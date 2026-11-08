@@ -2,16 +2,18 @@
  * Tests for Gen 3 randomized formats
  */
 'use strict';
+const common = require('../common');
 
 const assert = require('../assert');
 const {testTeam, validateLearnset} = require('./tools');
 
-describe('[Gen 3] Random Battle (slow)', () => {
+common.describeGen(3, '[Gen 3] Random Battle (slow)', () => {
 	const options = {format: 'gen3randombattle'};
-	const setsJSON = require(`../../dist/data/mods/gen3/random-sets.json`);
+	let setsJSON;
+	before(() => { setsJSON = require(`../../dist/data/mods/gen3/random-sets.json`); });
 	const dex = Dex.forFormat(options.format);
 
-	describe("New set format", () => {
+	common.describeGen(3, "New set format", () => {
 		const filename = '../../data/mods/gen3/random-sets.json';
 		it(`${filename} should have valid set data`, () => {
 			const setsJSON = require(filename);

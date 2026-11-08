@@ -4,6 +4,9 @@ const common=require('../../common');
 const {Dex}=require('../../../dist/sim');
 const {SpeciesPassives,ThematicPassiveGroups,PassiveCosmeticForms}=require('../../../dist/data/species-passives');
 const signature = require('./shortlist-approved.json').passives;
+const approved = require('./passive-approval-overlays');
+const { DisabledSpecies } = require('../../../dist/data/disabled-species');
+const expected = (id, passive) => approved.current(id, signature[id] || (id === 'butterfree' ? ['shielddust'] : ['grimer', 'muk'].includes(id) ? ['liquidooze'] : [passive]));
 const {StarterPassives}=require('../../../dist/data/starter-passives');
 let battle;const protocol=[];
 function setup(species,ability='Pressure',doubles=false,foeAbility='No Ability') {
@@ -16,20 +19,25 @@ function suppression(p,t,fn){fn();p.addVolatile('gastroacid');fn();p.removeVolat
 describe('Approved thematic species passives',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  after(()=>{const {extractChannelMessages}=require('../../../dist/sim/battle');fs.writeFileSync('artifacts/thematic-protocol-fixtures.json',JSON.stringify(protocol.map(f=>({...f,log:extractChannelMessages(f.log.join('\n'),[0])[0]})),null,2)+'\n');});
- it('grants exactly 61 named species and 27 cosmetic equivalents, preserving 76 starter records',()=>{
-  const ids=Object.values(ThematicPassiveGroups).flat();assert.equal(ids.length,61);
+	it('keeps the revised thematic records, cosmetic equivalents and starter records', () => {
+		const ids = Object.values(ThematicPassiveGroups).flat(); assert.equal(ids.length, 78);
   const cosmetics=Object.entries(PassiveCosmeticForms).flatMap(([base,forms])=>forms.map(form=>base+form));assert.equal(cosmetics.length,27);
-  assert.equal(Object.keys(SpeciesPassives).length, 839);
-  for(const[passive,group]of Object.entries(ThematicPassiveGroups))for(const id of group)assert.deepEqual(Dex.species.get(id).passives,signature[id] || (id === 'butterfree' ? ['shielddust'] : ['grimer','muk'].includes(id) ? ['liquidooze'] : [passive]),id);
+		assert.equal(Object.keys(SpeciesPassives).length, 952);
+		for (const [passive, group] of Object.entries(ThematicPassiveGroups)) for (const id of group)assert.deepEqual(Dex.species.get(id).passives, expected(id, passive), id);
   for(const id of cosmetics){const s=Dex.species.get(id);assert(s.exists,id);assert.deepEqual(s.passives,SpeciesPassives[id]);const base=Dex.species.get(s.baseSpecies);assert.deepEqual(s.baseStats,base.baseStats);assert.deepEqual(s.types,base.types);assert.deepEqual(s.abilities,base.abilities);}
   for(const[id,passives]of Object.entries(StarterPassives))assert.deepEqual(Dex.species.get(id).passives,passives,id);
   for(const s of Dex.species.all())assert.deepEqual(s.passives,SpeciesPassives[s.id]||[],s.id);
   for(const id of ['krabby','gligar','corphish','caterpie','metapod','wurmple','surskit','hoothoot','spearow','sentret','patrat','eeveestarter','eeveegmax','pinsirmega','kinglergmax','alcremiegmax','swalotpulse','mukpulse'])assert.deepEqual(Dex.species.get(id).passives,require('./passive-approval-overlays').current(id,[]),id);
  });
  for(const[passive,ids]of Object.entries(ThematicPassiveGroups))for(const id of ids)it(id+' keeps '+passive+' through suppression, selected-ability replacement and swaps',()=>{
-  const[p,t]=setup(id);assert.deepEqual(p.getPassives(),signature[id] || (id === 'butterfree' ? ['shielddust'] : ['grimer','muk'].includes(id) ? ['liquidooze'] : [passive]));
-  suppression(p,t,()=>assert(p.hasAbilityOrPassive(signature[id]?.[0] || passive)));
-  p.setAbility('Water Absorb');t.setAbility('Pressure');battle.actions.useMove('skillswap',p,{target:t});assert.deepEqual(p.getPassives(),signature[id] || (id === 'butterfree' ? ['shielddust'] : ['grimer','muk'].includes(id) ? ['liquidooze'] : [passive]));assert.deepEqual(t.getPassives(),['synchronize']);assert(!p.hasAbility(passive));
+		const [p, t] = setup(id); assert.deepEqual(p.getPassives(), expected(id, passive));
+		suppression(p, t, () => assert(p.hasAbilityOrPassive(expected(id, passive)[0])));
+		p.setAbility('Water Absorb');
+		t.setAbility('Pressure');
+		battle.actions.useMove('skillswap', p, { target: t });
+		assert.deepEqual(p.getPassives(), expected(id, passive));
+		assert.deepEqual(t.getPassives(), ['synchronize']);
+		assert(!p.hasAbility(passive));
  });
  it('Hyper Cutter blocks only external Attack drops with a duplicate composite once',()=>{
   const[p,t]=setup('Crawdaunt','Icebreaker');suppression(p,t,()=>{battle.boost({atk:-1,def:-1},p,t,Dex.moves.get('growl'));assert.equal(p.boosts.atk,0);});
@@ -51,9 +59,12 @@ describe('Approved thematic species passives',()=>{
   assert(p.trySetStatus('par',t,Dex.moves.get('thunderwave')));
  });
  for(const field of ['', 'murkwatersurfaceterrain','wastelandterrain'])for(const effect of ['drain','leechseed','strengthsap'])it('Liquid Ooze attributes '+effect+' once on '+(field||'no field'),()=>{
-  const[p,t]=setup('Swalot','Pulse Filtration');battle.field.terrain=field;t.hp=200;p.hp=200;
+		const [p, t] = setup('Muk', 'Pressure');
+		battle.field.terrain = field;
+		t.hp = 200;
+		p.hp = 200;
   const healed=battle.heal(20,t,p,{id:effect,name:effect,effectType:'Move'});assert(!healed);assert.equal(t.hp,field?160:180);
-  const lines=battle.log.filter(l=>l.includes('|-damage|')&&l.includes('passive: Liquid Ooze'));assert.equal(lines.length,2);assert(lines[0].includes('[of] p1a:'));
+		const lines = battle.log.filter(l => l.includes('|-damage|') && /(?:passive|ability): Liquid Ooze/.test(l)); assert.equal(lines.length, 2); assert(lines[0].includes('[of] p1a:'));
   protocol.push({name:'ooze-'+effect+'-'+field,log:battle.log});
  });
  it('Liquid Ooze does not invert ordinary healing and remains active while suppressed',()=>{
@@ -101,15 +112,18 @@ describe('Approved thematic species passives',()=>{
   assert.equal(p.hp,hp);assert.equal(p.status,'');assert.equal(p.boosts.spe,0);assert.equal(p.ability,'pressure');
  });
  it('Transform copies current passives, then restores original passives on switching; combat formes remove them',()=>{
-  const[p,t]=setup('Eevee');t.formeChange('Cacturne',null,true);assert(p.transformInto(t));assert.deepEqual(p.getPassives(),['overcoat']);
+		const [p, t] = setup('Eevee');
+		t.formeChange('Cacturne', null, true);
+		assert(p.transformInto(t));
+		assert.deepEqual(p.getPassives(), ['scarecrow']);
   battle.makeChoices('switch 3','move splash');battle.makeChoices('switch 3','move splash');assert.deepEqual(p.getPassives(),['runaway']);
   p.formeChange('Eevee-Gmax',null,true);assert.deepEqual(p.getPassives(),['overcoat']);
  });
  it('calculator and species metadata include every ordinary and cosmetic passive without selectable grants',()=>{
-  const metadata=require('../../../dist/sim/custom-calculator').calculatorMetadata();for(const id of Object.keys(SpeciesPassives))assert.deepEqual(metadata.species.find(s=>Dex.species.get(s.name).id===id)?.passives,SpeciesPassives[id],id);
+		const metadata = require('../../../dist/sim/custom-calculator').calculatorMetadata(); for (const id of Object.keys(SpeciesPassives).filter(id => !DisabledSpecies.has(id)))assert.deepEqual(metadata.species.find(s => Dex.species.get(s.name).id === Dex.species.get(id).id)?.passives, SpeciesPassives[id], id);
   const {calculateScenario}=require('../../../dist/sim/custom-calculator');const input={format:'gen9nofieldsinglesgame',move:'Giga Drain',samples:8,seed:42,actors:Array.from({length:4},()=>({species:'Mew',ability:'No Ability'}))};input.actors[1]={species:'Tentacruel',ability:'No Ability'};const a=calculateScenario(input);input.actors[1].ability='Liquid Ooze';assert.deepEqual(calculateScenario(input).results,a.results);assert(a.exampleLog.some(l=>l.includes('passive: Liquid Ooze')));
  });
- for(const id of ThematicPassiveGroups.levitate)it(id+' floats through ordinary suppression and returns to ground under Gravity',()=>{
+	for (const id of ThematicPassiveGroups.levitate.filter(id => approved.current(id, ['levitate']).some(passive => ['levitate', 'hydraflight'].includes(passive))))it(id + ' floats through ordinary suppression and returns to ground under Gravity', () => {
   const[p,t]=setup(id);suppression(p,t,()=>assert(!p.isGrounded()));
   battle.field.addPseudoWeather('gravity',t);assert.equal(p.isGrounded(),true);battle.field.removePseudoWeather('gravity');assert(!p.isGrounded());
  });

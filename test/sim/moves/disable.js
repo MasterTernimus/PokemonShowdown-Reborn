@@ -58,7 +58,7 @@ describe('Disable', function () {
 			assert(battle.log.includes('|-fail|p1a: Mew'), `Disable should fail if a move is already disabled`);
 		});
 
-		it(`should work on the first turn so long as the opponent has move with PP`, function () {
+		common.itGen(1, `should work on the first turn so long as the opponent has move with PP`, () => {
 			battle = common.gen(1).createBattle({forceRandomChance: true}, [[
 				{species: 'Mew', moves: ['disable']},
 			], [
@@ -68,7 +68,7 @@ describe('Disable', function () {
 			assert('disable' in battle.p2.active[0].volatiles);
 		});
 
-		it(`should fail if opponent has no moves with PP`, function () {
+		common.itGen(1, `should fail if opponent has no moves with PP`, () => {
 			battle = common.gen(1).createBattle({forceRandomChance: true}, [[
 				{species: 'Mew', moves: ['disable']},
 			], [
@@ -79,7 +79,7 @@ describe('Disable', function () {
 			assert(battle.log.includes('|-fail|p2a: Muk'), 'Muk has no moves with positive PP');
 		});
 
-		it(`should not select moves with 0 PP`, function () {
+		common.itGen(1, `should not select moves with 0 PP`, () => {
 			battle = common.gen(1).createBattle({forceRandomChance: true}, [[
 				{species: 'Mew', moves: ['disable']},
 			], [
@@ -94,7 +94,7 @@ describe('Disable', function () {
 			assert.equal(muk.volatiles.disable.move, 'tackle');
 		});
 
-		it(`Disable should build Rage, even if it misses/fails`, function () {
+		common.itGen(1, `Disable should build Rage, even if it misses/fails`, () => {
 			// Disable hits
 			battle = common.gen(1).createBattle([[
 				{species: 'Drowzee', moves: ['disable']},

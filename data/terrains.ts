@@ -3,6 +3,14 @@ import {EclipseTerrains} from './eclipse-fields';
 import { isGroundBoneMove } from './ground-bone-moves';
 import {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';
 import { MidnightZone } from './midnight-zone';
+export const denCooling: Readonly<Record<string, number>> = {
+	surf: 1,
+	muddywater: 1,
+	glaciate: 2,
+	hydrovortex: 2,
+	oceanicoperetta: 2,
+	subzeroslammer: 2,
+};
 /* eslint-disable @stylistic/max-len */
 import { type TerrainData } from "../sim/dex-terrains";
 import { type Battle } from '../sim/battle';
@@ -1097,9 +1105,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				const uberboost = ['smackdown', 'thousandarrows', 'continentalcrush', 'tectonicrage', 'dragonascent', 'payday', 'lusterpurge', 'mistball'];
 				const boost = ['magmadrift', 'matrixshot', 'lavaplume', 'magmastorm', 'megakick', 'makeitrain', 'rockclimb', 'strength', 'diamondstorm', 'makeitrain', 'powergem', 'shelltrap', 'earthpower', 'stompingtantrum'];
-				const terrain_change = ['glaciate', 'hydrovortex', 'oceanicoperetta', 'subzeroslammer', 'mistball'];
-				const terrain_change1 = ['muddywater', 'surf'];
-				const change = terrain_change1.includes(move.id) ? 1 : (move.id === 'sparklingaria' ? 2 : 0);
+				const change = denCooling[move.id] || 0;
 				const current = this.field.terrainState.terrainChanges?.get('caveterrain') ?? 0;
 				if (move.type === 'Dragon' || move.type === 'Fire') {
 					this.add('-message', 'The ambient dragon fire boosted the attack!');
@@ -1116,7 +1122,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'The draconic energy boosted the attack!');
 					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
-				if (terrain_change.includes(move.id) || (current + change >= 3)) {
+				if (['mistball', 'sparklingaria'].includes(move.id) || (change > 0 && current + change >= 2)) {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				const moveMessages = new Map<string, string>([
@@ -1140,34 +1146,30 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				return this.chainModify(modifier);
 			},
-			onDamage(damage, target, source, effect) {
-				const revert = ['dracometeor', 'dragonenergy', 'devastatingdrake'];
-				if (effect && effect.effectType === 'Move' && effect.category !== 'Status' && revert.includes(effect.id)) {
-					const move = effect;
-					const revert1 = ['dracometeor', 'dragonenergy'];
-					const backwardChange = revert1.includes(move.id) ? 1 : (move.id === 'devastatingdrake' ? 2 : 0);
-					const current = this.field.terrainState.terrainChanges?.get('caveterrain') ?? 0;
-					this.field.terrainState.terrainChanges?.set('caveterrain', current - backwardChange);
-				}
-			},
 			onAfterMove(source, target, move) {
-				const terrain_change = ['glaciate', 'hydrovortex', 'oceanicoperetta', 'subzeroslammer'];
-				const terrain_change1 = ['muddywater', 'surf'];
-				const forwardChange = terrain_change1.includes(move.id) ? 1 : (move.id === 'sparklingaria' ? 2 : 0);
-				const current = this.field.terrainState.terrainChanges?.get('caveterrain') ?? 0;
-				if ((current + forwardChange >= 3)) {
-					if (this.field.changeTerrain('caveterrain')) this.add('-message', 'The lava solidified!');
-					return;
-				} else if (move.id === 'mistball') {
+				if (typeof move.totalDamage !== 'number' || move.totalDamage <= 0 || this.field.moveTransitionBlocked(source, move)) return;
+				if (move.id === 'mistball') {
 					if (this.field.changeTerrain('fairytaleterrain', source, move)) this.add('-message', 'Mist Ball transformed the field for 5 turns!');
 					return;
 				}
-				if (terrain_change.includes(move.id)) {
-					this.field.changeTerrain('volcanicterrain');
+				if (move.id === 'sparklingaria') {
+					if (this.field.changeTerrain('volcanicterrain', source, move)) {
+						this.add('-message', 'The sparkling song stirred the lava into a volcanic eruption!');
+					}
 					return;
 				}
-				if (forwardChange) this.add('-message', 'The lava began to harden!');
-				this.field.terrainState.terrainChanges?.set('caveterrain', current + forwardChange);
+				const current = this.field.terrainState.terrainChanges?.get('caveterrain') ?? 0;
+				const cooling = denCooling[move.id] || 0;
+				if (cooling) {
+					if (current + cooling >= 2) {
+						if (this.field.changeTerrain('caveterrain', source, move)) this.add('-message', 'The dragon fire faded as the lava hardened into a cavern!');
+					} else {
+						this.field.terrainState.terrainChanges?.set('caveterrain', current + cooling);
+						this.add('-message', 'The lava cooled, but the dragon fire still burns!');
+					}
+				} else if (['dracometeor', 'dragonenergy', 'devastatingdrake'].includes(move.id)) {
+					this.field.terrainState.terrainChanges?.set('caveterrain', Math.max(0, current - (move.id === 'devastatingdrake' ? 2 : 1)));
+				}
 			},
 			onFieldStart() {
 				this.add('-message', 'If you wish to slay a dragon...');

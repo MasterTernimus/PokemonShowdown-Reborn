@@ -46,7 +46,7 @@ describe('Dual offensive boosts and Glacial Heart', () => {
 		assert.equal(drampa.boosts.spa, 1);
 	});
 
-	for (const ability of ['Berserk', 'Worldbreaker', 'Expiration', 'Winter’s Malice', 'Helios', 'Void Tyrant']) {
+	for (const ability of ['Berserk', 'Strings of Ruin', 'Expiration', 'Winter’s Malice', 'Helios', 'Void Tyrant']) {
 		it(ability + ' gains +1 Sp. Atk on entry, then +2 when an attack crosses half on Dragon’s Den', () => {
 			const set = {species: 'Drampa', ability, moves: ['splash']};
 			battle = common.createBattle({formatid: 'gen9dragonsden'}, [
@@ -112,16 +112,20 @@ describe('Dual offensive boosts and Glacial Heart', () => {
 		const foe = battle.p2.active[0];
 		assert.equal(baxcalibur.species.id, 'baxcaliburmega');
 		assert.equal(baxcalibur.ability, 'glacialheart');
-		for (const component of ['thermalexchange', 'icebody', 'stalwart']) {
+		for (const component of ['icebody']) {
 			assert(baxcalibur.hasAbility(component), component);
 		}
+		assert.deepEqual(baxcalibur.getPassives(), ['thermalexchange']);
+		assert(!baxcalibur.hasAbility('thermalexchange'));
+		assert(baxcalibur.hasAbilityOrPassive('thermalexchange'));
+		assert(!baxcalibur.hasAbility('stalwart'));
 		assert.equal(baxcalibur.hasAbility('toughclaws'), false);
 		assert.equal(baxcalibur.setStatus('brn', foe), false);
 		assert.equal(battle.runEvent('BasePower', baxcalibur, foe,
 			battle.dex.getActiveMove('dragonclaw'), 100), 100);
 		const trackedMove = battle.dex.getActiveMove('watergun');
 		battle.singleEvent('ModifyMove', baxcalibur.getAbility(), baxcalibur.abilityState, trackedMove, baxcalibur, foe);
-		assert.equal(trackedMove.tracksTarget, true);
+		assert.notEqual(trackedMove.tracksTarget, true);
 		battle.makeChoices('move splash', 'move ember');
 		assert.equal(baxcalibur.boosts.atk, 1);
 		battle.field.setWeather('hail');
@@ -131,7 +135,7 @@ describe('Dual offensive boosts and Glacial Heart', () => {
 		assert(baxcalibur.hp > hp);
 	});
 
-	it('retains the Stalwart entry boost on Fairy Tale Field', () => {
+	it('does not grant removed Stalwart entry boosts on Fairy Tale Field', () => {
 		battle = common.createBattle({formatid: 'gen9fairytalefield'}, [[
 			{species: 'Baxcalibur', item: 'Baxcalibrite', moves: ['splash']},
 		], [
@@ -141,6 +145,6 @@ describe('Dual offensive boosts and Glacial Heart', () => {
 		battle.makeChoices('move splash mega', 'move splash');
 		const baxcalibur = battle.p1.active[0];
 		assert.equal(baxcalibur.ability, 'glacialheart');
-		assert.equal(baxcalibur.boosts.spa, 1);
+		assert.equal(baxcalibur.boosts.spa, 0);
 	});
 });

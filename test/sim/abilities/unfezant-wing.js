@@ -68,7 +68,7 @@ describe('Unfezant Wing abilities', function () {
 			'focusblast', 'calmmind', 'hypervoice', 'extrasensory', 'rockthrow', 'harden',
 				'rockslide', 'brickbreak', 'stealthrock', 'closecombat', 'rockblast', 'blazekick', 'stoneedge',
 			'bulkup', 'rocktomb', 'knockoff', 'sandstorm', 'smackdown', 'dig', 'payback',
-			'rockpolish', 'mudslap', 'rockclimb', 'retaliate', 'lowkick', 'batonpass',
+			'rockpolish', 'mudbarrage', 'rockclimb', 'retaliate', 'lowkick', 'batonpass',
 			'endeavor', 'stompingtantrum', 'superpower', 'ironhead', 'mudshot', 'megakick',
 			'honeclaws', 'arenitewall', 'lowsweep', 'tripleaxel',
 		]) {

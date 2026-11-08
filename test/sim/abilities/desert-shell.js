@@ -59,9 +59,11 @@ describe('Aevian Mega Golisopod and Desert Shell', () => {
 		const foe = battle.p2.active[0];
 		assert.equal(holder.ability, 'desertshell');
 		assert(battle.field.isWeather('sandstorm'));
-		for (const component of ['skilllink', 'heatproof', 'sandstream']) {
+		for (const component of ['skilllink', 'sandstream']) {
 			assert(holder.hasAbility(component), `Missing ${component}`);
 		}
+		assert.deepEqual(holder.getPassives(), ['heatproof']);
+		assert(holder.hasAbilityOrPassive('heatproof'));
 		assert(battle.log.some(line => line.startsWith('|-hitcount|') && line.endsWith('|5')), battle.log.join('\n'));
 		assert.equal(battle.runEvent('BasePower', holder, foe, battle.dex.getActiveMove('pinmissile'), 100), 150);
 		assert.equal(battle.runEvent('SourceModifyAtk', holder, foe, battle.dex.getActiveMove('firepunch'), 100), 50);

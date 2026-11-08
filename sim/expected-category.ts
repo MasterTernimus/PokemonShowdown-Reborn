@@ -59,6 +59,8 @@ export function expectedCategory(battle: Battle, source: Pokemon, target: Pokemo
                         return choose(Array.from({length: upper - lower}, (_, i) => ({value: lower + i, weight: 1 / (upper - lower)})));
                     };
                     preview.sample = <T>(items: readonly T[]): T => items[preview.random(items.length)];
+					// Event-order ties also draw through PRNG directly (for example shuffle).
+					preview.prng.random = preview.random;
                 }
 				preview.setActiveMove(attack, attacker, defender);
 				if (encore && ((!preview.runEvent('TryHit', defender, attacker, attack)) ||

@@ -18,7 +18,7 @@ function hit(target, source, overrides = {}) {
 	Object.assign(move, {accuracy: true, damage: 20}, overrides);
 	battle.actions.runMove(move, source, source.getLocOf(target));
 }
-function rescueCount() { return battle.log.filter(s => s.includes('|-activate|') && s.includes('ability: Vital Signs')).length; }
+function rescueCount() { return battle.log.filter(s => s.includes('|-activate|') && /ability: (Vital Signs|Divine Intervention)(?:\||$)/.test(s)).length; }
 describe('Approved Audino support rework', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	it('preserves stats, types and alternate slots, and adds only the two support moves', () => {
@@ -38,6 +38,8 @@ describe('Approved Audino support rework', () => {
 			hit(p, foe);
 			assert.equal(p.hp, 70 + battle.modify(Math.floor(p.maxhp / 4), 1.3));
 			assert.equal(p.status, ''); assert.equal(p.m.vitalSignsRescued, true); assert.equal(rescueCount(), 1);
+			assert(battle.log.some(line => line.includes('|-activate|') && line.includes('ability: ' + ability)));
+			assert.equal(p.ability, Dex.toID(ability));
 			p.hp = 90; p.setStatus('par'); hit(p, foe); assert.equal(p.hp, 70); assert.equal(p.status, 'par');
 		});
 		it(ability + ' provides full Invigorate healing and Safeguard identity', () => {
@@ -101,7 +103,9 @@ describe('Approved Audino support rework', () => {
 	it('Mega Evolution preserves a used recipient allowance and installs all four components', () => {
 		const [p, foe] = setup(); p.hp = 100; hit(p, foe); p.setItem('Audinite'); p.canMegaEvo = 'Audino-Mega';
 		assert(battle.actions.runMegaEvo(p)); assert.equal(p.ability, 'divineintervention');
-		for (const id of ['vitalsigns', 'invigorate', 'triage', 'regenerator', 'friendguard']) assert(p.hasAbility(id));
+		for (const id of ['vitalsigns', 'triage', 'regenerator', 'friendguard']) assert(p.hasAbility(id));
+		assert.deepEqual(p.getPassives(), ['invigorate']);
+		assert(p.hasAbilityOrPassive('invigorate'));
 		assert(!p.hasAbility('fluffy')); assert(!p.hasAbility('swornduty'));
 		p.hp = 100; hit(p, foe); assert.equal(p.hp, 80); assert.equal(rescueCount(), 1);
 	});

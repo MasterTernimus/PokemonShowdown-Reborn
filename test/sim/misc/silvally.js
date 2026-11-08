@@ -30,11 +30,11 @@ describe(`[Hackmons] Silvally`, function () {
 		assert.deepEqual(battle.p1.active[0].getTypes(), ["Normal"]);
 	});
 
-	it(`[Gen 7] in a typed forme should be Normal-typed despite holding a memory if Silvally does not have the RKS System ability`, function () {
+	it(`[Gen 7] in a typed forme preserves its type and ignores a mismatched memory without RKS System`, () => {
 		const battle = common.gen(7).createBattle([
-			[{species: 'silvallyfire', ability: 'truant', item: 'firememory', moves: ['rest']}],
+			[{ species: 'silvallyfire', ability: 'truant', item: 'watermemory', moves: ['rest'] }],
 			[unimportantPokemon],
 		]);
-		assert.deepEqual(battle.p1.active[0].getTypes(), ["Normal"]);
+		assert.deepEqual(battle.p1.active[0].getTypes(), ["Fire"]);
 	});
 });

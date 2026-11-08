@@ -34,7 +34,7 @@ describe('Approved roster follow-up', () => {
 		for (const [species, slot, ability, component] of [
 			['Nidoking', 'H', "Royal Onslaught", 'Power Drill'],
 			['Kingler', '1', 'Hyper Cutter', 'Hyper Cutter'], ['Steelix', '1', 'Iron Lash', 'Whiplash'],
-			['Hariyama', 'H', 'Grit Grappler', 'Guts'], ['Krookodile', '1', 'Dread Jaw', 'Moxie'],
+			['Hariyama', '0', 'Grit Grappler', 'Guts'], ['Krookodile', '1', 'Dread Jaw', 'Moxie'],
 			['Beartic', '1', 'Floe Hunter', 'Slush Rush'], ['Escavalier', 'H', 'Lanceguard', 'Shell Armor'],
 			['Primarina', 'H', 'Tidal Voice', 'Liquid Voice'], ['Vikavolt', '0', 'Hover Cannon', 'Levitate'],
 			['Vikavolt', 'H', 'Battery', 'Battery'], ['Houndstone', 'H', 'Mourning Coat', 'Fluffy'],

@@ -45,7 +45,7 @@ describe('Flower Garden stage effects and transitions', () => {
 		it(`Stage 5 ${move} hits both foes, not the ally`, () => {
 			const [user, ally] = doubles(5, move);
 			battle.onEvent('Accuracy', battle.format, () => true);
-			battle.makeChoices(`move 1${['petalblizzard', 'petaldance'].includes(move) ? '' : ' 1'}, move splash`, 'move splash, move splash');
+			battle.makeChoices(`move 1${move === 'petalblizzard' ? '' : ' 1'}, move splash`, 'move splash, move splash');
 			assert.equal(ally.hp, ally.maxhp);
 			for (const foe of battle.p2.active) {
 				assert(move === 'poisonpowder' ? foe.status === 'psn' : foe.hp < foe.maxhp, battle.log.join('\n'));

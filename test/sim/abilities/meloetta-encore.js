@@ -37,6 +37,22 @@ describe('Encore Aria per-target engine comparison',()=>{
   const view=require('../../../dist/sim/encore-aria').encoreAriaView;
   assert(view(active,p,a).flags.dance&&!view(active,p,a).flags.sound);assert(view(active,p,z).flags.sound&&!view(active,p,z).flags.dance);
  });
+
+	it('compares both branches with tied Safeguard handlers without changing live state', () => {
+		const p = setup(), [a, z] = b.p2.active; a.setAbility('Dancer');
+		a.storedStats.def = 30;
+		a.storedStats.spd = 400;
+		z.storedStats.def = 400;
+		z.storedStats.spd = 30;
+		b.p1.addSideCondition('safeguard', p); b.p2.addSideCondition('safeguard', a);
+		const before = JSON.stringify(b.toJSON());
+		for (let i = 0; i < 2; i++) {
+			const m = b.dex.getActiveMove('relicsong'); require('../../../dist/data/meloetta-encore').prepareMeloettaMove(m, p);
+			const view = require('../../../dist/sim/encore-aria').encoreAriaView;
+			assert.equal(view(m, p, a).category, 'Physical'); assert.equal(view(m, p, z).category, 'Special');
+		}
+		assert.equal(JSON.stringify(b.toJSON()), before);
+	});
  it('uses real Punk Rock sound damage and leaves live RNG, HP, log and boosts unchanged',()=>{
   const p=setup(),t=b.p2.active[1];p.setAbility('Punk Rock');p.storedStats.atk=110;p.storedStats.spa=100;t.storedStats.def=t.storedStats.spd=100;
   const m=b.dex.getActiveMove('relicsong');require('../../../dist/data/meloetta-encore').prepareMeloettaMove(m,p);

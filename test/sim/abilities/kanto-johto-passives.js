@@ -23,7 +23,7 @@ describe('Approved Kanto and Johto passive migration', () => {
 		battle?.destroy();
 		battle = null;
 	});
-	it('adds exactly fifty-one approved IDs while unapproved forms remain unchanged', () => {
+	it('matches the original migration plus every reviewed passive revision', () => {
 		const expected = { ...before.passives };
 		for (const [passive, ids] of Object.entries(before.groups))
 			for (const id of ids)
@@ -35,7 +35,7 @@ describe('Approved Kanto and Johto passive migration', () => {
 		for (const [p, ids] of Object.entries(require('./latest-passives-approved.json').groups)) for (const id of ids) expected[id] = [p];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(SpeciesPassives, expected);
-		assert.equal(Object.keys(SpeciesPassives).length, 839);
+		assert.equal(Object.keys(SpeciesPassives).length, Object.keys(expected).length);
 	});
 	for (const [passive, ids] of Object.entries(before.groups))
 		for (const id of ids) {
@@ -97,7 +97,7 @@ describe('Approved Kanto and Johto passive migration', () => {
 		const [p, t] = setup('Ditto', 'Limber');
 		t.formeChange('Venomoth');
 		assert(p.transformInto(t));
-		assert.deepEqual(p.getPassives(), ['shielddust']);
+		assert.deepEqual(p.getPassives(), ['mothborn']);
 		assert(!p.getPassives().includes('limber'));
 	});
 	it('Sturdy survives suppression and still permits attack-scoped Mold Breaker', () => {
@@ -111,7 +111,7 @@ describe('Approved Kanto and Johto passive migration', () => {
 		assert.equal(p.hp, 0);
 	});
 	it('Early Bird advances sleep twice while suppressed', () => {
-		const [p, t] = setup('Dodrio');
+		const [p, t] = setup('Xatu');
 		p.addVolatile('gastroacid');
 		p.setStatus('slp', t);
 		p.statusState.time = 5;

@@ -26,14 +26,14 @@ it('Mountainbreaker hits Levitate and removes walls only after direct damage', (
  assert.equal(q.hp,hp);
  assert(q.side.getSideCondition('lightscreen'));
 });
-it('Dread Presence denies berries and boosts only its Dark attacks against weakened foes', () => {
+	it('Dread Presence denies berries and supplies Dark Aura regardless of target HP', () => {
  const [p,q]=setup('Dread Presence');q.maxhp=q.baseMaxhp=1000;q.hp=501;
  const power=(user,target,id)=>b.runEvent('BasePower',user,target,Dex.getActiveMove(id),100);
- assert.equal(power(p,q,'crunch'),100);
+		assert.equal(power(p, q, 'crunch'), 133);
  q.hp=500;
- assert.equal(power(p,q,'crunch'),130);
+		assert.equal(power(p, q, 'crunch'), 133);
  assert.equal(power(p,q,'stoneedge'),100);
- assert.equal(power(q,p,'crunch'),100);
+		assert.equal(power(q, p, 'crunch'), 133);
  q.setItem('Sitrus Berry');assert.equal(q.eatItem(),false);
  p.addVolatile('gastroacid',q);
  assert.equal(power(p,q,'crunch'),100);

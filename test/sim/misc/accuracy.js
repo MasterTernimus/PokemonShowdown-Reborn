@@ -59,7 +59,8 @@ describe("Accuracy", function () {
 
 		battle.onEvent('Accuracy', battle.format, function (accuracy, target, source, move) {
 			if (move.id !== 'fireblast') return;
-			assert.equal(accuracy, 51);
+			// Gravity ignores the target's positive evasion stage.
+			assert.equal(accuracy, 61);
 		});
 
 		battle.makeChoices('move gravity, move fire blast 1', 'move sleeptalk, move sleeptalk');
@@ -78,7 +79,7 @@ describe("Accuracy", function () {
 
 		battle.onEvent('Accuracy', battle.format, function (accuracy, target, source, move) {
 			if (move.id !== 'fireblast') return;
-			assert.equal(accuracy, 50);
+			assert.equal(accuracy, 60);
 		});
 
 		battle.makeChoices('move gravity, move fire blast 1', 'move sleeptalk, move sleeptalk');

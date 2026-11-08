@@ -14,7 +14,8 @@ describe('Gardevoir-Void and Void Voice',function(){
   battle.makeChoices('move splash mega','move splash');
   assert.equal(mon.ability,'voidvoice');assert(mon.hasAbility('dreamsickness'));
   const move=battle.dex.getActiveMove('hypervoice');
-  battle.singleEvent('ModifyType',mon.getAbility(),mon.abilityState,move,mon);
+		assert.deepEqual(mon.getPassives(), ['pixilate']);
+		battle.runEvent('ModifyType', mon, foe, move, move);
   assert.equal(move.type,'Fairy');assert.equal(battle.runEvent('BasePower',mon,foe,move,100),120);
   battle.boost({atk:-1,spe:-1},mon,foe,battle.dex.getActiveMove('growl'));
   assert.statStage(mon,'atk',-1);assert.statStage(mon,'spe',-1);

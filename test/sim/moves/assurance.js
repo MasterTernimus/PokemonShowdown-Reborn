@@ -16,13 +16,15 @@ describe('Assurance', function () {
 		], [
 			{species: 'Regieleki', ability: 'shellarmor', moves: ['wildcharge']},
 		]]);
-		const sneasel = battle.p1.active[0];
 		const regi = battle.p2.active[0];
+		const powers = [];
+		battle.onEvent('BasePower', battle.format, (power, source, target, move) => {
+			if (move.id === 'assurance') powers.push(power);
+		});
 		regi.boostBy({atk: 6});
 		battle.makeChoices();
-		const recoil = Math.floor((sneasel.maxhp - 1) / 4);
-		const assuRange = [214, 253];
-		assert.bounded(regi.hp, [regi.maxhp - recoil - assuRange[1], regi.maxhp - recoil - assuRange[0]]);
+		assert.deepEqual(powers, [120]);
+		assert(battle.log.some(line => line.includes('[from] Recoil')));
 	});
 
 	it(`should double the power against damaged Pokemon, not damaged slots`, function () {
@@ -45,11 +47,12 @@ describe('Assurance', function () {
 		], [
 			{species: 'Wailord', moves: ['painsplit']},
 		]]);
+		const powers = [];
+		battle.onEvent('BasePower', battle.format, (power, source, target, move) => {
+			if (move.id === 'assurance') powers.push(power);
+		});
 		battle.makeChoices();
-		const greedent = battle.p1.active[0];
-		const wailord = battle.p2.active[0];
-		const painSplitHP = (greedent.maxhp + wailord.maxhp) / 2;
-		const damage = painSplitHP - wailord.hp;
-		assert.bounded(damage, [78, 92]);
+		assert.deepEqual(powers, [60]);
+		assert(battle.log.some(line => line.includes('|-sethp|')));
 	});
 });

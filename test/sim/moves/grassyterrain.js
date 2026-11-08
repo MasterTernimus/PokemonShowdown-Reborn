@@ -24,7 +24,7 @@ describe('Grassy Terrain', function () {
 		assert(battle.field.isTerrain(''));
 	});
 
-	it(`should halve the base power of Earthquake, Bulldoze, and Magnitude against grounded targets`, function () {
+	it(`should halve ground-shaking move power against grounded and airborne targets`, () => {
 		battle = common.createBattle([[
 			{species: 'Shaymin', moves: ['grassyterrain']},
 		], [
@@ -34,9 +34,9 @@ describe('Grassy Terrain', function () {
 		const shaymin = battle.p1.active[0];
 		const aerodactyl = battle.p2.active[0];
 		assert.equal(battle.runEvent('BasePower', aerodactyl, shaymin, Dex.moves.get('earthquake'), 100, true), 50);
-		assert.equal(battle.runEvent('BasePower', shaymin, aerodactyl, Dex.moves.get('earthquake'), 100, true), 100);
+		assert.equal(battle.runEvent('BasePower', shaymin, aerodactyl, Dex.moves.get('earthquake'), 100, true), 50);
 		assert.equal(battle.runEvent('BasePower', aerodactyl, shaymin, Dex.moves.get('bulldoze'), 60, true), 30);
-		assert.equal(battle.runEvent('BasePower', shaymin, aerodactyl, Dex.moves.get('bulldoze'), 60, true), 60);
+		assert.equal(battle.runEvent('BasePower', shaymin, aerodactyl, Dex.moves.get('bulldoze'), 60, true), 30);
 	});
 
 	it(`should increase the base power of Grass-type attacks used by grounded Pokemon`, function () {
@@ -120,14 +120,18 @@ describe('Grassy Terrain', function () {
 		]]);
 
 		battle.makeChoices(); // KO Neutralizing Gas
+		assert.equal(battle.field.terrainState.duration, 5);
 		battle.makeChoices(); // Switch
 
 		// Kill turns with Wynaut and Grookey until turn 5
 		for (let i = 0; i < 4; i++) {
 			battle.makeChoices();
+			assert.equal(battle.field.terrainState.duration, 4 - i);
 		}
 
 		assert(battle.field.isTerrain('grassyterrain'), `Grassy Terrain should still be active turn 5, ending turn 6.`);
+		battle.makeChoices();
+		assert(battle.field.isTerrain(''), `Grassy Terrain should expire at the end of turn 6.`);
 	});
 
 	it.skip(`should not skip healing Pokemon if it was set during the block it would heal Pokemon`, function () {

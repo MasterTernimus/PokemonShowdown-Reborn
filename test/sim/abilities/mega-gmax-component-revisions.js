@@ -19,7 +19,7 @@ describe('Mega and G-Max component revisions', () => {
 		const [holder] = start('Mew', 'No Ability');
 		const expected = [
 			['Emboar-Mega', 'Burning Ego', ['proficient', 'ultraego', 'flamebody', 'magmaarmor']],
-			['Machamp-Gmax', 'Raging Fists', ['hydrabond', 'scrappy']],
+			['Machamp-Gmax', "Titan's Knuckles", ['ironfist']],
 			['Snorlax-Gmax', 'Mountain Hunger', ['sapsipper', 'thickfat', 'earlybird']],
 			['Pyroar-Mega', 'Royal Sun', ['drought', 'supremeoverlord']],
 			['Ampharos-Aevian-Mega', 'Absolute Zero', ['snowwarning', 'moldbreaker', 'filter']],
@@ -78,7 +78,7 @@ describe('Mega and G-Max component revisions', () => {
 		assert.equal(battle.runEvent('BasePower', holder, foe, battle.dex.getActiveMove('tackle'), 100), 120);
 	});
 
-	it('G-Max Sandaconda starts sand, triggers Sand Spit, and leaves Desert Field on faint', () => {
+	it('G-Max Sandaconda starts sand and triggers Sand Spit without creating a field on faint', () => {
 		const [holder, foe] = start('Sandaconda-Gmax', 'Dune Terror');
 		assert.equal(battle.field.weather, 'sandstorm');
 		battle.field.clearWeather();
@@ -86,8 +86,8 @@ describe('Mega and G-Max component revisions', () => {
 		assert.equal(battle.field.weather, 'sandstorm');
 		holder.faint();
 		battle.faintMessages();
-		assert.equal(battle.field.terrain, 'desertterrain');
-		assert.equal(battle.field.terrainState.duration, 5);
+		assert.equal(battle.field.terrain, '');
+		assert.equal(holder.getAbility().onFaint, undefined);
 	});
 
 	it('Mega Slowbro permits sleep and blocks confusion through Own Tempo', () => {

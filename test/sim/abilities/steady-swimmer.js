@@ -23,7 +23,11 @@ describe('Seaking confusion-only Steady Swimmer', () => {
 			assert.deepEqual(species.passives, require('./passive-approval-overlays').current(id, old.passives), id);
 		}
 		assert.deepEqual(Dex.species.get('goldeen').passives, []);
-		assert.equal(Object.keys(require('../../../dist/data/species-passives').SpeciesPassives).length, 839);
+		const expected = Object.fromEntries(Object.entries(before.species)
+			.filter(([, species]) => species.passives.length)
+			.map(([id, species]) => [id, species.passives]));
+		require('./passive-approval-overlays').passives(expected);
+		assert.deepEqual(require('../../../dist/data/species-passives').SpeciesPassives, expected);
 	});
 	for (const suppression of ['none', 'gastroacid', 'meridianseal', 'gas']) {
 		it('prevents opposing confusion through ' + suppression, () => {

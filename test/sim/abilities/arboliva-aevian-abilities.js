@@ -18,7 +18,19 @@ describe('Bad Seeds and approved Frozen Aura',()=>{
 describe('Winter’s Malice exact local composite',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  for(const suppressed of [false,true])it('Refrigerate once and suppression '+suppressed,()=>{const[p,q]=setup('','',"Winter's Malice");if(suppressed)p.addVolatile('gastroacid',q);const m=Dex.getActiveMove('tackle');battle.runEvent('ModifyType',p,q,m,m);assert.equal(m.type,suppressed?'Normal':'Ice');assert.equal(battle.runEvent('BasePower',p,q,m,100),suppressed?100:120);});
- it('retains local Berserk entry boosts and damage threshold boosts',()=>{const[p,q]=setup('dragonsdenterrain','',"Winter's Malice");assert.equal(p.boosts.atk,2);assert.equal(p.boosts.spa,2);battle.field.terrain='';p.hp=p.maxhp=p.baseMaxhp=100;hit(q,p,'sonicboom',{damage:60});assert.equal(p.boosts.atk,3);assert.equal(p.boosts.spa,3);});
+	it('ability acquisition does not grant the switch-in-only Berserk boost', () => {
+		const [p, q] = setup('dragonsdenterrain', '', "Winter's Malice");
+		assert.equal(p.boosts.atk, 0); assert.equal(p.boosts.spa, 0);
+		battle.field.terrain = ''; p.hp = p.maxhp = p.baseMaxhp = 100;
+		hit(q, p, 'sonicboom', { damage: 60 }); assert.equal(p.boosts.atk, 1); assert.equal(p.boosts.spa, 1);
+	});
+	it('grants +1 Sp. Atk on genuine Dragon’s Den entry and +2 when crossing half HP', () => {
+		battle = common.createBattle({ formatid: 'gen9dragonsden' }, [[{ species: 'Arboliva-Aevian', ability: "Winter's Malice", moves: ['splash'] }], [{ species: 'Mew', ability: 'No Ability', moves: ['sonicboom'] }]]);
+		battle.makeChoices('team 1', 'team 1'); const p = battle.p1.active[0], q = battle.p2.active[0];
+		assert.equal(battle.field.terrain, 'dragonsdenterrain'); assert.equal(p.boosts.atk, 0); assert.equal(p.boosts.spa, 1);
+		p.hp = p.maxhp = p.baseMaxhp = 100; hit(q, p, 'sonicboom', { damage: 60 });
+		assert.equal(p.boosts.atk, 0); assert.equal(p.boosts.spa, 3);
+	});
  it('retains Cursed Body disabling and faint curse',()=>{const[p,q]=setup('','',"Winter's Malice");battle.randomChance=()=>true;hit(q,p);assert(q.volatiles.disable);p.hp=1;hit(q,p,'sonicboom');assert(q.volatiles.curse);});
 });
 

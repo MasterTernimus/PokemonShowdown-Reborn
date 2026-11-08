@@ -19,13 +19,13 @@ describe('Latest four approved base-form changes',()=>{
  }
  function residual(p){battle.singleEvent('Residual',p.getAbility(),p.abilityState,p);}
  function out(p){battle.singleEvent('SwitchOut',p.getAbility(),p.abilityState,p);}
- it('changes exactly the four base forms and preserves alternate/powered forms',()=>{
-  assert.deepEqual(Dex.species.get('feraligatr').types,['Water','Dragon']);
+	it('matches the approved base and alternate-form lineups', () => {
+		assert.deepEqual(Dex.species.get('feraligatr').types, ['Water', 'Dark']);
   assert.deepEqual(Dex.species.get('dragonite').abilities,{0:'Inner Focus',1:'Sea Rescuer',H:'Multiscale'});
   assert.deepEqual(Dex.species.get('dragapult').abilities,{0:'Clear Body',1:'Infiltrator',H:'Dreepy Vanguard'});
   assert.deepEqual(Dex.species.get('raichu').abilities,{0:'Static',1:'Grounding Tail',H:'Lightning Rod'});
   for(const id of ['feraligatrmega','feraligatrgmax','dragonitemega','dragapultgmax','raichualola','raichumegax','raichumegay']){
-   const before={"feraligatrmega":{"types":["Water","Dragon"],"abilities":{"0":"Draconic Force"}},"feraligatrgmax":{"types":["Water","Dark"],"abilities":{"0":"Tidal Jaw"}},"dragonitemega":{"types":["Dragon","Flying"],"abilities":{"0":"Celestial Heart"}},"dragapultgmax":{"types":["Dragon","Ghost"],"abilities":{"0":"Phantom Barrage"}},"raichualola":{"types":["Electric","Psychic"],"abilities":{"0":"Surge Surfer","1":"Levitate","H":"Inner Focus"}},"raichumegax":{"types":["Electric"],"abilities":{"0":"Surge Conduit"}},"raichumegay":{"types":["Electric"],"abilities":{"0":"Railgun Circuit"}}}[id],now=Dex.species.get(id);
+			const before = { "feraligatrmega": { "types": ["Water", "Dragon"], "abilities": { "0": "Draconic Force" } }, "feraligatrgmax": { "types": ["Water", "Dark"], "abilities": { "0": "Tidal Jaw" } }, "dragonitemega": { "types": ["Dragon", "Flying"], "abilities": { "0": "Celestial Heart" } }, "dragapultgmax": { "types": ["Dragon", "Ghost"], "abilities": { "0": "Phantom Barrage" } }, "raichualola": { "types": ["Electric", "Psychic"], "abilities": { "0": "Static", "1": "Telepathy", "H": "Mind Current" } }, "raichumegax": { "types": ["Electric"], "abilities": { "0": "Surge Conduit" } }, "raichumegay": { "types": ["Electric"], "abilities": { "0": "Railgun Circuit" } } }[id], now = Dex.species.get(id);
    assert.deepEqual(now.types,before.types,id);assert.deepEqual(now.abilities,before.abilities,id);
   }
  });

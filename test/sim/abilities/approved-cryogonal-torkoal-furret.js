@@ -43,8 +43,9 @@ describe('Approved Cryogonal, Torkoal, and Furret changes', () => {
 
 	it('Smoldering Shroud blocks stat drops and grants Sp. Atk once per switch-in', () => {
 		const [holder, foe] = singles('Torkoal', 'Smoldering Shroud');
-		assert.deepEqual(holder.species.abilities, {0: 'Drought', 1: 'Smoldering Shroud', H: 'Solid Rock'});
-		assert(holder.hasAbility('whitesmoke'));
+		assert.deepEqual(holder.species.abilities, { 0: 'Drought', 1: 'Smoldering Shroud', H: 'Solid Rock', S: 'Ashen Seeds' });
+		assert.deepEqual(holder.getPassives(), ['whitesmoke']);
+		assert(holder.hasAbilityOrPassive('whitesmoke'));
 		const snarl = battle.dex.getActiveMove('snarl');
 		battle.boost({spa: -1}, holder, foe, snarl);
 		assert.equal(holder.boosts.spa, 1);
@@ -52,7 +53,7 @@ describe('Approved Cryogonal, Torkoal, and Furret changes', () => {
 		assert.equal(holder.boosts.spa, 1);
 	});
 
-	it('Spring Fur doubles Defense and raises Attack after one survived foe physical hit', () => {
+	it('Spring Fur doubles Defense and rewards a broken Substitute once per entry', () => {
 		const [holder, foe] = singles('Furret', 'Spring Fur');
 		assert.deepEqual(holder.species.baseStats, {hp: 95, atk: 115, def: 80, spa: 45, spd: 80, spe: 115});
 		assert.deepEqual(holder.species.abilities, {0: 'Spring Fur', 1: 'Simple', H: 'Variety Rush'});
@@ -61,6 +62,16 @@ describe('Approved Cryogonal, Torkoal, and Furret changes', () => {
 		const tackle = battle.dex.getActiveMove('tackle');
 		battle.singleEvent('DamagingHit', holder.getAbility(), holder.abilityState, holder, foe, tackle, 10);
 		battle.singleEvent('DamagingHit', holder.getAbility(), holder.abilityState, holder, foe, tackle, 10);
+		assert.equal(holder.boosts.atk, 0);
+		for (let i = 0; i < 2; i++) {
+			holder.addVolatile('substitute');
+			holder.volatiles.substitute.hp = 1;
+			const move = battle.dex.getActiveMove('tackle');
+			Object.assign(move, { accuracy: true, willCrit: false });
+			battle.actions.useMove(move, foe, { target: holder });
+			assert(!holder.volatiles.substitute);
+			assert.equal(holder.boosts.atk, 1);
+		}
 		assert.equal(holder.boosts.atk, 1);
 	});
 
@@ -68,9 +79,13 @@ describe('Approved Cryogonal, Torkoal, and Furret changes', () => {
 		const [holder, foe] = singles('Furret', 'Variety Rush');
 		const pivot = battle.dex.getActiveMove('uturn');
 		assert.equal(battle.runEvent('BasePower', holder, foe, pivot, 100), 140);
-		battle.singleEvent('SourceDamagingHit', holder.getAbility(), holder.abilityState, foe, holder, pivot, 10);
-		assert.equal(battle.runEvent('BasePower', holder, foe, pivot, 100), 140);
-		battle.singleEvent('AfterMove', holder.getAbility(), holder.abilityState, holder, foe, pivot);
+		const during = [];
+		Object.assign(pivot, { accuracy: true, willCrit: false, basePower: 1, onAfterHit() {
+			during.push(!!holder.m.varietySpent?.Bug);
+		} });
+		battle.actions.useMove(pivot, holder, { target: foe });
+		assert.deepEqual(during, [false]);
+		assert.equal(holder.m.varietySpent.Bug, true);
 		assert.equal(battle.runEvent('BasePower', holder, foe, pivot, 100), 100);
 		assert.equal(battle.runEvent('BasePower', holder, foe, battle.dex.getActiveMove('thunderpunch'), 100), 140);
 	});

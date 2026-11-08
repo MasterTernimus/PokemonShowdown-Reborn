@@ -589,6 +589,8 @@ export class Battle {
 	 */
 	fieldEvent(eventid: string, targets?: Pokemon[]) {
 		const callbackName = `on${eventid}`;
+		const initialTerrainStates = eventid === 'Residual' ?
+			new Set([this.field.terrainState, ...this.field.terrainStack]) : null;
 		let getKey: undefined | 'duration';
 		if (eventid === 'Residual') {
 			getKey = 'duration';
@@ -709,6 +711,16 @@ export class Battle {
 
 			this.faintMessages();
 			if (this.ended) return;
+		}
+		if (initialTerrainStates) {
+			// Fields created after this residual's handlers were collected have not
+			// spent a turn yet. Do not charge that turn retroactively next residual.
+			// Existing covered fields retain their clocks so restoration still ages them.
+			for (const state of [this.field.terrainState, ...this.field.terrainStack]) {
+				if (!initialTerrainStates.has(state) && state.turn === this.turn) {
+					state.durationUpdatedTurn = this.turn;
+				}
+			}
 		}
 	}
 

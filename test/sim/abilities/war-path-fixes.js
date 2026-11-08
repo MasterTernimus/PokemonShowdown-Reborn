@@ -2,7 +2,7 @@
 const assert = require('assert').strict;
 const common = require('../../common');
 
-describe('War Path accuracy and weather fixes', () => {
+describe('Legacy War Path resolves to Grand Strategy', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 	function setup() {
@@ -13,29 +13,37 @@ describe('War Path accuracy and weather fixes', () => {
 		battle.makeChoices('team 1', 'team 1');
 		return [battle.p1.active[0], battle.p2.active[0]];
 	}
-	it('boosts only outgoing accuracy and preserves always-hit moves', () => {
+	it('resolves the legacy name and preserves move-level Mold Breaker', () => {
+		const [holder, foe] = setup();
+		assert.equal(holder.ability, 'grandstrategy');
+		const move = battle.dex.getActiveMove('tackle');
+		battle.singleEvent('ModifyMove', holder.getAbility(), holder.abilityState, move, holder, foe);
+		assert.equal(move.ignoreAbility, true);
+	});
+	it('keeps ordinary accuracy and preserves always-hit moves', () => {
 		const [holder, foe] = setup();
 		const move = battle.dex.getActiveMove('tackle');
-		assert.equal(battle.runEvent('ModifyAccuracy', foe, holder, move, 50), 65);
+		assert.equal(battle.runEvent('ModifyAccuracy', foe, holder, move, 50), 50);
 		assert.equal(battle.runEvent('ModifyAccuracy', holder, foe, move, 50), 50);
 		assert.equal(battle.runEvent('ModifyAccuracy', foe, holder, move, true), true);
 	});
 	for (const weather of ['hail', 'sandstorm']) {
-		it(`prevents ${weather} damage even without a naturally immune type`, () => {
+		it(`does not retain the removed ${weather} immunity`, () => {
 			const [holder, foe] = setup();
 			battle.field.setWeather(weather, foe);
 			const before = holder.hp, foeBefore = foe.hp;
 			battle.makeChoices('move splash', 'move splash');
-			assert.equal(holder.hp, before);
+			assert(holder.hp < before);
+			assert.equal(before - holder.hp, foeBefore - foe.hp);
 			assert(foe.hp < foeBefore);
 		});
 	}
-	it('preserves power, status Attack and incoming damage modifiers', () => {
+	it('does not retain generic power, damage reduction or status Attack bonuses', () => {
 		const [holder, foe] = setup();
 		const move = battle.dex.getActiveMove('tackle');
-		assert.equal(battle.runEvent('BasePower', holder, foe, move, 100), 130);
-		assert.equal(battle.runEvent('ModifyDamage', foe, holder, move, 100), 75);
+		assert.equal(battle.runEvent('BasePower', holder, foe, move, 100), 100);
+		assert.equal(battle.runEvent('ModifyDamage', foe, holder, move, 100), 100);
 		holder.status = 'brn';
-		assert.equal(battle.runEvent('ModifyAtk', holder, foe, move, 100), 150);
+		assert.equal(battle.runEvent('ModifyAtk', holder, foe, move, 100), 100);
 	});
 });

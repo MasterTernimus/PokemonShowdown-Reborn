@@ -14,10 +14,10 @@ describe('Sceptile and Verdant Drake', () => {
 	it('uses the Grass/Dragon profile and has no Electric moves throughout its evolution line', () => {
 		const sceptile = Dex.species.get('Sceptile');
 		assert.deepEqual(sceptile.types, ['Grass', 'Dragon']);
-		assert.deepEqual(sceptile.abilities, {'0': 'Regenerator', '1': 'Dual Wield', H: 'Unburden'});
+		assert.deepEqual(sceptile.abilities, { '0': 'Regenerator', '1': 'Canopy Mastery', H: 'Unburden' });
 		const mega = Dex.species.get('Sceptile-Mega');
 		assert.deepEqual(mega.types, ['Grass', 'Dragon']);
-		assert.equal(mega.abilities[0], 'Verdant Drake');
+		assert.equal(mega.abilities[0], 'Raging Thicket');
 		for (const species of ['Treecko', 'Grovyle', 'Sceptile', 'Sceptile-Mega']) {
 			const electricMoves = Dex.species.getFullLearnset(species)
 				.flatMap(data => Object.keys(data.learnset))
@@ -36,7 +36,9 @@ describe('Sceptile and Verdant Drake', () => {
 		const sceptile = battle.p1.active[0];
 		battle.makeChoices('move splash mega', 'move splash');
 		assert.equal(sceptile.ability, 'verdantdrake');
-		for (const component of ['proficient', 'dualwield', 'regenerator', 'lightningrod']) {
+		assert.deepEqual(sceptile.getPassives(), ['proficient']);
+		assert(!sceptile.hasAbility('dualwield'));
+		for (const component of ['infiltrator', 'regenerator', 'lightningrod']) {
 			assert(sceptile.hasAbility(component), component);
 		}
 		const hp = sceptile.hp;

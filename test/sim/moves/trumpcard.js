@@ -52,7 +52,7 @@ describe('Trump Card', function () {
 		assert.deepEqual(basePowers, [80, 200]);
 	});
 
-	it('should work if called via Custap Berry in Gen 4', function () {
+	common.itGen(4, 'should work if called via Custap Berry in Gen 4', () => {
 		battle = common.gen(4).createBattle([
 			[{species: 'Eevee', level: 1, ability: 'runaway', item: 'custapberry', moves: ['trumpcard']}],
 			[{species: 'Scizor', ability: 'technician', moves: ['falseswipe']}],

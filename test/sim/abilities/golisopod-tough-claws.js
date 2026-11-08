@@ -3,9 +3,9 @@ const assert=require('assert').strict,common=require('../../common'),{Dex}=requi
 let battle;
 describe('Base Golisopod Tough Claws passive',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- it('replaces base Defiant while preserving Mega and Aevian forms',()=>{
+	it('keeps base and Mega Tough Claws separate from Aevian forms', () => {
   assert.deepEqual(Dex.species.get('golisopod').passives,['toughclaws']);
-  assert.deepEqual(Dex.species.get('golisopodmega').passives,['waterveil']);
+		assert.deepEqual(Dex.species.get('golisopodmega').passives, ['toughclaws']);
   for(const s of Dex.species.all().filter(s=>s.id.startsWith('golisopod')&&s.id.includes('aev')))assert(!s.passives?.includes('toughclaws'));
  });
  for(const mode of ['contact','noncontact','suppressed','active-duplicate','bypass'])it(mode,()=>{

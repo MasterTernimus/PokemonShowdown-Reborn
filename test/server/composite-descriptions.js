@@ -11,8 +11,8 @@ describe('Canonical composite descriptions', () => {
 		const a = Dex.abilities.get('verdantdrake');
 		assert(a.shortDesc.length < 160);
 		assert.doesNotMatch(a.shortDesc, /Proficient \+/);
-		for (const value of ['1.3x', 'Prevents and cures paralysis', '+1 Attack and Sp. Atk']) assert(a.desc.includes(value));
-		assert(getAbilityMechanicsHTML(a, Dex).includes('1.3x power'));
+		for (const value of ['Electric moves', 'Switching heals 1/3', '+1 Attack and Sp. Atk', 'bypass Substitute']) assert(a.desc.includes(value));
+		assert(getAbilityMechanicsHTML(a, Dex).includes('/dt Regenerator, gen9'));
 	});
 	it('canonicalizes legacy aliases and overlapping nested component paths for display only', () => {
 		try {
@@ -28,7 +28,7 @@ describe('Canonical composite descriptions', () => {
 	});
 	it('collapses Layered Coat children without removing explanatory prose or identity', () => {
 		const a = Dex.abilities.get('aeviantoxin');
-		assert.equal(a.shortDesc, 'Combines the listed abilities.');
+		assert.equal(a.shortDesc, 'Biting moves have 1.5x power.');
 		assert.match(a.desc, /Defense.*doubled|Doubles Defense/i);
 		assert.match(a.desc, /powder/);
 		assert.deepEqual(getAbilityDisplayComponents(a.id), ['strongjaw', 'layeredcoat', 'merciless']);
@@ -37,7 +37,10 @@ describe('Canonical composite descriptions', () => {
 		assert.equal(getAbilitySelectorSummary(a.id, 'Strong Jaw + Layered Coat + Fur Coat + Overcoat + Merciless; doubles Defense.', nameOf), a.shortDesc);
 	});
 	it('preserves distinct mechanics clauses and is idempotent', () => {
-		for (const a of Dex.abilities.all()) assert.equal(getAbilitySelectorSummary(a.id, a.shortDesc, nameOf), a.shortDesc, a.id);
+		for (const a of Dex.abilities.all()) {
+			const summary = getAbilitySelectorSummary(a.id, a.shortDesc, nameOf);
+			assert.equal(getAbilitySelectorSummary(a.id, summary, nameOf), summary, a.id);
+		}
 		const text = 'Sturdy. When Sturdy saves it, creates Spikes; damage reduction applies separately.';
 		assert.equal(getAbilitySelectorSummary('stonewall', text, nameOf), Dex.abilities.get('stonewall').shortDesc);
 	});

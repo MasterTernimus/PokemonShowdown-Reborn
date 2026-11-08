@@ -78,7 +78,7 @@ describe('Stomping Tantrum', function () {
 		battle = common.createBattle([[
 			{species: 'Marowak-Alola', ability: 'noguard', moves: ['stompingtantrum', 'hyperbeam']},
 		], [
-			{species: 'Lycanroc-Midnight', moves: ['sleeptalk']},
+			{ species: 'Blissey', moves: ['sleeptalk'] },
 		]]);
 
 		battle.onEvent('BasePower', battle.format, function (basePower, pokemon, target, move) {
@@ -86,6 +86,8 @@ describe('Stomping Tantrum', function () {
 		});
 
 		battle.makeChoices('move hyperbeam', 'auto');
+		assert(battle.p1.active[0].volatiles.mustrecharge);
+		assert.false.fainted(battle.p2.active[0]);
 		battle.makeChoices('move recharge', 'auto');
 		battle.makeChoices('move stompingtantrum', 'auto');
 	});

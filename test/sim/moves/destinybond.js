@@ -55,7 +55,7 @@ describe(`Destiny Bond`, function () {
 describe(`Destiny Bond [Gen 6]`, function () {
 	afterEach(() => battle.destroy());
 
-	it(`should not fail if used consecutively`, function () {
+	common.itGen(6, `should not fail if used consecutively`, () => {
 		battle = common.gen(6).createBattle([
 			[{species: "Gastly", ability: 'levitate', moves: ['destinybond']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
 			[{species: "Metagross", ability: 'clearbody', moves: ['psychic', 'calmmind']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
@@ -76,7 +76,7 @@ describe(`Destiny Bond [Gen 6]`, function () {
 		assert.fainted(battle.p2.active[0]);
 	});
 
-	it(`should end the effect before the user switches out`, function () {
+	common.itGen(6, `should end the effect before the user switches out`, () => {
 		battle = common.gen(6).createBattle([
 			[{species: "Gastly", level: 50, moves: ['destinybond']}, {species: "Gengar", moves: ['sleeptalk']}],
 			[{species: "Snorlax", moves: ['sleeptalk', 'pursuit']}],
@@ -93,7 +93,7 @@ describe(`Destiny Bond [Gen 6]`, function () {
 describe(`Destiny Bond [Gen 4]`, function () {
 	afterEach(() => battle.destroy());
 
-	it(`should not end the effect before the user switches out`, function () {
+	common.itGen(4, `should not end the effect before the user switches out`, () => {
 		battle = common.gen(4).createBattle([
 			[{species: "Gastly", level: 50, moves: ['destinybond']}, {species: "Gengar", moves: ['sleeptalk']}],
 			[{species: "Snorlax", moves: ['sleeptalk', 'pursuit']}],
@@ -110,7 +110,7 @@ describe(`Destiny Bond [Gen 4]`, function () {
 describe(`Destiny Bond [Gen 2]`, function () {
 	afterEach(() => battle.destroy());
 
-	it(`should end the effect before the user switches out if it is faster than the Pursuit user`, function () {
+	common.itGen(2, `should end the effect before the user switches out if it is faster than the Pursuit user`, () => {
 		battle = common.gen(2).createBattle([
 			[{species: "Gastly", level: 50, moves: ['destinybond']}, {species: "Haunter", level: 30, moves: ['destinybond']}, {species: "Gengar", moves: ['sleeptalk']}],
 			[{species: "Snorlax", moves: ['sleeptalk', 'pursuit']}],

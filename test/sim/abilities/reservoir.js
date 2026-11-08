@@ -15,11 +15,12 @@ describe('Poliwrath Reservoir', () => {
 	}
 	it('is unique, exposes all components and is legal with the mixed spread', () => {
 		const [p] = setup();
-		assert.deepEqual(p.species.abilities, {0: 'Reservoir', 1: 'Knuckle Tide', H: 'Crosscurrent'});
+		assert.deepEqual(p.species.abilities, { 0: 'Reservoir', 1: 'Knuckle Tide', H: 'Crosscurrent', S: 'Aevian Ascendance' });
 		assert.equal(p.species.bst, 560);
 		assert.equal(p.species.baseStats.atk, 100);
 		assert.equal(p.species.baseStats.spa, 95);
-		for (const a of ['waterabsorb', 'gluttony', 'damp']) assert(p.hasAbility(a), a);
+		for (const a of ['waterabsorb', 'gluttony']) assert(p.hasAbility(a), a);
+		assert(!p.hasAbilityOrPassive('damp'));
 		assert.deepEqual(Dex.abilities.all().filter(a => a.num === 11233).map(a => a.id), ['reservoir']);
 		assert.equal(TeamValidator.get('gen9nofieldsinglesgame').validateTeam([
 			{species: 'Poliwrath', ability: 'Reservoir', moves: ['surf', 'drainpunch']},
@@ -43,18 +44,18 @@ describe('Poliwrath Reservoir', () => {
 		battle.eachEvent('Update');
 		assert.equal(p.item, ''); assert.equal(p.boosts.atk, 1);
 	});
-	it('blocks explosions without the attacker fainting', () => {
+	it('does not retain the removed Damp explosion protection', () => {
 		const [p, foe] = setup();
 		battle.makeChoices('move splash', 'move explosion');
-		assert.equal(p.hp, p.maxhp); assert.equal(foe.hp, foe.maxhp);
+		assert(p.hp < p.maxhp); assert.equal(foe.hp, 0);
 	});
-	it('retains Damp Fire mitigation and Aftermath protection', () => {
+	it('does not retain removed Damp Fire mitigation or Aftermath protection', () => {
 		const [p, foe] = setup();
 		for (const [event, id] of [['ModifyAtk', 'firepunch'], ['ModifySpA', 'flamethrower']]) {
-			assert.equal(battle.runEvent(event, foe, p, battle.dex.getActiveMove(id), 100), 50);
+			assert.equal(battle.runEvent(event, foe, p, battle.dex.getActiveMove(id), 100), 100);
 		}
 		const hp = foe.hp;
-		battle.damage(50, foe, p, battle.dex.abilities.get('aftermath')); assert.equal(foe.hp, hp);
+		battle.damage(50, foe, p, battle.dex.abilities.get('aftermath')); assert.equal(foe.hp, hp - 50);
 	});
 	it('blocks ignition moves on Corrosive Mist', () => {
 		const [p] = setup(); battle.field.setTerrain('corrosivemistterrain', p);
@@ -62,7 +63,7 @@ describe('Poliwrath Reservoir', () => {
 		battle.actions.runMove('heatwave', battle.p2.active[0], 1);
 		assert.equal(p.hp, hp); assert.equal(battle.field.terrain, 'corrosivemistterrain');
 	});
-	it('loses absorption, early berries and explosion protection when suppressed', () => {
+	it('loses absorption and early berries when suppressed; explosions remain usable', () => {
 		const [p] = setup('Liechi Berry'); p.addVolatile('gastroacid');
 		p.hp = Math.floor(p.maxhp / 2); battle.eachEvent('Update'); assert.equal(p.item, 'liechiberry');
 		p.hp = p.maxhp; battle.makeChoices('move splash', 'move surf'); assert(p.hp < p.maxhp);

@@ -10,12 +10,13 @@ describe('Approved six species reworks', function () {
   battle.randomChance=(n,d)=>n>=d; battle.randomizer=x=>x;
   return [battle.p1.active[0],battle.p2.active[0]];
  }
- it('limits the new kits to approved base species',()=>{
+	it('keeps approved kits aligned with cosmetics and separate from regional forms', () => {
   setup('Wigglytuff','Cushion Chorus');
   const d=battle.dex;
   for(const [id,passive]of [['wigglytuff','fluffy'],['lurantis','solarmimicry'],['spiritomb','mourningvessel'],['dewgong','polarrest'],['walrein','glacierbreaker']])assert.deepEqual(d.species.get(id).passives,[passive]);
   assert.equal(d.species.get('decidueye').abilities.H,'Canopy Archer');
-  for(const id of ['decidueyehisui','decidueyealt'])assert(!Object.values(d.species.get(id).abilities).includes('Canopy Archer'));
+		assert.equal(d.species.get('decidueyehisui').abilities.H, 'Canopy Archer');
+		assert.equal(d.species.get('decidueyealt').abilities.H, 'Canopy Archer');
   for(const id of ['seel','sealeo','spheal','lurantis totem'])assert(!d.species.get(id).passives?.some(p=>['polarrest','glacierbreaker','solarmimicry'].includes(p)));
  });
  it('keeps Fluffy passive when selected abilities are suppressed',()=>{const[p]=setup('Wigglytuff','Perfect Apple');p.addVolatile('gastroacid');assert(p.hasAbilityOrPassive('fluffy'));assert(!p.hasAbility('purepower'));});
@@ -38,7 +39,18 @@ describe('Approved six species reworks', function () {
  it('Glacier Breaker keeps Accumulation Thick Fat and breaks three screens',()=>{const[p,t]=setup('Walrein','Accumulation',['icebeam']);assert(p.hasAbility('thickfat'));for(const id of ['reflect','lightscreen','auroraveil'])t.side.addSideCondition(id,t);battle.actions.runMove('icebeam',p,p.getLocOf(t));for(const id of ['reflect','lightscreen','auroraveil'])assert(!t.side.sideConditions[id]);});
  it('Deep Chill includes Intimidate and reacts to Special damage once per turn',()=>{const[p,t]=setup('Walrein','Deep Chill');assert(p.hasAbility('oblivious'));assert(p.hasAbility('intimidate'));assert.equal(t.boosts.atk,-1);battle.actions.runMove('icebeam',t,t.getLocOf(p));assert.equal(t.boosts.spe,-1);battle.actions.runMove('icebeam',t,t.getLocOf(p));assert.equal(t.boosts.spe,-1);});
  for(const species of ['Roserade','Roserade-Mega'])it(species+' gets one 60% Grass poison secondary with Serene Grace',()=>{const[p,t]=setup(species,'Serene Grace',['energyball']);assert(p.hasAbilityOrPassive('aromaveil'));const m=battle.dex.getActiveMove('energyball');battle.runEvent('ModifyMove',p,t,m,m);assert.deepEqual(m.secondaries.filter(s=>s.status==='psn').map(s=>s.chance),[60]);assert(!battle.dex.species.get('roseradeaevian').passives.includes('beguilingbouquet'));});
- it('Venom Spurs replaces charge behavior with Corrosion and Bug poison',()=>{const[p,t]=setup('Scolipede','Venom Spurs',['xscissor']);assert.deepEqual(p.getPassives(),['merciless']);assert(p.hasAbility('corrosion'));const m=battle.dex.getActiveMove('xscissor');battle.runEvent('ModifyMove',p,t,m,m);assert.deepEqual(m.secondaries.map(s=>s.chance),[30]);assert(!p.getAbility().onBeforeMove);assert.equal(battle.dex.species.get('scolipede').abilities.H,'Speed Boost');assert.equal(battle.dex.species.get('scolipedemega').abilities[0],'Venom Bastion');assert.deepEqual(battle.dex.species.get('scolipedemega').passives,['poisonpoint']);});
+	it('Venom Spurs replaces charge behavior with Corrosion and Bug poison', () => {
+		const [p, t] = setup('Scolipede', 'Venom Spurs', ['xscissor']);
+		assert.deepEqual(p.getPassives(), ['merciless']);
+		assert(p.hasAbility('corrosion'));
+		const m = battle.dex.getActiveMove('xscissor');
+		battle.runEvent('ModifyMove', p, t, m, m);
+		assert.deepEqual(m.secondaries.map(s => s.chance), [30]);
+		assert(!p.getAbility().onBeforeMove);
+		assert.equal(battle.dex.species.get('scolipede').abilities.H, 'Speed Boost');
+		assert.equal(battle.dex.species.get('scolipedemega').abilities[0], 'Venom Bastion');
+		assert.deepEqual(battle.dex.species.get('scolipedemega').passives, ['shellarmor']);
+	});
  it('Last Brood triggers only after the whole multihit attack, without HP cost or restart refresh',()=>{const[p,t]=setup('Scolipede','Last Brood');p.hp=Math.floor(p.maxhp/2);const hp=p.hp,seen=[];const m=battle.dex.getActiveMove('tackle');Object.assign(m,{damage:10,multihit:3,accuracy:true,onAfterHit(){seen.push(!!p.volatiles.substitute);}});battle.actions.runMove(m,t,t.getLocOf(p));assert.deepEqual(seen,[false,false,false]);assert.equal(p.hp,hp-30);assert.equal(p.volatiles.substitute.hp,Math.floor(p.maxhp/4));p.removeVolatile('substitute');p.setAbility('No Ability');p.setAbility('Last Brood');battle.actions.runMove('tackle',t,t.getLocOf(p));assert(!p.volatiles.substitute);});
  it('Last Brood existing Substitute preserves allowance and genuine entry resets it',()=>{const[p,t]=setup('Scolipede','Last Brood');p.hp=Math.floor(p.maxhp/2);p.addVolatile('substitute');const m=Object.assign(battle.dex.getActiveMove('tackle'),{damage:10,accuracy:true});battle.actions.runMove(m,t,t.getLocOf(p));assert(!p.m.lastBroodSpent);p.removeVolatile('substitute');battle.actions.runMove(m,t,t.getLocOf(p));assert(p.m.lastBroodSpent);battle.singleEvent('SwitchIn',p.getAbility(),p.abilityState,p);assert(!p.m.lastBroodSpent);});
  it('Last Brood recognizes a new entry even if suppressed during its entry callback',()=>{const[p,t]=setup('Scolipede','Last Brood');p.hp=Math.floor(p.maxhp/2);p.m.lastBroodSpent=true;p.m.lastBroodEntry=p.previouslySwitchedIn-1;const m=Object.assign(battle.dex.getActiveMove('tackle'),{damage:10,accuracy:true});battle.actions.runMove(m,t,t.getLocOf(p));assert(p.volatiles.substitute);assert.equal(p.m.lastBroodEntry,p.previouslySwitchedIn);});

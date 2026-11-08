@@ -1,3 +1,4 @@
+import { unstableEvoComponents } from './ability-components';
 import {fieldDisablesArmorReduction} from './armor-reductions';
 import { markDualWieldScale } from '../sim/dual-wield-power';
 import {absorbHit} from './absorption';
@@ -630,8 +631,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10433,
 	},
 	pearlcurrent: {
+		// Resolve the ally reward before a matching native absorption ends TryHit.
+		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
-			const absorbed = (this.dex.abilities.get('waterabsorb') as any).onTryHit?.call(this, target, source, move);
+			const absorbed = absorbHit(this, target, source, move, 'Water');
 			if (absorbed === null && !target.m.pearlCurrentUsed) {
 				target.m.pearlCurrentUsed = true;
 				const ally = target.allies().filter(pokemon => pokemon.hp).sort((a, b) => a.hp / a.maxhp - b.hp / b.maxhp)[0];
@@ -1968,18 +1971,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onAnyAccuracy(accuracy, target, source, move) {
 			return this.dex.abilities.get('defragment').onAnyAccuracy?.call(this, accuracy, target, source, move);
 		},
-		onCheckShow(pokemon) {
-			return this.dex.abilities.get('selfrepair').onCheckShow?.call(this, pokemon);
-		},
-		onSwitchOut(pokemon) {
-			return this.dex.abilities.get('selfrepair').onSwitchOut?.call(this, pokemon);
-		},
-		onResidual(pokemon) {
-			return this.dex.abilities.get('selfrepair').onResidual?.call(this, pokemon);
-		},
-		onImmunity(type, pokemon) {
-			return this.dex.abilities.get('selfrepair').onImmunity?.call(this, type, pokemon);
-		},
 		flags: { breakable: 1 },
 		name: "Adaptive Core",
 		rating: 5,
@@ -2320,9 +2311,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10283,
 	},
 	greatmarsh: {
-		onStart(pokemon) {
-			return this.dex.abilities.get('anticipation').onStart?.call(this, pokemon);
-		},
 		onTryHit(target, source, move) { return this.dex.abilities.getHandler('dryskin', 'onTryHit')?.call(this, target, source, move); },
 		onSourceBasePowerPriority: 17,
 		onSourceBasePower(basePower, attacker, defender, move) {
@@ -2858,6 +2846,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 71,
 	},
 	armortail: {
+		onSourceModifyDamage() {
+			if (fieldDisablesArmorReduction(this.field.terrain, 'armortail')) return;
+			if (skipPassiveComponent(this, this.effectState.target, 'armortail')) return;
+			return this.chainModify(0.8);
+		},
 		onStart(pokemon) {
 			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ def: 1, spd: 1 });
@@ -3908,11 +3901,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
 			const ally = pokemon.allies()[0];
+			if (!ally) return;
 			if (this.field.isTerrain('ashenbeachterrain')) {
 				ally.addVolatile('helpinghand');
 				pokemon.addVolatile('helpinghand');
 			}
-			if (!ally) return;
 
 			let i: BoostID;
 			for (i in ally.boosts) {
@@ -5014,12 +5007,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-activate', source, 'ability: Fallen Star');
 			this.actions.useMove(newMove, source, { target: followTarget, sourceEffect: this.dex.abilities.get('fallenstar') });
 		},
-		onImmunity(type, pokemon) {
-			return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
-		},
-		onResidual(pokemon) {
-			return this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
-		},
 		flags: { breakable: 1, cantsuppress: 1 },
 		name: "Fallen Star",
 		rating: 3.5,
@@ -5388,15 +5375,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyCritRatio(critRatio, source, target, move) {
 			return this.dex.abilities.get('superluck').onModifyCritRatio?.call(this, critRatio, source, target, move);
-		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.category !== 'Status' && source !== target) return this.chainModify(0.8);
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (!effect || effect.effectType !== 'Move' || !source?.hp) return;
-			const atk = source.getStat('atk', false, true);
-			const spa = source.getStat('spa', false, true);
-			this.boost(atk >= spa ? {atk: 1} : {spa: 1}, source, source, this.dex.abilities.get('voidcommand'));
 		},
 		flags: { breakable: 1 },
 		name: "Void Command",
@@ -7570,9 +7548,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.flags['sound']) {
-				if (this.field.isTerrain(['caveterrain', 'volcanicterrain', 'crystalcavernterrain'])) return this.chainModify(2);
-				if (this.field.isTerrain(['mountainterrain', 'snowymountainterrain'])) return this.chainModify(1.5);
-				return this.chainModify(1.5);
+				if (this.field.isTerrain(['caveterrain', 'volcanicterrain', 'crystalcavernterrain', 'mountainterrain', 'snowymountainterrain'])) return this.chainModify(1.5);
+				return this.chainModify(1.2);
 			}
 		},
 		onAnyTryHit(target, source, move) {
@@ -8173,14 +8150,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, pokemon, target, move) {
 			return (this.dex.abilities.get('dragonize') as any).onBasePower?.call(this, basePower, pokemon, target, move);
 		},
-		onImmunity(type, pokemon) {
-			const result = this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
-			if (result !== undefined) return result;
-
-		},
-		onResidual(pokemon) {
-			this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
-		},
 		flags: { breakable: 1 },
 		name: "Royal Scales",
 		rating: 5,
@@ -8356,12 +8325,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
 			this.dex.abilities.get('pollenbloom').onResidual?.call(this, pokemon);
-			this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
 		},
 		onImmunity(type, pokemon) {
 			const pollenResult = this.dex.abilities.get('pollenbloom').onImmunity?.call(this, type, pokemon);
 			if (pollenResult === false) return false;
-			return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
 		},
 		onDamagingHit(damage, target, source, move) {
 			return this.dex.abilities.get('effectspore').onDamagingHit?.call(this, damage, target, source, move);
@@ -8492,7 +8459,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
 			this.dex.abilities.get('waterbarrage').onResidual?.call(this, pokemon);
-			return this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			return this.dex.abilities.get('shellarmor').onSourceModifyDamage?.call(this, damage, source, target, move);
@@ -10026,17 +9992,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, source, target, move) {
 			return this.dex.abilities.get('skilllink').onBasePower?.call(this, basePower, source, target, move);
 		},
-		onSourceModifyAtkPriority: 6,
-		onSourceModifyAtk(atk, attacker, defender, move) {
-			return this.dex.abilities.get('heatproof').onSourceModifyAtk?.call(this, atk, attacker, defender, move);
-		},
-		onSourceModifySpAPriority: 5,
-		onSourceModifySpA(spa, attacker, defender, move) {
-			return this.dex.abilities.get('heatproof').onSourceModifySpA?.call(this, spa, attacker, defender, move);
-		},
-		onDamage(damage, target, source, effect) {
-			return this.dex.abilities.get('heatproof').onDamage?.call(this, damage, target, source, effect);
-		},
 		flags: { breakable: 1 },
 		name: "Desert Shell",
 		rating: 5,
@@ -10472,7 +10427,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onImmunity(type, pokemon) {
 			const wildfireResult = this.dex.abilities.get('unboundblaze').onImmunity?.call(this, type, pokemon);
 			if (wildfireResult === false) return false;
-			return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
 		},
 		onUpdate(pokemon) {
 			return this.dex.abilities.get('unboundblaze').onUpdate?.call(this, pokemon);
@@ -10512,7 +10466,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			this.dex.abilities.get('unboundblaze').onResidual?.call(this, pokemon);
-			return this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
 		},
 		flags: { breakable: 1 },
 		name: "Burning Crown",
@@ -13270,30 +13223,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
-				if (this.effectState.bestStat !== 'atk' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'atk' || !pokemon.hasAbilityOrPassive('protosynthesis')) return;
 				this.debug('Protosynthesis atk boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifyDefPriority: 6,
 			onModifyDef(def, pokemon) {
-				if (this.effectState.bestStat !== 'def' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'def' || !pokemon.hasAbilityOrPassive('protosynthesis')) return;
 				this.debug('Protosynthesis def boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(spa, pokemon) {
-				if (this.effectState.bestStat !== 'spa' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spa' || !pokemon.hasAbilityOrPassive('protosynthesis')) return;
 				this.debug('Protosynthesis spa boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpDPriority: 6,
 			onModifySpD(spd, pokemon) {
-				if (this.effectState.bestStat !== 'spd' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spd' || !pokemon.hasAbilityOrPassive('protosynthesis')) return;
 				this.debug('Protosynthesis spd boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpe(spe, pokemon) {
-				if (this.effectState.bestStat !== 'spe' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spe' || !pokemon.hasAbilityOrPassive('protosynthesis')) return;
 				this.debug('Protosynthesis spe boost');
 				return this.chainModify(1.5);
 			},
@@ -13430,30 +13383,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
-				if (this.effectState.bestStat !== 'atk' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'atk' || !pokemon.hasAbilityOrPassive('quarkdrive')) return;
 				this.debug('Quark Drive atk boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifyDefPriority: 6,
 			onModifyDef(def, pokemon) {
-				if (this.effectState.bestStat !== 'def' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'def' || !pokemon.hasAbilityOrPassive('quarkdrive')) return;
 				this.debug('Quark Drive def boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(spa, pokemon) {
-				if (this.effectState.bestStat !== 'spa' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spa' || !pokemon.hasAbilityOrPassive('quarkdrive')) return;
 				this.debug('Quark Drive spa boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpDPriority: 6,
 			onModifySpD(spd, pokemon) {
-				if (this.effectState.bestStat !== 'spd' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spd' || !pokemon.hasAbilityOrPassive('quarkdrive')) return;
 				this.debug('Quark Drive spd boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpe(spe, pokemon) {
-				if (this.effectState.bestStat !== 'spe' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spe' || !pokemon.hasAbilityOrPassive('quarkdrive')) return;
 				this.debug('Quark Drive spe boost');
 				return this.chainModify(1.5);
 			},
@@ -14695,7 +14648,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return;
 			}
 			for (const volatile of removableVolatiles) {
-				if (pokemon.volatiles[volatile]) pokemon.removeVolatile(volatile);
+				if (!pokemon.volatiles[volatile]) continue;
+				if (volatile === 'yawn' || volatile === 'perishsong') {
+					// Cleansing must not trigger their natural expiry (sleep/faint).
+					delete pokemon.volatiles[volatile];
+					this.add('-end', pokemon, `move: ${this.dex.conditions.get(volatile).name}`, '[silent]');
+				} else if (pokemon.removeVolatile(volatile) && !this.dex.conditions.get(volatile).onEnd) {
+					// These effects normally last until switching and have no end message.
+					this.add('-end', pokemon, `move: ${this.dex.conditions.get(volatile).name}`, '[silent]');
+				}
 			}
 			let clearedBoost = false;
 			let stat: BoostID;
@@ -15641,7 +15602,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHit(damage, target, source, move) { this.dex.abilities.get('cursedbody').onDamagingHit?.call(this, damage, target, source, move); },
 		onFaint(pokemon, source, effect) { this.dex.abilities.get('cursedbody').onFaint?.call(this, pokemon, source, effect); },
 		onResidual(pokemon) { this.dex.abilities.get('baddreams').onResidual?.call(this, pokemon); },
-		flags: {}, name: "Nightmare Pulse", rating: 4.5, num: 11257,
+		flags: {}, name: "Nightmare Pulse", rating: 4.5, num: 32511,
 	},
 	pulsewaste: {
 		onStart(pokemon) {
@@ -16082,31 +16043,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10033,
 	},
 	astralwitchcraft: {
-		onBasePowerPriority: 22,
-		onBasePower(basePower, attacker, defender, move) {
-			if (this.effect.id === 'astralwitchcraft') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
-		},
-		onStart(pokemon) {
-			this.dex.abilities.get('magicbounce').onStart?.call(this, pokemon);
-			if (this.field.isTerrain(['fairytaleterrain', 'newworldterrain'])) {
-				this.boost({ spa: 1, spd: 1 }, pokemon, pokemon);
-			}
-		},
-		onDamage(damage, target, source, effect) {
-			if (effect.effectType !== 'Move') {
-				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: Astral Witchcraft');
-				return false;
-			}
-		},
-		onImmunity(type, pokemon) {
-			if (type === 'Ground') return false;
-		},
-		onTryHit(target, source, move) { return this.dex.abilities.getHandler('magicbounce', 'onTryHit')?.call(this, target, source, move); },
-		onAllyTryHitSide(target, source, move) { return this.dex.abilities.getHandler('magicbounce', 'onAllyTryHitSide')?.call(this, target, source, move); },
-		flags: { breakable: 1 },
-		name: "Astral Witchcraft",
-		rating: 5,
-		num: 10034,
+		onStart(pokemon) { this.dex.abilities.get('magicguard').onStart?.call(this, pokemon); },
+		onDamage(damage, target, source, effect) { return this.dex.abilities.get('magicguard').onDamage?.call(this, damage, target, source, effect); },
+		onModifyMovePriority: -2,
+		onModifyMove(move, pokemon, target) { this.dex.abilities.get('serenegrace').onModifyMove?.call(this, move, pokemon, target); },
+		flags: { breakable: 1 }, name: 'Astral Witchcraft', rating: 5, num: 10034,
 	},
 	blazingtempo: {
 		onStart(pokemon) {
@@ -17664,7 +17605,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Solar Trap",
 		rating: 4.5,
-		num: 11258,
+		num: 32512,
 	},
 	pulseblockade: {
 		onStart(pokemon) {
@@ -18106,23 +18047,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10374,
 	},
 	scavenger: {
-		onImmunity(type, pokemon) {
-			return this.dex.abilities.get('overcoat').onImmunity?.call(this, type, pokemon);
+		onAnyFaint(fainted) {
+			const holder = this.effectState.target as Pokemon;
+			if (fainted === holder || !fainted.isActive || !holder.hp || !holder.isActive || holder.m.scavengerHealTurn === this.turn) return;
+			if (this.heal(holder.baseMaxhp / 4, holder, holder, this.effect)) holder.m.scavengerHealTurn = this.turn;
 		},
-		onTryHitPriority: 1,
-		onTryHit(target, source, move) {
-			return this.dex.abilities.getHandler('overcoat', 'onTryHit')?.call(this, target, source, move);
-		},
-		onTryBoost(boost, target, source, effect) {
-			return this.dex.abilities.get('bigpecks').onTryBoost?.call(this, boost, target, source, effect);
-		},
-		onSwitchOut(pokemon) {
-			return this.dex.abilities.get('regenerator').onSwitchOut?.call(this, pokemon);
-		},
-		flags: {breakable: 1},
-		name: "Scavenger",
-		rating: 4,
-		num: 10375,
+		flags: {}, name: 'Scavenger', rating: 3, num: 10375,
 	},
 	ultrainstinct: {
 		onStart(pokemon) {
@@ -19618,19 +19548,6 @@ const UNSTABLE_EVO_FORMES: Partial<Record<IDEntry, string>> = {
 	sparklyswirl: 'Sylveon',
 };
 
-function unstableEvoComponents(pokemon: Pokemon): IDEntry[] {
-	switch (pokemon.species.id) {
-	case 'jolteon': return ['lightningrod', 'voltabsorb'];
-	case 'flareon': return ['soulfire', 'fluffy'];
-	case 'vaporeon': return ['stormdrain', 'waterabsorb'];
-	case 'umbreon': return ['pressure', 'innerfocus'];
-	case 'espeon': return ['magicbounce', 'telepathy'];
-	case 'glaceon': return ['icescales', 'slushrush'];
-	case 'leafeon': return ['chlorophyll', 'regenerator'];
-	case 'sylveon': return ['friendguard', 'competitive'];
-	default: return [];
-	}
-}
 
 function setStarterEeveeBattleEVs(pokemon: Pokemon, effect: Effect) {
 	for (const stat of ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const) {
@@ -20489,7 +20406,19 @@ Abilities.fossilfrenzy.onUpdate = function (pokemon) {
 	if (!this.actions.attackResolutionDepth) resolveFossilFrenzy(this, pokemon, this.effectState);
 };
 
-Abilities.evergreen = {...Abilities.overcoat, ...Abilities.ripen, flags: {breakable: 1}, name: 'Evergreen', rating: 4, num: 11285};
+Abilities.evergreen = {
+	name: 'Evergreen', num: 11285, rating: 3, flags: {},
+	onResidualOrder: 28, onResidualSubOrder: 2,
+	onResidual(pokemon) {
+		if (this.field.isWeather(['hail', 'snow']) || this.randomChance(1, 2)) {
+			if (pokemon.hp && !pokemon.item && (this.dex.items.get(pokemon.lastItem).isBerry || ['telluricseed', 'syntheticseed', 'elementalseed', 'magicalseed'].includes(pokemon.lastItem))) {
+				pokemon.setItem(pokemon.lastItem);
+				pokemon.lastItem = '' as ID;
+				this.add('-item', pokemon, pokemon.getItem(), '[from] ability: Evergreen');
+			}
+		}
+	},
+};
 Abilities.battlegrip = {
 	...Abilities.moxie,
 	onSourceAfterFaint(length, target, source, effect) {
@@ -20893,16 +20822,8 @@ Abilities.voidhex.onAnyAfterDamageApplied = function (damage, target, source, ef
 Abilities.voidcommand.onAfterMove = function (source, target, move) {
  if (!source.hp || !move.isZ || source.moveThisTurnResult !== true || source.m.wickedCommandZUsed) return;
  source.m.wickedCommandZUsed = true;
- // Faints can be announced after AfterMove. Their ordinary per-KO callback supplies the boost.
- if (this.faintQueue.some(faint => faint.source === source && faint.effect === move) ||
-  move.hitTargets?.some(pokemon => pokemon !== source && pokemon.hp <= 0)) return;
  const atk = source.getStat('atk', false, true), spa = source.getStat('spa', false, true);
  this.boost(atk >= spa ? {atk: 1} : {spa: 1}, source, source, this.effect);
-};
-const approvedWickedKO = Abilities.voidcommand.onSourceAfterFaint;
-Abilities.voidcommand.onSourceAfterFaint = function (length, target, source, effect) {
- if (effect?.effectType === 'Move' && (effect as ActiveMove).isZ && source?.hp) source.m.wickedCommandZUsed = true;
- return approvedWickedKO?.call(this, length, target, source, effect);
 };
 Abilities.voidpromise.onHeal = function (amount, target, source, effect) {
  if (amount > 0 && target === source && effect?.id === 'moonlight') {
@@ -21094,7 +21015,6 @@ Abilities.woolyconductor.onDamagingHit = function (damage, target, source, move)
  target.addVolatile('woolyconductorspent', target, this.effect);
  this.boost({spe: -1}, source, target, this.effect);
 };
-
 
 // Approved replacements for components now supplied by the species passive.
 Abilities.uncheckedassault.onUpdate = function (pokemon) {
@@ -21771,3 +21691,19 @@ Abilities.tomeofavarice = {
 		}
 	},
 };
+
+import { installAngeFlower } from './ange-flower';
+installAngeFlower(Abilities);
+
+Abilities.twinfocus = {
+	name: 'Twin Focus', num: 32501, rating: 3, flags: {},
+	onModifyMove(move) {
+		if (move.type === 'Psychic' && move.category !== 'Status') move.ignorePositiveDefensive = true;
+	},
+};
+
+Abilities.cosmicanalysis = { name: 'Cosmic Analysis', num: 32502, rating: 4, flags: {} };
+composeSelectedAbility(Abilities, 'cosmicanalysis', ['analytic', 'download'], true);
+
+import { installGalarRising } from './galar-rising';
+installGalarRising(Abilities);

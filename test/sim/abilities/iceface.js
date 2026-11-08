@@ -44,14 +44,20 @@ describe('Ice Face', function () {
 		assert.species(transformedEiscue, 'Eiscue-Noice', `Transformed Eiscue should not have changed to Eiscue after hail was set`);
 	});
 
-	common.itGen(8, `should not trigger if the Pokemon was KOed by Max Hailstorm`, function () {
-		battle = common.gen(8).createBattle([[
+	it(`should not trigger if the Pokemon was KOed by Max Hailstorm`, () => {
+		battle = common.createBattle({ formatid: 'gen9factoryfield' }, [[
 			{species: 'Eiscue', level: 1, ability: 'iceface', moves: ['sleeptalk']},
 		], [
-			{species: 'Weavile', moves: ['icepunch']},
+			{ species: 'Snorlax', ability: 'No Ability', gigantamax: true, moves: ['icepunch'] },
 		]]);
+		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices();
-		battle.makeChoices('auto', 'move icepunch dynamax');
+		const attacker = battle.p2.active[0];
+		attacker.addVolatile('dynamax');
+		const hailstorm = battle.actions.getActiveMaxMove(battle.dex.getActiveMove('icepunch'), attacker);
+		battle.actions.useMove(hailstorm, attacker, { target: battle.p1.active[0] });
+		assert.equal(battle.p1.active[0].hp, 0);
+		assert(battle.log.some(line => line.includes('|Max Hailstorm|')));
 		const activate = '|-activate';
 		const battleLog = battle.log.join('\n');
 		const firstIndex = battleLog.indexOf(activate);

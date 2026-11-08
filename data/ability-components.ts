@@ -9,6 +9,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	eternalflower: ['moldbreaker'],
 	ange: ['moldbreaker'],
 	reservoir: ['waterabsorb', 'gluttony', 'damp'],
+	relicmishap: ['waterabsorb', 'voltabsorb'],
 	savageresolve: ['guts'],
 	lancepoint: ['keeneye'],
 	anchoredbattery: ['megalauncher', 'suctioncups'],
@@ -120,13 +121,13 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	razorcurrent: ['drizzle', 'strongjaw', 'speedboost'],
 	longreach: [],
 	paradoxengine: [],
-	greatmarsh: ['anticipation', 'dryskin', 'adaptability', 'toxicchain'],
+	greatmarsh: ['dryskin', 'adaptability', 'toxicchain'],
 	lifeguard: ['friendguard', 'swornduty', 'propellertail'],
 	zen: ['waterabsorb', 'unaware', 'damp'],
 	stormsong: ['liquidvoice', 'drizzle', 'soundproof'],
 	astralward: ['magicbounce', 'telepathy', 'anticipation'],
 	moonlightvigil: ['innerfocus', 'pressure', 'illuminate'],
-	adaptivecore: ['download', 'defragment', 'selfrepair'],
+	adaptivecore: ['download', 'defragment'],
 	sweetresonance: ['supersweetsyrup', 'selfsufficient', 'hydrabond'],
 	sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil', 'pastelveil'],
 	auroraresonance: ['liquidvoice', 'waterabsorb', 'icebody', 'raindish'],
@@ -162,7 +163,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	aurainstinct: ['adaptability', 'dualwield', 'secondwind'],
 	wrathshield: ['bulletproof', 'dauntlessshield', 'selfrepair', 'proficient'],
 	shadowcurrent: ['protean', 'technician', 'anticipation', 'infiltrator', 'proficient'],
-	astralwitchcraft: ['levitate', 'magicguard', 'magicbounce', 'proficient'],
+	astralwitchcraft: ['levitate', 'magicguard', 'serenegrace'],
 	ragingcurrent: ['swiftswim', 'dryskin', 'stamina', 'proficient'],
 	calderacore: ['magmaarmor', 'sheerforce', 'drought'],
 	doublestrike: ['ironfist', 'technician', 'skilllink'],
@@ -173,7 +174,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	deserttyrant: ['sandstream'],
 	desertspirit: ['levitate', 'sandstream', 'overcoat', 'tintedlens'],
 	tremor: ['levitate', 'resonanceforce', 'sandforce'],
-	desertshell: ['skilllink', 'heatproof', 'sandstream'],
+	desertshell: ['skilllink', 'sandstream'],
 	riptideclaws: ['swiftswim', 'toughclaws', 'shellarmor', 'moldbreaker'],
 	fossilfrenzy: ['klutz'],
 	phantomfist: ['unseenfist', 'selfrepair', 'shadowshield', 'aftermath'],
@@ -273,7 +274,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	moonlithide: ['shadowshield', 'magicguard'],
 	supersweetsyrup: [],
 	naturalrecovery: ['naturalcure', 'regenerator'],
-	mossarmor: ['stamina', 'naturalrecovery', 'levitate'],
+	mossarmor: ['stamina', 'naturalrecovery'],
 	stormcalling: ['drizzle', 'liquidvoice', 'tintedlens'],
 	aevianfrost: ['icebody', 'guts'],
 	aeviantoxin: ['strongjaw', 'layeredcoat', 'furcoat', 'overcoat', 'merciless'],
@@ -562,7 +563,7 @@ Object.assign(AbilityComponents, {
   templechime: ['elevate', 'levitate'],
   solarhydra: ['hydrabond', 'grassysurge', 'solarpower', 'solarbud'],
   stormcalling: ['drizzle', 'liquidvoice', 'dissonantecho'],
-  mossarmor: ['levitate', 'stamina', 'naturalcure'],
+	mossarmor: ['stamina', 'naturalcure'],
 });
 
 Object.assign(AbilityComponents, {searescuer: [], dreepyvanguard: ['stalwart'], groundingtail: []});
@@ -774,7 +775,7 @@ AbilityComponents.spiralevolution = ['moldbreaker', 'adaptability', 'dualwield',
 AbilityComponents.toxicevolution = ['moldbreaker', 'corrosion', 'dualwield', 'shielddust'];
 AbilityComponents.mythicscale = ['marvelscale', 'compoundeyes', 'shielddust'];
 
-AbilityComponents.voidomen = ['friendguard', 'serenegrace'];
+AbilityComponents.voidomen = ['friendguard'];
 
 AbilityComponents.hauntingveil = ['cursedbody', 'infiltrator'];
 
@@ -960,7 +961,19 @@ AbilityComponents.ironmountain=['hypercutter','bruteforce'];
 AbilityComponents.disguise=[];
 AbilityComponents.stancechange=[];
 
-Object.assign(AbilityComponents,{hydraflight:['levitate','hydrabond'],worldbreaker:['berserk','duskilate'],falseliberation:['moldbreaker']});
+Object.assign(AbilityComponents, {
+	hydraflight: [
+		'levitate',
+		'hydrabond',
+	],
+	stringsofruin: [
+		'berserk',
+		'duskilate',
+	],
+	falseliberation: [
+		'moldbreaker',
+	],
+});
 
 AbilityComponents.performer=['dancer','songstress'];
 
@@ -1030,7 +1043,7 @@ AbilityComponents.atrocity = ['unboundblaze', 'fireward'];
 AbilityComponents.apexpredator = ['windrider', 'toughclaws'];
 
 AbilityComponents.carryon = ['innerfocus', 'healer'];
-AbilityComponents.expiration = ['worldbreaker', 'controlledfury'];
+AbilityComponents.expiration = ['stringsofruin', 'controlledfury'];
 AbilityComponents.abyssalrebirth = ['hydrabond', 'levitate'];
 AbilityComponents.primevalskull = ['rockhead'];
 AbilityComponents.primevalshield = [];
@@ -1084,3 +1097,62 @@ AbilityComponents.bewitchingmajesty = ['magicbounce','queenlymajesty'];
 
 AbilityComponents.shelteringbreeze = ['friendguard', 'windrider'];
 AbilityComponents.acquiredtaste = ['frisk'];
+
+for (const id of [
+	'ancientbloom',
+	'fortressshell',
+	'burningcrown',
+	'royalscales',
+	'fallenstar',
+	'atrocity',
+	'ragingstorm',
+]) {
+	AbilityComponents[id] = AbilityComponents[id].filter(component => component !== 'selfsufficient');
+}
+
+AbilityComponents.twinfocus = [];
+
+if (!AbilityComponents.lunarorbit.includes('serenegrace')) AbilityComponents.lunarorbit.push('serenegrace');
+
+AbilityComponents.cosmicanalysis = ['analytic', 'download'];
+
+AbilityComponents.evergreen = [];
+AbilityComponents.scavenger = [];
+
+Object.assign(AbilityComponents, {
+	risingstriker: [],
+	risingrhythm: [],
+	risingmarksman: [],
+	grandstriker: [
+		'striker',
+		'defiant',
+		'risingstriker',
+	],
+	grandrhythm: [
+		'forestsurge',
+		'risingrhythm',
+	],
+	grandmarksman: [
+		'megalauncher',
+		'dualwield',
+		'risingmarksman',
+	],
+	calculatedshot: [
+		'frisk',
+	],
+});
+
+// Identity lookup and callback dispatch share the current-form components.
+export function unstableEvoComponents(pokemon: { species: { id: string } }): IDEntry[] {
+	switch (pokemon.species.id) {
+	case 'jolteon': return ['lightningrod', 'voltabsorb'];
+	case 'flareon': return ['soulfire', 'fluffy'];
+	case 'vaporeon': return ['stormdrain', 'waterabsorb'];
+	case 'umbreon': return ['pressure', 'innerfocus'];
+	case 'espeon': return ['magicbounce', 'telepathy'];
+	case 'glaceon': return ['icescales', 'slushrush'];
+	case 'leafeon': return ['chlorophyll', 'regenerator'];
+	case 'sylveon': return ['friendguard', 'competitive'];
+	default: return [];
+	}
+}

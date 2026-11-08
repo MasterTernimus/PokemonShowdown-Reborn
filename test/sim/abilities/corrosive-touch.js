@@ -17,7 +17,7 @@ describe('Corrosive Touch', function () {
  it('Mega Evolves, applies Technician, and grants Grass STAB without changing typing', function () {
   const [mon, foe] = start();
   assert.equal(mon.species.name, 'Breloom-Mega');
-  assert.deepEqual(mon.species.baseStats, {hp:80,atk:160,def:90,spa:55,spd:105,spe:110});
+		assert.deepEqual(mon.species.baseStats, { hp: 80, atk: 145, def: 90, spa: 75, spd: 105, spe: 105 });
   assert.deepEqual(mon.getTypes(), ['Poison', 'Fighting']);
   assert.equal(mon.ability, 'corrosivetouch');
   const move = battle.dex.getActiveMove('bulletseed');
@@ -27,16 +27,16 @@ describe('Corrosive Touch', function () {
   assert.equal(battle.runEvent('ModifySTAB', mon, foe, move, 1.5), 1.5);
  });
  for (const foeSpecies of ['Registeel', 'Muk']) {
-  it('poisons ' + foeSpecies + ' through Corrosion and applies its defensive drops', function () {
+		it('respects ' + foeSpecies + ' poison immunity without removed Corrosion', () => {
    const [mon, foe] = start(foeSpecies);
    battle.makeChoices('move toxic', 'move splash');
-   assert.equal(foe.status, 'tox');
-   assert.statStage(foe, 'def', -1);
-   assert.statStage(foe, 'spd', -1);
+			assert.equal(foe.status, '');
+			assert.statStage(foe, 'def', 0);
+			assert.statStage(foe, 'spd', 0);
   });
  }
  it('uses Poison Touch contact chance while respecting Covert Cloak', function () {
-  const [mon, foe] = start();
+		const [mon, foe] = start('Mew');
   battle.randomChance = (a, b) => { assert.equal(a, 3); assert.equal(b, 10); return true; };
   const hit = () => battle.singleEvent('SourceDamagingHit', mon.getAbility(), mon.abilityState, foe, mon, battle.dex.getActiveMove('machpunch'), 10);
   foe.setItem('covertcloak'); hit(); assert.equal(foe.status, '');

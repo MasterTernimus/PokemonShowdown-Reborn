@@ -16,7 +16,18 @@ describe('October Rapidash, Alcremie, royal and Mega Parasect additions',()=>{
  for(const kind of ['special','substitute','ally','clearbody','suppressed'])it('Soothing Cream respects '+kind,()=>{const[p,a,q]=setup('Alcremie','Soothing Cream');if(kind==='substitute')p.addVolatile('substitute');if(kind==='clearbody')q.setAbility('Clear Body');if(kind==='suppressed')p.addVolatile('gastroacid');const source=kind==='ally'?a:q;hit(source,p,kind==='special'?'waterpulse':'tackle',{damage:20});assert.equal(source.boosts.atk,0);});
  it('Soothing Cream retains full Ripen berry multiplier',()=>{const[p]=setup('Alcremie','Soothing Cream');assert(p.hasAbility('ripen'));p.hp=300;p.setItem('sitrusberry');p.eatItem();assert.equal(p.hp,800);});
  for(const kind of ['self','ally'])it('Sweet Sanctuary protects '+kind+' defenses and keeps other stat changes',()=>{const[p,a,q]=setup('Alcremie-Gmax','Sweet Sanctuary'),t=kind==='self'?p:a;battle.boost({def:-1,spd:-1,spe:-1},t,q);assert.equal(t.boosts.def,0);assert.equal(t.boosts.spd,0);assert.equal(t.boosts.spe,-1);battle.boost({def:-1,spd:-1},t,t);assert.equal(t.boosts.def,-1);assert.equal(t.boosts.spd,-1);});
- it('Sweet Sanctuary retains local Stamina per-hit heal and once-turn defense without old Decorate heal',()=>{const[p,a,q]=setup('Alcremie-Gmax','Sweet Sanctuary');p.hp=500;hit(q,p,'doublehit',{multihit:2,damage:100});assert.equal(p.hp,424);assert.equal(p.boosts.def,1);const hp=p.hp;hit(p,a,'decorate');assert.equal(p.hp,hp);assert.deepEqual(p.getPassives(),['friendguard']);assert(!p.hasAbility('ripen'));});
+	it('Sweet Sanctuary retains local Stamina once-per-move heal and once-turn defense without old Decorate heal', () => {
+		const [p, a, q] = setup('Alcremie-Gmax', 'Sweet Sanctuary');
+		p.hp = 500;
+		hit(q, p, 'doublehit', { multihit: 2, damage: 100 });
+		assert.equal(p.hp, 362);
+		assert.equal(p.boosts.def, 1);
+		const hp = p.hp;
+		hit(p, a, 'decorate');
+		assert.equal(p.hp, hp);
+		assert.deepEqual(p.getPassives(), ['friendguard']);
+		assert(!p.hasAbility('ripen'));
+	});
  it('Sweet Sanctuary allows Haze/Clear Smog, suppression and ordinary phazing',()=>{const[p,a,q]=setup('Alcremie-Gmax','Sweet Sanctuary');p.boosts.def=3;hit(q,p,'haze');assert.equal(p.boosts.def,0);p.boosts.def=2;hit(q,p,'clearsmog',{damage:10});assert.equal(p.boosts.def,1);p.addVolatile('gastroacid');battle.boost({def:-1,spd:-1},a,q);assert.equal(a.boosts.def,-1);assert.equal(a.boosts.spd,-1);assert.notEqual(battle.runEvent('DragOut',p,q,Dex.getActiveMove('roar')),false);});
  it('Royal Onslaught resolves old imports to one canonical selectable identity',()=>{assert.equal(Dex.abilities.get("Patriarch's Wrath"),Dex.abilities.get('Royal Onslaught'));assert.equal(Dex.abilities.get('Royal Onslaught').name,'Royal Onslaught');assert.equal(Dex.species.get('nidoking').abilities.H,'Royal Onslaught');assert.equal(Dex.abilities.all().filter(a=>a.name==='Royal Onslaught').length,1);});
  for(const field of ['','fairytaleterrain','psychicterrain'])it('Royal Aegis and Rivalry protect only other allies, independently in '+field,()=>{const[p,a,q]=setup('Nidoqueen','Royal Aegis');battle.field.terrain=field;const move=Dex.getActiveMove('tackle');assert.equal(battle.runEvent('ModifyDamage',q,a,move,100),56);assert.equal(battle.runEvent('ModifyDamage',q,p,move,100),100);a.setAbility('Rivalry');assert.equal(battle.runEvent('ModifyDamage',q,p,move,100),75);p.addVolatile('gastroacid');assert.equal(battle.runEvent('ModifyDamage',q,a,move,100),75);});
@@ -26,7 +37,15 @@ describe('October Rapidash, Alcremie, royal and Mega Parasect additions',()=>{
  for(const kind of ['healblock','ooze','substitute'])it('base Digestive Sap respects '+kind,()=>{const[p,a,q]=setup('Victreebel','Corrosion');p.hp=300;if(kind==='healblock')p.addVolatile('healblock');if(kind==='ooze')q.setAbility('Liquid Ooze');if(kind==='substitute')q.addVolatile('substitute');hit(p,q,'sludgebomb',{damage:60});assert.equal(p.hp,kind==='ooze'?280:300);});
  it('Corrosion lets base Victreebel damage and poison Steel',()=>{const[p,a,q]=setup('Victreebel','Corrosion');q.setType('Steel');hit(p,q,'sludgebomb',{damage:60});assert.equal(q.hp,940);assert(q.trySetStatus('psn',p,Dex.moves.get('toxic')));});
  it('base Digestive Sap shares the healing cap across a spread move',()=>{const[p,a,q]=setup('Victreebel','Corrosion');p.hp=300;hit(p,q,'sludgebomb',{target:'allAdjacentFoes',damage:300});assert.equal(p.hp,425);});
- for(const[cosmetic,base]of [['laprasazzy','lapras'],['lanturnalt','lanturn']])it(cosmetic+' matches gameplay while retaining identity',()=>{const c=Dex.species.get(cosmetic),b=Dex.species.get(base);for(const key of ['types','baseStats','abilities','passives','weightkg'])assert.deepEqual(c[key],b[key],key);assert.notEqual(c.name,b.name);const {TeamValidator}=require('../../../dist/sim');const v=TeamValidator.get('gen9nofieldsinglesgame');assert.deepEqual(Dex.species.getLearnsetData(cosmetic).learnset,Dex.species.getLearnsetData(base).learnset);for(const move of ['surf','icebeam','thunderbolt'])assert.equal(!!v.checkCanLearn(Dex.moves.get(move),c),!!v.checkCanLearn(Dex.moves.get(move),b),move);});
+	for (const [cosmetic, base] of [['laprasazzy', 'lapras'], ['lanturnalt', 'lanturn']])it(cosmetic + ' matches gameplay while retaining identity', () => {
+		const c = Dex.species.get(cosmetic), b = Dex.species.get(base);
+		for (const key of ['types', 'baseStats', 'abilities', 'passives', 'weightkg'])assert.deepEqual(c[key], b[key], key);
+		assert.notEqual(c.name, b.name);
+		const { TeamValidator } = require('../../../dist/sim');
+		const v = TeamValidator.get('gen9nofieldsinglesgame');
+		assert.deepEqual(Dex.species.getLearnsetData(cosmetic).learnset, Dex.species.getLearnsetData(base).learnset);
+		for (const move of ['surf', 'icebeam', 'thunderbolt', 'wildcharge'])assert.equal(!!v.checkCanLearn(Dex.moves.get(move), c), !!v.checkCanLearn(Dex.moves.get(move), b), move);
+	});
  it('Tireless Muscle retains Inner Focus under suppression and heals only once at end of turn',()=>{const[p,a,q]=setup('Poliwrath','Knuckle Tide');p.addVolatile('gastroacid');assert(!p.addVolatile('flinch',q));battle.boost({atk:-1},p,q,Dex.abilities.get('intimidate'));assert.equal(p.boosts.atk,0);p.hp=500;hit(q,p,'doublehit',{damage:20,multihit:3});assert.equal(p.hp,440);battle.fieldEvent('Residual');assert.equal(p.hp,502);battle.fieldEvent('Residual');assert.equal(p.hp,502);});
  for(const kind of ['ally','residual','substitute','recoil','healblock'])it('Tireless Muscle excludes or respects '+kind,()=>{const[p,a,q]=setup('Poliwrath','Knuckle Tide');p.hp=500;if(kind==='substitute')p.addVolatile('substitute');if(kind==='healblock')p.addVolatile('healblock');if(kind==='residual'||kind==='recoil')battle.damage(20,p,kind==='recoil'?p:q,Dex.conditions.get(kind==='recoil'?'recoil':'psn'));else hit(kind==='ally'?a:q,p,'tackle',{damage:20});const hp=p.hp;battle.fieldEvent('Residual');assert.equal(p.hp,hp);});
  it('Tireless Muscle uses normal healing modifiers and never heals a fainted holder',()=>{const[p,a,q]=setup('Poliwrath','Knuckle Tide');p.hp=500;p.addVolatile('aquaring');hit(q,p,'tackle',{damage:20});p.hp=0;battle.fieldEvent('Residual');assert.equal(p.hp,0);assert.equal(typeof Dex.abilities.get('reservoir').onAnyTryMove,'function');});

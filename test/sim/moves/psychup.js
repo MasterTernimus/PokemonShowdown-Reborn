@@ -66,7 +66,7 @@ describe('Psych Up [Gen 5]', function () {
 		battle.destroy();
 	});
 
-	it('should not copy the opponent\'s crit ratio', function () {
+	common.itGen(5, 'should not copy the opponent\'s crit ratio', () => {
 		battle = common.gen(5).createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Palkia', level: 100, moves: ['sleeptalk', 'focusenergy', 'psychup']},

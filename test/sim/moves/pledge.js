@@ -10,7 +10,7 @@ describe('Pledge moves', function () {
 		battle.destroy();
 	});
 
-	it(`should work`, function () {
+	it(`should execute independently and combine their field effects in move order`, () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Ninjask', ability: 'noability', moves: ['waterpledge']},
@@ -20,11 +20,17 @@ describe('Pledge moves', function () {
 			{species: 'Garchomp', ability: 'noability', moves: ['waterpledge']},
 			{species: 'Mew', ability: 'noability', moves: ['firepledge']},
 		]});
+		battle.onEvent('CriticalHit', battle.format, false);
 		battle.makeChoices('move 1 1, move 1 1', 'move 1 1, move 1 2');
 
-		// Incineroar should start Grass Pledge first, then faint to Water Pledge
-		assert(battle.p2.sideConditions['waterpledge']);
-		assert(battle.p2.sideConditions['grasspledge']);
-		assert.fainted(battle.p1.active[1]);
+		assert.deepEqual(battle.log.filter(line => line.startsWith('|move|')).map(line => line.split('|')[3]), [
+			'Water Pledge', 'Water Pledge', 'Fire Pledge', 'Grass Pledge',
+		]);
+		assert.deepEqual(battle.log.filter(line => line.startsWith('|-fieldstart|')).map(line => line.split('|')[2]), [
+			'Rainbow Terrain', 'Burning Terrain',
+		]);
+		assert.equal(battle.field.terrain, 'burningterrain');
+		assert.false(battle.p2.sideConditions['waterpledge']);
+		assert.false(battle.p2.sideConditions['grasspledge']);
 	});
 });

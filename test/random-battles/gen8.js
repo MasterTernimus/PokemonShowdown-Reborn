@@ -8,7 +8,15 @@ const assert = require('../assert');
 
 describe('[Gen 8] Random Battle (slow)', () => {
 	const options = {format: 'gen8randombattle'};
-	const dataJSON = require(`../../dist/data/mods/gen8/random-data.json`);
+	if (!Dex.formats.get('gen8randombattle').exists) {
+		it.skip('gen8randombattle: upstream format is not registered in Reborn');
+		return;
+	}
+	let dataJSON;
+	try { dataJSON = require(`../../dist/data/mods/gen8/random-data.json`); } catch (error) {
+		it('requires its generation random-battle fixture', () => { throw error; });
+		return;
+	}
 	const dex = Dex.forFormat(options.format);
 	const generator = Teams.getGenerator(options.format);
 
@@ -207,6 +215,10 @@ describe('[Gen 8] Random Battle (slow)', () => {
 
 describe('[Gen 8] Random Doubles Battle (slow)', () => {
 	const options = {format: 'gen8randomdoublesbattle'};
+	if (!Dex.formats.get('gen8randomdoublesbattle').exists) {
+		it.skip('gen8randomdoublesbattle: upstream format is not registered in Reborn');
+		return;
+	}
 
 	it('should never generate Melmetal without Body Press', () => {
 		testSet('melmetal', options, set => {
@@ -248,6 +260,10 @@ describe('[Gen 8] Random Battle (No Dmax) (slow)', () => {
 
 describe('[Gen 8] Free-for-All Random Battle (slow)', () => {
 	const options = {format: 'gen8freeforallrandombattle', isDoubles: true};
+	if (!Dex.formats.get('gen8freeforallrandombattle').exists) {
+		it.skip('gen8freeforallrandombattle: upstream format is not registered in Reborn');
+		return;
+	}
 
 	it('should enforce STAB on Pinsir, Pikachu, and Zygarde', () => {
 		for (const pkmn of ['pinsir', 'pikachu', 'zygarde']) {
@@ -258,7 +274,15 @@ describe('[Gen 8] Free-for-All Random Battle (slow)', () => {
 
 describe('[Gen 8 BDSP] Random Battle (slow)', () => {
 	const options = {format: 'gen8bdsprandombattle'};
-	const dataJSON = require(`../../dist/data/mods/gen8bdsp/random-data.json`);
+	if (!Dex.formats.get('gen8bdsprandombattle').exists) {
+		it.skip('gen8bdsprandombattle: upstream format is not registered in Reborn');
+		return;
+	}
+	let dataJSON;
+	try { dataJSON = require(`../../dist/data/mods/gen8bdsp/random-data.json`); } catch (error) {
+		it('requires its generation random-battle fixture', () => { throw error; });
+		return;
+	}
 	const dex = Dex.forFormat(options.format);
 
 	const okToHaveChoiceMoves = ['switcheroo', 'trick', 'healingwish'];

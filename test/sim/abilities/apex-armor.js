@@ -15,7 +15,7 @@ describe('Mega Sharpedo Y and Apex Armor', function () {
 		battle.field.setTerrain('fairytaleterrain', shark);
 		battle.makeChoices('move splash megay', 'move splash');
 		assert.equal(shark.species.name, 'Sharpedo-Mega-Y');
-		assert.deepEqual(shark.species.baseStats, {hp: 70, atk: 40, def: 125, spa: 150, spd: 125, spe: 90});
+		assert.deepEqual(shark.species.baseStats, { hp: 70, atk: 65, def: 115, spa: 140, spd: 115, spe: 95 });
 		assert.deepEqual(shark.getTypes(), ['Water', 'Steel']);
 		assert.statStage(shark, 'def', 1);
 		assert.statStage(shark, 'spd', 1);

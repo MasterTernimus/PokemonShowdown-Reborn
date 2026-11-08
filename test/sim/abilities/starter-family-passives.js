@@ -38,14 +38,15 @@ describe('Starter family passives', () => {
   // Later Emboar-Ego cosmetics copy existing records; they do not expand the explicit starter registry.
   const cosmetics = new Set(['emboarego', 'emboarmegaego']);
   const expected = Dex.species.all().filter(s=>!cosmetics.has(s.id)&&Object.values(families).flat().some(f=>s.id.startsWith(f)));
-  assert.equal(expected.length,76); assert.equal(new Set(expected.map(s=>s.id)).size,76);
+		// Mega Cinderace adds one final-stage form and one Proficient recipient.
+		assert.equal(expected.length, 77); assert.equal(new Set(expected.map(s => s.id)).size, 77);
   assert.deepEqual(Object.keys(StarterPassives).sort(),expected.map(s=>s.id).sort());
   for(const s of expected) {
    const family = Object.keys(families).find(p=>families[p].some(f=>s.id.startsWith(f)));
    assert.deepEqual(s.passives,ProficientPassiveForms.has(s.id)?['proficient']:[family],s.id);
    assert(!s.evos.length,s.id);
   }
-  assert.equal(expected.filter(s=>s.passives.includes('proficient')).length,27);
+		assert.equal(expected.filter(s => s.passives.includes('proficient')).length, 28);
   const {SpeciesPassives}=require('../../../dist/data/species-passives');
   for(const s of Dex.species.all())if(!expected.includes(s))assert.deepEqual(s.passives,SpeciesPassives[s.id]||[],s.id);
  });
@@ -85,7 +86,7 @@ describe('Starter family passives', () => {
   for(const[i,event]of ['ModifySpA','ModifyAtk'].entries()){
    assert.equal(boost(p,t,moves[family][i],event),expected);
    assert.equal(boost(p,t,moves[family][i],event),boost(t,p,moves[family][i],event));
-   assert.equal(boost(p,t,'psychic',event),family==='overgrow'?150:100);
+			assert.equal(boost(p, t, 'psychic', event), 100);
   }
  });
  for(const [stage,hp,expected] of [[2,0.6,150],[2,0.9,100],[4,1,180],[5,1,200]])it('preserves Flower Garden stage '+stage+' at HP fraction '+hp,()=>{
@@ -94,7 +95,7 @@ describe('Starter family passives', () => {
  });
  it('nested Rift Dancer calls Overgrow once and retains its separate effects',()=>{
   const[p,t]=setup('Venusaur','Rift Dancer');p.hp=1;assert.equal(boost(p,t,'energyball'),150);
-  battle.field.setTerrain('grassyterrain',p);assert.equal(boost(p,t,'flamethrower'),150);
+		battle.field.setTerrain('grassyterrain', p); assert.equal(boost(p, t, 'flamethrower'), 100);
  });
  it('Transform onto a nonstarter drops passives and switch reversion restores the actual species',()=>{
   const[p,t]=setup('Venusaur');assert(p.transformInto(t));assert.deepEqual(p.getPassives(),['synchronize']);

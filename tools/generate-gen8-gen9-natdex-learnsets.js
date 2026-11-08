@@ -30,13 +30,25 @@ if (!upstreamLearnsets || typeof upstreamLearnsets !== 'object') {
 
 const generatedLearnsets = {};
 for (const [species, data] of Object.entries(upstreamLearnsets)) {
+	const eventData = [];
+	const eventIndices = new Map();
+	for (const [index, event] of (data.eventData || []).entries()) {
+		if (event.generation !== 8 && event.generation !== 9) continue;
+		eventIndices.set(index, eventData.length);
+		eventData.push(event);
+	}
 	const learnset = {};
 	for (const [move, sources] of Object.entries(data.learnset || {})) {
-		const modernSources = sources.filter(sourceRecord => /^[89]/.test(sourceRecord));
+		const modernSources = sources.filter(sourceRecord => /^[89]/.test(sourceRecord)).map(sourceRecord => {
+			const match = /^([89])S(\d+)$/.exec(sourceRecord);
+			if (!match) return sourceRecord;
+			const index = eventIndices.get(Number(match[2]));
+			if (index === undefined) throw new Error(`Missing event for ${species}.${move}: ${sourceRecord}`);
+			return `${match[1]}S${index}`;
+		});
 		if (modernSources.length) learnset[move] = modernSources;
 	}
 
-	const eventData = (data.eventData || []).filter(event => event.generation === 8 || event.generation === 9);
 	const encounters = (data.encounters || []).filter(event => event.generation === 8 || event.generation === 9);
 	if (!Object.keys(learnset).length && !eventData.length && !encounters.length) continue;
 

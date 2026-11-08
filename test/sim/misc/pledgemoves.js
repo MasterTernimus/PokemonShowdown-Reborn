@@ -51,6 +51,12 @@ describe('Pledge Moves', function () {
 		]]);
 		battle.makeChoices('auto', 'move grasspledge +1, move firepledge +1 dynamax');
 		const weedle = battle.p1.active[0];
-		assert.statStage(weedle, 'atk', +1);
+		// Burning Crown lowers Attack on entry before Sap Sipper restores one stage.
+		assert.statStage(weedle, 'atk', 0);
+		assert.statStage(weedle, 'spa', 1);
+		assert(battle.p2.active[1].volatiles.dynamax);
+		assert(!battle.p1.sideConditions.firepledge);
+		assert(battle.log.some(line => line.includes('|Grass Pledge|')));
+		assert(battle.log.some(line => line.includes('|G-Max Wildfire|')));
 	});
 });

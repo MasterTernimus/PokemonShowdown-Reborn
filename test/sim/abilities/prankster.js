@@ -35,11 +35,11 @@ describe('Prankster', function () {
 		assert.constant(() => battle.p2.active[0].status, () => battle.makeChoices('move magiccoat', 'move willowisp'));
 	});
 
-	it('should not cause bounced Status moves to fail against Dark Pokémon if it is removed', function () {
+	for (const species of ['Mew', 'Sableye']) it(species + ' checks selected versus native Prankster after Skill Swap', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: "Alakazam", ability: 'synchronize', moves: ['skillswap']},
-			{species: "Sableye", ability: 'prankster', moves: ['magiccoat']},
+			{ species, ability: 'prankster', moves: ['magiccoat'] },
 		]});
 		battle.setPlayer('p2', {team: [
 			{species: "Pyukumuku", ability: 'unaware', moves: ['curse']},
@@ -47,7 +47,7 @@ describe('Prankster', function () {
 		]});
 		const darkPokemon = battle.p2.active[1];
 		battle.makeChoices('move skillswap -2, move magiccoat', 'move curse, move confide 2');
-		assert.statStage(darkPokemon, 'spa', -1);
+		assert.statStage(darkPokemon, 'spa', species === 'Sableye' ? 0 : -1);
 	});
 
 	it('should not cause Status moves forced by Encore to fail against Dark Pokémon', function () {

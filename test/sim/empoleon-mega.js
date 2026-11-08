@@ -11,8 +11,8 @@ describe('Empoleon and Empoleon-Mega', () => {
 
 	it('uses Empoleonite to Mega Evolve regular Empoleon', () => {
 		assert.deepEqual(Dex.species.get('Empoleon-Mega').baseStats,
-			{hp: 84, atk: 86, def: 118, spa: 151, spd: 131, spe: 60});
-		assert.equal(Dex.species.get('Empoleon-Mega').bst, 630);
+			{ hp: 84, atk: 86, def: 118, spa: 156, spd: 121, spe: 70 });
+		assert.equal(Dex.species.get('Empoleon-Mega').bst, 635);
 		const validator = TeamValidator.get('gen9nofieldsinglesgame');
 		assert.equal(validator.validateTeam([{species: 'Empoleon', item: 'Empoleonite', moves: ['Surf', 'Protect']}]), null);
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
@@ -20,11 +20,13 @@ describe('Empoleon and Empoleon-Mega', () => {
 		], [{species: 'Mew', moves: ['splash']}]]);
 		battle.makeChoices('team 1', 'team 1');
 		const empoleon = battle.p1.active[0];
-		assert.equal(empoleon.canMegaEvo, 'Empoleon-Mega');
+		assert.equal(empoleon.canMegaEvo, 'Empoleon-Mega-Y');
 		battle.makeChoices('move splash mega', 'move splash');
-		assert.equal(empoleon.species.name, 'Empoleon-Mega');
+		assert.equal(empoleon.species.name, 'Empoleon-Mega-Y');
 		assert.equal(empoleon.ability, 'emperorsresolve');
-		for (const component of ['competitive', 'slushrush', 'swiftswim', 'proficient']) {
+		assert.deepEqual(empoleon.getPassives(), ['proficient']);
+		assert(!empoleon.hasAbility('slushrush'));
+		for (const component of ['competitive', 'swiftswim']) {
 			assert(empoleon.hasAbility(component), component);
 		}
 		const waterMove = battle.dex.getActiveMove('surf');
@@ -34,7 +36,7 @@ describe('Empoleon and Empoleon-Mega', () => {
 		assert.equal(battle.runEvent('ModifySpe', empoleon, null, null, 100), 200);
 		battle.field.clearWeather();
 		battle.field.setTerrain('icyterrain', empoleon);
-		assert.equal(battle.runEvent('ModifySpe', empoleon, null, null, 100), 200);
+		assert.equal(battle.runEvent('ModifySpe', empoleon, null, null, 100), 75);
 	});
 
 	it('gives Exalt slicing and Steel Wing power without extra STAB or rain Speed', () => {

@@ -10,16 +10,57 @@ function start(ability,mode='singles',foeAbility='No Ability'){
  return[battle.p1.active[0],battle.p2.active[0]];
 }
 function hit(p,t,id,extra={}){const m=battle.dex.getActiveMove(id);Object.assign(m,{accuracy:true,willCrit:false},extra);battle.actions.useMove(m,p,{target:t});return m;}
-describe('Evolution Mold Breaker and Butterfree expansions',()=>{
+describe('Approved Evolution packages and Butterfree rewards', () => {
  afterEach(()=>{battle?.destroy();battle=null;});
  for(const ability of ['Spiral Evolution','Toxic Evolution']){
-  for(const [defense,move] of [['Levitate','earthpower'],['Water Absorb','waterpulse'],['Sturdy','waterpulse']])it(ability+' bypasses '+defense,()=>{const[p,t]=start(ability,'singles',defense);if(defense==='Sturdy')t.hp=t.maxhp=1;hit(p,t,move);assert(t.hp<t.maxhp);if(defense==='Sturdy')assert.equal(t.hp,0);assert(p.hasAbility('moldbreaker'));});
-  it(ability+' keeps Dual Wield, Shield Dust, Levitate and unbreakable shielding',()=>{const[p,t]=start(ability,'singles','Shadow Shield');const m=battle.dex.getActiveMove('waterpulse');battle.singleEvent('ModifyMove',p.getAbility(),p.abilityState,m,p,t);assert.equal(m.multihit,2);assert(m.ignoreAbility);assert(!p.isGrounded());assert.deepEqual(battle.runEvent('ModifySecondaries',p,t,m,[{chance:100,status:'brn'}]),[]);battle.setActiveMove(m,p,t);assert.equal(battle.runEvent('ModifyDamage',p,t,m,1000),800);battle.clearActiveMove();assert.equal(battle.log.filter(x=>x.endsWith('|' + ability)).length,1, battle.log.join('\n'));});
+		for (const [defense, move] of [['Levitate', 'earthpower'], ['Water Absorb', 'waterpulse'], ['Sturdy', 'waterpulse']])it(ability + ' respects ' + defense, () => {
+			const [p, t] = start(ability, 'singles', defense);
+			if (defense === 'Sturdy')t.hp = t.maxhp = 1;
+			hit(p, t, move);
+			assert.equal(t.hp, t.maxhp);
+			assert(!p.hasAbility('moldbreaker'));
+		});
+		it(ability + ' retains its separate Levitate passive without retired Dual Wield or Mold Breaker', () => {
+			const [p, t] = start(ability, 'singles', 'Shadow Shield');
+			const m = battle.dex.getActiveMove('waterpulse');
+			battle.runEvent('ModifyMove', p, t, m, m);
+			assert.equal(m.multihit, undefined);
+			assert(!m.ignoreAbility);
+			assert(!p.isGrounded());
+			const secondaries = [{ chance: 100, status: 'brn' }];
+			assert.deepEqual(battle.runEvent('ModifySecondaries', p, t, m, secondaries), ability === 'Toxic Evolution' ? [] : secondaries);
+			battle.setActiveMove(m, p, t);
+			assert.equal(battle.runEvent('ModifyDamage', p, t, m, 1000), 800);
+			battle.clearActiveMove();
+		});
   it(ability+' retains its protection rule',()=>{const[p,t]=start(ability);t.addVolatile('protect',t);hit(p,t,'waterpulse');assert.equal(t.hp<t.maxhp,ability==='Spiral Evolution');});
  }
- it('Toxic poison healing is once per turn across targets and retains Corrosion/confusion',()=>{const[p,t]=start('Toxic Evolution','doubles');p.hp=4000;t.setType('Steel');hit(p,t,'toxic');assert.equal(t.status,'tox');assert(t.volatiles.confusion);assert.equal(t.boosts.def,-1);assert.equal(t.boosts.spd,-1);assert.equal(p.hp,5000);hit(p,battle.p2.active[1],'toxic');assert.equal(p.hp,5000);battle.makeChoices('move splash, move splash','move splash, move splash');t.cureStatus();hit(p,t,'toxic');assert.equal(p.hp,6000);});
+	it('Toxic poison healing is once per turn across targets and retains Corrosion without confusion', () => {
+		const [p, t] = start('Toxic Evolution', 'doubles');
+		p.hp = 4000;
+		t.setType('Steel');
+		hit(p, t, 'toxic');
+		assert.equal(t.status, 'tox');
+		assert(!t.volatiles.confusion);
+		assert.equal(t.boosts.def, -1);
+		assert.equal(t.boosts.spd, -1);
+		assert.equal(p.hp, 5000);
+		hit(p, battle.p2.active[1], 'toxic');
+		assert.equal(p.hp, 5000);
+		battle.makeChoices('move splash, move splash', 'move splash, move splash');
+		t.cureStatus();
+		hit(p, t, 'toxic');
+		assert.equal(p.hp, 6000);
+	});
  it('Toxic excludes teammates, allies, failed poison and unrelated effects',()=>{const[p,t]=start('Toxic Evolution','doubles');p.hp=4000;const ally=battle.p1.active[1];t.trySetStatus('psn',ally,battle.dex.moves.get('toxic'));ally.trySetStatus('psn',p,battle.dex.moves.get('toxic'));t.trySetStatus('psn',p,battle.dex.moves.get('toxic'));assert.equal(p.hp,4000);t.cureStatus();t.trySetStatus('psn',p,battle.dex.conditions.get('toxicspikes'));assert.equal(p.hp,4000);});
- it('Toxic own retaliation heals once and suppression stops it',()=>{const[p,t]=start('Toxic Evolution');p.hp=4000;battle.randomChance=()=>true;battle.singleEvent('DamagingHit',p.getAbility(),p.abilityState,p,t,battle.dex.getActiveMove('tackle'),100);assert.equal(t.status,'psn');assert.equal(p.hp,5000);});
+	it('Toxic Evolution no longer poisons or heals merely from taking a hit', () => {
+		const [p, t] = start('Toxic Evolution');
+		p.hp = 4000;
+		battle.randomChance = () => true;
+		battle.singleEvent('DamagingHit', p.getAbility(), p.abilityState, p, t, battle.dex.getActiveMove('tackle'), 100);
+		assert.equal(t.status, '');
+		assert.equal(p.hp, 4000);
+	});
  for(const mode of ['singles','doubles','ffa'])it('Befuddle reward shares one budget in '+mode,()=>{const[p,t]=start('Mythic Scale',mode);hit(p,t,'gmaxbefuddle',{basePower:1});assert(t.status);assert.equal(p.boosts.def,1);assert.equal(p.boosts.spd,0);for(const ally of p.allies())assert.equal(ally.boosts.spd,1);for(const foe of p.foes())assert.equal(foe.boosts.spd,0);for(const foe of p.foes())foe.cureStatus();hit(p,t,'sleeppowder');assert.equal(p.boosts.def,1);for(const ally of p.allies())assert.equal(ally.boosts.spd,1);});
  it('powder consumes the same budget as Befuddle',()=>{const[p,t]=start('Mythic Scale','doubles');hit(p,t,'sleeppowder');t.cureStatus();hit(p,t,'gmaxbefuddle',{basePower:1});assert.equal(p.boosts.def,1);assert.equal(p.allies()[0].boosts.spd,1);});
  for(const extra of [{sourceEffect:'sleeptalk'},{hasBounced:true},{isExternal:true},{callsMove:true}])it('rejects indirect Befuddle '+JSON.stringify(extra),()=>{const[p,t]=start('Mythic Scale');hit(p,t,'gmaxbefuddle',{basePower:1,...extra});assert.equal(p.boosts.def,0);});
@@ -28,7 +69,18 @@ describe('Evolution Mold Breaker and Butterfree expansions',()=>{
  it('Mythic reward respects capped boosts and still spends its shared budget',()=>{const[p,t]=start('Mythic Scale','doubles');const ally=p.allies()[0];p.boosts.def=6;ally.boosts.spd=6;hit(p,t,'gmaxbefuddle',{basePower:1});assert.equal(p.boosts.def,6);assert.equal(ally.boosts.spd,6);p.boosts.def=0;ally.boosts.spd=0;t.cureStatus();hit(p,t,'sleeppowder');assert.equal(p.boosts.def,0);assert.equal(ally.boosts.spd,0);});
  it('Mythic reward excludes teammate source and allied victim',()=>{const[p,t]=start('Mythic Scale','doubles'),ally=p.allies()[0];hit(ally,t,'sleeppowder');hit(p,ally,'sleeppowder');assert.equal(p.boosts.def,0);assert.equal(ally.boosts.spd,0);});
  it('Befuddle reward resets after switching but not ability replacement',()=>{const[p,t]=start('Mythic Scale');hit(p,t,'gmaxbefuddle',{basePower:1});p.setAbility('No Ability');p.setAbility('Mythic Scale');t.cureStatus();hit(p,t,'gmaxbefuddle',{basePower:1});assert.equal(p.boosts.def,1);battle.makeChoices('switch 2','move splash');battle.makeChoices('switch 2','move splash');t.cureStatus();hit(p,t,'gmaxbefuddle',{basePower:1});assert.equal(p.boosts.def,1);});
- it('keeps distribution and calculator component identities',()=>{start('Toxic Evolution');const {calculatorMetadata}=require('../../../dist/sim/custom-calculator');const meta=calculatorMetadata();for(const [id,name,species] of [['spiralevolution','Spiral Evolution','Beedrill-Mega'],['toxicevolution','Toxic Evolution','Butterfree-Mega'],['mythicscale','Mythic Scale','Butterfree-Gmax']]){assert.deepEqual(battle.dex.species.all().filter(s=>Object.values(s.abilities).includes(name)).map(s=>s.name),[species]);if(id!=='mythicscale')assert(meta.abilityComponents[id].includes('Mold Breaker'));assert(battle.dex.abilities.get(id).shortDesc.length<160);}});
+	it('keeps distribution and calculator component identities', () => {
+		start('Toxic Evolution');
+		const { calculatorMetadata } = require('../../../dist/sim/custom-calculator');
+		const meta = calculatorMetadata();
+		for (const [id, name, species] of [['spiralevolution', 'Spiral Evolution', 'Beedrill-Mega'], ['toxicevolution', 'Toxic Evolution', 'Butterfree-Mega'], ['mythicscale', 'Mythic Scale', 'Butterfree-Gmax']]) {
+			assert.deepEqual(battle.dex.species.all().filter(s => Object.values(s.abilities).includes(name)).map(s => s.name), [species]);
+			assert(!meta.abilityComponents[id].includes('Mold Breaker'));
+			const expected = { spiralevolution: ['Power Drill', 'Adaptability'], toxicevolution: ['Corrosion', 'Shield Dust'], mythicscale: ['Marvel Scale', 'Compound Eyes', 'Shield Dust'] };
+			assert.deepEqual(meta.abilityComponents[id], expected[id]);
+			assert(battle.dex.abilities.get(id).shortDesc.length < 160);
+		}
+	});
 
  it('Mythic uses normal TryBoost blocking independently for holder and allies',()=>{const[p,t]=start('Mythic Scale','doubles');const ally=p.allies()[0];let checked=0;battle.onEvent('TryBoost',battle.format,function(boost,target){if(target===p||target===ally){checked++;for(const stat in boost)delete boost[stat];}});hit(p,t,'gmaxbefuddle',{basePower:1});assert.equal(checked,2);assert.equal(p.boosts.def,0);assert.equal(ally.boosts.spd,0);assert(p.volatiles.mythicscalespent);});
 

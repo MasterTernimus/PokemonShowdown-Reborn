@@ -18,5 +18,13 @@ describe('Controlled Fury approved scope and rampages',()=>{
  for(const ability of ['No Ability','Forsaken Sleeper','Old North','Glacial Prime'])for(const suppressed of [false,true])it('Mamoswine Cold Expertise applies Thick Fat once: '+ability+', suppressed='+suppressed,()=>{const[p,q]=setup('Mamoswine',ability);assert.deepEqual(p.getPassives(),['coldexpertise']);if(suppressed)p.addVolatile('gastroacid');for(const id of ['firepunch','icepunch','flamethrower','icebeam']){const move=Dex.getActiveMove(id);assert.equal(b.runEvent(move.category==='Physical'?'ModifyAtk':'ModifySpA',q,p,move,100),50);}assert.equal(b.runEvent('ModifyAtk',q,p,Dex.getActiveMove('tackle'),100),100);});
  it('Snowpack alone loses Thick Fat while retaining Ice Body recovery',()=>{const[p,q]=setup('Mew','Snowpack');assert(!p.hasAbility('thickfat'));assert(p.hasAbility('icebody'));assert.equal(b.runEvent('ModifySpA',q,p,Dex.getActiveMove('flamethrower'),100),100);b.field.terrain='icyterrain';p.hp=30000;b.fieldEvent('Residual');assert.equal(p.hp,33750);assert.equal(Dex.abilities.get('snowpack').onSourceModifyAtk,undefined);assert.equal(Dex.abilities.get('snowpack').onSourceModifySpA,undefined);});
  it('Mamoswine uses the revised selected lineup without Overcoat',()=>{const[p]=setup('Mamoswine');assert.deepEqual(p.species.abilities,{0:'Forsaken Sleeper',1:'Old North',H:'Glacial Prime'});assert(!p.hasAbilityOrPassive('overcoat'));});
- it('Sylveon replaces Healer only and keeps Pixilate',()=>{const[p,q]=setup('Sylveon','Fairy Aura');assert.deepEqual(p.species.abilities,{0:'Competitive',1:'Soothing Presence',H:'Fairy Aura'});assert.deepEqual(p.getPassives(),['pixilate']);assert.equal(b.runEvent('BasePower',q,p,Dex.getActiveMove('moonblast'),120),160);const move=Object.assign(Dex.getActiveMove('moonblast'),{hasAuraBreak:true});assert.equal(b.runEvent('BasePower',q,p,move,120),90);p.addVolatile('gastroacid');assert.equal(b.runEvent('BasePower',q,p,Dex.getActiveMove('moonblast'),120),120);assert(p.hasAbilityOrPassive('pixilate'));});
+	it('Sylveon offers Aroma Veil and retains its Pixilate passive', () => {
+		const [p, q] = setup('Sylveon', 'Aroma Veil');
+		assert.deepEqual(p.species.abilities, { 0: 'Competitive', 1: 'Soothing Presence', H: 'Aroma Veil' });
+		assert.deepEqual(p.getPassives(), ['pixilate']);
+		assert.equal(b.runEvent('BasePower', q, p, Dex.getActiveMove('moonblast'), 120), 120);
+		assert(!p.addVolatile('taunt', q));
+		p.addVolatile('gastroacid'); assert(p.addVolatile('taunt', q));
+		assert(p.hasAbilityOrPassive('pixilate'));
+	});
 });

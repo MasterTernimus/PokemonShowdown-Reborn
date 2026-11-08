@@ -7,7 +7,14 @@ export const SnowyField: TerrainData = {
 		effectType: 'Terrain', duration: 5,
 		onModifySpe(spe, pokemon) {
 			if (pokemon.isGrounded() && !pokemon.hasType('Ice') &&
-				!pokemon.hasAbilityOrPassive(['slushrush', 'icebody', 'snowcloak', 'refrigerate'])) return this.chainModify(0.75);
+				!pokemon.hasAbilityOrPassive([
+					'limber',
+					'slushrush',
+					'icebody',
+					'snowcloak',
+					'refrigerate',
+					'spiralevolution',
+				])) return this.chainModify(0.75);
 		},
 		onModifySpD(spd, pokemon) {
 			if (pokemon.hasType('Ice') && this.field.isWeather('hail')) return this.chainModify(1.5);

@@ -5,5 +5,15 @@ it('suppression disables ally protection',()=>{const[p,a,q]=setup();p.addVolatil
 it('Mold Breaker bypasses Friend Guard on actual attacks',()=>{function hit(ability){const[p,a,q]=setup(ability);const hp=a.hp;battle.actions.runMove('tackle',q,q.getLocOf(a));const loss=hp-a.hp;battle.destroy();battle=null;return loss;}assert(hit('Mold Breaker')>hit('No Ability'));});
 it('removes turn healing and Bewitched Woods cure',()=>{const[p]=setup();p.hp=1200;p.setStatus('par');battle.field.terrain='bewitchedwoodsterrain';battle.singleEvent('Residual',p.getAbility(),p.abilityState,p);assert.equal(p.hp,1200);assert.equal(p.status,'par');});
 it('removes switching cure and healing',()=>{const[p]=setup();p.hp=1200;p.setStatus('par');battle.singleEvent('SwitchOut',p.getAbility(),p.abilityState,p);assert.equal(p.hp,1200);assert.equal(p.status,'par');});
-it('removes weather immunity while keeping Stamina healing',()=>{const[p,a,q]=setup();assert(p.runStatusImmunity('sandstorm'));assert(p.runStatusImmunity('hail'));p.hp=1200;const m=Dex.getActiveMove('tackle');battle.runEvent('DamagingHit',p,q,m,100);battle.runEvent('DamagingHit',p,q,m,100);assert.equal(p.hp,1800);assert.equal(p.boosts.def,1);});
+	it('removes weather immunity while healing once for a multihit move', () => {
+		const [p, a, q] = setup();
+		assert(p.runStatusImmunity('sandstorm'));
+		assert(p.runStatusImmunity('hail'));
+		p.hp = 1200;
+		const m = Dex.getActiveMove('tackle');
+		battle.runEvent('DamagingHit', p, q, m, 100);
+		battle.runEvent('DamagingHit', p, q, m, 100);
+		assert.equal(p.hp, 1500);
+		assert.equal(p.boosts.def, 1);
+	});
 });

@@ -67,13 +67,13 @@ describe('Global Strong Winds bonuses', () => {
 			}
 		}
 	});
-	it('Cold Eclipse retains unconditional wind x2 without weather', () => {
+	it('Cold Eclipse does not boost wind moves without Strong Winds', () => {
 		const { battle: b, mons: [p, q] } = setup('coldeclipseterrain', 'No Ability', '');
 		try {
 			const ctx = Object.create(b);
 			ctx.chainModify = x => x;
 			const m = Dex.getActiveMove('gust');
-			assert.equal(b.field.getTerrain().onBasePower.call(ctx, 40, p, q, m), 2);
+			assert.equal(b.field.getTerrain().onBasePower.call(ctx, 40, p, q, m), 1);
 		} finally {
 			b.destroy();
 		}

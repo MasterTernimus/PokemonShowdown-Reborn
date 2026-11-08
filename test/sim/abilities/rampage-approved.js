@@ -14,7 +14,15 @@ describe('Approved rampage secondaries and Raging Storm',()=>{
  it('gaining Raging Storm ends a prior lock, while losing it restores ordinary locking',()=>{const[p,q]=setup();hit(p,q,'outrage');assert(p.volatiles.lockedmove);p.setAbility('Raging Storm',null,null,true);hit(p,q,'outrage');assert(!p.volatiles.lockedmove);assert(!p.volatiles.confusion);p.setAbility('No Ability',null,null,true);hit(p,q,'outrage');assert(p.volatiles.lockedmove);});
  for(const field of ['burningterrain','volcanicterrain'])for(const ability of ['Sheer Force','Raging Storm'])it('Raging Fury preserves '+field+' exception with '+ability,()=>{const[p,q]=setup(ability);battle.field.terrain=field;hit(p,q,'ragingfury');if(p.volatiles.lockedmove){p.volatiles.lockedmove.trueDuration=1;p.removeVolatile('lockedmove');}assert(!p.volatiles.confusion);if(field==='volcanicterrain')assert.equal(p.boosts.atk,1);});
  it('does not retain other Sheer Force self effects',()=>{const[p,q]=setup('Sheer Force');const m=Object.assign(Dex.getActiveMove('flamecharge'),{self:{boosts:{atk:1}},secondaries:[{chance:30,status:'brn'}]});battle.runEvent('ModifyMove',p,q,m,m);assert(!m.self);});
- it('ordinary Gyarados has only the approved selected slot and passive changes',()=>{assert.deepEqual(Dex.species.get('gyarados').abilities,{0:'Unbridled Wrath',1:'Tempest Fury',H:'Moxie'});assert.deepEqual(Dex.species.get('gyarados').passives,['intimidate']);const[p,q]=setup('Unbridled Wrath','Gyarados');assert(!p.addVolatile('flinch',q));p.boosts.atk=0;battle.boost({atk:-1},p,q,Dex.abilities.get('intimidate'));assert.equal(p.boosts.atk,0);});
+	it('ordinary Gyarados has only the approved selected slot and passive changes', () => {
+		assert.deepEqual(Dex.species.get('gyarados').abilities, { 0: 'Unbridled Wrath', 1: 'Intimidate', H: 'Moxie' });
+		assert.deepEqual(Dex.species.get('gyarados').passives, ['tempestfury']);
+		const [p, q] = setup('Unbridled Wrath', 'Gyarados');
+		assert(!p.addVolatile('flinch', q));
+		p.boosts.atk = 0;
+		battle.boost({ atk: -1 }, p, q, Dex.abilities.get('intimidate'));
+		assert.equal(p.boosts.atk, 0);
+	});
 });
 
 describe('Rampage 140 power and conversion metadata',()=>{

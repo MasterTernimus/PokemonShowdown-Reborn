@@ -2,49 +2,25 @@
 
 const assert = require('./../../assert');
 const common = require('./../../common');
-
 let battle;
 
 describe('Eviolite', function () {
-	afterEach(function () {
-		battle.destroy();
-	});
-
-	it(`should multiply the defenses of a Pokemon that can evolve by 1.5`, function () {
-		battle = common.createBattle([[
-			{species: 'Omanyte', ability: 'shellarmor', item: 'eviolite', moves: ['rest']},
-		], [
-			{species: 'Cherrim', moves: ['seedbomb', 'megadrain']},
-		]]);
-		battle.makeChoices();
-		assert.false.fainted(battle.p1.active[0]);
-		battle.makeChoices('auto', 'move megadrain');
-		assert.false.fainted(battle.p1.active[0]);
-	});
-
-	it(`should not multiply the defenses of a Pokemon that cannot evolve by 1.5`, function () {
-		battle = common.createBattle([[
-			{species: 'Omastar', ability: 'shellarmor', item: 'eviolite', moves: ['rest']},
-			{species: 'Omastar', ability: 'shellarmor', item: 'eviolite', moves: ['rest']},
-		], [
-			{species: 'Sceptile', item: 'meadowplate', moves: ['leafblade', 'megadrain']},
-		]]);
-		battle.makeChoices();
-		assert.fainted(battle.p1.active[0]);
-		battle.makeChoices(); // switch in the second Omastar
-		battle.makeChoices('auto', 'move megadrain');
-		assert.fainted(battle.p1.active[0]);
-	});
-
-	it(`should multiply the defenses of a National Dex Pokemon that can evolve by 1.5`, function () {
-		battle = common.createBattle([[
-			{species: 'Geodude', ability: 'shellarmor', item: 'eviolite', moves: ['rest']},
-		], [
-			{species: 'Roserade', moves: ['seedbomb', 'absorb']},
-		]]);
-		battle.makeChoices();
-		assert.false.fainted(battle.p1.active[0]);
-		battle.makeChoices('auto', 'move absorb');
-		assert.false.fainted(battle.p1.active[0]);
-	});
+	afterEach(() => { battle.destroy(); });
+	for (const [species, multiplier] of [['Omanyte', 1.5], ['Omastar', 1], ['Geodude', 1.5]]) {
+		it(`should apply the correct defense multiplier for ${species}`, () => {
+			battle = common.createBattle([[
+				{ species, ability: 'noability', item: 'eviolite', moves: ['sleeptalk'] },
+			], [
+				{ species: 'Mew', ability: 'noability', moves: ['sleeptalk'] },
+			]]);
+			const holder = battle.p1.active[0];
+			for (const event of ['ModifyDef', 'ModifySpD']) {
+				assert.equal(battle.runEvent(event, holder, null, null, 200), 200 * multiplier, event);
+			}
+			holder.takeItem();
+			for (const event of ['ModifyDef', 'ModifySpD']) {
+				assert.equal(battle.runEvent(event, holder, null, null, 200), 200, event + ' without Eviolite');
+			}
+		});
+	}
 });

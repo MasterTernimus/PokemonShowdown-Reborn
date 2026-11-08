@@ -8,7 +8,11 @@ describe('Approved guard and support species passives',()=>{
  function hit(p,q,id='tackle',extra={}){battle.clearActiveMove();const m=Object.assign(Dex.getActiveMove(id),{accuracy:true,willCrit:false},extra);battle.actions.useMove(m,p,{target:q});const result=battle.activeMove;battle.clearActiveMove();return result;}
  function damage(p,q,id='tackle',extra={}){return battle.actions.getDamage(p,q,Object.assign(Dex.getActiveMove(id),{willCrit:false,...extra}));}
  function switchBack(){battle.makeChoices('switch 3, move splash','move splash, move splash');battle.makeChoices('switch 3, move splash','move splash, move splash');}
- for(const[id,forms]of Object.entries(GuardPassiveGroups))for(const form of forms)it(form+' receives only '+id+' without selected duplication',()=>{assert.deepEqual(Dex.species.get(form).passives,[id]);assert(!Object.values(Dex.species.get(form).abilities).some(a=>Dex.toID(a)===id));});
+	for (const [id, forms] of Object.entries(GuardPassiveGroups)) for (const form of forms)it(form + ' receives the reviewed passive without selected duplication', () => {
+		const expected = require('./passive-approval-overlays').current(form, [id]);
+		assert.deepEqual(Dex.species.get(form).passives, expected);
+		assert(!Object.values(Dex.species.get(form).abilities).some(a => expected.includes(Dex.toID(a))));
+	});
  it('preserves all selected abilities, stats and out-of-scope passives',()=>{const baseline=require('../../../artifacts/passive-guard-batch/baseline-species.json'),scope=new Set(Object.values(GuardPassiveGroups).flat());for(const[id,row]of Object.entries(baseline)){const p=Dex.species.get(id);const reviewed=require('./passive-approval-overlays');assert.deepEqual(p.abilities,reviewed.abilities(id,{...row.abilities}),id);assert.deepEqual(p.baseStats,reviewed.stats(id,row.baseStats),id);if(!scope.has(id))assert.deepEqual(p.passives,reviewed.current(id,row.passives),id);}assert.deepEqual(Dex.species.get('belliboltmega').passives,['levitate']);});
  it('Swellow retains full Inner Focus through selected suppression',()=>{const[p,q]=setup('Swellow');p.addVolatile('gastroacid');assert(!p.addVolatile('flinch',q));battle.boost({atk:-1},p,q,Dex.abilities.get('intimidate'));assert.equal(p.boosts.atk,0);});
  it('Purugly uses full local Rattled including ally multi-hits, Intimidate and terrain entry',()=>{const[p,q,a]=setup('Purugly');hit(a,p,'beatup',{damage:10,multihit:2});assert.equal(p.boosts.spe,2);battle.boost({atk:-1},p,q,Dex.abilities.get('intimidate'));assert.equal(p.boosts.spe,3);battle.field.setTerrain('hauntedterrain',p);switchBack();assert.equal(p.boosts.spe,1);});
@@ -34,15 +38,75 @@ describe('Approved guard and support species passives',()=>{
  it('Silken Decoy includes Self Sufficient and Swarm exactly once with Venom Thread passive',()=>{const[p]=setup('Ariados-Mega');p.setAbility('Silken Decoy');p.hp=500;battle.makeChoices('move splash, move splash','move splash, move splash');assert.equal(p.hp,562);assert.equal(battle.runEvent('Immunity',p,null,null,'sandstorm'),false);assert.equal(battle.runEvent('Immunity',p,null,null,'hail'),false);const {AbilityComponents}=require('../../../dist/data/ability-components');assert.deepEqual(AbilityComponents.silkendecoy,['selfsufficient','swarm']);assert.deepEqual(p.getPassives(),['venomthread']);});
  it('Restorative Chime sound hits heal self and adjacent ally once across spread/multihit',()=>{const[p,q,a]=setup('Chimecho');p.setAbility('Restorative Chime');p.hp=a.hp=500;hit(p,q,'hypervoice',{damage:10,multihit:3});battle.runEvent('AfterMove',p,q,battle.dex.getActiveMove('splash'));assert.equal(p.hp,500); // useMove alone deliberately excludes the runMove AfterMove boundary
  battle.makeChoices('move splash, move splash','move splash, move splash');p.moveSlots[0]={...p.moveSlots[0],id:'hypervoice',move:'Hyper Voice'};battle.makeChoices('move hypervoice, move splash','move splash, move splash');assert.equal(p.hp,625);assert.equal(a.hp,625);assert.deepEqual(p.getPassives(),['levitate']);});
- for(const mode of ['heal','safeguard','cure','failed'])it('Restorative Chime Heal Bell '+mode+' uses real outcome despite callback return',()=>{const[p,q,a]=setup('Chimecho');p.setAbility('Restorative Chime');a.hp=500;if(mode==='heal')p.hp=500;if(mode!=='safeguard')p.side.addSideCondition('safeguard',p);if(mode==='cure')a.status='par';p.moveSlots[0]={...p.moveSlots[0],id:'healbell',move:'Heal Bell'};battle.makeChoices('move healbell, move splash','move splash, move splash');assert.equal(a.hp,mode==='failed'?562:687);assert.equal(p.hp,mode==='heal'?937:1000);if(mode==='cure')assert.equal(a.status,'');});
+	for (const mode of ['heal', 'safeguard', 'cure', 'failed'])it('Restorative Chime Heal Bell ' + mode + ' uses real outcome despite callback return', () => {
+		const [p, q, a] = setup('Chimecho');
+		p.setAbility('Restorative Chime');
+		a.hp = 500;
+		if (mode === 'heal')p.hp = 500;
+		if (mode !== 'safeguard')p.side.addSideCondition('safeguard', p);
+		if (mode === 'cure')a.status = 'par';
+		p.moveSlots[0] = { ...p.moveSlots[0], id: 'healbell', move: 'Heal Bell' };
+		battle.makeChoices('move healbell, move splash', 'move splash, move splash');
+		assert.equal(a.hp, mode === 'failed' ? 562 : 687);
+		assert.equal(p.hp, mode === 'heal' ? 812 : 1000);
+		if (mode === 'cure')assert.equal(a.status, '');
+	});
  it('Restorative Chime ally-only Boomburst fails to trigger healing',()=>{const[p,q,a]=setup('Chimecho');p.setAbility('Restorative Chime');p.hp=a.hp=500;for(const foe of battle.p2.active)foe.setType('Ghost');p.moveSlots[0]={...p.moveSlots[0],id:'boomburst',move:'Boomburst'};battle.makeChoices('move boomburst, move splash','move splash, move splash');assert.equal(p.hp,500);assert(a.hp<500);assert.notEqual(p.m.restorativeSoundTurn,battle.turn-1);});
  it('Restorative Chime no longer cures recipients through Recover or delayed Wish',()=>{const[p,q,a]=setup('Chimecho');p.setAbility('Restorative Chime');p.hp=500;p.status='par';hit(p,p,'recover');assert.equal(p.status,'par');p.status='';p.moveSlots[0]={...p.moveSlots[0],id:'wish',move:'Wish'};battle.makeChoices('move wish, move splash','move splash, move splash');const reserve=battle.p1.pokemon[2];reserve.hp=500;reserve.status='par';battle.makeChoices('switch 3, move splash','move splash, move splash');assert.equal(reserve.status,'par');});
- it('Comforting Presence heals successful ally status once per turn through suppression',()=>{const[p,q,a]=setup('Delcatty');p.addVolatile('gastroacid');a.hp=500;hit(p,a,'decorate');assert.equal(a.hp,562);hit(p,a,'decorate');assert.equal(a.hp,562);battle.turn++;a.removeVolatile('helpinghand');hit(p,a,'decorate');assert.equal(a.hp,624);});
- it('Comforting Presence ignores self, foe, failed and Substitute-blocked moves',()=>{const[p,q,a]=setup('Delcatty');p.hp=a.hp=q.hp=500;hit(p,p,'splash');assert.equal(p.hp,500);hit(p,q,'growl');assert.equal(q.hp,500);a.boosts.atk=6;hit(p,a,'swagger',{accuracy:0});assert.equal(a.hp,500);a.addVolatile('substitute');hit(p,a,'growl');assert.equal(a.hp,500);});
+	it('Legacy Comforting Presence is suppressed as a selected ability; Delcatty retains Rivalry', () => {
+		const [p, q, a] = setup('Mew');
+		p.setAbility('Comforting Presence');
+		p.addVolatile('gastroacid');
+		a.hp = 500;
+		hit(p, a, 'decorate');
+		assert.equal(a.hp, 500);
+		assert.deepEqual(Dex.species.get('Delcatty').passives, ['rivalry']);
+	});
+	it('Legacy Comforting Presence heals successful ally status once per turn while active', () => {
+		const [p, q, a] = setup('Mew');
+		p.setAbility('Comforting Presence');
+		a.hp = 500;
+		hit(p, a, 'decorate');
+		assert.equal(a.hp, 562);
+		hit(p, a, 'decorate');
+		assert.equal(a.hp, 562);
+		battle.turn++;
+		a.removeVolatile('helpinghand');
+		hit(p, a, 'decorate');
+		assert.equal(a.hp, 624);
+	});
+	it('Comforting Presence ignores self, foe, failed and Substitute-blocked moves', () => {
+		const [p, q, a] = setup('Mew');
+		p.setAbility('Comforting Presence');
+		p.hp = a.hp = q.hp = 500;
+		hit(p, p, 'splash');
+		assert.equal(p.hp, 500);
+		hit(p, q, 'growl');
+		assert.equal(q.hp, 500);
+		a.boosts.atk = 6;
+		hit(p, a, 'swagger', { accuracy: 0 });
+		assert.equal(a.hp, 500);
+		a.addVolatile('substitute');
+		hit(p, a, 'growl');
+		assert.equal(a.hp, 500);
+	});
  for(const species of ['Spidops','Wugtrio'])it(species+' reduces fixed Substitute hits without double application',()=>{const[p,q]=setup(species);p.addVolatile('substitute');p.volatiles.substitute.hp=500;if(species==='Spidops')p.addVolatile('threadshelter');hit(q,p,'tackle',{damage:100,multihit:3});assert.equal(p.volatiles.substitute.hp,species==='Spidops'?275:290);});
  it('Elastic Belly respects Heal Block, spends the trigger, and never heals residual crossing',()=>{const[p,q]=setup('Bellibolt');p.hp=650;p.addVolatile('healblock',q);hit(q,p,'tackle',{damage:200});assert.equal(p.hp,450);assert(p.m.elasticBellySpent);p.removeVolatile('healblock');p.hp=650;hit(q,p,'tackle',{damage:200});assert.equal(p.hp,450);});
  it('Feedback removes marks on faint and does not restore old marks on reentry',()=>{const[p,q]=setup('Toxtricity');hit(p,q,'bugbuzz',{damage:10});assert(q.volatiles.feedback);switchBack();assert(!q.volatiles.feedback);hit(p,q,'bugbuzz',{damage:10});p.faint();battle.faintMessages();assert(!q.volatiles.feedback);});
- it('Comforting Presence does not spend its turn on full HP or blocked healing',()=>{const[p,q,a]=setup('Delcatty');hit(p,a,'decorate');assert.notEqual(p.m.comfortingPresenceTurn,battle.turn);a.hp=500;a.addVolatile('healblock',q);hit(p,a,'decorate');assert.equal(a.hp,500);assert.notEqual(p.m.comfortingPresenceTurn,battle.turn);a.removeVolatile('healblock');hit(p,a,'decorate');assert.equal(a.hp,562);});
+	it('Comforting Presence does not spend its turn on full HP or blocked healing', () => {
+		const [p, q, a] = setup('Mew');
+		p.setAbility('Comforting Presence');
+		hit(p, a, 'decorate');
+		assert.notEqual(p.m.comfortingPresenceTurn, battle.turn);
+		a.hp = 500;
+		a.addVolatile('healblock', q);
+		hit(p, a, 'decorate');
+		assert.equal(a.hp, 500);
+		assert.notEqual(p.m.comfortingPresenceTurn, battle.turn);
+		a.removeVolatile('healblock');
+		hit(p, a, 'decorate');
+		assert.equal(a.hp, 562);
+	});
  it('Restorative Chime is suppressed normally while Levitate remains passive',()=>{const[p,q,a]=setup('Chimecho');p.setAbility('Restorative Chime');p.addVolatile('gastroacid');p.hp=a.hp=500;p.moveSlots[0]={...p.moveSlots[0],id:'hypervoice',move:'Hyper Voice'};battle.makeChoices('move hypervoice, move splash','move splash, move splash');assert.equal(p.hp,500);assert.equal(a.hp,500);assert(!p.isGrounded());});
  it('Restorative Chime cannot heal a user knocked out by sound-move recoil reactions',()=>{const[p,q,a]=setup('Chimecho');p.setAbility('Restorative Chime');p.hp=0;p.fainted=true;a.hp=500;const m=Dex.getActiveMove('hypervoice');m.restorativeChimeOpposingHit=true;Dex.abilities.get('restorativechime').onAfterMove.call(battle,p,q,m);assert.equal(a.hp,500);});
 

@@ -8,7 +8,12 @@ const {testTeam, testNotBothMoves, testSet, testHiddenPower, testAlwaysHasMove, 
 
 describe('[Gen 7] Random Battle (slow)', () => {
 	const options = {format: 'gen7randombattle'};
-	const setsJSON = require(`../../dist/data/mods/gen7/random-sets.json`);
+	if (!Dex.formats.get('gen7randombattle').exists) {
+		it.skip('gen7randombattle: upstream format is not registered in Reborn');
+		return;
+	}
+	let setsJSON;
+	before(() => { setsJSON = require(`../../dist/data/mods/gen7/random-sets.json`); });
 	const dex = Dex.forFormat(options.format);
 
 	describe("New set format", () => {
@@ -173,6 +178,10 @@ describe('[Gen 7] Random Battle (slow)', () => {
 
 describe('[Gen 7] Random Doubles Battle (slow)', () => {
 	const options = {format: 'gen7randomdoublesbattle'};
+	if (!Dex.formats.get('gen7randomdoublesbattle').exists) {
+		it.skip('gen7randomdoublesbattle: upstream format is not registered in Reborn');
+		return;
+	}
 
 	it("shouldn't give Manectric Intimidate before Mega Evolving", () => {
 		testSet('manectricmega', options, set => {

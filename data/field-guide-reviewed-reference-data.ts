@@ -19,7 +19,7 @@ export const ReviewedReferenceDetails = {
 				"Forest, Grassy Field and Stage 2 Flower Garden prevent major status and Yawn without requiring sun. This does not cure an existing status. Rest cannot inflict its required sleep while this protection applies; Utility Umbrella affects the weather alternative, not the field condition.",
 			],
 			"relentlesshunt": [
-				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse’s shared handler supplies its 2× damage and raises the priority-eligible base-power threshold from 60 to 80; the ability’s own Cold Eclipse return avoids doubling those modifiers.",
+				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse does not add a separate field power or priority bonus.",
 			],
 			"sapsipper": [
 				"At turn end, Forest heals 1/8 base max HP and Grassy Field heals 1/16. A Grass attack is not required; absorption and its offensive boosts remain separate.",
@@ -33,10 +33,10 @@ export const ReviewedReferenceDetails = {
 				"Forest and Grassy Field heal 1/8 maximum HP each turn. Flower Garden stage 2 heals 1/8 and stage 4 heals 1/4. Corrosive Field and Swamp damage non-Poison, non-Steel users by 1/16 instead; Poison and Steel users heal the ordinary 1/16. Its rooting and forced-switch protection remain.",
 			],
 			"forestscurse": [
-				"After successfully changing the target to pure Grass, Fairy Tale, Forest and Bewitched Woods also apply the Curse volatile if absent. It fails against an already pure-Grass target, so that case does not add Curse. The type-change message confirms the successful conversion.",
+				"After successfully changing the target to pure Grass, Fairy Tale, Forest and Bewitched Woods also apply Curse if absent. It fails against an already pure-Grass target, so that case does not add Curse. The type-change message confirms the successful conversion.",
 			],
 			"strengthsap": [
-				"Bewitched Woods lowers Special Attack by one as well as Attack. Forest and Swamp multiply its Attack-based healing by 1.3. The current Forest handler additionally fails if the target’s Special Attack is already at -6, even though Forest does not add a Special Attack drop.",
+				"Bewitched Woods lowers Special Attack by one as well as Attack. Forest and Swamp multiply its Attack-based healing by 1.3. On Forest, it also fails if the target’s Special Attack is already at -6, even though Forest does not add a Special Attack drop.",
 			],
 			"defendorder": [
 				"On Forest, raises Defense and Special Defense by two stages each.",
@@ -45,7 +45,7 @@ export const ReviewedReferenceDetails = {
 				"On Forest, Grassy Field and Flower Garden stage 1, raises Attack and Special Attack by two stages even without sun.",
 			],
 			"healorder": [
-				"On Forest, restores two thirds maximum HP. Its existing party-status cure still runs, including its Soundproof and Good as Gold exclusions; the Heal Bell activation message is emitted by that cure callback.",
+				"On Forest, restores two thirds maximum HP. Its existing party-status cure still runs, including its Soundproof and Good as Gold exclusions; the cure displays the Heal Bell message.",
 			],
 			"stabbyswarm": [
 				"On Forest, gains 1.5x power and lowers the target’s Defense by one after positive damage. Adaptive Cycle field protection prevents the field power bonus. The woodwork message is printed when the move is modified on Forest, before hit success is known.",
@@ -120,7 +120,7 @@ export const ReviewedReferenceDetails = {
 				"Grassy Field gives +1 priority only while the user is grounded. Grassy Aura’s current branch grants the priority bonus without that grounding check.",
 			],
 			"worryseed": [
-				"On Grassy Field, its successful-hit handler additionally lowers the target’s Attack by one stage while attempting to replace its active ability with Insomnia. Ordinary protected-ability checks remain.",
+				"On Grassy Field, a successful hit also lowers the target’s Attack by one stage while attempting to replace its active ability with Insomnia. Ordinary protected-ability checks remain.",
 			],
 			"bloomdoom": [
 				"Outside Forest, gains 1.3x power when Grassy Field can be established and attempts to create Grassy Field after use. It leaves Forest intact. Its terrain-setting Z-move path replaces the base field instead of creating an aura.",
@@ -129,7 +129,7 @@ export const ReviewedReferenceDetails = {
 				"Attempts to establish Grassy Field for five turns, or eight with Amplifield Rock. When a different full field already exists and auras are enabled, the shared setter instead creates the corresponding aura. Existing field-lock and ability restrictions apply; the aura and full-field effects are distinct. Grassy Terrain on an existing Flower Garden follows the garden-growth rules rather than replacing it.",
 			],
 			"maxovergrowth": [
-				"Its successful self callback requires the user to still be Dynamaxed, then attempts to establish Grassy Field. The shared setter can create the matching aura over an existing different full field. Normal field-lock and duration rules apply.",
+				"After a successful use while Dynamaxed, attempts to establish Grassy Field. The shared setter can create the matching aura over an existing different full field. Normal field-lock and duration rules apply.",
 			],
 		},
 		"items": {
@@ -158,13 +158,13 @@ export const ReviewedReferenceDetails = {
 	"ashenbeachterrain": {
 		"abilities": {
 			"costar": [
-				"On Ashen Beach entry, the holder and its first ally receive Helping Hand before the ordinary copied stat stages and focus effects. The current handler accesses the ally before checking that one exists, so singles entry can error; this is not a working self-only Helping Hand bonus.",
+				"On Ashen Beach entry, the holder and its first ally receive Helping Hand before the ordinary copied stat stages and focus effects. This requires an ally; using it alone can interrupt the battle.",
 			],
 			"perfectforesight": [
 				"On entry, prioritizes a foe whose active Speed-related ability matches the present conditions, then the highest current Attack or Sp. Atk. The field checks count Sand Rush on Desert/Ashen Beach; Swift Swim on Water Surface/Underwater/Murkwater/Midnight Zone; Slush Rush on Icy/Snowy Mountain/Cold Eclipse; Surge Surfer on Water Surface/Underwater/Murkwater/Short-Circuit/Electric; Quick Feet on Electric; Telepathy on Psychic Field or its aura. Speed Boost is always prioritized. Chlorophyll is checked against effective sun, not its garden exception. It copies the chosen actual ability and runs its entry behavior; Trace, Perfect Foresight and Void Voice are excluded.",
 			],
 			"forecast": [
-				"The current Forecast implementation selects Castform forms from effective weather, not this field alone. Copied/Transformed Pokémon do not change form. Climate Reserve can select its stored weather-rock form when effective weather is absent. Older field-only Forecast references in the source index are superseded; ordinary weather and Utility Umbrella rules still apply.",
+				"Forecast selects Castform forms from effective weather, not this field alone. Copied/Transformed Pokémon do not change form. Climate Reserve can select its stored weather-rock form when effective weather is absent. Ordinary weather and Utility Umbrella rules still apply.",
 			],
 			"sandforce": [
 				"On Desert or Ashen Beach, Rock, Ground and Steel attacks receive 1.3× power without sandstorm. This is the same conditional bonus as sandstorm and is not multiplied a second time when both are present. Sandstorm chip immunity remains.",
@@ -173,7 +173,7 @@ export const ReviewedReferenceDetails = {
 				"On Desert or Ashen Beach, doubles Speed without sandstorm. The field and weather branches do not stack into a second doubling. Sandstorm chip immunity remains.",
 			],
 			"sandspit": [
-				"After a damaging hit, attempts to start sandstorm. On Desert or Ashen Beach, the current loop also attempts −1 accuracy on Pokémon on the holder’s own side, not its opponents, and prints the Sand Spit activation for each attempt. This is an implementation discrepancy, not an opposing-accuracy debuff.",
+				"After a damaging hit, attempts to start sandstorm. On Desert or Ashen Beach, it also attempts −1 accuracy on Pokémon on the holder’s own side, not its opponents, and prints the Sand Spit activation for each attempt. It does not lower opposing accuracy.",
 			],
 			"tremor": [
 				"On Desert or Ashen Beach, Rock, Ground and Steel attacks receive the Sand Force-style 1.3× modifier without weather. Its separate 1.5× sound modifier can combine with that bonus when the attack qualifies for both. Ground immunity, Bug STAB and the ordinary allied sound protection remain.",
@@ -185,7 +185,7 @@ export const ReviewedReferenceDetails = {
 				"Standard Darmanitan is forced into Zen on Ashen Beach or Psychic Field; Galarian Darmanitan is forced into Galar-Zen on Icy, Snowy Mountain or Cold Eclipse. These checks run on entry, field change and turn end, regardless of HP. Transformed Pokémon are excluded. Outside the matching fields, the usual half-HP form condition applies.",
 			],
 			"relentlesshunt": [
-				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse’s shared handler supplies its 2× damage and raises the priority-eligible base-power threshold from 60 to 80; the ability’s own Cold Eclipse return avoids doubling those modifiers.",
+				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse does not add a separate field power or priority bonus.",
 			],
 			"battlefervor": [
 				"Ashen Beach, New World, Starlight Arena and Cold Eclipse add flinch immunity and protection from externally lowered stat stages. Cold Eclipse entry also attempts -1 Speed against foes, blocked by Substitute. Bewitched Woods, Haunted and Holy disable these benefits along with its ordinary power, defensive, berry/seed and retaliation effects; Holy does not grant the listed defensive benefits.",
@@ -245,7 +245,7 @@ export const ReviewedReferenceDetails = {
 				"On entry, prioritizes a foe whose active Speed-related ability matches the present conditions, then the highest current Attack or Sp. Atk. The field checks count Sand Rush on Desert/Ashen Beach; Swift Swim on Water Surface/Underwater/Murkwater/Midnight Zone; Slush Rush on Icy/Snowy Mountain/Cold Eclipse; Surge Surfer on Water Surface/Underwater/Murkwater/Short-Circuit/Electric; Quick Feet on Electric; Telepathy on Psychic Field or its aura. Speed Boost is always prioritized. Chlorophyll is checked against effective sun, not its garden exception. It copies the chosen actual ability and runs its entry behavior; Trace, Perfect Foresight and Void Voice are excluded.",
 			],
 			"forecast": [
-				"The current Forecast implementation selects Castform forms from effective weather, not this field alone. Copied/Transformed Pokémon do not change form. Climate Reserve can select its stored weather-rock form when effective weather is absent. Older field-only Forecast references in the source index are superseded; ordinary weather and Utility Umbrella rules still apply.",
+				"Forecast selects Castform forms from effective weather, not this field alone. Copied/Transformed Pokémon do not change form. Climate Reserve can select its stored weather-rock form when effective weather is absent. Ordinary weather and Utility Umbrella rules still apply.",
 			],
 			"sandforce": [
 				"On Desert or Ashen Beach, Rock, Ground and Steel attacks receive 1.3× power without sandstorm. This is the same conditional bonus as sandstorm and is not multiplied a second time when both are present. Sandstorm chip immunity remains.",
@@ -254,7 +254,7 @@ export const ReviewedReferenceDetails = {
 				"On Desert or Ashen Beach, doubles Speed without sandstorm. The field and weather branches do not stack into a second doubling. Sandstorm chip immunity remains.",
 			],
 			"sandspit": [
-				"After a damaging hit, attempts to start sandstorm. On Desert or Ashen Beach, the current loop also attempts −1 accuracy on Pokémon on the holder’s own side, not its opponents, and prints the Sand Spit activation for each attempt. This is an implementation discrepancy, not an opposing-accuracy debuff.",
+				"After a damaging hit, attempts to start sandstorm. On Desert or Ashen Beach, it also attempts −1 accuracy on Pokémon on the holder’s own side, not its opponents, and prints the Sand Spit activation for each attempt. It does not lower opposing accuracy.",
 			],
 			"tremor": [
 				"On Desert or Ashen Beach, Rock, Ground and Steel attacks receive the Sand Force-style 1.3× modifier without weather. Its separate 1.5× sound modifier can combine with that bonus when the attack qualifies for both. Ground immunity, Bug STAB and the ordinary allied sound protection remain.",
@@ -266,7 +266,7 @@ export const ReviewedReferenceDetails = {
 				"At each turn end on Cave or Desert, attempts to heal 1/16 base max HP and prints that the holder swallowed the rocks. Healing prevention or full HP can prevent recovery. Ground-move absorption remains its ordinary separate 1/4-HP effect.",
 			],
 			"relentlesshunt": [
-				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse’s shared handler supplies its 2× damage and raises the priority-eligible base-power threshold from 60 to 80; the ability’s own Cold Eclipse return avoids doubling those modifiers.",
+				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse does not add a separate field power or priority bonus.",
 			],
 			"dryskin": [
 				"Field recovery is independent of weather recovery: 1/16 base max HP each turn on Underwater, Swamp, Misty or grounded Water Surface; 1/8 on Murkwater for a grounded Poison type. Corrosive Mist heals Poison types by 1/8, damages non-Poison/non-Steel holders by 1/8, and leaves Steel types unaffected. Desert deals 1/8 each turn. Successful Water Surface/Underwater healing prints “absorbed some of the water!”; successful Murkwater healing prints “is healed by the poisoned water!”.",
@@ -284,7 +284,7 @@ export const ReviewedReferenceDetails = {
 				"On entry, resets stat stages and screens unless Neutralization blocks the effect; Safeguard protects its side from that reset. Fairy Tale, Chess Board, New World and Starlight Arena additionally raise Defense or Special Defense according to opposing offensive stats: two stages in singles, one otherwise. Chess Board also multiplies both defenses by 1.5 while Neutralization is absent. The reset preserves field-supported positive defenses for Relic Armor/Defeatist on Desert, Fairy Tale, Cave, Crystal Cavern, New World and Volcanic Summit; Magician Special Attack on Fairy Tale, Bewitched Woods, Haunted, Misty and New World; Stalwart Special Attack on New World, Starlight, Fairy Tale and Chess Board. Mirror Arena’s existing Mirror Armor/Iron Dominion evasion boosts survive the reset, but their new evasion boosts are not allowed by the current ongoing exception. The prevention message appears when a stat change is actually blocked.",
 			],
 			"duneterror": [
-				"On fainting, establishes Desert for five turns, or refreshes an existing Desert to five turns. Its Sand Spit component runs on damaging hits; on Desert and Ashen Beach the current shared callback lowers accuracy on the holder’s own side, an existing discrepancy from the intended opponent-facing description. Sand Stream, Shed Skin and its sand-dependent Ground chip retain their independent conditions.",
+				"On fainting, establishes Desert for five turns, or refreshes an existing Desert to five turns. Its Sand Spit component runs on damaging hits; on Desert and Ashen Beach it lowers accuracy on the holder’s own side. Sand Stream, Shed Skin and its sand-dependent Ground chip retain their independent conditions.",
 			],
 		},
 		"moves": {
@@ -317,7 +317,7 @@ export const ReviewedReferenceDetails = {
 				"Entry on Misty, Corrosive Mist or Murkwater grants +2 Defense. Midnight Zone entry changes its type to Water when type changes are allowed. Water-damage activation on Ashen Beach gives +2 Sp. Def in addition to its normal +2 Defense. At each turn end, Water Surface, Underwater, Murkwater and Swamp grant +2 Defense. The “sharply raised its defense” message accompanies Water hits and the listed water-field activations; stat caps and prevention still apply.",
 			],
 			"steamengine": [
-				"Burning, Superheated and Volcanic grant +6 Speed on entry. Water Surface, Underwater and Volcanic grant +1 Speed each turn. The residual handler’s Murkwater message check is inside an outer condition that excludes Murkwater, so Murkwater alone does not grant that residual boost. Midnight Zone entry changes the holder to Water when allowed. Full Magma Armor is also delegated, including its entry defenses, weather/status rules and Dragon’s Den Fire immunity.",
+				"Burning, Superheated and Volcanic grant +6 Speed on entry. Water Surface, Underwater and Volcanic grant +1 Speed each turn. Murkwater alone does not grant the turn-end Speed boost. Midnight Zone entry changes the holder to Water when allowed. Full Magma Armor is also delegated, including its entry defenses, weather/status rules and Dragon’s Den Fire immunity.",
 			],
 			"merciless": [
 				"On Corrosive, Corrosive Mist, Murkwater Surface and Wasteland, its attacks receive the guaranteed-critical modifier even against an unpoisoned target; effects that prevent critical hits still work. On Chessboard instead, the critical ratio is set to one stage per 20% of the target’s missing base max HP, capped at three; poisoning adds the guaranteed-critical modifier.",
@@ -397,7 +397,7 @@ export const ReviewedReferenceDetails = {
 				"On Water Surface or Murkwater, newly placed Toxic Spikes vanish immediately, producing the sinking message. Wasteland removes and records them for its own hazard behavior, producing the waste-swallowed message. On Corrosive Field, grounded Poison types do not absorb existing Toxic Spikes. Steel immunity, Heavy-Duty Boots, Run Away and grounding checks remain.",
 			],
 			"tarshot": [
-				"On Murkwater, adds a guaranteed poison and additional one-stage Speed-drop secondary. On Volcanic Summit, its primary Speed drop becomes two stages. Its Fire-weakness volatile adds two effectiveness stages on Burning Field instead of one, multiplying Fire effectiveness by four rather than two.",
+				"On Murkwater, adds a guaranteed poison and additional one-stage Speed-drop secondary. On Volcanic Summit, its primary Speed drop becomes two stages. Its Fire weakness effect adds two effectiveness stages on Burning Field instead of one, multiplying Fire effectiveness by four rather than two.",
 			],
 			"lifedew": [
 				"Holy and Rainbow increase healing to half maximum HP. Water Surface, Underwater and Midnight Zone instead add Aqua Ring and heal one quarter; adding the ring can succeed at full HP. Corrosive Mist and Murkwater add a guaranteed poison secondary, subject to status rules.",
@@ -412,7 +412,7 @@ export const ReviewedReferenceDetails = {
 				"New Stealth Rock disappears immediately on Water Surface and Murkwater. Wasteland swallows and records it, printing the pointed-stones message. Existing hazards use the shared field damage rules: Rock plus rotating Fire/Water/Grass/Psychic effectiveness on Crystal Cavern; doubled Rock effectiveness stages on Rocky Field/Cave; Fire effectiveness on Dragon Den/Volcanic with the molten-rocks message; Ice effectiveness on Cold Eclipse with the frozen-rocks message. Boots, Run Away and the existing Parasitism protection remain.",
 			],
 			"tidyup": [
-				"On Murkwater, each execution of its hit callback advances a shared Tidy Up counter; the second attempts to change to Water Surface. The counter advances even if no hazard or Substitute was removed. Its ordinary Attack/Speed boost remains.",
+				"On Murkwater, each use advances the shared Tidy Up count; the second attempts to change to Water Surface. The counter advances even if no hazard or Substitute was removed. Its ordinary Attack/Speed boost remains.",
 			],
 			"gmaxfoamburst": [
 				"Its opposing Speed drops become four stages on Murkwater, three on Water Surface, and two elsewhere.",
@@ -461,7 +461,7 @@ export const ReviewedReferenceDetails = {
 				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. Cold Eclipse also recognizes Duskilate for its 1.5× defenses and exemption from the grounded Speed penalty.",
 			],
 			"execution": [
-				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, its current stat-change handler blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
+				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, it blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
 			],
 			"woolyconductor": [
 				"The current package has no additional Electric Field or Short-Circuit paralysis effect. Its contact mitigation, Fire vulnerability, Mold Breaker and once-per-turn contact-attacker Speed drop operate normally here.",
@@ -485,7 +485,7 @@ export const ReviewedReferenceDetails = {
 				"On entry, prioritizes a foe whose active Speed-related ability matches the present conditions, then the highest current Attack or Sp. Atk. The field checks count Sand Rush on Desert/Ashen Beach; Swift Swim on Water Surface/Underwater/Murkwater/Midnight Zone; Slush Rush on Icy/Snowy Mountain/Cold Eclipse; Surge Surfer on Water Surface/Underwater/Murkwater/Short-Circuit/Electric; Quick Feet on Electric; Telepathy on Psychic Field or its aura. Speed Boost is always prioritized. Chlorophyll is checked against effective sun, not its garden exception. It copies the chosen actual ability and runs its entry behavior; Trace, Perfect Foresight and Void Voice are excluded.",
 			],
 			"forecast": [
-				"The current Forecast implementation selects Castform forms from effective weather, not this field alone. Copied/Transformed Pokémon do not change form. Climate Reserve can select its stored weather-rock form when effective weather is absent. Older field-only Forecast references in the source index are superseded; ordinary weather and Utility Umbrella rules still apply.",
+				"Forecast selects Castform forms from effective weather, not this field alone. Copied/Transformed Pokémon do not change form. Climate Reserve can select its stored weather-rock form when effective weather is absent. Ordinary weather and Utility Umbrella rules still apply.",
 			],
 			"zenmode": [
 				"Standard Darmanitan is forced into Zen on Ashen Beach or Psychic Field; Galarian Darmanitan is forced into Galar-Zen on Icy, Snowy Mountain or Cold Eclipse. These checks run on entry, field change and turn end, regardless of HP. Transformed Pokémon are excluded. Outside the matching fields, the usual half-HP form condition applies.",
@@ -503,7 +503,7 @@ export const ReviewedReferenceDetails = {
 				"Delegates the full Power Drill field package: drill/horn moves receive 2× power and bypass protection on Rocky, Mountain, Snowy Mountain, Cave and Volcanic. Its separate positive-defense-stage bypass remains. Native Power Drill is not applied twice.",
 			],
 			"relentlesshunt": [
-				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse’s shared handler supplies its 2× damage and raises the priority-eligible base-power threshold from 60 to 80; the ability’s own Cold Eclipse return avoids doubling those modifiers.",
+				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse does not add a separate field power or priority bonus.",
 			],
 			"windysurge": [
 				"On Mountain, Snowy Mountain or Cold Eclipse entry, also attempts to summon strong winds, unless Desolate Land or Primordial Sea is active. Its two-turn Tailwind still applies. Refreshing an existing Tailwind attempts +1 Special Attack for Wind Power/Hisuian Vanguard allies and +1 Attack for Wind Rider/Unova Vanguard/Scarecrow allies.",
@@ -550,10 +550,10 @@ export const ReviewedReferenceDetails = {
 		},
 		"moves": {
 			"tailwind": [
-				"After use on Mountain, Snowy Mountain or Cold Eclipse, attempts to start Strong Winds unless harsh sun or heavy rain is active. Mountain and Snowy Mountain extend Tailwind to six turns; the current implementation prints a Persistent activation message for this field extension even without that ability.",
+				"After use on Mountain, Snowy Mountain or Cold Eclipse, attempts to start Strong Winds unless harsh sun or heavy rain is active. Mountain and Snowy Mountain extend Tailwind to six turns; this field extension displays a Persistent message even without that ability.",
 			],
 			"auroraveil": [
-				"Can be used without hail or snow on Rainbow, Icy, Mirror Arena, Dark Crystal Cavern, Crystal Cavern, Snowy Mountain, Starlight Arena and Cold Eclipse. Mirror Arena extends ordinary Aurora Veil to eight turns and its after-use callback grants one evasion stage if a successful move has been recorded that turn. Royal Decree can still prevent the screen. G-Max-generated veil keeps its separate four-turn duration.",
+				"Can be used without hail or snow on Rainbow, Icy, Mirror Arena, Dark Crystal Cavern, Crystal Cavern, Snowy Mountain, Starlight Arena and Cold Eclipse. Mirror Arena extends ordinary Aurora Veil to eight turns and after use it grants one evasion stage if a successful move has been recorded that turn. Royal Decree can still prevent the screen. G-Max-generated veil keeps its separate four-turn duration.",
 			],
 			"mountaingale": [
 				"On Icy, Mountain and Snowy Mountain, base accuracy becomes 100%; accuracy/evasion modifiers still apply.",
@@ -572,7 +572,7 @@ export const ReviewedReferenceDetails = {
 				"Entry on Misty, Corrosive Mist or Murkwater grants +2 Defense. Midnight Zone entry changes its type to Water when type changes are allowed. Water-damage activation on Ashen Beach gives +2 Sp. Def in addition to its normal +2 Defense. At each turn end, Water Surface, Underwater, Murkwater and Swamp grant +2 Defense. The “sharply raised its defense” message accompanies Water hits and the listed water-field activations; stat caps and prevention still apply.",
 			],
 			"steamengine": [
-				"Burning, Superheated and Volcanic grant +6 Speed on entry. Water Surface, Underwater and Volcanic grant +1 Speed each turn. The residual handler’s Murkwater message check is inside an outer condition that excludes Murkwater, so Murkwater alone does not grant that residual boost. Midnight Zone entry changes the holder to Water when allowed. Full Magma Armor is also delegated, including its entry defenses, weather/status rules and Dragon’s Den Fire immunity.",
+				"Burning, Superheated and Volcanic grant +6 Speed on entry. Water Surface, Underwater and Volcanic grant +1 Speed each turn. Murkwater alone does not grant the turn-end Speed boost. Midnight Zone entry changes the holder to Water when allowed. Full Magma Armor is also delegated, including its entry defenses, weather/status rules and Dragon’s Den Fire immunity.",
 			],
 			"crosscurrent": [
 				"Water Surface, Murkwater Surface, Underwater and Midnight Zone double Speed without requiring rain. Rain plus one of these fields does not stack the Speed bonus. Its alternating physical/special hit bonus remains separate.",
@@ -629,7 +629,7 @@ export const ReviewedReferenceDetails = {
 				"Entry on Misty, Corrosive Mist or Murkwater grants +2 Defense. Midnight Zone entry changes its type to Water when type changes are allowed. Water-damage activation on Ashen Beach gives +2 Sp. Def in addition to its normal +2 Defense. At each turn end, Water Surface, Underwater, Murkwater and Swamp grant +2 Defense. The “sharply raised its defense” message accompanies Water hits and the listed water-field activations; stat caps and prevention still apply.",
 			],
 			"steamengine": [
-				"Burning, Superheated and Volcanic grant +6 Speed on entry. Water Surface, Underwater and Volcanic grant +1 Speed each turn. The residual handler’s Murkwater message check is inside an outer condition that excludes Murkwater, so Murkwater alone does not grant that residual boost. Midnight Zone entry changes the holder to Water when allowed. Full Magma Armor is also delegated, including its entry defenses, weather/status rules and Dragon’s Den Fire immunity.",
+				"Burning, Superheated and Volcanic grant +6 Speed on entry. Water Surface, Underwater and Volcanic grant +1 Speed each turn. Murkwater alone does not grant the turn-end Speed boost. Midnight Zone entry changes the holder to Water when allowed. Full Magma Armor is also delegated, including its entry defenses, weather/status rules and Dragon’s Den Fire immunity.",
 			],
 			"pressure": [
 				"On entry into Underwater, attempts to change the field to Midnight Zone; targeting the holder there costs two extra PP instead of one. Cold Eclipse entry attempts -2 Defense and Special Defense against each foe, blocked by Substitute and ordinary stat-drop protections. These Cold Eclipse attempts repeat on entry and do not spend the ordinary once-per-opponent-per-user battle allowance.",
@@ -711,7 +711,7 @@ export const ReviewedReferenceDetails = {
 		},
 		"items": {
 			"absorbbulb": [
-				"On entry while Misty Field, Water Surface or Underwater is active, attempts to consume itself for one Special Attack stage. The ordinary damaging Water-hit trigger remains. This entry callback does not itself add a field-change trigger.",
+				"On entry while Misty Field, Water Surface or Underwater is active, attempts to consume itself for one Special Attack stage. The ordinary damaging Water-hit trigger remains. Changing the field while the holder stays active does not activate it.",
 			],
 		},
 	},
@@ -724,10 +724,10 @@ export const ReviewedReferenceDetails = {
 				"Entry on Misty, Corrosive Mist or Murkwater grants +2 Defense. Midnight Zone entry changes its type to Water when type changes are allowed. Water-damage activation on Ashen Beach gives +2 Sp. Def in addition to its normal +2 Defense. At each turn end, Water Surface, Underwater, Murkwater and Swamp grant +2 Defense. The “sharply raised its defense” message accompanies Water hits and the listed water-field activations; stat caps and prevention still apply.",
 			],
 			"steamengine": [
-				"Burning, Superheated and Volcanic grant +6 Speed on entry. Water Surface, Underwater and Volcanic grant +1 Speed each turn. The residual handler’s Murkwater message check is inside an outer condition that excludes Murkwater, so Murkwater alone does not grant that residual boost. Midnight Zone entry changes the holder to Water when allowed. Full Magma Armor is also delegated, including its entry defenses, weather/status rules and Dragon’s Den Fire immunity.",
+				"Burning, Superheated and Volcanic grant +6 Speed on entry. Water Surface, Underwater and Volcanic grant +1 Speed each turn. Murkwater alone does not grant the turn-end Speed boost. Midnight Zone entry changes the holder to Water when allowed. Full Magma Armor is also delegated, including its entry defenses, weather/status rules and Dragon’s Den Fire immunity.",
 			],
 			"relentlesshunt": [
-				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse’s shared handler supplies its 2× damage and raises the priority-eligible base-power threshold from 60 to 80; the ability’s own Cold Eclipse return avoids doubling those modifiers.",
+				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse does not add a separate field power or priority bonus.",
 			],
 			"dryskin": [
 				"Field recovery is independent of weather recovery: 1/16 base max HP each turn on Underwater, Swamp, Misty or grounded Water Surface; 1/8 on Murkwater for a grounded Poison type. Corrosive Mist heals Poison types by 1/8, damages non-Poison/non-Steel holders by 1/8, and leaves Steel types unaffected. Desert deals 1/8 each turn. Successful Water Surface/Underwater healing prints “absorbed some of the water!”; successful Murkwater healing prints “is healed by the poisoned water!”.",
@@ -801,7 +801,7 @@ export const ReviewedReferenceDetails = {
 				"New Stealth Rock disappears immediately on Water Surface and Murkwater. Wasteland swallows and records it, printing the pointed-stones message. Existing hazards use the shared field damage rules: Rock plus rotating Fire/Water/Grass/Psychic effectiveness on Crystal Cavern; doubled Rock effectiveness stages on Rocky Field/Cave; Fire effectiveness on Dragon Den/Volcanic with the molten-rocks message; Ice effectiveness on Cold Eclipse with the frozen-rocks message. Boots, Run Away and the existing Parasitism protection remain.",
 			],
 			"tidyup": [
-				"On Murkwater, each execution of its hit callback advances a shared Tidy Up counter; the second attempts to change to Water Surface. The counter advances even if no hazard or Substitute was removed. Its ordinary Attack/Speed boost remains.",
+				"On Murkwater, each use advances the shared Tidy Up count; the second attempts to change to Water Surface. The counter advances even if no hazard or Substitute was removed. Its ordinary Attack/Speed boost remains.",
 			],
 			"gmaxfoamburst": [
 				"Its opposing Speed drops become four stages on Murkwater, three on Water Surface, and two elsewhere.",
@@ -812,7 +812,7 @@ export const ReviewedReferenceDetails = {
 		},
 		"items": {
 			"absorbbulb": [
-				"On entry while Misty Field, Water Surface or Underwater is active, attempts to consume itself for one Special Attack stage. The ordinary damaging Water-hit trigger remains. This entry callback does not itself add a field-change trigger.",
+				"On entry while Misty Field, Water Surface or Underwater is active, attempts to consume itself for one Special Attack stage. The ordinary damaging Water-hit trigger remains. Changing the field while the holder stays active does not activate it.",
 			],
 		},
 	},
@@ -855,7 +855,7 @@ export const ReviewedReferenceDetails = {
 				"Eligible Normal-to-Electric conversion gains 1.5× power on Electric and Factory fields, or 2× on Short-Circuit, instead of 1.2×. Ordinary excluded variable-type moves, damaging Z-Moves and Terastallized Tera Blast remain excluded.",
 			],
 			"hadronengine": [
-				"On entry, attempts to establish Electric Field. While Electric Field is active, Special Attack is multiplied by 5461/4096 (about 1.3333×); the callback checks the field rather than Electric Aura alone.",
+				"On entry, attempts to establish Electric Field. While Electric Field is active, Special Attack is multiplied by 5461/4096 (about 1.3333×); Electric Aura alone does not qualify.",
 			],
 			"lightningrod": [
 				"Electric Field entry grants +1 Attack and Special Attack. This is separate from the same boosts when it absorbs an Electric move; its ordinary redirection remains.",
@@ -879,7 +879,7 @@ export const ReviewedReferenceDetails = {
 				"Electric Field entry grants +1 Speed. Its ordinary +1 Speed after flinching remains separate; it does not prevent the flinch from consuming the action.",
 			],
 			"teravolt": [
-				"On Electric Field, Electric moves have their base power multiplied by 1.5 and Ground-type foes lose their Electric immunity through its immunity-negation handler. Its ordinary bypass of bypassable abilities remains.",
+				"On Electric Field, Electric moves have their base power multiplied by 1.5 and Ground-type foes lose their Electric immunity . Its ordinary bypass of bypassable abilities remains.",
 			],
 			"surgeconduit": [
 				"Electric Field entry grants +1 Attack and Special Attack through Lightning Rod. Electric redirection/absorption and Rock Head remain; the species’ Electric Surge passive is separate.",
@@ -893,7 +893,7 @@ export const ReviewedReferenceDetails = {
 		},
 		"moves": {
 			"charge": [
-				"On Electric Field, raises Special Defense by two stages. The existing Charge volatile doubles the next Electric attack’s power and ends after that Electric move, including an aborted use. The Charge message marks application or refresh; Elemental Seed’s version lasts two turns.",
+				"On Electric Field, raises Special Defense by two stages. Charge doubles the next Electric attack’s power and ends after that Electric move, including an aborted use. The Charge message marks application or refresh; Elemental Seed’s version lasts two turns.",
 			],
 			"eerieimpulse": [
 				"On Electric Field, lowers Special Attack by three stages.",
@@ -923,7 +923,7 @@ export const ReviewedReferenceDetails = {
 				"On Electric Field, boosts Defense and Special Defense by two stages for all eligible active allies, without requiring Plus or Minus. Outside that field it retains its ability requirement.",
 			],
 			"mudsport": [
-				"While Mud Sport is active, its terrain-attempt handler rejects attempts involving an already active Electric Field, and its residual callback adds one turn to that field’s duration, offsetting normal expiration. Electric move power is independently reduced to approximately one third.",
+				"While Mud Sport is active, it prevents replacement of an active Electric Field and extends it by one turn each turn, offsetting normal expiration. Electric move power is independently reduced to approximately one third.",
 			],
 			"paraboliccharge": [
 				"On Electric Field, heals three quarters of damage dealt rather than its ordinary drain fraction.",
@@ -941,10 +941,10 @@ export const ReviewedReferenceDetails = {
 				"Gains 1.3x power when Electric Field can be established. Its shared Z-move field-setting rule attempts to replace the base field with Electric Field rather than creating an aura.",
 			],
 			"tectonicrage": [
-				"On Electric Field, gains approximately 1.3x power unless Adaptive Cycle protects the target from fields. Its after-use callback clears Electric Field; the shared Z-move field-setting rule may then establish Desert.",
+				"On Electric Field, gains approximately 1.3x power unless Adaptive Cycle protects the target from fields. After use, it clears Electric Field; the shared Z-move field-setting rule may then establish Desert.",
 			],
 			"volttackle": [
-				"On Electric Field, gains 1.5x power and loses recoil. Adaptive Cycle can block the field power bonus; recoil removal is applied separately.",
+				"On Electric Field, loses recoil. Receives only the normal Electric-type field bonus; no additional Volt Tackle power boost.",
 			],
 			"wildcharge": [
 				"On Electric Field, removes its recoil.",
@@ -953,7 +953,7 @@ export const ReviewedReferenceDetails = {
 				"Attempts to establish Electric Field for five turns, or eight with Amplifield Rock. When a different full field already exists and auras are enabled, the shared setter instead creates the corresponding aura. Existing field-lock and ability restrictions apply; the aura and full-field effects are distinct. Grassy Terrain on an existing Flower Garden follows the garden-growth rules rather than replacing it.",
 			],
 			"maxlightning": [
-				"Its successful self callback requires the user to still be Dynamaxed, then attempts to establish Electric Field. The shared setter can create the matching aura over an existing different full field. Normal field-lock and duration rules apply.",
+				"After a successful use while Dynamaxed, attempts to establish Electric Field. The shared setter can create the matching aura over an existing different full field. Normal field-lock and duration rules apply.",
 			],
 			"spikes": [
 				"New Spikes vanish on Water Surface or Murkwater, printing the sinking message. On Electric Field, they also affect airborne entrants, subject to Electric immunity, Boots, Run Away and existing Parasitism protection. The current Electric damage formula uses the signed effectiveness stage directly, not a normal type multiplier: one-layer tests dealt 42 HP to Water/Flying Mew, zero to neutral Normal or immune Ground Mew, and one HP to resistant Grass Mew. This is an existing formula discrepancy, not standard Electric-type hazard damage.",
@@ -1015,7 +1015,7 @@ export const ReviewedReferenceDetails = {
 				"Lasts eight turns on Chess Board, New World and Psychic Field, taking precedence over Persistent’s seven-turn duration. Using it while already active still ends it.",
 			],
 			"miracleeye": [
-				"On Psychic Field, Fairy Tale and Holy Field, a successful hit additionally raises the user’s Special Attack by two. Its existing Ghost-resistance volatile, Dark-target Psychic immunity bypass and positive-evasion bypass remain.",
+				"On Psychic Field, Fairy Tale and Holy Field, a successful hit additionally raises the user’s Special Attack by two. Its existing Ghost resistance, Dark-target Psychic immunity bypass and positive-evasion bypass remain.",
 			],
 			"magicroom": [
 				"On New World and Psychic Field, lasts eight turns. Amplifield Rock independently gives eight; otherwise Persistent gives seven and the base duration is five. Reusing the move ends the room.",
@@ -1039,10 +1039,10 @@ export const ReviewedReferenceDetails = {
 				"On Psychic Field, after applying its lock-on effect, additionally raises the user’s Special Attack by two stages. Its activation message identifies the locked target.",
 			],
 			"mysticalpower": [
-				"On Psychic Field, the current replacement secondary gives the TARGET two Special Attack stages, rather than a self boost. This is an existing implementation discrepancy; the guide reports the actual target.",
+				"On Psychic Field, the additional effect gives the target two Special Attack stages, rather than a self boost.",
 			],
 			"psyshieldbash": [
-				"On Psychic Field, the current replacement secondary gives the TARGET one Defense and Special Defense stage, rather than boosting the user. This is an existing implementation discrepancy.",
+				"On Psychic Field, the additional effect gives the target one Defense and Special Defense stage, rather than boosting the user.",
 			],
 			"shatteredpsyche": [
 				"On Psychic Field, adds a guaranteed confusion secondary, subject to ordinary confusion protection.",
@@ -1054,7 +1054,7 @@ export const ReviewedReferenceDetails = {
 				"Attempts to establish Psychic Field for five turns, or eight with Amplifield Rock. When a different full field already exists and auras are enabled, the shared setter instead creates the corresponding aura. Existing field-lock and ability restrictions apply; the aura and full-field effects are distinct. Grassy Terrain on an existing Flower Garden follows the garden-growth rules rather than replacing it.",
 			],
 			"maxmindstorm": [
-				"Its successful self callback requires the user to still be Dynamaxed, then attempts to establish Psychic Field. The shared setter can create the matching aura over an existing different full field. Normal field-lock and duration rules apply.",
+				"After a successful use while Dynamaxed, attempts to establish Psychic Field. The shared setter can create the matching aura over an existing different full field. Normal field-lock and duration rules apply.",
 			],
 			"genesissupernova": [
 				"Its guaranteed self secondary attempts to establish Psychic Field, explicitly replacing the base field rather than creating an aura, subject to field-lock restrictions.",
@@ -1202,7 +1202,7 @@ export const ReviewedReferenceDetails = {
 				"Misty entry lowers the holder’s own accuracy by one stage, in addition to the usual adjacent-foe evasion drops. Flower Garden Stage 3 adds foe Defense/Special Defense drops; Stage 4 also adds Attack/Special Attack drops; Stage 5 also adds Speed/accuracy drops. Each is one stage, and Substitute blocks the foe attempt.",
 			],
 			"pastelveil": [
-				"On activation, cures poison on the holder and allies. Fairy Tale also raises the holder’s Special Defense by one; this activation can repeat when another Pokémon switches in. Bewitched Woods cancels weaknesses contributed by the holder’s Fairy typing. In Misty or Rainbow Field, the current callbacks reduce outgoing Poison damage: the holder’s attack receives both half-damage callbacks (one quarter overall), and an ally’s attack receives one (one half). They do not reduce incoming Poison damage. This describes the current implementation, not the old defensive description.",
+				"On activation, cures poison on the holder and allies. Fairy Tale also raises the holder’s Special Defense by one; this activation can repeat when another Pokémon switches in. Bewitched Woods cancels weaknesses contributed by the holder’s Fairy typing. In Misty or Rainbow Field, outgoing Poison damage is reduced to one quarter for the holder and one half for its allies. They do not reduce incoming Poison damage.",
 			],
 			"royaldecree": [
 				"On entry, resets stat stages and screens unless Neutralization blocks the effect; Safeguard protects its side from that reset. Fairy Tale, Chess Board, New World and Starlight Arena additionally raise Defense or Special Defense according to opposing offensive stats: two stages in singles, one otherwise. Chess Board also multiplies both defenses by 1.5 while Neutralization is absent. The reset preserves field-supported positive defenses for Relic Armor/Defeatist on Desert, Fairy Tale, Cave, Crystal Cavern, New World and Volcanic Summit; Magician Special Attack on Fairy Tale, Bewitched Woods, Haunted, Misty and New World; Stalwart Special Attack on New World, Starlight, Fairy Tale and Chess Board. Mirror Arena’s existing Mirror Armor/Iron Dominion evasion boosts survive the reset, but their new evasion boosts are not allowed by the current ongoing exception. The prevention message appears when a stat change is actually blocked.",
@@ -1234,12 +1234,12 @@ export const ReviewedReferenceDetails = {
 				"Attempts to establish Misty Field for five turns, or eight with Amplifield Rock. When a different full field already exists and auras are enabled, the shared setter instead creates the corresponding aura. Existing field-lock and ability restrictions apply; the aura and full-field effects are distinct. Grassy Terrain on an existing Flower Garden follows the garden-growth rules rather than replacing it.",
 			],
 			"maxstarfall": [
-				"Its successful self callback requires the user to still be Dynamaxed, then attempts to establish Misty Field. The shared setter can create the matching aura over an existing different full field. Normal field-lock and duration rules apply.",
+				"After a successful use while Dynamaxed, attempts to establish Misty Field. The shared setter can create the matching aura over an existing different full field. Normal field-lock and duration rules apply.",
 			],
 		},
 		"items": {
 			"absorbbulb": [
-				"On entry while Misty Field, Water Surface or Underwater is active, attempts to consume itself for one Special Attack stage. The ordinary damaging Water-hit trigger remains. This entry callback does not itself add a field-change trigger.",
+				"On entry while Misty Field, Water Surface or Underwater is active, attempts to consume itself for one Special Attack stage. The ordinary damaging Water-hit trigger remains. Changing the field while the holder stays active does not activate it.",
 			],
 		},
 	},
@@ -1259,10 +1259,10 @@ export const ReviewedReferenceDetails = {
 				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. Cold Eclipse also recognizes Duskilate for its 1.5× defenses and exemption from the grounded Speed penalty.",
 			],
 			"execution": [
-				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, its current stat-change handler blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
+				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, it blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
 			],
 			"pastelveil": [
-				"On activation, cures poison on the holder and allies. Fairy Tale also raises the holder’s Special Defense by one; this activation can repeat when another Pokémon switches in. Bewitched Woods cancels weaknesses contributed by the holder’s Fairy typing. In Misty or Rainbow Field, the current callbacks reduce outgoing Poison damage: the holder’s attack receives both half-damage callbacks (one quarter overall), and an ally’s attack receives one (one half). They do not reduce incoming Poison damage. This describes the current implementation, not the old defensive description.",
+				"On activation, cures poison on the holder and allies. Fairy Tale also raises the holder’s Special Defense by one; this activation can repeat when another Pokémon switches in. Bewitched Woods cancels weaknesses contributed by the holder’s Fairy typing. In Misty or Rainbow Field, outgoing Poison damage is reduced to one quarter for the holder and one half for its allies. They do not reduce incoming Poison damage.",
 			],
 			"royaldecree": [
 				"On entry, resets stat stages and screens unless Neutralization blocks the effect; Safeguard protects its side from that reset. Fairy Tale, Chess Board, New World and Starlight Arena additionally raise Defense or Special Defense according to opposing offensive stats: two stages in singles, one otherwise. Chess Board also multiplies both defenses by 1.5 while Neutralization is absent. The reset preserves field-supported positive defenses for Relic Armor/Defeatist on Desert, Fairy Tale, Cave, Crystal Cavern, New World and Volcanic Summit; Magician Special Attack on Fairy Tale, Bewitched Woods, Haunted, Misty and New World; Stalwart Special Attack on New World, Starlight, Fairy Tale and Chess Board. Mirror Arena’s existing Mirror Armor/Iron Dominion evasion boosts survive the reset, but their new evasion boosts are not allowed by the current ongoing exception. The prevention message appears when a stat change is actually blocked.",
@@ -1273,7 +1273,7 @@ export const ReviewedReferenceDetails = {
 		},
 		"moves": {
 			"forestscurse": [
-				"After successfully changing the target to pure Grass, Fairy Tale, Forest and Bewitched Woods also apply the Curse volatile if absent. It fails against an already pure-Grass target, so that case does not add Curse. The type-change message confirms the successful conversion.",
+				"After successfully changing the target to pure Grass, Fairy Tale, Forest and Bewitched Woods also apply Curse if absent. It fails against an already pure-Grass target, so that case does not add Curse. The type-change message confirms the successful conversion.",
 			],
 			"grasswhistle": [
 				"Base accuracy becomes 80% on Grassy Field or 85% on Bewitched Woods.",
@@ -1291,10 +1291,10 @@ export const ReviewedReferenceDetails = {
 				"On Bewitched Woods, base accuracy becomes 85%. Powder and paralysis immunities remain.",
 			],
 			"strengthsap": [
-				"Bewitched Woods lowers Special Attack by one as well as Attack. Forest and Swamp multiply its Attack-based healing by 1.3. The current Forest handler additionally fails if the target’s Special Attack is already at -6, even though Forest does not add a Special Attack drop.",
+				"Bewitched Woods lowers Special Attack by one as well as Attack. Forest and Swamp multiply its Attack-based healing by 1.3. On Forest, it also fails if the target’s Special Attack is already at -6, even though Forest does not add a Special Attack drop.",
 			],
 			"curse": [
-				"After use, attempts to turn Holy Field into Haunted or Forest into Bewitched Woods. The current transition callback does not require a Ghost user or successful Curse application. The current Ghost-user HP cost is one third maximum HP, unless Cursed Keepsake prevents the cost. Curse damage on Holy Field is applied once before that residual callback removes the curse.",
+				"After use, attempts to turn Holy Field into Haunted or Forest into Bewitched Woods. This does not require a Ghost user or successful Curse application. The current Ghost-user HP cost is one third maximum HP, unless Cursed Keepsake prevents the cost. Curse damage on Holy Field is applied once before the curse is removed.",
 			],
 			"headsmash": [
 				"On Bewitched Woods, recoil becomes one quarter of damage dealt.",
@@ -1319,7 +1319,7 @@ export const ReviewedReferenceDetails = {
 				"Fairy Tale, Starlight Arena, New World, Burning, Volcanic, Superheated and Cold Eclipse grant +1 Defense and Sp. Def on entry. Snowy Mountain, Icy and Cold Eclipse add Ice typing while this is the active ability, except for Abysseon and Divineon; this is not a blanket passive typing grant. Its ordinary self-burn, burn recovery and opposing chip remain separate.",
 			],
 			"steamengine": [
-				"Burning, Superheated and Volcanic grant +6 Speed on entry. Water Surface, Underwater and Volcanic grant +1 Speed each turn. The residual handler’s Murkwater message check is inside an outer condition that excludes Murkwater, so Murkwater alone does not grant that residual boost. Midnight Zone entry changes the holder to Water when allowed. Full Magma Armor is also delegated, including its entry defenses, weather/status rules and Dragon’s Den Fire immunity.",
+				"Burning, Superheated and Volcanic grant +6 Speed on entry. Water Surface, Underwater and Volcanic grant +1 Speed each turn. Murkwater alone does not grant the turn-end Speed boost. Midnight Zone entry changes the holder to Water when allowed. Full Magma Armor is also delegated, including its entry defenses, weather/status rules and Dragon’s Den Fire immunity.",
 			],
 			"thermalexchange": [
 				"Burning, Superheated, Dragon’s Den and Volcanic grant +1 Attack each turn, in addition to its ordinary Fire-hit Attack boost and burn prevention/cure. No Fire hit is required for the field boost.",
@@ -1328,7 +1328,7 @@ export const ReviewedReferenceDetails = {
 				"Burning, Superheated, Dragon’s Den and Volcanic grant +1 Defense each turn. The ordinary Fire-move absorption still grants +2 Defense separately when hit.",
 			],
 			"relentlesshunt": [
-				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse’s shared handler supplies its 2× damage and raises the priority-eligible base-power threshold from 60 to 80; the ability’s own Cold Eclipse return avoids doubling those modifiers.",
+				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse does not add a separate field power or priority bonus.",
 			],
 			"soulfire": [
 				"Haunted and Cold Eclipse grant +1 Defense and Sp. Def on entry. Haunted, Burning, Volcanic and Bewitched Woods grant +1 Attack and Sp. Atk each turn. These are additional to ordinary Fire/Ghost redirection, absorption and attack rules.",
@@ -1346,7 +1346,7 @@ export const ReviewedReferenceDetails = {
 				"Fails on Burning, Superheated and Volcanic fields with the message that intense heat prevents snow settling. Fairy Tale instead prints that the tale rejected the changing season; Starlight Arena prints that starlight refused to be eclipsed. Elsewhere its successful use creates Frozen Aura for five turns, or eight with Amplifield Rock; harsh sun can also prevent the move.",
 			],
 			"tarshot": [
-				"On Murkwater, adds a guaranteed poison and additional one-stage Speed-drop secondary. On Volcanic Summit, its primary Speed drop becomes two stages. Its Fire-weakness volatile adds two effectiveness stages on Burning Field instead of one, multiplying Fire effectiveness by four rather than two.",
+				"On Murkwater, adds a guaranteed poison and additional one-stage Speed-drop secondary. On Volcanic Summit, its primary Speed drop becomes two stages. Its Fire weakness effect adds two effectiveness stages on Burning Field instead of one, multiplying Fire effectiveness by four rather than two.",
 			],
 			"willowisp": [
 				"Burning Field and Volcanic Summit set base accuracy to 100%; Haunted sets it to 90%. A Ghost user bypasses accuracy checks, and a Fire user’s existing 100% base-accuracy rule still applies.",
@@ -1374,7 +1374,7 @@ export const ReviewedReferenceDetails = {
 				"Fairy Tale, Starlight Arena, New World, Burning, Volcanic, Superheated and Cold Eclipse grant +1 Defense and Sp. Def on entry. Snowy Mountain, Icy and Cold Eclipse add Ice typing while this is the active ability, except for Abysseon and Divineon; this is not a blanket passive typing grant. Its ordinary self-burn, burn recovery and opposing chip remain separate.",
 			],
 			"steamengine": [
-				"Burning, Superheated and Volcanic grant +6 Speed on entry. Water Surface, Underwater and Volcanic grant +1 Speed each turn. The residual handler’s Murkwater message check is inside an outer condition that excludes Murkwater, so Murkwater alone does not grant that residual boost. Midnight Zone entry changes the holder to Water when allowed. Full Magma Armor is also delegated, including its entry defenses, weather/status rules and Dragon’s Den Fire immunity.",
+				"Burning, Superheated and Volcanic grant +6 Speed on entry. Water Surface, Underwater and Volcanic grant +1 Speed each turn. Murkwater alone does not grant the turn-end Speed boost. Midnight Zone entry changes the holder to Water when allowed. Full Magma Armor is also delegated, including its entry defenses, weather/status rules and Dragon’s Den Fire immunity.",
 			],
 			"thermalexchange": [
 				"Burning, Superheated, Dragon’s Den and Volcanic grant +1 Attack each turn, in addition to its ordinary Fire-hit Attack boost and burn prevention/cure. No Fire hit is required for the field boost.",
@@ -1402,7 +1402,7 @@ export const ReviewedReferenceDetails = {
 				"Volcanic raises the contact burn chance from 30% to 60%. Cold Eclipse instead grants +1 Defense and Special Defense on entry and disables the contact burn effect.",
 			],
 			"iceface": [
-				"Cold Eclipse allows the intact Ice Face to absorb special as well as physical move damage before breaking. Volcanic marks the face broken on entry, so the update changes intact Eiscue into Noice Face rather than granting a shield. Ordinary restoration when hail or snow begins still follows the weather callback; resuming suppressed weather does not trigger restoration.",
+				"Cold Eclipse allows the intact Ice Face to absorb special as well as physical move damage before breaking. Volcanic marks the face broken on entry, so the update changes intact Eiscue into Noice Face rather than granting a shield. Hail or snow can still restore Ice Face when it begins; resuming suppressed weather does not trigger restoration.",
 			],
 			"magmaarmor": [
 				"On Dragon’s Den, Volcanic or Cold Eclipse entry, gains +1 Defense and Special Defense. Dragon’s Den also blocks incoming Fire moves from other Pokémon. Cold Eclipse removes its prevention of new frostbite, while its existing-status cure and halving of incoming Water/Ice offensive stats remain.",
@@ -1431,7 +1431,7 @@ export const ReviewedReferenceDetails = {
 				"Fails on Burning, Superheated and Volcanic fields with the message that intense heat prevents snow settling. Fairy Tale instead prints that the tale rejected the changing season; Starlight Arena prints that starlight refused to be eclipsed. Elsewhere its successful use creates Frozen Aura for five turns, or eight with Amplifield Rock; harsh sun can also prevent the move.",
 			],
 			"tarshot": [
-				"On Murkwater, adds a guaranteed poison and additional one-stage Speed-drop secondary. On Volcanic Summit, its primary Speed drop becomes two stages. Its Fire-weakness volatile adds two effectiveness stages on Burning Field instead of one, multiplying Fire effectiveness by four rather than two.",
+				"On Murkwater, adds a guaranteed poison and additional one-stage Speed-drop secondary. On Volcanic Summit, its primary Speed drop becomes two stages. Its Fire weakness effect adds two effectiveness stages on Burning Field instead of one, multiplying Fire effectiveness by four rather than two.",
 			],
 			"willowisp": [
 				"Burning Field and Volcanic Summit set base accuracy to 100%; Haunted sets it to 90%. A Ghost user bypasses accuracy checks, and a Fire user’s existing 100% base-accuracy rule still applies.",
@@ -1465,7 +1465,7 @@ export const ReviewedReferenceDetails = {
 				"Burning, Superheated, Dragon’s Den and Volcanic grant +1 Defense each turn. The ordinary Fire-move absorption still grants +2 Defense separately when hit.",
 			],
 			"relentlesshunt": [
-				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse’s shared handler supplies its 2× damage and raises the priority-eligible base-power threshold from 60 to 80; the ability’s own Cold Eclipse return avoids doubling those modifiers.",
+				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse does not add a separate field power or priority bonus.",
 			],
 			"armorize": [
 				"Eligible Normal moves become Steel. The conversion bonus is 1.5× on Factory, Short-Circuit, Fairy Tale, Dragon’s Den, Starlight Arena, New World and Holy, instead of 1.2×. Cold Eclipse grants hail immunity but does not increase that conversion bonus. Variable-type moves retain their normal conversion exclusions.",
@@ -1504,7 +1504,7 @@ export const ReviewedReferenceDetails = {
 				"Defense is 1.5× on Dragon’s Den, Fairy Tale, Rainbow, Starlight Arena and Misty without requiring a status condition. Having both a status and one of these fields does not stack the bonus.",
 			],
 			"shedskin": [
-				"On Dragon’s Den, a qualifying end-of-turn recovery activates without its ordinary 50% roll: cure status, heal 1/4 max HP, raise the higher attacking stat by one stage (Attack wins ties), and lower Defense and Special Defense by one stage. It does not clear negative stages or listed volatile ailments in this branch, although those can trigger it. Scrafty with Shed Skin or Street Tyrant heals 1/8 instead.",
+				"On Dragon’s Den, a qualifying end-of-turn recovery activates without its ordinary 50% roll: cure status, heal 1/4 max HP, raise the higher attacking stat by one stage (Attack wins ties), and lower Defense and Special Defense by one stage. It does not clear negative stages or temporary ailments, although those can trigger it. Scrafty with Shed Skin or Street Tyrant heals 1/8 instead.",
 			],
 			"shellarmor": [
 				"Gains +1 Defense on Dragon’s Den or Fairy Tale entry. Prevents critical hits and gains +2 Special Defense when a foe lowers its stats. Its 20% damage cut applies on Fairy Tale only of these two fields.",
@@ -1536,7 +1536,7 @@ export const ReviewedReferenceDetails = {
 				"On Cave or Dragon Den, attacks immediately without spending a charge turn; the preparation/animation messages still play. Tailwind or Strong Winds independently remove charging and add a critical-rate stage.",
 			],
 			"skydrop": [
-				"Cave prevents the pickup. Dragon Den prevents the move in its pre-use callback unless Adaptive Cycle shields the attacker from that field effect. The separate Yearning Star version retains its Cave, weight, ally, Substitute and Flying-target restrictions.",
+				"Cave prevents the pickup. Dragon Den prevents the move before the attack unless Adaptive Cycle shields the attacker from that field effect. The separate Yearning Star version retains its Cave, weight, ally, Substitute and Flying-target restrictions.",
 			],
 			"dragonrush": [
 				"Dragon Den sets base accuracy to 100%; accuracy/evasion modifiers still apply.",
@@ -1554,13 +1554,13 @@ export const ReviewedReferenceDetails = {
 				"Fairy Tale, Starlight Arena, New World, Burning, Volcanic, Superheated and Cold Eclipse grant +1 Defense and Sp. Def on entry. Snowy Mountain, Icy and Cold Eclipse add Ice typing while this is the active ability, except for Abysseon and Divineon; this is not a blanket passive typing grant. Its ordinary self-burn, burn recovery and opposing chip remain separate.",
 			],
 			"relentlesshunt": [
-				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse’s shared handler supplies its 2× damage and raises the priority-eligible base-power threshold from 60 to 80; the ability’s own Cold Eclipse return avoids doubling those modifiers.",
+				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse does not add a separate field power or priority bonus.",
 			],
 			"queenlymajesty": [
 				"Damaging attacks deal 1.5× damage on Fairy Tale. On Chessboard the same bonus applies only when the attacker does not have the Queen role. Its protection against opposing priority attacks remains.",
 			],
 			"stalwart": [
-				"On entry, gains +1 Special Attack on Chessboard, Fairy Tale, New World and Starlight Arena. Moves still ignore redirection; the shared Cave collapse handler also recognizes Stalwart as protection from that collapse.",
+				"On entry, gains +1 Special Attack on Chessboard, Fairy Tale, New World and Starlight Arena. Moves still ignore redirection; Stalwart also protects against Cave collapse.",
 			],
 			"stancechange": [
 				"On entry to Chessboard or Fairy Tale, gains +1 Defense and Special Defense. A qualifying Aegislash changing into Blade gains +1 Attack and Special Attack but loses one Defense and Special Defense stage; returning to Shield reverses those stage changes. Status moves other than King’s Shield do not change stance. Transformed users and Aegislash-Gmax do not perform the stance changes.",
@@ -1614,13 +1614,13 @@ export const ReviewedReferenceDetails = {
 				"Fairy Tale entry grants +1 Defense and Special Defense, plus +1 Special Attack from its Stalwart component. Stalwart also grants that Special Attack stage on New World, Starlight Arena and Chessboard.",
 			],
 			"dauntlessshield": [
-				"Fairy Tale entry adds +1 Defense and Special Defense to its ordinary +1 Defense, for +2 Defense and +1 Special Defense in total. The current entry callback has no once-per-battle guard.",
+				"Fairy Tale entry adds +1 Defense and Special Defense to its ordinary +1 Defense, for +2 Defense and +1 Special Defense in total. This can activate again after switching out and back in.",
 			],
 			"ange": [
 				"Its full Fairy Aura component makes the holder’s moves bypass accuracy checks on Fairy Tale. The ordinary shared Fairy-power aura remains; Eternal Flower is a separate passive rather than an extra copy inside Ange.",
 			],
 			"fairyaura": [
-				"On Fairy Tale, the holder’s moves bypass accuracy checks; this callback is not limited to Fairy moves. Its ordinary shared Fairy attack-power aura remains.",
+				"On Fairy Tale, the holder’s moves bypass accuracy checks; this applies to all move types. Its ordinary shared Fairy attack-power aura remains.",
 			],
 			"auroradomain": [
 				"On fainting, prints “The Aurora will persist”, attempts to create Fairy Tale for five turns, and independently starts or refreshes its side’s Aurora Veil to five turns. A blocked field change does not prevent the veil attempt. This is not an entry veil.",
@@ -1632,7 +1632,7 @@ export const ReviewedReferenceDetails = {
 				"Its once-per-battle entry boost on Fairy Tale totals +2 Attack and +1 Special Attack instead of only +1 Attack. The extra stages do not bypass the once-per-battle guard.",
 			],
 			"magicbounce": [
-				"Fairy Tale entry gives +1 Special Defense; Mirror Arena entry gives +1 evasion. On Mirror Arena, reflecting a directly targeted move also grants the original user +1 evasion. Side-targeted reflections do not use that additional evasion callback.",
+				"Fairy Tale entry gives +1 Special Defense; Mirror Arena entry gives +1 evasion. On Mirror Arena, reflecting a directly targeted move also grants the original user +1 evasion. Side-targeted reflections do not grant that extra evasion.",
 			],
 			"magicguard": [
 				"Fairy Tale entry grants +1 Special Defense. Its ordinary indirect-damage prevention and HP-cost exceptions remain unchanged.",
@@ -1641,7 +1641,7 @@ export const ReviewedReferenceDetails = {
 				"Fairy Tale entry grants +1 Defense and Special Defense. Its independent recovery and fainted-ally ability-copying behavior remain.",
 			],
 			"astralwitchcraft": [
-				"On Fairy Tale and New World entry, its own bonus gives +1 Special Attack and Special Defense, while its Void Guile component separately supplies another +1 Special Attack. These are distinct bonuses; it does not receive Magic Bounce’s entry bonus or reflection.",
+				"Magic Guard grants +1 Special Defense on Fairy Tale entry. Astral Witchcraft has no separate New World entry bonus.",
 			],
 			"steelyspirit": [
 				"On Fairy Tale, its side’s Steel moves receive 2× power instead of 1.5×. The shared ally-power event includes the holder.",
@@ -1665,7 +1665,7 @@ export const ReviewedReferenceDetails = {
 				"On Fairy Tale, Chessboard, New World, Starlight Arena and Cold Eclipse, half HP or more grants one tracked Defense and Special Defense stage instead of its ordinary 2× attack power. Below half HP, those granted stages are removed and it receives 1.5× attack power plus double Speed. Leaving the favored fields removes the tracked defenses. “fortifies its defenses” announces the high-HP field mode; “quickens its command” announces low-HP mode; “empowers its attacks” announces ordinary high-HP mode.",
 			],
 			"pastelveil": [
-				"On activation, cures poison on the holder and allies. Fairy Tale also raises the holder’s Special Defense by one; this activation can repeat when another Pokémon switches in. Bewitched Woods cancels weaknesses contributed by the holder’s Fairy typing. In Misty or Rainbow Field, the current callbacks reduce outgoing Poison damage: the holder’s attack receives both half-damage callbacks (one quarter overall), and an ally’s attack receives one (one half). They do not reduce incoming Poison damage. This describes the current implementation, not the old defensive description.",
+				"On activation, cures poison on the holder and allies. Fairy Tale also raises the holder’s Special Defense by one; this activation can repeat when another Pokémon switches in. Bewitched Woods cancels weaknesses contributed by the holder’s Fairy typing. In Misty or Rainbow Field, outgoing Poison damage is reduced to one quarter for the holder and one half for its allies. They do not reduce incoming Poison damage.",
 			],
 			"royaldecree": [
 				"On entry, resets stat stages and screens unless Neutralization blocks the effect; Safeguard protects its side from that reset. Fairy Tale, Chess Board, New World and Starlight Arena additionally raise Defense or Special Defense according to opposing offensive stats: two stages in singles, one otherwise. Chess Board also multiplies both defenses by 1.5 while Neutralization is absent. The reset preserves field-supported positive defenses for Relic Armor/Defeatist on Desert, Fairy Tale, Cave, Crystal Cavern, New World and Volcanic Summit; Magician Special Attack on Fairy Tale, Bewitched Woods, Haunted, Misty and New World; Stalwart Special Attack on New World, Starlight, Fairy Tale and Chess Board. Mirror Arena’s existing Mirror Armor/Iron Dominion evasion boosts survive the reset, but their new evasion boosts are not allowed by the current ongoing exception. The prevention message appears when a stat change is actually blocked.",
@@ -1674,13 +1674,13 @@ export const ReviewedReferenceDetails = {
 				"Its Stalwart component raises Special Attack on entry in New World, Starlight Arena, Fairy Tale and Chess Board. Shell Armor adds entry Defense on Fairy Tale or Dragon Den. Its own field-entry effect raises Defense and Special Defense on Fairy Tale, New World, Cold Eclipse or Starlight, tracking changes between fields. New World, Cold Eclipse and Starlight give 1.5x power. Guardian Presence gives allied attacks 1.5x power on Haunted, Bewitched Woods, Holy or Psychic Field (1.3x otherwise), and reduces allied incoming damage by 25%. Electric Aura, Electric Field, Murkwater, Water Surface, Underwater, Midnight Zone, Factory or Short-Circuit activate its Electric redirection/absorption and Attack/Special Attack increases.",
 			],
 			"mirrorarmor": [
-				"Fairy Tale grants one Defense and Special Defense stage on entry; Mirror Arena grants one evasion stage. Royal Decree preserves existing matching field boosts during its entry reset. Starlight Arena supplies its priority-protection callback. Ordinary reflected stat drops still follow Mirror Armor’s targeting and reflection rules.",
+				"Fairy Tale grants one Defense and Special Defense stage on entry; Mirror Arena grants one evasion stage. Royal Decree preserves existing matching field boosts during its entry reset. Starlight Arena protects against opposing priority attacks. Ordinary reflected stat drops still follow Mirror Armor’s targeting and reflection rules.",
 			],
 			"atrocity": [
 				"Its converted Dragon attacks gain a 1.5x conversion modifier on Dragon Den and Fairy Tale instead of 1.2x. Cold Eclipse adds a 1.3x power modifier and raises its defensive multiplier to 1.5x instead of 1.3x. Its inherited Magma Armor field behavior remains: entry defenses on Dragon Den, Volcanic Summit and Infernal Eclipse, with Dragon Den and Infernal Eclipse Fire protection and Cold Eclipse’s freeze exception. Dragon Rush additionally receives its existing 1.5x modifier. Royal Decree/Empress adds the existing authority bonus only while Neutralization is absent.",
 			],
 			"irondominion": [
-				"Fairy Tale increases its adjacent-ally entry healing from one quarter to one third maximum HP; the shared-mead message accompanies each attempted ally heal. This healing is skipped when Sworn Duty is already the species passive. Fairy Tale also grants one Defense and Special Defense stage once per ability activation; Mirror Arena grants one evasion stage. Cold Eclipse changes its Pressure drops to two stages in both defenses, retaining the per-target attempt memory and Substitute check. Starlight Arena blocks opposing positive-priority moves aimed at its protected side, with the callback’s field-wide targeting exclusions.",
+				"Fairy Tale increases its adjacent-ally entry healing from one quarter to one third maximum HP; the shared-mead message accompanies each attempted ally heal. This healing is skipped when Sworn Duty is already the species passive. Fairy Tale also grants one Defense and Special Defense stage once per ability activation; Mirror Arena grants one evasion stage. Cold Eclipse changes its Pressure drops to two stages in both defenses, retaining the per-target attempt memory and Substitute check. Starlight Arena blocks opposing positive-priority moves aimed at its protected side, with the usual targeting exceptions.",
 			],
 		},
 		"moves": {
@@ -1694,7 +1694,7 @@ export const ReviewedReferenceDetails = {
 				"Raises Defense by three stages on Corrosive Field, Corrosive Mist, Fairy Tale and Murkwater.",
 			],
 			"forestscurse": [
-				"After successfully changing the target to pure Grass, Fairy Tale, Forest and Bewitched Woods also apply the Curse volatile if absent. It fails against an already pure-Grass target, so that case does not add Curse. The type-change message confirms the successful conversion.",
+				"After successfully changing the target to pure Grass, Fairy Tale, Forest and Bewitched Woods also apply Curse if absent. It fails against an already pure-Grass target, so that case does not add Curse. The type-change message confirms the successful conversion.",
 			],
 			"nobleroar": [
 				"On Fairy Tale and Dragon Den, lowers Attack and Special Attack by two stages each.",
@@ -1703,7 +1703,7 @@ export const ReviewedReferenceDetails = {
 				"After positive damage on Fairy Tale or Dragon Den, raises the user’s Special Attack by two stages rather than one.",
 			],
 			"craftyshield": [
-				"On Fairy Tale, a successful field-hit callback also raises the user’s Defense and Special Defense by one stage. Ordinary status-move protection remains.",
+				"On Fairy Tale, a successful use also raises the user’s Defense and Special Defense by one stage. Ordinary status-move protection remains.",
 			],
 			"flowershield": [
 				"On Fairy Tale, adds one Defense and Special Defense stage to the user, then supplies the normal Defense boost to eligible Grass types. Flower Garden stages 2 and 3 instead boost both defenses of active allies by one or two stages respectively, without a Grass-type requirement.",
@@ -1721,7 +1721,7 @@ export const ReviewedReferenceDetails = {
 				"When its slot condition processes an incoming Pokémon on Fairy Tale or Starlight Arena, also raises Attack and Special Attack by one. This boost sits outside the healing-success check; a healthy, status-free entrant can receive it while the unused wish remains.",
 			],
 			"miracleeye": [
-				"On Psychic Field, Fairy Tale and Holy Field, a successful hit additionally raises the user’s Special Attack by two. Its existing Ghost-resistance volatile, Dark-target Psychic immunity bypass and positive-evasion bypass remain.",
+				"On Psychic Field, Fairy Tale and Holy Field, a successful hit additionally raises the user’s Special Attack by two. Its existing Ghost resistance, Dark-target Psychic immunity bypass and positive-evasion bypass remain.",
 			],
 			"strangesteam": [
 				"On Fairy Tale and Misty Field, its confusion secondary becomes guaranteed, subject to ordinary secondary/immunity rules. Its independent super-effective-target priority rule remains.",
@@ -1730,7 +1730,7 @@ export const ReviewedReferenceDetails = {
 				"If created on Misty, Rainbow, Fairy Tale, Holy or Starlight, stores healing equal to three quarters of the original user’s maximum HP instead of half. The amount is decided when Wish is set, not when it resolves. The Wish healing message appears only when healing succeeds.",
 			],
 			"steelystrike": [
-				"On Fairy Tale, gains 1.5x power unless the target has Adaptive Cycle field protection. The blade-cuts-true message is printed when that power callback applies. Its existing screen removal remains.",
+				"On Fairy Tale, gains 1.5x power unless the target has Adaptive Cycle field protection. The blade-cuts-true message is printed when the power boost applies. Its existing screen removal remains.",
 			],
 		},
 	},
@@ -1743,10 +1743,10 @@ export const ReviewedReferenceDetails = {
 				"Entry on Holy, Crystal Cavern, Dark Crystal Cavern, New World, Starlight Arena, Cave, Volcanic or Desert grants +1 Defense and Sp. Def. Its weather-setting call uses Hail, despite older prose calling it Snow. Effective Hail or Snow enables its ordinary never-miss Electric attacks and weather-based defenses; the field bonus itself does not require weather.",
 			],
 			"relentlesshunt": [
-				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse’s shared handler supplies its 2× damage and raises the priority-eligible base-power threshold from 60 to 80; the ability’s own Cold Eclipse return avoids doubling those modifiers.",
+				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse does not add a separate field power or priority bonus.",
 			],
 			"stalwart": [
-				"On entry, gains +1 Special Attack on Chessboard, Fairy Tale, New World and Starlight Arena. Moves still ignore redirection; the shared Cave collapse handler also recognizes Stalwart as protection from that collapse.",
+				"On entry, gains +1 Special Attack on Chessboard, Fairy Tale, New World and Starlight Arena. Moves still ignore redirection; Stalwart also protects against Cave collapse.",
 			],
 			"defragment": [
 				"On Cold Eclipse and Fairy Tale entry, raises both Defense and Special Defense by one stage. On Factory, Short-Circuit, Glitch, New World and Starlight Arena, compares all living foes’ combined Attack and Special Attack and raises the corresponding defense by two stages (Defense wins a tie), instead of the ordinary one-stage increase. Its attacks still cannot miss.",
@@ -1770,7 +1770,7 @@ export const ReviewedReferenceDetails = {
 				"On Crystal Cavern, changes to the current crystal cycle’s Fire, Water, Grass or Psychic type. On New World, randomly selects one of the eighteen ordinary types. A current aura with a Mimicry type overrides that field choice. Terastallized Pokémon do not change type.",
 			],
 			"astralwitchcraft": [
-				"On Fairy Tale and New World entry, its own bonus gives +1 Special Attack and Special Defense, while its Void Guile component separately supplies another +1 Special Attack. These are distinct bonuses; it does not receive Magic Bounce’s entry bonus or reflection.",
+				"Magic Guard grants +1 Special Defense on Fairy Tale entry. Astral Witchcraft has no separate New World entry bonus.",
 			],
 			"beadsofruin": [
 				"On New World, the Special Defense multiplier for other active Pokémon without Beads of Ruin becomes 0.66× instead of 0.75×. Multiple holders do not stack the same modifier.",
@@ -1788,7 +1788,7 @@ export const ReviewedReferenceDetails = {
 				"On New World, the Special Attack multiplier for active Pokémon without Vessel of Ruin becomes 0.66× instead of 0.75×. Multiple holders do not stack the same modifier.",
 			],
 			"victorystar": [
-				"New World and Starlight Arena multiply damage handled by its opposing-Pokémon damage callback by 1.5. That callback prints the literal message “Happened” when it runs, including outside those fields; the message is debugging-like flavor, not an extra effect. Its ordinary ally accuracy boost remains.",
+				"New World and Starlight Arena increase damage to opposing Pokémon by 1.5×. Its usual ally accuracy boost remains.",
 			],
 			"battlefervor": [
 				"Ashen Beach, New World, Starlight Arena and Cold Eclipse add flinch immunity and protection from externally lowered stat stages. Cold Eclipse entry also attempts -1 Speed against foes, blocked by Substitute. Bewitched Woods, Haunted and Holy disable these benefits along with its ordinary power, defensive, berry/seed and retaliation effects; Holy does not grant the listed defensive benefits.",
@@ -1809,7 +1809,7 @@ export const ReviewedReferenceDetails = {
 				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. Cold Eclipse also recognizes Duskilate for its 1.5× defenses and exemption from the grounded Speed penalty.",
 			],
 			"execution": [
-				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, its current stat-change handler blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
+				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, it blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
 			],
 			"relicarmor": [
 				"Desert, Fairy Tale, Cave, Crystal Cavern, New World and Volcanic entry grant +1 Defense and Special Defense. Its Rock-typing weakness protection applies on Rocky, Fairy Tale, Water Surface, Underwater, Murkwater, Midnight Zone, Starlight Arena, New World, Holy, Mountain, Cave, Volcanic, Dragon’s Den, Crystal Cavern and Dark Crystal Cavern. Desert, Icy, Snowy Mountain and Cold Eclipse do not grant that protection by themselves. Aevian Lapras additionally gains Ice typing on Icy/Snowy Mountain/Cold Eclipse or in hail/snow. The visible Rock-protection message announces actual protection and is withheld during Illusion.",
@@ -1853,7 +1853,7 @@ export const ReviewedReferenceDetails = {
 				"On New World, also averages the two Pokémon’s current HP, using the target’s undynamaxed HP and rounding down, with a minimum of one. Ordinary stat-stage swapping remains.",
 			],
 			"lunardance": [
-				"On New World, its slot callback additionally boosts Attack, Defense, Special Attack, Special Defense and Speed by one; on Starlight, boosts Attack and Special Attack by one. These boosts occur before the actual healing/PP-restoration check, so an otherwise healthy entrant can receive them.",
+				"On New World, the entering Pokémon gains Attack, Defense, Special Attack, Special Defense and Speed by one; on Starlight, boosts Attack and Special Attack by one. These boosts occur before the actual healing/PP-restoration check, so an otherwise healthy entrant can receive them.",
 			],
 			"magicroom": [
 				"On New World and Psychic Field, lasts eight turns. Amplifield Rock independently gives eight; otherwise Persistent gives seven and the base duration is five. Reusing the move ends the room.",
@@ -1881,10 +1881,10 @@ export const ReviewedReferenceDetails = {
 				"Entry on Holy, Crystal Cavern, Dark Crystal Cavern, New World, Starlight Arena, Cave, Volcanic or Desert grants +1 Defense and Sp. Def. Its weather-setting call uses Hail, despite older prose calling it Snow. Effective Hail or Snow enables its ordinary never-miss Electric attacks and weather-based defenses; the field bonus itself does not require weather.",
 			],
 			"relentlesshunt": [
-				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse’s shared handler supplies its 2× damage and raises the priority-eligible base-power threshold from 60 to 80; the ability’s own Cold Eclipse return avoids doubling those modifiers.",
+				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse does not add a separate field power or priority bonus.",
 			],
 			"stalwart": [
-				"On entry, gains +1 Special Attack on Chessboard, Fairy Tale, New World and Starlight Arena. Moves still ignore redirection; the shared Cave collapse handler also recognizes Stalwart as protection from that collapse.",
+				"On entry, gains +1 Special Attack on Chessboard, Fairy Tale, New World and Starlight Arena. Moves still ignore redirection; Stalwart also protects against Cave collapse.",
 			],
 			"defragment": [
 				"On Cold Eclipse and Fairy Tale entry, raises both Defense and Special Defense by one stage. On Factory, Short-Circuit, Glitch, New World and Starlight Arena, compares all living foes’ combined Attack and Special Attack and raises the corresponding defense by two stages (Defense wins a tie), instead of the ordinary one-stage increase. Its attacks still cannot miss.",
@@ -1914,7 +1914,7 @@ export const ReviewedReferenceDetails = {
 				"New World and Starlight Arena entry grant +1 Special Defense. Its ordinary Ice-power, hail immunity and effective hail/snow Special Attack effects remain separate.",
 			],
 			"victorystar": [
-				"New World and Starlight Arena multiply damage handled by its opposing-Pokémon damage callback by 1.5. That callback prints the literal message “Happened” when it runs, including outside those fields; the message is debugging-like flavor, not an extra effect. Its ordinary ally accuracy boost remains.",
+				"New World and Starlight Arena increase damage to opposing Pokémon by 1.5×. Its usual ally accuracy boost remains.",
 			],
 			"battlefervor": [
 				"Ashen Beach, New World, Starlight Arena and Cold Eclipse add flinch immunity and protection from externally lowered stat stages. Cold Eclipse entry also attempts -1 Speed against foes, blocked by Substitute. Bewitched Woods, Haunted and Holy disable these benefits along with its ordinary power, defensive, berry/seed and retaliation effects; Holy does not grant the listed defensive benefits.",
@@ -1935,7 +1935,7 @@ export const ReviewedReferenceDetails = {
 				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. Cold Eclipse also recognizes Duskilate for its 1.5× defenses and exemption from the grounded Speed penalty.",
 			],
 			"execution": [
-				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, its current stat-change handler blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
+				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, it blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
 			],
 			"imperialmandate": [
 				"On Fairy Tale, Chessboard, New World, Starlight Arena and Cold Eclipse, half HP or more grants one tracked Defense and Special Defense stage instead of its ordinary 2× attack power. Below half HP, those granted stages are removed and it receives 1.5× attack power plus double Speed. Leaving the favored fields removes the tracked defenses. “fortifies its defenses” announces the high-HP field mode; “quickens its command” announces low-HP mode; “empowers its attacks” announces ordinary high-HP mode.",
@@ -1950,10 +1950,10 @@ export const ReviewedReferenceDetails = {
 				"Its Stalwart component raises Special Attack on entry in New World, Starlight Arena, Fairy Tale and Chess Board. Shell Armor adds entry Defense on Fairy Tale or Dragon Den. Its own field-entry effect raises Defense and Special Defense on Fairy Tale, New World, Cold Eclipse or Starlight, tracking changes between fields. New World, Cold Eclipse and Starlight give 1.5x power. Guardian Presence gives allied attacks 1.5x power on Haunted, Bewitched Woods, Holy or Psychic Field (1.3x otherwise), and reduces allied incoming damage by 25%. Electric Aura, Electric Field, Murkwater, Water Surface, Underwater, Midnight Zone, Factory or Short-Circuit activate its Electric redirection/absorption and Attack/Special Attack increases.",
 			],
 			"mirrorarmor": [
-				"Fairy Tale grants one Defense and Special Defense stage on entry; Mirror Arena grants one evasion stage. Royal Decree preserves existing matching field boosts during its entry reset. Starlight Arena supplies its priority-protection callback. Ordinary reflected stat drops still follow Mirror Armor’s targeting and reflection rules.",
+				"Fairy Tale grants one Defense and Special Defense stage on entry; Mirror Arena grants one evasion stage. Royal Decree preserves existing matching field boosts during its entry reset. Starlight Arena protects against opposing priority attacks. Ordinary reflected stat drops still follow Mirror Armor’s targeting and reflection rules.",
 			],
 			"irondominion": [
-				"Fairy Tale increases its adjacent-ally entry healing from one quarter to one third maximum HP; the shared-mead message accompanies each attempted ally heal. This healing is skipped when Sworn Duty is already the species passive. Fairy Tale also grants one Defense and Special Defense stage once per ability activation; Mirror Arena grants one evasion stage. Cold Eclipse changes its Pressure drops to two stages in both defenses, retaining the per-target attempt memory and Substitute check. Starlight Arena blocks opposing positive-priority moves aimed at its protected side, with the callback’s field-wide targeting exclusions.",
+				"Fairy Tale increases its adjacent-ally entry healing from one quarter to one third maximum HP; the shared-mead message accompanies each attempted ally heal. This healing is skipped when Sworn Duty is already the species passive. Fairy Tale also grants one Defense and Special Defense stage once per ability activation; Mirror Arena grants one evasion stage. Cold Eclipse changes its Pressure drops to two stages in both defenses, retaining the per-target attempt memory and Substitute check. Starlight Arena blocks opposing positive-priority moves aimed at its protected side, with the usual targeting exceptions.",
 			],
 		},
 		"moves": {
@@ -1967,7 +1967,7 @@ export const ReviewedReferenceDetails = {
 				"Cold Eclipse restores three quarters maximum HP regardless of weather. Dark Crystal Cavern, New World, Starlight Arena and Bewitched Woods restore three quarters except in sun (approximately two thirds) or snow (one quarter). Adaptive Cycle can neutralize the adverse snow reduction. Healing restrictions still apply.",
 			],
 			"auroraveil": [
-				"Can be used without hail or snow on Rainbow, Icy, Mirror Arena, Dark Crystal Cavern, Crystal Cavern, Snowy Mountain, Starlight Arena and Cold Eclipse. Mirror Arena extends ordinary Aurora Veil to eight turns and its after-use callback grants one evasion stage if a successful move has been recorded that turn. Royal Decree can still prevent the screen. G-Max-generated veil keeps its separate four-turn duration.",
+				"Can be used without hail or snow on Rainbow, Icy, Mirror Arena, Dark Crystal Cavern, Crystal Cavern, Snowy Mountain, Starlight Arena and Cold Eclipse. Mirror Arena extends ordinary Aurora Veil to eight turns and after use it grants one evasion stage if a successful move has been recorded that turn. Royal Decree can still prevent the screen. G-Max-generated veil keeps its separate four-turn duration.",
 			],
 			"snowscape": [
 				"Fails on Burning, Superheated and Volcanic fields with the message that intense heat prevents snow settling. Fairy Tale instead prints that the tale rejected the changing season; Starlight Arena prints that starlight refused to be eclipsed. Elsewhere its successful use creates Frozen Aura for five turns, or eight with Amplifield Rock; harsh sun can also prevent the move.",
@@ -1982,10 +1982,10 @@ export const ReviewedReferenceDetails = {
 				"If created on Misty, Rainbow, Fairy Tale, Holy or Starlight, stores healing equal to three quarters of the original user’s maximum HP instead of half. The amount is decided when Wish is set, not when it resolves. The Wish healing message appears only when healing succeeds.",
 			],
 			"lightthatburnsthesky": [
-				"On Holy and Starlight Arena, gains 1.3x power unless Adaptive Cycle shields the target from fields. After use, prints “The light was consumed!” and clears that field; the clearing callback is not conditioned on hit success.",
+				"On Holy and Starlight Arena, gains 1.3x power unless Adaptive Cycle shields the target from fields. After use, prints “The light was consumed!” and clears that field; the field can clear even if the attack misses.",
 			],
 			"lunardance": [
-				"On New World, its slot callback additionally boosts Attack, Defense, Special Attack, Special Defense and Speed by one; on Starlight, boosts Attack and Special Attack by one. These boosts occur before the actual healing/PP-restoration check, so an otherwise healthy entrant can receive them.",
+				"On New World, the entering Pokémon gains Attack, Defense, Special Attack, Special Defense and Speed by one; on Starlight, boosts Attack and Special Attack by one. These boosts occur before the actual healing/PP-restoration check, so an otherwise healthy entrant can receive them.",
 			],
 			"lunarblessing": [
 				"On Starlight, restores 33% maximum HP instead of 25%, while retaining its major-status cure.",
@@ -1998,7 +1998,7 @@ export const ReviewedReferenceDetails = {
 				"Fairy Tale, Starlight Arena, New World, Burning, Volcanic, Superheated and Cold Eclipse grant +1 Defense and Sp. Def on entry. Snowy Mountain, Icy and Cold Eclipse add Ice typing while this is the active ability, except for Abysseon and Divineon; this is not a blanket passive typing grant. Its ordinary self-burn, burn recovery and opposing chip remain separate.",
 			],
 			"steamengine": [
-				"Burning, Superheated and Volcanic grant +6 Speed on entry. Water Surface, Underwater and Volcanic grant +1 Speed each turn. The residual handler’s Murkwater message check is inside an outer condition that excludes Murkwater, so Murkwater alone does not grant that residual boost. Midnight Zone entry changes the holder to Water when allowed. Full Magma Armor is also delegated, including its entry defenses, weather/status rules and Dragon’s Den Fire immunity.",
+				"Burning, Superheated and Volcanic grant +6 Speed on entry. Water Surface, Underwater and Volcanic grant +1 Speed each turn. Murkwater alone does not grant the turn-end Speed boost. Midnight Zone entry changes the holder to Water when allowed. Full Magma Armor is also delegated, including its entry defenses, weather/status rules and Dragon’s Den Fire immunity.",
 			],
 			"thermalexchange": [
 				"Burning, Superheated, Dragon’s Den and Volcanic grant +1 Attack each turn, in addition to its ordinary Fire-hit Attack boost and burn prevention/cure. No Fire hit is required for the field boost.",
@@ -2007,7 +2007,7 @@ export const ReviewedReferenceDetails = {
 				"Burning, Superheated, Dragon’s Den and Volcanic grant +1 Defense each turn. The ordinary Fire-move absorption still grants +2 Defense separately when hit.",
 			],
 			"relentlesshunt": [
-				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse’s shared handler supplies its 2× damage and raises the priority-eligible base-power threshold from 60 to 80; the ability’s own Cold Eclipse return avoids doubling those modifiers.",
+				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse does not add a separate field power or priority bonus.",
 			],
 		},
 		"moves": {
@@ -2015,13 +2015,13 @@ export const ReviewedReferenceDetails = {
 				"Fails on Burning, Superheated and Volcanic fields with the message that intense heat prevents snow settling. Fairy Tale instead prints that the tale rejected the changing season; Starlight Arena prints that starlight refused to be eclipsed. Elsewhere its successful use creates Frozen Aura for five turns, or eight with Amplifield Rock; harsh sun can also prevent the move.",
 			],
 			"outrage": [
-				"On Superheated, removes the rampage-lock volatile after each use rather than waiting for its final locked turn. The volatile’s ordinary end behavior, including any applicable confusion, still applies.",
+				"On Superheated, ends the forced repeated attack after each use rather than waiting for its final locked turn. The usual confusion at the end of the attack still applies.",
 			],
 			"petaldance": [
-				"On Superheated, removes the rampage-lock volatile after each use rather than waiting for its final locked turn. The volatile’s ordinary end behavior, including any applicable confusion, still applies.",
+				"On Superheated, ends the forced repeated attack after each use rather than waiting for its final locked turn. The usual confusion at the end of the attack still applies.",
 			],
 			"thrash": [
-				"On Superheated, removes the rampage-lock volatile after each use rather than waiting for its final locked turn. The volatile’s ordinary end behavior, including any applicable confusion, still applies.",
+				"On Superheated, ends the forced repeated attack after each use rather than waiting for its final locked turn. The usual confusion at the end of the attack still applies.",
 			],
 		},
 	},
@@ -2043,7 +2043,7 @@ export const ReviewedReferenceDetails = {
 				"Delegates the full Power Drill field package: drill/horn moves receive 2× power and bypass protection on Rocky, Mountain, Snowy Mountain, Cave and Volcanic. Its separate positive-defense-stage bypass remains. Native Power Drill is not applied twice.",
 			],
 			"relentlesshunt": [
-				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse’s shared handler supplies its 2× damage and raises the priority-eligible base-power threshold from 60 to 80; the ability’s own Cold Eclipse return avoids doubling those modifiers.",
+				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse does not add a separate field power or priority bonus.",
 			],
 			"punkrock": [
 				"Sound moves have 1.5× power here instead of the usual 1.3×; incoming sound-move damage remains halved.",
@@ -2063,7 +2063,7 @@ export const ReviewedReferenceDetails = {
 				"On Cave or Dragon Den, attacks immediately without spending a charge turn; the preparation/animation messages still play. Tailwind or Strong Winds independently remove charging and add a critical-rate stage.",
 			],
 			"skydrop": [
-				"Cave prevents the pickup. Dragon Den prevents the move in its pre-use callback unless Adaptive Cycle shields the attacker from that field effect. The separate Yearning Star version retains its Cave, weight, ally, Substitute and Flying-target restrictions.",
+				"Cave prevents the pickup. Dragon Den prevents the move before the attack unless Adaptive Cycle shields the attacker from that field effect. The separate Yearning Star version retains its Cave, weight, ally, Substitute and Flying-target restrictions.",
 			],
 			"rockclimb": [
 				"On Mountain, Rocky Field, Cave or Desert, gains one critical-rate stage. Its independent Attack/Speed boost against an already confused target remains.",
@@ -2096,7 +2096,7 @@ export const ReviewedReferenceDetails = {
 				"On Crystal Cavern, raises Speed by two and Attack and Special Attack by one. On Rocky Field, raises Speed by three.",
 			],
 			"auroraveil": [
-				"Can be used without hail or snow on Rainbow, Icy, Mirror Arena, Dark Crystal Cavern, Crystal Cavern, Snowy Mountain, Starlight Arena and Cold Eclipse. Mirror Arena extends ordinary Aurora Veil to eight turns and its after-use callback grants one evasion stage if a successful move has been recorded that turn. Royal Decree can still prevent the screen. G-Max-generated veil keeps its separate four-turn duration.",
+				"Can be used without hail or snow on Rainbow, Icy, Mirror Arena, Dark Crystal Cavern, Crystal Cavern, Snowy Mountain, Starlight Arena and Cold Eclipse. Mirror Arena extends ordinary Aurora Veil to eight turns and after use it grants one evasion stage if a successful move has been recorded that turn. Royal Decree can still prevent the screen. G-Max-generated veil keeps its separate four-turn duration.",
 			],
 			"meteorbeam": [
 				"Crystal Cavern, New World and Starlight Arena remove the charge turn while retaining the Special Attack increase. Starlight additionally adds Dark subtyping. The prepare/animation messages accompany this immediate attack; its independent post-move healing remains.",
@@ -2124,7 +2124,7 @@ export const ReviewedReferenceDetails = {
 				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. Cold Eclipse also recognizes Duskilate for its 1.5× defenses and exemption from the grounded Speed penalty.",
 			],
 			"execution": [
-				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, its current stat-change handler blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
+				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, it blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
 			],
 		},
 		"moves": {
@@ -2138,7 +2138,7 @@ export const ReviewedReferenceDetails = {
 				"Cold Eclipse and Dark Crystal Cavern force healing to one quarter maximum HP, unless the user is protected from field effects by Adaptive Cycle. Weather-based healing rules otherwise apply.",
 			],
 			"auroraveil": [
-				"Can be used without hail or snow on Rainbow, Icy, Mirror Arena, Dark Crystal Cavern, Crystal Cavern, Snowy Mountain, Starlight Arena and Cold Eclipse. Mirror Arena extends ordinary Aurora Veil to eight turns and its after-use callback grants one evasion stage if a successful move has been recorded that turn. Royal Decree can still prevent the screen. G-Max-generated veil keeps its separate four-turn duration.",
+				"Can be used without hail or snow on Rainbow, Icy, Mirror Arena, Dark Crystal Cavern, Crystal Cavern, Snowy Mountain, Starlight Arena and Cold Eclipse. Mirror Arena extends ordinary Aurora Veil to eight turns and after use it grants one evasion stage if a successful move has been recorded that turn. Royal Decree can still prevent the screen. G-Max-generated veil keeps its separate four-turn duration.",
 			],
 			"darkvoid": [
 				"Dark Crystal Cavern, New World and Cold Eclipse set base accuracy to 100% when a target is available to its modifier. Other hit and sleep restrictions remain.",
@@ -2166,7 +2166,7 @@ export const ReviewedReferenceDetails = {
 				"On Holy entry, gains +1 Attack and Special Attack and prints “Holy light empowered [Pokémon]’s Ascendance, raising its offenses!”. This is separate from its form transformation and ordinary damage/STAB effects.",
 			],
 			"cursedbody": [
-				"Holy disables its damage-triggered Disable effect. Haunted guarantees the ordinary 30% trigger, excluding Max moves, delayed attacks, Struggle and an already Disabled attacker. Its fainting curse against living foes is a separate callback and is not blocked by Holy in this handler.",
+				"Holy disables its damage-triggered Disable effect. Haunted guarantees the ordinary 30% trigger, excluding Max moves, delayed attacks, Struggle and an already Disabled attacker. Holy does not prevent its separate fainting curse against living foes.",
 			],
 			"holycow": [
 				"On its first entry in the battle, attempts to create Holy for five turns. The attempt is spent even if blocked, and it cannot refresh an already active Holy field. Its per-entry Milk Drink cure remains separate.",
@@ -2199,7 +2199,7 @@ export const ReviewedReferenceDetails = {
 				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. Cold Eclipse also recognizes Duskilate for its 1.5× defenses and exemption from the grounded Speed penalty.",
 			],
 			"execution": [
-				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, its current stat-change handler blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
+				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, it blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
 			],
 		},
 		"moves": {
@@ -2210,13 +2210,13 @@ export const ReviewedReferenceDetails = {
 				"Holy and Rainbow increase healing to half maximum HP. Water Surface, Underwater and Midnight Zone instead add Aqua Ring and heal one quarter; adding the ring can succeed at full HP. Corrosive Mist and Murkwater add a guaranteed poison secondary, subject to status rules.",
 			],
 			"miracleeye": [
-				"On Psychic Field, Fairy Tale and Holy Field, a successful hit additionally raises the user’s Special Attack by two. Its existing Ghost-resistance volatile, Dark-target Psychic immunity bypass and positive-evasion bypass remain.",
+				"On Psychic Field, Fairy Tale and Holy Field, a successful hit additionally raises the user’s Special Attack by two. Its existing Ghost resistance, Dark-target Psychic immunity bypass and positive-evasion bypass remain.",
 			],
 			"wish": [
 				"If created on Misty, Rainbow, Fairy Tale, Holy or Starlight, stores healing equal to three quarters of the original user’s maximum HP instead of half. The amount is decided when Wish is set, not when it resolves. The Wish healing message appears only when healing succeeds.",
 			],
 			"lightthatburnsthesky": [
-				"On Holy and Starlight Arena, gains 1.3x power unless Adaptive Cycle shields the target from fields. After use, prints “The light was consumed!” and clears that field; the clearing callback is not conditioned on hit success.",
+				"On Holy and Starlight Arena, gains 1.3x power unless Adaptive Cycle shields the target from fields. After use, prints “The light was consumed!” and clears that field; the field can clear even if the attack misses.",
 			],
 			"naturesmadness": [
 				"Deals three quarters of the target’s current undynamaxed HP on Grassy Field, Forest and New World, or two thirds on Holy, instead of half. Minimum one damage.",
@@ -2238,7 +2238,7 @@ export const ReviewedReferenceDetails = {
 				"Delegates the full Power Drill field package: drill/horn moves receive 2× power and bypass protection on Rocky, Mountain, Snowy Mountain, Cave and Volcanic. Its separate positive-defense-stage bypass remains. Native Power Drill is not applied twice.",
 			],
 			"relentlesshunt": [
-				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse’s shared handler supplies its 2× damage and raises the priority-eligible base-power threshold from 60 to 80; the ability’s own Cold Eclipse return avoids doubling those modifiers.",
+				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse does not add a separate field power or priority bonus.",
 			],
 			"windysurge": [
 				"On Mountain, Snowy Mountain or Cold Eclipse entry, also attempts to summon strong winds, unless Desolate Land or Primordial Sea is active. Its two-turn Tailwind still applies. Refreshing an existing Tailwind attempts +1 Special Attack for Wind Power/Hisuian Vanguard allies and +1 Attack for Wind Rider/Unova Vanguard/Scarecrow allies.",
@@ -2261,7 +2261,7 @@ export const ReviewedReferenceDetails = {
 		},
 		"moves": {
 			"tailwind": [
-				"After use on Mountain, Snowy Mountain or Cold Eclipse, attempts to start Strong Winds unless harsh sun or heavy rain is active. Mountain and Snowy Mountain extend Tailwind to six turns; the current implementation prints a Persistent activation message for this field extension even without that ability.",
+				"After use on Mountain, Snowy Mountain or Cold Eclipse, attempts to start Strong Winds unless harsh sun or heavy rain is active. Mountain and Snowy Mountain extend Tailwind to six turns; this field extension displays a Persistent message even without that ability.",
 			],
 			"rockclimb": [
 				"On Mountain, Rocky Field, Cave or Desert, gains one critical-rate stage. Its independent Attack/Speed boost against an already confused target remains.",
@@ -2277,7 +2277,7 @@ export const ReviewedReferenceDetails = {
 				"Delegates the full Power Drill field package: drill/horn moves receive 2× power and bypass protection on Rocky, Mountain, Snowy Mountain, Cave and Volcanic. Its separate positive-defense-stage bypass remains. Native Power Drill is not applied twice.",
 			],
 			"relentlesshunt": [
-				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse’s shared handler supplies its 2× damage and raises the priority-eligible base-power threshold from 60 to 80; the ability’s own Cold Eclipse return avoids doubling those modifiers.",
+				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse does not add a separate field power or priority bonus.",
 			],
 			"rockypayload": [
 				"Rocky Payload gives its usual 1.5× attacking-stat bonus. Rocky Field separately boosts Rock move power by 1.5×.",
@@ -2298,10 +2298,10 @@ export const ReviewedReferenceDetails = {
 	"bigtopterrain": {
 		"abilities": {
 			"relentlesshunt": [
-				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse’s shared handler supplies its 2× damage and raises the priority-eligible base-power threshold from 60 to 80; the ability’s own Cold Eclipse return avoids doubling those modifiers.",
+				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse does not add a separate field power or priority bonus.",
 			],
 			"dancer": [
-				"On Big Top, after a copied Dancer/Performer action processes a stat change with no positive stages in that change, the handler attempts +1 Attack and Sp. Atk on its source. A copied stat change already containing a positive boost does not receive this bonus. Ordinary dance-copy targeting and restrictions remain.",
+				"On Big Top, after a copied Dancer/Performer action processes a stat change with no positive stages in that change, the Pokémon receiving the stat change also gains +1 Attack and Sp. Atk. A copied stat change already containing a positive boost does not receive this bonus. Ordinary dance-copy targeting and restrictions remain.",
 			],
 			"predator": [
 				"Against newly switched or still-pending-action targets, Predator gives 1.5× power on Mountain, Snowy Mountain and Rocky, or 1.3× on other fields including Fairy Tale, Dragon’s Den and Big Top. Its 1.5× authority/Ultra matchup bonus replaces this timing bonus; Predator bonuses never stack or exceed 1.5×. Ultra matchups are disabled on Bewitched Woods, Haunted and Holy.",
@@ -2371,7 +2371,7 @@ export const ReviewedReferenceDetails = {
 				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. Cold Eclipse also recognizes Duskilate for its 1.5× defenses and exemption from the grounded Speed penalty.",
 			],
 			"execution": [
-				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, its current stat-change handler blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
+				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, it blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
 			],
 			"royaldecree": [
 				"On entry, resets stat stages and screens unless Neutralization blocks the effect; Safeguard protects its side from that reset. Fairy Tale, Chess Board, New World and Starlight Arena additionally raise Defense or Special Defense according to opposing offensive stats: two stages in singles, one otherwise. Chess Board also multiplies both defenses by 1.5 while Neutralization is absent. The reset preserves field-supported positive defenses for Relic Armor/Defeatist on Desert, Fairy Tale, Cave, Crystal Cavern, New World and Volcanic Summit; Magician Special Attack on Fairy Tale, Bewitched Woods, Haunted, Misty and New World; Stalwart Special Attack on New World, Starlight, Fairy Tale and Chess Board. Mirror Arena’s existing Mirror Armor/Iron Dominion evasion boosts survive the reset, but their new evasion boosts are not allowed by the current ongoing exception. The prevention message appears when a stat change is actually blocked.",
@@ -2391,7 +2391,7 @@ export const ReviewedReferenceDetails = {
 				"Haunted doubles power without requiring status. Adaptive Cycle field protection removes only that field-based qualification; status, Comatose or Sinister Blaze can still independently double it.",
 			],
 			"meanlook": [
-				"On Haunted, targets all adjacent foes rather than one. Each target still must be eligible for its trapping volatile.",
+				"On Haunted, targets all adjacent foes rather than one. Each target still must be eligible for trapping.",
 			],
 			"nightshade": [
 				"On Haunted, fixed damage is 1.5 times the user’s level; on Cold Eclipse it is 140. Verified with level-100 Night Shade: 150 damage on Haunted and 140 on Cold Eclipse. Type immunity still applies.",
@@ -2425,7 +2425,7 @@ export const ReviewedReferenceDetails = {
 				"On entry into Chessboard, gains +1 Defense and prints “[Pokémon] is stalling and playing defensively!”. Its ordinary late-action ordering remains.",
 			],
 			"stalwart": [
-				"On entry, gains +1 Special Attack on Chessboard, Fairy Tale, New World and Starlight Arena. Moves still ignore redirection; the shared Cave collapse handler also recognizes Stalwart as protection from that collapse.",
+				"On entry, gains +1 Special Attack on Chessboard, Fairy Tale, New World and Starlight Arena. Moves still ignore redirection; Stalwart also protects against Cave collapse.",
 			],
 			"stancechange": [
 				"On entry to Chessboard or Fairy Tale, gains +1 Defense and Special Defense. A qualifying Aegislash changing into Blade gains +1 Attack and Special Attack but loses one Defense and Special Defense stage; returning to Shield reverses those stage changes. Status moves other than King’s Shield do not change stance. Transformed users and Aegislash-Gmax do not perform the stance changes.",
@@ -2616,7 +2616,7 @@ export const ReviewedReferenceDetails = {
 				"On Factory, raises Defense by three stages.",
 			],
 			"gearup": [
-				"On Factory, uses two-stage Attack and Special Attack boosts. The current handler first boosts the user only if it is not among the Plus/Minus recipients, then requires both an eligible recipient and that successful user boost before processing those recipients. Consequently, a Plus/Minus user does not receive the intended field boost through this handler. This is an existing implementation discrepancy, not a new restriction.",
+				"On Factory, the Attack and Sp. Atk boosts become +2. This requires a user without Plus or Minus, at least one eligible ally, and a successful boost to the user. A user with Plus or Minus does not receive this field bonus.",
 			],
 			"electroshot": [
 				"Electric Field and Factory remove the charge turn while retaining the Special Attack increase. Rain and heavy rain independently provide the same charge skip.",
@@ -2640,10 +2640,10 @@ export const ReviewedReferenceDetails = {
 				"On Glitch, base accuracy becomes 90%. Hail, snow or Cold Eclipse instead bypass accuracy checks.",
 			],
 			"conversion": [
-				"After use, records one conversion toward Glitch Field; a later Conversion or Conversion 2 attempts to create Glitch. While already on Glitch, resets its duration to five turns, or eight with Amplifield Rock. The current after-use callback does not require a successful type change.",
+				"After use, records one conversion toward Glitch Field; a later Conversion or Conversion 2 attempts to create Glitch. While already on Glitch, resets its duration to five turns, or eight with Amplifield Rock. This does not require a successful type change.",
 			],
 			"conversion2": [
-				"Shares Conversion’s counter: one use records progress, a later Conversion or Conversion 2 attempts to create Glitch. While already on Glitch, resets its duration to five turns, or eight with Amplifield Rock. This after-use callback does not require a successful type change.",
+				"Shares Conversion’s counter: one use records progress, a later Conversion or Conversion 2 attempts to create Glitch. While already on Glitch, resets its duration to five turns, or eight with Amplifield Rock. This does not require a successful type change.",
 			],
 			"hyperbeam": [
 				"On Glitch, a hit that knocks out its target removes the recharge requirement and prints the fallen-energy message. Other hits still require recharge.",
@@ -2652,7 +2652,7 @@ export const ReviewedReferenceDetails = {
 				"On Glitch, chooses only eligible Metronome moves whose listed base power is at least 70. This excludes variable-power moves listed below that threshold even if their eventual power would be high.",
 			],
 			"rest": [
-				"On Glitch, the initial check permits use while already asleep or Comatose. Its hit callback also heals even if setting sleep fails; it still writes a three-turn sleep timer. Full-HP, Insomnia and Vital Spirit checks remain. This is the current implementation, including its unusual status-failure behavior.",
+				"On Glitch, the initial check permits use while already asleep or Comatose. It also heals even if setting sleep fails; it still writes a three-turn sleep timer. Full-HP, Insomnia and Vital Spirit checks remain.",
 			],
 			"glitchygraphics": [
 				"Outside Glitch, establishes Glitch for five turns. On Glitch, instead changes each eligible opposing Pokémon to a randomly chosen type it does not already have. Multitype, RKS System and protected Ogerpon/Terapagos forms are excluded. Each successful conversion prints a type-change message.",
@@ -2665,7 +2665,7 @@ export const ReviewedReferenceDetails = {
 				"Cold Eclipse doubles Defense. Mirror Arena entry grants +2 evasion. On Icy and Snowy Mountain, super-effective contributions from the holder’s Ice typing are neutralized; weaknesses from another type remain. Its ordinary halving of special damage and hail immunity remain.",
 			],
 			"magicbounce": [
-				"Fairy Tale entry gives +1 Special Defense; Mirror Arena entry gives +1 evasion. On Mirror Arena, reflecting a directly targeted move also grants the original user +1 evasion. Side-targeted reflections do not use that additional evasion callback.",
+				"Fairy Tale entry gives +1 Special Defense; Mirror Arena entry gives +1 evasion. On Mirror Arena, reflecting a directly targeted move also grants the original user +1 evasion. Side-targeted reflections do not grant that extra evasion.",
 			],
 			"colorchange": [
 				"Mirror Arena entry grants +1 evasion. Its ordinary type change after being hit remains.",
@@ -2677,18 +2677,18 @@ export const ReviewedReferenceDetails = {
 				"On entry, resets stat stages and screens unless Neutralization blocks the effect; Safeguard protects its side from that reset. Fairy Tale, Chess Board, New World and Starlight Arena additionally raise Defense or Special Defense according to opposing offensive stats: two stages in singles, one otherwise. Chess Board also multiplies both defenses by 1.5 while Neutralization is absent. The reset preserves field-supported positive defenses for Relic Armor/Defeatist on Desert, Fairy Tale, Cave, Crystal Cavern, New World and Volcanic Summit; Magician Special Attack on Fairy Tale, Bewitched Woods, Haunted, Misty and New World; Stalwart Special Attack on New World, Starlight, Fairy Tale and Chess Board. Mirror Arena’s existing Mirror Armor/Iron Dominion evasion boosts survive the reset, but their new evasion boosts are not allowed by the current ongoing exception. The prevention message appears when a stat change is actually blocked.",
 			],
 			"mirrorarmor": [
-				"Fairy Tale grants one Defense and Special Defense stage on entry; Mirror Arena grants one evasion stage. Royal Decree preserves existing matching field boosts during its entry reset. Starlight Arena supplies its priority-protection callback. Ordinary reflected stat drops still follow Mirror Armor’s targeting and reflection rules.",
+				"Fairy Tale grants one Defense and Special Defense stage on entry; Mirror Arena grants one evasion stage. Royal Decree preserves existing matching field boosts during its entry reset. Starlight Arena protects against opposing priority attacks. Ordinary reflected stat drops still follow Mirror Armor’s targeting and reflection rules.",
 			],
 			"lunarorbit": [
 				"Its Magic Guard component grants one Special Defense stage on Fairy Tale. Its entry Gravity cannot activate on New World. Gravity sinks Water Surface into Underwater, Underwater into Midnight Zone, and Corrosive Mist into Corrosive Field; otherwise an eligible active aura is promoted to its field. The sinking message is triggered by the Water Surface transition attempt. Mirror Arena alone does not supply an additional reflection effect through Lunar Orbit.",
 			],
 			"irondominion": [
-				"Fairy Tale increases its adjacent-ally entry healing from one quarter to one third maximum HP; the shared-mead message accompanies each attempted ally heal. This healing is skipped when Sworn Duty is already the species passive. Fairy Tale also grants one Defense and Special Defense stage once per ability activation; Mirror Arena grants one evasion stage. Cold Eclipse changes its Pressure drops to two stages in both defenses, retaining the per-target attempt memory and Substitute check. Starlight Arena blocks opposing positive-priority moves aimed at its protected side, with the callback’s field-wide targeting exclusions.",
+				"Fairy Tale increases its adjacent-ally entry healing from one quarter to one third maximum HP; the shared-mead message accompanies each attempted ally heal. This healing is skipped when Sworn Duty is already the species passive. Fairy Tale also grants one Defense and Special Defense stage once per ability activation; Mirror Arena grants one evasion stage. Cold Eclipse changes its Pressure drops to two stages in both defenses, retaining the per-target attempt memory and Substitute check. Starlight Arena blocks opposing positive-priority moves aimed at its protected side, with the usual targeting exceptions.",
 			],
 		},
 		"moves": {
 			"auroraveil": [
-				"Can be used without hail or snow on Rainbow, Icy, Mirror Arena, Dark Crystal Cavern, Crystal Cavern, Snowy Mountain, Starlight Arena and Cold Eclipse. Mirror Arena extends ordinary Aurora Veil to eight turns and its after-use callback grants one evasion stage if a successful move has been recorded that turn. Royal Decree can still prevent the screen. G-Max-generated veil keeps its separate four-turn duration.",
+				"Can be used without hail or snow on Rainbow, Icy, Mirror Arena, Dark Crystal Cavern, Crystal Cavern, Snowy Mountain, Starlight Arena and Cold Eclipse. Mirror Arena extends ordinary Aurora Veil to eight turns and after use it grants one evasion stage if a successful move has been recorded that turn. Royal Decree can still prevent the screen. G-Max-generated veil keeps its separate four-turn duration.",
 			],
 			"baddybad": [
 				"On Mirror Arena, its self effect adds one evasion stage as well as Reflect. Reflect’s own Mirror Arena activation effects remain independent.",
@@ -2703,7 +2703,7 @@ export const ReviewedReferenceDetails = {
 				"On Mirror Arena, lasts eight turns and gives the user one evasion stage when the screen successfully starts. Royal Decree can prevent creation, in which case that entry boost does not occur.",
 			],
 			"mirrorcoat": [
-				"On Mirror Arena, the current damage-recording callback grants Defense, Special Defense and evasion to the opposing special attacker that hit the user. Its separate after-use callback grants the same three boosts to the user if a successful move has been recorded that turn. The attacker-side boost is an existing implementation discrepancy.",
+				"On Mirror Arena, being hit by a special attack grants Defense, Special Defense and evasion to the opposing special attacker that hit the user. After use, it grants the same three boosts to the user if a successful move has been recorded that turn.",
 			],
 			"mirrormove": [
 				"On Mirror Arena, after selecting and calling an eligible copied move, raises the user’s Attack, Special Attack and evasion by one stage each.",
@@ -2731,16 +2731,16 @@ export const ReviewedReferenceDetails = {
 				"On Misty or Rainbow, any Pokémon fainting grants the holder +1 Special Attack and +2 Special Defense instead of only +1 Special Attack.",
 			],
 			"wonderskin": [
-				"On Rainbow, status moves targeting the holder receive zero accuracy from its accuracy callback. Elsewhere it sets numeric status-move accuracy to 50; normal effects that bypass accuracy checks still follow their own rules.",
+				"On Rainbow, status moves targeting the holder receive zero accuracy . Elsewhere it sets numeric status-move accuracy to 50; normal effects that bypass accuracy checks still follow their own rules.",
 			],
 			"duskilate": [
 				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. Cold Eclipse also recognizes Duskilate for its 1.5× defenses and exemption from the grounded Speed penalty.",
 			],
 			"execution": [
-				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, its current stat-change handler blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
+				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, it blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
 			],
 			"pastelveil": [
-				"On activation, cures poison on the holder and allies. Fairy Tale also raises the holder’s Special Defense by one; this activation can repeat when another Pokémon switches in. Bewitched Woods cancels weaknesses contributed by the holder’s Fairy typing. In Misty or Rainbow Field, the current callbacks reduce outgoing Poison damage: the holder’s attack receives both half-damage callbacks (one quarter overall), and an ally’s attack receives one (one half). They do not reduce incoming Poison damage. This describes the current implementation, not the old defensive description.",
+				"On activation, cures poison on the holder and allies. Fairy Tale also raises the holder’s Special Defense by one; this activation can repeat when another Pokémon switches in. Bewitched Woods cancels weaknesses contributed by the holder’s Fairy typing. In Misty or Rainbow Field, outgoing Poison damage is reduced to one quarter for the holder and one half for its allies. They do not reduce incoming Poison damage.",
 			],
 		},
 		"moves": {
@@ -2748,7 +2748,7 @@ export const ReviewedReferenceDetails = {
 				"On Holy, New World, Rainbow, Starlight Arena, Misty and Psychic fields, raises Defense and Special Defense by two stages each.",
 			],
 			"auroraveil": [
-				"Can be used without hail or snow on Rainbow, Icy, Mirror Arena, Dark Crystal Cavern, Crystal Cavern, Snowy Mountain, Starlight Arena and Cold Eclipse. Mirror Arena extends ordinary Aurora Veil to eight turns and its after-use callback grants one evasion stage if a successful move has been recorded that turn. Royal Decree can still prevent the screen. G-Max-generated veil keeps its separate four-turn duration.",
+				"Can be used without hail or snow on Rainbow, Icy, Mirror Arena, Dark Crystal Cavern, Crystal Cavern, Snowy Mountain, Starlight Arena and Cold Eclipse. Mirror Arena extends ordinary Aurora Veil to eight turns and after use it grants one evasion stage if a successful move has been recorded that turn. Royal Decree can still prevent the screen. G-Max-generated veil keeps its separate four-turn duration.",
 			],
 			"firepledge": [
 				"After a successful hit or Substitute damage, records this pledge for field combinations. Fire + Grass creates Burning Field, Fire + Water creates Rainbow, and Grass + Water creates Swamp. A recorded complementary pledge grants approximately 1.3x power unless Adaptive Cycle blocks that field-only contribution. On an already timed matching combination field, the hit resets its duration to four turns, or seven with Amplifield Rock; this is a reset, not an addition. The move chooses Physical or Special using the higher offensive stat.",
@@ -2775,7 +2775,7 @@ export const ReviewedReferenceDetails = {
 		},
 		"moves": {
 			"topsyturvy": [
-				"After use, attempts to create Inverse Field for three turns, or six with Amplifield Rock. This field callback runs independently of whether stat inversion changed any stages.",
+				"After use, attempts to create Inverse Field for three turns, or six with Amplifield Rock. The field is created regardless of whether stat inversion changed any stages.",
 			],
 		},
 	},

@@ -10,7 +10,7 @@ export const ReadableAbilitySummaries: Record<string, string> = {
 	apexarmor: 'Blocks bullets, pulses and Mega Launcher-boosted moves; 20% less attack damage.',
 	fossilfrenzy: 'Surviving each opposing attack gives +1 Attack/Speed and confusion. Confusion still hurts.',
 	fallenstar: 'Arrows: +1 priority at 1/4 HP. Trapped-target and same-type attacks gain 1.3x power.',
-	voidcommand: '20% less damage; KOs boost higher offense; first Z-Move also boosts, without a double KO reward.',
+	voidcommand: 'Insomnia + Super Luck; first successful Z-Move gives +1 higher offense.',
 	bewitchingmajesty: 'Sets Bewitched Woods; reflects targeted status moves; blocks foe priority for its side.',
 	omenedge: 'Stronger slicing; eligible attacks hit twice; extra foe PP cost; physical Doom Desire on fainting.',
 	adaptivecell: 'Category-based Fighting/Psychic typing; attacks use 1.3x Sp. Atk; powder/weather immunity.',

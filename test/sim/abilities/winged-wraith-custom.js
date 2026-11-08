@@ -15,7 +15,7 @@ describe('Winged Wraith custom effects', () => {
 		for (const name of ['Crobat', 'Crobat-Alt']) {
 			const species = Dex.species.get(name);
 			assert.deepEqual(species.baseStats, {hp: 80, atk: 100, def: 80, spa: 100, spd: 80, spe: 130});
-			assert.deepEqual(species.abilities, {0: 'Inner Focus', 1: 'Wind Rider', H: 'Winged Wraith'});
+			assert.deepEqual(species.abilities, { 0: 'Poison Touch', 1: 'Wind Rider', H: 'Winged Wraith' });
 		}
 	});
 

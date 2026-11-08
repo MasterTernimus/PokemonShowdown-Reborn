@@ -70,9 +70,16 @@ describe('Pressure per-user battle limit and Skull Bash power', () => {
 		battle.field.terrain = ''; assert.equal(battle.singleEvent('DeductPP', p.getAbility(), p.abilityState, p, q), 1);
 		const pp = q.moveSlots[1].pp; battle.makeChoices('move 1', 'move 2'); assert.equal(q.moveSlots[1].pp, pp - 2);
 	});
-	for (const ability of ['Royal Escort', 'Omen Edge', 'Moonlight Vigil', 'Lunar Dread', 'Iron Dominion']) it(ability + ' shares the same Pressure budget', () => {
+	for (const ability of ['Royal Escort', 'Omen Edge', 'Moonlight Vigil', 'Iron Dominion']) it(ability + ' shares the same Pressure budget', () => {
 		const [p, q] = setup(); p.setAbility(ability); assert.equal(q.boosts.def, -1);
 		p.setAbility('Pressure'); assert.equal(q.boosts.def, -1); entry(p); assert.equal(q.boosts.spd, -1);
+	});
+
+	it('Lunar Dread uses Dishearten without spending a Pressure attempt', () => {
+		const [p, q] = setup(); p.setAbility('Lunar Dread');
+		assert.equal(q.boosts.spa, -1); assert.equal(q.boosts.def, 0); assert.equal(q.boosts.spd, 0);
+		assert.equal(p.m.pressureTargets, undefined);
+		p.setAbility('Pressure'); assert.equal(q.boosts.def, -1); assert.equal(q.boosts.spd, -1);
 	});
 	it('Skull Bash is 80 BP and retains charging boosts and post-damage healing', () => {
 		const [p, q] = setup(); assert.equal(Dex.moves.get('skullbash').basePower, 80); p.hp = 2000;

@@ -92,7 +92,7 @@ describe('Mega Typhlosion Corona Furnace', () => {
 		battle.runEvent('DamagingHit', p, q, Dex.getActiveMove('tackle'), 10);
 		assert.equal(q.status, '');
 	});
-	it('uses full local Flame Body 30/60 percent contact chances and Cold Eclipse entry effects', () => {
+	it('uses Flame Body contact chances and Infernal Eclipse entry effects', () => {
 		const [p, q] = setup();
 		const rolls = [];
 		battle.randomChance = (n, d) => {
@@ -115,11 +115,15 @@ describe('Mega Typhlosion Corona Furnace', () => {
 		rolls.length = 0;
 		battle.field.setTerrain('coldeclipseterrain', p);
 		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
-		assert.equal(p.boosts.def, 1);
-		assert.equal(p.boosts.spd, 1);
+		assert.equal(p.boosts.def, 0);
+		assert.equal(p.boosts.spd, 0);
 		contact();
 		assert.equal(q.status, '');
 		assert.equal(rolls.length, 0);
+		battle.field.setTerrain('infernaleclipseterrain', p);
+		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
+		assert.equal(p.boosts.def, 1);
+		assert.equal(p.boosts.spd, 1);
 	});
 	it('adds no extra power, hits or priority beyond the separate Proficient passive', () => {
 		const [p, q] = setup('Typhlosion-Mega');

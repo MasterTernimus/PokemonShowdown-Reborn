@@ -830,6 +830,7 @@ export class Side {
 				} else if (pokemon.side.allySide?.canDynamaxNow()) {
 					return this.emitChoiceError(`Can't move: It's your partner's turn to Dynamax.`);
 				}
+				return this.emitChoiceError(`Can't move: ${pokemon.name} can't Dynamax now.`);
 			}
 		}
 		const terastallize = (event === 'terastallize' || event === 'zmove-terastallize');

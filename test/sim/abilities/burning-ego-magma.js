@@ -16,7 +16,7 @@ describe('Burning Ego Magma Armor replacement', () => {
 		for (const [id, n] of [['waterfall', 50], ['icepunch', 50], ['firepunch', 100]])assert.equal(battle.runEvent('SourceModifyAtk', p, foe, battle.dex.getActiveMove(id), 100), n);
 		assert.notEqual(battle.runEvent('Immunity', p, null, null, 'hail'), false);
 	});
-	for (const [field, n] of [['dragonsdenterrain', 1], ['volcanicterrain', 1], ['coldeclipseterrain', 2]])it(field + ' retains each component entry boost once', () => {
+	for (const [field, n] of [['dragonsdenterrain', 1], ['volcanicterrain', 1], ['coldeclipseterrain', 0], ['infernaleclipseterrain', 2]])it(field + ' applies the current component entry boosts', () => {
 		const [p] = start(); battle.field.changeTerrain(field, p);
 		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
 		assert.equal(p.boosts.def, n); assert.equal(p.boosts.spd, n);
@@ -29,10 +29,11 @@ describe('Burning Ego Magma Armor replacement', () => {
 		battle.field.changeTerrain('coldeclipseterrain', p); assert(p.setStatus('frz'));
 		battle.singleEvent('Update', p.getAbility(), p.abilityState, p); assert.equal(p.status, '');
 	});
-	it('loses Thick Fat-only Cold Eclipse benefits but preserves Fire-type defense benefit', () => {
+	it('uses Cold Eclipse’s Fire defense penalty without an obsolete Speed penalty', () => {
 		const [p] = start(); battle.field.changeTerrain('coldeclipseterrain', p);
-		assert.equal(battle.runEvent('ModifySpe', p, null, null, 100), 75);
-		assert.equal(battle.runEvent('ModifyDef', p, null, null, 100), 150);
+		assert.equal(battle.runEvent('ModifySpe', p, null, null, 100), 100);
+		assert.equal(battle.runEvent('ModifyDef', p, null, null, 100), 80);
+		assert.equal(battle.runEvent('ModifySpD', p, null, null, 100), 80);
 		p.setType('Normal'); assert.equal(battle.runEvent('ModifyDef', p, null, null, 100), 100);
 	});
 	it('retains one Flame Body roll, Ultra Ego hit healing/boosts and Proficient', () => {

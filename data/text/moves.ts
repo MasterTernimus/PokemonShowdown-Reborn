@@ -126,11 +126,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	allyswitch: {
 		name: "Ally Switch",
-		desc: "The user swaps positions with its ally. Fails if the user is the only Pokemon on its side. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Ally Switch.",
-		shortDesc: "User and ally swap positions; using again can fail.",
+		desc: "The user switches out for a chosen teammate. Has -6 priority, so it usually acts after other moves. Fails if no teammate can switch in.",
+		shortDesc: "Switches to a chosen teammate. Priority -6.",
 		gen8: {
-			desc: "The user swaps positions with its ally. Fails if the user is the only Pokemon on its side.",
-			shortDesc: "The user swaps positions with its ally.",
+			desc: "The user switches out for a chosen teammate. Has -6 priority, so it usually acts after other moves. Fails if no teammate can switch in.",
+			shortDesc: "Switches to a chosen teammate. Priority -6.",
 		},
 		gen6: {
 			desc: "The user swaps positions with its ally on the opposite side of the field. Fails if there is no Pokemon at that position, if the user is the only Pokemon on its side, or if the user is in the middle.",
@@ -3532,8 +3532,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	kingsshield: {
 		name: "King's Shield",
-		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Attack lowered by 1 stage. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Burning Bulwark, Detect, Endure, King's Shield, Max Guard, Obstruct, Protect, Quick Guard, Silk Trap, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
-		shortDesc: "Protects from damaging attacks. Contact: -1 Atk.",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Attack lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Burning Bulwark, Detect, Endure, King's Shield, Max Guard, Obstruct, Protect, Quick Guard, Silk Trap, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		shortDesc: "Protects from damaging attacks. Contact: -2 Atk.",
 		gen8: {
 			desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Attack lowered by 1 stage. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Max Guard, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 		},
@@ -7825,11 +7825,11 @@ for (const [id, effect, compact] of [
  ['ragingfury', 'burn the target', 'burn'],
 ]) {
  MovesText[id as ID].shortDesc = '30% ' + compact + '. Locks 2-3 turns, then confuses user.';
- MovesText[id as ID].desc = 'Has a 30% chance to ' + effect + '. Targets a random adjacent opponent. '
-  + 'Locks the user into this move for 2-3 turns, then confuses the user if it is not already confused. '
-  + 'If the user cannot act, starts a turn asleep, or fails to hit before the final locked turn, the lock ends without confusion. Sleep Talk uses it once without confusion while the user is asleep. '
-  + 'Sheer Force removes the 30% effect and gives its normal power boost once; the lock and ending confusion remain. '
-  + 'Raging Storm makes it a single-turn attack with no lock or ending confusion; it does not cure existing confusion. '
+	MovesText[id as ID].desc = 'Has a 30% chance to ' + effect + '. Targets a random adjacent opponent.' +
+		'Locks the user into this move for 2-3 turns, then confuses the user if it is not already confused.' +
+		'If the user cannot act, starts a turn asleep, or fails to hit before the final locked turn, the lock ends without confusion. Sleep Talk uses it once without confusion while the user is asleep.' +
+		'Sheer Force removes the 30% effect and gives its normal power boost once; the lock and ending confusion remain.' +
+		'Raging Storm makes it a single-turn attack with no lock or ending confusion; it does not cure existing confusion.'
   + (id === 'ragingfury'
    ? 'On Burning or Volcanic Field, ending the rampage does not cause confusion. On Volcanic Field, each use also raises the user\'s Attack by 1.'
    : 'On Superheated Field, the lock ends after the attack; ending it early does not cause confusion.');

@@ -29,9 +29,14 @@ describe('Composite and field audit fixes', () => {
   assert(!p.hasAbility('levitate')); assert(p.isGrounded());
  });
  it('resolves nested components of a copied composite', () => {
+		const p = setup('Perfect Foresight', 'Soul Cremation');
+		assert(p.hasAbility('flamebody'));
+		assert(p.hasAbility('flashfire'));
+	});
+	it('copied Toxic Armor retains Dual Wield and Violent Rush without removed Poison Heal', () => {
   const p = setup('Perfect Foresight', 'Toxic Armor');
-  assert(p.hasAbility('poisonheal'));
-  assert(p.hasAbility('dualwield'));
+		assert(p.hasAbility('dualwield')); assert(p.hasAbility('violentrush'));
+		assert(!p.hasAbility('poisonheal'));
  });
  for (const field of ['watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain']) {
   it('Helios has Swift Swim exemption and double Speed in ' + field, () => {

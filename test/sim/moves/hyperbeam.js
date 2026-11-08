@@ -20,7 +20,7 @@ describe(`Hyper Beam`, function () {
 		assert.cantMove(() => battle.choose('p1', 'move tackle'));
 	});
 
-	it(`[Gen 1] should not force a recharge turn after KOing a Pokemon`, function () {
+	common.itGen(1, `[Gen 1] should not force a recharge turn after KOing a Pokemon`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'snorlax', moves: ['hyperbeam', 'tackle']},
 		], [
@@ -32,7 +32,7 @@ describe(`Hyper Beam`, function () {
 		assert.false.cantMove(() => battle.choose('p1', 'move tackle'));
 	});
 
-	it(`[Gen 1] should not force a recharge turn after breaking a Substitute`, function () {
+	common.itGen(1, `[Gen 1] should not force a recharge turn after breaking a Substitute`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'snorlax', moves: ['hyperbeam', 'tackle']},
 		], [
@@ -42,7 +42,7 @@ describe(`Hyper Beam`, function () {
 		assert.false.cantMove(() => battle.choose('p1', 'move tackle'));
 	});
 
-	it(`[Gen 1] should force a recharge turn after damaging, but not breaking a Substitute`, function () {
+	common.itGen(1, `[Gen 1] should force a recharge turn after damaging, but not breaking a Substitute`, () => {
 		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
 			{species: 'slowpoke', moves: ['hyperbeam', 'tackle']},
 		], [

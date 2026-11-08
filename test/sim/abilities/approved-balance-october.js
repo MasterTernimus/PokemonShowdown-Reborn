@@ -72,14 +72,25 @@ describe('Approved Soul Cremation, Dread Maw and Star Boxer balance', () => {
   hit(p,t,'flamethrower',{basePower:1});
   battle.makeChoices('move splash','switch 2');assert(!t.volatiles.soulsiphonblock);
  });
- it('keeps both Flash Fire and Flame Body field entry boosts and Flame Body contact behavior', () => {
+	it('uses Infernal Eclipse entry bonuses and disables its Fire components on Cold Eclipse', () => {
+		assert(!Dex.abilities.get('soulcremation').desc.includes('entry gives +2'));
   const [p,t]=setup();
   battle.field.setTerrain('coldeclipseterrain',p);
   p.boosts.def=0;p.boosts.spd=0;
   battle.singleEvent('Start',p.getAbility(),p.abilityState,p);
-  // Both delegates grant +1 on Cold Eclipse; confirmed against committed pre-migration behavior.
-  assert.equal(p.boosts.def,2);assert.equal(p.boosts.spd,2);
-  battle.field.clearTerrain();battle.randomChance=()=>true;
+		assert.equal(p.boosts.def, 0); assert.equal(p.boosts.spd, 0);
+		battle.randomChance = () => true;
+		hit(t, p, 'tackle', { basePower: 1 }); assert.equal(t.status, '');
+		const coldHP = p.hp;
+		hit(t, p, 'flamethrower', { basePower: 1 });
+		assert(p.hp < coldHP);
+		assert(!p.volatiles.flashfire);
+		battle.field.setTerrain('infernaleclipseterrain', p);
+		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
+		assert.equal(p.boosts.def, 1); assert.equal(p.boosts.spd, 1); assert(p.volatiles.flashfire);
+	});
+	it('keeps ordinary Flame Body contact burns and Flash Fire absorption', () => {
+		const [p, t] = setup(); battle.randomChance = () => true;
   hit(t,p,'tackle',{basePower:1});assert.equal(t.status,'brn');
   const hp=p.hp;hit(t,p,'flamethrower',{basePower:1});assert.equal(p.hp,hp);assert(p.volatiles.flashfire);
  });

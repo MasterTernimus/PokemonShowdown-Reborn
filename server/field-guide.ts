@@ -13,8 +13,33 @@ import { RoomReference } from '../data/room-reference';
 const index = JSON.parse(FS('data/field-guide-index.json').readSync());
 export function publicFieldGuide() {
 	const fields = calculatorMetadata().fields.filter(f => f.id).map(field => ({
-		...field, name: field.id === 'adriennterrain' ? 'Adrienn Mixed Field' : field.name, kind: 'field', group: fieldGuideGroup(field.id), groupingNote: FieldGuideGroupingNotes[field.id] || '', sections: { ...(ReviewedFieldGuide[field.id] || {}), ...((ReviewedFieldGuide[field.id]?.['Battle messages'] || FieldMessageTriggers[field.id] || index.fieldStartMessages?.[field.id]) ? { 'Battle messages': FieldMessageTriggers[field.id] || [...new Set<string>([...(ReviewedFieldGuide[field.id]?.['Battle messages'] || []), ...(index.fieldStartMessages?.[field.id] || [])])].map(message => index.fieldStartMessages?.[field.id]?.includes(message) ? '“' + message + '” — printed directly when this field starts. It announces activation; the text itself adds no extra effect.' : 'Trigger review pending — “' + message + '” is flavor text; its exact cause has not yet been documented.') } : {}) },
-		review: ReviewedFieldGuide[field.id] ? 'Source-reviewed field effects and indexed move, ability and item interactions.' : 'Detailed sections have not yet been source-reviewed. Older notes below are explicitly unverified.',
+		...field, name: field.id === 'adriennterrain' ?
+			'Adrienn Mixed Field' :
+			field.name, kind: 'field', group: fieldGuideGroup(
+			field.id
+		), groupingNote: FieldGuideGroupingNotes[field.id] || '', sections: {
+			...(ReviewedFieldGuide[field.id] || {}),
+			...((ReviewedFieldGuide[field.id]?.['Battle messages'] || FieldMessageTriggers[field.id] ||
+				index.fieldStartMessages?.[field.id]) ?
+				{
+					'Battle messages': FieldMessageTriggers[field.id] || [
+						...new Set<string>([
+							...(ReviewedFieldGuide[field.id]?.['Battle messages'] || []),
+							...(index.fieldStartMessages?.[field.id] || []),
+						]),
+					].map(
+						message => index.fieldStartMessages?.[field.id]?.includes(
+							message
+						) ?
+							'“' + message + '” — appears when the field starts.' :
+							'“' + message + '” is a battle message; it adds no separate effect.'
+					),
+				} :
+				{}),
+		},
+		review: ReviewedFieldGuide[field.id] ?
+			'Field effects and move, ability and item interactions.' :
+			'Detailed effects are not available yet.',
 		legacyNotes: ReviewedFieldGuide[field.id] || field.id === 'newworldterrain' ? [] : FieldNotes[field.id] || [],
 		referenceDetails: fieldReferenceDetails(field.id),
 		references: Object.fromEntries(Object.entries(index.fields[field.id] || {}).map(([kind, ids]) => [kind,
@@ -60,7 +85,19 @@ export function publicFieldGuide() {
 				'Overlapping Frozen Aura and Cold Eclipse bonuses to the same named move are not applied twice. Bitter Malice also avoids a duplicate bonus on Icy or Snowy Mountain; Chilling Water does so on Icy or Snowy Field.',
 			);
 		}
-		return {id: aura.id, name: aura.name, kind: 'aura', group: fieldGuideGroup(aura.id), groupingNote: '', review: 'Registry values and Eclipse aura conversion rules checked against battle handlers.', legacyNotes: [], references: {}, sections};
+		return {
+			id: aura.id,
+			name: aura.name,
+			kind: 'aura',
+			group: fieldGuideGroup(
+				aura.id
+			),
+			groupingNote: '',
+			review: 'Aura bonuses and interactions.',
+			legacyNotes: [],
+			references: {},
+			sections,
+		};
 	});
 	const rooms = Object.entries(RoomReference).map(([id, entry]) => ({
 		id, name: Dex.moves.get(id).name, kind: 'effect', group: 'Rooms & Gravity',
@@ -73,7 +110,24 @@ export function publicFieldGuide() {
 		], ...(id === 'gravity' ? {'Impact moves': [Dex.moves.all().filter(move => move.flags.gravityboost).map(move => move.name).join(', ') + '.']} : {})},
 		legacyNotes: [], references: {}, referenceDetails: {} as ReturnType<typeof fieldReferenceDetails>,
 	}));
-	return { fingerprint: index.fingerprint, entries: [...fields, ...auras, ...rooms], coverage: { fields: fields.length, auras: auras.length, rooms: rooms.length, reviewedFields: Object.keys(ReviewedFieldGuide).length, exhaustive: false }, notice: 'Every field has source-reviewed sections and indexed interaction details. Battle messages are explained separately from mechanics. The indexed review is not a guarantee of exhaustive cross-file coverage; documented discrepancies describe current behavior rather than intended balance.' };
+	return {
+		fingerprint: index.fingerprint,
+		entries: [
+			...fields,
+			...auras,
+			...rooms,
+		],
+		coverage: {
+			fields: fields.length,
+			auras: auras.length,
+			rooms: rooms.length,
+			reviewedFields: Object.keys(
+				ReviewedFieldGuide
+			).length,
+			exhaustive: false,
+		},
+		notice: 'Browse field effects, moves, abilities and items. These notes describe current battle rules; some interactions may not be listed.',
+	};
 }
 
 function fieldReferenceDetails(field: string) {

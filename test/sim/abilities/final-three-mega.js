@@ -167,15 +167,18 @@ describe('Final approved Predator Aura Precision and Entrenched designs', () => 
 		assert.equal(q.boosts.atk, 1);
 		assert.equal(q.boosts.spa, 1);
 	});
-	it('Aura Precision is only Shield Dust and standard local Technician with no extra hits or Inner Focus', () => {
+	it('Aura Precision combines Ultra Instinct, Shield Dust and Minds Eye with a separate Aura Guard passive', () => {
 		const [p, q] = setup('Lucario-Mega-Z', 'Aura Precision', 'No Ability');
 		assert.deepEqual(p.getPassives(), ['auraguard']);
-		assert(p.hasAbility('shielddust') && p.hasAbility('technician'));
-		assert(!p.hasAbility('dualwield') && !p.hasAbility('innerfocus'));
+		for (const part of ['ultrainstinct', 'shielddust', 'mindseye']) assert(p.hasAbility(part));
+		assert(!p.hasAbility('technician'));
+		assert(!p.hasAbility('dualwield'));
+		assert(p.hasAbility('innerfocus'));
+		assert(!p.addVolatile('flinch', q));
 		const move = Dex.getActiveMove('aurasphere');
 		battle.runEvent('ModifyMove', p, q, move, move);
 		assert(!move.multihit);
-		for (const [field, bp, expected] of [['', 60, 90], ['', 61, 61], ['factoryterrain', 80, 120], ['factoryterrain', 81, 81]]) {
+		for (const [field, bp, expected] of [['', 60, 60], ['', 61, 61], ['factoryterrain', 80, 80], ['factoryterrain', 81, 81]]) {
 			battle.field.terrain = field;
 			assert.equal(battle.runEvent('BasePower', p, q, move, bp), expected);
 		}
@@ -189,19 +192,22 @@ describe('Final approved Predator Aura Precision and Entrenched designs', () => 
 	});
 	it('copied Aura Precision works on a nonrecipient without granting Aura Guard', () => {
 		const [p, q] = setup('Mew', 'Aura Precision', 'No Ability');
-		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 40), 60);
+		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 40), 40);
+		p.addVolatile('gastroacid');
+		assert.deepEqual(p.getPassives(), ['synchronize']);
 		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('tackle'), 100), 100);
 	});
-	it('Haxorus retains full Raging Overlord while Entrenched blocks hostile phazing and permits voluntary switching', () => {
+	it('Haxorus retains Raging Overlord and Twin Fang without the old Entrenched phazing immunity', () => {
 		const [p, q] = setup('Haxorus-Mega', 'Raging Overlord', 'No Ability');
-		assert.deepEqual(p.getPassives(), ['entrenched']);
-		assert(p.hasAbility('battlearmor') && p.hasAbility('ragingstorm') && p.hasAbility('supremeoverlord'));
-		assert.equal(battle.runEvent('DragOut', p, q, Dex.moves.get('roar')), null);
-		assert.equal(battle.runEvent('DragOut', p, q, Dex.items.get('redcard')), null);
+		assert.deepEqual(p.getPassives(), ['twinfang']);
+		assert(p.hasAbility('moldbreaker') && p.hasAbility('ragingstorm') && p.hasAbility('supremeoverlord'));
+		assert(!p.hasAbility('battlearmor'));
+		assert.equal(battle.runEvent('DragOut', p, q, Dex.moves.get('roar')), true);
+		assert.equal(battle.runEvent('DragOut', p, q, Dex.items.get('redcard')), true);
 		assert.notEqual(battle.runEvent('DragOut', p, p, Dex.moves.get('roar')), null);
 		p.setAbility('No Ability');
 		p.addVolatile('gastroacid');
-		assert.equal(battle.runEvent('DragOut', p, q, Dex.moves.get('roar')), null);
+		assert.equal(battle.runEvent('DragOut', p, q, Dex.moves.get('roar')), true);
 		battle.makeChoices('switch 2', 'move splash');
 		assert.notEqual(battle.p1.active[0], p);
 	});

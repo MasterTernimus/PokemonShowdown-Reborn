@@ -1,6 +1,19 @@
 'use strict';const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim');
 describe('Quarter damage contact protection bypass',()=>{let b;afterEach(()=>b?.destroy());function setup(ability,species='Mew',suppress=false){b=common.createBattle({},[[{species,ability,moves:['tackle']}],[{species:'Mew',ability:'No Ability',moves:['splash']}]]);b.randomizer=n=>n;const p=b.p1.active[0],q=b.p2.active[0];q.hp=q.maxhp=q.baseMaxhp=10000;if(suppress)p.addVolatile('gastroacid',q);return[p,q];}function hit(p,q,guard,multi=false,extra={}){q.hp=10000;if(guard)q.addVolatile(guard);b.actions.useMove(Object.assign(Dex.getActiveMove('tackle'),{willCrit:false,...(multi?{multihit:2}:{}),...extra}),p,{target:q});const damage=10000-q.hp;if(guard)q.removeVolatile(guard);return damage;}
-for(const [ability,species]of [['Unseen Fist','Mew'],['Piercing Drill','Mew'],['Phantom Fist','Mew'],['Punch Fiend','Mew'],['No Ability','Excadrill-Mega'],['Unseen Fist','Excadrill-Mega']])for(const multi of [false,true])it(ability+' / '+species+' multihit='+multi,()=>{const[p,q]=setup(ability,species);const normal=hit(p,q,'',multi),protectedDamage=hit(p,q,'protect',multi);assert.equal(protectedDamage,b.modify(normal/(multi?2:1),0.25)*(multi?2:1));assert.equal(hit(p,q,'maxguard',multi),0);assert.equal(hit(p,q,'',multi),normal);});
+	for (const [ability, species] of [['Unseen Fist', 'Mew'], ['Piercing Drill', 'Mew'], ['Phantom Fist', 'Mew'], ['No Ability', 'Excadrill-Mega'], ['Unseen Fist', 'Excadrill-Mega']]) for (const multi of [false, true])it(ability + ' / ' + species + ' multihit=' + multi, () => {
+		const [p, q] = setup(ability, species);
+		const normal = hit(p, q, '', multi), protectedDamage = hit(p, q, 'protect', multi);
+		assert.equal(protectedDamage, b.modify(normal / (multi ? 2 : 1), 0.25) * (multi ? 2 : 1));
+		assert.equal(hit(p, q, 'maxguard', multi), 0);
+		assert.equal(hit(p, q, '', multi), normal);
+	});
+	for (const multi of [false, true])it('Punch Fiend no longer bypasses Protect, multihit=' + multi, () => {
+		const [p, q] = setup('Punch Fiend');
+		assert(hit(p, q, '', multi) > 0);
+		assert.equal(hit(p, q, 'protect', multi), 0);
+		assert.equal(hit(p, q, 'maxguard', multi), 0);
+	});
+
 it('overlapping move bypass uses quarter once',()=>{const[p,q]=setup('Unseen Fist','Excadrill-Mega');const normal=hit(p,q,'');assert.equal(hit(p,q,'protect',false,{breaksProtect:true}),b.modify(normal,0.25));});
 it('suppression disables selected bypass',()=>{const[p,q]=setup('Unseen Fist','Mew',true);assert.equal(hit(p,q,'protect'),0);});
 it('suppression preserves native Piercing Drill',()=>{const[p,q]=setup('No Ability','Excadrill-Mega',true);const normal=hit(p,q,'');assert.equal(hit(p,q,'protect'),b.modify(normal,0.25));});

@@ -53,9 +53,9 @@ describe('Approved mixed attacker and guardian abilities', () => {
 		assert.equal(battle.runEvent('BasePower', holder, foe, punch, 100), 130);
 	});
 
-	it("Knight's Guard intercepts only one ally-targeted attack and rewards survival", () => {
-		const [holder, ally, foe] = doubles('Gallade', "Knight's Guard");
-		assert.deepEqual(holder.species.abilities, {0: 'Dual Wield', 1: "Knight's Guard", H: 'Inner Focus'});
+	it("Gallade-Azzy retains the legacy one-attack Knight's Guard interception", () => {
+		const [holder, ally, foe] = doubles('Gallade-Azzy', "Knight's Guard");
+		assert.deepEqual(holder.species.abilities, { 0: 'Dual Wield', 1: "Knight's Guard", H: 'Inner Focus', S: 'Ruptured Heaven' });
 		assert.equal(holder.hasAbility('swornduty'), true);
 		const tackle = battle.dex.getActiveMove('tackle');
 		assert.equal(battle.priorityEvent('RedirectTarget', foe, foe, tackle, ally), holder);
@@ -65,8 +65,8 @@ describe('Approved mixed attacker and guardian abilities', () => {
 		assert.equal(battle.priorityEvent('RedirectTarget', foe, foe, tackle, ally), ally);
 	});
 
-	it('Void Veil phases its first Dark or Ghost attack through screens and Substitute', () => {
-		const [holder, , foe] = doubles('Gardevoir', 'Void Veil');
+	it('Gardevoir-Void retains the first Dark/Ghost barrier bypass', () => {
+		const [holder, , foe] = doubles('Gardevoir-Void', 'Void Veil');
 		const shadow = battle.dex.getActiveMove('shadowball');
 		battle.singleEvent('ModifyMove', holder.getAbility(), holder.abilityState, shadow, holder);
 		assert.equal(shadow.infiltrates, true);
@@ -89,9 +89,9 @@ describe('Approved mixed attacker and guardian abilities', () => {
 	});
 
 	it('Mimecraft and Pearl Current heal allies from their stated triggers', () => {
-		let [holder, ally, foe] = doubles('Mr. Mime', 'Soundproof');
+		let [holder, ally, foe] = doubles('Mr. Mime', 'Silent Act');
 		assert.deepEqual(holder.species.baseStats, {hp: 65, atk: 45, def: 80, spa: 110, spd: 125, spe: 95});
-		assert.equal(holder.species.abilities[1], 'Soundproof');
+		assert.equal(holder.species.abilities[1], 'Silent Act');
 		assert.deepEqual(holder.getPassives(), ['mimecraft']);
 		assert(require('../../../dist/data/learnsets').Learnsets.mrmime.learnset.wideguard);
 		ally.hp -= 40;
@@ -103,8 +103,8 @@ describe('Approved mixed attacker and guardian abilities', () => {
 		battle.runEvent('AfterMove', holder, ally, reflect);
 		assert(ally.hp > before);
 		battle.destroy(); battle = null;
-		[holder, ally, foe] = doubles('Cloyster', 'Shell Armor');
-		assert.deepEqual(holder.getPassives(), ['pearlcurrent']);
+		[holder, ally, foe] = doubles('Mew', 'Pearl Current');
+		assert.equal(holder.ability, 'pearlcurrent');
 		assert(holder.hasAbilityOrPassive('waterabsorb'));
 		ally.hp -= 40;
 		const hp = ally.hp;
@@ -132,10 +132,17 @@ describe('Approved mixed attacker and guardian abilities', () => {
   const[holder,ally]=doubles(species,"Knight's Guard");battle.field.terrain=field;ally.maxhp=ally.baseMaxhp=1200;ally.hp=100;holder.hp=10;
   battle.singleEvent('Start',holder.getAbility(),holder.abilityState,holder);
   assert.equal(ally.hp,field?500:400);assert.equal(holder.hp,10);assert(holder.hasAbility('swornduty'));
-  assert.equal(holder.abilityState.interceptUsed,false);
+		assert.equal(!!holder.abilityState.interceptUsed, false);
  });
  it('Knight Guard Sworn Duty respects Heal Block and fainted allies',()=>{const[holder,ally,foe]=doubles('Gallade',"Knight's Guard");ally.hp=100;ally.addVolatile('healblock',foe);battle.singleEvent('Start',holder.getAbility(),holder.abilityState,holder);assert.equal(ally.hp,100);ally.removeVolatile('healblock');ally.hp=0;ally.fainted=true;battle.singleEvent('Start',holder.getAbility(),holder.abilityState,holder);assert.equal(ally.hp,0);});
- it('Knight Guard skips its entry-heal component when the same passive supplies it',()=>{const[holder,ally]=doubles('Gallade',"Knight's Guard");ally.hp=100;holder.getPassives=()=>['swornduty'];battle.singleEvent('Start',holder.getAbility(),holder.abilityState,holder);assert.equal(ally.hp,100);assert.equal(holder.abilityState.interceptUsed,false);});
+	it('Knight Guard skips its entry-heal component when the same passive supplies it', () => {
+		const [holder, ally] = doubles('Gallade', "Knight's Guard");
+		ally.hp = 100;
+		holder.getPassives = () => ['swornduty'];
+		battle.singleEvent('Start', holder.getAbility(), holder.abilityState, holder);
+		assert.equal(ally.hp, 100);
+		assert.equal(!!holder.abilityState.interceptUsed, false);
+	});
 
  it('Knight Guard calculator components and unchanged ordinary attack damage',()=>{const {calculatorMetadata,calculateScenario}=require('../../../dist/sim/custom-calculator');assert.deepEqual(calculatorMetadata().abilityComponents.knightsguard,['Sworn Duty']);const scenario={format:'gen9nofieldsinglesgame',move:'Tackle',samples:8,seed:42,actors:Array.from({length:4},()=>({species:'Mew',ability:'No Ability'}))};const base=calculateScenario(scenario).results[1];scenario.actors[0].ability="Knight's Guard";const guard=calculateScenario(scenario).results[1];assert.equal(guard.min,base.min);assert.equal(guard.max,base.max);});
 });

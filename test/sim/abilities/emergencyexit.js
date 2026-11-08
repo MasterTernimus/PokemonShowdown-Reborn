@@ -165,17 +165,16 @@ describe(`Emergency Exit`, function () {
 	});
 
 	it(`should not request switch-out after taking poison damage and getting healed by berry`, function () {
-		battle = common.createBattle([
-			[{species: "Golisopod", ability: 'emergencyexit', moves: ['substitute', 'sleeptalk'], item: 'sitrusberry'}, {species: "Magikarp", moves: ['splash']}],
-			[{species: "Gengar", moves: ['toxic', 'nightshade', 'protect']}],
-		]);
-		battle.makeChoices('move substitute', 'move toxic');
-		battle.makeChoices('move sleeptalk', 'move nightshade');
-		battle.makeChoices('move sleeptalk', 'move protect');
+		battle = common.createBattle([[{ species: 'Mew', ability: 'Emergency Exit', item: 'Sitrus Berry', moves: ['splash'] }, { species: 'Mew', moves: ['splash'] }], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
+		const holder = battle.p1.active[0];
+		holder.hp = 550;
+		holder.maxhp = holder.baseMaxhp = 1000;
+		holder.setStatus('psn');
+		battle.makeChoices();
+		assert.equal(holder.hp, 675);
+		assert.equal(holder.item, '');
 		assert.equal(battle.requestState, 'move');
-	});
-
-	it(`should not request switch-out on usage of Substitute`, function () {
+	});	it(`should not request switch-out on usage of Substitute`, () => {
 		battle = common.createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['substitute'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 			[{species: "Deoxys-Attack", ability: 'pressure', item: 'laggingtail', moves: ['thunderbolt']}],
@@ -241,13 +240,15 @@ describe(`Emergency Exit`, function () {
 
 	it(`should be suppressed by Sheer Force`, function () {
 		battle = common.createBattle([[
-			{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], ivs: EMPTY_IVS},
+			{ species: "Mew", ability: 'emergencyexit', moves: ['sleeptalk'], ivs: EMPTY_IVS },
 			{species: "Clefable", moves: ['sleeptalk']},
 		], [
 			{species: "Nidoking", ability: 'sheerforce', moves: ['thunderbolt']},
 		]]);
 		const eePokemon = battle.p1.active[0];
+		eePokemon.maxhp = eePokemon.baseMaxhp = 1000; eePokemon.hp = 510;
 		battle.makeChoices();
+		assert(eePokemon.hp > 0, 'The hit must cross half HP without knocking out the holder');
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 		assert.equal(battle.requestState, 'move');
 	});
@@ -296,29 +297,30 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'move');
 	});
 
-	common.itGen(8, 'should request switchout if its HP drops to below 50% while dynamaxed', function () {
-		battle = common.gen(8).createBattle([
-			[{species: "Golisopod", ability: 'emergencyexit', moves: ['closecombat'], ivs: EMPTY_IVS, level: 30}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
-			[{species: "Gengar", ability: 'cursedbody', moves: ['nightshade']}],
-		]);
-		const eePokemon = battle.p1.active[0];
-		battle.makeChoices('move maxknuckle dynamax', 'move nightshade');
-		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
-		assert.equal(battle.requestState, 'switch');
+	// Ordinary temporary Dynamax is unavailable; use the fork's persistent G-Max forms.
+	it('does not offer ordinary Dynamax to Golisopod with Emergency Exit', () => {
+		battle = common.createBattle([[{ species: 'Golisopod', ability: 'Emergency Exit', moves: ['splash'] }], [{ species: 'Mew', moves: ['splash'] }]]);
+		assert(!battle.p1.active[0].getMoveRequestData().canDynamax);
+		assert(!battle.p1.active[0].getDynamaxRequest());
 	});
-
-	common.itGen(8, 'should not request switchout if its HP is below 50% when its dynamax ends', function () {
-		battle = common.gen(8).createBattle([
-			[{species: "Golisopod", ability: 'emergencyexit', moves: ['drillrun'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
-			[{species: "Landorus", ability: 'sheerforce', moves: ['sludgewave']}],
-		]);
-		const eePokemon = battle.p1.active[0];
-		battle.makeChoices('move maxquake dynamax', 'move sludgewave');
-		battle.makeChoices();
-		battle.makeChoices();
-		assert.false.fainted(eePokemon);
-		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
-		assert.equal(battle.requestState, 'move');
+	for (const crossing of [true, false])it(crossing ? 'requests a switch when a G-Max holder crosses half HP' : 'does not request a switch or revert a G-Max holder already below half HP after three turns', () => {
+		battle = common.createBattle({ formatid: 'gen9mistyfieldadrienn' }, [[
+			{ species: 'Charizard', ability: 'No Ability', gigantamax: true, moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+		], [{ species: 'Mew', ability: 'No Ability', moves: ['splash', 'nightshade'] }]]);
+		battle.makeChoices('team 12', 'team 1'); battle.makeChoices('move splash dynamax', 'move splash');
+		const p = battle.p1.active[0]; assert.equal(p.species.id, 'charizardgmax'); p.setAbility('Emergency Exit');
+		p.maxhp = p.baseMaxhp = 1000; p.hp = crossing ? 550 : 400;
+		if (crossing) {
+			battle.makeChoices('move splash', 'move nightshade');
+			assert.equal(p.hp, 450);
+			assert.equal(battle.requestState, 'switch');
+		} else {
+			for (let i = 0; i < 3; i++)battle.makeChoices('move splash', 'move splash');
+			assert.equal(p.hp, 400);
+			assert.equal(battle.requestState, 'move');
+			assert.equal(p.species.id, 'charizardgmax');
+			assert(p.volatiles.dynamax);
+		}
 	});
 
 	it.skip(`should request switchout between hazards`, function () {
@@ -376,7 +378,10 @@ describe(`Emergency Exit`, function () {
 			{species: 'Chansey', moves: ['sleeptalk']},
 		]]);
 		const eePokemon = battle.p1.active[0];
+		eePokemon.maxhp = eePokemon.baseMaxhp = 10000; eePokemon.hp = 5001;
+		battle.p2.active[0].hp = battle.p2.active[0].maxhp = battle.p2.active[0].baseMaxhp = 5000;
 		battle.makeChoices();
+		assert(eePokemon.hp > 0); assert(battle.p2.active[0].hp > 0);
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 		assert.equal(battle.requestState, 'switch');
 	});

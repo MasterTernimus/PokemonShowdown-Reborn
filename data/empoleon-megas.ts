@@ -2,7 +2,10 @@ import type {AbilityDataTable} from '../sim/dex-abilities';
 import {composeSelectedAbility} from './selected-mega-simplifications';
 export const EmpoleonDescriptions = {
  monarchofice: {shortDesc:'Ice STAB/field benefits + Slush Rush. 30% frostbite; crits frostbitten foes, then thaws.', desc:'Gains Ice STAB, Ice-type field and weather benefits, and Slush Rush. Damaging moves have a 30% frostbite chance, subject to normal secondary-effect modifiers. Attacks critically hit frostbitten foes unless critical hits are prevented, then thaw damaged foes after the attack. Wave Crash becomes Royal Collision: Water/Ice effectiveness, 10% recoil, and ignores target abilities. Remains Water/Steel.'},
- emperorsresolve: {shortDesc:'Swift Swim + Flying STAB + Competitive.', desc:'Includes full local Swift Swim and Competitive. Flying moves receive STAB. Proficient remains its separate species passive.'},
+	emperorsresolve: {
+		shortDesc: 'Swift Swim + Flying STAB + Competitive.',
+		desc: 'Includes full local Swift Swim and Competitive. Flying moves receive STAB.',
+	},
 };
 type MonarchMove = ActiveMove & {monarchWillCrit?: boolean; monarchCritSet?: boolean; monarchThaw?: Pokemon[]};
 export function installEmpoleonMegas(abilities: AbilityDataTable) {

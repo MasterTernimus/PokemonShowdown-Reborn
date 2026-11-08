@@ -67,7 +67,7 @@ describe('Dancer', function () {
 
 	it(`should not copy Teeter Dance when all targets are confused`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Oricorio', ability: 'dancer', moves: ['sleeptalk', 'protect']},
+			{ species: 'Mew', ability: 'dancer', moves: ['sleeptalk', 'protect'] },
 			{species: 'Slowbro', ability: 'owntempo', moves: ['sleeptalk']},
 		], [
 			{species: 'Wynaut', ability: 'dancer', item: 'persimberry', moves: ['sleeptalk', 'teeterdance']},

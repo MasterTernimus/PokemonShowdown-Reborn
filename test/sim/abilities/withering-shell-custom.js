@@ -20,7 +20,7 @@ describe('Withering Shell custom effects', () => {
 		}
 	});
 
-	it('should combine Crumbling Shell, Natural Recovery, and Sturdy without passive healing', () => {
+	it('combines Crumbling Shell, Rain Dish and Sticky Hold with passive Natural Recovery', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame', preview: true}, [[
 			{species: 'Corsola-Alt', ability: 'Withering Shell', moves: ['splash']},
 		], [
@@ -29,8 +29,11 @@ describe('Withering Shell custom effects', () => {
 		battle.makeChoices('team 1', 'team 1');
 		const corsola = battle.p1.active[0];
 		assert(corsola.hasAbility('crumblingshell'));
-		assert(corsola.hasAbility('naturalrecovery'));
-		assert(corsola.hasAbility('sturdy'));
+		assert.deepEqual(corsola.getPassives(), ['naturalrecovery']);
+		assert(corsola.hasAbilityOrPassive('naturalrecovery'));
+		assert(corsola.hasAbility('raindish'));
+		assert(corsola.hasAbility('stickyhold'));
+		assert(!corsola.hasAbility('sturdy'));
 
 		battle.makeChoices('move splash', 'move tackle');
 		assert.equal(corsola.boosts.def, 0);

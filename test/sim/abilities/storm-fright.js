@@ -10,7 +10,7 @@ describe('Storm Fright', () => {
 		battle = null;
 	});
 
-	it('gives Mega Manectric Intimidate, Storm Power, and Lightning Rod only', () => {
+	it('gives Mega Manectric passive Intimidate alongside Storm Power and Lightning Rod', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Manectric', item: 'Manectite', moves: ['splash', 'bite']},
 		], [
@@ -22,7 +22,9 @@ describe('Storm Fright', () => {
 		const foe = battle.p2.active[0];
 		assert.equal(manectric.species.id, 'manectricmega');
 		assert.equal(manectric.ability, 'stormfright');
-		for (const component of ['intimidate', 'stormpower', 'lightningrod']) {
+		assert.deepEqual(manectric.getPassives(), ['intimidate']);
+		assert(manectric.hasAbilityOrPassive('intimidate'));
+		for (const component of ['stormpower', 'lightningrod']) {
 			assert(manectric.hasAbility(component), component);
 		}
 		assert.equal(manectric.hasAbility('teravolt'), false);

@@ -16,9 +16,9 @@ describe('Approved Conkeldurr, Seismitoad, and Frosmoth abilities', () => {
 	}
 
 	it('exposes the approved slots and Frosmoth stats', () => {
-		const [holder] = singles('Conkeldurr', 'Void Reprisal');
+		const [holder] = singles('Conkeldurr', 'Guts');
 		assert.deepEqual(holder.species.abilities,
-			{0: 'Void Reprisal', 1: 'Stamina', H: 'Wrecking Crew'});
+			{ 0: 'Guts', 1: 'Stamina', H: 'Wrecking Crew' });
 		assert.equal(holder.hasAbility('guts'), true);
 		assert.equal(battle.dex.species.get('Frosmoth').abilities[1], 'Silk Ward');
 		assert.deepEqual(battle.dex.species.get('Frosmoth').baseStats,
@@ -47,7 +47,7 @@ describe('Approved Conkeldurr, Seismitoad, and Frosmoth abilities', () => {
 		assert.equal(foe.side.getSideCondition('lightscreen'), null);
 	});
 
-	it('Marsh Conduit absorbs Water and drops both foe Speeds only once per switch-in', () => {
+	it('Marsh Conduit remains a Water Absorb alias without the removed Speed drops', () => {
 		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
 			{species: 'Seismitoad', ability: 'Marsh Conduit', moves: ['splash']},
 			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
@@ -65,9 +65,9 @@ describe('Approved Conkeldurr, Seismitoad, and Frosmoth abilities', () => {
 		const water = battle.dex.getActiveMove('surf');
 		assert.equal(battle.singleEvent('TryHit', holder.getAbility(), holder.abilityState, holder, ally, water), null);
 		assert(holder.hp > firstHp);
-		assert.deepEqual(foes.map(foe => foe.boosts.spe), [-1, -1]);
+		assert.deepEqual(foes.map(foe => foe.boosts.spe), [0, 0]);
 		battle.singleEvent('TryHit', holder.getAbility(), holder.abilityState, holder, ally, water);
-		assert.deepEqual(foes.map(foe => foe.boosts.spe), [-1, -1]);
+		assert.deepEqual(foes.map(foe => foe.boosts.spe), [0, 0]);
 	});
 
 	it('Silk Ward halves the first super-effective hit, then wears off until switching', () => {
@@ -96,17 +96,19 @@ describe('Approved Conkeldurr, Seismitoad, and Frosmoth abilities', () => {
 		assert.equal(holder.boosts.spe, 1);
 	});
 
-	it('Mire Chorus converts sound moves and can poison on a noncontact sound hit', () => {
+	it('native Mire Chorus supplies Liquid Voice and noncontact sound poison exactly once', () => {
 		const [holder, foe] = singles('Seismitoad', 'Mire Chorus');
-		assert(holder.hasAbility('liquidvoice'));
-		assert(holder.hasAbility('poisontouch'));
+		assert(!holder.hasAbility('liquidvoice'));
+		assert(holder.hasAbilityOrPassive('liquidvoice'));
+		assert.deepEqual(holder.getPassives(), ['mirechorus']);
+		assert(!holder.hasAbility('poisontouch'));
 		const voice = battle.dex.getActiveMove('hypervoice');
-		battle.singleEvent('ModifyType', holder.getAbility(), holder.abilityState, voice, holder);
+		battle.runEvent('ModifyType', holder, foe, voice, voice);
 		assert.equal(voice.type, 'Water');
-		assert(battle.runEvent('BasePower', holder, foe, voice, 100) > 100);
+		assert.equal(battle.runEvent('BasePower', holder, foe, voice, 100), 120);
 		const oldRandomChance = battle.randomChance;
 		battle.randomChance = () => true;
-		battle.singleEvent('SourceDamagingHit', holder.getAbility(), holder.abilityState, foe, holder, voice, 10);
+		battle.actions.useMove(voice, holder, { target: foe });
 		battle.randomChance = oldRandomChance;
 		assert.equal(foe.status, 'psn');
 	});
@@ -128,10 +130,10 @@ describe('Approved Conkeldurr, Seismitoad, and Frosmoth abilities', () => {
 		assert(holder.side.getSideCondition('stealthrock'));
 	});
 
-	it('Cloyster redistributes bulk and gains Pearl Current as its hidden ability', () => {
+	it('Cloyster keeps its approved bulk and Shell Armor option', () => {
 		const [holder] = singles('Cloyster', 'Skill Link');
 		assert.deepEqual(holder.species.baseStats, {hp: 50, atk: 95, def: 160, spa: 85, spd: 90, spe: 70});
 		assert.deepEqual(holder.species.abilities,
-			{0: 'Frozen Fortress', 1: 'Skill Link', H: 'Pearl Current'});
+			{ 0: 'Frozen Fortress', 1: 'Skill Link', H: 'Shell Armor' });
 	});
 });

@@ -2,7 +2,7 @@
 const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim/dex');let battle;
 function start(ability,mode='singles',foeAbility='No Ability',item=''){
  const species={ 'Night Watch':'Noctowl','Fruitful Bough':'Tropius','Soul Anchor':'Dhelmise'}[ability];
- const p={species,ability,item,moves:['splash','anchorshot','protect','sleeptalk']};const t={species:'Mew',ability:foeAbility,moves:['splash','swordsdance','tackle','protect']};
+	const p = { species, ability, item, moves: ['splash', 'anchorshot', 'protect', 'sleeptalk'] }; const t = { species: 'Mew', ability: foeAbility, moves: ['splash', 'swordsdance', 'growl', 'protect'] };
  const team=[p,{...t,ability:'No Ability'},{...t,ability:'No Ability'}],other=[t,{...t},{...t}];
  battle=common.createBattle({formatid:mode==='ffa'?'gen9freeforall4pmistyfieldadrienn':mode==='doubles'?'gen9nofielddoublesbattle':'gen9nofieldsinglesgame'},mode==='ffa'?[team,other,other,other]:[team,other]);battle.makeChoices(...battle.sides.map(()=>mode==='doubles'?'team 123':'team 123'));battle.field.terrain='';battle.randomizer=d=>d;
  for(const side of battle.sides)for(const p of side.active)p.hp=p.maxhp=p.baseMaxhp=1600;
@@ -14,21 +14,98 @@ function residual(){battle.fieldEvent('Residual');}
 describe('Approved Noctowl, Tropius and Dhelmise abilities',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  it('replaces only exact slots and leaves stats untouched',()=>{
-  for(const [id,abilities,stats] of [['noctowl',{0:'Duskilate',1:'Night Watch',H:'Lunar Spirit'},[100,50,78,96,106,80]],['tropius',{0:'Fruitful Bough',1:'Hospitality',H:'Windy Surge'},[115,90,95,75,95,70]],['dhelmise',{0:'Water Bubble',1:'Soul Anchor',H:'Rocky Payload'},[85,135,110,60,100,40]]]){assert.deepEqual(Dex.species.get(id).abilities,abilities);assert.deepEqual(Object.values(Dex.species.get(id).baseStats),stats);}
+		for (const [id, abilities, stats] of [['noctowl', { 0: 'Duskilate', 1: 'Night Watch', H: 'Lunar Spirit' }, [100, 50, 78, 96, 106, 80]], ['tropius', { 0: 'Fruitful Bough', 1: 'Hospitality', H: 'Windy Surge' }, [115, 90, 95, 75, 95, 70]], ['dhelmise', { 0: 'Water Bubble', 1: 'Blackwater Anchor', H: 'Rocky Payload' }, [85, 135, 110, 60, 100, 40]]]) { assert.deepEqual(Dex.species.get(id).abilities, abilities); assert.deepEqual(Object.values(Dex.species.get(id).baseStats), stats); }
+	});
+	it('Night Watch retains Insomnia alongside Noctowl’s independent Keen Eye passive', () => {
+		const [p, t] = start('Night Watch');
+		assert(!p.hasAbility('keeneye'));
+		assert(p.hasAbilityOrPassive('keeneye'));
+		assert(p.hasAbility('insomnia'));
+		assert.equal(p.trySetStatus('slp', t), false);
+		assert(!p.addVolatile('yawn', t));
+		const m = battle.dex.getActiveMove('darkpulse');
+		battle.runEvent('ModifyMove', p, t, m, m);
+		assert(m.ignoreEvasion);
+		assert.equal(battle.runEvent('BasePower', p, t, m, 1000), 1300);
+		battle.boost({ accuracy: -1 }, p, t);
+		assert.equal(p.boosts.accuracy, 0);
+	});
+	// Night Watch now responds to a successful opposing status hit, not repeated self-setup.
+	it('Disables the first successful opposing status hit and can respond again', () => {
+		const [p, t] = start('Night Watch'); turn('move growl'); assert.equal(t.volatiles.disable.move, 'growl');
+		assert.equal(p.boosts.atk, -1);
+		t.removeVolatile('disable');
+		turn('move splash');
+		turn('move growl');
+		assert.equal(t.volatiles.disable.move, 'growl'); assert.equal(p.boosts.atk, -2);
+	});
+	it('ignores repeated self-setup rather than maintaining an observation counter', () => {
+		const [p, t] = start('Night Watch'); turn('move swordsdance'); turn('move swordsdance');
+		assert.equal(t.boosts.atk, 4); assert(!t.volatiles.disable); assert(!p.volatiles.nightwatchstate);
+	});
+	it('holder and foe switching do not impose an entry budget', () => {
+		const [p, t] = start('Night Watch');
+		turn('move growl');
+		assert(t.volatiles.disable);
+		t.removeVolatile('disable');
+		turn('move splash', 'switch 2');
+		turn('move splash', 'switch 2');
+		turn('move growl');
+		assert(t.volatiles.disable);
+		turn('switch 2');
+		turn('switch 2');
+		turn('move growl');
+		assert.equal(t.volatiles.disable.move, 'growl');
+	});
+	it('suppression prevents new responses and removal restores them', () => {
+		const [p, t] = start('Night Watch');
+		p.addVolatile('gastroacid', t);
+		turn('move growl');
+		assert(!t.volatiles.disable);
+		p.removeVolatile('gastroacid'); turn('move growl'); assert.equal(t.volatiles.disable.move, 'growl');
+	});
+	it('Aroma Veil prevents Disable after a successful status hit', () => {
+		const [p, t] = start('Night Watch', 'singles', 'Aroma Veil'); turn('move growl');
+		assert.equal(p.boosts.atk, -1); assert(!t.volatiles.disable);
+	});
+	it('a protected status target cannot trigger Night Watch', () => {
+		const [p, t] = start('Night Watch');
+		turn('move growl', 'move protect');
+		assert.equal(p.boosts.atk, 0);
+		assert(!t.volatiles.disable);
+	});
+	it('responds separately to both doubles opponents and excludes allies', () => {
+		const [p, t] = start('Night Watch', 'doubles'), u = battle.p2.active[1], ally = p.allies()[0];
+		battle.makeChoices('move splash, move growl', 'move growl, move growl');
+		assert.equal(t.volatiles.disable.move, 'growl'); assert.equal(u.volatiles.disable.move, 'growl'); assert(!ally.volatiles.disable);
+	});
+	it('responds to every FFA opponent whose status move hits the holder', () => {
+		const [p] = start('Night Watch', 'ffa'); battle.makeChoices('move splash', 'move growl', 'move growl', 'move growl');
+		for (const foe of p.foes())assert.equal(foe.volatiles.disable.move, 'growl');
+	});
+	it('Fruitful Bough heals allies on own Berry consumption alongside passive Ripen', () => {
+		const [p] = start('Fruitful Bough', 'doubles', '', 'oranberry'), ally = p.allies()[0];
+		p.hp = 1000;
+		ally.hp = 800;
+		assert(p.eatItem());
+		assert.equal(p.hp, 1020);
+		assert.equal(ally.hp, 1000);
+		p.setItem('oranberry');
+		assert(p.eatItem());
+		assert.equal(ally.hp, 1000);
+		battle.turn++;
+		p.setItem('oranberry');
+		assert(p.eatItem());
+		assert.equal(ally.hp, 1200);
+	});
+	it('Fruitful Bough leaves holder healing to the Ripen-boosted Berry in FFA', () => {
+		const [p] = start('Fruitful Bough', 'ffa', '', 'oranberry');
+		p.hp = 800;
+		for (const foe of p.foes())foe.hp = 800;
+		p.eatItem();
+		assert.equal(p.hp, 820);
+		for (const foe of p.foes())assert.equal(foe.hp, 800);
  });
- it('Night Watch retains full local Keen Eye and Insomnia',()=>{const[p,t]=start('Night Watch');assert(p.hasAbility('keeneye'));assert(p.hasAbility('insomnia'));assert.equal(p.trySetStatus('slp',t),false);assert(!p.addVolatile('yawn',t));const m=battle.dex.getActiveMove('darkpulse');battle.singleEvent('ModifyMove',p.getAbility(),p.abilityState,m,p,t);assert(m.ignoreEvasion);assert.equal(battle.runEvent('BasePower',p,t,m,1000),1300);battle.boost({accuracy:-1},p,t);assert.equal(p.boosts.accuracy,0);});
- it('Disables after the second selected status action, once per entry',()=>{const[p,t]=start('Night Watch');turn('move swordsdance');assert(!t.volatiles.disable);turn('move swordsdance');assert.equal(t.boosts.atk,4);assert.equal(t.volatiles.disable.move,'swordsdance');assert(p.volatiles.nightwatchstate.spent);t.removeVolatile('disable');turn('move splash');turn('move splash');assert(!t.volatiles.disable);});
- it('different moves interrupt observations',()=>{const[p,t]=start('Night Watch');turn('move swordsdance');turn('move splash');turn('move swordsdance');assert(!t.volatiles.disable);turn('move swordsdance');assert(t.volatiles.disable);});
- it('switching the holder resets observations and budget',()=>{const[p,t]=start('Night Watch');turn();turn('move splash','switch 2');turn('move splash','switch 2');assert(!t.volatiles.disable);turn();assert(t.volatiles.disable);t.removeVolatile('disable');turn('move swordsdance','switch 2');turn('move swordsdance','switch 2');assert(!p.volatiles.nightwatchstate?.spent);turn('move swordsdance');assert.equal(t.volatiles.disable.move,'swordsdance');});
- it('switching a foe breaks its sequence',()=>{const[p,t]=start('Night Watch');turn();turn('switch 2');turn('switch 2');turn();assert(!t.volatiles.disable);turn();assert(t.volatiles.disable);});
- it('suppression prevents observation and Disable',()=>{const[p,t]=start('Night Watch');p.addVolatile('gastroacid',t);turn();turn();assert(!t.volatiles.disable);p.removeVolatile('gastroacid');turn();assert(!t.volatiles.disable);turn();assert(t.volatiles.disable);});
- it('Aroma Veil blocks normal Disable',()=>{const[p,t]=start('Night Watch','singles','Aroma Veil');turn();turn();assert(!t.volatiles.disable);});
- it('Protect blocks the normal Disable attempt',()=>{const[p,t]=start('Night Watch');battle.randomChance=()=>true;turn('move protect');turn('move protect');assert(!t.volatiles.disable);});
- it('called, reflected and external observations do not count',()=>{const[p,t]=start('Night Watch');for(const extra of [{sourceEffect:'sleeptalk'},{hasBounced:true},{isExternal:true}]){for(let i=0;i<2;i++){battle.turn++;const m=battle.dex.getActiveMove('splash');Object.assign(m,extra);t.lastMove=m;battle.runEvent('AfterMove',t,p,m);}assert(!t.volatiles.disable);} });
- it('tracks opposing identities separately in doubles and excludes allies',()=>{const[p,t]=start('Night Watch','doubles'),u=battle.p2.active[1];battle.makeChoices('move splash, move splash','move swordsdance, move splash');battle.makeChoices('move splash, move splash','move splash, move swordsdance');assert(!t.volatiles.disable&&!u.volatiles.disable);assert(!p.allies()[0].volatiles.disable);battle.makeChoices('move splash, move splash','move splash, move swordsdance');assert.equal([t,u].filter(x=>x.volatiles.disable).length,1);});
- it('FFA opponents share one Night Watch activation budget',()=>{const[p]=start('Night Watch','ffa');turn();turn();assert.equal(p.foes().filter(x=>x.volatiles.disable).length,1);});
- it('Fruitful Bough heals only allies on actual own Berry consumption',()=>{const[p]=start('Fruitful Bough','doubles','','oranberry'),ally=p.allies()[0];p.hp=1000;ally.hp=800;assert(p.eatItem());assert.equal(p.hp,1010);assert.equal(ally.hp,1000);p.setItem('oranberry');assert(p.eatItem());assert.equal(ally.hp,1000);battle.turn++;p.setItem('oranberry');assert(p.eatItem());assert.equal(ally.hp,1200);});
- it('Fruitful Bough grants no extra holder healing in singles or FFA',()=>{const[p]=start('Fruitful Bough','ffa','','oranberry');p.hp=800;for(const foe of p.foes())foe.hp=800;p.eatItem();assert.equal(p.hp,810);for(const foe of p.foes())assert.equal(foe.hp,800);});
  it('removal, theft, seed use and foreign berry events do not reward allies',()=>{const[p,t]=start('Fruitful Bough','doubles','','oranberry'),ally=p.allies()[0];ally.hp=800;p.takeItem(t);assert.equal(ally.hp,800);p.setItem('telluricseed');p.useItem();assert.equal(ally.hp,800);battle.runEvent('EatItem',p,t,battle.dex.moves.get('pluck'),battle.dex.items.get('oranberry'));assert.equal(ally.hp,800);});
  it('Unnerve prevents Berry consumption and healing',()=>{const[p]=start('Fruitful Bough','doubles','Unnerve','oranberry');const ally=p.allies()[0];ally.hp=800;assert(!p.eatItem());assert.equal(ally.hp,800);});
  it('suppression and Heal Block prevent Fruitful Bough healing',()=>{const[p,t]=start('Fruitful Bough','doubles','','oranberry'),ally=p.allies()[0];ally.hp=800;p.addVolatile('gastroacid',t);p.eatItem();assert.equal(ally.hp,800);p.removeVolatile('gastroacid');p.setItem('oranberry');ally.addVolatile('healblock',t);p.eatItem();assert.equal(ally.hp,800);});

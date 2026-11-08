@@ -12,7 +12,9 @@ export const RipenSeedDescriptions = {
 	},
 	evergreen: {
 		name: 'Evergreen',
-		shortDesc: 'Overcoat + Ripen.',
-		desc: 'Overcoat + Ripen: immune to powder moves and sandstorm/hail damage; doubles applicable Berry effects and positive held-Seed stat boosts. Seed stat drops and other effects are unchanged.',
+		...{
+			"shortDesc": "Restores a consumed Berry or field Seed: 50% each turn, guaranteed in hail/snow.",
+			"desc": "At turn end with an empty item slot, has a 50% chance to restore its last consumed Berry or field Seed. Guaranteed in hail or snow instead of sun.",
+		},
 	},
 };

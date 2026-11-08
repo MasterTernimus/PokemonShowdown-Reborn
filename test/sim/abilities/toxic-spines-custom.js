@@ -18,7 +18,7 @@ describe('Toxic Spines custom effects', () => {
 		assert.deepEqual(toxapex.abilities, {0: 'Battle Armor', 1: 'Toxic Spines', H: 'Regenerator'});
 	});
 
-	it('should retain Toxic Debris, Corrosion, and Merciless behavior', () => {
+	it('retains Toxic Debris poison bypass and native Merciless without Corrosion', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Toxapex', ability: 'Toxic Spines', moves: ['toxic', 'surf']},
 		], [
@@ -28,14 +28,15 @@ describe('Toxic Spines custom effects', () => {
 		const toxapex = battle.p1.active[0];
 		const registeel = battle.p2.active[0];
 		assert(toxapex.hasAbility('toxicdebris'));
-		assert(toxapex.hasAbility('corrosion'));
-		assert(toxapex.hasAbility('merciless'));
+		assert(!toxapex.hasAbility('corrosion'));
+		assert.deepEqual(toxapex.getPassives(), ['merciless']);
+		assert(toxapex.hasAbilityOrPassive('merciless'));
 		const surf = battle.dex.getActiveMove('surf');
 		assert.equal(battle.runEvent('ModifyCritRatio', toxapex, registeel, surf, 0), 0,
 			'Merciless should not force critical hits before the target is poisoned');
 
 		battle.makeChoices('move toxic', 'move tackle');
-		assert.equal(registeel.status, 'tox', 'Corrosion should let Toxic affect Steel types');
+		assert.equal(registeel.status, 'tox', 'Toxic Debris poison bypass should let Toxic affect Steel types');
 		assert(registeel.side.getSideCondition('toxicspikes'), 'A physical hit should set Toxic Spikes');
 		assert.equal(battle.runEvent('ModifyCritRatio', toxapex, registeel, surf, 0), 5,
 			'Toxic Spines should inherit Merciless against poisoned targets');

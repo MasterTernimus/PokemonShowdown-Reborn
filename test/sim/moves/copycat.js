@@ -22,7 +22,7 @@ describe('Copycat', function () {
 		assert.statStage(battle.p2.active[0], 'spa', -4);
 	});
 
-	it('[Gen 4] should not be able to copy called moves', function () {
+	common.itGen(4, '[Gen 4] should not be able to copy called moves', () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'bonsly', ability: 'sturdy', moves: ['copycat']},
 		], [

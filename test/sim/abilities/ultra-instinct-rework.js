@@ -162,8 +162,22 @@ describe('Approved Ultra Instinct and Burning Spirit rework', () => {
 		const plain = calculateScenario(scenario).results[1]; scenario.actors[1].ability = 'Ultra Instinct'; const guarded = calculateScenario(scenario).results[1];
 		for (const key of ['min', 'max']) assert(Math.abs(guarded[key] - plain[key] * 0.70) <= 2, key);
 	});
-	it('keeps Ultra Ego, Burning Ego and ordinary Opportunist callbacks byte-identical', () => {
-		const before = require('../../../artifacts/ultra-instinct-before.json'); for (const id of ['ultraego', 'burningego', 'opportunist'])assert.deepEqual(Object.fromEntries(Object.entries(Dex.abilities.get(id)).filter(([,v]) => typeof v === 'function').map(([k, v]) => [k, v.toString()])), before.abilities[id].callbacks, id);
+	it('preserves callbacks outside the later approved Ego hit rework', () => {
+		const before = require('../../../artifacts/ultra-instinct-before.json');
+		for (const id of ['ultraego', 'burningego', 'opportunist']) {
+			const current = Object.fromEntries(Object.entries(Dex.abilities.get(id)).filter(([,v]) => typeof v === 'function').map(([k, v]) => [k, v.toString()]));
+			const expected = { ...before.abilities[id].callbacks };
+			if (id !== 'opportunist') { delete current.onDamagingHit; delete expected.onDamagingHit; }
+			assert.deepEqual(current, expected, id);
+		}
+	});
+	for (const ability of ['Ultra Ego', 'Burning Ego']) it(ability + ' boosts on alternate whole attacks, not each hit', () => {
+		const [p, q] = setup(ability);
+		for (const stage of [1, 1, 2, 2]) {
+			hit(q, p, { multihit: 3 });
+			assert.equal(p.boosts.atk, stage);
+			assert.equal(p.boosts.spa, stage);
+		}
 	});
 	for (const ability of ['Ultra Instinct', 'Burning Spirit']) {
 		it(ability + ' has target-specific queued/new-entry power, no screen punishment or stale newlySwitched bonus', () => {

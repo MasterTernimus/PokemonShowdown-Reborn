@@ -25,7 +25,7 @@ describe('Sheer Cold [Gen 6]', function () {
 		battle.destroy();
 	});
 
-	it('should affect Ice-type Pokémon', function () {
+	common.itGen(6, 'should affect Ice-type Pokémon', () => {
 		battle = common.gen(6).createBattle([
 			[{species: "Deoxys-Speed", ability: 'noguard', moves: ['sheercold']}],
 			[{species: "Arceus-Ice", item: 'icicleplate', ability: 'multitype', moves: ['calmmind']}],

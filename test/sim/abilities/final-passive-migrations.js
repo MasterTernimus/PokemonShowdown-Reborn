@@ -37,7 +37,16 @@ describe('Final approved passive migrations',()=>{
  it('Still Mind retains Oblivious Taunt prevention',()=>{const[p,q]=setup('Medicham','Still Mind');battle.actions.useMove('taunt',q,{target:p});assert(!p.volatiles.taunt);});
  it('Bloodmoon Gaze includes Infiltrator and Competitive; passive Mind’s Eye survives suppression',()=>{const[p,q]=setup('Ursaluna-Bloodmoon','Bloodmoon Gaze');let m=modified(p,q);assert(m.infiltrates);assert(m.ignoreEvasion);assert(m.ignoreImmunity.Normal);battle.boost({def:-1},p,q,battle.dex.getActiveMove('tailwhip'));assert.equal(p.boosts.spa,2);p.addVolatile('gastroacid');m=modified(p,q);assert(!m.infiltrates);assert(m.ignoreEvasion);});
  it('Error Handler combines Aroma Veil and Infiltrator independently of Download',()=>{const[p,q]=setup('Porygon-Z','Error Handler');assert(modified(p,q).infiltrates);battle.actions.useMove('taunt',q,{target:p});assert(!p.volatiles.taunt);assert.equal(p.passiveStates.download.downloadFirstHit,false);});
- for(const species of ['Tsareena','Tsareena-Alt'])it(species+' uses one Queenly Majesty multiplier and full Long Reach',()=>{const[p,q]=setup(species,'Empress','fairytaleterrain');const m=modified(p,q);assert(!m.flags.contact);assert.equal(battle.runEvent('ModifyDamage',p,q,m,100),150);assert(p.boosts.accuracy>=1);assert(p.getAbilityComponentExclusions().includes('queenlymajesty'));p.addVolatile('gastroacid');assert.equal(battle.runEvent('ModifyDamage',p,q,m,100),150);});
+	for (const species of ['Tsareena', 'Tsareena-Alt'])it(species + ' uses one Queenly Majesty multiplier and full Long Reach', () => {
+		const [p, q] = setup(species, 'Empress', 'fairytaleterrain');
+		const m = modified(p, q);
+		assert(!m.flags.contact);
+		assert.equal(battle.runEvent('ModifyDamage', p, q, m, 100), 150);
+		assert.equal(p.boosts.accuracy, 0);
+		assert(p.getAbilityComponentExclusions().includes('queenlymajesty'));
+		p.addVolatile('gastroacid');
+		assert.equal(battle.runEvent('ModifyDamage', p, q, m, 100), 150);
+	});
  it('other Empress users retain Queenly Majesty',()=>{const[p,q]=setup('Mew','Empress','fairytaleterrain');assert.equal(battle.runEvent('ModifyDamage',p,q,battle.dex.getActiveMove('tackle'),100),150);assert(!p.getAbilityComponentExclusions().includes('queenlymajesty'));});
  it('Archaludon passive Stalwart tracks targets while selected ability is suppressed',()=>{const[p,q]=setup('Archaludon','Stamina');p.addVolatile('gastroacid');assert(modified(p,q).tracksTarget);});
  it('Ursaluna passive Thick Fat halves Fire offense under suppression',()=>{const[p,q]=setup('Ursaluna','Bulletproof');p.addVolatile('gastroacid');const m=battle.dex.getActiveMove('flamethrower');assert.equal(battle.runEvent('ModifySpA',q,p,m,100),50);});

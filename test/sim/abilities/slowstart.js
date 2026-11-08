@@ -42,8 +42,10 @@ describe(`Slow Start`, function () {
 			{species: 'regigigas', ability: 'slowstart', moves: ['assist']},
 			{species: 'necrozma', moves: ['photongeyser']},
 		], [
-			{species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk']},
+			{ species: 'wynaut', ability: 'No Ability', moves: ['sleeptalk'] },
 		]]);
+		// Shell Armor now reduces damage; disable critical hits without that reduction.
+		battle.onEvent('CriticalHit', battle.format, () => false);
 		battle.makeChoices();
 		const wynaut = battle.p2.active[0];
 		const damage = wynaut.maxhp - wynaut.hp;

@@ -37,7 +37,8 @@ describe('Unaware', function () {
 		battle = common.createBattle([[
 			{species: 'Clefable', ability: 'unaware', moves: ['moonblast', 'nastyplot']},
 		], [
-			{species: 'Registeel', ability: 'shellarmor', moves: ['sleeptalk']},
+			// Registeel's native Self Repair heals at turn end and obscures direct damage.
+			{ species: 'Mew', ability: 'shellarmor', moves: ['sleeptalk'] },
 		]]);
 
 		const baseline = baselineDamage(battle.p1.active[0], battle.p2.active[0], 'moonblast');
@@ -52,7 +53,7 @@ describe('Unaware', function () {
 		battle = common.createBattle([[
 			{species: 'Clefable', ability: 'unaware', item: 'laggingtail', moves: ['moonblast']},
 		], [
-			{species: 'Registeel', ability: 'shellarmor', moves: ['amnesia']},
+			{ species: 'Mew', ability: 'shellarmor', moves: ['amnesia'] },
 		]]);
 
 		const baseline = baselineDamage(battle.p1.active[0], battle.p2.active[0], 'moonblast');

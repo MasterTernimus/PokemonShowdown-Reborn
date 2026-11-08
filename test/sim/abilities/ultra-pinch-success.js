@@ -12,19 +12,19 @@ describe('Ultra Ego successful pinch consumption', () => {
 		const p = battle.p1.active[0], foe = battle.p2.active[0], move = battle.dex.getActiveMove('tackle');
 		battle.field.changeTerrain('ashenbeachterrain', p); p.hp = 1;
 		assert(p.addVolatile('healblock', foe));
-		battle.singleEvent('DamagingHit', p.getAbility(), p.abilityState, p, foe, move, 10);
+		battle.singleEvent('DamagingHit', p.getAbility(), p.abilityState, p, foe, battle.dex.getActiveMove('tackle'), 10);
 		assert.equal(p.hp, 1);
 		assert.equal(p.abilityState.ultraEgoPinch, false, 'blocked healing must not spend the pinch recovery');
 		assert.equal(p.boosts.atk, 1); assert.equal(p.boosts.spa, 1);
 		p.removeVolatile('healblock');
 		// Preserve the existing window reset: the holder completes its own damaging move.
 		battle.singleEvent('AfterMove', p.getAbility(), p.abilityState, p, foe, move);
-		battle.singleEvent('DamagingHit', p.getAbility(), p.abilityState, p, foe, move, 10);
+		battle.singleEvent('DamagingHit', p.getAbility(), p.abilityState, p, foe, battle.dex.getActiveMove('tackle'), 10);
 		assert.equal(p.hp, 1 + Math.floor(p.baseMaxhp / 4));
 		assert.equal(p.abilityState.ultraEgoPinch, true);
 		p.hp = 1;
 		battle.singleEvent('AfterMove', p.getAbility(), p.abilityState, p, foe, move);
-		battle.singleEvent('DamagingHit', p.getAbility(), p.abilityState, p, foe, move, 10);
+		battle.singleEvent('DamagingHit', p.getAbility(), p.abilityState, p, foe, battle.dex.getActiveMove('tackle'), 10);
 		assert.equal(p.hp, 1 + Math.floor(p.baseMaxhp / 16), 'successful pinch is spent; normal hit recovery remains');
 	});
 });

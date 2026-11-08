@@ -60,23 +60,25 @@ describe('Approved scouting distribution', () => {
 		battle.singleEvent('ModifyMove', p.getAbility(), p.abilityState, move, p, p.foes()[0]);
 		assert(move.ignoreEvasion);
 	});
-	it('Doom Warning checks each opponent once, including with its Magic Bounce passive', () => {
+	it('Doom Warning does not duplicate the separate Omen Sight passive', () => {
 		const p = setup('Absol-Mega');
 		battle.field.changeTerrain('psychicterrain', p);
 		p.boosts.spa = 0;
 		p.setAbility('Doom Warning');
-		// Two no-threat opponents each grant exactly +2, without duplicate delegates.
-		assert.equal(p.boosts.spa, 4);
+		// Changing the selected ability must not rerun native Omen Sight.
+		assert.equal(p.boosts.spa, 0);
 		p.setAbility('No Ability');
 		p.boosts.spa = 0;
 		p.foes()[0].moveSlots = [{ id: 'sludgebomb', move: 'Sludge Bomb', pp: 10, maxpp: 10, target: 'normal', disabled: false, used: false }];
 		const from = battle.log.length;
 		p.setAbility('Doom Warning');
-		// Poison threatens Dark/Fairy Absol-Mega; only the other foe grants +2.
-		assert.equal(p.boosts.spa, 2);
-		assert.equal(battle.log.slice(from).filter(x => x.includes('ability: Anticipation|')).length, 1);
-		assert(p.hasAbility('anticipation'));
-		assert(p.getPassives().includes('magicbounce'));
+		// A new threatening moveset also does not turn selected-ability changes into entry checks.
+		assert.equal(p.boosts.spa, 0);
+		assert.equal(battle.log.slice(from).filter(x => x.includes('ability: Anticipation|')).length, 0);
+		assert(!p.hasAbility('anticipation'));
+		assert.deepEqual(p.getPassives(), ['omensight']);
+		assert(p.hasAbility('magicbounce'));
+		assert(p.hasAbility('magicguard'));
 	});
 	it('Calculated Shot gets one Frisk roll per item holder and retains its Water modifier', () => {
 		const p = setup('Inteleon'), rolls = [];
@@ -125,7 +127,7 @@ describe('Approved scouting distribution', () => {
 	it('keeps existing users and passes Long Reach through Razor Reach', () => {
 		const p = setup();
 		assert.deepEqual(battle.dex.species.all().filter(s => Object.values(s.abilities).includes('Long Reach')).map(s => s.name), ['Rowlet', 'Dartrix']);
-		for (const [species, ability] of [['Galvantula', 'Silk Sights'], ['Espeon', 'Astral Ward'], ['Absol-Mega', 'Doom Warning'], ['Inteleon', 'Calculated Shot'], ['Yanmega', 'Slipstream'], ['Luxray-Mega', 'Night Hunt']])assert(Object.values(battle.dex.species.get(species).abilities).includes(ability));
+		for (const [species, ability] of [['Galvantula', 'Silk Sights'], ['Espeon', 'Remembered Step'], ['Absol-Mega', 'Doom Warning'], ['Inteleon', 'Calculated Shot'], ['Yanmega', 'Slipstream'], ['Luxray-Mega', 'Night Hunt']])assert(Object.values(battle.dex.species.get(species).abilities).includes(ability));
 		p.setAbility('Razor Reach');
 		assert(p.hasAbility('keeneye'));
 		const move = battle.dex.getActiveMove('tackle');

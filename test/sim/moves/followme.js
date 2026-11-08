@@ -10,7 +10,7 @@ describe('Follow Me', function () {
 		battle.destroy();
 	});
 
-	it('should redirect single-target moves towards it if it is a valid target', function () {
+	common.itGen(5, 'should redirect single-target moves towards it if it is a valid target', function () {
 		this.timeout(5000);
 
 		battle = common.gen(5).createBattle({gameType: 'triples'});
@@ -67,7 +67,7 @@ describe('Follow Me', function () {
 		assert.fullHP(battle.p1.active[1]);
 	});
 
-	it(`should redirect single-target moves towards it if it is a valid target in FFA`, function () {
+	it(`should redirect the selected opponent only in FFA`, () => {
 		battle = common.createBattle({gameType: 'freeforall'}, [[
 			{species: "Wynaut", moves: ['tackle']},
 		], [
@@ -78,14 +78,17 @@ describe('Follow Me', function () {
 		], [
 			{species: "Blissey", moves: ['followme']},
 		]]);
-		battle.makeChoices('move tackle 1', 'move tackle 1', 'move final gambit 2', 'move followme');
+		const targetLoc = battle.p4.active[0].getLocOf(battle.p2.active[0]);
+		battle.makeChoices('move tackle 1', 'move tackle 1', 'move final gambit 2', `move followme ${targetLoc}`);
 
-		// Follow Me should have redirected both attacks, so the Wynaut should be at full HP
+		// Only p2's attack is redirected; p1 still hits its chosen opponent.
 		assert.fullHP(battle.p1.active[0]);
-		assert.fullHP(battle.p2.active[0]);
+		assert.false.fullHP(battle.p2.active[0]);
+		assert(battle.log.some(line => line.startsWith('|move|p2a: Wynaut|Tackle|p4b: Blissey')));
+		assert(battle.log.some(line => line.startsWith('|move|p1a: Wynaut|Tackle|p2a: Wynaut')));
 	});
 
-	it(`[Gen 3] should continue to redirect moves after the user is knocked out and replaced`, function () {
+	common.itGen(3, `[Gen 3] should continue to redirect moves after the user is knocked out and replaced`, () => {
 		battle = common.gen(3).createBattle({gameType: 'doubles'}, [[
 			{species: "Swellow", moves: ['aerialace']},
 			{species: "Chansey", level: 1, moves: ['followme']},

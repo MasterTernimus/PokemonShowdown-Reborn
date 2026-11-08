@@ -405,6 +405,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				const details = pokemon.getUpdatedDetails();
 				this.add('replace', pokemon, details);
 				this.add('-end', pokemon, 'Illusion');
+				this.add('-damage', pokemon, pokemon.getHealth, '[silent]');
 				if (this.ruleTable.has('illusionlevelmod')) {
 					this.hint("Illusion Level Mod is active, so this Pokemon's true level was hidden.", true);
 				}
@@ -947,7 +948,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (typeof bindingDamage === 'number' && bindingDamage > 0 && source?.hp && source.isActive && source.hasAbilityOrPassive('constrictingcoils')) {
 				this.heal(bindingDamage, source, pokemon, 'drain');
 			}
-			if (pokemon.hp && this.effectState.sourceEffect.id === 'desertsmark' && this.field.isTerrain('ashenterrain')) {
+			if (pokemon.hp && this.effectState.sourceEffect.id === 'desertsmark' && this.field.isTerrain('ashenbeachterrain')) {
 				this.boost({accuracy: -1}, pokemon, source, this.effectState.sourceEffect);
 			}
 			if (this.effectState.infernalDominionTurns && --this.effectState.infernalDominionTurns === 0) pokemon.removeVolatile('partiallytrapped');
@@ -2015,3 +2016,8 @@ Object.assign(Conditions, LoreConditions);
 Conditions.lastbloom = {name: 'Last Bloom'};
 Conditions.tyrantlegacy = {name: 'Tyrant Legacy'};
 Conditions.harborpassage = {name: 'Harbor Passage'};
+
+Conditions.risingmomentum = {
+	name: 'Rising Momentum', noCopy: true,
+	onModifyCritRatio(critRatio) { if (this.effectState.marksman) return critRatio + 1; },
+};

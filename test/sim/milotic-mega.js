@@ -33,8 +33,8 @@ describe('Milotic-Mega', function () {
 		const milotic = battle.p1.active[0];
 		const foe = battle.p2.active[0];
 		assert.species(milotic, 'Milotic-Mega');
-		for (const component of ['prismscale', 'marvelscale', 'oblivious', 'swiftswim', 'dragonize', 'selfsufficient']) {
-			assert(milotic.hasAbility(component));
+		for (const component of ['marvelscale', 'swiftswim', 'dragonize']) {
+			assert(milotic.hasAbilityOrPassive(component), component);
 		}
 		const tackle = battle.dex.getActiveMove('tackle');
 		battle.singleEvent('ModifyType', milotic.getAbility(), milotic.abilityState, tackle, milotic);
@@ -50,16 +50,17 @@ describe('Milotic-Mega', function () {
 		assert.equal(milotic.getStat('spe'), speed * 2);
 		battle.field.clearWeather();
 		battle.actions.useMove('taunt', foe, milotic);
-		assert.false(!!milotic.volatiles.taunt);
+		assert(!!milotic.volatiles.taunt);
+		milotic.removeVolatile('taunt');
 		battle.boost({atk: -1}, milotic, foe, battle.dex.abilities.get('intimidate'));
-		assert.equal(milotic.boosts.atk, 0);
-		assert.equal(battle.runEvent('Immunity', milotic, null, null, 'attract'), false);
+		assert.equal(milotic.boosts.atk, -1);
+		assert.notEqual(battle.runEvent('Immunity', milotic, null, null, 'attract'), false);
 		const defense = milotic.getStat('def');
 		milotic.setStatus('par', foe);
 		assert(milotic.getStat('def') >= Math.floor(defense * 1.49));
 		milotic.hp = 100;
 		battle.makeChoices('move splash', 'move splash');
-		assert.equal(milotic.hp, 100 + Math.floor(milotic.baseMaxhp / 16));
+		assert.equal(milotic.hp, 100);
 	});
 
 	it('does not Mega Evolve Milotic-Terajuma with the regular stone', function () {

@@ -60,7 +60,7 @@ describe('Stone Axe', function () {
 		assert.equal(!!(battle.p2.sideConditions.stealthrock), false);
 	});
 
-	it('should not be bounced back by Magic Bounce', function () {
+	it('should reflect the attack and its hazard with Magic Bounce', () => {
 		battle = common.createBattle([[
 			{species: 'kleavor', ability: 'noguard', moves: ['stoneaxe']},
 		], [
@@ -68,8 +68,8 @@ describe('Stone Axe', function () {
 		]]);
 
 		battle.makeChoices();
-		assert.equal(!!(battle.p1.sideConditions.stealthrock), false);
-		assert(battle.p2.sideConditions.stealthrock);
+		assert(battle.p1.sideConditions.stealthrock);
+		assert(!battle.p2.sideConditions.stealthrock);
 	});
 
 	it('should have its Stealth Rock prevented by Sheer Force', function () {
@@ -88,10 +88,12 @@ describe('Stone Axe', function () {
 			{species: 'kleavor', ability: 'noguard', item: 'focussash', moves: ['stoneaxe']},
 			{species: 'wynaut', moves: ['sleeptalk']},
 		], [
-			{species: 'regieleki', item: 'rockyhelmet', moves: ['sheercold']},
+			{ species: 'regieleki', item: 'rockyhelmet', moves: ['sleeptalk'] },
 		]]);
 
-		battle.makeChoices(); // Kleavor will faint to the Rocky Helmet
+		battle.p1.active[0].hp = 1;
+		battle.makeChoices();
+		assert.fainted(battle.p1.active[0]);
 		assert.equal(!!(battle.p2.sideConditions.stealthrock), false);
 	});
 });

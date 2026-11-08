@@ -14,7 +14,19 @@ it('suppressed provider grants neither skip nor spent allowance',()=>{const[p,a,
 it('provider switching does not refill a stationary recipient',()=>{const[p,a,q]=setup();move(a,q,'skullbash');battle.actions.switchIn(battle.p1.pokemon[2],0);battle.actions.switchIn(p,0);move(a,q,'skullbash');assert(a.volatiles.twoturnmove);});
 it('Transform and recipient ability changes do not refill allowance',()=>{const[p,a,q]=setup();move(a,q,'skullbash');a.setAbility('Pressure');assert(a.transformInto(q));move(a,q,'skullbash');assert(a.volatiles.twoturnmove);});
 it('passive Serene Grace leaves the independent Omen allowance limited',()=>{const[p,a,q]=setup('Void Omen','Togekiss');move(p,q,'skullbash');assert(p.volatiles.voidomenchargespent);move(p,q,'skullbash');assert(p.volatiles.twoturnmove);});
-it('exhaustion leaves holder-only secondary doubling intact',()=>{const[p,a,q]=setup();a.addVolatile('voidomenchargespent');const m=Dex.getActiveMove('crunch');battle.runEvent('ModifyMove',a,q,m,m);assert.equal(m.secondaries[0].chance,20);const own=Dex.getActiveMove('crunch');battle.runEvent('ModifyMove',p,q,own,own);assert.equal(own.secondaries[0].chance,40);const charge=Dex.getActiveMove('skullbash');battle.runEvent('ModifyMove',a,q,charge,charge);assert(charge.flags.charge);});
+	it('charge allowance does not grant secondary doubling to the holder or allies', () => {
+		const [p, a, q] = setup();
+		a.addVolatile('voidomenchargespent');
+		const m = Dex.getActiveMove('crunch');
+		battle.runEvent('ModifyMove', a, q, m, m);
+		assert.equal(m.secondaries[0].chance, 20);
+		const own = Dex.getActiveMove('crunch');
+		battle.runEvent('ModifyMove', p, q, own, own);
+		assert.equal(own.secondaries[0].chance, 20);
+		const charge = Dex.getActiveMove('skullbash');
+		battle.runEvent('ModifyMove', a, q, charge, charge);
+		assert(charge.flags.charge);
+	});
 });
 describe('Requiem no longer applies status-triggered countdowns',()=>{
 afterEach(()=>{battle?.destroy();battle=null;});

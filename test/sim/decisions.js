@@ -176,11 +176,11 @@ describe('Choices', function () {
 
 		it('should disallow specifying move targets for targetless moves (randomNormal)', function () {
 			battle = common.createBattle({gameType: 'doubles'}, [
-				[{species: "Dragonite", ability: 'multiscale', moves: ['outrage']}, {species: "Blastoise", ability: 'torrent', moves: ['rest']}],
+				[{ species: "Dragonite", ability: 'multiscale', moves: ['uproar'] }, { species: "Blastoise", ability: 'torrent', moves: ['rest'] }],
 				[{species: "Tyranitar", ability: 'unnerve', moves: ['dragondance']}, {species: "Zapdos", ability: 'pressure', moves: ['roost']}],
 			]);
 
-			assert.cantTarget(() => battle.p1.chooseMove('outrage', 1), 'outrage');
+			assert.cantTarget(() => battle.p1.chooseMove('uproar', 1), 'uproar');
 		});
 
 		it('should disallow specifying move targets for targetless moves (scripted)', function () {
@@ -228,7 +228,7 @@ describe('Choices', function () {
 			assert.species(battle.p2.active[0], 'Charmeleon');
 		});
 
-		it('should allow shifting the Pokémon on the left to the center', function () {
+		common.itGen(5, 'should allow shifting the Pokémon on the left to the center', () => {
 			battle = common.gen(5).createBattle({gameType: 'triples'});
 			battle.setPlayer('p1', {team: [
 				{species: "Pineco", ability: 'sturdy', moves: ['harden']},
@@ -251,7 +251,7 @@ describe('Choices', function () {
 			}
 		});
 
-		it('should allow shifting the Pokémon on the right to the center', function () {
+		common.itGen(5, 'should allow shifting the Pokémon on the right to the center', () => {
 			battle = common.gen(5).createBattle({gameType: 'triples'});
 			battle.setPlayer('p1', {team: [
 				{species: "Pineco", ability: 'sturdy', moves: ['harden']},
@@ -273,7 +273,7 @@ describe('Choices', function () {
 			}
 		});
 
-		it('should shift the Pokémon as a standard priority move action', function () {
+		common.itGen(5, 'should shift the Pokémon as a standard priority move action', () => {
 			battle = common.gen(5).createBattle({gameType: 'triples'});
 			battle.setPlayer('p1', {team: [
 				{species: "Pineco", ability: 'sturdy', moves: ['harden']},
@@ -426,7 +426,7 @@ describe('Choices', function () {
 			assert.fainted(battle.p2.active[1]);
 		});
 
-		it('should allow passing when there are not enough available switch-ins even if an active Pokémon is not fainted', function () {
+		common.itGen(5, 'should allow passing when there are not enough available switch-ins even if an active Pokémon is not fainted', () => {
 			battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 				{species: 'Bulbasaur', ability: 'overgrow', moves: ['tackle']},
 				{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
@@ -563,7 +563,7 @@ describe('Choices', function () {
 			}
 		});
 
-		it('should allow specifying the team order in a slot-per-slot basis in Triples', function () {
+		common.itGen(5, 'should allow specifying the team order in a slot-per-slot basis in Triples', () => {
 			for (let i = 0; i < 5; i++) {
 				battle = common.gen(5).createBattle({preview: true, gameType: 'triples'}, TRIPLES_TEAMS.full);
 				const teamOrder = Utils.shuffle(BASE_TEAM_ORDER.slice());
@@ -700,7 +700,7 @@ describe('Choices', function () {
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
-		it('should privately log shifting decisions for the Pokémon on the left', function () {
+		common.itGen(5, 'should privately log shifting decisions for the Pokémon on the left', () => {
 			battle = common.gen(5).createBattle({gameType: 'triples'});
 			battle.setPlayer('p1', {team: [
 				{species: "Pineco", ability: 'sturdy', moves: ['harden']},
@@ -719,7 +719,7 @@ describe('Choices', function () {
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
-		it('should privately log shifting decisions for the Pokémon on the right', function () {
+		common.itGen(5, 'should privately log shifting decisions for the Pokémon on the right', () => {
 			battle = common.gen(5).createBattle({gameType: 'triples'});
 			battle.setPlayer('p1', {team: [
 				{species: "Pineco", ability: 'sturdy', moves: ['harden']},
@@ -935,7 +935,7 @@ describe('Choice extensions', function () {
 				}
 			});
 
-			it(`should support to ${mode} shift decisions on move requests`, function () {
+			common.itGen(5, `should support to ${mode} shift decisions on move requests`, () => {
 				const TEAMS = [[
 					{species: 'Bulbasaur', ability: 'overgrow', moves: ['synthesis']},
 					{species: 'Ivysaur', ability: 'overgrow', moves: ['synthesis']},
@@ -971,7 +971,7 @@ describe('Choice extensions', function () {
 				assert.equal(battle.p1.active[2].lastMove.id, 'synthesis');
 			});
 
-			it(`should disallow to ${mode} shift decisions by default`, function () {
+			common.itGen(5, `should disallow to ${mode} shift decisions by default`, () => {
 				const TEAMS = [[
 					{species: 'Bulbasaur', ability: 'overgrow', moves: ['synthesis']},
 					{species: 'Ivysaur', ability: 'overgrow', moves: ['growth']},
@@ -1228,7 +1228,7 @@ describe('Choice internals', function () {
 			{species: "Bulbasaur", ability: 'overgrow', moves: ['growl', 'synthesis']},
 		]});
 		battle.setPlayer('p2', {team: [
-			{species: "Pupitar", ability: 'shedskin', moves: ['surf']}, // faster than Bulbasaur
+			{ species: "Pupitar", ability: 'No Ability', moves: ['surf'] }, // Avoid Shed Skin clearing the Growl stage being tested.
 			{species: "Arceus", ability: 'multitype', moves: ['calmmind']},
 		]});
 		const [p1, p2] = battle.sides;
@@ -1239,7 +1239,7 @@ describe('Choice internals', function () {
 		p1.chooseMove(1);
 		p2.chooseMove(1);
 		p2.chooseMove(1);
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.equal(battle.turn, 2);
 		assert.statStage(p2.active[0], 'atk', -1);
@@ -1248,7 +1248,7 @@ describe('Choice internals', function () {
 		p1.chooseMove('synthesis');
 		p2.chooseMove('surf');
 		p2.chooseMove('calmmind');
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.equal(battle.turn, 3);
 		assert.fullHP(p1.active[1]);
@@ -1257,7 +1257,7 @@ describe('Choice internals', function () {
 		p1.chooseMove('2');
 		p2.chooseMove('1');
 		p2.chooseMove('calmmind');
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.equal(battle.turn, 4);
 		assert.fullHP(p1.active[1]);
@@ -1282,13 +1282,13 @@ describe('Choice internals', function () {
 		p1.chooseMove('selfdestruct');
 		p2.chooseMove('recover');
 		p2.chooseMove('recover');
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.fainted(p1.active[0]);
 		assert.fainted(p1.active[1]);
 		p1.chooseSwitch(4);
 		p1.chooseSwitch(3);
-		battle.commitDecisions();
+		battle.commitChoices();
 		assert.equal(battle.turn, 2);
 		assert.equal(p1.active[0].name, 'Ekans');
 		assert.equal(p1.active[1].name, 'Koffing');
@@ -1316,7 +1316,7 @@ describe('Choice internals', function () {
 			`Expected switch to fail`
 		);
 		p2.choose('move recover, move recover');
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.equal(battle.turn, 2);
 		assert.equal(p1.active[0].name, 'Mew');
@@ -1329,7 +1329,7 @@ describe('Choice internals', function () {
 			`Expected switch to fail`
 		);
 		p2.choose('move recover, move recover');
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.equal(battle.turn, 3);
 		assert.equal(p1.active[0].name, 'Bulbasaur');
@@ -1410,7 +1410,7 @@ describe('Choice internals', function () {
 		assert.species(p1.active[1], 'Koffing');
 	});
 
-	it('should empty the actions list when undoing a shift', function () {
+	common.itGen(5, 'should empty the actions list when undoing a shift', () => {
 		battle = common.gen(5).createBattle({gameType: 'triples', cancel: true});
 		battle.supportCancel = true;
 		battle.setPlayer('p1', {team: [

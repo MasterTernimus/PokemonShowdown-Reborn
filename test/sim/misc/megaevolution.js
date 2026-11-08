@@ -2,6 +2,8 @@
 
 const assert = require('./../../assert');
 const common = require('./../../common');
+const { Format } = require('../../../dist/sim/dex-formats');
+const { Dex } = require('../../../dist/sim');
 
 let battle;
 
@@ -20,7 +22,8 @@ describe('Mega Evolution', function () {
 		]});
 		const megaMon = battle.p1.active[0];
 		battle.makeChoices('move metalclaw mega', 'move uturn');
-		assert.equal(megaMon.ability, 'toughclaws');
+		assert.equal(megaMon.ability, 'coldlogic');
+		assert.deepEqual(megaMon.getPassives(), ['toughclaws']);
 	});
 
 	it('[Hackmons] should be able to override different formes but not same forme', function () {
@@ -49,7 +52,7 @@ describe('Mega Evolution', function () {
 		});
 	});
 
-	it('should modify speed/priority in gen 7+', function () {
+	common.itGen(6, 'should modify speed/priority in gen 7+', () => {
 		battle = common.createBattle([[
 			{species: 'Metagross', ability: 'prankster', item: 'metagrossite', moves: ['taunt']},
 		], [
@@ -114,56 +117,26 @@ describe('Mega Evolution', function () {
 		assert.equal(megaMon.status, '');
 	});
 
-	describe("Mega Rayquaza", () => {
-		const TEAMS = [[
-			{species: "Rayquaza", ability: 'airlock', moves: ['dragonascent'], evs: {hp: 1}},
-		], [
-			{species: "Rayquaza", ability: 'airlock', moves: ['protect'], evs: {hp: 1}},
-		]];
-
-		function assertCanMega(formatid) {
-			battle = common.createBattle({formatid}, TEAMS);
-			battle.makeChoices(); // team preview
-			battle.makeChoices('move 1 mega', 'auto');
-			assert.equal(battle.p1.active[0].species.name, "Rayquaza-Mega");
+	describe('Mega Rayquaza', () => {
+		const TEAMS = [[{ species: 'Rayquaza', ability: 'Air Lock', moves: ['Dragon Ascent'], evs: { hp: 1 } }],
+			[{ species: 'Rayquaza', ability: 'Air Lock', moves: ['Protect'], evs: { hp: 1 } }]];
+		function format(mod = 'gen9', extra = []) {
+			return new Format({ name: 'Rayquaza clause regression', effectType: 'Format', mod, ruleset: ['Obtainable', 'Team Preview', '+Past', ...extra] });
 		}
-
-		function assertLegalButCantMega(formatid) {
-			assert.legalTeam(TEAMS[0], formatid);
-			battle = common.createBattle({formatid}, TEAMS);
-			battle.makeChoices(); // team preview
+		for (const gen of [6, 7, 8, 9])common.itGen(gen, 'Mega evolution requires Dragon Ascent', () => {
+			battle = common.createBattle({ formatid: format('gen' + gen) }, TEAMS);
+			battle.makeChoices();
+			assert.equal(battle.p1.active[0].canMegaEvo, 'Rayquaza-Mega');
+			assert.false(battle.p2.active[0].canMegaEvo);
+			battle.makeChoices('move 1 mega', 'move 1');
+			assert.equal(battle.p1.active[0].species.name, 'Rayquaza-Mega');
+		});
+		for (const rule of ['Mega Rayquaza Clause', '-Rayquaza-Mega', '-Mega'])it('blocks Mega evolution with ' + rule, () => {
+			const f = format('gen9', [rule]); assert.legalTeam(TEAMS[0], f);
+			assert(Dex.formats.getRuleTable(f).has('megarayquazaclause'));
+			battle = common.createBattle({ formatid: f }, TEAMS); battle.makeChoices();
+			assert.false(battle.p1.active[0].canMegaEvo);
 			assert.throws(() => battle.choose('p1', 'move 1 mega'));
-		}
-
-		it('should be able to Mega Evolve iff it knows Dragon Ascent', () => {
-			assertCanMega('gen6anythinggoes');
-			// battle continues
-			assert.throws(() => battle.choose('p2', 'move 1 mega'));
-		});
-
-		it('should be allowed to Mega Evolve in new gen formats allowing "Past" elements', () => {
-			assertCanMega('gen9nationaldexag');
-			battle.destroy();
-			assertCanMega('gen9natdexdraft');
-			battle.destroy();
-			assertCanMega('gen8anythinggoes@@@+past');
-		});
-
-		it('should not be allowed to Mega Evolve in formats that have the Mega Rayquaza Clause', () => {
-			assertLegalButCantMega('gen6ubers');
-			battle.destroy();
-			assertLegalButCantMega('gen9nationaldexubers');
-		});
-
-		it('should implicitly add the Mega Rayquaza Clause when banned', () => {
-			assertLegalButCantMega('gen9nationaldexag@@@-rayquaza-mega');
-			battle.destroy();
-			assertLegalButCantMega('gen9nationaldexag@@@-mega');
-			battle.destroy();
-			assertLegalButCantMega('gen9nationaldexag@@@-ndag');
-
-			// don't add it where unnecessary
-			assert.false(Dex.formats.getRuleTable(Dex.formats.get('gen5anythinggoes')).has('megarayquazaclause'));
 		});
 	});
 });

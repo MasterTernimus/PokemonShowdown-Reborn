@@ -141,7 +141,7 @@ describe('Encore [Gen 2]', function () {
 		battle.destroy();
 	});
 
-	it(`[Gen 2] Encore succeeds when used against an opponent that last attacked before the Encore user switched in`, function () {
+	common.itGen(2, `[Gen 2] Encore succeeds when used against an opponent that last attacked before the Encore user switched in`, () => {
 		battle = common.gen(2).createBattle({forceRandomChance: true}, [[
 			{species: 'slowbro', moves: ['glare']},
 			{species: 'fearow', moves: ['encore']},

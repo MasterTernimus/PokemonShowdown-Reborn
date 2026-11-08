@@ -7,7 +7,7 @@ const {Gen8Gen9NatDexLearnsets} = require('../../dist/data/natdex-gen8-gen9-lear
 const TEST_MOVES_BY_TYPE = {
 	Normal: 'tackle', Fire: 'ember', Water: 'watergun', Bug: 'strugglebug', Electric: 'thundershock',
 	Steel: 'metalclaw', Dark: 'bite', Ghost: 'lick', Fighting: 'brickbreak', Dragon: 'dragonclaw',
-	Rock: 'rockthrow', Ground: 'mudslap', Poison: 'poisonsting', Flying: 'gust', Fairy: 'disarmingvoice',
+	Rock: 'rockthrow', Ground: 'mudbarrage', Poison: 'poisonsting', Flying: 'gust', Fairy: 'disarmingvoice',
 	Psychic: 'confusion', Grass: 'leafage', Ice: 'powdersnow',
 };
 
@@ -112,7 +112,7 @@ describe('Custom G-Max audit', function () {
 		const missing = [...expected].filter(id => !dex.species.getMovePool(id, true).has('naturepower'));
 		assert(expected.size >= 100, `Expected the scoped Nature Power set to contain at least 100 entries, got ${expected.size}`);
 		assert.deepEqual(missing, []);
-		assert(!dex.data.Learnsets.flox.learnset.naturepower, 'Nature Power should not be added to unrelated entries');
+		assert(!dex.data.Learnsets.flox, 'Unsupported species should not receive imported learnsets');
 	});
 
 });

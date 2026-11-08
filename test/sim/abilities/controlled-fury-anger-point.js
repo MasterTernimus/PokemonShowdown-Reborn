@@ -48,7 +48,7 @@ describe('Controlled Fury Anger Point and Raging Heart Inner Focus',()=>{
  it('preserves exact distribution boundaries and legal selected slots',()=>{
   assert.deepEqual(Dex.species.get('crabominable').abilities,{0:'Icebreaker',1:'Iron Fist',H:'Controlled Fury'});
   assert.deepEqual(Dex.species.get('primeape').abilities,{0:'Vital Spirit',1:'Controlled Fury',H:'Defiant'});
-  assert.deepEqual(Dex.species.get('krookodile').abilities,{0:'Intimidate',1:'Dread Jaw',H:'Vendetta'});
+		assert.deepEqual(Dex.species.get('krookodile').abilities, { 0: 'Intimidate', 1: 'Dread Jaw', H: 'Dune Hunter' });
   assert.deepEqual(Dex.species.get('krookodile').passives,['controlledfury']);
   assert.deepEqual(Dex.species.get('annihilape').abilities,{0:'Unbound Spirit',1:'Raging Heart',H:'Defiant'});
   assert.deepEqual(Dex.species.get('mankey').abilities,{0:'Vital Spirit',1:'Anger Point',H:'Defiant'});

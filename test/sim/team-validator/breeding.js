@@ -1,57 +1,70 @@
 'use strict';
 
 const assert = require('../../assert');
+const common = require('../../common');
+const { Format } = require('../../../dist/sim/dex-formats');
+// Egg-move tests exercise move legality, independently of retired ladder names
+// and this fork's changed selectable ability slots.
+function breedingFormat(gen, littleCup = false) {
+	return new Format({ name: 'Breeding regression Gen ' + gen + (littleCup ? ' LC' : ''),
+		effectType: 'Format', mod: 'gen' + gen,
+		ruleset: ['Obtainable', '!Obtainable Abilities', ...(littleCup ? ['Little Cup'] : [])] });
+}
 
 let team;
 
 describe('Team Validator', function () {
-	it("should validate Shedinja's egg moves correctly", function () {
+	common.itGen(7, 'allows four egg moves on a move evolution with modern breeding', () => {
+		assert.legalTeam([{ species: 'mamoswine', ability: 'oblivious',
+			moves: ['tackle', 'iceshard', 'amnesia', 'furyattack'], evs: { hp: 1 } }], breedingFormat(7));
+	});
+	common.itGen(3, "should validate Shedinja's egg moves correctly", () => {
 		team = [
 			{species: 'shedinja', ability: 'wonderguard', moves: ['silverwind', 'gust'], evs: {hp: 1}},
 		];
 		assert.legalTeam(team, 'gen3ou');
 	});
 
-	it("should properly exclude egg moves for Baby Pokemon and their evolutions", function () {
+	common.itGen(7, "should properly exclude egg moves for Baby Pokemon and their evolutions", () => {
 		team = [
 			{species: 'blissey', ability: 'naturalcure', moves: ['charm', 'seismictoss'], evs: {hp: 1}},
 		];
-		assert.false.legalTeam(team, 'gen7ou');
+		assert.false.legalTeam(team, breedingFormat(7));
 
 		team = [
 			{species: 'marill', ability: 'hugepower', moves: ['splash', 'aquajet'], evs: {hp: 1}},
 		];
-		assert.false.legalTeam(team, 'gen7ou');
+		assert.false.legalTeam(team, breedingFormat(7));
 
 		team = [
 			{species: 'azumarill', ability: 'thickfat', moves: ['futuresight', 'slam'], evs: {hp: 1}},
 		];
-		assert.false.legalTeam(team, 'gen7ou');
+		assert.false.legalTeam(team, breedingFormat(7));
 	});
 
-	it("should disallow 4 egg moves on move evolutions before gen 6", function () {
+	common.itGen(5, "should disallow 4 egg moves on move evolutions before gen 6", () => {
 		team = [
 			{species: 'mamoswine', ability: 'oblivious', moves: ['tackle', 'iceshard', 'amnesia', 'furyattack'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen5ou');
-		assert.legalTeam(team, 'gen7ou');
+		assert.legalTeam(team, breedingFormat(7));
 	});
 
-	it("should disallow egg moves with male-only Hidden Abilities", function () {
+	common.itGen(5, "should disallow egg moves with male-only Hidden Abilities", () => {
 		team = [
 			{species: 'combusken', ability: 'speedboost', moves: ['batonpass'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen5ou');
 	});
 
-	it("should disallow Pokemon in Little Cup that can't be bred to be level 5", function () {
+	common.itGen(8, "should disallow Pokemon in Little Cup that can't be bred to be level 5", () => {
 		team = [
 			{species: 'kubfu', ability: 'innerfocus', moves: ['aerialace'], evs: {hp: 1}},
 		];
-		assert.false.legalTeam(team, 'gen8lc');
+		assert.false.legalTeam(team, breedingFormat(8, true));
 	});
 
-	it('should reject illegal egg move combinations', function () {
+	common.itGen(2, 'should reject illegal egg move combinations', () => {
 		team = [
 			{species: 'azumarill', ability: 'hugepower', moves: ['bellydrum', 'aquajet'], evs: {hp: 1}},
 		];
@@ -78,7 +91,7 @@ describe('Team Validator', function () {
 		assert.false.legalTeam(team, 'gen3ou');
 	});
 
-	it('should allow chain breeding', function () {
+	common.itGen(2, 'should allow chain breeding', () => {
 		// via duskull
 		team = [
 			{species: 'weezing', ability: 'levitate', moves: ['painsplit', 'willowisp'], evs: {hp: 1}},
@@ -104,7 +117,7 @@ describe('Team Validator', function () {
 		assert.legalTeam(team, 'gen4ou');
 	});
 
-	it('should accept this chainbreed on Snorlax', function () {
+	common.itGen(5, 'should accept this chainbreed on Snorlax', () => {
 		// the weirdest chainbreed I've ever seen:
 		// breed male Curse Snorlax in Gen 3, transfer to XD, teach Self-destruct
 		// by tutor, breed with female Gluttony Snorlax
@@ -114,7 +127,7 @@ describe('Team Validator', function () {
 		assert.legalTeam(team, 'gen5ou');
 	});
 
-	it('should allow trading back Gen 2 egg moves if compatible with Gen 1', () => {
+	common.itGen(1, 'should allow trading back Gen 2 egg moves if compatible with Gen 1', () => {
 		// HJK can be bred onto Tyrogue in Gen 2, evolved into Hitmonchan, transferred back to Gen 1, taught Body Slam via TM, and transferred back to Gen 2.
 		team = [
 			{species: 'hitmonchan', moves: ['highjumpkick', 'bodyslam']},
@@ -129,14 +142,14 @@ describe('Team Validator', function () {
 		assert.false.legalTeam(team, 'gen1ou');
 	});
 
-	it("should disallow trading back an egg move not in gen 1", () => {
+	common.itGen(2, "should disallow trading back an egg move not in gen 1", () => {
 		team = [
 			{species: 'marowak', moves: ['swordsdance', 'ancientpower', 'bodyslam']},
 		];
 		assert.false.legalTeam(team, 'gen2ou');
 	});
 
-	it("should properly resolve egg moves for Pokemon with pre-evolutions that don't have Hidden Abilities", function () {
+	common.itGen(5, "should properly resolve egg moves for Pokemon with pre-evolutions that don't have Hidden Abilities", () => {
 		team = [
 			{species: 'tyranitar', ability: 'unnerve', moves: ['dragondance'], evs: {hp: 1}},
 			{species: 'staraptor', ability: 'reckless', moves: ['pursuit'], evs: {hp: 1}},
@@ -144,14 +157,14 @@ describe('Team Validator', function () {
 		assert.legalTeam(team, 'gen5ou');
 	});
 
-	it("should allow Nidoqueen to have egg moves", function () {
+	common.itGen(6, "should allow Nidoqueen to have egg moves", () => {
 		team = [
 			{species: 'nidoqueen', ability: 'poisonpoint', moves: ['charm'], evs: {hp: 1}},
 		];
 		assert.legalTeam(team, 'gen6ou');
 	});
 
-	it("should properly handle HA Dragonite with Extreme Speed", function () {
+	common.itGen(5, "should properly handle HA Dragonite with Extreme Speed", () => {
 		team = [
 			{species: 'dragonite', ability: 'multiscale', moves: ['extremespeed'], evs: {hp: 1}},
 		];
@@ -163,54 +176,64 @@ describe('Team Validator', function () {
 		assert.false.legalTeam(team, 'gen5ou');
 	});
 
-	it("should disallow low-level female-only Pokemon with illegal (level up) egg moves/egg move combinations", function () {
+	common.itGen(9, "allows Tinkatink's low-level egg combinations with the expanded local fathers", () => {
+		// Raichu's local learnset supplies a legal male Fairy-group parent for
+		// these combinations, unlike the upstream roster used by this fixture.
+		const { TeamValidator, PokemonSources } = require('../../../dist/sim/team-validator');
+		const validator = new TeamValidator(breedingFormat(9, true));
+		for (const moves of [['brutalswing'], ['covet', 'fakeout']]) {
+			const sources = new PokemonSources();
+			sources.limitedEggMoves = moves;
+			sources.levelUpEggMoves = moves;
+			assert(validator.findEggMoveFathers('9Eany', validator.dex.species.get('tinkatink'), sources, true).includes('raichu'));
+		}
 		team = [
 			{species: 'tinkatink', level: 5, ability: 'moldbreaker', moves: ['brutalswing'], evs: {hp: 1}},
 		];
-		assert.false.legalTeam(team, 'gen9lc');
+		assert.legalTeam(team, breedingFormat(9, true));
 
 		team = [
 			{species: 'tinkatink', level: 5, ability: 'moldbreaker', moves: ['covet', 'fakeout'], evs: {hp: 1}},
 		];
-		assert.false.legalTeam(team, 'gen9lc');
+		assert.legalTeam(team, breedingFormat(9, true));
 	});
 
-	it("should disallow illegal (level up) egg move combinations involving moves that can't be tradebacked", function () {
+	common.itGen(2, "should disallow illegal (level up) egg move combinations involving moves that can't be tradebacked", () => {
 		team = [
 			{species: 'chansey', level: 5, moves: ['healbell', 'softboiled'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen2ou');
 	});
 
-	it("should disallow illegal (level up) egg moves/egg move combinations involving Pomeg glitch and Gen 4 abilities", function () {
+	common.itGen(4, "should disallow illegal (level up) egg moves/egg move combinations involving Pomeg glitch and Gen 4 abilities", () => {
 		team = [
 			{species: 'smoochum', level: 5, ability: 'forewarn', moves: ['powdersnow'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen4lc');
 	});
 
-	it("should allow previously illegal level up egg moves in Gen 7", function () {
+	common.itGen(7, "should allow previously illegal level up egg moves in Gen 7", () => {
 		team = [
 			{species: 'smoochum', level: 5, ability: 'hydration', moves: ['powdersnow'], evs: {hp: 1}},
 		];
-		assert.legalTeam(team, 'gen7lc');
+		assert.legalTeam(team, breedingFormat(7, true));
 	});
 
-	it("should allow Pomeg glitch with event egg moves", function () {
+	common.itGen(3, "should allow Pomeg glitch with event egg moves", () => {
 		team = [
 			{species: 'zigzagoon', level: 5, ability: 'pickup', moves: ['bellydrum', 'extremespeed'], evs: {hp: 1}},
 		];
 		assert.legalTeam(team, 'gen3ou');
 	});
 
-	it("should disallow illegal egg move combinations containing past gen universal moves", function () {
+	common.itGen(5, "should disallow illegal egg move combinations containing past gen universal moves", () => {
 		team = [
 			{species: 'salamence', ability: 'intimidate', moves: ['defensecurl', 'thrash', 'dragonrage', 'dragonrush'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen5ou');
 	});
 
-	it('should allow complex chainbred sets', function () {
+	common.itGen(4, 'should allow complex chainbred sets', () => {
 		team = [
 			{species: 'toxicroak', ability: 'dryskin', moves: ['bulletpunch', 'crosschop', 'fakeout'], evs: {hp: 4}},
 		];
@@ -226,21 +249,21 @@ describe('Team Validator', function () {
 		team = [
 			{species: 'volbeat', ability: 'swarm', moves: ['lunge', 'dizzypunch'], evs: {hp: 1}},
 		];
-		assert.false.legalTeam(team, 'gen7anythinggoes');
+		assert.false.legalTeam(team, breedingFormat(7));
 	});
 
-	it('should allow egg moves on event formes in Gen 9', function () {
+	common.itGen(9, 'should allow egg moves on event formes in Gen 9', () => {
 		team = [
 			{species: 'ursalunabloodmoon', ability: 'mindseye', moves: ['yawn', 'bellydrum'], evs: {hp: 1}},
 			{species: 'greninjabond', ability: 'battlebond', moves: ['counter', 'switcheroo'], evs: {hp: 1}},
 		];
-		assert.legalTeam(team, 'gen9anythinggoes');
+		assert.legalTeam(team, breedingFormat(9));
 	});
 
-	it('should not allow egg moves on event formes before Gen 9', function () {
+	common.itGen(7, 'should not allow egg moves on event formes before Gen 9', () => {
 		team = [
 			{species: 'greninjabond', ability: 'battlebond', moves: ['toxicspikes'], evs: {hp: 1}},
 		];
-		assert.false.legalTeam(team, 'gen7anythinggoes');
+		assert.false.legalTeam(team, breedingFormat(7));
 	});
 });

@@ -1,6 +1,16 @@
 'use strict';const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim');let battle;const mon=(species='Mew',ability='No Ability')=>({species,ability,moves:['dive','clangingscales','hypervoice','splash']});function setup(species='Cramorant',ability='Dive Fisher'){battle=common.createBattle({gameType:'doubles'},[[mon(species,ability),mon(),mon()],[mon(),mon(),mon()]]);battle.field.terrain='';battle.randomizer=n=>n;for(const p of battle.getAllActive())p.hp=p.maxhp=p.baseMaxhp=1200;return[battle.p1.active[0],battle.p2.active[0]];}function hit(p,q,id,extra={}){battle.actions.useMove(Object.assign(Dex.getActiveMove(id),{accuracy:true,willCrit:false,secondaries:[]},extra),p,{target:q});return battle.activeMove;}
 describe('Final Cramorant Goodra Kommo-o approved choices',()=>{afterEach(()=>{battle?.destroy();battle=null;});
- it('base Goodra and Kommo-o scope excludes Hisui and Totem',()=>{assert.deepEqual(Dex.species.get('goodra').passives,['thickfat']);for(const id of ['goodrahisui','goodrahisuialt']){assert.deepEqual(Dex.species.get(id).passives,['stickyhold']);assert.deepEqual(Dex.species.get(id).abilities,{0:'Armorize',1:'Filter',H:'Gooey'});}assert.deepEqual(Dex.species.get('kommoo').passives,['overcoat']);assert.deepEqual(Dex.species.get('kommoo').abilities,{0:'Bulletproof',1:'Soundproof',H:'Scale Rhythm'});assert.deepEqual(Dex.species.get('kommoototem').passives,[]);assert.deepEqual(Dex.species.get('kommoototem').abilities,{0:'Overcoat'});});
+	it('keeps current Goodra regional lineups and distinct Kommo-o Totem slots', () => {
+		assert.deepEqual(Dex.species.get('goodra').passives, ['gooey']);
+		for (const id of ['goodrahisui', 'goodrahisuialt']) {
+			assert.deepEqual(Dex.species.get(id).passives, ['gooey']);
+			assert.deepEqual(Dex.species.get(id).abilities, { 0: 'Armorize', 1: 'Filter', H: 'Shellbound Fury' });
+		}
+		assert.deepEqual(Dex.species.get('kommoo').passives, ['overcoat']);
+		assert.deepEqual(Dex.species.get('kommoo').abilities, { 0: 'Bulletproof', 1: 'Soundproof', H: 'Scale Rhythm' });
+		assert.deepEqual(Dex.species.get('kommoototem').passives, []);
+		assert.deepEqual(Dex.species.get('kommoototem').abilities, { 0: 'Overcoat' });
+	});
  it('Bottomless Gullet combines only Gluttony and Cheek Pouch and does not load from berry',()=>{const[p]=setup('Cramorant','Bottomless Gullet');assert(p.hasAbility('gluttony'));assert(p.hasAbility('cheekpouch'));p.hp=500;p.setItem('Sitrus Berry');p.eatItem();assert.equal(p.hp,1200);assert.equal(p.species.id,'cramorant');assert(!p.hasAbility('ripen'));});
  it('Gluttony consumes pinch berry at half HP',()=>{const[p]=setup('Cramorant','Bottomless Gullet');p.hp=600;p.setItem('Liechi Berry');battle.singleEvent('Update',p.getItem(),p.itemState,p);assert.equal(p.item,'');assert.equal(p.boosts.atk,1);assert.equal(p.hp,1000);});
  it('Dive Fisher executes Special Dive in one turn, loads projectile, preserves selected ability and Power Herb',()=>{const[p,q]=setup();p.setItem('Power Herb');const m=hit(p,q,'dive');assert.equal(m.category,'Special');assert(q.hp<1200);assert(!p.volatiles.twoturnmove);assert(!p.volatiles.dive);assert.equal(p.species.id,'cramorantgulping');assert.equal(p.ability,'divefisher');assert.equal(p.item,'powerherb');assert(p.volatiles.aquaring);assert(!p.trySetStatus('brn',q));assert(!p.hasAbility('swiftswim'));});

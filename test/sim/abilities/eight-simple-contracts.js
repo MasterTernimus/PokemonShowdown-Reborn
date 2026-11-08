@@ -22,8 +22,12 @@ describe('Eight approved simple ability contracts',()=>{
   assert.equal(modify(p,q,'hypnosis').accuracy,true);assert.notEqual(modify(q,p,'hypnosis').accuracy,true);
   assert.equal(incoming(p,q),100);assert.equal(incoming(p,q,1),100);assert.equal(battle.runEvent('BasePower',p,q,Dex.getActiveMove('shadowball'),100),130);
  });
- it('unrelated Nightmare Pulse retains its prior Filter reduction',()=>{
-  const[p,q]=setup('Nightmare Pulse');assert.equal(incoming(p,q),80);assert.equal(incoming(p,q,1),60);
+	it('Nightmare Pulse armor reduction follows its Haunted field restriction', () => {
+		const [p, q] = setup('Nightmare Pulse');
+		assert.equal(battle.field.terrain, 'hauntedterrain');
+		assert.equal(incoming(p, q), 100);
+		assert.equal(incoming(p, q, 1), 100);
+		battle.field.clearTerrain(); assert.equal(incoming(p, q), 80); assert.equal(incoming(p, q, 1), 60);
  });
  it('Cavern Drake absorbs Ground and keeps Solid Rock but respects opposing abilities',()=>{
   const[p,q]=setup('Cavern Drake');p.hp=2000;use(q,p,'earthpower');assert.equal(p.hp,3000);assert.equal(incoming(p,q),80);assert.equal(incoming(p,q,1),60);

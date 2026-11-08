@@ -12,3 +12,13 @@ describe('Approved Sawsbuck seasonal slots',()=>{
  it('Transform does not season-cycle',()=>{const p=setup(),q=battle.p2.active[0];q.transformInto(p);season(q,'sunnyday');assert.equal(q.species.id,'sawsbuck');});
  it('conversion and kicking stack once; sun-only speed survives selected suppression',()=>{const p=setup('Overcoat'),q=battle.p2.active[0];p.addVolatile('gastroacid');const m=Dex.getActiveMove('megakick');battle.runEvent('ModifyType',p,q,m,m);assert.equal(m.type,'Water');assert.equal(battle.runEvent('BasePower',p,q,m,100),168);battle.field.weather='sunnyday';assert.equal(battle.runEvent('ModifySpe',p,null,null,100),200);battle.field.weather='';battle.field.terrain='forestterrain';assert.equal(battle.runEvent('ModifySpe',p,null,null,100),100);});
 });
+
+describe('Sawsbuck seasonal coverage limits', () => {
+	const { TeamValidator } = require('../../../dist/sim');
+	const validator = TeamValidator.get('gen9nofieldsinglesgame');
+	for (const id of names)it(id + ' cannot regain removed coverage through shared learnsets', () => {
+		const species = Dex.species.get(id);
+		for (const move of ['aquajet', 'aquastep', 'flipturn', 'blazekick', 'firelash', 'heatcrash', 'iceshard', 'iciclespear', 'tripleaxel', 'earthquake'])assert(validator.checkCanLearn(Dex.moves.get(move), species), id + ': ' + move);
+		for (const move of ['hornleech', 'liquidation', 'waterfall', 'flareblitz', 'highhorsepower', 'icespinner', 'iciclecrash'])assert.equal(validator.checkCanLearn(Dex.moves.get(move), species), null, id + ': ' + move);
+	});
+});

@@ -10,7 +10,7 @@ describe('Magnetic Flux', function () {
 		battle.destroy();
 	});
 
-	it('should boost the Defense and Special Defense of all active allies with Plus or Minus', function () {
+	common.itGen(5, 'should boost the Defense and Special Defense of all active allies with Plus or Minus', () => {
 		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: "Minun", ability: 'minus', moves: ['sleeptalk']},

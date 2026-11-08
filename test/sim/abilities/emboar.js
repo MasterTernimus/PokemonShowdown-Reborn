@@ -16,7 +16,7 @@ describe('Emboar abilities and Mega Evolution', () => {
 
 	it('has the expected base and Mega ability slots', () => {
 		const [emboar] = start('Gluttony');
-		assert.deepEqual(emboar.species.abilities, { 0: 'Stoke Belly', 1: 'Thick Fat', H: 'Brute Force' });
+		assert.deepEqual(emboar.species.abilities, { 0: 'Controlled Fury', 1: 'Thick Fat', H: 'Brute Force' });
 		assert.equal(battle.dex.species.get('Emboar-Mega').abilities[0], 'Burning Ego');
 	});
 

@@ -7,7 +7,7 @@ let battle;
 const unimportantPokemon = {species: 'magikarp', moves: ['splash']};
 
 describe(`[Hackmons] Arceus`, function () {
-	it(`in untyped forme should change its type to match the plate held`, function () {
+	common.itGen(4, `in untyped forme should change its type to match the plate held`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'arceus', ability: 'multitype', item: 'flameplate', moves: ['rest']},
 		], [
@@ -17,7 +17,7 @@ describe(`[Hackmons] Arceus`, function () {
 		assert(arceus.hasType('Fire'));
 	});
 
-	it(`in Steel forme should should be Water-typed to match the held Splash Plate`, function () {
+	common.itGen(4, `in Steel forme should should be Water-typed to match the held Splash Plate`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'arceussteel', ability: 'multitype', item: 'splashplate', moves: ['rest']},
 		], [
@@ -27,7 +27,7 @@ describe(`[Hackmons] Arceus`, function () {
 		assert(arceus.hasType('Water'));
 	});
 
-	it(`in a typed forme should be Normal-typed if no plate is held`, function () {
+	common.itGen(4, `in a typed forme should be Normal-typed if no plate is held`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'arceusfire', ability: 'multitype', item: 'leftovers', moves: ['rest']},
 		], [
@@ -37,7 +37,7 @@ describe(`[Hackmons] Arceus`, function () {
 		assert(arceus.hasType('Normal'));
 	});
 
-	it(`in a typed forme should be Normal-typed despite holding a plate if Arceus does not have the Multitype ability`, function () {
+	common.itGen(4, `in a typed forme should be Normal-typed despite holding a plate if Arceus does not have the Multitype ability`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'arceusfire', ability: 'truant', item: 'flameplate', moves: ['rest']},
 		], [

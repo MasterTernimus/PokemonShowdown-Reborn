@@ -11,7 +11,7 @@ describe('Rage Powder', function () {
 		battle.destroy();
 	});
 
-	it('should redirect single-target moves towards it if it is a valid target', function () {
+	common.itGen(5, 'should redirect single-target moves towards it if it is a valid target', function () {
 		this.timeout(5000);
 
 		battle = common.gen(5).createBattle({gameType: 'triples'});
@@ -44,7 +44,7 @@ describe('Rage Powder', function () {
 		assert.equal(hitCount[2], 0);
 	});
 
-	it('should not affect Pokemon with Powder immunities', function () {
+	common.itGen(5, 'should not affect Pokemon with Powder immunities', () => {
 		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Amoonguss', ability: 'overcoat', moves: ['growth']},

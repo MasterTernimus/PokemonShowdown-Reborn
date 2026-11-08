@@ -23,7 +23,8 @@ describe('Storm Drain', function () {
 		battle = common.gen(8).createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Gastrodon', ability: 'stormdrain', moves: ['sleep talk']},
-			{species: 'Manaphy', ability: 'hydration', moves: ['scald']},
+			// This fork permits the Max route for G-Max-capable species.
+			{ species: 'Lapras', ability: 'No Ability', gigantamax: true, moves: ['scald'] },
 		]});
 		battle.setPlayer('p2', {team: [
 			{species: 'Igglybuff', ability: 'cute charm', moves: ['sleep talk']},

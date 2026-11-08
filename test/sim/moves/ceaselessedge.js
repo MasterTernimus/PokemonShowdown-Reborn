@@ -60,7 +60,7 @@ describe('Ceaseless Edge', function () {
 		assert.equal(!!(battle.p2.sideConditions.spikes), false);
 	});
 
-	it(`should not be bounced back by Magic Bounce`, function () {
+	it(`should reflect the attack and its hazard with Magic Bounce`, () => {
 		battle = common.createBattle([[
 			{species: 'samurotthisui', ability: 'noguard', moves: ['ceaselessedge']},
 		], [
@@ -68,8 +68,8 @@ describe('Ceaseless Edge', function () {
 		]]);
 
 		battle.makeChoices();
-		assert.equal(!!(battle.p1.sideConditions.spikes), false);
-		assert.equal(battle.p2.sideConditions.spikes?.layers, 1);
+		assert(battle.p1.sideConditions.spikes);
+		assert(!battle.p2.sideConditions.spikes);
 	});
 
 	it(`should have its Spikes prevented by Sheer Force`, function () {
@@ -88,10 +88,12 @@ describe('Ceaseless Edge', function () {
 			{species: 'samurotthisui', ability: 'noguard', item: 'focussash', moves: ['ceaselessedge']},
 			{species: 'wynaut', moves: ['sleeptalk']},
 		], [
-			{species: 'regieleki', item: 'rockyhelmet', moves: ['sheercold']},
+			{ species: 'regieleki', item: 'rockyhelmet', moves: ['sleeptalk'] },
 		]]);
 
-		battle.makeChoices(); // Samurott will faint to the Rocky Helmet
+		battle.p1.active[0].hp = 1;
+		battle.makeChoices();
+		assert.fainted(battle.p1.active[0]);
 		assert.equal(!!(battle.p2.sideConditions.spikes), false);
 	});
 });

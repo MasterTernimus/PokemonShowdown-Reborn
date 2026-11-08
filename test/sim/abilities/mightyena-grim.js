@@ -16,19 +16,13 @@ describe('Mightyena Grim artwork variant', () => {
 		assert(base.cosmeticFormes.includes('Mightyena-Grim'));
 		assert(base.formeOrder.includes('Mightyena-Deso'));
 	});
-	it('accepts the base movepool and retains its artwork in battle', () => {
+
+	it('retains internal learnset data but rejects new teams and battles', () => {
 		const set = {species: 'Mightyena-Grim', ability: 'Intimidate', moves: ['Crunch', 'Protect']};
-		assert.equal(TeamValidator.get('gen9nofieldsinglesgame').validateTeam([set]), null);
-		const battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[set], [{species: 'Mew', ability: 'Synchronize', moves: ['Splash']}],
-		]);
-		try {
-			battle.makeChoices('team 1', 'team 1');
-			assert.equal(battle.p1.active[0].species.name, 'Mightyena-Grim');
-			assert.deepEqual(battle.p1.active[0].species.passives, ['rattled']);
-			assert(battle.log.some(line => line.includes('Mightyena-Grim')));
-		} finally {
-			battle.destroy();
-		}
+		assert.deepEqual(Dex.species.getLearnsetData('mightyenagrim').learnset, Dex.species.getLearnsetData('mightyena').learnset);
+		assert(TeamValidator.get('gen9nofieldsinglesgame').validateTeam([set]).some(error => error.includes('Mightyena-Grim is disabled')));
+		assert.throws(() => common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[set], [{ species: 'Mew', ability: 'No Ability', moves: ['Splash'] }],
+		]), /Mightyena-Grim is disabled/);
 	});
 });

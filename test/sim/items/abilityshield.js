@@ -12,27 +12,40 @@ describe('Ability Shield', function () {
 
 	it(`should protect the holder's ability against ability-changing moves`, function () {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['splash']},
+			{ species: 'wynaut', ability: 'pressure', item: 'abilityshield', moves: ['splash'] },
 		], [
 			{species: 'weezinggalar', ability: 'levitate', moves: ['worryseed']},
 		]]);
 
 		battle.makeChoices();
 		assert(battle.log.some(line => line.includes('Ability Shield')), `Ability Shield should trigger a block message`);
-		assert.equal(battle.p1.active[0].ability, 'shadowtag', `Holder should retain ability`);
+		assert.equal(battle.p1.active[0].ability, 'pressure', `Holder should retain ability`);
 	});
 
 	it(`should protect the holder's ability against ability-changing abilities`, function () {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['tackle']},
+			{ species: 'wynaut', ability: 'pressure', item: 'abilityshield', moves: ['tackle'] },
 		], [
 			{species: 'weezinggalar', ability: 'mummy', moves: ['splash']},
 		]]);
 
 		battle.makeChoices();
 		assert(battle.log.some(line => line.includes('Ability Shield')), `Ability Shield should trigger a block message`);
-		assert.equal(battle.p1.active[0].ability, 'shadowtag', `Holder should retain ability`);
+		assert.equal(battle.p1.active[0].ability, 'pressure', `Holder should retain ability`);
 	});
+
+	for (const method of ['move', 'ability']) {
+		it(`should allow ability replacement without the shield (${method})`, () => {
+			battle = common.createBattle([[
+				{ species: 'wynaut', ability: 'pressure', moves: [method === 'move' ? 'splash' : 'tackle'] },
+			], [
+				{ species: 'weezinggalar', ability: method === 'move' ? 'levitate' : 'mummy',
+					moves: [method === 'move' ? 'worryseed' : 'splash'] },
+			]]);
+			battle.makeChoices();
+			assert.equal(battle.p1.active[0].ability, method === 'move' ? 'insomnia' : 'mummy');
+		});
+	}
 
 	it(`should only protect the holder`, function () {
 		battle = common.createBattle([[
@@ -136,7 +149,7 @@ describe('Ability Shield', function () {
 
 	it(`should protect the holder's ability against Skill Swap`, function () {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['splash']},
+			{ species: 'wynaut', ability: 'pressure', item: 'abilityshield', moves: ['splash'] },
 		], [
 			{species: 'weezinggalar', ability: 'levitate', moves: ['skillswap']},
 		]]);
@@ -145,13 +158,13 @@ describe('Ability Shield', function () {
 
 		// assert logs?
 
-		assert.equal(battle.p1.active[0].ability, 'shadowtag', `Holder should retain ability`);
+		assert.equal(battle.p1.active[0].ability, 'pressure', `Holder should retain ability`);
 		assert.equal(battle.p2.active[0].ability, 'levitate', `Opponent should retain ability`);
 	});
 
 	it(`should protect the holder's ability against Skill Swap, even if used by the holder`, function () {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['skillswap']},
+			{ species: 'wynaut', ability: 'pressure', item: 'abilityshield', moves: ['skillswap'] },
 		], [
 			{species: 'weezinggalar', ability: 'levitate', moves: ['splash']},
 		]]);
@@ -160,7 +173,7 @@ describe('Ability Shield', function () {
 
 		// assert logs?
 
-		assert.equal(battle.p1.active[0].ability, 'shadowtag', `Holder should retain ability`);
+		assert.equal(battle.p1.active[0].ability, 'pressure', `Holder should retain ability`);
 		assert.equal(battle.p2.active[0].ability, 'levitate', `Opponent should retain ability`);
 	});
 

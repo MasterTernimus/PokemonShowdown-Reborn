@@ -26,7 +26,7 @@ describe('Misty Terrain', function () {
 		assert(battle.field.isTerrain(''));
 	});
 
-	it('should halve the base power of Dragon-type attacks on grounded Pokemon', function () {
+	it('should halve the base power of Dragon-type attacks on grounded and airborne Pokemon', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Shaymin", ability: 'naturalcure', moves: ['mistyterrain']}]});
 		battle.setPlayer('p2', {team: [{species: "Shaymin-Sky", ability: 'serenegrace', moves: ['leechseed']}]});
@@ -36,7 +36,7 @@ describe('Misty Terrain', function () {
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
 		assert.equal(basePower, battle.modify(move.basePower, 0.5));
 		basePower = battle.runEvent('BasePower', battle.p1.active[0], battle.p2.active[0], move, move.basePower, true);
-		assert.equal(basePower, move.basePower);
+		assert.equal(basePower, battle.modify(move.basePower, 0.5));
 	});
 
 	it('should prevent moves from setting non-volatile status on grounded Pokemon', function () {
@@ -89,12 +89,12 @@ describe('Misty Terrain', function () {
 		assert.equal(battle.p2.active[0].status, 'slp');
 	});
 
-	it('should cause Nature Power to become Moonblast', function () {
+	it('should cause Nature Power to become Mist Ball', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Whimsicott", ability: 'prankster', moves: ['mistyterrain']}]});
 		battle.setPlayer('p2', {team: [{species: "Shuckle", ability: 'sturdy', moves: ['naturepower']}]});
 		battle.makeChoices('move mistyterrain', 'move naturepower');
 		const resultMove = toID(battle.log[battle.lastMoveLine].split('|')[3]);
-		assert.equal(resultMove, 'moonblast');
+		assert.equal(resultMove, 'mistball');
 	});
 });

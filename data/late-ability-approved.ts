@@ -1,5 +1,4 @@
 import type {AbilityDataTable} from '../sim/dex-abilities';
-import {applySereneGrace} from './ally-serene-grace';
 export function installLateAbilityApproved(abilities: AbilityDataTable) {
  const table = abilities as any;
  table.voidomen.onAllyChargeMovePriority = -100;
@@ -10,7 +9,6 @@ export function installLateAbilityApproved(abilities: AbilityDataTable) {
   this.add('-activate', source, 'ability: Void Omen');
   return false;
  };
- table.voidomen.onModifyMove = function (this: Battle, move: ActiveMove) { applySereneGrace(move, 'voidomen'); };
  const reach = table.longreach;
  for (const key of Object.keys(reach).filter(key => key.startsWith('on'))) {
   const addition = reach[key], previous = table.heatcoil[key];

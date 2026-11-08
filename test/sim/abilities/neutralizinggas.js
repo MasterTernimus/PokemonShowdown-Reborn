@@ -65,7 +65,7 @@ describe('Neutralizing Gas', function () {
 	it('should negate abilities that modify move type', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'neutralizinggas', moves: ['laserfocus']}]});
-		battle.setPlayer('p2', {team: [{species: "Sylveon", ability: 'pixilate', moves: ['hypervoice']}]});
+		battle.setPlayer('p2', { team: [{ species: "Mew", ability: 'pixilate', moves: ['hypervoice'] }] });
 		battle.makeChoices('move laserfocus', 'move hypervoice');
 		assert.fullHP(battle.p1.active[0]);
 	});
@@ -76,7 +76,7 @@ describe('Neutralizing Gas', function () {
 			{species: 'Weezing-Galar', ability: 'neutralizinggas', moves: ['payback']},
 		]});
 		battle.setPlayer('p2', {team: [
-			{species: 'Ferrothorn', ability: 'ironbarbs', moves: ['rockpolish']},
+			{ species: 'Mew', ability: 'ironbarbs', moves: ['rockpolish'] },
 		]});
 		battle.makeChoices();
 		assert.fullHP(battle.p1.active[0]);
@@ -164,23 +164,23 @@ describe('Neutralizing Gas', function () {
 
 	it(`should cause Slow Start to instantly wear off/restart when Neutralizing Gas leaves/enters the field`, function () {
 		battle = common.createBattle([[
-			{species: "Regigigas", ability: 'slowstart', moves: ['sleeptalk']},
+			{ species: "Mew", ability: 'slowstart', moves: ['sleeptalk'] },
 			{species: "Eternatus", moves: ['sleeptalk']},
 		], [
 			{species: "Wynaut", moves: ['sleeptalk']},
 			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
 		]]);
 
-		const regigigas = battle.p1.active[0];
-		const slowStartSpeed = regigigas.getStat('spe');
+		const holder = battle.p1.active[0];
+		const slowStartSpeed = holder.getStat('spe');
 
 		// Slow Start should be negated, so it should have its original, non-Slow Start speed
 		battle.makeChoices('auto', 'switch 2');
-		assert.equal(regigigas.getStat('spe'), slowStartSpeed * 2);
+		assert.equal(holder.getStat('spe'), slowStartSpeed * 2);
 
 		// Slow Start should be turned back on, so it should have its Slow Start speed again
 		battle.makeChoices('auto', 'switch 2');
-		assert.equal(regigigas.getStat('spe'), slowStartSpeed);
+		assert.equal(holder.getStat('spe'), slowStartSpeed);
 	});
 
 	it(`should not cause Gluttony to instantly eat Berries when Neutralizing Gas leaves the field`, function () {

@@ -6,7 +6,7 @@ describe('Approved base Emboar stats', () => {
 			const s = Dex.species.get(id);
 			assert.deepEqual(s.baseStats, { "hp": 110, "atk": 123, "def": 75, "spa": 80, "spd": 75, "spe": 65 });
 			assert.equal(s.bst, 528);
-			assert.deepEqual(s.abilities, { 0: 'Gluttony', 1: 'Thick Fat', H: 'Brute Force' });
+			assert.deepEqual(s.abilities, { 0: 'Controlled Fury', 1: 'Thick Fat', H: 'Brute Force' });
 		}
 		for (const id of ['emboarmega', 'emboarmegaalt']) {
 			const s = Dex.species.get(id);

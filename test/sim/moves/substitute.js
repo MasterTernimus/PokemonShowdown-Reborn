@@ -21,8 +21,8 @@ describe('Substitute', function () {
 
 	it('should not block the user\'s own moves from targetting itself', function () {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute', 'calmmind']}]});
-		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['recover']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Mew', ability: 'synchronize', moves: ['substitute', 'calmmind'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Mew', ability: 'synchronize', moves: ['recover'] }] });
 		battle.makeChoices('move substitute', 'move recover');
 		battle.makeChoices('move calmmind', 'move recover');
 		assert.equal(battle.p1.active[0].boosts['spa'], 1);
@@ -48,7 +48,7 @@ describe('Substitute', function () {
 		assert.notEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
 	});
 
-	it('should take specific recoil damage in Gen 1', function () {
+	common.itGen(1, 'should take specific recoil damage in Gen 1', () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Hitmonlee', moves: ['substitute', 'highjumpkick']},
 		], [
@@ -99,8 +99,8 @@ describe('Substitute', function () {
 
 	it('should cause recovery from an opponent\'s draining moves to be based on damage dealt to the substitute', function () {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Zangoose', ability: 'pressure', moves: ['substitute']}]});
-		battle.setPlayer('p2', {team: [{species: 'Zangoose', ability: 'noguard', moves: ['bellydrum', 'drainpunch']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Mew', ability: 'pressure', moves: ['substitute'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Mew', ability: 'noguard', moves: ['bellydrum', 'drainpunch'] }] });
 		battle.makeChoices('move substitute', 'move bellydrum');
 		const hp = battle.p2.active[0].hp;
 		battle.makeChoices('move substitute', 'move drainpunch');
@@ -126,7 +126,7 @@ describe('Substitute', function () {
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it(`[Gen 1] should track what the actual damage would have been without the Substitute`, function () {
+	common.itGen(1, `[Gen 1] should track what the actual damage would have been without the Substitute`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Ponyta', moves: ['substitute', 'growl'], evs: {hp: 252, spd: 252}},
 		], [
@@ -142,7 +142,7 @@ describe('Substitute', function () {
 		assert.bounded(hp - ponyta.hp, [91, 108]);
 	});
 
-	it(`[Gen 1] Substitute should not block secondary effect confusion if it is unbroken`, function () {
+	common.itGen(1, `[Gen 1] Substitute should not block secondary effect confusion if it is unbroken`, () => {
 		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
 			{species: 'Magikarp', moves: ['psybeam']},
 		], [

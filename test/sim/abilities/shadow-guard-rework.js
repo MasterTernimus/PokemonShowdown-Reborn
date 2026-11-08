@@ -16,7 +16,9 @@ describe('Voidcraft rework', () => {
 		battle.makeChoices('move splash mega', 'move splash');
 		const mega = battle.p1.active[0];
 		assert.species(mega, 'Mismagius-Mega');
-		for (const component of ['elevate', 'shadowshield', 'temporalshift', 'insomnia']) {
+		assert.deepEqual(mega.getPassives(), ['elevate']);
+		assert(mega.hasAbilityOrPassive('elevate'));
+		for (const component of ['shadowshield', 'temporalshift', 'insomnia']) {
 			assert(mega.hasAbility(component), `Missing ${component}`);
 		}
 		assert(!mega.hasAbility('shadowtag'));

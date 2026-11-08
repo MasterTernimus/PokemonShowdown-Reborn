@@ -13,7 +13,7 @@ const { DualWieldFinalDamageHooks } = require('../../../dist/sim/dual-wield-powe
 describe('Dual Wield actual offensive ability boost family', () => {
 	let battle;
 	const registered = new Set();
-	const parts = ['dualwield', 'sharpness', 'powerdrill', 'megalauncher', 'technician', 'toughclaws', 'ironfist', 'strongjaw', 'sheerforce', 'analytic', 'sniper', 'tintedlens', 'neuroforce', 'freshplumage', 'hugepower'];
+	const parts = ['dualwield', 'sharpness', 'powerdrill', 'megalauncher', 'technician', 'toughclaws', 'ironfist', 'strongjaw', 'sheerforce', 'analytic', 'sniper', 'tintedlens', 'neuroforce', 'hugepower'];
 	before(() => {
 		for (const id of parts) {
 			if (!ThematicPassiveIds.has(id)) registered.add(id);
@@ -95,6 +95,31 @@ describe('Dual Wield actual offensive ability boost family', () => {
 	it('lists every current final-damage ability hook for explicit pure eligibility coverage', () => {
 		for (const ability of Dex.abilities.all()) if (ability.onModifyDamage) assert(DualWieldFinalDamageHooks.has(ability.id), ability.id);
 	});
+	for (const [ability, moveid, qualifyingType] of [
+		['Beast Fang', 'sacredsword', 'Dragon'],
+		['Apocalyptic Flame', 'metalclaw', 'Flying'],
+		['Burning Quake', 'sacredsword', 'Dragon'],
+	]) for (const qualifies of [true, false]) it(`${ability} scales both hits correctly against ${qualifies ? 'qualifying' : 'ordinary'} targets`, () => {
+		const [p, q] = setup(ability, ['dualwield'], moveid);
+		q.setType(qualifies ? qualifyingType : 'Normal');
+		const move = Object.assign(Dex.getActiveMove(moveid), {
+			basePower: 100, flags: { slicing: 1 }, willCrit: false, noDamageVariance: true,
+		});
+		battle.runEvent('ModifyMove', p, q, move, move);
+		const damage = [1, 2].map(hit => {
+			move.hit = hit;
+			return battle.actions.getDamage(p, q, move, true);
+		});
+		// A normal single hit supplies an independent damage reference, including
+		// Beast Fang's defensive-stat override and ordinary type effectiveness.
+		const first = battle.actions.getDamage(p, q, { ...move, multihitType: undefined,
+			hit: 1, basePower: qualifies ? 100 : 60 }, true);
+		p.setAbility('No Ability');
+		p.getPassives = () => [];
+		const second = battle.actions.getDamage(p, q, { ...move, multihitType: undefined,
+			hit: 1, basePower: qualifies ? 15 : 60 }, true);
+		assert.deepEqual(damage, [first, second]);
+	});
 	it('Sniper final-damage callback executes once per hit after BasePower, with full first and unboosted follow-up', () => {
 		const [p, q] = setup('Sniper', ['dualwield']);
 		const original = battle.getCallback;
@@ -160,7 +185,7 @@ describe('Dual Wield actual offensive ability boost family', () => {
 		}
 		assert.deepEqual(bp, [54, 54]);
 	});
-	it('preserves Fresh Plumage consumption through Substitute while keeping the follow-up unboosted', () => {
+	it('Fresh Plumage grants no Flying damage bonus through Substitute', () => {
 		const [p, q] = setup('Fresh Plumage', ['dualwield'], 'airslash');
 		q.hp = q.maxhp = 2000;
 		q.addVolatile('substitute');
@@ -172,8 +197,8 @@ describe('Dual Wield actual offensive ability boost family', () => {
 		};
 		const move = Object.assign(Dex.getActiveMove('airslash'), { willCrit: false, accuracy: true, noDamageVariance: true });
 		battle.actions.useMove(move, p, q);
-		assert.deepEqual(bp, [75, battle.modify(75, 0.15)]);
-		assert(p.m.approvedSignatures.freshPlumageUsed);
+		assert.deepEqual(bp, [45, 45]);
+		assert(!p.m.approvedSignatures?.freshPlumageUsed);
 	});
 	it('stops on a first-hit KO and cleans the per-damage context', () => {
 		const [p, q] = setup('Tough Claws', ['dualwield']);

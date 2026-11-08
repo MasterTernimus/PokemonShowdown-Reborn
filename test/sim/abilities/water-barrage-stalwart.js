@@ -11,10 +11,10 @@ function setup(species = 'Blastoise', ability = 'Water Barrage', doubles = false
 }
 describe('Water Barrage owns one full Stalwart component', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
-	it('preserves Fortress Shell as its existing partial package without a new Stalwart grant', () => {
-		const [p, q] = setup('Mew', 'Fortress Shell'); battle.field.terrain = 'newworldterrain'; p.boosts.spa = 0;
-		battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(p.boosts.spa, 0);
-		const move = Dex.getActiveMove('waterpulse'); battle.runEvent('ModifyMove', p, q, move, move); assert.equal(move.multihit, 2); assert(!move.tracksTarget); assert(!p.hasAbility('stalwart'));
+	it('Tidal Crown retains Stalwart but excludes Dual Wield', () => {
+		const [p, q] = setup('Mew', 'Tidal Crown'); battle.field.terrain = 'newworldterrain'; p.boosts.spa = 0;
+		battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(p.boosts.spa, 1);
+		const move = Dex.getActiveMove('waterpulse'); battle.runEvent('ModifyMove', p, q, move, move); assert.equal(move.multihit, undefined); assert(move.tracksTarget); assert(p.hasAbility('stalwart'));
 	});
 	for (const [species, ability] of [['Blastoise', 'Water Barrage'], ['Blastoise-Mega', 'Siege Launcher'], ['Mew', 'Water Barrage'], ['Mew', 'Siege Launcher']]) {
 		for (const field of ['newworldterrain', 'starlightarenaterrain', 'fairytaleterrain', 'chessboardterrain'])it(species + '/' + ability + ' gains exactly one Stalwart entry boost on ' + field, () => {
@@ -24,7 +24,7 @@ describe('Water Barrage owns one full Stalwart component', () => {
 		it(species + '/' + ability + ' owns one Dual Wield pair and preserves singles/FFA modifiers', () => {
 			const [p, q] = setup(species, ability); for (const game of ['singles', 'freeforall']) {
 				battle.gameType = game; const m = Dex.getActiveMove('darkpulse'); battle.runEvent('ModifyMove', p, q, m, m); assert.equal(m.multihit, 2); assert.equal(m.multihitType, 'dualwield'); assert(m.tracksTarget);
-				for (const hit of [1, 2]) { m.hit = hit; assert.equal(battle.runEvent('BasePower', p, q, m, 100), ability === 'Siege Launcher' ? (game === 'singles' ? 90 : 150) : (game === 'singles' ? 60 : 100)); }
+				for (const hit of [1, 2]) { m.hit = hit; assert.equal(battle.runEvent('BasePower', p, q, m, 100), ability === 'Siege Launcher' ? (game === 'freeforall' || hit === 1 ? 150 : 15) : 60); }
 			}
 			for (const id of ['selfsufficient', 'proficient', 'moldbreaker', 'shellarmor'])assert(!p.hasAbility(id), id); if (species === 'Blastoise-Mega')assert(p.getPassives().includes('proficient'));
 		});

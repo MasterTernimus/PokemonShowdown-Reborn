@@ -20,14 +20,15 @@ describe('Current-effect ability wording', () => {
 	});
 	it('keeps Aevian Ascendance’s current effects in full lookup without removed-healing commentary', () => {
 		const ability = Dex.abilities.get('aevianascendance');
-		for (const phrase of ['Normal/Fighting', 'Fairy/Dark', '30%', '1.3x', '1/4', '1/16', 'Underwater']) {
+		for (const phrase of ['Normal/Fighting', 'Fairy/Dark', '20%', '1.3x', '1/4', '1/16', 'Underwater']) {
 			assert(ability.desc.includes(phrase), phrase);
 		}
 		assert.doesNotMatch(getAbilityMechanicsHTML(ability, Dex), /gives no healing|slots are unchanged/);
 	});
 	it('preserves meaningful duration, immunity, target and healing restrictions', () => {
 		assert.match(Dex.abilities.get('deltastream').desc, /no longer active/);
-		assert.match(Dex.abilities.get('anticipation').desc, /Allies are not checked/);
+		assert.match(Dex.abilities.get('anticipation').desc, /opposing switch-ins/);
+		assert.match(Dex.abilities.get('anticipation').desc, /foes' Illusions/);
 		assert.match(Dex.abilities.get('exaltedaether').desc, /Substitute damage and allied damage do not heal/);
 		assert.match(Dex.abilities.get('royalremedy').desc, /only if a status was cured/);
 		assert.match(Dex.abilities.get('rockhead').desc, /Struggle/);

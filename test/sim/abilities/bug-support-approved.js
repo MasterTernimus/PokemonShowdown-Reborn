@@ -30,7 +30,7 @@ describe('Approved Beedrill and Butterfree support changes', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	it('uses only the approved two base slots and keeps Magic Guard hidden', () => {
 		assert.deepEqual(Dex.species.get('butterfree').abilities, { '0': 'Gentle Scales', '1': 'Tinted Lens', H: 'Magic Guard' });
-		assert.deepEqual(Dex.species.get('beedrill').abilities, { '0': 'Hive Courier', '1': 'Dual Wield', H: 'Sniper' });
+		assert.deepEqual(Dex.species.get('beedrill').abilities, { '0': 'Hive Courier', '1': 'Twin Drills', H: 'Sniper' });
 		for (const [name, id] of [['Gentle Scales', 'butterfree'], ['Hive Courier', 'beedrill']]) assert.deepEqual(Dex.species.all().filter(s => Object.values(s.abilities).includes(name)).map(s => s.id), [id]);
 	});
 	it('Gentle Scales retains Compound Eyes accuracy and Mirror Arena entry bonuses', () => {
@@ -95,7 +95,7 @@ describe('Approved Beedrill and Butterfree support changes', () => {
 		use('tackle', p, t);
 		assert.equal(p.hp, 5000);
 	});
-	it('Toxic existing infliction and retaliation healing spend the same damage-heal cap', () => {
+	it('Toxic Evolution shares its infliction/damage cap and has no contact retaliation', () => {
 		const [p, t] = setup('Butterfree-Mega', 'Toxic Evolution');
 		p.hp = 4000;
 		use('toxic', p, t);
@@ -108,10 +108,15 @@ describe('Approved Beedrill and Butterfree support changes', () => {
 		battle.randomChance = () => true;
 		const hp = p.hp;
 		use('tackle', t, p, { damage: 100 });
-		assert.equal(p.hp, hp + 900);
+		assert.equal(p.hp, hp - 100);
+		assert.equal(t.status, '');
+		assert(!p.volatiles.toxicevolutionhealed);
+		t.setStatus('psn', t);
 		const healed = p.hp;
 		use('tackle', p, t);
-		assert.equal(p.hp, healed);
+		assert.equal(p.hp, healed + 1000);
+		use('tackle', p, t);
+		assert.equal(p.hp, healed + 1000);
 	});
 	for (const reason of ['healthy', 'ally', 'protect', 'substitute', 'zero', 'status', 'suppression', 'healblock']) it('Toxic damage healing rejects ' + reason, () => {
 		const [p, t, ally] = setup('Butterfree-Mega', 'Toxic Evolution');

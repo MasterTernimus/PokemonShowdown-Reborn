@@ -25,15 +25,15 @@ describe('Standalone Aevian Gastrodon profiles', () => {
 		}
 	});
 
-	it('gives both profiles the same 67 moves without inheriting the regular water learnset', () => {
+	it('gives both profiles the same 68 moves including Deluge without inheriting the regular water learnset', () => {
 		const west = Dex.data.Learnsets.gastrodonaevian.learnset;
 		const east = Dex.data.Learnsets.gastrodoneastaevian.learnset;
-		assert.equal(Object.keys(west).length, 67);
+		assert.equal(Object.keys(west).length, 68);
 		assert.deepEqual(east, west);
 		for (const name of ['Gastrodon-Aevian', 'Gastrodon-East-Aevian']) {
 			assert.equal(Dex.species.getFullLearnset(Dex.species.get(name).id).length, 1);
 		}
-		for (const id of ['arenitewall', 'strangesteam', 'hiddenpower', 'fairywind', 'earthpower']) {
+		for (const id of ['arenitewall', 'strangesteam', 'hiddenpower', 'fairywind', 'earthpower', 'deluge']) {
 			assert.deepEqual(west[id], ['9M']);
 		}
 		for (const id of Object.keys(west)) assert(Dex.moves.get(id).exists, id);

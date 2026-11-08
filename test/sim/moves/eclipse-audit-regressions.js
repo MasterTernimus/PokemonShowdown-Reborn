@@ -99,7 +99,7 @@ describe('Eclipse audit regressions', () => {
 		assert.equal(battle.field.getPseudoWeather('trickroom'), null);
 	});
 
-	it('keeps the Ice overlap capped after the legal Bad Seeds, Rift Herald and Glaciate sequence', () => {
+	it('Rift Herald replaces Frozen Aura without allowing an unrelated Glaciate to develop it', () => {
 		const format = 'gen9rockyfield';
 		const teams = [
 			[{ species: 'Weavile', ability: 'Bad Seeds', moves: ['Protect'] },
@@ -112,12 +112,9 @@ describe('Eclipse audit regressions', () => {
 		battle.makeChoices('team 12', 'team 12');
 		assert.equal(battle.field.auraField, 'frozenaura');
 		battle.makeChoices('switch 2', 'move glaciate');
-		assert.equal(battle.field.terrain, 'coldeclipseterrain');
-		assert.equal(battle.field.auraField, 'frozenaura');
+		assert.equal(battle.field.terrain, 'rockyterrain');
+		assert.equal(battle.field.auraField, 'riftaura');
 		assert.equal(battle.field.auraTurns, 4);
-		const result = power('ancientpower', battle.p2.active[0], battle.p1.active[0]);
-		assert.deepEqual(result.move.types, ['Rock', 'Ice']);
-		assert.equal(result.power, 150);
 	});
 
 	for (const move of ['ancientpower', 'ironhead', 'earthpower', 'surf', 'freezedry']) {

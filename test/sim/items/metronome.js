@@ -7,94 +7,57 @@ let battle;
 
 describe('Metronome (item)', function () {
 	afterEach(function () {
-		battle.destroy();
+		battle?.destroy();
+		battle = null;
 	});
 
-	it(`should increase the damage of moves that have been used successfully and consecutively`, function () {
-		battle = common.createBattle([[
-			{species: 'wynaut', item: 'metronome', moves: ['psystrike']},
-		], [
-			{species: 'cleffa', evs: {hp: 252}, ability: 'shellarmor', moves: ['sleeptalk']},
-		]]);
-		battle.makeChoices();
-		const cleffa = battle.p2.active[0];
-		const hpAfterOneAttack = cleffa.hp;
-		battle.makeChoices();
-		const damage = hpAfterOneAttack - cleffa.hp;
-		assert.bounded(damage, [115, 137]);
+	// Compare identical deterministic battles so custom stats/passives cannot stale damage ranges.
+	function sample(item, move, choices, sun = false) {
+		battle?.destroy();
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Mew', ability: 'No Ability', item, moves: [move, 'splash'] },
+		], [{ species: 'Mew', ability: 'No Ability', moves: ['splash', 'protect'] }]]);
+		battle.makeChoices('team 1', 'team 1');
+		battle.randomizer = damage => damage;
+		battle.randomChance = (n, d) => n >= d;
+		const p = battle.p1.active[0], q = battle.p2.active[0];
+		for (const mon of [p, q]) mon.hp = mon.maxhp = mon.baseMaxhp = 5000;
+		if (sun) battle.field.setWeather('sunnyday', p);
+		return choices.map(([own, foe, clearSun]) => {
+			if (clearSun) battle.field.clearWeather();
+			const hp = q.hp;
+			battle.makeChoices('move ' + own, 'move ' + foe);
+			return hp - q.hp;
+		});
+	}
+	function compare(move, choices, factors, sun = false) {
+		const baseline = sample('', move, choices, sun);
+		const held = sample('Metronome', move, choices, sun);
+		for (let i = 0; i < factors.length; i++) {
+			if (!factors[i]) {
+				assert.equal(baseline[i], 0);
+				assert.equal(held[i], 0);
+				continue;
+			}
+			assert(baseline[i] > 0);
+			assert(Math.abs(held[i] - baseline[i] * factors[i]) <= 1,
+				'Turn ' + (i + 1) + ': ' + held[i] + ' vs baseline ' + baseline[i] + ' × ' + factors[i]);
+		}
+	}
+	it('increases consecutive successful attacks, up to its double-damage cap', () => {
+		compare('psystrike', Array.from({ length: 7 }, () => ['psystrike', 'splash']), [1, 1.2, 1.4, 1.6, 1.8, 2, 2]);
 	});
-
-	it(`should reset the multiplier after switching moves`, function () {
-		battle = common.createBattle([[
-			{species: 'wynaut', item: 'metronome', moves: ['psystrike', 'sleeptalk']},
-		], [
-			{species: 'cleffa', evs: {hp: 252}, ability: 'shellarmor', moves: ['sleeptalk']},
-		]]);
-		battle.makeChoices();
-		const cleffa = battle.p2.active[0];
-		const hpAfterOneAttack = cleffa.hp;
-		battle.makeChoices('move sleeptalk', 'auto');
-		battle.makeChoices();
-		const damage = hpAfterOneAttack - cleffa.hp;
-		assert.bounded(damage, [96, 114]);
+	it('resets after switching moves', () => {
+		compare('psystrike', [['psystrike', 'splash'], ['splash', 'splash'], ['psystrike', 'splash']], [1, 0, 1]);
 	});
-
-	it(`should reset the multiplier after hitting Protect`, function () {
-		battle = common.createBattle([[
-			{species: 'wynaut', item: 'metronome', moves: ['psystrike']},
-		], [
-			{species: 'cleffa', evs: {hp: 252}, ability: 'shellarmor', moves: ['sleeptalk', 'protect']},
-		]]);
-		battle.makeChoices();
-		const cleffa = battle.p2.active[0];
-		const hpAfterOneAttack = cleffa.hp;
-		battle.makeChoices('auto', 'move protect');
-		battle.makeChoices();
-		const damage = hpAfterOneAttack - cleffa.hp;
-		assert.bounded(damage, [96, 114]);
+	it('resets after Protect blocks an attack', () => {
+		compare('psystrike', [['psystrike', 'splash'], ['psystrike', 'protect'], ['psystrike', 'splash']], [1, 0, 1]);
 	});
-
-	it(`should instantly start moves that use a charging turn at Metronome 1 boost level, then increase linearly`, function () {
-		battle = common.createBattle([[
-			{species: 'dusknoir', item: 'metronome', moves: ['dig']},
-		], [
-			{species: 'blissey', ability: 'shellarmor', moves: ['softboiled']},
-		]]);
-		battle.makeChoices();
-		battle.makeChoices();
-		const blissey = battle.p2.active[0];
-		let damage = blissey.maxhp - blissey.hp;
-
-		// Metronome 1 and 2 damage rolls always overlap in range, so we can't use assert.bounded here.
-		let possibleDamageRolls = [290, 294, 296, 300, 304, 307, 311, 314, 318, 320, 324, 328, 331, 335, 338, 342];
-		const damageWasMetronome1Boosted = possibleDamageRolls.includes(damage);
-		assert(damageWasMetronome1Boosted, `Dig should be Metronome 1 boosted`);
-
-		battle.makeChoices();
-		battle.makeChoices();
-		damage = blissey.maxhp - blissey.hp;
-		possibleDamageRolls = [339, 343, 346, 350, 354, 358, 363, 367, 371, 374, 378, 382, 386, 391, 395, 399];
-		const damageWasMetronome2Boosted = possibleDamageRolls.includes(damage);
-		assert(damageWasMetronome2Boosted, `Dig should be Metronome 2 boosted`);
+	it('starts a charged attack at the first boost and advances on the next attack', () => {
+		compare('dig', Array.from({ length: 4 }, () => ['dig', 'splash']), [0, 1.2, 0, 1.4]);
 	});
-
-	it(`should not instantly start moves that skip a charging turn at Metronome 1 boost level`, function () {
-		battle = common.createBattle([[
-			{species: 'slowbro', item: 'metronome', moves: ['solarbeam']},
-		], [
-			{species: 'blissey', ability: 'shellarmor', moves: ['sunnyday']},
-			{species: 'blissey', ability: 'cloudnine', moves: ['luckychant']},
-		]]);
-		battle.makeChoices();
-		const blissey = battle.p2.active[0];
-		let damage = blissey.maxhp - blissey.hp;
-		assert.bounded(damage, [67, 79], `Solar Beam should not be Metronome boosted`);
-
-		battle.makeChoices('auto', 'switch 2');
-		battle.makeChoices();
-		const newBlissey = battle.p2.active[0];
-		damage = newBlissey.maxhp - newBlissey.hp;
-		assert.bounded(damage, [80, 95], `Solar Beam should be Metronome 1 boosted`);
+	it('does not add a charge boost when sun skips Solar Beam charging', () => {
+		compare('solarbeam', [['solarbeam', 'splash'], ['solarbeam', 'splash', true], ['solarbeam', 'splash']], [1, 0, 1.2], true);
 	});
 
 	it.skip(`should use called moves to determine the Metronome multiplier`, function () {

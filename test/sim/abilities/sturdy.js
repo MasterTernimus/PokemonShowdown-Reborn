@@ -10,11 +10,14 @@ describe('Sturdy', function () {
 		battle.destroy();
 	});
 
-	it('should give the user an immunity to OHKO moves', function () {
+	it('takes damage from reworked Sheer Cold and survives a lethal hit at full HP', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Aron', level: 1, ability: 'sturdy', moves: ['sleeptalk']}]});
 		battle.setPlayer('p2', {team: [{species: 'Kyogre', ability: 'noguard', moves: ['sheercold']}]});
-		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices('move sleeptalk', 'move sheercold'));
+		assert(!battle.dex.moves.get('sheercold').ohko);
+		// Inspect direct damage before Sheer Cold's possible frostbite residual.
+		assert.hurts(battle.p1.active[0], () => battle.actions.useMove('sheercold', battle.p2.active[0], { target: battle.p1.active[0] }));
+		assert.equal(battle.p1.active[0].hp, 1);
 	});
 
 	it('should allow its user to survive an attack from full HP', function () {

@@ -16,6 +16,8 @@ describe('Weather damage calculation', function () {
 		battle.setPlayer('p1', {team: [{species: 'Ninetales', ability: 'drought', moves: ['incinerate']}]});
 		battle.setPlayer('p2', {team: [{species: 'Cryogonal', ability: 'levitate', moves: ['splash']}]});
 		const attacker = battle.p1.active[0];
+		// Fix the attacking stat so roster buffs do not change this rounding test.
+		attacker.storedStats.spa = 198;
 		const defender = battle.p2.active[0];
 		assert.hurtsBy(defender, 152, () => battle.makeChoices('move incinerate', 'move splash'));
 		const move = Dex.moves.get('incinerate');
@@ -29,6 +31,8 @@ describe('Weather damage calculation', function () {
 		battle.setPlayer('p1', {team: [{species: 'Ninetales', ability: 'drizzle', moves: ['incinerate']}]});
 		battle.setPlayer('p2', {team: [{species: 'Cryogonal', ability: 'levitate', moves: ['splash']}]});
 		const attacker = battle.p1.active[0];
+		// Fix the attacking stat so roster buffs do not change this rounding test.
+		attacker.storedStats.spa = 198;
 		const defender = battle.p2.active[0];
 		assert.hurtsBy(defender, 50, () => battle.makeChoices('move incinerate', 'move splash'));
 		const move = Dex.moves.get('incinerate');

@@ -1,9 +1,10 @@
 'use strict';
 
 const assert = require('./../assert');
+const common = require('../common');
 
 describe('Mod loader', function () {
-	it('should work fine in any order', function () {
+	common.itGen(2, 'should work fine in any order', () => {
 		{
 			const Dex = require('./../../dist/sim/dex').Dex;
 			assert.equal(Dex.mod('gen2').species.getLearnsetData('nidoking').learnset.bubblebeam.join(','), '1M');
@@ -31,6 +32,17 @@ describe('Dex#getEffect', function () {
 });
 
 describe('Dex#getSpecies', function () {
+	for (const order of [['Ninetales-Reborn', 'Ninetales-Alt'], ['Ninetales-Alt', 'Ninetales-Reborn']]) {
+		it(`preserves the cosmetic base through aliases (${order.join(' then ')})`, () => {
+			// Exercise both cold-cache lookup orders, not a previously resolved alias.
+			for (const id of ['ninetalesreborn', 'ninetalesalt']) Dex.species.speciesCache.delete(id);
+			const first = Dex.species.get(order[0]);
+			const second = Dex.species.get(order[1]);
+			assert.equal(first, second);
+			assert.equal(first.baseSpecies, 'Ninetales');
+			assert.equal(first.abilities.S, 'Ashen Seeds');
+		});
+	}
 	it('should handle cosmetic Flabébé formes', function () {
 		assert.equal(Dex.species.get('Flabébé-yellow').name, 'Flabébé-Yellow');
 	});
@@ -45,11 +57,13 @@ describe('Dex#getSpecies', function () {
 		assert.equal(Dex.species.get('rockruffdusk').name, 'Rockruff-Dusk');
 	});
 
-	it('should handle Pikachu forme numbering', function () {
+	common.itGen(6, 'should handle Gen 6 Pikachu forme numbering', () => {
 		assert.deepEqual(
 			Dex.forGen(6).species.get('Pikachu').formeOrder.slice(0, 7),
 			["Pikachu", "Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Cosplay"]
 		);
+	});
+	common.itGen(7, 'should handle Gen 7 Pikachu forme numbering', () => {
 		assert.deepEqual(
 			Dex.forGen(7).species.get('Pikachu').formeOrder.slice(0, 9),
 			["Pikachu", "Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", "Pikachu-Starter"]
@@ -58,18 +72,9 @@ describe('Dex#getSpecies', function () {
 });
 
 describe('Dex#getItem', function () {
-	it(`should correctly mark Gem legality`, function () {
-		assert.false(Dex.forGen(5).items.get('Normal Gem').isNonstandard);
-		assert.false(Dex.forGen(5).items.get('Rock Gem').isNonstandard);
-
-		assert.false(Dex.forGen(6).items.get('Normal Gem').isNonstandard);
-		assert.equal(Dex.forGen(6).items.get('Rock Gem').isNonstandard, "Unobtainable");
-
-		assert.false(Dex.forGen(7).items.get('Normal Gem').isNonstandard);
-		assert.equal(Dex.forGen(7).items.get('Rock Gem').isNonstandard, "Unobtainable");
-
-		assert.false(Dex.forGen(8).items.get('Normal Gem').isNonstandard);
-		assert.equal(Dex.forGen(8).items.get('Rock Gem').isNonstandard, "Past");
+	for (const gen of [5, 6, 7, 8]) common.itGen(gen, 'should correctly mark Gem legality', () => {
+		assert.false(Dex.forGen(gen).items.get('Normal Gem').isNonstandard);
+		assert.equal(Dex.forGen(gen).items.get('Rock Gem').isNonstandard, gen === 5 ? null : gen === 8 ? 'Past' : 'Unobtainable');
 	});
 });
 

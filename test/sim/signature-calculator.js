@@ -10,7 +10,8 @@ function scenario(ability = 'No Ability', move = 'Tackle') {
 describe('Approved signature calculator parity', () => {
 	it('exposes complete composite metadata and approved stats', () => {
 		const metadata = calculatorMetadata();
-		assert.deepEqual(metadata.abilityComponents.duskdrive, ['Opportunist', 'Ultra Ego']);
+		assert.deepEqual(metadata.abilityComponents.duskdrive, ['Keen Eye', 'Ultra Ego']);
+		assert.deepEqual(metadata.abilityComponents.twilightinstinct, ['Ultra Instinct', 'Opportunist']);
 		assert(!metadata.abilityComponents.atrocity.includes('Tough Claws'));
 		assert(metadata.abilityComponents.atrocity.includes('Fire Ward'));
 		assert(!metadata.abilityComponents.atrocity.includes('Levitate'));

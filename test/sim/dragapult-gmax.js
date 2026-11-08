@@ -8,7 +8,7 @@ describe('G-Max Spirit Volley', function () {
 	afterEach(() => battle?.destroy());
 
 	it('Phantom Barrage adds Hydra Bond power to Dragon Darts and Spirit Volley without extra hits', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+		battle = common.createBattle({ formatid: 'gen9factoryfield' }, [[
 			{species: 'Dragapult-Gmax', ability: 'Phantom Barrage', moves: ['dragondarts', 'shadowball']},
 		], [
 			{species: 'Umbreon', moves: ['splash']},
@@ -25,8 +25,8 @@ describe('G-Max Spirit Volley', function () {
 			'the weaker Spirit Volley follow-up receives the same ability bonus');
 		assert.equal(battle.runEvent('BasePower', dragapult, foe, shadowBall, 80), 80);
 		battle.makeChoices('move dragondarts', 'move splash');
-		assert.equal(battle.log.filter(line => line.startsWith('|-damage|p2a: Umbreon|') &&
-			line.endsWith(`/${foe.maxhp}`)).length, 2);
+		assert.equal(battle.getDebugLog().split('\n').filter(line => line.startsWith('|-damage|p2a: Umbreon|') &&
+			line.endsWith(`/${foe.maxhp}`)).length, 2, battle.log.join('\n'));
 	});
 
 	it('hits the selected foe at full power and the other foe once at lower power', function () {
@@ -50,7 +50,7 @@ describe('G-Max Spirit Volley', function () {
 		const otherDamage = other.maxhp - other.hp;
 		assert(selectedDamage > otherDamage, `selected: ${selectedDamage}; other: ${otherDamage}`);
 		assert(otherDamage > 0);
-		const damageLines = battle.log.filter(line =>
+		const damageLines = battle.getDebugLog().split('\n').filter(line =>
 			(line.startsWith('|-damage|p2a: Umbreon|') || line.startsWith('|-damage|p2b: Umbreon|')) &&
 			line.endsWith(`/${selected.maxhp}`));
 		assert.equal(damageLines.length, 2, 'each foe should take exactly one hit');
@@ -58,7 +58,7 @@ describe('G-Max Spirit Volley', function () {
 	});
 
 	it('hits a surviving lone foe a second time at 50 power', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+		battle = common.createBattle({ formatid: 'gen9factoryfield' }, [[
 			{species: 'Dragapult', gigantamax: true, moves: ['shadowball']},
 		], [
 			{species: 'Umbreon', moves: ['splash']},
@@ -66,7 +66,7 @@ describe('G-Max Spirit Volley', function () {
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move shadowball dynamax', 'move splash');
 		const foe = battle.p2.active[0];
-		assert.equal(battle.log.filter(line =>
+		assert.equal(battle.getDebugLog().split('\n').filter(line =>
 			line.startsWith('|-damage|p2a: Umbreon|') && line.endsWith(`/${foe.maxhp}`)).length, 2);
 	});
 
@@ -81,12 +81,12 @@ describe('G-Max Spirit Volley', function () {
 		battle.makeChoices('team 12', 'team 12');
 		battle.makeChoices('move shadowball dynamax 1, move extremespeed 2', 'move splash, move splash');
 		assert.equal(battle.p2.pokemon[1].hp, 0);
-		assert.equal(battle.log.filter(line => line.startsWith('|-damage|p2a: Umbreon|') &&
+		assert.equal(battle.getDebugLog().split('\n').filter(line => line.startsWith('|-damage|p2a: Umbreon|') &&
 			line.endsWith(`/${battle.p2.active[0].maxhp}`)).length, 2);
 	});
 
 	it('does not follow up on a target knocked out by the first hit', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+		battle = common.createBattle({ formatid: 'gen9factoryfield' }, [[
 			{species: 'Dragapult', gigantamax: true, moves: ['shadowball']},
 		], [
 			{species: 'Umbreon', level: 1, moves: ['splash']},
@@ -96,19 +96,19 @@ describe('G-Max Spirit Volley', function () {
 		battle.p2.active[0].hp = 1;
 		battle.makeChoices('move shadowball dynamax', 'move splash');
 		assert.equal(battle.p2.pokemon[0].hp, 0);
-		assert.equal(battle.log.filter(line => line.startsWith('|-anim|')).length, 0);
+		assert.equal(battle.getDebugLog().split('\n').filter(line => line.startsWith('|-anim|')).length, 0);
 	});
 
 	for (const protection of ['immunity', 'protect', 'maxguard']) {
 		it(`preserves ${protection} against the single-target fallback`, function () {
 			const species = protection === 'immunity' ? 'Snorlax' : 'Umbreon';
-			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			battle = common.createBattle({ formatid: 'gen9factoryfield' }, [[
 				{species: 'Dragapult', gigantamax: true, moves: ['shadowball']},
 			], [{species, moves: [protection === 'immunity' ? 'splash' : protection]}]]);
 			battle.makeChoices('team 1', 'team 1');
 			battle.makeChoices('move shadowball dynamax', 'move 1');
 			const foe = battle.p2.active[0];
-			const damageLines = battle.log.filter(line => line.startsWith(`|-damage|p2a: ${species}|`) &&
+			const damageLines = battle.getDebugLog().split('\n').filter(line => line.startsWith(`|-damage|p2a: ${species}|`) &&
 				line.endsWith(`/${foe.maxhp}`));
 			if (protection === 'protect') {
 				assert.equal(damageLines.length, 2);

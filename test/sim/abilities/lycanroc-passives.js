@@ -10,9 +10,9 @@ function setup(species, ability = 'No Ability', doubles = false) {
 function hit(p, q) { battle.actions.useMove(Object.assign(Dex.getActiveMove('tackle'), { accuracy: true, willCrit: false }), p, { target: q }); battle.clearActiveMove(); }
 describe('Three exact Lycanroc passive replacements', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
-	it('changes only the three approved passives and the Dusk slot, preserving stats and typings', () => {
+	it('retains the three Lycanroc passives alongside subsequent approved roster changes', () => {
 		const before = require('../../../artifacts/lycanroc-before.json'), passives = { lycanroc: ['infiltrator'], lycanrocmidnight: ['defiant'], lycanrocdusk: ['toughclaws'] }; let changes = 0;
-		for (const old of before) { const s = Dex.species.get(old.id); assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, {...old.abilities}), old.id); assert.deepEqual(s.baseStats, old.stats, old.id); assert.deepEqual(s.types, old.types, old.id); assert.deepEqual(s.passives, require('./passive-approval-overlays').current(old.id, passives[old.id] || old.passives), old.id); if (passives[old.id])changes++; }assert.equal(changes, 3);
+		for (const old of before) { const s = Dex.species.get(old.id); assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, { ...old.abilities }), old.id); assert.deepEqual(s.baseStats, require('./passive-approval-overlays').stats(old.id, old.stats), old.id); assert.deepEqual(s.types, require('./passive-approval-overlays').types(old.id, old.types), old.id); assert.deepEqual(s.passives, require('./passive-approval-overlays').current(old.id, passives[old.id] || old.passives), old.id); if (passives[old.id])changes++; }assert.equal(changes, 3);
 		assert.deepEqual(Dex.species.get('lycanrocdusk').abilities, { 0: 'Scrappy', 1: 'Twilight Instinct', H: 'Dusk Ego' });
 	});
 	for (const suppressed of [false, true]) it('Dusk selected Scrappy respects suppression independently of Tough Claws ' + suppressed, () => {

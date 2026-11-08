@@ -158,7 +158,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"doomwarning": "Magic Bounce + Magic Guard; fainting sets Doom Desire against each foe.",
 	"perfectego": "Never misses; heals and gains stats in combat.",
 	"heavenlychorus": "Half contact damage, double Fire damage.",
-	"mourningsnow": "8-turn Hail/Veil; damaging moves add 30% frostbite; faint healing/curse; hit Disable.",
+	"mourningsnow": "8-turn Hail/Veil; 30% frostbite; healing; hit Disable; on faint, two 1/8-HP curse ticks.",
 	"venombastion": "HP hits heal 1/16 and boost Defense once per turn; poisoned attackers lose their higher offense once per turn.",
 	"rimeknuckle": "Frostbite chance; KO healing.",
 	"streettyrant": "End-turn status cure and stat reset can restore HP; Mega form heals 1/8.",
@@ -862,3 +862,44 @@ for (const id of ['serenegrace', 'fortunatewing', 'voidomen']) AbilityDisplaySum
 AbilityDisplaySummaries.safeharbor = 'Switching out heals its immediate replacement by 1/8 HP after hazards.';
 AbilityDisplaySummaries.oceanlullaby = 'Successful sound moves heal active allies and itself by 1/16 HP and clear confusion once per turn.';
 AbilityDisplaySummaries.auroraresonance = 'Water/Ice hits cure its active side’s status; 30% more power during Aurora Veil.';
+AbilityDisplaySummaries.ange = AbilityDescriptionOverrides.ange.shortDesc;
+
+for (const id of [
+	'royalscales',
+	'ancientbloom',
+	'fortressshell',
+	'burningcrown',
+	'freshplumage',
+	'burningquake',
+	'voidcommand',
+]) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+
+AbilityDisplaySummaries.greatmarsh = AbilityDescriptionOverrides.greatmarsh.shortDesc;
+
+for (const id of ['armortail', 'twinfocus']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+
+AbilityDisplaySummaries.astralwitchcraft = AbilityDescriptionOverrides.astralwitchcraft.shortDesc;
+
+AbilityDisplaySummaries.lunarorbit = AbilityDescriptionOverrides.lunarorbit.shortDesc;
+
+AbilityDisplaySummaries.cosmicanalysis = AbilityDescriptionOverrides.cosmicanalysis.shortDesc;
+
+for (const id of ['evergreen', 'scavenger']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+
+AbilityDisplaySummaries.dreadpresence = 'Dark Aura + Unnerve.';
+
+AbilityDisplaySummaries.adaptivecore = AbilityDescriptionOverrides.adaptivecore.shortDesc;
+
+AbilityDisplaySummaries.mossarmor = AbilityDescriptionOverrides.mossarmor.shortDesc;
+
+AbilityDisplaySummaries.desertshell = AbilityDescriptionOverrides.desertshell.shortDesc;
+
+for (const id of [
+	'risingstriker',
+	'risingrhythm',
+	'risingmarksman',
+	'grandstriker',
+	'grandrhythm',
+	'grandmarksman',
+	'calculatedshot',
+]) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;

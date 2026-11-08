@@ -16,7 +16,7 @@ describe('Alakazam Rejuv', () => {
 		const p = setup();
 		assert.equal(p.species.id, 'alakazamrejuv');
 		assert.deepEqual(p.getTypes(), ['Fighting']);
-		assert.deepEqual(p.species.baseStats, {hp:80, atk:130, def:100, spa:25, spd:95, spe:128});
+		assert.deepEqual(p.species.baseStats, { hp: 80, atk: 120, def: 95, spa: 45, spd: 95, spe: 123 });
 		assert.equal(p.species.bst, 558);
 		assert.deepEqual(p.getPassives(), ['composed']);
 		assert(p.hasAbility('ironfist')); assert(p.hasAbility('owntempo'));

@@ -5,11 +5,16 @@
 'use strict';
 
 const assert = require('../assert');
+const common = require('../common');
 const {Utils} = require('../../dist/lib');
 const {testTeam, assertSetValidity, validateLearnset} = require('./tools');
 const {default: Dex} = require('../../dist/sim/dex');
 
 describe('value rule support (slow)', () => {
+	if (!Dex.formats.all().some(format => format.team)) {
+		it.skip('Upstream random formats are not registered in Reborn');
+		return;
+	}
 	it('should generate teams of the proper length for the format (i.e. support Max Team Size)', () => {
 		testTeam({format: 'gen9randombattle', rounds: 100}, team => assert.equal(team.length, 6));
 		testTeam({format: 'gen9challengecup1v1', rounds: 100}, team => assert.equal(team.length, 6));
@@ -22,6 +27,10 @@ describe('value rule support (slow)', () => {
 	});
 
 	for (let gen = 1; gen <= 9; gen++) {
+		if (!common.hasGeneration(gen)) {
+			it.skip(`Gen ${gen} random battles: generation data unavailable`);
+			continue;
+		}
 		const formatID = `gen${gen}randombattle`;
 		const dex = Dex.forFormat(formatID);
 		for (const count of [1, 3, 24]) {
@@ -34,9 +43,10 @@ describe('value rule support (slow)', () => {
 				// Due to frontloading of moveset generation, formats with the new set format do not support
 				// Max Move Counts less than 4
 				if (count < 4) continue;
-				const setsJSON = require(`../../dist/data/${gen === 9 ? '' : `mods/gen${gen}/`}random-sets.json`);
-
 				it(`${format.name} should support Max Move Count = ${count}`, () => {
+					// Load optional generation fixtures during the test, not collection.
+					// Missing data must fail this case without preventing unrelated suites from running.
+					const setsJSON = require(`../../dist/data/${gen === 9 ? '' : `mods/gen${gen}/`}random-sets.json`);
 					testTeam({format, rounds: 50}, team => {
 						for (const set of team) {
 							let species = set.species;
@@ -66,9 +76,8 @@ describe('value rule support (slow)', () => {
 					});
 				});
 			} else {
-				const dataJSON = require(`../../dist/data/mods/gen${gen}/random-data.json`);
-
 				it(`${format.name} should support Max Move Count = ${count}`, () => {
+					const dataJSON = require(`../../dist/data/mods/gen${gen}/random-data.json`);
 					testTeam({format, rounds: 50}, team => {
 						for (const set of team) {
 							let species = set.species;
@@ -118,6 +127,8 @@ describe("New set format", () => {
 	for (const filename of files) {
 		it(`${filename} should have valid set data`, () => {
 			const setsJSON = require(filename);
+			const { RandomTeams } = require('../../dist/data/random-teams');
+			const generator = new RandomTeams('gen9nofieldsinglesgame', [1, 2, 3, 4]);
 			let validRoles = [];
 			if (filename === '../../data/random-sets.json') {
 				validRoles = ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user",
@@ -138,7 +149,13 @@ describe("New set format", () => {
 						const dexMove = Dex.moves.get(move);
 						assert(dexMove.exists, `${species.name} has invalid move: ${move}`);
 						assert.equal(move, dexMove.name, `${species.name} has misformatted move: ${move}`);
-						assert(validateLearnset(dexMove, {species}, 'anythinggoes', 'gen9'), `${species.name} can't learn ${move}`);
+						// Upstream source pools retain Tera Blast; Reborn removes it before move selection.
+						if (dexMove.id === 'terablast') {
+							const generated = generator.randomMoveset(species.types, new Set(Object.values(species.abilities)), {}, species, false, filename.includes('doubles'), set.movepool.map(m => Dex.moves.get(m).id), 'Stellar', set.role);
+							assert(!generated.has('terablast'), species.name);
+							continue;
+						}
+						assert(validateLearnset(dexMove, { species }, 'nofieldsinglesgame', 'gen9'), `${species.name} can't learn ${move}`);
 					}
 					for (let i = 0; i < set.movepool.length - 1; i++) {
 						assert(set.movepool[i + 1] > set.movepool[i], `${species} movepool should be sorted alphabetically`);
@@ -177,8 +194,12 @@ describe('randomly generated teams should be valid (slow)', () => {
 });
 
 describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
+	if (!Dex.formats.all().some(format => format.team)) {
+		it.skip('Upstream random formats are not registered in Reborn');
+		return;
+	}
 	for (const filename of ['mods/gen8/bss-factory-sets', 'mods/gen7/bss-factory-sets', 'mods/gen7/factory-sets', 'mods/gen6/factory-sets']) {
-		it(`${filename}.json should contain valid sets`, function () {
+		common.itGen(Number(filename.split('/')[1].slice(3)), `${filename}.json should contain valid sets`, function () {
 			this.timeout(0);
 			const setsJSON = require(`../../dist/data/${filename}.json`);
 			const mod = filename.split('/')[1] || 'gen' + Dex.gen;

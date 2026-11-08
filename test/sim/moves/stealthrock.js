@@ -26,7 +26,7 @@ describe('Stealth Rock', function () {
 			{species: "Volcarona", moves: ['roost']},
 			{species: "Staraptor", moves: ['roost']},
 			{species: "Chansey", moves: ['wish']},
-			{species: "Hitmonchan", moves: ['rest']},
+			{ species: "Machop", moves: ['rest'] },
 			{species: "Steelix", moves: ['rest']},
 		]});
 		battle.makeChoices('move stealthrock', 'move protect');

@@ -140,19 +140,24 @@ describe('Approved thirteen Sinnoh Unova Mega passive migrations', () => {
 		q.activeTurns = 0;
 		assert.equal(battle.runEvent('ModifySpA', p, q, move, 100), 200);
 	});
-	it('Dusknoir keeps Dark Aura, recovery and Haunted triggers while passive Unaware ignores opposing boosts', () => {
+	it('Dusknoir keeps recovery and Haunted Aura while passive Unaware ignores opposing boosts', () => {
 		const [p, q] = setup('Dusknoir-Mega');
 		p.hp = 500;
 		battle.runEvent('Residual', p);
 		assert.equal(p.hp, 575);
-		assert(p.hasAbility('darkaura'));
+		assert(!p.hasAbility('darkaura'));
+		assert(battle.field.isAura('hauntedaura'));
+		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('shadowball'), 100), 120);
 		battle.activePokemon = q;
 		battle.activeTarget = p;
 		const boosts = battle.runEvent('ModifyBoost', q, null, null, { atk: 6, def: 6, spa: 6, accuracy: 6 });
 		assert.deepEqual(boosts, { atk: 0, def: 0, spa: 0, accuracy: 0 });
 		battle.clearActiveMove();
 		battle.runEvent('DamagingHit', p, q, Dex.getActiveMove('tackle'), 1);
+		assert.equal(battle.field.terrain, '');
+		battle.singleEvent('SourceAfterFaint', p.getAbility(), p.abilityState, q, p, Dex.getActiveMove('shadowball'), 1);
 		assert.equal(battle.field.terrain, 'hauntedterrain');
+		assert.equal(battle.field.terrainState.duration, 5);
 	});
 	it('Scrafty preserves shared one-quarter healing and cleansing after suppression and ability changes', () => {
 		const [p] = setup('Scrafty-Mega');

@@ -71,7 +71,8 @@ export function finishDualWieldPower(battle: Battle) {
 export const DualWieldFinalDamageHooks = new Set([
 	'moonveil', 'corrosiveburn', 'abysssniper', 'freezerburn', 'voidvoice', 'eternalflower', 'desertspirit', 'neuroforce',
 	'pastelveil', 'queenlymajesty', 'rkssystem', 'sniper', 'tintedlens', 'empress', 'prismwings', 'spentforce', 'venomignition',
-	'freshplumage', 'patientmarksman', 'guidinggallop', 'crushingdepths', 'ruinedsky', 'rivalmalice', 'pastelsanctuary',
+	'patientmarksman', 'guidinggallop', 'crushingdepths', 'ruinedsky', 'rivalmalice', 'pastelsanctuary',
+	'beastfang', 'apocalypticflame', 'burningquake',
 ]);
 export function dualWieldFinalDamageBoost(
 	battle: Battle, id: string, source: Pokemon, target: Pokemon, move: ActiveMove
@@ -79,6 +80,12 @@ export function dualWieldFinalDamageBoost(
 	const custom = (battle.dex.abilities.get(id) as any).dualWieldDamageBoost;
 	if (typeof custom === 'function') return !!custom.call(battle, source, target, move);
 	switch (id) {
+	case 'beastfang':
+		return move.category === 'Physical' && !!(move.flags.bite || move.flags.slicing) && target.hasType('Dragon');
+	case 'apocalypticflame':
+		return battle.movehasType(move, 'Steel') && target.hasType(['Flying', 'Dragon']);
+	case 'burningquake':
+		return move.category === 'Physical' && target.hasType('Dragon');
 	case 'corrosiveburn': case 'venomignition':
 		return battle.movehasType(move, 'Fire') && ['psn', 'tox'].includes(target.status);
 	case 'freezerburn': return target.status === 'brn' && battle.movehasType(move, 'Ice');
@@ -94,10 +101,7 @@ export function dualWieldFinalDamageBoost(
 	case 'sniper': case 'abysssniper': case 'patientmarksman': return !!target.getMoveHitData(move).crit;
 	case 'neuroforce': return target.getMoveHitData(move).typeMod > 0;
 	case 'tintedlens': case 'desertspirit': case 'prismwings': return target.getMoveHitData(move).typeMod < 0;
-	case 'freshplumage': {
-		const entry = source.m.approvedSignatures;
-		return (!entry?.freshPlumageUsed || entry.freshPlumageMove === move) && battle.movehasType(move, 'Flying');
-	}
+
 	case 'crushingdepths':
 		return move.category === 'Physical' && battle.movehasType(move, 'Steel') && target.boosts.def < 0;
 	case 'ruinedsky': return target.hasType(['Flying', 'Dragon']);

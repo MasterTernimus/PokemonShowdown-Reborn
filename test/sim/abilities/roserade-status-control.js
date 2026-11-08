@@ -53,7 +53,7 @@ describe('Approved Roserade status control',()=>{
   for(const[id,abilities,passives]of [
    ['roserade',{0:'False Devotion',1:'Invigorate',H:'Technician'},['beguilingbouquet']],
    ['roserademega',{0:'True Devotion'},['beguilingbouquet']],
-   ['roseradeaevian',{0:'Dry Skin',1:'Technician',H:'False Devotion'},[]],
+			['roseradeaevian', { 0: 'Dry Skin', 1: 'Technician', H: 'False Devotion' }, ['poisonpoint']],
    ['amoonguss',{0:'Sticky Hold',1:'Spore Shroud',H:'Regenerator'},['dryskin']],
   ]) {assert.deepEqual(Dex.species.get(id).abilities,abilities);assert.deepEqual(Dex.species.get(id).passives,passives);}
  });

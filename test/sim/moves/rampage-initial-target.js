@@ -1,7 +1,12 @@
 'use strict';const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim');let b;
 function setup(move='outrage',ability='No Ability',mode='doubles'){const mon=(moves=['splash'],ability='No Ability')=>({species:'Mew',ability,moves});b=common.createBattle({gameType:mode},[[mon([move],ability),mon()],[mon(),mon()]]);for(const p of b.getAllActive())p.hp=p.maxhp=p.baseMaxhp=10000;return b.p1.active[0];}
 describe('Initial rampage targeting and Mega Gyarados passive removal',()=>{afterEach(()=>{b?.destroy();b=null;});
-it('removes only Mega Defiant and leaves ordinary Intimidate and Unleashed Ego',()=>{assert.deepEqual(Dex.species.get('gyaradosmega').passives,['tempestfury']);assert.deepEqual(Dex.species.get('gyarados').passives,['intimidate']);assert.equal(Dex.species.get('gyaradosmega').abilities[0],'Unleashed Ego');});
+	it('keeps Tempest Fury passive on both forms and Intimidate selectable on the base', () => {
+		assert.deepEqual(Dex.species.get('gyaradosmega').passives, ['tempestfury']);
+		assert.deepEqual(Dex.species.get('gyarados').passives, ['tempestfury']);
+		assert.equal(Dex.species.get('gyarados').abilities[1], 'Intimidate');
+		assert.equal(Dex.species.get('gyaradosmega').abilities[0], 'Unleashed Ego');
+	});
 for(const id of ['outrage','thrash','petaldance','ragingfury']){
  it(id+' accepts either initial opponent, rejects allies, and requests random continuation',()=>{const p=setup(id);assert.equal(p.getMoveRequestData().moves[0].target,'adjacentFoe');assert.equal(b.getTarget(p,id,2),b.p2.active[1]);assert(!b.validTargetLoc(-2,p,'adjacentFoe'));const pp=p.moveSlots[0].pp;b.makeChoices('move 1 2, move splash','move splash, move splash');assert(b.log.some(l=>l.startsWith('|move|p1a: Mew|'+Dex.moves.get(id).name+'|p2b: Mew')));assert(p.volatiles.lockedmove);assert.equal(p.moveSlots[0].pp,pp-1);assert.equal(p.getMoveRequestData().moves[0].target,'randomNormal');let calls=0;const old=b.getRandomTarget;b.getRandomTarget=function(...args){calls++;return old.apply(this,args);};b.getTarget(p,id,2);assert.equal(calls,1);b.makeChoices('move 1, move splash','move splash, move splash');assert.equal(p.moveSlots[0].pp,pp-1);});
  it(id+' remains selectable every turn with Raging Storm without lock/confusion',()=>{const p=setup(id,'Raging Storm');b.makeChoices('move 1 2, move splash','move splash, move splash');assert(!p.volatiles.lockedmove);assert(!p.volatiles.confusion);assert.equal(p.getMoveRequestData().moves[0].target,'adjacentFoe');b.makeChoices('move 1 1, move splash','move splash, move splash');assert(!p.volatiles.lockedmove);});

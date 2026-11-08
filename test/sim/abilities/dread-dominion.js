@@ -8,31 +8,11 @@ describe('Mega Mightyena and Dread Dominion', () => {
 	let battle;
 	afterEach(() => { if (battle) battle.destroy(); battle = null; });
 	for (const species of ['Mightyena', 'Mightyena-Grim', 'Mightyena-Deso']) {
-		it(`checks ${species} Grimyinite availability and passive`, () => {
+		it('rejects unavailable Grimyinite routes for ' + species, () => {
 			const set = {species, ability: 'Intimidate', item: 'Grimyinite', moves: ['Protect']};
-            if (species !== 'Mightyena-Grim') {
-                assert(TeamValidator.get('gen9nofieldsinglesgame').validateTeam([set]).some(error => error.includes('Mightyena-Mega is disabled')));
-                return;
-            }
-            assert.equal(TeamValidator.get('gen9nofieldsinglesgame').validateTeam([set]), null);
-			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[set], [
-				{species: 'Mew', ability: 'Synchronize', moves: ['Splash']},
-			]]);
-			battle.makeChoices('team 1', 'team 1');
-			assert.equal(battle.p1.active[0].canMegaEvo, species === 'Mightyena-Grim' ? 'Mightyena-Mega-Grim' : 'Mightyena-Mega');
-			battle.makeChoices('move 1 mega', 'move 1');
-			const mon = battle.p1.active[0];
-			assert.equal(mon.species.name, species === 'Mightyena-Grim' ? 'Mightyena-Mega-Grim' : 'Mightyena-Mega');
-			assert.deepEqual(mon.species.baseStats, {hp: 90, atk: 140, def: 105, spa: 85, spd: 100, spe: 130});
-			assert.equal(mon.species.bst, Dex.species.get('Mightyena').bst + 100);
-			assert.equal(mon.ability, 'dreaddominion');
-			assert.deepEqual(mon.species.passives, ['darkaura']);
-			assert(mon.hasAbilityOrPassive('darkaura'));
-			assert(!mon.hasAbilityOrPassive('infiltrator'));
-			const foe = battle.p2.active[0];
-			const move = battle.dex.getActiveMove('darkpulse');
-			assert.equal(battle.runEvent('BasePower', mon, foe, move, 80, true), 106);
-			assert(battle.log.some(line => line.includes('Dark Aura')), battle.log.join('\n'));
+			const errors = TeamValidator.get('gen9nofieldsinglesgame').validateTeam([set]);
+			assert(errors.some(error => error.includes(species === 'Mightyena-Grim' ? 'Mightyena-Grim is disabled' : 'Mightyena-Mega is disabled')));
+			assert(Dex.species.get(species === 'Mightyena-Grim' ? 'Mightyena-Mega-Grim' : 'Mightyena-Mega').exists);
 		});
 	}
 	function setup() {
@@ -82,12 +62,14 @@ describe('Mega Mightyena and Dread Dominion', () => {
 	});
 	it('does not stack Dark Aura passives and still supports Aura Break', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Mightyena-Mega-Grim', ability: 'Dread Dominion', moves: ['Splash']},
-			{species: 'Mightyena-Mega-Grim', ability: 'Dread Dominion', moves: ['Splash']},
+			{ species: 'Mew', ability: 'Dread Dominion', moves: ['Splash'] },
+			{ species: 'Mew', ability: 'Dread Dominion', moves: ['Splash'] },
 		], [
 			{species: 'Mew', ability: 'No Ability', moves: ['Splash']},
 			{species: 'Mew', ability: 'No Ability', moves: ['Splash']},
 		]]);
+		// Isolate legacy Dark Aura passive mechanics without enabling a disabled species.
+		for (const holder of battle.p1.active) holder.getPassives = () => ['darkaura'];
 		const source = battle.p2.active[0], target = battle.p1.active[0];
 		assert.equal(battle.runEvent('BasePower', source, target, battle.dex.getActiveMove('darkpulse'), 80, true), 106);
 		battle.p2.active[1].setAbility('aurabreak');

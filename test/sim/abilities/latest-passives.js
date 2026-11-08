@@ -21,25 +21,21 @@ function hit(p, t, id = 'tackle', extra = {}, finish = true) {
 	battle.clearActiveMove();
 	return m;
 }
-function prime(p, t) {
-	hit(t, p);
-	assert.equal(p.volatiles.vendetta.mark, t);
-}
 describe('Latest explicit passive approvals and redesigned abilities', () => {
 	afterEach(() => {
 		battle?.destroy();
 		battle = null;
 	});
-	it('matches the entire approved 839-holder registry and all selected slots', () => {
+	it('matches the reviewed 952-holder registry and all selected slots', () => {
 		const expected = { ...approved.previousPassives };
 		for (const [passive, ids] of Object.entries(approved.groups))
 			for (const id of ids)
 				expected[id] = [passive];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(require('../../../dist/data/species-passives').SpeciesPassives, expected);
-		assert.equal(Object.keys(expected).length, 839);
+		assert.equal(Object.keys(expected).length, 952);
 		for (const [id, slot, , name] of approved.slots)
-			assert.equal(Dex.species.get(id).abilities[slot], name, id);
+			assert.equal(Dex.species.get(id).abilities[slot], require('./passive-approval-overlays').abilities(id, { [slot]: name })[slot], id);
 		for (const [id, abilities] of Object.entries(approved.priorAbilities)) {
 			const expected = { ...abilities };
 			for (const [s, slot, , name] of approved.slots)
@@ -51,11 +47,11 @@ describe('Latest explicit passive approvals and redesigned abilities', () => {
 	for (const [passive, ids] of Object.entries(approved.groups))
 		for (const id of ids)
 			it(id + ' has exactly ' + passive, () => assert.deepEqual(Dex.species.get(id).passives, require('./passive-approval-overlays').current(id, [passive])));
-	it('leaves all held species and excluded related forms untouched', () => {
+	it('preserves the reviewed later approvals for held species and related forms', () => {
 		for (const id of ['salamence', 'gardevoir', 'rhyperior', 'conkeldurr', 'excadrill', 'excadrillmega', 'meowsticf', 'meowsticfmega', 'kingambit', 'baxcalibur', 'glimmora', 'glimmoramega', 'probopass', 'roserade', 'roserademega', 'gyaradosaevian', 'gyaradosaevianmega', 'miloticaevian', 'miloticterajuma', 'granbullreborn'])
 			if (Dex.species.get(id).exists && !Object.values(require('./settled-passives-approved.json').groups).flat().includes(id))
 				assert.deepEqual(Dex.species.get(id).passives, require('./passive-approval-overlays').current(id, approved.previousPassives[id] || []), id);
-		assert.deepEqual(Dex.species.get('garchompmega').passives, ['sandforce']);
+		assert.deepEqual(Dex.species.get('garchompmega').passives, ['sharpness']);
 		for (const s of Dex.species.all()) assert(!Object.values(s.abilities).includes('Uproot'), s.id);
 	});
 	it('Steady Aim blocks only external accuracy drops under suppression', () => {
@@ -72,102 +68,56 @@ describe('Latest explicit passive approvals and redesigned abilities', () => {
 		assert(!m.ignoreEvasion);
 		assert.equal(m.accuracy, 100);
 	});
-	it('Vendetta marks only after the whole move and retaliates once with normal trapping', () => {
+	it('Vendetta Taunts a surviving attacker once per entry, including multihit attacks', () => {
+		const [p, t] = setup(); hit(t, p, 'tackle', { multihit: 3 });
+		assert(p.volatiles.vendettaspent); assert(t.volatiles.taunt); assert.equal(p.hp, 880);
+		assert(!p.volatiles.vendetta); assert(!t.volatiles.vendettatrap);
+		t.removeVolatile('taunt'); hit(t, p); assert(!t.volatiles.taunt);
+	});
+	for (const protection of ['Aroma Veil', 'Oblivious'])it('Vendetta spends its attempt against ' + protection, () => {
 		const [p, t] = setup();
-		const m = hit(t, p, 'tackle', { multihit: 3 }, false);
-		assert(!p.volatiles.vendetta.mark);
-		battle.runEvent('AfterMove', t, p, m);
-		assert.equal(p.volatiles.vendetta.mark, t);
-		battle.randomChance = () => false;
-		hit(p, t, 'crunch', { accuracy: 1 });
-		assert.equal(t.hp, 960);
-		assert(!p.volatiles.vendetta.mark);
-		assert(t.volatiles.vendettatrap);
-		assert.equal(t.volatiles.vendettatrap.duration, 2);
-		assert.equal(p.boosts.atk, 0);
-		assert.equal(p.hp, 880);
+		t.setAbility(protection);
 		hit(t, p);
-		assert(!p.volatiles.vendetta.mark);
+		assert(p.volatiles.vendettaspent);
+		assert(!t.volatiles.taunt);
+		t.setAbility('No Ability'); hit(t, p); assert(!t.volatiles.taunt);
 	});
-	for (const blocked of ['protect', 'substitute', 'immunity', 'semi'])
-		it('Vendetta consumes retaliation without bypassing ' + blocked, () => {
-			const [p, t] = setup();
-			prime(p, t);
-			if (blocked === 'protect')
-				t.addVolatile('protect', t);
-			if (blocked === 'substitute')
-				t.addVolatile('substitute', t);
-			if (blocked === 'immunity')
-				t.setType('Flying');
-			if (blocked === 'semi')
-				t.addVolatile('fly', t);
-			const hp = t.hp;
-			hit(p, t, blocked === 'immunity' ? 'stompingtantrum' : 'crunch', { accuracy: 1 });
-			assert(!p.volatiles.vendetta.mark);
-			assert(!t.volatiles.vendettatrap);
-			assert.equal(t.hp, hp);
-		});
-	it('Vendetta does not spend on an attack of the wrong type or a spread move', () => {
+	for (const state of ['gastroacid', 'replacement', 'gas'])it('Vendetta does not refresh its allowance after ' + state, () => {
 		const [p, t] = setup();
-		prime(p, t);
-		hit(p, t, 'tackle');
-		assert.equal(p.volatiles.vendetta.mark, t);
-		hit(p, t, 'earthquake');
-		assert.equal(p.volatiles.vendetta.mark, t);
-	});
-	for (const state of ['gastroacid', 'replacement', 'gas'])
-		it('Vendetta clears its mark for ' + state + ' without refreshing its entry allowance', () => {
-			const [p, t] = setup();
-			prime(p, t);
-			if (state === 'replacement')
-				p.setAbility('Pressure');
-			else if (state === 'gas')
-				t.setAbility('Neutralizing Gas');
-			else
-				p.addVolatile('gastroacid');
-			battle.runEvent('Update', p);
-			assert(!p.volatiles.vendetta.mark);
-			p.removeVolatile('gastroacid');
-			t.setAbility('No Ability');
-			p.setAbility('Vendetta');
-			hit(t, p);
-			assert(!p.volatiles.vendetta.mark);
-			assert(p.volatiles.vendetta.spent);
-		});
-	it('Vendetta expires at end of following turn and clears when the marked foe leaves', () => {
-		const [p, t] = setup();
-		prime(p, t);
-		battle.fieldEvent('Residual');
-		assert.equal(p.volatiles.vendetta.mark, t);
-		battle.turn++;
-		battle.fieldEvent('Residual');
-		assert(!p.volatiles.vendetta.mark);
-		p.clearVolatile();
-		p.isActive = true;
+		hit(t, p);
+		assert(t.volatiles.taunt);
+		t.removeVolatile('taunt');
+		if (state === 'replacement')p.setAbility('Pressure'); else if (state === 'gas')t.setAbility('Neutralizing Gas'); else p.addVolatile('gastroacid');
+		hit(t, p); assert(!t.volatiles.taunt);
+		p.removeVolatile('gastroacid');
+		t.setAbility('No Ability');
 		p.setAbility('Vendetta');
-		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
-		prime(p, t);
-		battle.runEvent('SwitchOut', t);
-		assert(!p.volatiles.vendetta.mark);
+		hit(t, p);
+		assert(p.volatiles.vendettaspent); assert(!t.volatiles.taunt);
+	});
+	it('Vendetta resets its allowance on a real switch', () => {
+		const [p, t] = setup();
+		hit(t, p);
+		assert(t.volatiles.taunt);
+		t.removeVolatile('taunt');
+		battle.makeChoices('switch 2', 'move splash'); battle.makeChoices('switch 2', 'move splash');
+		assert(!p.volatiles.vendettaspent); hit(t, p); assert(t.volatiles.taunt);
 	});
 	it('Vendetta ignores Substitute-only damage, allied damage and fatal hits', () => {
 		const [p, t] = setup();
 		p.addVolatile('substitute', p);
 		hit(t, p);
-		assert(!p.volatiles.vendetta.spent);
-		p.removeVolatile('substitute');
-		hit(p, p);
-		assert(!p.volatiles.vendetta.spent);
-		hit(t, p, 'tackle', { damage: 10000 });
-		assert(!p.volatiles.vendetta?.spent);
+		assert(!p.volatiles.vendettaspent);
+		p.removeVolatile('substitute'); hit(p, p); assert(!p.volatiles.vendettaspent);
+		hit(t, p, 'tackle', { damage: 10000 }); assert(!p.volatiles.vendettaspent); assert(!t.volatiles.taunt);
 	});
-	it('Vendetta uses ordinary Ghost escape rules', () => {
+	it('Vendetta does not trap Ghosts or grant a retaliation damage multiplier', () => {
 		const [p, t] = setup();
-		prime(p, t);
 		t.setType('Ghost');
+		hit(t, p);
 		hit(p, t, 'crunch');
-		battle.runEvent('TrapPokemon', t);
-		assert(!t.trapped);
+		assert.equal(t.hp, 960);
+		battle.runEvent('TrapPokemon', t); assert(!t.trapped);
 	});
 	it('Silk Sights Disables a previously slowed foe only once per entry and only on success', () => {
 		const [p, t] = setup('Galvantula', 'Silk Sights');
@@ -206,7 +156,7 @@ describe('Latest explicit passive approvals and redesigned abilities', () => {
   assert(!Object.values(Dex.species.get('venusaur').abilities).includes('Uproot'));
  });
  it('preserves Vendetta without unrelated components, residuals or damage modifiers', () => {
-  assert(!require('../../../dist/data/ability-components').AbilityComponents.vendetta.length);
+		assert.deepEqual(require('../../../dist/data/ability-components').AbilityComponents.vendetta, ['innerfocus']);
   assert(!Dex.abilities.get('vendetta').onResidual);
   assert(!Dex.abilities.get('vendetta').onDamage);
  });

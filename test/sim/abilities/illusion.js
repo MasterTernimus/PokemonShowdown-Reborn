@@ -25,7 +25,7 @@ describe('Illusion', function () {
 		assert.equal(battle.p1.active[0].illusion.species.baseSpecies, 'Garchomp');
 	});
 
-	common.itGen(8, `should not instantly wear off before Dynamaxing`, function () {
+	common.itGen(8, `should retain Illusion after rejecting an unavailable ordinary Dynamax`, () => {
 		battle = common.gen(8).createBattle([[
 			{species: "Zoroark", ability: 'illusion', moves: ['sleeptalk']},
 			{species: "Diglett", moves: ['sleeptalk']},
@@ -33,7 +33,9 @@ describe('Illusion', function () {
 			{species: "Wynaut", moves: ['sleeptalk']},
 		]]);
 
-		battle.makeChoices('move sleeptalk dynamax', 'auto');
+		assert.cantMove(() => battle.choose('p1', 'move sleeptalk dynamax'));
+		assert.equal(battle.p1.active[0].illusion.species.id, 'diglett');
+		battle.makeChoices('move sleeptalk', 'auto');
 		assert(battle.log.every(line => !line.includes('|-end|p1a: Zoroark|Illusion')));
 	});
 
@@ -48,7 +50,7 @@ describe('Illusion', function () {
 		assert.cantMove(() => battle.choose('p1', 'move sleeptalk dynamax'));
 	});
 
-	common.itGen(8, `should be able to wear off normally while Dynamaxed`, function () {
+	common.itGen(8, `should wear off normally after an unavailable Dynamax is rejected`, () => {
 		battle = common.gen(8).createBattle([[
 			{species: "Zoroark", ability: 'illusion', moves: ['machpunch']},
 			{species: "Diglett", moves: ['sleeptalk']},
@@ -56,7 +58,8 @@ describe('Illusion', function () {
 			{species: "Wynaut", moves: ['thunderbolt']},
 		]]);
 
-		battle.makeChoices('move machpunch dynamax', 'auto');
+		assert.cantMove(() => battle.choose('p1', 'move machpunch dynamax'));
+		battle.makeChoices('move machpunch', 'auto');
 		assert(battle.log.some(line => line.includes('|-end|p1a: Zoroark|Illusion')));
 	});
 
@@ -77,7 +80,7 @@ describe('Illusion', function () {
 		assert(battle.log.some(line => line.includes('|-end|p1a: Zoroark|Illusion')));
 	});
 
-	common.itGen(8, `should Illusion as the regular Dynamax version of G-Max Pokemon while Dynamaxed`, function () {
+	common.itGen(8, `should not gain G-Max eligibility from its disguise`, () => {
 		battle = common.gen(8).createBattle([[
 			{species: "Zoroark", ability: 'illusion', moves: ['sleeptalk']},
 			{species: "Charizard", gigantamax: true, moves: ['ember', 'sleeptalk']},
@@ -85,7 +88,10 @@ describe('Illusion', function () {
 			{species: "Wynaut", moves: ['sleeptalk']},
 		]]);
 
-		battle.makeChoices('move sleeptalk dynamax', 'auto');
+		assert.equal(battle.p1.active[0].illusion.species.id, 'charizard');
+		assert.false(battle.p1.active[0].getMoveRequestData().canDynamax);
+		assert.cantMove(() => battle.choose('p1', 'move sleeptalk dynamax'));
+		battle.makeChoices('move sleeptalk', 'auto');
 		assert(battle.log.every(line => !line.includes('Gmax')));
 	});
 

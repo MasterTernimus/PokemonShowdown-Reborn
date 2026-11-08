@@ -10,7 +10,10 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 			{species, ability, item: 'Anomaly Core', moves},
 		], [foe]]);
 		battle.makeChoices('team 1', 'team 1');
-		return [battle.p1.active[0], battle.p2.active[0]];
+		// Fixed PULSE kits attack instead of Splash; keep the field test opponent alive.
+		const target = battle.p2.active[0];
+		target.hp = target.maxhp = target.baseMaxhp = 5000;
+		return [battle.p1.active[0], target];
 	}
 
 	for (const [base, form, ability, stats, types] of [
@@ -22,7 +25,7 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 		it(`Anomaly Core transforms ${base} into ${form} with approved stats`, () => {
 			const [pokemon] = start(base, 'No Ability');
 			assert.equal(battle.dex.items.get('anomalycore').megaStone[base], form);
-			battle.makeChoices('move splash mega', 'move splash');
+			battle.makeChoices('move 1 mega', 'move splash');
 			assert.equal(pokemon.species.name, form);
 			assert.equal(pokemon.ability, battle.dex.toID(ability));
 			assert.deepEqual(pokemon.species.types, types);
@@ -34,9 +37,9 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 	it('Pulse Blockade creates finite Snowy Mountain and blocks replacement but not auras', () => {
 		const [avalugg] = start('Avalugg', 'Own Tempo');
 		battle.field.setTerrain('factoryterrain', avalugg);
-		battle.makeChoices('move splash mega', 'move splash');
+		battle.makeChoices('move 1 mega', 'move splash');
 		assert.equal(battle.field.terrain, 'snowymountainterrain');
-		assert(battle.field.terrainState.duration > 0 && battle.field.terrainState.duration <= 5);
+		assert(battle.field.terrainState.duration > 0 && battle.field.terrainState.duration <= 3);
 		assert(!avalugg.hasAbility('solidrock'));
 		assert.equal(battle.field.setTerrain('electricterrain', avalugg, battle.dex.moves.get('electricterrain'), false, true), false);
 		assert.equal(battle.field.changeTerrain('icyterrain', avalugg), false);
@@ -53,9 +56,9 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 
 	it('Pulse Triad keeps Hydra Bond, Levitate and Clear Body', () => {
 		const [magnezone, foe] = start('Magnezone', 'No Ability');
-		battle.makeChoices('move splash mega', 'move splash');
+		battle.makeChoices('move 1 mega', 'move splash');
 		assert.equal(battle.field.terrain, 'factoryterrain');
-		assert(battle.field.terrainState.duration <= 5);
+		assert(battle.field.terrainState.duration <= 3);
 		for (const component of ['hydrabond', 'levitate', 'clearbody']) assert(magnezone.hasAbility(component));
 		assert.equal(magnezone.isGrounded(), null);
 		battle.boost({atk: -1}, magnezone, foe, battle.dex.moves.get('growl'));
@@ -67,9 +70,9 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 
 	it('Nightmare Pulse sets Haunted Field without Infiltrator', () => {
 		const [hypno] = start('Hypno', 'No Ability');
-		battle.makeChoices('move splash mega', 'move splash');
+		battle.makeChoices('move 1 mega', 'move splash');
 		assert.equal(battle.field.terrain, 'hauntedterrain');
-		assert(battle.field.terrainState.duration <= 5);
+		assert(battle.field.terrainState.duration <= 3);
 		for (const component of ['pendulumswing', 'cursedbody', 'baddreams']) assert(hypno.hasAbility(component));
 		assert(!hypno.hasAbility('infiltrator'));
 		const move = battle.dex.getActiveMove('shadowball');
@@ -78,9 +81,14 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 	});
 
 	it('Drapion has its new ordinary abilities and preserves Aevian Toxin', () => {
-		const [drapion] = start('Drapion', 'Razor Reach', ['nightslash']);
+		const [drapion] = start('Drapion', 'Battle Armor', ['nightslash']);
 		assert.deepEqual(drapion.species.abilities,
-			{0: 'Razor Reach', 1: 'Withering Touch', H: 'Crushing Venom', S: 'Aevian Toxin'});
+			{ 0: 'Battle Armor', 1: 'Sniper', H: 'Crushing Venom', S: 'Aevian Toxin' });
+		assert.deepEqual(drapion.getPassives(), ['poisontouch']);
+	});
+
+	it('retains the legacy Razor Reach non-contact slicing effect on a copied holder', () => {
+		const [drapion] = start('Mew', 'Razor Reach', ['nightslash']);
 		const move = battle.dex.getActiveMove('nightslash');
 		assert(move.flags['contact'] && move.flags['slicing']);
 		battle.dex.abilities.get('razorreach').onModifyMove.call(battle, move, drapion);
@@ -89,7 +97,7 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 	});
 
 	it('Withering Touch inherits custom Corrosion poisoning and Poison damage against Steel', () => {
-		const [drapion, steel] = start('Drapion', 'Withering Touch', ['toxic', 'gunkshot'],
+		const [drapion, steel] = start('Mew', 'Withering Touch', ['toxic', 'gunkshot'],
 			{species: 'Registeel', ability: 'No Ability', moves: ['splash']});
 		battle.makeChoices('move toxic', 'move splash');
 		assert.equal(steel.status, 'tox');
@@ -98,25 +106,30 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 		attack.accuracy = true;
 		battle.actions.runMove(attack, drapion, drapion.getLocOf(steel));
 		assert(steel.hp < hp);
-		assert.equal(steel.boosts.atk, -1);
+		assert.equal(steel.boosts.atk, 0);
+		assert.equal(steel.boosts.def, -1);
+		assert.equal(steel.boosts.spd, -1);
 	});
 
-	it('Withering Touch lowers a poisoned foe once per target per turn', () => {
-		const [drapion, foe] = start('Drapion', 'Withering Touch', ['sludgebomb']);
+	it('Withering Touch does not repeatedly lower stats against an already-poisoned foe', () => {
+		const [drapion, foe] = start('Mew', 'Withering Touch', ['sludgebomb']);
 		foe.setStatus('psn', drapion);
+		const stages = { ...foe.boosts };
 		const move = battle.dex.getActiveMove('sludgebomb');
 		Object.assign(move, {damage: 10, accuracy: true, willCrit: false, secondaries: undefined, multihit: 3});
 		battle.actions.runMove(move, drapion, drapion.getLocOf(foe));
-		assert.equal(foe.boosts.atk, -1);
+		assert.deepEqual(foe.boosts, stages);
+		assert.equal(foe.boosts.atk, 0);
 		battle.actions.runMove(move, drapion, drapion.getLocOf(foe));
-		assert.equal(foe.boosts.atk, -1);
+		assert.deepEqual(foe.boosts, stages);
+		assert.equal(foe.boosts.atk, 0);
 	});
 
 	it('Pulse Bulwark gives screens priority and keeps transitions finite', () => {
 		const [mime] = start('Mr. Mime', 'No Ability', ['reflect', 'discharge']);
 		battle.makeChoices('move reflect mega', 'move splash');
 		assert.equal(battle.field.terrain, 'shortcircuitterrain');
-		assert(battle.field.terrainState.duration <= 5);
+		assert(battle.field.terrainState.duration <= 3);
 		assert(mime.side.getSideCondition('reflect'));
 		assert.deepEqual(mime.moveSlots.map(move => move.id), ['lightscreen', 'reflect', 'dazzlinggleam', 'darkpulse']);
 		assert.equal(battle.dex.abilities.get('pulsebulwark').onModifyPriority.call(
@@ -182,14 +195,20 @@ describe('Pulse Blockade field duration protocol', () => {
    {species: 'Mew', ability: 'No Ability', moves: ['splash']},
   ], [{species: 'Mew', ability: 'No Ability', moves: ['splash']}]]);
   battle.makeChoices('team 1,2', 'team 1');
-  battle.makeChoices('move splash mega', 'move splash');
-  const announcement = '|-fieldstart|Snowy Mountain Terrain|[turns] 5|[silent]';
+		const foe = battle.p2.active[0]; foe.hp = foe.maxhp = foe.baseMaxhp = 5000;
+		battle.makeChoices('move 1 mega', 'move splash');
+		const announcement = '|-fieldstart|Snowy Mountain Terrain|[turns] 3|[silent]';
   assert(battle.log.includes(announcement));
   battle.makeChoices('switch 2', 'move splash');
   const before = battle.log.length;
   battle.makeChoices('switch 2', 'move splash');
-  assert.equal(battle.field.terrainState.duration, 2);
+		assert.equal(battle.field.terrain, '');
   assert(!battle.log.slice(before).includes(announcement));
+	});
+	it('announces a manually extended field with the unlimited duration marker', () => {
+		battle = common.createBattle([[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
+		battle.field.setTerrain('snowymountainterrain', battle.p1.active[0]);
   battle.field.setTerrainDuration(9999);
   assert(battle.log.includes('|-fieldstart|Snowy Mountain Terrain|[turns] 0|[silent]'));
  });

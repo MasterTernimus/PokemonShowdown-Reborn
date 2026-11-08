@@ -23,21 +23,21 @@ describe('Approved Shadow Double and Crossfire', () => {
 		assert.deepEqual(Dex.species.get('gengarmega').passives, ['shadowtag']);
 		assert.deepEqual(Dex.species.get('scovillainmega').passives, ['spicyspray']);
 	});
-	for (const species of ['Gengar-Mega', 'Scovillain-Mega', 'Lucario-Mega', 'Eevee-Starter']) {
-		it('Illusion copies ' + species + ' selected ability and passive, then restores on reveal', () => {
+	for (const species of ['Gengar-Mega', 'Scovillain-Mega', 'Lucario-Mega', 'Eevee-Starter']) for (const ability of ['Illusion', 'Perfect Illusion']) {
+		it(ability + ' follows its own copy rules for ' + species + ' and restores on reveal', () => {
 			const set = (species, ability = 'No Ability') => ({ species, ability, moves: ['splash'] });
 			battle = common.createBattle({ gameType: 'singles' }, [
-				[set('Mew'), set('Zoroark', 'Illusion'), set(species, Dex.species.get(species).abilities[0])],
+				[set('Mew'), set('Zoroark', ability), set(species, Dex.species.get(species).abilities[0])],
 				[set('Mew')],
 			]);
 			const disguise = battle.p1.pokemon[2];
 			if (disguise.species.id !== Dex.species.get(species).id) disguise.formeChange(species, null, true);
 			battle.makeChoices('switch 2', 'move 1');
 			const p = battle.p1.active[0], q = battle.p2.active[0];
-			assert(p.illusion); assert.equal(p.ability, disguise.ability);
-			assert.deepEqual(p.getPassives(), disguise.getPassives());
+			assert(p.illusion); assert.equal(p.ability, ability === 'Perfect Illusion' ? disguise.ability : 'illusion');
+			assert.deepEqual(p.getPassives(), ability === 'Perfect Illusion' ? disguise.getPassives() : Dex.species.get('zoroark').passives);
 			move(q, p, 'watergun');
-			assert(!p.illusion); assert.equal(p.ability, 'illusion');
+			assert(!p.illusion); assert.equal(p.ability, Dex.abilities.get(ability).id);
 			assert.deepEqual(p.getPassives(), Dex.species.get('zoroark').passives);
 		});
 	}
@@ -46,9 +46,9 @@ describe('Approved Shadow Double and Crossfire', () => {
 		assert(!p.volatiles.shadowdoublespent); q.removeVolatile('substitute'); move(p, q, 'shadowball');
 		assert(p.volatiles.shadowdoublespent.armed);
 		const m = Dex.getActiveMove('doublehit');
-		assert.equal(battle.runEvent('ModifyDamage', q, p, m, 100), 56);
-		assert.equal(battle.runEvent('ModifyDamage', q, p, m, 100), 56);
-		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('doublehit'), 100), 75);
+		assert.equal(battle.runEvent('ModifyDamage', q, p, m, 100), 60);
+		assert.equal(battle.runEvent('ModifyDamage', q, p, m, 100), 60);
+		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('doublehit'), 100), 80);
 		p.setAbility('No Ability'); p.setAbility('Shadow Double'); move(p, q, 'shadowball');
 		assert.equal(p.volatiles.shadowdoublespent.armed, false);
 	});
@@ -60,7 +60,7 @@ describe('Approved Shadow Double and Crossfire', () => {
 	it('suppresses only Shadow Double while Shadow Tag retains its reduction', () => {
 		const [p, q] = setup('Gengar-Mega'); p.addVolatile('gastroacid'); move(p, q, 'shadowball');
 		assert(!p.volatiles.shadowdoublespent);
-		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('doublehit'), 100), 75);
+		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('doublehit'), 100), 80);
 		assert(q.transformInto(p)); assert.deepEqual(q.getPassives(), ['shadowtag']);
 	});
 	it('alternates charges, repeats without a bonus, and never primes from a Substitute-only hit', () => {

@@ -1285,6 +1285,8 @@ export class BattleActions {
 		let hit: number;
 		for (hit = 1; hit <= targetHits; hit++) {
 			if (damage.includes(false)) break;
+			if (move.angeFlower && hit > 1 && (!move.angeFlowerReady || !pokemon.hp || !pokemon.isActive ||
+				!pokemon.hasAbility('ange') || !originalMultihitTarget?.hp || !originalMultihitTarget.isActive)) break;
 			if (battleBondHitOffset && (!pokemon.hp || pokemon.fainted || !pokemon.isActive)) break;
 			if (twinStrike && (!pokemon.hp || pokemon.fainted || !pokemon.isActive)) break;
 			if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
@@ -1566,7 +1568,8 @@ export class BattleActions {
 	}
 
 	getMultihitSpilloverTarget(originalTarget: Pokemon, pokemon: Pokemon, move: ActiveMove, hit: number, targetHits: number) {
-		if ((move as any).mycelialBond || (move as any).twinFang || (move as any).exaltedAether || (move as any).wraithProcession) return null;
+		if (move.angeFlower || (move as any).mycelialBond || (move as any).twinFang ||
+			(move as any).exaltedAether || (move as any).wraithProcession) return null;
 		if (hit > targetHits || move.multihitType === 'starboxer') return null;
 		const parentalLike = ['parentalbond', 'hydrabond'].includes(move.multihitType || '');
 		if (!parentalLike && !move.multihit) return null;
@@ -1944,6 +1947,7 @@ export class BattleActions {
 		targets: SpreadMoveTargets, source: Pokemon,
 		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean
 	) {
+		if (move.angeFlower && move.hit > 1) return;
 		if (move.multihitType === 'starboxer' && !(move as any).starBoxerFinishing) {
 			// Star Boxer defers self effects until its final hit.
 			(move as any).starBoxerSelfTargets = targets;
@@ -1968,6 +1972,7 @@ export class BattleActions {
 		}
 	}
 	secondaries(targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSelf?: boolean) {
+		if (move.angeFlower && move.hit > 1) return;
 		if (!moveData.secondaries) return;
 		if (((move as any).mycelialBond || (move as any).twinFang || (move as any).exaltedAether) && move.hit > 1) return;
 		if ((move as any).silkenSalvo && move.hit > 2) return;
@@ -2335,6 +2340,9 @@ export class BattleActions {
 		if (move.damageCallback || move.damage) {
 			let damage = move.damageCallback ? move.damageCallback.call(this.battle, source, target) :
 				move.damage === 'level' ? source.level : move.damage!;
+			if (move.angeFlower && move.hit > 1 && typeof damage === 'number' && damage > 0) {
+				damage = Math.max(1, this.battle.modify(damage, 0.25));
+			}
 			if (((move as any).wraithProcession || (move as any).exaltedAether) && move.hit > 1 && typeof damage === 'number' && damage > 0) {
 				damage = Math.max(1, this.battle.modify(damage, (move as any).exaltedAether ? 0.4 : 0.5));
 			}
@@ -2447,11 +2455,16 @@ export class BattleActions {
 				ultraGuardAvailable(this.battle, source, target, move) &&
 				!predatorUltraMatch(this.battle, source, target))) atkBoosts = 0;
 		}
-		if (atkBoosts > 0 && adaptiveSetup(target, attacker)) atkBoosts = 0;
+		if (atkBoosts > 0 && !(target.species.id === 'kecleon' && adaptiveZHit(target, move)) &&
+			adaptiveSetup(target, attacker)) atkBoosts = 0;
 		if (defBoosts > 0 && adaptiveSetup(source, defender)) defBoosts = 0;
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 		let ignorePositiveDefensive = (!!(move as any).exaltedAether && move.hit > 1) || grandStrategyPrepared(source, target, move) || ((move as any).aimAssistTarget ? (move as any).aimAssistTarget === target : !!move.ignorePositiveDefensive);
+		// Kecleon's Z-Move weakness bypasses defensive setup, not the attacker's penalties.
+		if (defender === target && target.species.id === 'kecleon' && adaptiveZHit(target, move)) {
+			ignorePositiveDefensive = true;
+		}
 		if (source.hasAbility('insight') && !source.isAlly(target)) {
 			// Keep the read from the first strike for every hit against this foe in the same move.
 			const previous = source.abilityState.auraReads?.[target.m.ultraRivalryEntryToken];
@@ -2543,6 +2556,7 @@ export class BattleActions {
 		if (move.multihitType === 'starboxer') baseDamage = this.battle.modify(baseDamage, 0.4);
 
 		let ffaFollowUpAttack = false;
+		if (move.angeFlower && move.hit > 1) baseDamage = this.battle.modify(baseDamage, 0.25);
 		if ((move as any).mycelialBond && move.hit > 1) baseDamage = this.battle.modify(baseDamage, 0.25);
 		if ((move as any).twinFang && move.hit > 1) baseDamage = this.battle.modify(baseDamage, 0.3);
 		if (move.spreadHit) {

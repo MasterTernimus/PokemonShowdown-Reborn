@@ -61,7 +61,15 @@ export const RejuvenationSignatureCredits: {[id: string]: string} = {
  pyrokinesis: 'Lavender', venamskiss: 'Venam', heavenlywing: 'Souta', uproot: 'Flora and Florin',
 };
 for (const [id, summary] of Object.entries(summaries)) {
- const fieldNotes: {[id:string]:string} = {"multipulse":" Holy Field adds a 1.3x named boost regardless of Plate type.","aquabatics":" Big Top raises both stats by 2 stages instead.","feverpitch":" Cave gains shared volcanic heat; the second heating use changes it to Volcanic with the existing transition boost.","desertsmark":" Desert binding damage is 1/6 max HP; Ashen Field lowers trapped targets' accuracy each turn.","superumdmove":" Factory and Short Circuit boost power 1.5x; Physical changes Factory to Short Circuit, Special reverses it, with a 1.3x transition boost.","galestrike":" Forest boosts power 1.5x and adds Grass typing.","matrixshot":" Dragon's Den adds a 1.5x named boost alongside its Rock boost."};
+	const fieldNotes: { [id: string]: string } = {
+		"multipulse": " Holy Field adds a 1.3x named boost regardless of Plate type.",
+		"aquabatics": " Big Top raises both stats by 2 stages instead.",
+		"feverpitch": " Cave gains shared volcanic heat; the second heating use changes it to Volcanic with the existing transition boost.",
+		"desertsmark": " Desert binding damage is 1/6 max HP; Ashen Field lowers trapped targets' accuracy each turn.",
+		"superumdmove": " Factory and Short Circuit boost power 1.5x; Physical changes Factory to Short Circuit, Special reverses it, with a 1.3x transition boost.",
+		"galestrike": " Forest boosts power 1.5x and adds Grass typing.",
+		"matrixshot": " Dragon's Den boosts this move's power by 1.5x.",
+	};
  const fieldSummary = summary + (fieldNotes[id] || '');
  let desc = fieldSummary;
  if (['barbedweb', 'bunrakubeatdown'].includes(id)) desc += ' Adaptive damage uses the higher Attack or Sp. Atk including stat stages, with the matching defense and Special winning ties. Items, burn, screens and opposing defenses do not change this comparison.';

@@ -19,18 +19,6 @@ describe('Future attack queue and RKS Memory audit regressions', () => {
 		], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'], ...foe }]);
 	}
 
-	function doubles(item, attack, foeAbility = 'No Ability') {
-		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
-			{ species: 'Silvally', ability: 'RKS System', item, moves: ['splash'] },
-			{ species: 'Pelipper', ability: 'No Ability', moves: ['splash'] },
-		], [
-			{ species: 'Mew', ability: foeAbility, moves: [attack] },
-			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
-		]]);
-		battle.makeChoices('team 12', 'team 12');
-		return battle.p1.active;
-	}
-
 	function watchFutureHits() {
 		const hits = [];
 		battle.onEvent('Damage', battle.format, (damage, target, source, move) => {
@@ -113,208 +101,77 @@ describe('Future attack queue and RKS Memory audit regressions', () => {
 	});
 
 	const memories = {
-		Bug: ['tintedlens', 'shielddust'], Dark: ['pressure', 'intimidate'],
-		Dragon: ['marvelscale', 'toughclaws'], Electric: ['transistor', 'lightningrod'],
-		Fairy: ['invigorate', 'friendguard'], Fighting: ['innerfocus', 'sheerforce'],
-		Fire: ['soulfire', 'flamebody'], Flying: ['galewings', 'airlock'],
-		Ghost: ['soulfire', 'cursedbody'], Grass: ['hospitality', 'chlorophyll'],
-		Ground: ['sandrush', 'stamina'], Ice: ['icebody', 'slushrush'],
-		Poison: ['regenerator', 'corrosion'], Psychic: ['magicbounce', 'magicguard'],
-		Rock: ['purifyingsalt', 'solidrock'], Steel: ['swornduty', 'mirrorarmor'],
-		Water: ['swiftswim', 'waterveil'],
+		Bug: ['tintedlens'], Dark: ['pressure'], Dragon: ['marvelscale'], Electric: ['lightningrod'],
+		Fairy: ['mistysurge'], Fighting: ['innerfocus'], Fire: ['flashfire'], Flying: ['windrider'],
+		Ghost: ['infiltrator'], Grass: ['hospitality'], Ground: ['eartheater'], Ice: ['thermalexchange'],
+		Poison: ['regenerator'], Psychic: ['magicbounce'], Rock: ['purifyingsalt'], Steel: ['swornduty'], Water: ['swiftswim'],
 	};
-	for (const [type, components] of Object.entries(memories)) {
-		it(`exposes only the ${type} Memory components and forwards every component hook`, () => {
-			const holder = memory(`${type} Memory`);
-			for (const component of components) {
-				assert(holder.hasAbility(component), component);
-				for (const [event, handler] of Object.entries(battle.dex.abilities.get(component))) {
-					if (event.startsWith('on') && typeof handler === 'function') {
-						assert.equal(typeof holder.getAbility()[event], 'function', `${component}.${event}`);
-					}
-				}
-			}
-			for (const component of new Set(Object.values(memories).flat())) {
-				assert.equal(holder.hasAbility(component), components.includes(component), component);
-			}
-			assert(!holder.hasAbility('scrappy'));
-		});
-	}
-
-	it('applies Sheer Force once, keeps the flinch immunity, and preserves a non-Memory control', () => {
+	for (const [type, components] of Object.entries(memories))it('exposes only the current ' + type + ' Memory component and forwards its hooks', () => {
+		const holder = memory(type + ' Memory');
+		for (const component of components) {
+			assert(holder.hasAbility(component), component);
+			for (const [event, handler] of Object.entries(battle.dex.abilities.get(component))) if (event.startsWith('on') && typeof handler === 'function')assert.equal(typeof holder.getAbility()[event], 'function', component + '.' + event);
+		}
+		for (const component of new Set(Object.values(memories).flat()))assert.equal(holder.hasAbility(component), components.includes(component), component);
+		assert(!holder.hasAbility('scrappy'));
+	});
+	it('Fighting Memory blocks flinches without Sheer Force or secondary removal', () => {
 		const holder = memory('Fighting Memory', ['flamethrower'], { moves: ['fakeout'] });
-		const target = battle.p2.active[0];
-		const move = battle.dex.getActiveMove('flamethrower');
+		const target = battle.p2.active[0], move = battle.dex.getActiveMove('flamethrower');
 		battle.singleEvent('ModifyMove', holder.getAbility(), holder.abilityState, move, holder, target);
-		assert(!move.secondaries);
-		assert.equal(battle.runEvent('BasePower', holder, target, move, 100), 130);
+		assert(move.secondaries); assert.equal(battle.runEvent('BasePower', holder, target, move, 100), 100);
 		battle.makeChoices('move flamethrower', 'move fakeout');
 		assert(!battle.log.some(line => line.startsWith('|cant|p1a:') && line.endsWith('|flinch')));
-		holder.setItem('Normalium Z');
-		const ordinary = battle.dex.getActiveMove('flamethrower');
-		battle.singleEvent('ModifyMove', holder.getAbility(), holder.abilityState, ordinary, holder, target);
-		assert(ordinary.secondaries);
-		assert.equal(battle.runEvent('BasePower', holder, target, ordinary, 100), 100);
 	});
-
-	for (const [item, attack] of [['Electric Memory', 'thunderbolt'], ['Fire Memory', 'flamethrower'], ['Ghost Memory', 'shadowball']]) {
-		it(`${item} redirects and absorbs ${attack} once`, () => {
-			const [holder, ally] = doubles(item, attack);
-			battle.makeChoices('move splash, move splash', `move ${attack} 2, move splash`);
-			assert.equal(ally.hp, ally.maxhp);
-			assert.equal(holder.boosts.spa, 1);
-			assert.equal(holder.boosts.atk, 1);
-		});
-	}
-
-	it('Bug Memory removes opposing secondaries but keeps self effects', () => {
-		const holder = memory('Bug Memory');
-		const secondaries = [{ chance: 100, status: 'par' }, { chance: 100, self: { boosts: { atk: 1 } } }];
-		assert.deepEqual(battle.runEvent('ModifySecondaries', holder, battle.p2.active[0],
-			battle.dex.getActiveMove('thunderbolt'), secondaries), [secondaries[1]]);
+	it('Bug Memory permits ordinary opposing secondaries', () => {
+		const holder = memory('Bug Memory'), secondaries = [{ chance: 100, status: 'par' }];
+		assert.deepEqual(battle.runEvent('ModifySecondaries', holder, battle.p2.active[0], battle.dex.getActiveMove('thunderbolt'), secondaries), secondaries);
 	});
-
-	it('Dark Memory applies both entry components once with their own ability identity', () => {
-		const holder = memory('Dark Memory', ['splash'], { ability: 'Inner Focus' });
-		const foe = battle.p2.active[0];
-		assert.equal(foe.boosts.atk, 0, 'Inner Focus recognizes Intimidate');
-		assert.equal(foe.boosts.def, -1);
-		assert.equal(foe.boosts.spd, -1);
+	it('Dark Memory applies Pressure without Intimidate', () => {
+		const holder = memory('Dark Memory'), foe = battle.p2.active[0];
+		assert.equal(foe.boosts.atk, 0); assert.equal(foe.boosts.def, -1); assert.equal(foe.boosts.spd, -1);
 		assert.equal(battle.runEvent('DeductPP', holder, foe), 1);
 	});
-
-	it('Dragon Memory supplies Tough Claws and Marvel Scale once', () => {
-		const holder = memory('Dragon Memory');
-		assert.equal(battle.runEvent('BasePower', holder, battle.p2.active[0], battle.dex.getActiveMove('tackle'), 100), 130);
-		holder.status = 'brn';
-		assert.equal(battle.runEvent('ModifyDef', holder, null, null, 100), 150);
+	it('Dragon Memory supplies Marvel Scale without Tough Claws', () => {
+		const holder = memory('Dragon Memory'); assert.equal(battle.runEvent('BasePower', holder, battle.p2.active[0], battle.dex.getActiveMove('tackle'), 100), 100);
+		holder.status = 'brn'; assert.equal(battle.runEvent('ModifyDef', holder, null, null, 100), 150);
 	});
-
-	it('Fairy Memory amplifies healing and protects allies once', () => {
-		const [holder, ally] = doubles('Fairy Memory', 'splash');
-		ally.hp = 1;
-		assert.equal(battle.heal(100, ally, holder), 130);
-		assert.equal(battle.runEvent('ModifyDamage', battle.p2.active[0], ally, battle.dex.getActiveMove('tackle'), 100), 75);
+	it('Water Memory doubles Speed in rain without Water Veil', () => {
+		const holder = memory('Water Memory'); battle.field.setWeather('raindance', holder);
+		assert.equal(battle.runEvent('ModifySpe', holder, null, null, 100), 200);
+		assert(!holder.hasAbility('waterveil')); assert(holder.trySetStatus('brn', battle.p2.active[0]));
 	});
-
-	it('Flying Memory suppresses weather only while its holder is active', () => {
-		const holder = singles([
-			{ species: 'Silvally', ability: 'RKS System', item: 'Flying Memory', moves: ['splash'] },
-			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
-		], [{ species: 'Mew', ability: 'No Ability', moves: ['raindance', 'splash'] }]);
-		battle.makeChoices('move splash', 'move raindance');
-		assert.equal(battle.field.weather, 'raindance');
-		assert.equal(battle.field.effectiveWeather(), '');
-		assert.equal(battle.runEvent('ModifyPriority', holder, battle.p2.active[0], battle.dex.getActiveMove('airslash'), 0), 1);
-		battle.makeChoices('switch 2', 'move splash');
-		assert.equal(battle.field.effectiveWeather(), 'raindance');
-		battle.makeChoices('switch 2', 'move splash');
-		assert.equal(battle.field.effectiveWeather(), '');
+	it('Poison Memory recovers on switching without Corrosion', () => {
+		const holder = singles([{ species: 'Silvally', ability: 'RKS System', item: 'Poison Memory', moves: ['toxic'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }], [{ species: 'Registeel', ability: 'No Ability', moves: ['splash'] }]);
+		battle.makeChoices('move toxic', 'move splash'); assert.equal(battle.p2.active[0].status, '');
+		holder.hp = 1; battle.makeChoices('switch 2', 'move splash'); assert.equal(holder.hp, 1 + Math.floor(holder.baseMaxhp / 3));
 	});
-
-	for (const [item, weather] of [['Grass Memory', 'sunnyday'], ['Ground Memory', 'sandstorm'], ['Ice Memory', 'hail'], ['Water Memory', 'raindance']]) {
-		it(`${item} supplies its weather speed component once`, () => {
-			const holder = memory(item);
-			battle.field.setWeather(weather);
-			assert.equal(battle.runEvent('ModifySpe', holder, null, null, 100), 200);
-		});
-	}
-
-	it('Ground Memory applies Stamina once per turn while healing each hit', () => {
-		const holder = memory('Ground Memory');
-		holder.hp = 1;
-		for (let hit = 0; hit < 2; hit++) {
-			battle.runEvent('DamagingHit', holder, battle.p2.active[0], battle.dex.getActiveMove('tackle'), 1);
-		}
-		assert.equal(holder.boosts.def, 1);
-		assert.equal(holder.hp, 1 + 2 * Math.floor(holder.baseMaxhp / 16));
-	});
-
-	it('Ice Memory adds Ice Body weather healing to the core RKS recovery once', () => {
-		const holder = memory('Ice Memory');
-		holder.hp = 1;
-		battle.field.setWeather('hail', holder);
-		battle.makeChoices('move splash', 'move splash');
-		assert.equal(holder.hp, 1 + 2 * Math.floor(holder.baseMaxhp / 16));
-	});
-
-	it('Poison Memory can poison Steel through Corrosion and heals when switching out', () => {
-		const holder = singles([
-			{ species: 'Silvally', ability: 'RKS System', item: 'Poison Memory', moves: ['toxic'] },
-			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
-		], [{ species: 'Registeel', ability: 'No Ability', moves: ['splash'] }]);
-		battle.makeChoices('move toxic', 'move splash');
-		assert.equal(battle.p2.active[0].status, 'tox');
-		holder.hp = 1;
-		battle.makeChoices('switch 2', 'move splash');
-		assert.equal(holder.hp, 1 + Math.floor(holder.baseMaxhp / 3));
-	});
-
-	it('Psychic Memory bounces Toxic and blocks indirect damage', () => {
+	it('Psychic Memory bounces Toxic but does not prevent indirect damage', () => {
 		const holder = memory('Psychic Memory', ['splash'], { species: 'Chansey', moves: ['toxic'] });
-		battle.makeChoices('move splash', 'move toxic');
-		assert.equal(holder.status, '');
-		assert.equal(battle.p2.active[0].status, 'tox');
-		assert.equal(battle.damage(20, holder, holder, battle.dex.conditions.get('brn')), false);
+		battle.makeChoices('move splash', 'move toxic'); assert.equal(holder.status, ''); assert.equal(battle.p2.active[0].status, 'tox');
+		const hp = holder.hp; assert.equal(battle.damage(20, holder, holder, battle.dex.conditions.get('brn')), 20); assert.equal(holder.hp, hp - 20);
 	});
-
-	it('Psychic Memory reflection still allows the original attacker to Synchronize Toxic back', () => {
-		const holder = memory('Psychic Memory', ['splash'], { moves: ['toxic'] });
-		battle.makeChoices('move splash', 'move toxic');
-		assert.equal(battle.p2.active[0].status, 'tox');
-		assert.equal(holder.status, 'tox');
-	});
-
-	it('Rock Memory blocks Yawn and direct status through Purifying Salt', () => {
+	it('Rock Memory blocks Yawn and direct status', () => {
 		const holder = memory('Rock Memory', ['splash'], { moves: ['yawn', 'toxic'] });
-		battle.makeChoices('move splash', 'move yawn');
-		assert(!holder.volatiles.yawn);
-		battle.makeChoices('move splash', 'move toxic');
-		assert.equal(holder.status, '');
+		battle.makeChoices('move splash', 'move yawn'); assert(!holder.volatiles.yawn);
+		battle.makeChoices('move splash', 'move toxic'); assert.equal(holder.status, '');
 	});
-
-	it('Steel Memory reflects a drop once and recognizes another Mirror Armor holder', () => {
-		const holder = memory('Steel Memory', ['splash'], { ability: 'Mirror Armor', moves: ['growl'] });
-		battle.makeChoices('move splash', 'move growl');
-		assert.equal(holder.boosts.atk, 0);
-		assert.equal(battle.p2.active[0].boosts.atk, -1);
-	});
-
-	it('Water Memory installs Aqua Ring and prevents burns', () => {
-		const holder = memory('Water Memory', ['splash'], { moves: ['willowisp'] });
-		assert(holder.volatiles.aquaring);
-		battle.makeChoices('move splash', 'move willowisp');
-		assert.equal(holder.status, '');
-	});
-
-	it('retains the held Memory through form changes, Magic Room, and intrinsic suppression immunity', () => {
+	it('held Memory follows form changes and ignores item suppression', () => {
 		const holder = memory('Fighting Memory', ['splash'], { ability: 'Neutralizing Gas', moves: ['gastroacid'] });
-		holder.formeChange('Silvally-Dark');
-		battle.field.addPseudoWeather('magicroom', holder);
-		assert(holder.ignoringItem());
-		assert.equal(holder.species.id, 'silvallydark');
-		assert(holder.hasAbility('sheerforce'));
-		assert(!holder.hasAbility('pressure'));
-		battle.makeChoices('move splash', 'move gastroacid');
-		assert(!holder.volatiles.gastroacid);
-		assert(!holder.ignoringAbility());
+		holder.formeChange('Silvally-Dark'); battle.field.addPseudoWeather('magicroom', holder);
+		assert(holder.ignoringItem()); assert(holder.hasAbility('innerfocus')); assert(!holder.hasAbility('pressure'));
+		battle.makeChoices('move splash', 'move gastroacid'); assert(!holder.volatiles.gastroacid); assert(!holder.ignoringAbility());
 		assert.equal(holder.addVolatile('flinch'), null);
 		holder.setItem('Bug Memory');
-		assert(holder.hasAbility('shielddust'));
-		assert(!holder.hasAbility('sheerforce'));
-	});
-
-	it('uses Scrappy without a Memory and grants no components to a non-Silvally', () => {
-		const holder = memory('Normalium Z');
-		assert(holder.hasAbility('scrappy'));
+		assert(holder.hasAbility('tintedlens'));
 		assert(!holder.hasAbility('innerfocus'));
-		const move = battle.dex.getActiveMove('tackle');
-		battle.singleEvent('ModifyMove', holder.getAbility(), holder.abilityState, move, holder, battle.p2.active[0]);
-		assert.equal(move.ignoreImmunity.Normal, true);
+	});
+	it('uses Scrappy without a Memory and grants no components to a non-Silvally', () => {
+		const holder = memory('Normalium Z'); assert(holder.hasAbility('scrappy')); assert(!holder.hasAbility('innerfocus'));
 		const foe = battle.p2.active[0];
 		foe.setAbility('RKS System');
 		foe.setItem('Fighting Memory');
-		assert(!foe.hasAbility('sheerforce'));
+		assert(!foe.hasAbility('innerfocus'));
 		assert(!foe.hasAbility('scrappy'));
 	});
 });

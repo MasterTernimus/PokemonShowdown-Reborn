@@ -2,16 +2,18 @@
  * Tests for Gen 5 randomized formats
  */
 'use strict';
+const common = require('../common');
 
 const assert = require('../assert');
 const {testTeam, testSet, testHiddenPower, testAlwaysHasMove, validateLearnset} = require('./tools');
 
-describe('[Gen 5] Random Battle (slow)', () => {
+common.describeGen(5, '[Gen 5] Random Battle (slow)', () => {
 	const options = {format: 'gen5randombattle'};
-	const setsJSON = require(`../../dist/data/mods/gen5/random-sets.json`);
+	let setsJSON;
+	before(() => { setsJSON = require(`../../dist/data/mods/gen5/random-sets.json`); });
 	const dex = Dex.forFormat(options.format);
 
-	describe("New set format", () => {
+	common.describeGen(5, "New set format", () => {
 		const filename = '../../data/mods/gen5/random-sets.json';
 		it(`${filename} should have valid set data`, () => {
 			const setsJSON = require(filename);

@@ -1,169 +1,104 @@
 'use strict';
-
 const assert = require('./../../assert');
 const common = require('./../../common');
-
 let battle;
 
-describe("Dynamax", function () {
-	afterEach(function () {
-		battle.destroy();
-	});
-
-	it('Max Move effects should not be suppressed by Sheer Force', function () {
-		battle = common.gen(8).createBattle();
-		battle.setPlayer('p1', {team: [
-			{species: 'Braviary', ability: 'sheerforce', moves: ['heatwave', 'facade', 'superpower']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: 'Shedinja', ability: 'sturdy', item: 'ringtarget', moves: ['splash']},
-		]});
-		battle.makeChoices('move heatwave dynamax', 'auto');
-		assert.equal(battle.field.weather, 'sunnyday');
-		battle.makeChoices('move facade', 'auto');
-		assert.statStage(battle.p2.active[0], 'spe', -1);
-		battle.makeChoices('move superpower', 'auto');
-		assert.statStage(battle.p1.active[0], 'atk', 1);
-	});
-
-	it('Max Move versions of disabled moves should not be disabled, except by Assault Vest', function () {
-		battle = common.gen(8).createBattle([[
-			{species: 'Mew', item: 'assaultvest', moves: ['watergun', 'protect']},
+// Reborn supports persistent G-Max species, not ordinary three-turn Dynamax.
+// Keep the upstream hacked-Max protections below, but exercise legal local forms here.
+describe('Reborn G-Max battle flow', () => {
+	afterEach(() => { battle?.destroy(); battle = null; });
+	function setup(species = 'Charizard', moves = ['ember', 'watergun', 'splash', 'protect'], item = '') {
+		battle = common.createBattle({ formatid: 'gen9mistyfieldadrienn' }, [[
+			{ species, ability: 'No Ability', gigantamax: true, item, moves },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
 		], [
-			{species: 'Mew', item: 'choiceband', moves: ['watergun', 'protect']},
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash', 'taunt', 'watergun'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
 		]]);
-		battle.makeChoices('move 1 dynamax', 'move 1 dynamax');
-		assert.throws(() => {
-			battle.makeChoices('move 2', 'move 1');
-		});
-		battle.makeChoices('move 1', 'move 2');
+		battle.makeChoices('team 12', 'team 12');
+		const p = battle.p1.active[0], q = battle.p2.active[0];
+		q.hp = q.maxhp = q.baseMaxhp = 5000;
+		return [p, q];
+	}
+	it('does not offer ordinary Dynamax to species without a G-Max form', () => {
+		const [p] = setup('Mew');
+		assert(!p.canGigantamax);
+		assert(!p.getDynamaxRequest());
+		assert(!p.getMoveRequestData().canDynamax);
 	});
-
-	it('Max Move weather activates even if foe faints', function () {
-		battle = common.gen(8).createBattle([[
-			{species: 'Shedinja', moves: ['splash']},
-		], [
-			{species: 'Mew', moves: ['watergun']},
-		]]);
-		battle.makeChoices('move 1', 'move 1 dynamax');
-		assert.equal(battle.field.weather, 'raindance');
+	it('converts only signature-compatible attacks and keeps other moves ordinary', () => {
+		const [p] = setup(); const r = p.getDynamaxRequest();
+		assert.deepEqual(r.maxMoves.map(m => m.move), ['gmaxwildfire', 'watergun', 'splash', 'protect']);
+		assert.equal(r.maxMoves[3].disabled, true);
+		battle.makeChoices('move watergun dynamax', 'move splash');
+		assert.equal(p.species.id, 'charizardgmax');
+		assert(battle.log.some(l => l.startsWith('|move|p1a:') && l.includes('|Water Gun|')));
+		assert(!battle.log.some(l => l.includes('|Max Geyser|')));
 	});
-
-	it('Max Move weather activates before Sand Spit', function () {
-		battle = common.gen(8).createBattle([[
-			{species: 'Shedinja', ability: 'sandspit', moves: ['splash']},
-		], [
-			{species: 'Mew', moves: ['watergun']},
-		]]);
-		battle.makeChoices('move 1', 'move 1 dynamax');
+	it('keeps a signature side effect when the G-Max user has Sheer Force', () => {
+		const [p] = setup(); battle.makeChoices('move splash dynamax', 'move splash'); p.setAbility('Sheer Force');
+		battle.makeChoices('move ember', 'move splash');
+		assert(battle.p2.sideConditions.gmaxwildfire);
+	});
+	it('starts the signature side effect even when the target faints', () => {
+		const [p, q] = setup(); q.hp = 1;
+		battle.makeChoices('move ember dynamax', 'move splash');
+		assert.equal(q.hp, 0); assert(battle.p2.sideConditions.gmaxwildfire);
+	});
+	it('retains Sand Spit when an ordinary Water move hits during G-Max', () => {
+		const [p, q] = setup(); q.setAbility('Sand Spit');
+		battle.makeChoices('move watergun dynamax', 'move splash');
 		assert.equal(battle.field.weather, 'sandstorm');
+		assert(!battle.log.some(l => l.includes('|Max Geyser|')));
 	});
-
-	it('makes Liquid Voice stop working', function () {
-		battle = common.gen(8).createBattle([[
-			{species: 'Primarina', ability: 'liquidvoice', moves: ['hypervoice']},
-		], [
-			{species: 'Rhyhorn', ability: 'wonderguard', moves: ['splash']},
-		]]);
-		battle.makeChoices('move 1 dynamax', 'move 1');
-		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+	it('retains Liquid Voice on an ordinary sound move during G-Max', () => {
+		const [p, q] = setup('Charizard', ['ember', 'hypervoice', 'splash']);
+		battle.makeChoices('move splash dynamax', 'move splash');
+		p.setAbility('Liquid Voice');
+		q.setAbility('Water Absorb');
+		q.hp = 1000;
+		battle.makeChoices('move hypervoice', 'move splash');
+		assert.equal(q.hp, 2250);
 	});
-
-	it('should execute in order of updated speed when 2 or more Pokemon are Dynamaxing', function () {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'kingdra', ability: 'swiftswim', moves: ['sleeptalk']},
-			{species: 'wynaut', moves: ['sleeptalk']},
-			{species: 'groudon', ability: 'drought', moves: ['sleeptalk']},
-		], [
-			{species: 'kyogre', ability: 'drizzle', moves: ['sleeptalk']},
-			{species: 'wynaut', moves: ['sleeptalk']},
-		]]);
-		battle.makeChoices('move sleeptalk dynamax, switch 3', 'move sleeptalk dynamax, auto');
-		const log = battle.getDebugLog();
-		const kingdraMaxIndex = log.indexOf('|-start|p1a: Kingdra|Dynamax');
-		const kyogreMaxIndex = log.indexOf('|-start|p2a: Kyogre|Dynamax');
-		assert(kyogreMaxIndex < kingdraMaxIndex, 'Kyogre should have Dynamaxed before Kingdra.');
+	it('retains the G-Max form after turn three and after switching', () => {
+		const [p] = setup(); battle.makeChoices('move splash dynamax', 'move splash');
+		for (let i = 0; i < 3; i++)battle.makeChoices('move splash', 'move splash');
+		assert.equal(p.species.id, 'charizardgmax'); assert(p.volatiles.dynamax);
+		battle.makeChoices('switch 2', 'move splash'); battle.makeChoices('switch 2', 'move splash');
+		assert.equal(battle.p1.active[0], p); assert.equal(p.species.id, 'charizardgmax');
 	});
-
-	it('should revert before the start of the 4th turn, not as an end-of-turn effect on the 3rd turn', function () {
-		battle = common.gen(8).createBattle([[
-			{species: 'wynaut', moves: ['sleeptalk', 'psychic']},
-		], [
-			{species: 'weedle', level: 1, moves: ['sleeptalk']},
-			{species: 'weedle', moves: ['sleeptalk']},
-		]]);
-		battle.makeChoices('move sleeptalk dynamax', 'auto');
-		battle.makeChoices();
-		battle.makeChoices('move psychic', 'auto');
-		const wynaut = battle.p1.active[0];
-		assert(wynaut.volatiles['dynamax'], 'End of 3rd turn, Wynaut should still be Dynamaxed.');
-		battle.makeChoices('', 'switch 2');
-		assert.false(wynaut.volatiles['dynamax'], 'Start of 4th turn, Wynaut should not be Dynamaxed.');
+	it('orders simultaneous G-Max transformations using Speed after a weather-changing switch', () => {
+		const set = (species, ability) => ({ species, ability, gigantamax: true, moves: ['splash'] });
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			set('Blastoise', 'Swift Swim'), set('Mew', 'No Ability'), set('Groudon', 'Drought'),
+		], [set('Charizard', 'Drizzle'), set('Mew', 'No Ability')]]);
+		battle.makeChoices('team 123', 'team 12');
+		assert.equal(battle.field.weather, 'raindance');
+		assert(battle.p1.active[0].getStat('spe') > battle.p2.active[0].getStat('spe'));
+		battle.makeChoices('move splash dynamax, switch 3', 'move splash dynamax, move splash');
+		const first = battle.log.findIndex(l => l.startsWith('|detailschange|p2a:') && l.includes('Charizard-Gmax'));
+		const second = battle.log.findIndex(l => l.startsWith('|detailschange|p1a:') && l.includes('Blastoise-Gmax'));
+		assert(first >= 0 && second > first, battle.log.join('\n'));
 	});
-
-	it('should be impossible to Dynamax when all the base moves are disabled', function () {
-		battle = common.gen(8).createBattle([[
-			{species: "Feebas", moves: ['splash']},
-		], [
-			{species: "Wynaut", moves: ['taunt', 'splash']},
-		]]);
-		battle.makeChoices();
-		assert.cantMove(() => battle.choose('p1', 'move splash dynamax'));
-		assert.cantMove(() => battle.choose('p1', 'move struggle dynamax'));
-
-		battle = common.gen(8).createBattle([[
-			{species: "Feebas", moves: ['splash']},
-		], [
-			{species: "Wynaut", moves: ['imprison', 'splash']},
-		]]);
-		battle.makeChoices();
-		battle.makeChoices('move 1', 'auto');
-		assert.cantMove(() => battle.choose('p1', 'move splash dynamax'));
-		assert.cantMove(() => battle.choose('p1', 'move struggle dynamax'));
+	it('keeps Assault Vest and Protect restrictions on unconverted status moves', () => {
+		const [p] = setup('Charizard', ['ember', 'splash', 'protect'], 'Assault Vest');
+		const r = p.getDynamaxRequest(); assert(!r.maxMoves[0].disabled);
+		assert.equal(r.maxMoves[1].disabled, true); assert.equal(r.maxMoves[2].disabled, true);
 	});
-
-	it(`should not allow the user to select max moves with 0 base PP remaining`, function () {
-		battle = common.gen(8).createBattle([[
-			{species: 'pichu', ability: 'prankster', level: 1, moves: ['grudge']},
-			{species: 'noibat', ability: 'prankster', level: 1, moves: ['grudge']},
-			{species: 'azurill', moves: ['sleeptalk']},
-		], [
-			{species: 'wynaut', moves: ['earthquake', 'icebeam']},
-		]]);
-
-		battle.makeChoices('auto', 'move earthquake dynamax');
-		battle.makeChoices();
-		assert.cantMove(() => battle.p2.chooseMove('earthquake'), 'wynaut', 'Max Quake');
-		battle.makeChoices(); // Noibat uses Grudge and Wynaut uses Max Hailstorm
-		assert.fainted(battle.p1.active[0]);
-		battle.makeChoices();
-		assert.cantMove(() => battle.p2.chooseMove('icebeam'), 'wynaut', 'icebeam');
-		battle.makeChoices('auto', 'move struggle'); // will throw an error if Wynaut isn't forced to use Struggle
+	it('rejects an exhausted signature move and uses Struggle when every slot is exhausted', () => {
+		const [p] = setup('Charizard', ['ember', 'splash']); battle.makeChoices('move splash dynamax', 'move splash');
+		p.moveSlots[0].pp = 0;
+		assert.equal(p.getMoveRequestData().maxMoves.maxMoves[0].disabled, true);
+		assert.cantMove(() => battle.p1.chooseMove('ember'));
+		p.moveSlots[1].pp = 0;
+		const r = p.getMoveRequestData();
+		assert.equal(r.moves[0].id, 'struggle');
+		assert(!r.maxMoves);
 	});
-
-	it(`should force the user to use Struggle if certain effects are disabling all of its base moves`, function () {
-		battle = common.gen(8).createBattle([[
-			{species: "Skwovet", item: 'oranberry', moves: ['sleeptalk', 'belch', 'stuffcheeks']},
-		], [
-			{species: "Calyrex-Shadow", moves: ['disable', 'trick']},
-		]]);
-		battle.makeChoices();
-		// Skwovet's Sleep Talk and Belch are disabled, but Stuff Cheeks isn't so Skwovet can still use Max Ooze
-		battle.makeChoices('move belch dynamax', 'auto');
-		assert.equal(battle.p1.active[0].boosts.spa, 1);
-		battle.makeChoices('move belch', 'move trick');
-		assert.equal(battle.p1.active[0].boosts.spa, 2);
-		// Now Skwovet's berry is gone, so Stuff Cheeks is disabled too
-		battle.makeChoices('move struggle', 'auto'); // will throw an error if Skwovet isn't forced to use Struggle
-
-		battle = common.gen(8).createBattle([[
-			{species: "Feebas", moves: ['splash']},
-		], [
-			{species: "Clefairy", moves: ['imprison', 'gravity', 'splash']},
-		]]);
-		battle.makeChoices('move splash dynamax', 'auto');
-		battle.makeChoices('move splash', 'move gravity'); // will throw an error if Feebas is forced to use Struggle by Imprison
-		battle.makeChoices('move splash', 'auto'); // will throw an error if Feebas is forced to use Struggle by Gravity
+	it('uses Struggle when Taunt disables its only remaining ordinary status move', () => {
+		const [p, q] = setup('Charizard', ['splash']); battle.makeChoices('move splash dynamax', 'move splash');
+		p.addVolatile('taunt', q); const r = p.getMoveRequestData();
+		assert.equal(r.moves[0].id, 'struggle'); assert(!r.maxMoves);
 	});
 
 	it.skip(`should not remove the variable to Dynamax on forced switches`, function () {

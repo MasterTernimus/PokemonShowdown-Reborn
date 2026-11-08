@@ -3885,6 +3885,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			onStart(pokemon, source) {
 				this.add('-start', pokemon, 'Curse', `[of] ${source}`);
+				// Only the fainting curses expire; move Curse and other ability curses retain their rules.
+				if (['cursedbody', 'mourningsnow'].includes(this.effectState.sourceEffect?.id)) {
+					this.effectState.faintCurseTicks = 2;
+				}
 			},
 			onResidualOrder: 12,
 			onResidual(pokemon) {
@@ -3893,6 +3897,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				const dealt = this.damage(pokemon.baseMaxhp / damageDivisor);
 				const caster = this.effectState.source;
 				if (sourceEffect?.id === 'cursedkeepsake' && caster?.hp && caster.isActive && caster.hasAbility('cursedkeepsake') && typeof dealt === 'number' && dealt > 0) this.heal(dealt / 2, caster, pokemon, 'drain');
+				if (this.effectState.faintCurseTicks && --this.effectState.faintCurseTicks === 0) {
+					if (pokemon.removeVolatile('curse')) this.add('-end', pokemon, 'Curse');
+					return;
+				}
 				if (this.field.isTerrain('holyterrain')) {
 					if (pokemon.removeVolatile('curse')) this.add('-end', pokemon, 'Curse', '[silent]');
 				}
@@ -23887,10 +23895,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		recoil: [33, 100],
-		onBasePower(basePower, source, target) {
-			if (adaptiveEnvironment(target, 'fields')) return;
-			if (this.field.isTerrain('electricterrain')) return this.chainModify(1.5);
-		},
 		onModifyMove(move) {
 			if (this.field.isTerrain('electricterrain')) delete move.recoil;
 		},
@@ -24520,7 +24524,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				const statAndBoosts = move.overrideOffensiveStat;
 				if (!['def', 'spd'].includes(statAndBoosts)) return;
 				move.overrideOffensiveStat = statAndBoosts === 'def' ? 'spd' : 'def';
-				this.hint(`${move.name} uses ${statAndBoosts === 'def' ? '' : 'Sp. '}Def boosts when Wonder Room is active.`);
+				this.hint(`${move.name} uses ${statAndBoosts === 'def' ? '' : 'Sp.'}Def boosts when Wonder Room is active.`);
 			},
 			onFieldStart(target, source, effect) {
 				if (effect?.id === 'mirrorchamber') {

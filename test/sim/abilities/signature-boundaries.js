@@ -38,13 +38,16 @@ describe('Signature ability interaction boundaries', () => {
 		const move = battle.dex.getActiveMove('bugbuzz');
 		assert.equal(battle.runEvent('ModifySpA', holder, attacker, move, 100), 150);
 	});
-	it('Vault Keeper protects an ally target on its side and Defog still clears hazards', () => {
+	it('Vault Keeper keeps Prankster without its removed screen protection', () => {
 		const [keeper, attacker] = setup('Vault Keeper', 'No Ability', 'doubles');
 		const ally = keeper.side.active[1];
 		keeper.side.addSideCondition('reflect', keeper); keeper.side.addSideCondition('spikes', attacker);
-		attack(attacker, ally, 'brickbreak'); assert(keeper.side.sideConditions.reflect);
-		attack(attacker, ally, 'defog'); assert(keeper.side.sideConditions.reflect);
+		attack(attacker, ally, 'brickbreak'); assert(!keeper.side.sideConditions.reflect);
+		keeper.side.addSideCondition('reflect', keeper);
+		attack(attacker, ally, 'defog'); assert(!keeper.side.sideConditions.reflect);
 		assert(!keeper.side.sideConditions.spikes);
+		assert.equal(battle.runEvent('ModifyPriority', keeper, attacker, battle.dex.getActiveMove('splash'), 0), 1);
+		keeper.side.addSideCondition('reflect', keeper);
 		keeper.addVolatile('gastroacid'); attack(attacker, ally, 'brickbreak');
 		assert(!keeper.side.sideConditions.reflect);
 	});
@@ -64,13 +67,15 @@ describe('Signature ability interaction boundaries', () => {
 		attack(attacker, holder, 'seismictoss');
 		assert.equal(holder.hp, 0); assert(!attacker.side.sideConditions.spikes);
 	});
-	it('Twilight can earn another charge after an earlier one expired while suppressed', () => {
+	it('Twilight does not restore its removed damage-triggered charge', () => {
 		const [holder, attacker] = setup('Twilight Instinct');
 		holder.m.approvedSignatures.twilightTurn = battle.turn;
 		holder.addVolatile('gastroacid'); battle.turn += 2; holder.removeVolatile('gastroacid');
 		battle.queue.willMove = () => ({ choice: 'move' });
 		attack(attacker, holder, 'tackle');
-		assert.equal(holder.m.approvedSignatures.twilightTurn, battle.turn + 1);
+		assert.equal(holder.m.approvedSignatures.twilightTurn, battle.turn - 2);
+		assert(holder.hasAbility('ultrainstinct'));
+		assert(holder.hasAbility('opportunist'));
 	});
 	it('Dissonant Chime blocks opposing Perish Song but not its own song', () => {
 		const [holder, attacker] = setup('Dissonant Chime');

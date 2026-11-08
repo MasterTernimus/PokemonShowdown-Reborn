@@ -15,7 +15,9 @@ describe('Signature move descriptions and adaptive Spectral Scream', () => {
    assert(move.desc.includes("'s move."), id);
    assert(!/inspired by|custom implementation|undefined/i.test(move.desc + move.shortDesc), id);
   }
-  assert(Dex.moves.get('airstreamassault').desc.includes('6 turns'));
+		assert(Dex.moves.get('airstreamassault').desc.includes('clears own-side entry hazards'));
+		assert(Dex.moves.get('airstreamassault').desc.includes('Mountain or Snowy Mountain: a damaging hit creates 3-turn Tailwind'));
+		assert(!Dex.moves.get('airstreamassault').desc.includes('6 turns'));
   assert(Dex.moves.get('corrosivestrike').desc.startsWith("Corey's move."));
  });
  for (const [atk, spa, boost, expected] of [[200,100,0,'Physical'],[100,200,0,'Special'],[100,100,0,'Special'],[200,100,3,'Special']]) {

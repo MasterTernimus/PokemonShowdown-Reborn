@@ -10,7 +10,7 @@ describe('Leftovers [Gen 2]', function () {
 		battle.destroy();
 	});
 
-	it('should heal after switch', function () {
+	common.itGen(2, 'should heal after switch', () => {
 		battle = common.gen(2).createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Blissey', item: 'leftovers', moves: ['healbell']},

@@ -1,6 +1,12 @@
 'use strict';const assert=require('assert').strict,common=require('../../common');const{Dex}=require('../../../dist/sim');let battle;
 function setup(ability='Skywarden',foe='No Ability'){const set=(species,ability)=>({species,ability,moves:['defog','uturn','splash','tackle']});battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[set('Corviknight',ability),set('Mew','No Ability')],[set('Mew',foe),set('Mew','No Ability')]]);battle.makeChoices('team 12','team 12');return[battle.p1.active[0],battle.p2.active[0]];}
 describe('Approved support ability reworks',()=>{
+	for (const [id, num] of [['swiftvenom', 32509], ['soulreaver', 32510]]) it(id + ' has a distinct current-generation registry identity', () => {
+		const ability = Dex.abilities.get(id);
+		assert.equal(ability.num, num);
+		assert.equal(ability.gen, 9);
+		assert.deepEqual(Dex.abilities.all().filter(a => a.num === num).map(a => a.id), [id]);
+	});
  afterEach(()=>{battle?.destroy();battle=null;});
  it('preserves effective Mirror Armor passive and Gmax slots',()=>{assert.deepEqual(Dex.species.get('Corviknight').abilities,{0:'Pressure',1:'Skywarden',H:'Steelwing Escort',S:'Burning Quake'});assert.deepEqual(Dex.species.get('Corviknight').passives,['mirrorarmor']);assert(Object.values(Dex.species.get('Corviknight-Gmax').abilities).includes('Iron Dominion'));});
  it('Skywarden Defog creates Mist after clearing, heals only the first success',()=>{const[p,q]=setup();p.hp=100;const hp=p.hp;battle.actions.useMove('defog',p,{target:q});assert.equal(p.hp-hp,Math.floor(p.baseMaxhp/8));assert.equal(p.side.sideConditions.mist.duration,5);p.side.sideConditions.mist.duration=8;const hp2=p.hp;battle.actions.useMove('defog',p,{target:q});assert.equal(p.hp,hp2);assert.equal(p.side.sideConditions.mist.duration,8);assert.equal(p.boosts.atk,0);});

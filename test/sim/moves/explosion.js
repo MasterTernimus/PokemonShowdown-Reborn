@@ -10,17 +10,18 @@ describe('Explosion', function () {
 		battle.destroy();
 	});
 
-	it('should not halve defense in current gens', function () {
+	it('should halve the matching defense in the current rework', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Metagross", nature: "Adamant", moves: ['explosion']}]});
 		battle.setPlayer('p2', {team: [{species: "Hippowdon", nature: "Impish", evs: {hp: 252, def: 252}, moves: ['splash']}]});
 		battle.makeChoices('move explosion', 'move splash');
 		const hippo = battle.p2.active[0];
 		const damage = hippo.maxhp - hippo.hp;
-		assert.bounded(damage, [164, 193]);
+		assert.bounded(damage, [327, 385]);
+		assert.fainted(battle.p1.active[0]);
 	});
 
-	it('should halve defense in old gens', function () {
+	common.itGen(4, 'should halve defense in old gens', () => {
 		battle = common.gen(4).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Metagross", nature: "Adamant", moves: ['explosion']}]});
 		battle.setPlayer('p2', {team: [{species: "Hippowdon", nature: "Impish", evs: {hp: 252, def: 252}, moves: ['splash']}]});
@@ -30,7 +31,7 @@ describe('Explosion', function () {
 		assert.bounded(damage, [327, 385]);
 	});
 
-	it(`[Gen 1] Explosion should build rage, even if it misses`, function () {
+	common.itGen(1, `[Gen 1] Explosion should build rage, even if it misses`, () => {
 		// Explosion hits
 		battle = common.gen(1).createBattle([[
 			{species: 'golem', moves: ['explosion']},
@@ -63,7 +64,7 @@ describe('Explosion', function () {
 		assert(battle.log.some(line => line.startsWith('|-boost|')));
 	});
 
-	it(`[Gen 1] Explosion should faint the user when the target is semi-invulnerable`, function () {
+	common.itGen(1, `[Gen 1] Explosion should faint the user when the target is semi-invulnerable`, () => {
 		// Explosion hits
 		battle = common.gen(1).createBattle([[
 			{species: 'golem', moves: ['explosion']},

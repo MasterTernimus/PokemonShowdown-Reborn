@@ -28,7 +28,8 @@ describe('Approved Kalos Alola nine Mega migrations and Ultra damage removal', (
 		}
 		assert.equal(count, 9);
 	});
-	for (const [id, passive] of Object.entries(approved)) {
+	for (const [id, historical] of Object.entries(approved)) {
+		const [passive] = require('./passive-approval-overlays').current(id, [historical]);
 		it(id + ' calculator damage does not double a duplicate selected passive', () => {
 			const { calculateScenario } = require('../../../dist/sim/custom-calculator');
 			const input = { format: 'gen9nofieldsinglesgame', move: id === 'floettemega' ? 'Moonblast' : 'Surf', samples: 16, seed: 42,
@@ -40,7 +41,7 @@ describe('Approved Kalos Alola nine Mega migrations and Ultra damage removal', (
 		it(id + ' acquires its passive through real Mega evolution and Transform', () => {
 			const [p, q] = setup(id);
 			assert.deepEqual(p.getPassives(), [passive]);
-			assert(p.getAbilityComponentExclusions().includes(passive));
+			assert.equal(p.getAbilityComponentExclusions().includes(passive), id !== 'floettemega');
 			assert(q.transformInto(p));
 			assert.deepEqual(q.getPassives(), [passive]);
 			p.setAbility('No Ability');
@@ -50,7 +51,8 @@ describe('Approved Kalos Alola nine Mega migrations and Ultra damage removal', (
 		it(id + ' does not remove shared components from an unrelated recipient', () => {
 			const [p, q] = setup(id);
 			q.setAbility(p.ability);
-			assert.equal(q.getAbilityComponentExclusions().includes(passive), !!require('./selected-simplifications-approved.json').removed[p.ability]?.includes(passive));
+			const removals = { ange: [], aquashell: ['toughclaws'] };
+			assert.equal(q.getAbilityComponentExclusions().includes(passive), !!(removals[p.ability] || require('./selected-simplifications-approved.json').removed[p.ability])?.includes(passive));
 		});
 	}
 	it('Pyroar starts Unnerve on Mega evolution and keeps it through ability replacement', () => {
@@ -136,18 +138,19 @@ describe('Approved Kalos Alola nine Mega migrations and Ultra damage removal', (
 		battle.boost({ atk: -1 }, p, q, Dex.abilities.get('intimidate'));
 		assert.equal(p.boosts.atk, 0);
 	});
-	it('Water Veil grants Aqua Ring on Mega evolution and retains status and weather protection', () => {
+	it('Golisopod gets Tough Claws as its passive and Heatproof plus Frisk from Aqua Shell', () => {
 		const [p, q] = setup('golisopodmega');
-		assert(p.volatiles.aquaring);
-		assert(p.hasAbility('toughclaws'));
-		assert(p.hasAbility('innerfocus'));
+		assert(!p.volatiles.aquaring);
+		assert(p.hasAbilityOrPassive('toughclaws'));
+		assert(p.hasAbility('heatproof')); assert(p.hasAbility('frisk'));
+		assert(!p.hasAbility('innerfocus'));
 		p.setAbility('No Ability');
-		assert(!p.trySetStatus('brn', q, Dex.moves.get('willowisp')));
-		assert(!p.runStatusImmunity('sandstorm'));
+		assert(p.trySetStatus('brn', q, Dex.moves.get('willowisp')));
+		assert(!p.runStatusImmunity('sandstorm'), 'Steel typing still protects from sand');
 		p.status = 'par';
 		battle.field.terrain = 'watersurfaceterrain';
 		battle.runEvent('Residual', p);
-		assert.equal(p.status, '');
+		assert.equal(p.status, 'par');
 	});
 	it('Drizzle owns rain, selected duration is eight and Water chip remains without rain', () => {
 		const [p, q] = setup('drampamega');
@@ -181,7 +184,7 @@ describe('Approved Kalos Alola nine Mega migrations and Ultra damage removal', (
 		assert.equal(p.boosts.spa, 1);
 		assert.equal(p.hp, 675);
 		battle.runEvent('DamagingHit', p, q, move, 10);
-		assert.equal(p.hp, 735);
+		assert.equal(p.hp, 675, 'duplicate DamagingHit dispatch for the same move must not heal again');
 		assert.equal(p.boosts.atk, 1);
 	});
 	it('retains standalone Battle Fervor authority damage effects', () => {

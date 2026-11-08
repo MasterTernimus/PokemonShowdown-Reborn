@@ -30,9 +30,9 @@ describe('Dragon’s Den field revisions', () => {
   assert.equal(target.runEffectiveness(Dex.getActiveMove('flamethrower')), 1);
   assert.equal(target.runEffectiveness(Dex.getActiveMove('earthquake')), -1);
  });
- it('resolves one 50% roll for Fickle Beam with Worldbreaker or Expiration', () => {
+	it('resolves one 50% roll for Fickle Beam with Strings of Ruin or Expiration', () => {
   const [user, foe] = start();
-  for (const ability of ['Worldbreaker','Expiration']) {
+		for (const ability of ['Strings of Ruin', 'Expiration']) {
    user.setAbility(ability);
    const rolls = [];
    battle.randomChance = (n,d) => {rolls.push([n,d]);return false;};
@@ -71,9 +71,12 @@ describe('Dragon’s Den field revisions', () => {
   assert(battle.field.changeTerrain('caveterrain',holder));
  });
  it('announces cooling progress before the Den becomes Cave', () => {
-  const [user,foe] = start(), move = Dex.getActiveMove('surf');
-  for(let i=0;i<3;i++) battle.runEvent('AfterMove',user,foe,move);
+		const [user, foe] = start();
+		user.hp = user.maxhp = foe.hp = foe.maxhp = 10000;
+		battle.makeChoices('move surf', 'move splash');
+		assert.equal(battle.field.terrain, 'dragonsdenterrain');
+		battle.makeChoices('move surf', 'move splash');
   assert.equal(battle.field.terrain,'caveterrain');
-  assert.equal(battle.log.filter(line=>line.includes('lava began to harden')).length,2);
+		assert.equal(battle.log.filter(line => line.includes('lava cooled')).length, 1);
  });
 });

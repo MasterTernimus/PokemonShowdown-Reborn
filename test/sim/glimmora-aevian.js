@@ -83,7 +83,7 @@ describe('Glimmora-Aevian, Adaptive Core, and Injection', () => {
 		]), null);
 	});
 
-	it('applies all three Adaptive Core components', () => {
+	it('applies Adaptive Core with separate Self Repair passive', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 			{ species: 'Glimmora-Aevian', ability: 'Filter', item: 'Glimmoranite', moves: ['splash'] },
 			{ species: 'Mew', moves: ['splash'] },
@@ -92,7 +92,10 @@ describe('Glimmora-Aevian, Adaptive Core, and Injection', () => {
 		battle.makeChoices('move splash mega', 'move splash');
 		const glimmora = battle.p1.active[0];
 		assert.equal(glimmora.ability, 'adaptivecore');
-		for (const component of ['download', 'defragment', 'selfrepair', 'selfsufficient', 'naturalcure']) {
+		assert.deepEqual(glimmora.getPassives(), ['selfrepair']);
+		assert(!glimmora.hasAbility('selfrepair'));
+		assert(glimmora.hasAbilityOrPassive('selfrepair'));
+		for (const component of ['download', 'defragment']) {
 			assert(glimmora.hasAbility(component), component);
 		}
 		assert.equal(glimmora.boosts.atk, 1, 'Download did not boost Attack');

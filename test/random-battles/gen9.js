@@ -10,7 +10,12 @@ const Dex = require('./../../dist/sim/dex').Dex;
 
 describe('[Gen 9] Random Battle (slow)', () => {
 	const options = {format: 'gen9randombattle'};
-	const setsJSON = require(`../../dist/data/random-sets.json`);
+	if (!Dex.formats.get('gen9randombattle').exists) {
+		it.skip('gen9randombattle: upstream format is not registered in Reborn');
+		return;
+	}
+	let setsJSON;
+	before(() => { setsJSON = require(`../../dist/data/random-sets.json`); });
 	const dex = Dex.forFormat(options.format);
 
 	it('all Pokemon should have 4 moves, except for Ditto', function () {
@@ -68,6 +73,10 @@ describe('[Gen 9] Random Battle (slow)', () => {
 
 describe('[Gen 9] Monotype Random Battle (slow)', () => {
 	const options = {format: 'gen9monotyperandombattle'};
+	if (!Dex.formats.get('gen9monotyperandombattle').exists) {
+		it.skip('gen9monotyperandombattle: upstream format is not registered in Reborn');
+		return;
+	}
 
 	it('all Pokemon should share a common type', function () {
 		testTeam({...options, rounds: 100}, team => {
@@ -78,7 +87,12 @@ describe('[Gen 9] Monotype Random Battle (slow)', () => {
 
 describe('[Gen 9] Random Doubles Battle (slow)', () => {
 	const options = {format: 'gen9randomdoublesbattle'};
-	const setsJSON = require(`../../dist/data/random-doubles-sets.json`);
+	if (!Dex.formats.get('gen9randomdoublesbattle').exists) {
+		it.skip('gen9randomdoublesbattle: upstream format is not registered in Reborn');
+		return;
+	}
+	let setsJSON;
+	before(() => { setsJSON = require(`../../dist/data/random-doubles-sets.json`); });
 	const dex = Dex.forFormat(options.format);
 
 	it('all Pokemon should have 4 moves, except for Ditto', function () {

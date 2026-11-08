@@ -22,7 +22,7 @@ describe('Sleep Talk', function () {
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|cant'), 'should log that High Jump Kick failed');
 	});
 
-	it('should fail and lose PP on subsequent turns while Choice locked, prior to Gen 5', function () {
+	common.itGen(4, 'should fail and lose PP on subsequent turns while Choice locked, prior to Gen 5', () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'Breloom', moves: ['spore', 'snore']},
 		], [

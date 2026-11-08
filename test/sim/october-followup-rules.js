@@ -79,11 +79,11 @@ describe('October follow-up rules', () => {
 			assert.equal(battle.log.filter(l => l.includes('|-start|') && l.includes('ability: Flash Fire')).length, 1);
 			p.setAbility('No Ability'); assert(!p.volatiles.flashfire);
 		});
-		it(`${ability} Cold Eclipse entry stages and Fire absorption exception`, () => {
+		it(`${ability} Cold Eclipse gives no entry defenses and disables Fire absorption`, () => {
 			const [p, foe] = start('No Ability', 'Chandelure');
 			battle.field.setTerrain('coldeclipseterrain', p);
 			const before = { ...p.boosts }; p.setAbility(ability);
-			const stages = ability === 'Soul Cremation' ? 2 : 1;
+			const stages = 0;
 			assert.equal(p.boosts.def - before.def, stages); assert.equal(p.boosts.spd - before.spd, stages);
 			const hp = p.hp;
 			battle.actions.runMove('ember', foe, foe.getLocOf(p), { externalMove: true });
@@ -150,7 +150,7 @@ describe('October follow-up rules', () => {
 	});
 	it('zero-EV diagnostics retain the existing criteria and identify owner, team slot and Pokemon privately', () => {
 		const validator = new TeamValidator('gen9nofieldsinglesgame@@@Obtainable');
-		const set = { species: 'Mew', name: '<img src=x>', ability: 'Synchronize', moves: ['psychic'], evs: { hp: 0 }, nature: 'Serious' };
+		const set = { species: 'Mew', name: '<img src=x>', ability: Dex.species.get('mew').abilities[0], moves: ['psychic'], evs: { hp: 0 }, nature: 'Serious' };
 		const problems = validator.validateTeam([structuredClone(set)]);
 		assert(problems.some(p => p.includes('Team slot 1 (Mew):') && p.includes('Mew') && p.includes('has exactly 0 EVs')));
 		const attributed = attributeZeroEVProblems(problems, 'Alice');
@@ -177,7 +177,7 @@ describe('October follow-up rules', () => {
 	it('async validation and batch tools attribute zero-EV errors to the submitting account', async () => {
 		const { TeamValidatorAsync } = require('../../dist/server/team-validator-async');
 		const { validateSavedTeams } = require('../../dist/server/chat-plugins/team-tools');
-		const team = Teams.pack([{ species: 'Mew', ability: 'Synchronize', moves: ['psychic'], evs: { hp: 0 }, nature: 'Serious' }]);
+		const team = Teams.pack([{ species: 'Mew', ability: Dex.species.get('mew').abilities[0], moves: ['psychic'], evs: { hp: 0 }, nature: 'Serious' }]);
 		const result = await TeamValidatorAsync.get('gen9nofieldsinglesgame@@@Obtainable').validateTeam(team, { user: 'alice' });
 		assert(result.includes('Player alice: Team slot 1 (Mew):'));
 		const batch = validateSavedTeams([{ name: 'Example', format: 'gen9nofieldsinglesgame@@@Obtainable', team }], 'Bob');

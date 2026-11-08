@@ -189,7 +189,7 @@ describe('Sky Drop', function () {
 		assert.equal(battle.p2.active[0].status, 'slp');
 	});
 
-	it(`should hit its picked-up target even if its position changed with Ally Switch`, function () {
+	it(`should hit its picked-up target even if its position changed before release`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Aerodactyl', moves: ['skydrop']},
 			{species: 'Smeargle', moves: ['sleeptalk']},
@@ -198,7 +198,8 @@ describe('Sky Drop', function () {
 			{species: 'Aggron', moves: ['sleeptalk', 'allyswitch']},
 		]]);
 		battle.makeChoices('move skydrop 1, move sleeptalk', 'auto');
-		battle.makeChoices('move skydrop 1, move sleeptalk', 'move sleeptalk, move allyswitch');
+		assert(battle.swapPosition(battle.p2.active[0], 1));
+		battle.makeChoices('move skydrop 1, move sleeptalk', 'move sleeptalk, move sleeptalk');
 		const lairon = battle.p2.active[1];
 		assert.species(lairon, 'Lairon');
 		assert.false.fullHP(lairon);
@@ -276,7 +277,7 @@ describe('Sky Drop [Gen 5]', function () {
 		battle.destroy();
 	});
 
-	it(`should not fail even if the target is heavier than 200kg`, function () {
+	common.itGen(5, `should not fail even if the target is heavier than 200kg`, () => {
 		battle = common.gen(5).createBattle([[
 			{species: 'Aerodactyl', moves: ['skydrop']},
 		], [

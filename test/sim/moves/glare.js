@@ -24,7 +24,7 @@ describe('Glare [Gen 3]', function () {
 		battle.destroy();
 	});
 
-	it('should not ignore natural type immunities', function () {
+	common.itGen(3, 'should not ignore natural type immunities', () => {
 		battle = common.gen(3).createBattle([
 			[{species: "Arbok", ability: 'noguard', moves: ['glare']}],
 			[{species: "Gengar", ability: 'blaze', moves: ['bulkup']}],

@@ -19,19 +19,21 @@ describe('Burn', function () {
 		assert.hurtsBy(target, Math.floor(target.maxhp / 16), () => battle.makeChoices('move bulkup', 'move willowisp'));
 	});
 
-	it(`should halve damage from most Physical attacks`, function () {
+	it('should halve damage from most Physical attacks', () => {
 		battle = common.createBattle([[
-			{species: 'Machamp', ability: 'noguard', moves: ['boneclub']},
+			{ species: 'Mew', ability: 'noability', moves: ['earthquake'] },
 		], [
-			{species: 'Sableye', ability: 'prankster', moves: ['willowisp']},
+			{ species: 'Mew', ability: 'noability', moves: ['sleeptalk'] },
 		]]);
-		battle.makeChoices();
-		const sableye = battle.p2.active[0];
-		const damage = sableye.maxhp - sableye.hp;
-		assert.bounded(damage, [37, 44]);
-	});
-
-	it('should reduce atk to 50% of its original value in Stadium', function () {
+		const source = battle.p1.active[0], target = battle.p2.active[0];
+		const move = { ...battle.dex.getActiveMove('earthquake'), willCrit: false };
+		const saved = battle.prng.clone();
+		const normal = battle.actions.getDamage(source, target, move);
+		battle.prng = saved;
+		assert(source.setStatus('brn'));
+		const burned = battle.actions.getDamage(source, target, { ...move });
+		assert.equal(burned, Math.floor(normal / 2));
+	});	common.itGen(1, 'should reduce atk to 50% of its original value in Stadium', () => {
 		// I know WoW doesn't exist in Stadium, but the engine supports future gen moves
 		// and this is easier than digging for a seed that makes Flamethrower burn
 		battle = common.createBattle({formatid: 'gen1stadiumou@@@!teampreview'}, [
@@ -81,7 +83,7 @@ describe('Paralysis', function () {
 		assert.equal(battle.p1.active[0].getStat('spe'), 168); // would be 169 if both Choice Scarf and paralysis were chained
 	});
 
-	it('should reduce speed to 25% of its original value in Gen 6', function () {
+	common.itGen(6, 'should reduce speed to 25% of its original value in Gen 6', () => {
 		battle = common.gen(6).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]});
 		battle.setPlayer('p2', {team: [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]});
@@ -90,7 +92,7 @@ describe('Paralysis', function () {
 		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 
-	it('should reduce speed to 25% of its original value in Gen 2', function () {
+	common.itGen(2, 'should reduce speed to 25% of its original value in Gen 2', () => {
 		battle = common.gen(2).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]});
 		battle.setPlayer('p2', {team: [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]});
@@ -99,7 +101,7 @@ describe('Paralysis', function () {
 		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 
-	it('should reduce speed to 25% of its original value in Stadium', function () {
+	common.itGen(1, 'should reduce speed to 25% of its original value in Stadium', () => {
 		battle = common.createBattle({formatid: 'gen1stadiumou@@@!teampreview'}, [
 			[{species: 'Vaporeon', moves: ['growl']}],
 			[{species: 'Jolteon', moves: ['thunderwave']}],
@@ -109,7 +111,7 @@ describe('Paralysis', function () {
 		assert.equal(battle.p1.active[0].getStat('spe'), Math.floor(speed * 0.25));
 	});
 
-	it('should reapply its speed drop when an opponent uses a stat-altering move in Gen 1', function () {
+	common.itGen(1, 'should reapply its speed drop when an opponent uses a stat-altering move in Gen 1', () => {
 		battle = common.gen(1).createBattle([
 			[{species: 'Electrode', moves: ['rest']}],
 			[{species: 'Slowpoke', moves: ['amnesia', 'thunderwave']}],
@@ -120,7 +122,7 @@ describe('Paralysis', function () {
 		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 
-	it('should not reapply its speed drop when an opponent uses a failed stat-altering move in Gen 1', function () {
+	common.itGen(1, 'should not reapply its speed drop when an opponent uses a failed stat-altering move in Gen 1', () => {
 		battle = common.gen(1).createBattle([
 			[{species: 'Electrode', moves: ['rest']}],
 			[{species: 'Slowpoke', moves: ['amnesia', 'thunderwave']}],
@@ -204,7 +206,11 @@ describe('Freeze', function () {
 				}
 			}
 		});
+		// Survive frostbite residual damage so this tests the transformed form, not faint reversion.
+		const ditto = battle.p1.active[0];
+		ditto.hp = ditto.maxhp = ditto.baseMaxhp = 10000;
 		battle.makeChoices('move sleeptalk', 'move icebeam');
+		assert.false.fainted(ditto);
 		assert.equal(battle.p1.active[0].status, 'frz');
 		assert.equal(battle.p1.active[0].species.name, 'Shaymin-Sky');
 	});
@@ -228,7 +234,7 @@ describe('Burn [Gen 6]', function () {
 		battle.destroy();
 	});
 
-	it('should inflict 1/8 of max HP at the end of the turn, rounded down', function () {
+	common.itGen(6, 'should inflict 1/8 of max HP at the end of the turn, rounded down', () => {
 		battle = common.gen(6).createBattle([
 			[{species: 'Machamp', ability: 'noguard', moves: ['bulkup']}],
 			[{species: 'Sableye', ability: 'prankster', moves: ['willowisp']}],
@@ -243,7 +249,7 @@ describe('Toxic Poison [Gen 1]', function () {
 		battle.destroy();
 	});
 
-	it(`should affect Leech Seed damage counter`, function () {
+	common.itGen(1, `should affect Leech Seed damage counter`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Venusaur', moves: ['toxic', 'leechseed']},
 		], [
@@ -268,7 +274,7 @@ describe('Toxic Poison [Gen 2]', function () {
 		battle.destroy();
 	});
 
-	it(`should not affect Leech Seed damage counter`, function () {
+	common.itGen(2, `should not affect Leech Seed damage counter`, () => {
 		battle = common.gen(2).createBattle({forceRandomChance: true}, [[
 			{species: 'Venusaur', moves: ['toxic', 'leechseed']},
 		], [
@@ -282,7 +288,7 @@ describe('Toxic Poison [Gen 2]', function () {
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 5);
 	});
 
-	it(`should pass the damage counter to Pokemon with Baton Pass`, function () {
+	common.itGen(2, `should pass the damage counter to Pokemon with Baton Pass`, () => {
 		battle = common.gen(2).createBattle([[
 			{species: 'Smeargle', moves: ['toxic', 'willowisp', 'splash']},
 		], [
@@ -314,7 +320,7 @@ describe('Toxic Poison [Gen 2]', function () {
 		assert.equal(hp - chansey.hp, Math.floor(chansey.maxhp / 8), `Chansey should have taken normal damage from burn`);
 	});
 
-	it('should revert to regular poison on switch in, even for Poison types', function () {
+	common.itGen(2, 'should revert to regular poison on switch in, even for Poison types', () => {
 		battle = common.gen(2).createBattle([
 			[{species: 'Smeargle', moves: ['toxic', 'splash']}],
 			[
@@ -331,7 +337,7 @@ describe('Toxic Poison [Gen 2]', function () {
 		assert.equal(battle.p2.active[0].status, 'psn');
 	});
 
-	it('should not have its damage counter affected by Heal Bell', function () {
+	common.itGen(2, 'should not have its damage counter affected by Heal Bell', () => {
 		battle = common.gen(2).createBattle([[
 			{species: 'Smeargle', moves: ['toxic', 'willowisp', 'splash']},
 		], [

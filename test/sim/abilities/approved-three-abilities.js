@@ -76,15 +76,17 @@ describe('Approved Glacial Mass, Unleashed Ego and Moonlit Hide', () => {
 		battle.singleEvent('SourceDamagingHit', p.getAbility(), p.abilityState, foe, p, m, 60);
 		assert.equal(p.hp, 100 + 2 * Math.floor(p.baseMaxhp / 16));
 	});
-	it('Unleashed Ego resets incoming hit boosts after an attack, not a status move', () => {
+	it('Unleashed Ego boosts on alternate opposing attacks and resets its healing rate after attacking', () => {
 		const [p, foe] = start('Unleashed Ego'); p.hp = 100;
 		hit(p, foe); hit(p, foe);
 		assert.equal(p.boosts.atk, 1); assert.equal(p.boosts.spa, 1);
 		assert.equal(p.hp, 100 + Math.floor(p.baseMaxhp/16) + Math.floor(p.baseMaxhp/20));
 		battle.singleEvent('AfterMove', p.getAbility(), p.abilityState, p, foe, battle.dex.getActiveMove('splash'));
-		hit(p, foe); assert.equal(p.boosts.atk, 1);
+		hit(p, foe); assert.equal(p.boosts.atk, 2);
+		const hp = p.hp;
 		battle.singleEvent('AfterMove', p.getAbility(), p.abilityState, p, foe, battle.dex.getActiveMove('tackle'));
 		hit(p, foe); assert.equal(p.boosts.atk, 2);
+		assert.equal(p.hp, hp + Math.floor(p.baseMaxhp / 16));
 	});
 	it('Unleashed Ego preserves field defense and pinch-healing limits', () => {
 		const [p, foe] = start('Unleashed Ego'); battle.field.setTerrain('ashenbeachterrain', p, p.getAbility()); p.hp = 50;
@@ -138,10 +140,10 @@ describe('Approved Glacial Mass, Unleashed Ego and Moonlit Hide', () => {
 		p.addVolatile('gastroacid',foe); assert.equal(damage(p,foe),1000);
 		assert.equal(battle.runEvent('Damage',p,foe,battle.dex.conditions.get('brn'),50),50);
 	});
-	it('Glacial Mass retains Thick Fat Cold Eclipse defense and speed benefits', () => {
+	it('Glacial Mass has no removed ability-based Cold Eclipse stat bonuses', () => {
 		const [p] = start('Glacial Mass'); battle.field.setTerrain('coldeclipseterrain', p, p.getAbility());
-		assert.equal(battle.runEvent('ModifyDef',p,null,null,100),150);
-		assert.equal(battle.runEvent('ModifySpD',p,null,null,100),150);
+		assert.equal(battle.runEvent('ModifyDef', p, null, null, 100), 100);
+		assert.equal(battle.runEvent('ModifySpD', p, null, null, 100), 100);
 		assert.equal(battle.runEvent('ModifySpe',p,null,null,100),100);
 	});
 	it('Unleashed Ego retains Ultra Ego entry reset without Battle Armor Fairy Tale boost', () => {
@@ -177,13 +179,16 @@ describe('Approved Glacial Mass, Unleashed Ego and Moonlit Hide', () => {
 		assert.equal(battle.runEvent('BasePower',p,foe,battle.dex.getActiveMove('tackle'),1000),1000);
 		assert.equal(damage(p,foe),1000);
 	});
-	it('Glacial Mass heals exactly once in Cold Eclipse hail', () => {
+	it('Glacial Mass remains immune to hail without removed Cold Eclipse healing', () => {
 		const [p]=start('Glacial Mass'); battle.field.setTerrain('coldeclipseterrain',p,p.getAbility());
 		battle.field.setWeather('hail',p,p.getAbility()); p.hp=100;
-		battle.singleEvent('Residual',battle.dex.conditions.get('coldeclipseterrain'),battle.field.terrainState,p);
-		assert.equal(p.hp,100+Math.floor(p.baseMaxhp/10));
+		battle.makeChoices('move splash', 'move splash');
+		assert.equal(p.hp, 100);
 	});
 	it('calculator metadata exposes the three exact packages and Ursaluna slots', () => {
+		const { Dex } = require('../../../dist/sim');
+		assert(!Dex.abilities.get('glacialmass').desc.includes('On Cold Eclipse'));
+		assert(Dex.abilities.get('glacialmass').desc.includes('Factory Field'));
 		const {calculatorMetadata}=require('../../../dist/sim/custom-calculator');
 		const m=calculatorMetadata();
 		assert.deepEqual(m.abilityComponents.glacialmass,['Heavy Metal','Thick Fat']);

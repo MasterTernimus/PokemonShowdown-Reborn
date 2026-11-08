@@ -10,7 +10,7 @@ describe('Struggle', function () {
 		battle.destroy();
 	});
 
-	it(`should KO Shedinja in Gen 4 (and every other gen)`, function () {
+	common.itGen(4, `should KO Shedinja in Gen 4 (and every other gen)`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'Shedinja', moves: ['sleeptalk']},
 		], [

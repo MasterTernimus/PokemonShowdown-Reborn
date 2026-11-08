@@ -5,9 +5,36 @@ const common = require('./../../common');
 
 let battle;
 
+// Compare controlled battles, rather than upstream damage ranges tied to old stats.
+function futureDamage(options = {}) {
+	battle?.destroy();
+	battle = common.createBattle([[
+		{ species: options.species || (options.flying ? 'Xatu' : 'Mew'), ability: options.ability || 'No Ability', item: options.item || '', moves: ['futuresight', 'splash', 'kingsshield'] },
+		{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+	], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
+	battle.randomizer = n => n; battle.randomChance = (n, d) => n >= d;
+	const source = battle.p1.active[0], target = battle.p2.active[0];
+	source.setType(options.flying ? ['Psychic', 'Flying'] : ['Psychic']);
+	for (const side of battle.sides) for (const p of side.pokemon) p.hp = p.maxhp = p.baseMaxhp = 5000;
+	if (options.initialTerrain) battle.field.setTerrain('psychicterrain', source);
+	battle.makeChoices('move futuresight', 'move splash');
+	if (options.spa) source.storedStats.spa = options.spa;
+	if (options.boost !== undefined) source.boosts.spa = options.boost;
+	if (options.clearTerrain) battle.field.clearTerrain();
+	if (options.finalTerrain) battle.field.setTerrain('psychicterrain', source);
+	if (options.screen) target.side.addSideCondition('lightscreen', target);
+	const waitMove = options.shield ? 'move kingsshield' : options.item === 'Choice Specs' && !options.switched ? 'move futuresight' : 'move splash';
+	battle.makeChoices(options.switched ? 'switch 2' : waitMove, 'move splash');
+	const before = target.hp;
+	battle.makeChoices(waitMove, 'move splash');
+	if (options.species === 'Aegislash') assert.equal(source.species.name, options.shield ? 'Aegislash' : 'Aegislash-Blade');
+	return before - target.hp;
+}
+
 describe('Future Sight', function () {
 	afterEach(function () {
-		battle.destroy();
+		battle?.destroy();
+		battle = null;
 	});
 
 	it(`should damage in two turns, ignoring Protect, affected by Dark immunities`, function () {
@@ -40,7 +67,7 @@ describe('Future Sight', function () {
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
 	});
 
-	it(`[Gen 2] should damage in two turns, ignoring Protect`, function () {
+	common.itGen(2, `[Gen 2] should damage in two turns, ignoring Protect`, () => {
 		battle = common.gen(2).createBattle([[
 			{species: 'Sneasel', moves: ['sleeptalk', 'futuresight', 'sweetscent']},
 		], [
@@ -60,19 +87,14 @@ describe('Future Sight', function () {
 	});
 
 	it(`should not double Stomping Tantrum for exiting normally`, function () {
-		battle = common.createBattle([[
-			{species: 'Wynaut', moves: ['futuresight', 'stompingtantrum']},
-		], [
-			{species: 'Scizor', ability: 'shellarmor', moves: ['sleeptalk']},
-		]]);
-
-		battle.makeChoices();
-		battle.makeChoices('move stompingtantrum', 'move sleeptalk');
-		const scizor = battle.p2.active[0];
-		const damage = scizor.maxhp - scizor.hp;
-		assert.bounded(damage, [19, 23]); // If it were doubled, would be 38-45
+		const run = first => {
+			battle?.destroy(); battle = common.createBattle([[{ species: 'Mew', ability: 'No Ability', moves: ['futuresight', 'splash', 'stompingtantrum'] }], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
+			battle.randomizer = n => n; battle.randomChance = (n, d) => n >= d;
+			battle.makeChoices('move ' + first, 'move splash'); const q = battle.p2.active[0], hp = q.hp;
+			battle.makeChoices('move stompingtantrum', 'move splash'); return hp - q.hp;
+		};
+		const normal = run('splash'); assert(normal > 0); assert.equal(run('futuresight'), normal);
 	});
-
 	it(`should not trigger Eject Button`, function () {
 		battle = common.createBattle([[
 			{species: 'Wynaut', moves: ['futuresight']},
@@ -136,7 +158,7 @@ describe('Future Sight', function () {
 		assert.bounded(damage, [30, 35]); // 22-27 if Life Orb was not applied
 	});
 
-	it(`[Gen 4] should not be affected by Life Orb`, function () {
+	common.itGen(4, `[Gen 4] should not be affected by Life Orb`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'wynaut', item: 'lifeorb', moves: ['futuresight']},
 		], [
@@ -187,94 +209,30 @@ describe('Future Sight', function () {
 	});
 
 	it(`should be boosted by Terrain only if Terrain is active on the damaging turn`, function () {
-		battle = common.createBattle([[
-			{species: 'Blissey', ability: 'shellarmor', moves: ['softboiled']},
-		], [
-			{species: 'Wynaut', ability: 'psychicsurge', moves: ['sleeptalk', 'futuresight']},
-		]]);
-
-		battle.makeChoices('auto', 'move futuresight');
-		battle.makeChoices();
-		battle.makeChoices();
-		const blissey = battle.p1.active[0];
-		let damage = blissey.maxhp - blissey.hp;
-		assert.bounded(damage, [46, 55]);
-
-		battle.makeChoices('auto', 'move futuresight');
-		battle.makeChoices();
-		battle.makeChoices();
-		damage = blissey.maxhp - blissey.hp;
-		assert.bounded(damage, [36, 43]);
+		const normal = futureDamage(); assert(normal > 0);
+		assert.equal(futureDamage({ initialTerrain: true, clearTerrain: true }), normal);
+		const boosted = futureDamage({ finalTerrain: true }); assert(boosted > normal);
+		assert.equal(futureDamage({ initialTerrain: true }), boosted);
 	});
-
 	it(`should be boosted by Terrain even if the user is not on the field, as long as the user is not Flying-type`, function () {
-		battle = common.createBattle([[
-			{species: 'Blissey', ability: 'shellarmor', moves: ['softboiled']},
-		], [
-			{species: 'cresselia', ability: 'levitate', moves: ['sleeptalk', 'futuresight']},
-			{species: 'deino', ability: 'psychicsurge', moves: ['sleeptalk']},
-			{species: 'xatu', moves: ['sleeptalk', 'futuresight']},
-		]]);
-
-		// Cresselia will be Terrain-boosted because its Ability is not checked while not active
-		battle.makeChoices('auto', 'move futuresight');
-		battle.makeChoices();
-		battle.makeChoices('auto', 'switch deino');
-		const blissey = battle.p1.active[0];
-		let damage = blissey.maxhp - blissey.hp;
-		assert.bounded(damage, [102, 121]);
-
-		// Xatu won't be Terrain-boosted because its Flying-type is checked while not active
-		battle.makeChoices('auto', 'switch xatu');
-		battle.makeChoices('auto', 'move futuresight');
-		battle.makeChoices();
-		battle.makeChoices('auto', 'switch deino');
-		damage = blissey.maxhp - blissey.hp;
-		assert.bounded(damage, [96, 114]);
+		const grounded = futureDamage({ switched: true });
+		assert(futureDamage({ switched: true, finalTerrain: true }) > grounded);
+		const flying = futureDamage({ switched: true, flying: true }); assert(flying > 0);
+		assert.equal(futureDamage({ switched: true, flying: true, finalTerrain: true }), flying);
 	});
-
 	it(`should not ignore the target's screens, even when the user is not active on the field`, function () {
-		battle = common.createBattle([[
-			{species: 'Blissey', ability: 'shellarmor', item: 'lightclay', moves: ['softboiled', 'lightscreen']},
-		], [
-			{species: 'Wynaut', moves: ['sleeptalk', 'futuresight']},
-			{species: 'deino', moves: ['sleeptalk']},
-		]]);
-
-		battle.makeChoices('move lightscreen', 'move futuresight');
-		battle.makeChoices();
-		battle.makeChoices();
-		const blissey = battle.p1.active[0];
-		let damage = blissey.maxhp - blissey.hp;
-		assert.bounded(damage, [18, 21]);
-
-		battle.makeChoices('auto', 'move futuresight');
-		battle.makeChoices();
-		battle.makeChoices('auto', 'switch 2');
-		damage = blissey.maxhp - blissey.hp;
-		assert.bounded(damage, [18, 21]);
+		for (const switched of [false, true]) {
+			const normal = futureDamage({ switched }), screen = futureDamage({ switched, screen: true });
+			assert(screen > 0); assert(Math.abs(screen * 2 - normal) <= 2);
+		}
 	});
-
 	it(`should not consider the user's item or Ability when the user is not active`, function () {
-		battle = common.createBattle([[
-			{species: 'Blissey', ability: 'shellarmor', moves: ['softboiled']},
-		], [
-			{species: 'Wynaut', ability: 'adaptability', item: 'choicespecs', moves: ['futuresight']},
-			{species: 'Deino', ability: 'powerspot', moves: ['sleeptalk']},
-		]]);
-
-		for (let i = 0; i < 3; i++) battle.makeChoices();
-		const blissey = battle.p1.active[0];
-		let damage = blissey.maxhp - blissey.hp;
-		assert.bounded(damage, [70, 84]); // boosted by Adaptability and Choice Specs
-
-		battle.makeChoices();
-		battle.makeChoices();
-		battle.makeChoices('auto', 'switch 2');
-		damage = blissey.maxhp - blissey.hp;
-		assert.bounded(damage, [46, 55]); // only boosted by Power Spot
+		const normal = futureDamage();
+		assert(futureDamage({ item: 'Choice Specs' }) > normal);
+		assert(futureDamage({ ability: 'Adaptability' }) > normal);
+		const benched = futureDamage({ switched: true }); assert(benched > 0);
+		assert.equal(futureDamage({ switched: true, item: 'Choice Specs', ability: 'Adaptability' }), benched);
 	});
-
 	it(`should not ignore the target's Unaware`, function () {
 		battle = common.createBattle([[
 			{species: 'Manaphy', ability: 'simple', moves: ['tailglow', 'futuresight']},
@@ -292,24 +250,12 @@ describe('Future Sight', function () {
 	});
 
 	it(`should use the user's most recent Special Attack stat if the user is on the field`, function () {
-		battle = common.createBattle([[
-			{species: 'Aegislash', ability: 'stancechange', moves: ['futuresight', 'kingsshield']},
-		], [
-			{species: 'Ho-Oh', ability: 'shellarmor', moves: ['recover']},
-		]]);
-
-		for (let i = 0; i < 3; i++) battle.makeChoices();
-		const hooh = battle.p2.active[0];
-		let damage = hooh.maxhp - hooh.hp;
-		assert.bounded(damage, [79, 94]); // Blade Forme damage
-
-		battle.makeChoices();
-		battle.makeChoices('move kingsshield', 'auto');
-		battle.makeChoices('move kingsshield', 'auto');
-		damage = hooh.maxhp - hooh.hp;
-		assert.bounded(damage, [34, 41]); // Shield Forme damage
+		const low = futureDamage({ spa: 100 }), high = futureDamage({ spa: 300 });
+		assert(low > 0); assert(high > low * 2, 'Special Attack changed after setup must affect the delayed hit');
+		const blade = futureDamage({ species: 'Aegislash', ability: 'Stance Change' });
+		const shield = futureDamage({ species: 'Aegislash', ability: 'Stance Change', shield: true });
+		assert(shield > 0); assert(blade > shield, 'King’s Shield before impact must use the current Shield form stats');
 	});
-
 	it.skip(`should use the user's most recent Special Attack stat, even if the user is not on the field`, function () {
 		battle = common.createBattle([[
 			{species: 'Aegislash', ability: 'stancechange', moves: ['futuresight', 'kingsshield']},
@@ -335,24 +281,10 @@ describe('Future Sight', function () {
 	});
 
 	it(`should only use Sp. Atk stat boosts/drops if the user is on the field`, function () {
-		battle = common.createBattle([[
-			{species: 'Flapple', moves: ['futuresight', 'nastyplot', 'sleeptalk']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
-		], [
-			{species: 'Ho-Oh', ability: 'shellarmor', moves: ['recover']},
-		]]);
-
-		battle.makeChoices();
-		battle.makeChoices('move nastyplot', 'auto');
-		battle.makeChoices();
-		const hooh = battle.p2.active[0];
-		let damage = hooh.maxhp - hooh.hp;
-		assert.bounded(damage, [113, 134], `Future Sight should deal damage with +2 Sp. Atk`);
-
-		battle.makeChoices();
-		battle.makeChoices('switch wynaut', 'auto');
-		battle.makeChoices();
-		damage = hooh.maxhp - hooh.hp;
-		assert.bounded(damage, [57, 68], `Future Sight should deal damage with +0 Sp. Atk`);
+		const normal = futureDamage(), boosted = futureDamage({ boost: 2 }), reduced = futureDamage({ boost: -2 });
+		assert(boosted > normal); assert(reduced < normal);
+		const benched = futureDamage({ switched: true }); assert(benched > 0);
+		assert.equal(futureDamage({ switched: true, boost: 2 }), benched);
+		assert.equal(futureDamage({ switched: true, boost: -2 }), benched);
 	});
 });

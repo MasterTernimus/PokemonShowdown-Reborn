@@ -17,9 +17,16 @@ describe('room promotions', function () {
 		this.room = Rooms.get('promotiontesting');
 
 		this.user = makeUser('Annika', '127.0.0.1');
-		this.user.setGroup('&');
+		// This fork's administrator symbol is ~; & is not a configured group.
+		this.user.setGroup('~');
 
 		this.targetUser = makeUser('Heart of Etheria', '127.0.0.1');
+	});
+	beforeEach(() => {
+		this.room.auth.clear();
+		this.room.persist = true;
+		this.targetUser.locked = false;
+		this.targetUser.registered = true;
 	});
 
 	it('should not promote users with usernames >18 characters long', () => {
@@ -47,10 +54,10 @@ describe('room promotions', function () {
 	});
 
 	it('should not promote locked users', () => {
-		assert.doesNotThrow(() => moderation.runPromote(this.user, this.room, this.targetUser.id, '+', undefined, true));
 		this.targetUser.locked = true;
-		assert.throws(() => moderation.runPromote(this.user, this.room, this.targetUser.id, '+', undefined, true));
+		assert.throws(() => moderation.runPromote(this.user, this.room, this.targetUser.id, '#', undefined, true), /is locked/);
 		this.targetUser.locked = false;
+		assert.doesNotThrow(() => moderation.runPromote(this.user, this.room, this.targetUser.id, '#', undefined, true));
 	});
 
 	it('should update Room#auth', () => {

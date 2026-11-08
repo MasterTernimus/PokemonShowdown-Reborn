@@ -81,7 +81,7 @@ describe('Heal Block [Gen 5]', function () {
 		battle.destroy();
 	});
 
-	it('should prevent Pokemon from gaining HP from residual recovery items', function () {
+	common.itGen(5, 'should prevent Pokemon from gaining HP from residual recovery items', () => {
 		battle = common.gen(5).createBattle([
 			[{species: 'Hippowdon', ability: 'sandstream', moves: ['healblock']}],
 			[{species: 'Spiritomb', ability: 'pressure', item: 'leftovers', moves: ['calmmind']}],
@@ -90,7 +90,7 @@ describe('Heal Block [Gen 5]', function () {
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
-	it('should prevent Pokemon from consuming HP recovery items', function () {
+	common.itGen(5, 'should prevent Pokemon from consuming HP recovery items', () => {
 		battle = common.gen(5).createBattle([
 			[{species: 'Sableye', ability: 'prankster', moves: ['healblock']}],
 			[{species: 'Pansage', ability: 'gluttony', item: 'sitrusberry', moves: ['bellydrum']}],
@@ -100,7 +100,7 @@ describe('Heal Block [Gen 5]', function () {
 		assert.equal(battle.p2.active[0].hp, Math.ceil(battle.p2.active[0].maxhp / 2));
 	});
 
-	it('should disable the use of healing moves', function () {
+	common.itGen(5, 'should disable the use of healing moves', () => {
 		battle = common.gen(5).createBattle([
 			[{species: 'Spiritomb', ability: 'pressure', moves: ['healblock']}],
 			[{species: 'Cresselia', ability: 'levitate', moves: ['recover']}],
@@ -109,7 +109,7 @@ describe('Heal Block [Gen 5]', function () {
 		assert.cantMove(() => battle.makeChoices('move healblock', 'move recover'), 'Cresselia', 'Recover');
 	});
 
-	it('should prevent abilities from recovering HP', function () {
+	common.itGen(5, 'should prevent abilities from recovering HP', () => {
 		battle = common.gen(5).createBattle([
 			[{species: 'Sableye', ability: 'prankster', moves: ['healblock', 'surf']}],
 			[{species: 'Quagsire', ability: 'waterabsorb', moves: ['bellydrum', 'calmmind']}],
@@ -120,7 +120,7 @@ describe('Heal Block [Gen 5]', function () {
 		assert.equal(battle.p2.active[0].hp, hp);
 	});
 
-	it('should prevent draining moves from healing HP', function () {
+	common.itGen(5, 'should prevent draining moves from healing HP', () => {
 		battle = common.gen(5).createBattle([
 			[{species: 'Sableye', ability: 'prankster', moves: ['healblock']}],
 			[{species: 'Venusaur', ability: 'overgrow', moves: ['substitute', 'gigadrain']}],
@@ -132,7 +132,7 @@ describe('Heal Block [Gen 5]', function () {
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it('should prevent Leech Seed from healing HP', function () {
+	common.itGen(5, 'should prevent Leech Seed from healing HP', () => {
 		battle = common.gen(5).createBattle([
 			[{species: 'Starmie', ability: 'noguard', moves: ['healblock']}],
 			[{species: 'Venusaur', ability: 'overgrow', moves: ['substitute', 'leechseed']}],
@@ -149,7 +149,7 @@ describe('Heal Block [Gen 4]', function () {
 		battle.destroy();
 	});
 
-	it('should disable the use of healing moves', function () {
+	common.itGen(4, 'should disable the use of healing moves', () => {
 		battle = common.gen(4).createBattle([
 			[{species: 'Spiritomb', ability: 'pressure', moves: ['healblock']}],
 			[{species: 'Cresselia', ability: 'levitate', moves: ['recover']}],
@@ -158,7 +158,7 @@ describe('Heal Block [Gen 4]', function () {
 		assert.cantMove(() => battle.makeChoices('move healblock', 'move recover'), 'Cresselia', 'Recover');
 	});
 
-	it('should block the effect of Wish', function () {
+	common.itGen(4, 'should block the effect of Wish', () => {
 		battle = common.gen(4).createBattle([
 			[{species: 'Spiritomb', ability: 'pressure', moves: ['healblock']}],
 			[{species: 'Deoxys', ability: 'pressure', moves: ['wish']}],
@@ -167,7 +167,7 @@ describe('Heal Block [Gen 4]', function () {
 		assert.cantMove(() => battle.makeChoices('move healblock', 'move wish'), 'Deoxys', 'Wish');
 	});
 
-	it('should prevent draining moves from healing HP', function () {
+	common.itGen(4, 'should prevent draining moves from healing HP', () => {
 		battle = common.gen(4).createBattle([
 			[{species: 'Sableye', ability: 'prankster', moves: ['healblock']}],
 			[{species: 'Venusaur', ability: 'overgrow', moves: ['substitute', 'gigadrain']}],
@@ -179,7 +179,7 @@ describe('Heal Block [Gen 4]', function () {
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it('should allow HP recovery items to activate', function () {
+	common.itGen(4, 'should allow HP recovery items to activate', () => {
 		battle = common.gen(4).createBattle([
 			[{species: 'Spiritomb', ability: 'pressure', moves: ['healblock', 'shadowball']}],
 			[{species: 'Abra', level: 1, ability: 'synchronize', item: 'leftovers', moves: ['celebrate', 'endure']}, {species: 'Abra', level: 1, ability: 'synchronize', item: 'sitrusberry', moves: ['celebrate', 'endure']}],
@@ -193,7 +193,7 @@ describe('Heal Block [Gen 4]', function () {
 		assert.notEqual(battle.p2.active[0].hp, 1);
 	});
 
-	it('should allow abilities that recover HP to activate', function () {
+	common.itGen(4, 'should allow abilities that recover HP to activate', () => {
 		battle = common.gen(4).createBattle([
 			[{species: 'Sableye', ability: 'keeneye', moves: ['healblock', 'surf']}],
 			[{species: 'Quagsire', ability: 'waterabsorb', moves: ['bellydrum', 'calmmind']}],
@@ -204,7 +204,7 @@ describe('Heal Block [Gen 4]', function () {
 		assert.notEqual(battle.p2.active[0].hp, hp);
 	});
 
-	it('should prevent Leech Seed from healing HP', function () {
+	common.itGen(4, 'should prevent Leech Seed from healing HP', () => {
 		battle = common.gen(4).createBattle([
 			[{species: 'Starmie', ability: 'noguard', moves: ['healblock']}],
 			[{species: 'Venusaur', ability: 'overgrow', moves: ['substitute', 'leechseed']}],

@@ -6,9 +6,9 @@ const {Dex} = require('../../../dist/sim/dex');
 describe('Kingler Water/Steel refinement', () => {
  let battle;
  afterEach(() => { battle?.destroy(); });
- function setup() {
+	function setup(ability = 'No Ability') {
   battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [
-   [{species: 'Kingler', ability: 'Titan Pincer', moves: ['splash']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+			[{ species: 'Kingler', ability, moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
    [{species: 'Mew', ability: 'No Ability', moves: ['splash']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
   ]);
   battle.makeChoices('team 1, 2', 'team 1, 2');
@@ -18,12 +18,13 @@ describe('Kingler Water/Steel refinement', () => {
   const move = battle.dex.getActiveMove(id);
   return battle.runEvent('ModifyMove', source, battle.p2.active[0], move, move);
  }
- it('assigns defensive and offensive alternatives without changing Gmax', () => {
+	it('assigns the current base and Gmax kits', () => {
   const kingler = Dex.species.get('Kingler');
   assert.deepEqual(kingler.types, ['Water', 'Steel']);
-  assert.deepEqual(kingler.abilities, {0: 'Shell Armor', 1: 'Titan Pincer', H: 'Shellcracker'});
-  assert.deepEqual(Dex.species.get('Kingler-Gmax').types, ['Water', 'Bug']);
-  assert.equal(Dex.species.get('Kingler-Gmax').abilities[0], 'Tidal Dominion');
+		assert.deepEqual(kingler.passives, ['titanpincer']);
+		assert.deepEqual(kingler.abilities, { 0: 'Shell Armor', 1: 'Hyper Cutter', H: 'Shellcracker' });
+		assert.deepEqual(Dex.species.get('Kingler-Gmax').types, ['Water', 'Steel']);
+		assert.equal(Dex.species.get('Kingler-Gmax').abilities[0], 'Crushing Depths');
  });
  it('uses stronger Defense for Crabhammer and physical Steel but not special Steel or other attacks', () => {
   const p = setup(); p.storedStats.def = 500; p.storedStats.atk = 100;
@@ -38,8 +39,8 @@ describe('Kingler Water/Steel refinement', () => {
   p.boosts.def = 1;
   assert.equal(modified('ironhead', p).overrideOffensiveStat, 'def');
  });
- it('retains Hyper Cutter protection against opposing Attack drops', () => {
-  const p = setup();
+	it('offers Hyper Cutter protection separately from the Titan Pincer passive', () => {
+		const p = setup('Hyper Cutter');
   battle.boost({atk: -1}, p, battle.p2.active[0], battle.dex.abilities.get('intimidate'));
   assert.equal(p.boosts.atk, 0);
   battle.boost({atk: -1}, p, p, battle.dex.moves.get('superpower'));

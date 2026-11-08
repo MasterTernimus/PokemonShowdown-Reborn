@@ -10,7 +10,7 @@ function start(ability = 'Pressure') {
 	battle.makeChoices('team 1', 'team 1');
 	return battle.p1.active[0];
 }
-describe('Perfect Foresight Insomnia', () => {
+describe('Perfect Foresight copied abilities', () => {
 	afterEach(() => battle?.destroy());
 	for (const sand of [false, true]) {
 		it(`selects ${sand ? 'active Sand Rush' : 'the strongest attacker without sand'} and applies actual Speed`, () => {
@@ -39,22 +39,25 @@ describe('Perfect Foresight Insomnia', () => {
 		assert(!foe.side.slotConditions[foe.position].futuremove.moveData.perfectForesight);
 		assert(!battle.field.pseudoWeather.foresightmemory);
 	});
-	it('retains its copied ability while preventing sleep and Yawn and curing existing sleep', () => {
-		const mon = start();
-		assert.equal(mon.m.perfectForesightAbility, 'pressure');
-		assert(mon.hasAbility('insomnia'));
-		assert(mon.hasAbility('pressure'));
-		assert.equal(mon.trySetStatus('slp', battle.p2.active[0]), false);
-		assert(!mon.addVolatile('yawn', battle.p2.active[0]));
+
+	for (const copied of ['Pressure', 'Insomnia']) it('copies ' + copied + ' without adding independent Insomnia', () => {
+		const mon = start(copied), foe = battle.p2.active[0], insomnia = copied === 'Insomnia';
+		assert.equal(mon.m.perfectForesightAbility, insomnia ? 'insomnia' : 'pressure');
+		assert.equal(mon.hasAbility('insomnia'), insomnia);
+		assert.equal(mon.hasAbility('pressure'), !insomnia);
+		assert.equal(!!mon.trySetStatus('slp', foe), !insomnia);
+		mon.cureStatus();
+		assert.equal(!!mon.addVolatile('yawn', foe), !insomnia);
 		mon.status = 'slp';
 		battle.eachEvent('Update');
-		assert.equal(mon.status, '');
+		assert.equal(mon.status, insomnia ? '' : 'slp');
 	});
+
 	for (const copied of ['Pressure', 'Insomnia']) {
-		it(`applies one Insomnia power boost when copying ${copied}`, () => {
+		it(`applies only the copied offensive effect for ${copied}`, () => {
 			const mon = start(copied), target = battle.p2.active[0];
 			for (const id of ['darkpulse', 'shadowball']) {
-				assert.equal(battle.runEvent('BasePower', mon, target, battle.dex.getActiveMove(id), 100), 130);
+				assert.equal(battle.runEvent('BasePower', mon, target, battle.dex.getActiveMove(id), 100), copied === 'Insomnia' ? 130 : 100);
 			}
 			assert.equal(battle.runEvent('BasePower', mon, target, battle.dex.getActiveMove('psychic'), 100), 100);
 		});

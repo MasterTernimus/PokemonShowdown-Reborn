@@ -10,7 +10,13 @@ function start(move='tackle',foe='seismictoss'){
 function use(p,t,id,patch={}){battle.clearActiveMove();const m=battle.dex.getActiveMove(id);Object.assign(m,{accuracy:true,willCrit:false,secondaries:null},patch);battle.actions.useMove(m,p,{target:t});battle.clearActiveMove();}
 describe('Approved Tactical Retreat and Rain Courier',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- it('replaces only approved slots and exposes calculator metadata',()=>{assert.deepEqual(Dex.species.get('golisopod').abilities,{0:'Tactical Retreat',1:'Inner Focus',H:'Shell Armor'});assert.deepEqual(Dex.species.get('pelipper').abilities,{0:'Accumulation',1:'Drizzle',H:'Rain Courier'});assert.notEqual(Dex.species.get('golisopodmega').abilities[0],'Tactical Retreat');const m=require('../../../dist/sim/custom-calculator').calculatorMetadata();for(const id of ['golisopod','pelipper'])assert.deepEqual(m.species.find(s=>s.name===Dex.species.get(id).name).abilities,Dex.species.get(id).abilities);});
+	it('replaces only approved slots and exposes calculator metadata', () => {
+		assert.deepEqual(Dex.species.get('golisopod').abilities, { 0: 'Tactical Retreat', 1: 'Inner Focus', H: 'Shell Armor' });
+		assert.deepEqual(Dex.species.get('pelipper').abilities, { 0: 'Accumulation', 1: 'Keen Eye', H: 'Rain Courier' });
+		assert.notEqual(Dex.species.get('golisopodmega').abilities[0], 'Tactical Retreat');
+		const m = require('../../../dist/sim/custom-calculator').calculatorMetadata();
+		for (const id of ['golisopod', 'pelipper'])assert.deepEqual(m.species.find(s => s.name === Dex.species.get(id).name).abilities, Dex.species.get(id).abilities);
+	});
  it('lets the selected slower attack finish once without modifying priority, then retreats',()=>{const[p,t]=start();battle.makeChoices('move 1','move 1');assert.equal(battle.requestState,'switch');assert.equal(p.hp,150);assert(t.hp<4000);assert.equal(battle.log.filter(l=>l.startsWith('|move|p1a:')&&l.includes('|Tackle|')).length,1);assert(!p.abilityState.tacticalRetreatPending);assert.equal(battle.dex.moves.get('tackle').priority,0);});
  it('retreats normally before a selected status move',()=>{const[p,t]=start('splash');battle.makeChoices('move 1','move 1');assert.equal(battle.requestState,'switch');assert.equal(t.hp,4000);assert(!battle.log.some(l=>l.startsWith('|move|p1a:')));assert(!p.abilityState.tacticalRetreatPending);});
  it('retreats normally when its attack already acted',()=>{const[p]=start('quickattack');battle.makeChoices('move 1','move 1');assert.equal(battle.requestState,'switch');assert(!p.abilityState.tacticalRetreatPending);assert.equal(battle.log.filter(l=>l.startsWith('|move|p1a:')).length,1);});

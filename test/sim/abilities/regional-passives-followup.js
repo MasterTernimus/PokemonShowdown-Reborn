@@ -101,9 +101,9 @@ describe('Latest approved passive routing and scope preservation', () => {
 	it('Raging Storm keeps priority protection without stacking Battle Armor mitigation', () => {
 		const [p, t] = setup('Haxorus', 'Raging Storm');
 		const m = Dex.getActiveMove('tackle');
-		assert.equal(battle.runEvent('ModifyDamage', t, p, m, 100), 80);
+		assert.equal(battle.runEvent('ModifyDamage', t, p, m, 100), 100);
 		m.priority = 1;
-		assert.equal(battle.runEvent('ModifyDamage', t, p, m, 100), 40);
+		assert.equal(battle.runEvent('ModifyDamage', t, p, m, 100), 50);
 	});
 	it('Plus and Minus passives activate together and remain active through suppression', () => {
 		const [p, t, ally] = setup('Plusle', 'No Ability', true);
@@ -114,7 +114,7 @@ describe('Latest approved passive routing and scope preservation', () => {
 		assert.equal(battle.runEvent('ModifySpA', p, t, m, 100), 130);
 		assert.equal(battle.runEvent('ModifySpA', ally, t, m, 100), 130);
 	});
-	for (const [a, b, passive] of [['Aegislash', 'Aegislash-Blade', 'owntempo'], ['Eiscue', 'Eiscue-Noice', 'overcoat'], ['Morpeko', 'Morpeko-Hangry', 'owntempo'], ['Darmanitan', 'Darmanitan-Zen', 'owntempo'], ['Darmanitan-Galar', 'Darmanitan-Galar-Zen', 'owntempo'], ['Wishiwashi', 'Wishiwashi-School', 'friendguard'], ['Cramorant', 'Cramorant-Gulping', 'gluttony'], ['Cramorant', 'Cramorant-Gorging', 'gluttony'], ['Palafin', 'Palafin-Hero', 'friendguard'], ['Mimikyu', 'Mimikyu-Busted', 'cursedbody'], ['Minior', 'Minior-Meteor', 'clearbody']])
+	for (const [a, b, passive] of [['Aegislash', 'Aegislash-Blade', 'stancechange'], ['Eiscue', 'Eiscue-Noice', 'overcoat'], ['Morpeko', 'Morpeko-Hangry', 'owntempo'], ['Darmanitan', 'Darmanitan-Zen', 'owntempo'], ['Darmanitan-Galar', 'Darmanitan-Galar-Zen', 'owntempo'], ['Wishiwashi', 'Wishiwashi-School', 'friendguard'], ['Cramorant', 'Cramorant-Gulping', 'gulpmissile'], ['Cramorant', 'Cramorant-Gorging', 'gulpmissile'], ['Palafin', 'Palafin-Hero', 'zerotohero'], ['Mimikyu', 'Mimikyu-Busted', 'disguise'], ['Minior', 'Minior-Meteor', 'shieldsdown']])
 		it(a + ' retains its assigned passive through the approved ordinary transformation', () => {
 			const [p] = setup(a);
 			assert.deepEqual(p.getPassives(), [passive]);

@@ -27,8 +27,9 @@ for (const ate in ates) {
 			battle = common.createBattle([[
 				{species: 'Genesect', ability: ate, moves: ['hypervoice']},
 			], [
-				{species: 'Blissey', ability: 'shellarmor', moves: ['sleeptalk']},
+				{ species: 'Blissey', ability: 'noability', moves: ['sleeptalk'] },
 			]]);
+			battle.onEvent('CriticalHit', battle.format, false);
 			battle.makeChoices();
 			assert.bounded(battle.p2.active[0].hp, [651 - 83, 651 - 70]);
 		});

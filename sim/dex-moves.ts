@@ -261,6 +261,8 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	ignorePositiveDefensive?: boolean;
 	ignorePositiveEvasion?: boolean;
 	multiaccuracy?: boolean;
+	angeFlower?: boolean;
+	angeFlowerReady?: boolean;
 	multihit?: number | number[];
 	multihitType?: 'parentalbond' | 'hydrabond' | 'dualwield' | 'blazingmane' | 'starboxer' | 'twincannons' | 'twinblades';
 	dualWieldAccuracy?: number | true;

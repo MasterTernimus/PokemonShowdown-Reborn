@@ -22,7 +22,7 @@ export function installApprovedSupportReworks(abilities: AbilityDataTable) {
  };
  compose('bloomingsun' as ID, ['megasol', 'flowerveil'] as ID[]);
  compose('skywarden' as ID, ['windrider'] as ID[]);
- abilities.swiftvenom = {name: 'Swift Venom', rating: 4, flags: {}};
+	abilities.swiftvenom = { name: 'Swift Venom', num: 32509, rating: 4, flags: {} };
  compose('swiftvenom' as ID, ['swiftswim', 'merciless'] as ID[]);
  compose('wickedsnare' as ID, ['intimidate'] as ID[]);
  abilities.wickedsnare.onModifyMove = function () { this.effectState.snareTargets = []; };
@@ -49,7 +49,7 @@ export function installApprovedSupportReworks(abilities: AbilityDataTable) {
   if (move.id !== 'decorate') return;
   for (const recipient of targets) if (recipient.hp && recipient.isActive) this.heal(recipient.maxhp / 4, recipient, source, this.effect);
  };
- abilities.soulreaver = {name: 'Soul Reaver', rating: 4, flags: {}};
+	abilities.soulreaver = { name: 'Soul Reaver', num: 32510, rating: 4, flags: {} };
  compose('soulreaver' as ID, ['infiltrator'] as ID[]);
  const infiltrator = abilities.soulreaver.onModifyMove!;
  abilities.soulreaver.onModifyMove = function (move, pokemon, target) {

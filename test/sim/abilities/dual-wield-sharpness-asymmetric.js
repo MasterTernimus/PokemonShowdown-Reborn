@@ -31,7 +31,7 @@ describe('Sharpness asymmetric Dual Wield', () => {
 		}
 	});
 	it('keeps ordinary Dual Wield unchanged', () => assert.deepEqual(powers({ sharp: false, ability: 'Dual Wield' }), [60, 60]));
-	it('keeps Cold Eclipse disabling Sharpness and its separate Fighting penalty', () => assert.deepEqual(powers({ cold: true }), [30, 30]));
+	it('keeps Cold Eclipse disabling Sharpness without an obsolete Fighting penalty', () => assert.deepEqual(powers({ cold: true }), [60, 60]));
 	it('keeps Siege Launcher free-for-all full-power hits', () => assert.deepEqual(powers({ ability: 'Siege Launcher', mode: 'freeforall' }), [150, 150]));
 	it('keeps native multihit moves untouched', () => {
 		powers();

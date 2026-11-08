@@ -8,4 +8,32 @@ describe('Approved Dragon Rend replacement',()=>{afterEach(()=>{battle?.destroy(
  it('damages Substitute without placing a hazard and preserves Volcanic conversion',()=>{const[p,q]=setup();q.addVolatile('substitute');q.volatiles.substitute.hp=2000;const hp=q.hp;battle.field.setTerrain('volcanicterrain',p);use(p,q);assert.equal(q.hp,hp);assert(q.volatiles.substitute.hp<2000);assert.equal(battle.field.terrain,'dragonsdenterrain');assert(!q.side.sideConditions.dragonrend);});
  it('keeps 75 power, 100 accuracy, 10 PP and staged adaptive category',()=>{const[p,q]=setup();const m=Dex.moves.get('dragonrend');assert.equal(m.basePower,75);assert.equal(m.accuracy,100);assert.equal(m.pp,10);p.storedStats.atk=p.storedStats.spa=100;assert.equal(use(p,q).category,'Special');p.boosts.atk=2;assert.equal(use(p,q).category,'Physical');});
  for(const species of ['Goodra-Hisui','Hydreigon','Cyclizar','Dragonite','Garchomp','Charizard'])it(species+' legally learns Dragon Rend',()=>{assert(Dex.species.getLearnsetData(Dex.species.get(species).id).learnset.dragonrend);assert.equal(TeamValidator.get('gen9nofieldsinglesgame').checkCanLearn(Dex.moves.get('dragonrend'),Dex.species.get(species)),null);});
+
+	it('Dragon types receive both defensive field multipliers without stat stages', () => {
+		const [p, q] = setup(['Normal']);
+		const def = p.getStat('def'), spd = p.getStat('spd'), otherDef = q.getStat('def'), otherSpd = q.getStat('spd');
+		battle.field.setTerrain('dragonsdenterrain', p);
+		assert.equal(p.getStat('def'), battle.modify(def, 1.3));
+		assert.equal(p.getStat('spd'), battle.modify(spd, 1.3));
+		assert.equal(q.getStat('def'), otherDef); assert.equal(q.getStat('spd'), otherSpd);
+		assert.equal(p.boosts.def, 0); assert.equal(p.boosts.spd, 0);
+	});
+	for (const substitute of [false, true])it('Dragon Rend sets ordinary Stealth Rock in the Den' + (substitute ? ' through Substitute' : ''), () => {
+		const [p, q] = setup(); battle.field.setTerrain('dragonsdenterrain', p);
+		if (substitute) { q.addVolatile('substitute'); q.volatiles.substitute.hp = 2000; }
+		use(p, q); assert(q.side.sideConditions.stealthrock); assert(!q.side.sideConditions.dragonrend);
+	});
+	it('Dragon Rend cannot set Stealth Rock through Protect or Wonder Guard', () => {
+		const [p, q] = setup(['Fairy'], 'Wonder Guard'); battle.field.setTerrain('dragonsdenterrain', p);
+		use(p, q); assert(!q.side.sideConditions.stealthrock);
+		q.setAbility('No Ability');
+		q.addVolatile('protect');
+		use(p, q);
+		assert(!q.side.sideConditions.stealthrock);
+	});
+	it('Dragon Rend does not set rocks on the hit that creates the Den', () => {
+		const [p, q] = setup(); battle.field.setTerrain('caveterrain', p); use(p, q);
+		assert.equal(battle.field.terrain, 'dragonsdenterrain'); assert(!q.side.sideConditions.stealthrock);
+		use(p, q); assert(q.side.sideConditions.stealthrock);
+	});
 });

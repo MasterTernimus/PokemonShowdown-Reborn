@@ -17,7 +17,7 @@ describe('Custom battle data updates', function () {
 	it('should let Gardevoir shift between Mega forms while a gimmick remains', function () {
 		const gardevoir = Dex.species.get('Gardevoir');
 		assert.deepEqual(gardevoir.formeOrder, [
-			'Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Void-Mega', 'Gardevoir-Mega-Z',
+			'Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Void', 'Gardevoir-Void-Mega', 'Gardevoir-Mega-Z',
 		]);
 		assert(Dex.species.get('Gardevoir-Void').exists);
 
@@ -67,13 +67,13 @@ describe('Custom battle data updates', function () {
 		}
 	});
 
-	it('should give Meowscarada False Bouquet, Protean, and Zoroark-style Illusion', function () {
+	it('should give Meowscarada False Bouquet, Protean, and Perfect Illusion', () => {
 		assert.deepEqual(Dex.species.get('Meowscarada').abilities, {
-			0: 'False Bouquet', 1: 'Protean', H: 'Illusion',
+			0: 'False Bouquet', 1: 'Protean', H: 'Perfect Illusion',
 		});
 
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Meowscarada', ability: 'illusion', moves: ['tackle']},
+			{ species: 'Meowscarada', ability: 'perfectillusion', moves: ['tackle'] },
 			{species: 'Garchomp', moves: ['tackle']},
 		], [
 			{species: 'Pikachu', moves: ['tackle']},
@@ -109,12 +109,13 @@ describe('Custom battle data updates', function () {
 		const charizard = battle.p2.active[0];
 		const burningCrown = charizard.getAbility();
 		assert.equal(qwilfish.boosts.atk, -1);
-		assert(charizard.hasAbility('whitesmoke'));
-		assert.equal(typeof burningCrown.onTryBoost, 'function');
+		assert(!charizard.hasAbility('whitesmoke'));
+		battle.boost({ def: -1 }, charizard, qwilfish, Dex.moves.get('tailwhip'));
+		assert.equal(charizard.boosts.def, -1);
 		battle.singleEvent('Start', burningCrown, charizard.abilityState, charizard);
 		battle.singleEvent('Start', burningCrown, charizard.abilityState, charizard);
 		assert.equal(qwilfish.boosts.atk, -1);
-		assert.equal(battle.log.filter(line => line.includes('|Intimidate|boost')).length, 1);
+		assert.equal(battle.log.filter(line => line.startsWith('|-unboost|p1a: Qwilfish|atk|')).length, 1);
 	});
 
 	it('should not activate Intimidate for Territorial', function () {
@@ -132,7 +133,7 @@ describe('Custom battle data updates', function () {
 		battle.singleEvent('Start', territorial, ursaluna.abilityState, ursaluna);
 		battle.singleEvent('Start', territorial, ursaluna.abilityState, ursaluna);
 		assert.equal(qwilfish.boosts.atk, 0);
-		assert.equal(battle.log.filter(line => line.includes('|Intimidate|boost')).length, 0);
+		assert.equal(battle.log.filter(line => line.startsWith('|-unboost|p1a: Qwilfish|atk|')).length, 0);
 	});
 
 	it('should keep Rapid Response and Violent Rush for the entire first active turn only', function () {
@@ -189,7 +190,7 @@ describe('Custom battle data updates', function () {
 		const golduck = battle.dex.species.get('Golduck');
 		assert.deepEqual(golduck.baseStats, {hp: 80, atk: 82, def: 78, spa: 115, spd: 80, spe: 90});
 		assert.equal(golduck.bst, 525);
-		assert.deepEqual(golduck.abilities, {0: 'Swift Swim', 1: 'Still Waters', H: 'Defragment'});
+		assert.deepEqual(golduck.abilities, { 0: 'Swift Swim', 1: 'Still Waters', H: 'Competitive' });
 		const learnset = battle.dex.species.getLearnsetData('golduck').learnset;
 		for (const move of [
 			'simplebeam', 'weatherball', 'futuresight', 'meditate', 'miracleeye', 'twinbeam', 'barrier', 'kinesis',
@@ -208,7 +209,7 @@ describe('Custom battle data updates', function () {
 		const megaAriados = dex.species.get('Ariados-Mega');
 		assert.deepEqual(ariados.baseStats, {hp: 80, atk: 100, def: 85, spa: 75, spd: 85, spe: 40});
 		assert.equal(ariados.bst, 465);
-		assert.deepEqual(megaAriados.baseStats, {hp: 80, atk: 130, def: 120, spa: 40, spd: 120, spe: 85});
+		assert.deepEqual(megaAriados.baseStats, { hp: 80, atk: 120, def: 115, spa: 60, spd: 115, spe: 85 });
 		assert.equal(megaAriados.bst, 575);
 	});
 
@@ -319,7 +320,7 @@ describe('Custom battle data updates', function () {
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move icywind', 'move dragonpulse');
-		const usedMoves = battle.log.filter(line => line.startsWith('|move|'));
+		const usedMoves = battle.log.filter(line => line.startsWith('|move|') && !line.includes('[from] passive:'));
 		assert.match(usedMoves[0], /Alakazam.*Icy Wind/);
 	});
 
@@ -471,13 +472,13 @@ describe('Custom battle data updates', function () {
 		assert.species(eevee, 'Jolteon');
 		assert.statStage(eevee, 'spa', 1);
 		assert.fullHP(eevee);
-		assert(battle.log.some(line => line.includes('ability: Volt Absorb')), 'Jolteon should activate Volt Absorb');
+		assert(battle.log.some(line => /(?:ability|passive): Volt Absorb/.test(line)), 'Jolteon should activate Volt Absorb');
 
 		battle.makeChoices('move bouncybubble', 'move surf');
 		assert.species(eevee, 'Vaporeon');
 		assert.statStage(eevee, 'spa', 2);
 		assert.equal(eevee.hp, eevee.maxhp, 'Vaporeon should block Surf after the form change');
-		assert(battle.log.some(line => line.includes('ability: Water Absorb')), 'Vaporeon should activate Water Absorb');
+		assert(battle.log.some(line => /(?:ability|passive): Water Absorb/.test(line)), 'Vaporeon should activate Water Absorb');
 	});
 
 	it('should activate both requested built-in Ability effects for each Unstable Evo form', function () {
@@ -764,7 +765,7 @@ describe('Custom battle data updates', function () {
 		assert.equal(megaZ.requiredItem, 'Banettite');
 		const cursedArmament = dex.abilities.get('Cursed Armament');
 		assert.equal(cursedArmament.name, 'Cursed Armament');
-		assert(cursedArmament.onSourceModifyDamage, 'Cursed Armament should include Filter');
+		assert(!cursedArmament.onSourceModifyDamage, 'Cursed Armament no longer includes Filter');
 		const banetteMoves = dex.species.getLearnsetData('banette').learnset;
 		for (const move of ['flashcannon', 'magnetbomb', 'mirrorshot', 'bittermalice', 'ancientpower', 'eeriespell']) {
 			assert(banetteMoves[move]?.length, `Banette should learn ${move}`);
@@ -777,26 +778,20 @@ describe('Custom battle data updates', function () {
 		battle.makeChoices('move splash megax', 'move splash');
 		assert.species(activeBanette, 'Banette-Mega-Z');
 		assert.equal(activeBanette.ability, 'cursedarmament');
-		assert(activeBanette.hasAbility('filter'), 'Cursed Armament should expose Filter');
+		assert(!activeBanette.hasAbility('filter'));
 		const curseMove = dex.getActiveMove('curse');
-		battle.singleEvent('ModifyMove', cursedArmament, activeBanette.abilityState, curseMove, activeBanette);
-		assert.equal(curseMove.category, 'Physical', 'Banette-Mega-Z should use its higher Attack for Curse');
-		assert.equal(curseMove.overrideOffensiveStat, 'atk');
-		const specialCurseMove = dex.getActiveMove('curse');
-		const specialAttacker = {getStat(stat) { return stat === 'spa' ? 101 : 100; }};
-		battle.singleEvent('ModifyMove', cursedArmament, {}, specialCurseMove, specialAttacker);
-		assert.equal(specialCurseMove.category, 'Special', 'Cursed Armament should use Special Attack when it is higher');
-		assert.equal(specialCurseMove.overrideOffensiveStat, 'spa');
+		battle.runEvent('ModifyMove', activeBanette, foe, curseMove, curseMove);
+		assert.equal(curseMove.category, 'Status');
+		assert.equal(curseMove.overrideOffensiveStat, undefined);
+		const hp = activeBanette.hp;
 		battle.makeChoices('move curse', 'move splash');
 		assert(foe.volatiles.curse);
+		assert.equal(activeBanette.hp, hp - Math.floor(activeBanette.maxhp / 3));
+		assert.equal(battle.field.terrain, '');
+		activeBanette.hp = 1;
 		battle.makeChoices('move splash', 'move nightshade');
-		battle.makeChoices('move splash', 'move nightshade');
-		assert.equal(battle.field.terrain, 'hauntedterrain', 'half HP should create Haunted Field');
-		battle.field.clearTerrain();
-		battle.makeChoices('move splash', 'move nightshade');
-		battle.makeChoices('move splash', 'move nightshade');
-		assert.equal(activeBanette.hp, 0, 'fourth Night Shade should faint Banette');
-		assert.equal(battle.field.terrain, 'hauntedterrain', 'fainting should create Haunted Field');
+		assert.equal(activeBanette.hp, 0);
+		assert.equal(battle.field.terrain, '');
 	});
 
 	it('should remove the stray Aura Wheel Plus entry from Morpeko', function () {

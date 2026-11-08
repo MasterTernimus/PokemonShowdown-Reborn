@@ -112,17 +112,20 @@ describe('Focus Punch', function () {
 		assert(tighteningFocusMessage > 0);
 	});
 
-	common.itGen(8, `should not tighten the Pokemon's focus when Dynamaxing or already Dynamaxed`, function () {
-		battle = common.gen(8).createBattle([[
-			{species: 'Chansey', moves: ['focuspunch']},
+	it(`should not tighten focus when converted to G-Max Chi Strike`, () => {
+		battle = common.createBattle({ formatid: 'gen9factoryfield' }, [[
+			{ species: 'Machamp', gigantamax: true, moves: ['focuspunch'] },
 		], [
 			{species: 'Venusaur', moves: ['magicalleaf']},
 		]]);
 
+		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move focuspunch dynamax', 'auto');
+		assert(battle.p1.active[0].volatiles.dynamax);
 		battle.makeChoices('move focuspunch', 'auto');
-		const tighteningFocusMessage = battle.log.indexOf('|-singleturn|p1a: Chansey|move: Focus Punch');
+		const tighteningFocusMessage = battle.log.indexOf('|-singleturn|p1a: Machamp|move: Focus Punch');
 		assert(tighteningFocusMessage < 0);
+		assert.equal(battle.log.filter(line => line.startsWith('|move|') && line.includes('|G-Max Chi Strike|')).length, 2);
 	});
 
 	it(`should tighten focus after switches in Gen 5+`, function () {

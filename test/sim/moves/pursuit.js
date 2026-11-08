@@ -15,12 +15,18 @@ describe(`Pursuit`, function () {
 			{species: "Alakazam", ability: 'magicguard', moves: ['psyshock']},
 			{species: "Clefable", ability: 'unaware', moves: ['calmmind']},
 		]]);
+		const outgoing = battle.p2.active[0];
 		battle.makeChoices('move Pursuit mega', 'switch 2');
 		assert.species(battle.p1.active[0], "Beedrill-Mega");
-		assert.fainted(battle.p2.active[0]);
+		assert.false.fullHP(outgoing);
+		assert.species(battle.p2.active[0], 'Clefable');
+		assert.fullHP(battle.p2.active[0]);
+		const log = battle.getDebugLog();
+		assert(log.indexOf('|-mega|p1a: Beedrill') < log.indexOf('|move|p1a: Beedrill|Pursuit'));
+		assert(log.indexOf('|move|p1a: Beedrill|Pursuit') < log.indexOf('|switch|p2a: Clefable'));
 	});
 
-	it(`should continue the switch in Gen 3`, function () {
+	common.itGen(3, `should continue the switch in Gen 3`, () => {
 		battle = common.gen(3).createBattle([[
 			{species: "Tyranitar", ability: 'sandstream', moves: ['pursuit']},
 		], [
@@ -31,7 +37,7 @@ describe(`Pursuit`, function () {
 		assert(battle.p2.active[0].hp);
 	});
 
-	it(`should continue the switch in Gen 4`, function () {
+	common.itGen(4, `should continue the switch in Gen 4`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: "Tyranitar", ability: 'sandstream', moves: ['pursuit']},
 		], [
@@ -67,8 +73,13 @@ describe(`Pursuit`, function () {
 			{species: "Alakazam", moves: ['calmmind']},
 		]]);
 		const furret = battle.p1.pokemon[2];
+		const hits = [];
+		battle.onEvent('BasePower', battle.format, (power, source, target, move) => {
+			if (move.id === 'pursuit') hits.push([target.name, power]);
+		});
 		battle.makeChoices('move pursuit mega -2, switch 3', 'auto');
-		assert.bounded(furret.maxhp - furret.hp, [60, 70]);
+		assert.deepEqual(hits, [['Furret', 40]]);
+		assert.false.fullHP(furret);
 	});
 
 	it(`should deal damage prior to attacker selecting a switch in after u-turn etc`, function () {
@@ -89,7 +100,7 @@ describe(`Pursuit`, function () {
 		battle.makeChoices('move Pursuit', 'move voltswitch');
 	});
 
-	it(`should only activate before switches on adjacent foes`, function () {
+	common.itGen(5, `should only activate before switches on adjacent foes`, () => {
 		battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 			{species: 'Beedrill', moves: ['pursuit']},
 			{species: 'Wynaut', moves: ['swordsdance']},

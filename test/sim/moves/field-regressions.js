@@ -109,163 +109,95 @@ describe('Field audit regressions', () => {
 		battle.field.changeTerrain('underwaterterrain', source);
 		assert.equal(battle.field.weather, '');
 	});
-	it('rolls back a rejected Cold Eclipse change without damaging the field stack', () => {
-		const [source] = setup();
-		battle.field.startTerrain('rockyterrain');
+
+	it('allows Cold Eclipse during harsh sun and keeps it during ordinary sun', () => {
+		const [source] = setup(); battle.field.startTerrain('rockyterrain');
 		battle.field.setWeather('desolateland', source);
-		const state = battle.field.terrainState;
-		assert.equal(battle.field.changeTerrain('coldeclipseterrain', source), false);
-		assert.equal(battle.field.terrain, 'rockyterrain');
-		assert.equal(battle.field.terrainState, state);
-		assert.equal(battle.field.terrainStack[0], state);
+		assert(battle.field.changeTerrain('coldeclipseterrain', source));
+		battle.field.clearWeather(); battle.field.setWeather('sunnyday', source);
+		battle.makeChoices(); battle.makeChoices();
+		assert.equal(battle.field.terrain, 'coldeclipseterrain');
 	});
-	it('gives Cold Eclipse eight turns with hail regardless of which starts first', () => {
-		let [source] = setup();
-		battle.field.setWeather('hail', source);
-		battle.field.setTerrain('coldeclipseterrain', source);
-		assert.equal(battle.field.terrainState.duration, 8);
-		battle.destroy();
-		[source] = setup();
-		battle.field.setTerrain('coldeclipseterrain', source);
+	it('extends new hail to eight turns without refreshing the Eclipse timer', () => {
+		const [source] = setup(); battle.field.setTerrain('coldeclipseterrain', source);
 		assert.equal(battle.field.terrainState.duration, 5);
 		battle.field.setWeather('hail', source);
-		assert.equal(battle.field.terrainState.duration, 8);
+		assert.equal(battle.field.weatherState.duration, 8);
+		assert.equal(battle.field.terrainState.duration, 5);
 	});
-	it('stacks Ice Scales and Cold Eclipse Defense as intended', () => {
-		const [source] = setup('splash', 'Ice Scales');
-		const normalDefense = source.getStat('def');
-		battle.field.setTerrain('coldeclipseterrain', source);
-		assert.equal(source.getStat('def'), normalDefense * 4);
+	it('doubles Ice Scales Defense once on Cold Eclipse', () => {
+		const [source] = setup('splash', 'Ice Scales'); const def = source.getStat('def');
+		battle.field.setTerrain('coldeclipseterrain', source); assert.equal(source.getStat('def'), def * 2);
 	});
-	for (const ability of ['Ascendance', 'Illusion']) {
-		it(`grants ${ability} both Cold Eclipse defense boosts`, () => {
-			const [source] = setup('splash', ability);
-			const normalDefense = source.getStat('def');
-			const normalSpecialDefense = source.getStat('spd');
-			battle.field.setTerrain('coldeclipseterrain', source);
-			assert.equal(source.getStat('def'), Math.floor(normalDefense * 1.5));
-			assert.equal(source.getStat('spd'), Math.floor(normalSpecialDefense * 1.5));
-		});
-	}
-	it('does not grant Ice Body the Cold Eclipse defense boost', () => {
-		const [source] = setup('splash', 'Ice Body');
-		const normalDefense = source.getStat('def');
-		const normalSpecialDefense = source.getStat('spd');
+	for (const ability of ['Ascendance', 'Illusion', 'Ice Body', 'Pollen Bloom', 'Toxic Bloom'])it(ability + ' does not gain removed Cold Eclipse defenses', () => {
+		const [source] = setup('splash', ability); const stats = ['def', 'spd', 'spe'].map(s => source.getStat(s));
 		battle.field.setTerrain('coldeclipseterrain', source);
-		assert.equal(source.getStat('def'), normalDefense);
-		assert.equal(source.getStat('spd'), normalSpecialDefense);
+		assert.deepEqual(['def', 'spd', 'spe'].map(s => source.getStat(s)), stats);
 	});
-	it('keeps Ice Body eligible for Cold Eclipse hail healing', () => {
-		const [source] = setup('splash', 'Ice Body');
-		battle.field.setWeather('hail', source);
+	for (const types of [['Ice'], ['Ghost'], ['Ice', 'Ghost'], ['Fire']])it(types.join('/') + ' receives the current Cold Eclipse type defenses', () => {
+		const [source] = setup(); source.setType(types); const base = source.getStat('def');
 		battle.field.setTerrain('coldeclipseterrain', source);
-		source.hp = source.maxhp - 100;
-		const previousHP = source.hp;
-		battle.singleEvent('Residual', battle.field.getTerrain(), battle.field.terrainState, source);
-		assert(source.hp > previousHP);
+		const multiplier = types.length === 2 ? 1.44 : types[0] === 'Fire' ? 0.8 : 1.2;
+		assert(Math.abs(source.getStat('def') - base * multiplier) <= 1);
+		assert.equal(source.getStat('def'), source.getStat('spd'));
 	});
-	it('grants Dragon types both defenses and doubles Dragon move power', () => {
-		const [source, target] = setup();
-		source.setType('Dragon');
-		const normalDefense = source.getStat('def');
-		const normalSpecialDefense = source.getStat('spd');
-		battle.field.setTerrain('coldeclipseterrain', source);
-		assert.equal(source.getStat('def'), Math.floor(normalDefense * 1.5));
-		assert.equal(source.getStat('spd'), Math.floor(normalSpecialDefense * 1.5));
-		assert.equal(battle.runEvent('BasePower', source, target, battle.dex.getActiveMove('dragonclaw'), 100), 200);
+	it('heals Ice Body once for one eighth in Cold Eclipse hail during a real turn', () => {
+		const [source] = setup('splash', 'Ice Body'); battle.field.setWeather('hail', source);
+		battle.field.setTerrain('coldeclipseterrain', source); source.hp = 100;
+		battle.makeChoices(); assert.equal(source.hp, 100 + Math.floor(source.baseMaxhp / 8));
 	});
-	for (const ability of ['Pollen Bloom', 'Toxic Bloom']) {
-		it(`recognizes ${ability}'s Thick Fat component on Cold Eclipse`, () => {
-			const [source] = setup('splash', ability);
-			const normalDefense = source.getStat('def');
-			const normalSpeed = source.getStat('spe');
-			assert.equal(source.hasAbility('thickfat'), true);
-			battle.field.setTerrain('coldeclipseterrain', source);
-			assert.equal(source.getStat('def'), Math.floor(normalDefense * 1.5));
-			assert.equal(source.getStat('spe'), normalSpeed);
-		});
-	}
-	for (const ability of [
-		'Thick Fat', 'Pollen Bloom', 'Toxic Bloom', 'Ice Body', 'Mind Freeze',
-		'Full Metal Body', 'Illusion', 'Prism Armor', 'Shadow Shield', 'Dark Aura', 'Duskilate', 'Armorize',
-	]) {
-		it(`retains ${ability}'s own hail immunity on Cold Eclipse`, () => {
-			const [source] = setup('splash', ability);
-			battle.field.setTerrain('coldeclipseterrain', source);
-			battle.field.setWeather('hail', source);
-			assert.equal(source.runStatusImmunity('hail'), false);
-		});
-	}
-	it('converts rain to hail and leaves a three-turn Water Sport', () => {
-		const [source] = setup();
+	it('doubles Dragon move power without adding Dragon defenses', () => {
+		const [source, target] = setup(); source.setType('Dragon'); const def = source.getStat('def');
 		battle.field.setTerrain('coldeclipseterrain', source);
-		battle.field.setWeather('raindance', source);
-		assert.equal(battle.field.pseudoWeather.watersport.duration, 3);
-		battle.makeChoices('move splash', 'move splash');
-		assert.equal(battle.field.weather, 'hail');
-		assert(battle.field.pseudoWeather.watersport);
-		battle.makeChoices('move splash', 'move splash');
-		assert(battle.field.pseudoWeather.watersport);
-		battle.makeChoices('move splash', 'move splash');
-		assert.equal(battle.field.pseudoWeather.watersport, undefined);
+		assert.equal(source.getStat('def'), def);
+		assert.equal(battle.runEvent('BasePower', source, target, Dex.getActiveMove('dragonclaw'), 100), 200);
 	});
-	it('grants three-turn Water Sport when Cold Eclipse begins in existing rain', () => {
-		const [source] = setup();
-		battle.field.setWeather('raindance', source);
-		battle.field.setTerrain('coldeclipseterrain', source);
-		assert.equal(battle.field.pseudoWeather.watersport.duration, 3);
+	for (const ability of ['Thick Fat', 'Pollen Bloom', 'Toxic Bloom', 'Ice Body', 'Mind Freeze', 'Full Metal Body', 'Prism Armor', 'Shadow Shield', 'Dark Aura', 'Duskilate', 'Armorize'])it(ability + ' retains its own hail immunity', () => {
+		const [source] = setup('splash', ability); battle.field.setTerrain('coldeclipseterrain', source);
+		battle.field.setWeather('hail', source); assert.equal(source.runStatusImmunity('hail'), false);
 	});
-	it('does not shorten an existing Water Sport when rain begins', () => {
-		const [source] = setup();
-		battle.field.setTerrain('coldeclipseterrain', source);
-		battle.field.addPseudoWeather('watersport', source, battle.dex.moves.get('watersport'));
-		assert.equal(battle.field.pseudoWeather.watersport.duration, 5);
-		battle.field.setWeather('raindance', source);
+	it('Illusion itself does not prevent hail', () => {
+		const [p] = setup('splash', 'Illusion');
+		battle.field.setTerrain('coldeclipseterrain', p);
+		assert.equal(p.runStatusImmunity('hail'), true);
+	});
+	for (const rainFirst of [true, false])it('keeps rain independent of Cold Eclipse, rain first: ' + rainFirst, () => {
+		const [source] = setup(); if (rainFirst)battle.field.setWeather('raindance', source);
+		battle.field.setTerrain('coldeclipseterrain', source); if (!rainFirst)battle.field.setWeather('raindance', source);
+		battle.makeChoices(); assert.equal(battle.field.weather, 'raindance'); assert(!battle.field.pseudoWeather.watersport);
+	});
+	it('preserves independently used Water Sport', () => {
+		const [p] = setup();
+		battle.field.setTerrain('coldeclipseterrain', p);
+		battle.field.addPseudoWeather('watersport', p, Dex.moves.get('watersport'));
+		battle.field.setWeather('raindance', p);
 		assert.equal(battle.field.pseudoWeather.watersport.duration, 5);
 	});
-	it('does not count a missed heat move toward clearing Cold Eclipse', () => {
-		const [source] = setup('heatwave');
-		battle.field.setTerrain('coldeclipseterrain', source);
-		battle.onEvent('Accuracy', battle.format, () => 0);
-		battle.makeChoices('move heatwave', 'move splash');
-		assert.equal(battle.field.terrain, 'coldeclipseterrain');
-		assert.equal(battle.field.terrainState.terrainChanges.get('coldEclipseHeat'), 0);
+	for (const outcome of ['miss', 'protect', 'hit'])it('Cold Eclipse heating respects ' + outcome, () => {
+		const [source] = setup('heatwave'); battle.field.setTerrain('coldeclipseterrain', source);
+		if (outcome === 'miss')battle.onEvent('Accuracy', battle.format, () => 0);
+		if (outcome === 'hit')battle.onEvent('Accuracy', battle.format, () => true);
+		battle.makeChoices('move heatwave', outcome === 'protect' ? 'move protect' : 'move splash');
+		assert.equal(battle.field.terrain, outcome === 'hit' ? 'rifteclipseterrain' : 'coldeclipseterrain');
 	});
-	it('clears Cold Eclipse after two successful heat moves', () => {
-		const [source] = setup('heatwave');
-		battle.field.setTerrain('coldeclipseterrain', source);
-		battle.makeChoices('move heatwave', 'move splash');
-		assert.equal(battle.field.terrainState.terrainChanges.get('coldEclipseHeat'), 1);
-		battle.makeChoices('move heatwave', 'move splash');
-		assert.notEqual(battle.field.terrain, 'coldeclipseterrain');
-	});
-	it('changes Cold Eclipse to Starlight only after Geomancy finishes', () => {
-		const [source] = setup('geomancy');
-		battle.field.setTerrain('coldeclipseterrain', source);
-		battle.makeChoices('move geomancy', 'move splash');
-		assert.equal(battle.field.terrain, 'coldeclipseterrain');
-		battle.makeChoices('move geomancy', 'move splash');
+	for (const field of ['coldeclipseterrain', 'infernaleclipseterrain'])it('completed Geomancy changes ' + field + ' to permanent Starlight', () => {
+		const [source] = setup('geomancy'); battle.field.setTerrain(field, source);
+		battle.makeChoices(); assert.equal(battle.field.terrain, field);
+		battle.makeChoices();
+		assert.equal(source.boosts.spa, 2);
 		assert.equal(battle.field.terrain, 'starlightarenaterrain');
+		assert.equal(battle.field.terrainState.duration, undefined);
 	});
-	it('keeps Cold Eclipse when Light of Ruin misses', () => {
-		const [source] = setup('lightofruin');
-		battle.field.setTerrain('coldeclipseterrain', source);
+	it('Power Herb Geomancy changes the field on its only turn', () => {
+		const [source] = setup('geomancy'); source.setItem('Power Herb'); battle.field.setTerrain('coldeclipseterrain', source);
+		battle.makeChoices(); assert.equal(source.boosts.spa, 2); assert.equal(battle.field.terrain, 'starlightarenaterrain');
+	});
+	it('missed Light of Ruin does not change Cold Eclipse', () => {
+		const [p] = setup('lightofruin');
+		battle.field.setTerrain('coldeclipseterrain', p);
 		battle.onEvent('Accuracy', battle.format, () => 0);
-		battle.makeChoices('move lightofruin', 'move splash');
+		battle.makeChoices();
 		assert.equal(battle.field.terrain, 'coldeclipseterrain');
-	});
-	it('restarts the sunny turn count when sunlight is interrupted', () => {
-		const [source] = setup();
-		battle.field.setTerrain('coldeclipseterrain', source);
-		battle.field.setWeather('sunnyday', source);
-		battle.makeChoices('move splash', 'move splash');
-		assert.equal(battle.field.terrain, 'coldeclipseterrain');
-		battle.field.setWeather('hail', source);
-		battle.field.setWeather('sunnyday', source);
-		battle.makeChoices('move splash', 'move splash');
-		assert.equal(battle.field.terrain, 'coldeclipseterrain');
-		battle.makeChoices('move splash', 'move splash');
-		assert.notEqual(battle.field.terrain, 'coldeclipseterrain');
 	});
 	it('exposes the actual condition definitions through the terrain dex', () => {
 		for (const id of Object.keys(Dex.data.Terrains)) {

@@ -36,7 +36,7 @@ describe('Wraith Procession and Infernal Parade', () => {
 	}
 	it('replaces only Hisuian Typhlosion H and preserves its passive and other choices', () => {
 		const s = Dex.species.get('Typhlosion-Hisui');
-		assert.deepEqual(s.abilities, {0: 'Blazing Mane', 1: 'Soul Fire', H: 'Wraith Procession'});
+		assert.deepEqual(s.abilities, { 0: 'Blazing Mane', 1: 'Soul Fire', H: 'Wraith Procession', S: 'Ashen Seeds' });
 		assert.deepEqual(s.passives, ['blaze']);
 		assert.equal(Dex.species.get('Typhlosion').abilities.H, 'Sand Rush');
 		assert.equal(Dex.abilities.get('wraithprocession').num, 11984);

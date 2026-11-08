@@ -1354,6 +1354,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 24,
 		eggGroups: ["Bug", "Grass"],
 		otherFormes: ["Parasect-Mega", "Parasect-Rejuv", "Parasect-Parasite"],
+		formeOrder: ["Parasect", "Parasect-Mega", "Parasect-Rejuv", "Parasect-Parasite"],
 	},
 	parasectparasite: {
 		eggGroups: ["Bug", "Grass"],
@@ -2272,7 +2273,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Electric", "Steel"],
 		gender: "N",
 		baseStats: { hp: 70, atk: 60, def: 95, spa: 120, spd: 70, spe: 85 },
-		abilities: { 0: "Paradox Pull", 1: "Elevate", H: "Hydra Bond" },
+		abilities: { 0: "Magnet Pull", 1: "Elevate", H: "Analytic" },
 		heightm: 1,
 		weightkg: 60,
 		color: "Gray",
@@ -2893,7 +2894,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 112,
 		name: "Rhydon",
 		types: ["Ground", "Rock"],
-		baseStats: { hp: 110, atk: 140, def: 130, spa: 35, spd: 75, spe: 60 },
+		baseStats: { hp: 110, atk: 130, def: 125, spa: 45, spd: 60, spe: 50 },
 		abilities: { 0: "Grand Strategy", 1: "Lightning Rod", H: "Brute Force" },
 		heightm: 1.9,
 		weightkg: 120,
@@ -3032,7 +3033,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Water", "Psychic"],
 		gender: "N",
 		baseStats: { hp: 60, atk: 75, def: 85, spa: 105, spd: 85, spe: 115 },
-		abilities: { 0: "Illuminate", 1: "Natural Cure", H: "Victory Star" },
+		abilities: { 0: "Cosmic Analysis", 1: "Natural Cure", H: "Victory Star" },
 		heightm: 1.1,
 		weightkg: 80,
 		color: "Purple",
@@ -3452,8 +3453,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		canGigantamax: "G-Max Cuddle",
 		cosmeticFormes: ["Eevee-Starter-Alt"],
-		otherFormes: ["Eevee-Starter-Alt", "Divineon"],
-		formeOrder: ["Eevee-Starter", "Eevee-Starter-Alt", "Divineon"],
+		otherFormes: ["Eevee-Starter-Alt", "Divineon", "Abysseon"],
+		formeOrder: ["Eevee-Starter", "Eevee-Starter-Alt", "Divineon", "Abysseon"],
 	},
 	eeveestarteralt: {
 		isCosmeticForme: true,
@@ -3489,9 +3490,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		changesFrom: "Eevee",
 	},
 	auroreon: {
-		num: 133,
+		num: 196,
 		name: "Auroreon",
-		baseSpecies: "Eevee",
+		baseSpecies: "Espeon",
 		forme: "Auroreon",
 		types: ["Ice", "Psychic"],
 		baseStats: { hp: 60, atk: 60, def: 95, spa: 130, spd: 95, spe: 110 },
@@ -3510,7 +3511,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Water"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 130, atk: 65, def: 60, spa: 110, spd: 95, spe: 65 },
-		abilities: { 0: "Tidal Wave", 1: "Marvel Scale", H: "Drizzle" },
+		abilities: { 0: "Tidal Wave", 1: "Marvel Scale", H: "Adaptability" },
 		heightm: 1,
 		weightkg: 29,
 		color: "Blue",
@@ -3525,7 +3526,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Electric"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 65, atk: 65, def: 60, spa: 110, spd: 95, spe: 130 },
-		abilities: { 0: "Livewire", 1: "Battery", H: "Electric Surge" },
+		abilities: { 0: "Livewire", 1: "Battery", H: "Adaptability" },
 		heightm: 0.8,
 		weightkg: 24.5,
 		color: "Yellow",
@@ -3540,7 +3541,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fire"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 65, atk: 130, def: 60, spa: 95, spd: 110, spe: 65 },
-		abilities: { 0: "Kindled Fury", 1: "Fire Mane", H: "Drought" },
+		abilities: { 0: "Kindled Fury", 1: "Flame Body", H: "Adaptability" },
 		heightm: 0.9,
 		weightkg: 25,
 		color: "Red",
@@ -4187,6 +4188,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Bug"],
 	},
 	ledian: {
+		otherFormes: ["Ledian-Mega"],
+		formeOrder: ["Ledian", "Ledian-Mega"],
 		num: 166,
 		name: "Ledian",
 		types: ["Bug", "Flying"],
@@ -4274,7 +4277,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 171,
 		name: "Lanturn",
 		types: ["Water", "Electric"],
-		baseStats: { hp: 125, atk: 58, def: 88, spa: 116, spd: 106, spe: 67 },
+		baseStats: { hp: 125, atk: 58, def: 88, spa: 106, spd: 96, spe: 67 },
 		abilities: { 0: "Abyss Lure", 1: "Drizzle", H: "Dazzling" },
 		heightm: 1.2,
 		weightkg: 22.5,
@@ -4718,6 +4721,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Water 1", "Field"],
 	},
 	espeon: {
+		otherFormes: ["Auroreon", "Soluneon"],
+		formeOrder: ["Espeon", "Auroreon", "Soluneon"],
 		num: 196,
 		name: "Espeon",
 		types: ["Psychic"],
@@ -5360,7 +5365,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Kingdra",
 		types: ["Water", "Dragon"],
 		baseStats: { hp: 85, atk: 105, def: 90, spa: 105, spd: 90, spe: 95 },
-		abilities: { 0: "Swift Swim", 1: "Abyss Sniper", H: "Storm Drain" },
+		abilities: { 0: "Damp", 1: "Abyss Sniper", H: "Storm Drain" },
 		heightm: 1.8,
 		weightkg: 152,
 		color: "Blue",
@@ -6211,7 +6216,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 30,
 		eggGroups: ["Human-Like", "Amorphous"],
 		otherFormes: ["Gardevoir-Mega", "Gardevoir-Void-Mega", "Gardevoir-Mega-Z"],
-		formeOrder: ["Gardevoir", "Gardevoir-Mega", "Gardevoir-Void-Mega", "Gardevoir-Mega-Z"],
+		formeOrder: ["Gardevoir", "Gardevoir-Mega", "Gardevoir-Void", "Gardevoir-Void-Mega", "Gardevoir-Mega-Z"],
 	},
 	gardevoirmega: {
 		cosmeticFormes: ["Gardevoir-Mega-Alt"],
@@ -7605,8 +7610,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 13,
 		color: "Black",
 		eggGroups: ["Amorphous"],
-		otherFormes: ["Muk-Pulse"],
-		formeOrder: ["Muk-Alola", "Muk-Pulse"],
 		requiredItem: "Banettite",
 	},
 	banettemegaz: {
@@ -7794,7 +7797,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Glalie-Aevian",
 		forme: "Aevian",
 		types: ["Grass", "Rock"],
-		baseStats: { hp: 110, atk: 110, def: 100, spa: 50, spd: 80, spe: 50 },
+		baseStats: { "hp": 110, "atk": 110, "def": 105, "spa": 50, "spd": 85, "spe": 40 },
 		abilities: { 0: "Grassy Surge", 1: "Brute Force", H: "Stamina" },
 		heightm: 1.5,
 		weightkg: 256.5,
@@ -7810,7 +7813,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Glalie-Aevian",
 		forme: "Mega-Aevian",
 		types: ["Grass", "Rock"],
-		baseStats: { hp: 110, atk: 155, def: 115, spa: 50, spd: 90, spe: 85 },
+		baseStats: { "hp": 110, "atk": 135, "def": 105, "spa": 90, "spd": 85, "spe": 80 },
 		abilities: { 0: "Moss Armor" },
 		heightm: 2.1,
 		weightkg: 350.2,
@@ -9381,7 +9384,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 441,
 		name: "Chatot",
 		types: ["Normal", "Flying"],
-		baseStats: { hp: 96, atk: 72, def: 65, spa: 112, spd: 65, spe: 121 },
+		baseStats: { hp: 86, atk: 72, def: 65, spa: 107, spd: 65, spe: 116 },
 		abilities: { 0: "Echo Fiend", 1: "Cloud Nine", H: "Opportunist" },
 		heightm: 0.5,
 		weightkg: 1.9,
@@ -9399,6 +9402,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Purple",
 		eggGroups: ["Amorphous"],
 		cosmeticFormes: ["Spiritomb-Alt"],
+		formeOrder: ["Spiritomb", "Spiritomb-Alt"],
 	},
 	gible: {
 		num: 443,
@@ -9623,7 +9627,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Drapion",
 		types: ["Poison", "Dark"],
 		baseStats: { hp: 80, atk: 110, def: 125, spa: 60, spd: 80, spe: 95 },
-		abilities: { 0: "Razor Reach", 1: "Withering Touch", H: "Strong Jaw", S: "Aevian Toxin" },
+		abilities: { 0: "Battle Armor", 1: "Sniper", H: "Strong Jaw", S: "Aevian Toxin" },
 		heightm: 1.3,
 		weightkg: 61.5,
 		color: "Purple",
@@ -9969,7 +9973,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Grass"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 65, atk: 110, def: 130, spa: 60, spd: 65, spe: 95 },
-		abilities: { 0: "Verdant Edge", 1: "Regenerator", H: "Grassy Surge" },
+		abilities: { 0: "Verdant Edge", 1: "Regenerator", H: "Technician" },
 		heightm: 1,
 		weightkg: 25.5,
 		color: "Green",
@@ -9984,7 +9988,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Ice"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 65, atk: 60, def: 110, spa: 130, spd: 95, spe: 65 },
-		abilities: { 0: "Permafrost", 1: "Slush Rush", H: "Snow Warning", S: "Mind Freeze" },
+		abilities: { 0: "Permafrost", 1: "Slush Rush", H: "Technician", S: "Mind Freeze" },
 		heightm: 0.8,
 		weightkg: 25.9,
 		color: "Blue",
@@ -10115,7 +10119,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	},
 	dusknoirmega: {"num":477,"name":"Dusknoir-Mega","baseSpecies":"Dusknoir","forme":"Mega","types":["Ghost","Dark"],"baseStats":{"hp":65,"atk":180,"def":155,"spa":70,"spd":155,"spe":45},"abilities":{"0":"Reaper's Grip"},"heightm":2.2,"weightkg":106.6,"color":"Black","eggGroups":["Amorphous"],"requiredItem":"Dusknoirite","battleOnly":"Dusknoir","isNonstandard":"Custom"},
 	dusknoir: {
-		otherFormes: ["Dusknoir-Mega"], formeOrder: ["Dusknoir", "Dusknoir-Mega"],
+		otherFormes: ["Dusknoir-Mega"], formeOrder: ["Dusknoir", "Dusknoir-Mega", "Dusknoir-Alt"],
 		num: 477,
 		name: "Dusknoir",
 		types: ["Ghost", "Dark"],
@@ -10989,7 +10993,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega-Aevian",
 		types: ["Grass", "Water"],
 		gender: "F",
-		baseStats: { hp: 70, atk: 80, def: 70, spa: 140, spd: 100, spe: 140 },
+		baseStats: { "hp": 70, "atk": 80, "def": 80, "spa": 140, "spd": 100, "spe": 130 },
 		abilities: { 0: "Storm Calling" },
 		heightm: 2.6,
 		weightkg: 29.6,
@@ -14474,7 +14478,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fairy"],
 		gender: "F",
 		baseStats: { hp: 74, atk: 65, def: 67, spa: 125, spd: 128, spe: 92 },
-		abilities: { 0: "Symbiosis", 1: "Magic Guard", H: "Eternal Flower" },
+		abilities: { 0: "Symbiosis", 1: "Natural Cure", H: "Eternal Flower" },
 		heightm: 0.2,
 		weightkg: 0.9,
 		color: "White",
@@ -20321,7 +20325,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Normal"],
 		gender: "N",
 		baseStats: { hp: 74, atk: 75, def: 70, spa: 65, spd: 75, spe: 111 },
-		abilities: { 0: "Friend Guard", 1: "Cheek Pouch", H: "Technician" },
+		abilities: { 0: "Technician", 1: "Cheek Pouch", H: "Hospitality" },
 		heightm: 0.3,
 		weightkg: 2.3,
 		color: "White",
@@ -20339,7 +20343,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Normal"],
 		gender: "N",
 		baseStats: { hp: 74, atk: 75, def: 70, spa: 65, spd: 75, spe: 111 },
-		abilities: { 0: "Friend Guard", 1: "Cheek Pouch", H: "Technician" },
+		abilities: { 0: "Technician", 1: "Cheek Pouch", H: "Hospitality" },
 		heightm: 0.3,
 		weightkg: 2.8,
 		color: "White",
@@ -20364,7 +20368,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Dachsbun",
 		types: ["Fairy"],
 		baseStats: { hp: 80, atk: 80, def: 115, spa: 50, spd: 80, spe: 95 },
-		abilities: { 0: "Well-Baked Body", 1: "Aroma Veil", H: "Friend Guard" },
+		abilities: { 0: "Sweet Veil", 1: "Aroma Veil", H: "Friend Guard" },
 		heightm: 0.5,
 		weightkg: 14.9,
 		color: "Brown",
@@ -20971,7 +20975,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Revavroom",
 		types: ["Steel", "Poison"],
 		baseStats: { hp: 80, atk: 119, def: 90, spa: 54, spd: 67, spe: 90 },
-		abilities: { 0: "Overcoat", H: "Filter" },
+		abilities: { 0: "Filter", 1: "Motor Drive", H: "Reckless" },
 		heightm: 1.8,
 		weightkg: 120,
 		color: "Gray",
@@ -21296,7 +21300,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Farigiraf",
 		types: ["Normal", "Psychic"],
 		baseStats: { hp: 120, atk: 90, def: 70, spa: 110, spd: 70, spe: 60 },
-		abilities: { 0: "Twin Appetite", 1: "Armor Tail", H: "Royal Decree" },
+		abilities: { 0: "Twin Appetite", 1: "Twin Focus", H: "Royal Decree" },
 		heightm: 3.2,
 		weightkg: 160,
 		color: "Brown",
@@ -21358,7 +21362,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Ground", "Fighting"],
 		gender: "N",
 		baseStats: { hp: 115, atk: 131, def: 131, spa: 53, spd: 53, spe: 87 },
-		abilities: { 0: "Protosynthesis" },
+		abilities: { 0: "Rolling Fortress", 1: "Siege Tusks", H: "Battle Armor" },
 		heightm: 2.2,
 		weightkg: 320,
 		color: "Purple",
@@ -21371,7 +21375,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fairy", "Psychic"],
 		gender: "N",
 		baseStats: { hp: 115, atk: 65, def: 99, spa: 65, spd: 115, spe: 111 },
-		abilities: { 0: "Protosynthesis" },
+		abilities: { 0: "Competitive", 1: "Friend Guard", H: "Intimidate" },
 		heightm: 1.2,
 		weightkg: 8,
 		color: "Pink",
@@ -21384,7 +21388,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Grass", "Dark"],
 		gender: "N",
 		baseStats: { hp: 111, atk: 127, def: 99, spa: 79, spd: 99, spe: 55 },
-		abilities: { 0: "Protosynthesis" },
+		abilities: { 0: "Spore Shroud", 1: "Regenerator", H: "Strong Jaw" },
 		heightm: 1.2,
 		weightkg: 21,
 		color: "White",
@@ -21397,7 +21401,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Ghost", "Fairy"],
 		gender: "N",
 		baseStats: { hp: 55, atk: 55, def: 55, spa: 135, spd: 135, spe: 135 },
-		abilities: { 0: "Protosynthesis" },
+		abilities: { 0: "Infiltrator", 1: "Prankster", H: "Levitate" },
 		heightm: 1.4,
 		weightkg: 4,
 		color: "Gray",
@@ -21410,7 +21414,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Bug", "Fighting"],
 		gender: "N",
 		baseStats: { hp: 85, atk: 135, def: 79, spa: 85, spd: 105, spe: 81 },
-		abilities: { 0: "Protosynthesis" },
+		abilities: { 0: "Cinder Scales", 1: "Overcoat", H: "Tough Claws" },
 		heightm: 3.2,
 		weightkg: 92,
 		color: "White",
@@ -21423,7 +21427,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Electric", "Ground"],
 		gender: "N",
 		baseStats: { hp: 85, atk: 81, def: 97, spa: 121, spd: 85, spe: 101 },
-		abilities: { 0: "Protosynthesis" },
+		abilities: { 0: "Magnet Pull", 1: "Hydra Bond", H: "Sand Force" },
 		heightm: 2.3,
 		weightkg: 60,
 		color: "Gray",
@@ -21436,7 +21440,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Ground", "Steel"],
 		gender: "N",
 		baseStats: { hp: 90, atk: 112, def: 120, spa: 72, spd: 70, spe: 106 },
-		abilities: { 0: "Quark Drive" },
+		abilities: { 0: "Rolling Fortress", 1: "Siege Tusks", H: "Speed Boost" },
 		heightm: 0.9,
 		weightkg: 240,
 		color: "Gray",
@@ -21449,7 +21453,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Ice", "Water"],
 		gender: "N",
 		baseStats: { hp: 56, atk: 80, def: 114, spa: 124, spd: 60, spe: 136 },
-		abilities: { 0: "Quark Drive" },
+		abilities: { 0: "Prankster", 1: "Evil Santa", H: "Slush Rush" },
 		heightm: 0.6,
 		weightkg: 11,
 		color: "Red",
@@ -21462,7 +21466,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fighting", "Electric"],
 		gender: "N",
 		baseStats: { hp: 154, atk: 140, def: 108, spa: 50, spd: 68, spe: 50 },
-		abilities: { 0: "Quark Drive" },
+		abilities: { 0: "Grit Grappler", 1: "Sheer Force", H: "Iron Fist" },
 		heightm: 1.8,
 		weightkg: 380.7,
 		color: "Gray",
@@ -21475,7 +21479,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Dark", "Flying"],
 		gender: "N",
 		baseStats: { hp: 94, atk: 80, def: 86, spa: 122, spd: 80, spe: 108 },
-		abilities: { 0: "Quark Drive" },
+		abilities: { 0: "Strings of Ruin", 1: "False Liberation", H: "Mega Launcher" },
 		heightm: 1.3,
 		weightkg: 111,
 		color: "Blue",
@@ -21488,7 +21492,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fire", "Poison"],
 		gender: "N",
 		baseStats: { hp: 80, atk: 70, def: 60, spa: 140, spd: 110, spe: 110 },
-		abilities: { 0: "Quark Drive" },
+		abilities: { 0: "Cinder Scales", 1: "Dawn Herald", H: "Levitate" },
 		heightm: 1.2,
 		weightkg: 36,
 		color: "White",
@@ -21501,7 +21505,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Rock", "Electric"],
 		gender: "N",
 		baseStats: { hp: 100, atk: 134, def: 110, spa: 70, spd: 84, spe: 72 },
-		abilities: { 0: "Quark Drive" },
+		abilities: { 0: "Sand Stream", 1: "Mountain Hide", H: "Analytic" },
 		heightm: 1.6,
 		weightkg: 303,
 		color: "Green",
@@ -21667,7 +21671,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Dragon", "Dark"],
 		gender: "N",
 		baseStats: { hp: 105, atk: 139, def: 71, spa: 55, spd: 101, spe: 119 },
-		abilities: { 0: "Protosynthesis" },
+		abilities: { 0: "Intimidate", 1: "Free Flight", H: "Strong Jaw" },
 		heightm: 2,
 		weightkg: 380,
 		color: "Blue",
@@ -21680,7 +21684,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fairy", "Fighting"],
 		gender: "N",
 		baseStats: { hp: 74, atk: 130, def: 90, spa: 120, spd: 60, spe: 116 },
-		abilities: { 0: "Quark Drive" },
+		abilities: { 0: "Void Veil", 1: "Ruptured Heaven", H: "Download" },
 		heightm: 1.4,
 		weightkg: 35,
 		color: "White",
@@ -21719,7 +21723,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Water", "Dragon"],
 		gender: "N",
 		baseStats: { hp: 99, atk: 83, def: 91, spa: 125, spd: 83, spe: 109 },
-		abilities: { 0: "Protosynthesis" },
+		abilities: { 0: "Pressure", 1: "Water Veil", H: "Swift Swim" },
 		heightm: 3.5,
 		weightkg: 280,
 		color: "Blue",
@@ -21732,7 +21736,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Grass", "Psychic"],
 		gender: "N",
 		baseStats: { hp: 90, atk: 130, def: 88, spa: 70, spd: 108, spe: 104 },
-		abilities: { 0: "Quark Drive" },
+		abilities: { 0: "Justified", 1: "Sharpness", H: "Mind's Eye" },
 		heightm: 1.5,
 		weightkg: 125,
 		color: "Green",
@@ -22043,7 +22047,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fire", "Dragon"],
 		gender: "N",
 		baseStats: { hp: 105, atk: 115, def: 121, spa: 65, spd: 93, spe: 91 },
-		abilities: { 0: "Protosynthesis" },
+		abilities: { 0: "Pressure", 1: "Flash Fire", H: "Turboblaze" },
 		heightm: 3.5,
 		weightkg: 590,
 		color: "Brown",
@@ -22055,7 +22059,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Electric", "Dragon"],
 		gender: "N",
 		baseStats: { hp: 125, atk: 73, def: 91, spa: 137, spd: 89, spe: 75 },
-		abilities: { 0: "Protosynthesis" },
+		abilities: { 0: "Pressure", 1: "Volt Absorb", H: "Transistor" },
 		heightm: 5.2,
 		weightkg: 480,
 		color: "Yellow",
@@ -22067,7 +22071,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Rock", "Psychic"],
 		gender: "N",
 		baseStats: { hp: 90, atk: 120, def: 80, spa: 68, spd: 108, spe: 124 },
-		abilities: { 0: "Quark Drive" },
+		abilities: { 0: "Justified", 1: "Sharpness", H: "Rock Head" },
 		heightm: 1.5,
 		weightkg: 162.5,
 		color: "Gray",
@@ -22079,7 +22083,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Steel", "Psychic"],
 		gender: "N",
 		baseStats: { hp: 90, atk: 72, def: 100, spa: 122, spd: 108, spe: 98 },
-		abilities: { 0: "Quark Drive" },
+		abilities: { 0: "Justified", 1: "Sharpness", H: "Steelworker" },
 		heightm: 1.6,
 		weightkg: 156,
 		color: "Blue",
@@ -23634,9 +23638,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		isNonstandard: "Custom",
 	},
 	soluneon: {
-		num: 133,
+		num: 196,
 		name: "Soluneon",
-		baseSpecies: "Eevee",
+		baseSpecies: "Espeon",
 		forme: "Soluneon",
 		types: ["Dark", "Psychic"],
 		baseStats: {hp: 80, atk: 60, def: 110, spa: 95, spd: 110, spe: 95},
@@ -23772,7 +23776,19 @@ const latestSpeciesUpdates: {[id: string]: any} = {
 		abilities: {0: "Sand Stream", 1: "Ruin Jaw", H: "Accumulation"},
 	},
 	garchompbattlebond: {baseStats: {spe: 112}},
-	gourgeist: {isNonstandard: "Unobtainable", tier: "Illegal"},
+	gourgeist: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+		otherFormes: [
+			"Gourgeist-Small",
+			"Gourgeist-Super",
+		],
+		formeOrder: [
+			"Gourgeist",
+			"Gourgeist-Small",
+			"Gourgeist-Super",
+		],
+	},
 	gourgeistsmall: {isNonstandard: null, tier: "RU"},
 	gourgeistlarge: {isNonstandard: "Unobtainable", tier: "Illegal"},
 	gourgeistsuper: {isNonstandard: null, tier: "RU"},
@@ -23868,9 +23884,9 @@ const latestSpeciesUpdates: {[id: string]: any} = {
 		formeOrder: ["Emboar", "Emboar-Mega", "Emboar-Reborn", "Emboar-Mega-Reborn"],
 	},
 	auroreon: {
-		num: 133,
+		num: 196,
 		name: "Auroreon",
-		baseSpecies: "Eevee",
+		baseSpecies: "Espeon",
 		forme: "Auroreon",
 		types: ["Ice", "Psychic"],
 		baseStats: {hp: 60, atk: 60, def: 95, spa: 130, spd: 95, spe: 110},
@@ -24246,7 +24262,7 @@ Pokedex.taurospaldeaaqua.abilities!["1"] = "Rousing Feast";
 Pokedex.hawlucha.abilities!["0"] = "Ringcraft";
 Pokedex.centiskorch.abilities!["1"] = "Constricting Heat";
 
-Pokedex.conkeldurr.abilities![0] = 'Void Reprisal';
+Pokedex.conkeldurr.abilities![0] = 'Guts';
 Pokedex.conkeldurr.abilities!.H = 'Wrecking Crew';
 
 Pokedex.abomasnow.abilities!["1"] = "Evergreen";
@@ -24417,7 +24433,7 @@ Pokedex.avalugg.abilities!['0'] = 'Scrappy';
 Pokedex.cursola.abilities!['0'] = 'Cursed Body';
 Pokedex.veluza.abilities!['E'] = 'Unburden';
 
-Pokedex.slowkinggalar.abilities!['1'] = 'Telepathy';
+Pokedex.slowkinggalar.abilities!['1'] = 'Own Tempo';
 Pokedex.mrmime.abilities!['1'] = 'Soundproof';
 Pokedex.raichu.abilities!['0'] = 'Static';
 Pokedex.fearow.abilities!['0'] = 'Keen Eye';
@@ -24447,7 +24463,7 @@ Pokedex.gliscoralt.abilities![0] = 'Venom Pincer';
 
 Pokedex.gyarados.abilities![0] = 'Unbridled Wrath';
 
-Pokedex.conkeldurr.abilities!['1'] = 'Rocky Payload';
+Pokedex.conkeldurr.abilities!['1'] = 'Stamina';
 
 import {CastformForms} from './castform-split';
 for (const id of CastformForms) Pokedex[id as ID].abilities![0] = 'Perfect Forecast';
@@ -24484,8 +24500,17 @@ Pokedex.arbolivaaevian = {
  heightm: 1.4, weightkg: 48.2, color: 'Blue', eggGroups: ['Grass'], isNonstandard: 'Custom',
 };
 // Cosmetic Ego variants retain the exact current ordinary and Mega mechanical data.
-Pokedex.emboarego = {...Pokedex.emboar, name: 'Emboar-Ego', baseSpecies: 'Emboar', forme: 'Ego', spriteid: 'emboar-ego',
- otherFormes: ['Emboar-Mega-Ego'], formeOrder: ['Emboar-Ego', 'Emboar-Mega-Ego'], isNonstandard: 'Custom'};
+Pokedex.emboarego = {
+	...Pokedex.emboar,
+	name: 'Emboar-Ego',
+	baseSpecies: 'Emboar',
+	forme: 'Ego',
+	spriteid: 'emboar-ego',
+	cosmeticFormes: undefined,
+	otherFormes: ['Emboar-Mega-Ego'],
+	formeOrder: ['Emboar-Ego', 'Emboar-Mega-Ego'],
+	isNonstandard: 'Custom',
+};
 Pokedex.emboarmegaego = {...Pokedex.emboarmega, name: 'Emboar-Mega-Ego', baseSpecies: 'Emboar', forme: 'Mega-Ego', spriteid: 'emboar-mega-ego',
  battleOnly: 'Emboar-Ego', changesFrom: 'Emboar-Ego', isNonstandard: 'Custom'};
 Pokedex.emboar = {...Pokedex.emboar, otherFormes: [...(Pokedex.emboar.otherFormes || []), 'Emboar-Ego', 'Emboar-Mega-Ego'], formeOrder: [...(Pokedex.emboar.formeOrder || []), 'Emboar-Ego', 'Emboar-Mega-Ego']};
@@ -24494,9 +24519,35 @@ Pokedex.corviknight.abilities = {0: 'Pressure', 1: 'Skywarden', H: 'Steelwing Es
 Pokedex.overqwil.abilities!['1'] = 'Swift Venom';
 
 // Grim remains a cosmetic mechanical counterpart with its own Mega identity.
-Pokedex.mightyenagrim = {...Pokedex.mightyena, name: 'Mightyena-Grim', baseSpecies: 'Mightyena', forme: 'Grim', spriteid: 'mightyena-grim', isCosmeticForme: false, otherFormes: ['Mightyena-Mega-Grim'], formeOrder: ['Mightyena-Grim', 'Mightyena-Mega-Grim'], isNonstandard: 'Custom'};
+Pokedex.mightyenagrim = {
+	...Pokedex.mightyena,
+	name: 'Mightyena-Grim',
+	baseSpecies: 'Mightyena',
+	forme: 'Grim',
+	spriteid: 'mightyena-grim',
+	isCosmeticForme: false,
+	cosmeticFormes: undefined,
+	otherFormes: [
+		'Mightyena-Mega-Grim',
+	],
+	formeOrder: [
+		'Mightyena-Grim',
+		'Mightyena-Mega-Grim',
+	],
+	isNonstandard: 'Custom',
+};
 Pokedex.mightyenamegagrim = {...Pokedex.mightyenamega, name: 'Mightyena-Mega-Grim', baseSpecies: 'Mightyena', forme: 'Mega-Grim', spriteid: 'mightyena-mega', battleOnly: 'Mightyena-Grim', changesFrom: 'Mightyena-Grim', isNonstandard: 'Custom'};
-Pokedex.mightyena = {...Pokedex.mightyena, otherFormes: [...(Pokedex.mightyena.otherFormes || []), 'Mightyena-Mega-Grim']};
+Pokedex.mightyena = {
+	...Pokedex.mightyena,
+	otherFormes: [
+		...(Pokedex.mightyena.otherFormes || []),
+		'Mightyena-Mega-Grim',
+	],
+	formeOrder: [
+		...(Pokedex.mightyena.formeOrder || []),
+		'Mightyena-Mega-Grim',
+	],
+};
 
 // Approved selected-slot replacements; other slots and species passives stay separate.
 Pokedex.gliscor.abilities!['1'] = 'Silent Hunter';
@@ -24542,7 +24593,7 @@ Pokedex.marowakalola.abilities![1] = 'Cursed Body';
 
 Pokedex.venusaur.abilities![1] = 'Soothing Bouquet';
 
-Pokedex.tyranitar.abilities![0] = 'Mountain Hide';
+Pokedex.tyranitar.abilities = { 0: 'Earth Eater', 1: 'Battle Armor', H: 'Dread Presence' };
 Pokedex.abomasnow.abilities![0] = 'Rimebark';
 
 for (const species of Object.values(Pokedex)) if ((species.name === 'Silvally' || species.baseSpecies === 'Silvally') && species.abilities?.[1] === 'Mimicry') species.abilities[1] = 'Adaptive Arsenal';
@@ -24612,7 +24663,7 @@ Pokedex.aggron.abilities={0:'Lightning Rod',1:'Brute Force',H:'Soundproof'};
 for(const id of ['mimikyu','mimikyubusted','mimikyutotem','mimikyubustedtotem'] as const)Pokedex[id].abilities={0:'Cursed Body',1:'Frisk',H:'Infiltrator'};
 for(const id of ['aegislash','aegislashblade'] as const)Pokedex[id].abilities={0:'Stalwart',1:'Cursed Body',H:'Infiltrator'};
 
-Pokedex.hydreigon.abilities={0:'Dark Aura',1:'Worldbreaker',H:'False Liberation'};
+Pokedex.hydreigon.abilities = { 0: 'Dark Aura', 1: 'Strings of Ruin', H: 'False Liberation' };
 
 Pokedex.meloetta.abilities={0:'Songstress'};
 Pokedex.meloettapirouette.abilities={0:'Dancer'};
@@ -24691,7 +24742,7 @@ Pokedex.mienshao.abilities!.H = 'Infiltrator';
 Pokedex.pelipper.abilities![1] = 'Rain Dish';
 // Emboar-Ego intentionally shares this ordinary ability table; Reborn and Megas do not.
 Pokedex.emboar.abilities![0] = 'Controlled Fury';
-Pokedex.sylveon.abilities!.H = 'Fairy Aura';
+Pokedex.sylveon.abilities!.H = 'Aroma Veil';
 
 for (const id of ['palafin', 'palafinhero'] as const) Pokedex[id].abilities = { 0: 'Sworn Duty', 1: 'Friend Guard', H: 'Hydration' };
 Pokedex.palafinhero = {...Pokedex.palafinhero, requiredAbility: undefined};
@@ -24703,7 +24754,17 @@ Pokedex.miniormeteor = { ...Pokedex.miniormeteor, requiredAbility: undefined };
 
 // Approved event-only selectable slot; regular Politoed choices are unchanged.
 Pokedex.politoed.abilities!.S = 'Aevian King';
-Pokedex.politoed = { ...Pokedex.politoed, otherFormes: [...(Pokedex.politoed.otherFormes || []), 'Politoed-Rejuv'] };
+Pokedex.politoed = {
+	...Pokedex.politoed,
+	otherFormes: [
+		...(Pokedex.politoed.otherFormes || []),
+		'Politoed-Rejuv',
+	],
+	formeOrder: [
+		'Politoed',
+		'Politoed-Rejuv',
+	],
+};
 Pokedex.politoedrejuv = {
 	num: 186, name: 'Politoed-Rejuv', baseSpecies: 'Politoed', forme: 'Rejuv', types: ['Water'],
 	baseStats: { hp: 110, atk: 70, def: 105, spa: 95, spd: 85, spe: 70 }, abilities: { 0: 'Aevian King' },
@@ -24713,11 +24774,31 @@ Pokedex.politoedrejuv = {
 
 Pokedex.politoedrejuv = { ...Pokedex.politoedrejuv, types: ['Normal', 'Dragon'] };
 Pokedex.poliwrath.abilities!.S = 'Aevian Ascendance';
-Pokedex.poliwrath = { ...Pokedex.poliwrath, otherFormes: [...(Pokedex.poliwrath.otherFormes || []), 'Poliwrath-Rejuv'] };
+Pokedex.poliwrath = {
+	...Pokedex.poliwrath,
+	otherFormes: [
+		...(Pokedex.poliwrath.otherFormes || []),
+		'Poliwrath-Rejuv',
+	],
+	formeOrder: [
+		'Poliwrath',
+		'Poliwrath-Rejuv',
+	],
+};
 Pokedex.poliwrathrejuv = { num: 62, name: 'Poliwrath-Rejuv', baseSpecies: 'Poliwrath', forme: 'Rejuv', types: ['Normal', 'Dragon'], baseStats: { hp: 100, atk: 55, def: 100, spa: 160, spd: 90, spe: 55 }, abilities: { 0: 'Aevian Ascendance' }, heightm: 1.3, weightkg: 54, color: 'Blue', eggGroups: ['Water 1'], requiredAbility: 'Aevian Ascendance', battleOnly: 'Poliwrath', isNonstandard: 'Custom' };
 
 Pokedex.galvantula.abilities!.S = 'Aevian Web';
-Pokedex.galvantula = { ...Pokedex.galvantula, otherFormes: [...(Pokedex.galvantula.otherFormes || []), 'Galvantula-Rejuv'] };
+Pokedex.galvantula = {
+	...Pokedex.galvantula,
+	otherFormes: [
+		...(Pokedex.galvantula.otherFormes || []),
+		'Galvantula-Rejuv',
+	],
+	formeOrder: [
+		'Galvantula',
+		'Galvantula-Rejuv',
+	],
+};
 Pokedex.galvantularejuv = { num: 596, name: 'Galvantula-Rejuv', baseSpecies: 'Galvantula', forme: 'Rejuv', types: ['Bug', 'Rock'], baseStats: { hp: 70, atk: 127, def: 60, spa: 47, spd: 60, spe: 108 }, abilities: { 0: 'Aevian Web' }, heightm: 0.8, weightkg: 14.3, color: 'Yellow', eggGroups: ['Bug'], requiredAbility: 'Aevian Web', battleOnly: 'Galvantula', isNonstandard: 'Custom' };
 
 Pokedex.decidueyehisui.abilities = { ...Pokedex.decidueyehisui.abilities!, H: 'Canopy Archer' };
@@ -24792,6 +24873,13 @@ Pokedex.golduck.abilities!.H = 'Competitive';
 Pokedex.pelipper.abilities![1] = 'Keen Eye';
 Pokedex.amoonguss.abilities![0] = 'Sticky Hold';
 Pokedex.sawk.abilities![1] = 'Sturdy';
+
+Pokedex.cinderace.abilities![1] = 'Rising Striker';
+Pokedex.rillaboom.abilities![1] = 'Rising Rhythm';
+Pokedex.inteleon.abilities = { 0: 'Infiltrator', 1: 'Rising Marksman', H: 'Calculated Shot' };
+Pokedex.cinderacegmax.abilities = { 0: 'Grand Striker' };
+Pokedex.rillaboomgmax.abilities = { 0: 'Grand Rhythm' };
+Pokedex.inteleongmax.abilities = { 0: 'Grand Marksman' };
 
 // Synchronize after every base-form override.
 for (const [skinId, counterpartId] of Object.entries(CosmeticBattleCounterparts)) {

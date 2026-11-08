@@ -35,6 +35,26 @@ describe('Relic Mishap', function () {
 		assert(arctovish.hp > afterWater - 100);
 	});
 
+	for (const species of ['Dracozolt', 'Arctozolt', 'Dracovish', 'Arctovish']) {
+		for (const move of ['watergun', 'thundershock']) {
+			for (const mode of ['normal', 'suppressed', 'moldbreaker']) {
+				it(species + ' ' + move + ' absorption with ' + mode, () => {
+					battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+						{ species, ability: 'Relic Mishap', moves: ['splash'] },
+					], [{ species: 'Mew', ability: mode === 'moldbreaker' ? 'Mold Breaker' : 'No Ability', moves: [move] }]]);
+					battle.makeChoices('team 1', 'team 1');
+					const p = battle.p1.active[0], q = battle.p2.active[0];
+					p.hp = 100; p.maxhp = p.baseMaxhp = 1000;
+					if (mode === 'suppressed') p.addVolatile('gastroacid');
+					const attack = Object.assign(battle.dex.getActiveMove(move), { damage: 40, accuracy: true, willCrit: false });
+					battle.actions.useMove(attack, q, { target: p });
+					assert.equal(p.hp, mode === 'normal' ? 350 : 60);
+					assert.equal(p.ability, 'relicmishap');
+				});
+			}
+		}
+	}
+
 	it('should boost Sp. Def in Sand and Defense in Hail', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Dracovish', ability: 'relicmishap', moves: ['splash']},

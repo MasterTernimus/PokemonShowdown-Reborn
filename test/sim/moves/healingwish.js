@@ -49,7 +49,7 @@ describe('Healing Wish', function () {
 		assert(battle.p1.slotConditions[0]['healingwish']);
 	});
 
-	it('should heal an ally fully after Ally Switch', function () {
+	it('should keep Healing Wish in its slot when Ally Switch has no replacement', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Jirachi', ability: 'serenegrace', moves: ['healingwish']},
@@ -66,10 +66,12 @@ describe('Healing Wish', function () {
 		// Rotom does not consume Healing Wish
 		battle.makeChoices('switch rotom', '');
 		assert(battle.p1.slotConditions[0]['healingwish']);
-		// Caterpie gets healed by Healing Wish triggered by Ally Switch
+		// Ally Switch is a pivot; it cannot exchange active positions or heal the other slot.
 		battle.makeChoices('move allyswitch, move stringshot', 'move sleeptalk, move protect');
-		assert.equal(battle.p1.active[0].hp, 231); // Caterpie start in slot 1 -> Ally Switch-ed to slot 0
-		assert.false(battle.p1.slotConditions[0]['healingwish']);
+		assert.equal(battle.p1.active[0].species.name, 'Rotom');
+		assert.equal(battle.p1.active[1].species.name, 'Caterpie');
+		assert.equal(battle.p1.active[1].hp, 1);
+		assert(battle.p1.slotConditions[0]['healingwish']);
 	});
 
 	it(`should fail to switch the user out if no Pokemon can be switched in`, function () {
@@ -109,7 +111,7 @@ describe('Healing Wish', function () {
 		assert.false.fullHP(wynaut);
 	});
 
-	it('[Gen 4] should heal a switch-in for full after hazards mid-turn', function () {
+	common.itGen(4, '[Gen 4] should heal a switch-in for full after hazards mid-turn', () => {
 		battle = common.gen(4).createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Caterpie', ability: 'shielddust', moves: ['stringshot']},

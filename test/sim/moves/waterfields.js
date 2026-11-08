@@ -139,13 +139,13 @@ describe('Water field move interactions', () => {
 			['surf', 243], // Water x1.5, current x1.5, individual x1.2
 			['octazooka', 117], // current x1.2 plus the move's Water-type field interaction
 			['sludgewave', 114],
-			['tripledive', 54],
+			['tripledive', 45], // 20 BP, Water x1.5 and Triple Dive x1.5
 		]) {
 			const move = battle.dex.getActiveMove(moveID);
 			assert.equal(
 				battle.runEvent('BasePower', source, target, move, move.basePower, true),
 				expected,
-				`${move.name} should retain its existing boost and receive the new individual boost`
+				`${move.name} should receive its documented Water Surface multipliers`
 			);
 		}
 	});
@@ -162,7 +162,7 @@ describe('Water field move interactions', () => {
 		battle.field.changeTerrain('underwaterterrain', source);
 		const terrain = battle.dex.conditions.get('underwaterterrain');
 
-		for (const [moveID, expected] of [['dragondarts', 150], ['gravapple', 135]]) {
+		for (const [moveID, expected] of [['dragondarts', 180], ['gravapple', 135]]) {
 			const move = battle.dex.getActiveMove(moveID);
 			battle.singleEvent('ModifyMove', terrain, battle.field.terrainState, move, source, target);
 			assert.equal(move.type, 'Water');

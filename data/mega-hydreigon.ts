@@ -3,8 +3,8 @@ import {composeSelectedAbility} from './selected-mega-simplifications';
 
 export const MegaHydreigonDescriptions = {
 	expiration: {
-		shortDesc: 'Worldbreaker + Controlled Fury.',
-		desc: 'Full local Worldbreaker and Controlled Fury. Berserk raises Attack and Sp. Atk by 1 after surviving a move crossing half HP, or only Sp. Atk by 2 on Dragon’s Den. Entering Dragon’s Den grants +1 Sp. Atk. Duskilate converts Normal moves to Dark with its normal power and field effects. Each damaging hit independently has a 30% chance (50% on Dragon’s Den) to double base power; Fickle Beam uses only its own all-out roll. The first damaging hit received each entry raises Attack by 1; surviving a critical hit instead maximizes Attack. Outrage, Thrash, Petal Dance and Raging Fury cause no rampage lock or ending confusion. Existing confusion and other move locks remain unchanged.',
+		shortDesc: 'Strings of Ruin + Controlled Fury.',
+		desc: 'Full local Strings of Ruin and Controlled Fury. Berserk raises Attack and Sp. Atk by 1 after surviving a move crossing half HP, or only Sp. Atk by 2 on Dragon’s Den. Entering Dragon’s Den grants +1 Sp. Atk. Duskilate converts Normal moves to Dark with its normal power and field effects. Each damaging hit independently has a 30% chance (50% on Dragon’s Den) to double base power; Fickle Beam uses only its own all-out roll. The first damaging hit received each entry raises Attack by 1; surviving a critical hit instead maximizes Attack. Outrage, Thrash, Petal Dance and Raging Fury cause no rampage lock or ending confusion. Existing confusion and other move locks remain unchanged.',
 	},
 	abyssalrebirth: {
 		shortDesc: 'Hydra Bond + Levitate; Fairy weaknesses become neutral; heals 25% once when crossing half HP.',
@@ -25,7 +25,7 @@ function reawaken(battle: Battle, holder: Pokemon, source: Pokemon, move: Active
 
 export function installMegaHydreigon(abilities: AbilityDataTable) {
 	abilities.expiration = {name: 'Expiration', num: 11980, rating: 5, flags: {}};
-	composeSelectedAbility(abilities, 'expiration', ['worldbreaker', 'controlledfury'], true);
+	composeSelectedAbility(abilities, 'expiration', ['stringsofruin', 'controlledfury'], true);
 	abilities.abyssalrebirth = {
 		...abilities.hydraflight, name: 'Abyssal Rebirth', num: 11981,
 		onAfterDamageApplied(damage, target, source, effect) {

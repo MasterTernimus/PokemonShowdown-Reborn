@@ -13,9 +13,9 @@ describe('Eevee and Eeveelution ability updates', () => {
 
 	it('sets the requested HP and ability slots', () => {
 		assert.equal(Dex.species.get('Eevee-Gmax').baseStats.hp, 150);
-		assert.deepEqual(Dex.species.get('Vaporeon').abilities, {0: 'Tidal Wave', 1: 'Marvel Scale', H: 'Drizzle'});
-		assert.deepEqual(Dex.species.get('Jolteon').abilities, {0: 'Livewire', 1: 'Battery', H: 'Electric Surge'});
-		assert.deepEqual(Dex.species.get('Flareon').abilities, {0: 'Kindled Fury', 1: 'Fire Mane', H: 'Drought'});
+		assert.deepEqual(Dex.species.get('Vaporeon').abilities, { 0: 'Tidal Wave', 1: 'Marvel Scale', H: 'Adaptability' });
+		assert.deepEqual(Dex.species.get('Jolteon').abilities, { 0: 'Livewire', 1: 'Battery', H: 'Adaptability' });
+		assert.deepEqual(Dex.species.get('Flareon').abilities, { 0: 'Kindled Fury', 1: 'Flame Body', H: 'Adaptability' });
 	});
 
 	it('lets Tidal Wave absorb Water attacks and retain its component effects', () => {
@@ -26,7 +26,9 @@ describe('Eevee and Eeveelution ability updates', () => {
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const vaporeon = battle.p1.active[0];
-		for (const component of ['waterabsorb', 'hydration', 'raindish']) {
+		assert.deepEqual(vaporeon.getPassives(), ['waterabsorb']);
+		assert(!vaporeon.hasAbility('waterabsorb'), 'Absorption is a separate species passive');
+		for (const component of ['hydration', 'raindish']) {
 			assert(vaporeon.hasAbility(component), component);
 		}
 		battle.damage(80, vaporeon);
@@ -43,7 +45,9 @@ describe('Eevee and Eeveelution ability updates', () => {
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const jolteon = battle.p1.active[0];
-		for (const component of ['transistor', 'voltabsorb', 'quickfeet', 'ironbarbs']) {
+		assert.deepEqual(jolteon.getPassives(), ['voltabsorb']);
+		assert(!jolteon.hasAbility('voltabsorb'), 'Absorption is a separate species passive');
+		for (const component of ['transistor', 'quickfeet', 'ironbarbs']) {
 			assert(jolteon.hasAbility(component), component);
 		}
 		const normalSpeed = jolteon.getStat('spe');
@@ -63,7 +67,9 @@ describe('Eevee and Eeveelution ability updates', () => {
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const flareon = battle.p1.active[0];
-		for (const component of ['fluffy', 'guts', 'flashfire']) {
+		assert.deepEqual(flareon.getPassives(), ['flashfire']);
+		assert(!flareon.hasAbility('flashfire'), 'Absorption is a separate species passive');
+		for (const component of ['fluffy', 'guts']) {
 			assert(flareon.hasAbility(component), component);
 		}
 		const hpBefore = flareon.hp;

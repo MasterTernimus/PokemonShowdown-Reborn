@@ -82,7 +82,8 @@ describe('Fire-only Fire Mane and simplified Blazing Mane', () => {
 		assert.equal(battle.p1.active[0].boosts.spe, 0);
 	});
 	it('preserves each actual selected-ability distribution', () => {
-		for (const id of ['rapidash', 'taurospaldeablaze', 'flareon', 'pyroar']) assert(Object.values(Dex.species.get(id).abilities).includes('Fire Mane'), id);
+		for (const id of ['rapidash', 'taurospaldeablaze', 'pyroar']) assert(Object.values(Dex.species.get(id).abilities).includes('Fire Mane'), id);
+		assert.equal(Dex.species.get('flareon').abilities[1], 'Flame Body');
 		for (const id of ['typhlosion', 'typhlosionalt', 'typhlosionhisui']) assert.equal(Dex.species.get(id).abilities[0], 'Blazing Mane');
 	});
 });
@@ -142,6 +143,7 @@ describe('Aqua Shell Heatproof and full local Frisk', () => {
 		const components = require('../../../dist/data/ability-components').AbilityComponents;
 		assert.deepEqual(components.aquashell, ['heatproof', 'frisk']);
 		assert.equal(Dex.species.get('golisopodaevianmega').abilities[0], 'Desert Shell');
-		assert.deepEqual(components.desertshell, ['skilllink', 'heatproof', 'sandstream']);
+		assert.deepEqual(components.desertshell, ['skilllink', 'sandstream']);
+		assert.deepEqual(Dex.species.get('golisopodaevianmega').passives, ['heatproof']);
 	});
 });

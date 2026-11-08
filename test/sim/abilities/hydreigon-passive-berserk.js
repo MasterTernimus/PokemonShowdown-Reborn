@@ -19,13 +19,13 @@ describe('Hydreigon selected Berserk ownership', () => {
 		const move = Object.assign(Dex.getActiveMove('tackle'), {damage: 150, accuracy: true, willCrit: false});
 		battle.actions.runMove(move, q, q.getLocOf(p));
 	}
-	for (const ability of ['Dark Aura', 'Worldbreaker', 'False Liberation', 'Berserk']) {
+	for (const ability of ['Dark Aura', 'Strings of Ruin', 'False Liberation', 'Berserk']) {
 		for (const suppressed of [false, true]) {
 			it(`${ability}, suppressed=${suppressed}: boosts only through unsuppressed selected Berserk`, () => {
 				const [p, q] = setup(ability);
 				if (suppressed) p.addVolatile('gastroacid', q);
 				assert.deepEqual(p.getPassives(), ['hydraflight']);
-				const expected = !suppressed && ['Worldbreaker', 'Berserk'].includes(ability) ? 1 : 0;
+				const expected = !suppressed && ['Strings of Ruin', 'Berserk'].includes(ability) ? 1 : 0;
                 assert.equal(p.hasAbilityOrPassive('berserk'), !!expected);
 				hit(p, q);
 				assert.equal(p.hp, 450);
@@ -37,10 +37,10 @@ describe('Hydreigon selected Berserk ownership', () => {
 			});
 		}
 	}
-	for (const ability of ['Worldbreaker', 'False Liberation']) {
+	for (const ability of ['Strings of Ruin', 'False Liberation']) {
 		it(`${ability} owns Berserk independently of species`, () => {
 			const [p, q] = setup(ability, 'Mew');
-			const expected = ability === 'Worldbreaker' ? 1 : 0; assert.equal(p.hasAbilityOrPassive('berserk'), !!expected);
+			const expected = ability === 'Strings of Ruin' ? 1 : 0; assert.equal(p.hasAbilityOrPassive('berserk'), !!expected);
 			hit(p, q);
 			assert.equal(p.boosts.atk, expected);
 			assert.equal(p.boosts.spa, expected);

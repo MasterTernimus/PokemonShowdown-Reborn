@@ -257,7 +257,8 @@ for (const methodName of assertMethods) {
 		try {
 			assert[methodName].apply(null, args);
 		} catch (err) {
-			return;
+			if (err instanceof AssertionError) return;
+			throw err;
 		}
 		throw new AssertionError({
 			message: lastArgIndex < args.length ? args[lastArgIndex] : `Expected '${methodName}' assertion to fail.`,

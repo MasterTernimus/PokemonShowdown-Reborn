@@ -5,12 +5,81 @@ function hit(p,t,id='tackle',extra={}){battle.clearActiveMove();const m=battle.d
 describe('Approved Archeops full revision',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  it('keeps the exact Archeops slots and Defeatist',()=>assert.deepEqual(Dex.species.get('archeops').abilities,{0:'Defeatist',1:'Relic Instinct',H:'Fossil Frenzy'}));
- it('Relic Instinct heals TO 60% once and clears only negative stages without defensive drops',()=>{const[p,t]=start();p.hp=1200;p.boosts.atk=-2;p.boosts.def=-2;p.boosts.spd=2;hit(t,p,'tackle',{damage:400});assert.equal(p.hp,2400);assert.equal(p.boosts.atk,0);assert.equal(p.boosts.def,0);assert.equal(p.boosts.spd,2);assert(p.m.relicInstinctSpent);p.hp=800;battle.runEvent('Update',p);assert.equal(p.hp,800);});
- it('Relic recovery is deferred across all multi-hit strikes, with no resurrection',()=>{const[p,t]=start();p.hp=1200;const observed=[];battle.onEvent('DamagingHit',battle.format,()=>observed.push(p.hp));hit(t,p,'doublehit',{damage:500,multihit:2});assert.deepEqual(observed,[700,200]);assert.equal(p.hp,2400);p.m.relicInstinctSpent=false;p.hp=700;hit(t,p,'doublehit',{damage:500,multihit:2});assert.equal(p.hp,0);assert(!p.m.relicInstinctSpent);});
- it('Heal Block preserves emergency and negative stages until healing succeeds',()=>{const[p,t]=start();p.hp=1200;p.boosts.def=-2;p.addVolatile('healblock',t);hit(t,p,'tackle',{damage:400});assert.equal(p.hp,800);assert(!p.m.relicInstinctSpent);assert.equal(p.boosts.def,-2);p.removeVolatile('healblock');battle.runEvent('Update',p);assert.equal(p.hp,2400);assert.equal(p.boosts.def,0);assert(p.m.relicInstinctSpent);});
- it('switching and ability replacement cannot reset the battle charge',()=>{const[p,t]=start();p.hp=800;battle.runEvent('Update',p);assert(p.m.relicInstinctSpent);battle.makeChoices('switch 2','move splash');battle.makeChoices('switch 2','move splash');p.setAbility('No Ability');p.setAbility('Relic Instinct');p.hp=800;battle.runEvent('Update',p);assert.equal(p.hp,800);});
- it('residual and non-move damage can trigger recovery with integer target HP',()=>{const[p,t]=start();p.hp=1200;battle.damage(400,p,t,battle.dex.conditions.get('brn'));assert.equal(p.hp,2400);p.m.relicInstinctSpent=false;p.maxhp=p.baseMaxhp=401;p.hp=100;battle.runEvent('Update',p);assert.equal(p.hp,240);});
- it('end-turn threshold recovers before the ordinary low-HP residual heal',()=>{const[p,t]=start();p.hp=800;battle.fieldEvent('Residual');assert.equal(p.hp,2400);});
+	it('Relic Instinct no longer restores emergency HP or clears negative stages after a hit', () => {
+		const [p, t] = start();
+		p.hp = 1200;
+		p.boosts.atk = -2;
+		p.boosts.def = -2;
+		p.boosts.spd = 2;
+		hit(t, p, 'tackle', { damage: 400 });
+		assert.equal(p.hp, 800);
+		assert.equal(p.boosts.atk, -2);
+		assert.equal(p.boosts.def, -2);
+		assert.equal(p.boosts.spd, 2);
+		battle.runEvent('Update', p);
+		assert.equal(p.hp, 800);
+	});
+	it('multi-hit damage does not trigger emergency recovery or resurrection', () => {
+		const [p, t] = start();
+		p.hp = 1200;
+		const observed = [];
+		battle.onEvent('DamagingHit', battle.format, () => observed.push(p.hp));
+		hit(t, p, 'doublehit', { damage: 500, multihit: 2 });
+		assert.deepEqual(observed, [700, 200]);
+		assert.equal(p.hp, 200);
+		p.hp = 700;
+		hit(t, p, 'doublehit', { damage: 500, multihit: 2 });
+		assert.equal(p.hp, 0);
+	});
+	it('Heal Block prevents low-HP residual healing without clearing negative stages', () => {
+		const [p, t] = start();
+		p.hp = 1200;
+		p.boosts.def = -2;
+		p.addVolatile('healblock', t);
+		hit(t, p, 'tackle', { damage: 400 });
+		battle.singleEvent('Residual', p.getAbility(), p.abilityState, p);
+		assert.equal(p.hp, 800);
+		assert.equal(p.boosts.def, -2);
+		p.removeVolatile('healblock');
+		battle.runEvent('Update', p);
+		assert.equal(p.hp, 800);
+		battle.singleEvent('Residual', p.getAbility(), p.abilityState, p);
+		assert.equal(p.hp, 1050);
+		assert.equal(p.boosts.def, -2);
+	});
+	it('ability restarts and re-entry do not restore emergency healing', () => {
+		const [p, t] = start();
+		p.hp = 800;
+		battle.runEvent('Update', p);
+		assert.equal(p.hp, 800);
+		battle.makeChoices('switch 2', 'move splash');
+		battle.makeChoices('switch 2', 'move splash');
+		p.setAbility('No Ability');
+		p.setAbility('Relic Instinct');
+		p.hp = 800;
+		battle.runEvent('Update', p);
+		assert.equal(p.hp, 800);
+	});
+	it('indirect damage does not trigger recovery; low-HP residual healing rounds down', () => {
+		const [p, t] = start();
+		p.hp = 1200;
+		battle.damage(400, p, t, battle.dex.conditions.get('brn'));
+		assert.equal(p.hp, 800);
+		p.maxhp = p.baseMaxhp = 401;
+		p.hp = 100;
+		battle.runEvent('Update', p);
+		assert.equal(p.hp, 100);
+		battle.singleEvent('Residual', p.getAbility(), p.abilityState, p);
+		assert.equal(p.hp, 125);
+	});
+	it('end-turn healing is exactly 1/16 and only at half HP or less', () => {
+		const [p] = start();
+		for (const [hp, expected] of [[800, 1050], [2000, 2250], [2001, 2001]]) {
+			p.hp = hp;
+			battle.fieldEvent('Residual');
+			assert.equal(p.hp, expected);
+		}
+	});
  it('retains both threshold modes and does not tax a healthy attack',()=>{const[p,t]=start();const move=battle.dex.getActiveMove('tackle');battle.runEvent('ModifyMove',p,t,move,move);assert(move.ignoreAbility);const hp=p.hp;hit(p,t);assert.equal(p.hp,hp);p.hp=1800;assert.equal(battle.runEvent('ModifyAtk',p,t,move,100),50);assert.equal(battle.runEvent('ModifySpA',p,t,move,100),50);assert.equal(battle.runEvent('ModifyDamage',t,p,move,100),75);assert.equal(battle.runEvent('CriticalHit',p,t,move),false);battle.singleEvent('Residual',p.getAbility(),p.abilityState,p);assert.equal(p.hp,2050);});
  it('Fossil Frenzy boosts and confuses once after an entire opposing multi-hit move',()=>{const[p,t]=start('Fossil Frenzy');let hits=0;battle.onEvent('DamagingHit',battle.format,()=>{hits++;assert.equal(p.boosts.atk,0);assert(!p.volatiles.confusion);});hit(t,p,'doublehit',{damage:100,multihit:2});assert.equal(hits,2);assert.equal(p.boosts.atk,1);assert.equal(p.boosts.spe,1);assert(p.volatiles.confusion);});
  it('Fossil Frenzy can reward a later move but never an attack that KOs it',()=>{const[p,t]=start('Fossil Frenzy');hit(t,p,'tackle',{damage:100});hit(t,p,'tackle',{damage:100});assert.equal(p.boosts.atk,2);p.hp=100;const from=battle.log.length;hit(t,p,'doublehit',{damage:100,multihit:2});assert.equal(p.hp,0);assert(!battle.log.slice(from).some(l=>l.startsWith('|-boost|')));});

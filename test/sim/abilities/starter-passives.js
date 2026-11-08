@@ -2,6 +2,8 @@
 const assert=require('assert').strict, common=require('../../common');
 const {Dex,Teams}=require('../../../dist/sim');
 const {StarterPassives,ProficientPassiveForms}=require('../../../dist/data/starter-passives');
+const { DisabledSpecies } = require('../../../dist/data/disabled-species');
+const selectableProficientForms = [...ProficientPassiveForms].filter(id => !DisabledSpecies.has(id));
 let battle;
 function start(species='Charizard',ability='No Ability',foe='No Ability') {
  battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species,ability,moves:['flamethrower','splash']},{species:'Mew',ability:'No Ability',moves:['splash']}],[{species:'Mew',ability:foe,moves:['splash']},{species:'Mew',ability:'No Ability',moves:['splash']}]]);
@@ -11,18 +13,21 @@ function start(species='Charizard',ability='No Ability',foe='No Ability') {
 function event(p,t,event='ModifySpA',move='flamethrower') {return battle.runEvent(event,p,t,battle.dex.getActiveMove(move),100);}
 describe('Starter species passives',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- it('maps all 76 final records and preserves exactly 27 Proficient gimmick records',()=>{
+	it('maps all 77 internal records and 28 Proficient gimmick records', () => {
   const {abilityIncludesComponent}=require('../../../dist/data/ability-components');
   for(const id of ProficientPassiveForms)assert(Object.values(Dex.species.get(id).abilities).every(a=>!abilityIncludesComponent(Dex.abilities.get(a).id,'proficient')),id+' chosen abilities must not duplicate Proficient');
-  assert.equal(Object.keys(StarterPassives).length,76);assert.equal(ProficientPassiveForms.size,27);
+		assert.equal(Object.keys(StarterPassives).length, 77); assert.equal(ProficientPassiveForms.size, 28);
   for(const [id,passives] of Object.entries(StarterPassives)){const s=Dex.species.get(id);assert(s.exists,id);assert.equal(s.id,id);assert.deepEqual(s.passives,passives);assert(!s.evos.length,id);}
-  for(const id of ['bulbasaur','ivysaur','charmander','charmeleon','pikachu'])assert.deepEqual(Dex.species.get(id).passives,[]);
+		for (const id of ['bulbasaur', 'ivysaur', 'charmander', 'charmeleon', 'pikachu']) {
+			assert.equal(StarterPassives[id], undefined);
+			assert(!Dex.species.get(id).passives.some(p => ['blaze', 'torrent', 'overgrow', 'proficient'].includes(p)), id);
+		}
  });
  for(const [species,pinch,move] of [['Charizard','Blaze','flamethrower'],['Venusaur','Overgrow','energyball'],['Blastoise','Torrent','surf']]) {
   it(species+' keeps one passive pinch effect through selected ability and suppression',()=>{const[p,t]=start(species);p.hp=1;assert.equal(event(p,t,'ModifySpA',move),150);p.setAbility(pinch);assert.equal(event(p,t,'ModifySpA',move),150);p.addVolatile('gastroacid');assert.equal(event(p,t,'ModifySpA',move),150);assert.deepEqual(p.getPassives(),[pinch.toLowerCase()]);});
  }
  it('preserves a nested active Overgrow component',()=>{const[p,t]=start('Venusaur','Rift Dancer');p.hp=1;assert.equal(event(p,t,'ModifySpA','energyball'),150);});
- for(const id of ProficientPassiveForms)it(id+' retains one Proficient after active ability replacement/suppression',()=>{
+	for (const id of selectableProficientForms)it(id + ' retains one Proficient after active ability replacement/suppression', () => {
   const[p,t]=start(id);if(p.species.id!==id)p.formeChange(id,null,true);p.setType('Normal');assert.equal(event(p,t,'BasePower','tackle'),130);
   p.setAbility('Proficient');assert.equal(event(p,t,'BasePower','tackle'),130);
   p.addVolatile('gastroacid');assert.equal(event(p,t,'BasePower','tackle'),130);
@@ -63,7 +68,11 @@ describe('Starter species passives',()=>{
  });
  it('keeps ordinary team serialization and calculator species metadata in sync',()=>{
   const team=Teams.import('Charizard\nAbility: Solar Power\n- Flamethrower');assert.equal(Teams.unpack(Teams.pack(team))[0].ability,'Solar Power');assert(!Teams.pack(team).includes('Blaze'));
-  const metadata=require('../../../dist/sim/custom-calculator').calculatorMetadata();for(const [id,passives] of Object.entries(StarterPassives))assert.deepEqual(metadata.species.find(s=>Dex.species.get(s.name).id===id).passives,passives,id);
+		const metadata = require('../../../dist/sim/custom-calculator').calculatorMetadata(); for (const [id, passives] of Object.entries(StarterPassives)) {
+			const entry = metadata.species.find(s => Dex.species.get(s.name).id === id);
+			if (DisabledSpecies.has(id)) { assert.equal(entry, undefined, id + ' remains hidden'); continue; }
+			assert(entry, id); assert.deepEqual(entry.passives, passives, id);
+		}
  });
  it('deduplicates Perfect Foresight copied components without replaying entry events',()=>{
   const[p,t]=start('Charizard-Mega-X','Perfect Foresight');p.m.perfectForesightAbility='proficient';p.m.perfectForesightAbilityState={id:'proficient',target:p};p.setType('Normal');assert.equal(event(p,t,'BasePower','tackle'),130);
@@ -76,7 +85,7 @@ describe('Starter species passives',()=>{
  it('preserves current-type Proficient and excludes off-type moves',()=>{
   const[p,t]=start('Charizard-Mega-X');p.setType('Water');assert.equal(event(p,t,'BasePower','surf'),130);assert.equal(event(p,t,'BasePower','flamethrower'),100);
  });
- for(const id of ProficientPassiveForms)it(id+' calculator damage matches copied active Proficient without stacking',()=>{
+	for (const id of selectableProficientForms)it(id + ' calculator damage matches copied active Proficient without stacking', () => {
   const {calculateScenario}=require('../../../dist/sim/custom-calculator');const input={format:'gen9nofieldsinglesgame',move:'Tera Blast',samples:8,seed:42,actors:Array.from({length:4},()=>({species:'Mew',ability:'No Ability'}))};
   input.actors[0]={species:Dex.species.get(id).name,ability:'No Ability',teraType:'Normal',gimmick:'tera'};const result=calculateScenario(input);input.actors[0].ability='Proficient';assert.deepEqual(calculateScenario(input).results,result.results);
  });

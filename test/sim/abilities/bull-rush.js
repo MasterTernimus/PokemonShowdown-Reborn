@@ -16,7 +16,7 @@ describe('Bull Rush on Tauros forms', () => {
 			['Tauros-Paldea-Aqua', 'Thick Fat'],
 		]) {
 			assert.deepEqual(battle.dex.species.get(species).abilities,
-				{0: 'Bull Rush', 1: 'Gluttony', H: hidden});
+				{ 0: 'Bull Rush', 1: 'Rousing Feast', H: hidden });
 		}
 	});
 

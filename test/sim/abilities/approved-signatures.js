@@ -37,7 +37,7 @@ describe('Approved signature batch', () => {
 		assert.equal(Dex.species.get('magcargo').bst, 540);
 		assert.deepEqual(Dex.species.get('kleavor').abilities, { 0: 'Flint Fracture', 1: 'Sheer Force', H: 'Sharpness' });
 		assert.deepEqual(Dex.species.get('grafaiai').abilities, { 0: 'Unburden', 1: 'Toxic Signature', H: 'Sticky Hold' });
-		assert.deepEqual(Dex.species.get('klefki').abilities, { 0: 'Prankster', 1: 'Master Key', H: 'Magician' });
+		assert.deepEqual(Dex.species.get('klefki').abilities, { 0: 'Adhesive Armor', 1: 'Master Key', H: 'Magician' });
 		assert.deepEqual(Dex.species.get('chimecho').abilities,
 			{ 0: 'Temple Chime', 1: 'Restorative Chime', H: 'Dissonant Chime' });
 		assert.equal(Dex.species.get('glaliemega').abilities[0], 'Freezer Burn');
@@ -111,8 +111,8 @@ describe('Approved signature batch', () => {
 			use(source, target, 'thunderwave'); assert.equal(target.status, '');
 		});
 	}
-	it('Klefki preserves its item through passive Sticky Hold but permits screen removal', () => {
-		const [keeper, attacker] = start('Prankster', 'No Ability', 'Klefki'); screens(keeper); keeper.setItem('leftovers');
+	it('Klefki preserves its item through selected Adhesive Armor but permits screen removal', () => {
+		const [keeper, attacker] = start('Adhesive Armor', 'No Ability', 'Klefki'); screens(keeper); keeper.setItem('leftovers');
 		use(attacker, keeper, 'brickbreak', { basePower: 1 });
 		assert(!keeper.side.sideConditions.reflect);
 		use(attacker, keeper, 'knockoff', { basePower: 1 }); assert.equal(keeper.item, 'leftovers');
@@ -180,6 +180,9 @@ describe('Approved signature batch', () => {
 		for (const id of ['flamebody', 'swarm']) assert(source.hasAbility(id));
 		battle.field.setTerrain('coldeclipseterrain', source);
 		battle.singleEvent('Start', source.getAbility(), source.abilityState, source);
+		assert.equal(source.boosts.def, 0); assert.equal(source.boosts.spd, 0);
+		battle.field.setTerrain('infernaleclipseterrain', source);
+		battle.singleEvent('Start', source.getAbility(), source.abilityState, source);
 		assert.equal(source.boosts.def, 1); assert.equal(source.boosts.spd, 1);
 		const secondary = [{ chance: 100, status: 'par' }];
 		assert.deepEqual(battle.runEvent('ModifySecondaries', source, target, battle.dex.getActiveMove('tackle'), secondary), secondary);
@@ -201,7 +204,10 @@ describe('Approved signature batch', () => {
 		assert.deepEqual(crits, [false, false, false, false, false]);
 		crits.length = 0; target.setAbility('Battle Armor');
 		use(source, target, 'rockblast', { basePower: 1, willCrit: undefined });
-		assert(crits.every(crit => !crit)); assert(source.hasAbility('owntempo')); assert(!source.hasAbility('battlearmor'));
+		assert(crits.every(crit => !crit));
+		assert(source.hasAbility('steadfast'));
+		assert(!source.hasAbility('owntempo'));
+		assert(!source.hasAbility('battlearmor'));
 	});
 	it('Rimebreaker clears only Rocks and one Spikes layer once per turn', () => {
 		const [source, target] = start('Rimebreaker');
@@ -308,55 +314,57 @@ describe('Approved signature batch', () => {
 		assert.equal(battle.heal(40, target, target, battle.dex.abilities.get('regenerator')), 40);
 		source.setAbility('No Ability'); assert.equal(battle.heal(40, target, target, battle.dex.moves.get('recover')), 40);
 	});
-	it('Dusk Drive contains all actual component hooks and combined end cleanup', () => {
-		const dusk = Dex.abilities.get('duskdrive');
-		for (const id of ['battlefervor', 'precision', 'opportunist']) {
-			const component = Dex.abilities.get(id);
-			for (const key of Object.keys(component).filter(key => key.startsWith('on') && key !== 'onEnd')) {
-				assert.equal(dusk[key], component[key], `${id}.${key}`);
-			}
-		}
+	it('Dusk Ego retains the legacy ID and only the approved components', () => {
+		const [source] = start('Dusk Ego');
+		assert.equal(source.ability, 'duskdrive'); assert.equal(Dex.abilities.get('Dusk Drive').name, 'Dusk Ego');
+		for (const id of ['keeneye', 'ultraego']) assert(source.hasAbility(id));
+		for (const id of ['battlefervor', 'precision', 'opportunist']) assert(!source.hasAbility(id));
 	});
-	it('Dusk Drive blocks berries, boosts once on multi-hit and keeps Precision/Opportunist', () => {
-		const [source, target] = start('Dusk Drive');
-		assert.equal(source.abilityState.unnerved, true, battle.log.join('\n'));
-		assert.equal(battle.runEvent('TryEatItem', target, null, null, Dex.items.get('sitrusberry')), false);
+	it('Dusk Ego boosts once per multi-hit attack and retains Keen Eye without Precision or berry blocking', () => {
+		const [source, target] = start('Dusk Ego');
+		assert.notEqual(battle.runEvent('TryEatItem', target, null, null, Dex.items.get('sitrusberry')), false);
 		use(target, source, 'tackle', { basePower: 1, multihit: 3 });
 		assert.equal(source.boosts.atk, 1); assert.equal(source.boosts.spa, 1);
-		const move = battle.dex.getActiveMove('shadowball'); battle.runEvent('ModifyMove', source, target, move, move);
-		assert.equal(move.accuracy, true); assert.equal(battle.runEvent('ModifyCritRatio', source, target, move, 1), 2);
-		battle.boost({ def: 2 }, target, target);
-		battle.fieldEvent('Residual'); assert.equal(source.boosts.def, 2);
+		battle.boost({ accuracy: -1 }, source, target); assert.equal(source.boosts.accuracy, 0);
+		const move = battle.dex.getActiveMove('airslash'); battle.runEvent('ModifyMove', source, target, move, move);
+		assert.equal(move.accuracy, 95); assert.equal(move.ignoreEvasion, true); assert.equal(move.ignoreAbility, true);
+		battle.boost({ def: 2 }, target, target); battle.fieldEvent('Residual'); assert.equal(source.boosts.def, 0);
 	});
-	it('Twilight Instinct shields only one HP hit and prepares only next-turn zero-priority attacks', () => {
+	it('Twilight Instinct retains Ultra Instinct attack timing and copies opposing boosts', () => {
 		const [source, target] = start('Twilight Instinct');
-		const original = battle.queue.willMove;
-		battle.queue.willMove = pokemon => pokemon === source ? { choice: 'move' } : null;
-		const damages = [];
-		battle.onEvent('DamagingHit', battle.format, damage => damages.push(damage));
-		use(target, source, 'tackle', { basePower: 10, multihit: 3 });
-		assert(Math.abs(damages[0] / damages[1] - 0.75) < 0.1);
-		assert.equal(damages[1], damages[2]);
-		const tackle = battle.dex.getActiveMove('tackle');
-		assert.equal(battle.runEvent('ModifyPriority', source, target, tackle, 0), 0);
-		battle.turn++;
-		assert.equal(battle.runEvent('ModifyPriority', source, target, tackle, 0), 1);
-		assert.equal(battle.runEvent('ModifyPriority', source, target, battle.dex.getActiveMove('accelerock'), 1), 1);
-		assert.equal(battle.runEvent('ModifyPriority', source, source, battle.dex.getActiveMove('swordsdance'), 0), 0);
-		use(source, target, 'tackle', { accuracy: 0 });
-		assert(!source.m.approvedSignatures.twilightTurn);
-		battle.queue.willMove = original;
+		assert(source.hasAbility('ultrainstinct')); assert(source.hasAbility('opportunist'));
+		const move = battle.dex.getActiveMove('tackle');
+		battle.queue.willMove = pokemon => pokemon === target ? { choice: 'move' } : null;
+		assert.equal(battle.runEvent('BasePower', source, target, move, 100), 130);
+		battle.boost({ def: 2 }, target, target); battle.fieldEvent('Residual'); assert.equal(source.boosts.def, 2);
+		assert.equal(battle.runEvent('ModifyPriority', source, target, move, 0), 0);
 	});
-	it('Twilight priority expires and first-hit budgets survive ability replacement but reset on switching', () => {
+	it('Twilight Instinct does not retain the retired first-hit priority budget', () => {
 		const [source, target] = start('Twilight Instinct');
 		use(target, source, 'tackle', { basePower: 1 });
+		battle.turn++;
+		assert.equal(battle.runEvent('ModifyPriority', source, target, battle.dex.getActiveMove('tackle'), 0), 0);
 		source.setAbility('No Ability'); source.setAbility('Twilight Instinct');
-		assert(source.m.approvedSignatures.twilightGuardUsed);
-		source.m.approvedSignatures.twilightTurn = battle.turn;
-		battle.fieldEvent('Residual'); assert(!source.m.approvedSignatures.twilightTurn);
-		battle.actions.switchIn(source.side.pokemon[1], 0);
-		battle.actions.switchIn(source, 0);
-		assert(!source.m.approvedSignatures.twilightGuardUsed);
+		assert.equal(battle.runEvent('ModifyPriority', source, target, battle.dex.getActiveMove('tackle'), 0), 0);
+		battle.actions.switchIn(source.side.pokemon[1], 0); battle.actions.switchIn(source, 0);
+		assert.equal(battle.runEvent('ModifyPriority', source, target, battle.dex.getActiveMove('tackle'), 0), 0);
+	});
+	it('Twilight Instinct protects the whole first attack each turn without refreshing on ability replacement', () => {
+		const [source, target] = start('Twilight Instinct');
+		source.hp = source.maxhp = 10000;
+		const damages = [];
+		battle.onEvent('DamagingHit', battle.format, (damage, defender) => {
+			if (defender === source) damages.push(damage);
+		});
+		use(target, source, 'tackle', { basePower: 30, multihit: 3 });
+		source.setAbility('No Ability'); source.setAbility('Twilight Instinct');
+		use(target, source, 'tackle', { basePower: 30 });
+		assert.equal(damages.length, 4);
+		assert.equal(damages[0], damages[1]); assert.equal(damages[1], damages[2]);
+		assert(Math.abs(damages[0] / damages[3] - 0.7) < 0.05);
+		battle.turn++;
+		use(target, source, 'tackle', { basePower: 30 });
+		assert.equal(damages[4], damages[0]);
 	});
 	it('Atrocity has neither Levitate nor Tough Claws and preserves the 654 BST', () => {
 		const [source, target] = start('Atrocity', 'No Ability', 'Charizard-Mega-X');
@@ -387,20 +395,15 @@ describe('Approved signature batch', () => {
 		battle.runEvent('ModifyMove', source, target, move, move); assert(!move.flags.contact);
 		use(source, target, 'doubleshock', { basePower: 1 }); assert(!source.hasType('Electric'));
 	});
-	it('Dusk Drive retains damage modifiers, field suppression and normal ability suppression', () => {
-		const [source, target] = start('Dusk Drive');
-		const move = battle.dex.getActiveMove('tackle');
-		battle.queue.willMove = () => ({ choice: 'move' });
-		assert.equal(battle.runEvent('BasePower', source, target, move, 100), 120);
-		assert.equal(battle.runEvent('ModifyDamage', target, source, move, 100), 80);
-		assert.equal(battle.runEvent('ModifyDamage', target, source, move, 100), 100);
+	it('Dusk Ego field suppression disables Ultra Ego while keeping Keen Eye', () => {
+		const [source, target] = start('Dusk Ego');
 		battle.field.setTerrain('holyterrain', source);
-		assert.equal(battle.runEvent('BasePower', source, target, move, 100), 100);
-		assert.notEqual(battle.runEvent('TryEatItem', target, null, null, Dex.items.get('sitrusberry')), false);
-		source.addVolatile('gastroacid');
-		assert.equal(source.ignoringAbility(), true);
-		const special = battle.dex.getActiveMove('shadowball');
-		battle.runEvent('ModifyMove', source, target, special, special); assert.equal(special.accuracy, 100);
+		use(target, source, 'tackle', { basePower: 1 }); assert.equal(source.boosts.atk, 0); assert.equal(source.boosts.spa, 0);
+		let move = battle.dex.getActiveMove('airslash'); battle.runEvent('ModifyMove', source, target, move, move);
+		assert(!move.ignoreAbility); assert.equal(move.ignoreEvasion, true);
+		source.addVolatile('gastroacid'); assert.equal(source.ignoringAbility(), true);
+		move = battle.dex.getActiveMove('airslash'); battle.runEvent('ModifyMove', source, target, move, move);
+		assert(!move.ignoreEvasion); assert(!move.ignoreAbility);
 	});
 	it('HP-triggered signatures ignore ally, residual and Substitute-only damage', () => {
 		const [source, target] = start('Pressure Kiln'); source.addVolatile('substitute');

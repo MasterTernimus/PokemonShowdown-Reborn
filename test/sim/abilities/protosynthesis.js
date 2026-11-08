@@ -77,7 +77,7 @@ describe('Protosynthesis', function () {
 		assert.equal(tail.volatiles['protosynthesis'].bestStat, 'spd', `Scream Tail's SpD should have been boosted by Protosynthesis in Sun while holding Utility Umbrella`);
 	});
 
-	it(`should have its boost nullified by Neutralizing Gas`, function () {
+	it(`should retain its innate passive boost under Neutralizing Gas`, () => {
 		battle = common.createBattle([[
 			{species: 'Scream Tail', ability: 'protosynthesis', item: 'boosterenergy', moves: ['luckychant', 'recover']},
 		], [
@@ -92,7 +92,7 @@ describe('Protosynthesis', function () {
 		assert(boostedDamage > 0);
 		battle.makeChoices('auto', 'switch 2');
 		battle.makeChoices('move recover', 'move venoshock');
-		assert.bounded((tail.maxhp - tail.hp) / boostedDamage, [1.25, 1.35]);
+		assert.equal(tail.maxhp - tail.hp, boostedDamage);
 		// Ensure that the boost wasn't completely removed
 		battle.makeChoices('auto', 'switch 2');
 		battle.makeChoices('move recover', 'move venoshock');

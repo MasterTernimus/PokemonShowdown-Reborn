@@ -14,7 +14,7 @@ function fresh(){battle?.destroy();battle=null;}
 describe('Fifteen newly approved signatures',()=>{
  afterEach(fresh);
  it('changes only approved slots and keeps forms and reserved designs',()=>{
- const slots={ninetalesreborn:{0:'Sun Charm',1:'Serene Grace',H:'Soul Fire'},slowbrogalar:{0:'Quick Draw',1:'Caustic Chamber',H:'Regenerator'},copperajah:{0:'Demolition Trunk',1:'Water Absorb',H:'Heavy Metal'},wailord:{0:'Drizzle',1:'Stamina',H:'Deep Resonance'},golemalola:{0:'Siege Magnet',1:'Sturdy',H:'Galvanize'},inteleon:{0:'Dual Wield',1:'Patient Marksman',H:'Calculated Shot'},rabsca:{0:'Cradle Ward',1:'Elevate',H:'Telepathy'},sunflora:{0:'Sun Reserve',1:'Solar Power',H:'Grassy Surge'},hatterene:{0:'Invigorate',1:'Silent Reprisal',H:'Magic Bounce'},musharna:{0:'Neutralization',1:'Dream Refuge',H:'Aevian Dream'},klinklang:{0:'Closed Circuit',1:'Galvanize',H:'Light Metal'}};
+		const slots = { ninetalesreborn: { 0: 'Sun Charm', 1: 'Serene Grace', H: 'Soul Fire', S: 'Ashen Seeds' }, slowbrogalar: { 0: 'Shellder Artillery', 1: 'Caustic Chamber', H: 'Regenerator' }, copperajah: { 0: 'Demolition Trunk', 1: 'Water Absorb', H: 'Heavy Metal' }, wailord: { 0: 'Drizzle', 1: 'Stamina', H: 'Deep Resonance' }, golemalola: { 0: 'Siege Magnet', 1: 'Sturdy', H: 'Rock Head' }, inteleon: { 0: 'Infiltrator', 1: 'Rising Marksman', H: 'Calculated Shot' }, rabsca: { 0: 'Cradle Ward', 1: 'Elevate', H: 'Telepathy' }, sunflora: { 0: 'Sun Reserve', 1: 'Solar Power', H: 'Grassy Surge' }, hatterene: { 0: 'Invigorate', 1: 'Silent Reprisal', H: 'Magic Bounce' }, musharna: { 0: 'Neutralization', 1: 'Dream Refuge', H: 'Aevian Dream' }, klinklang: { 0: 'Closed Circuit', 1: 'Galvanize', H: 'Light Metal' } };
  for(const[id,a]of Object.entries(slots))assert.deepEqual(Dex.species.get(id).abilities,a,id);
  for(const id of ['tatsugiri','tatsugiridroopy','tatsugiristretchy'])assert.deepEqual(Dex.species.get(id).abilities,{0:'Commander',1:'Sushi Trick',H:'Storm Drain'});
  const m=require('../../../dist/sim/custom-calculator').calculatorMetadata();for(const[id,a]of Object.entries(slots))if(id!=='ninetalesreborn')assert.deepEqual(m.species.find(p=>p.name===Dex.species.get(id).name).abilities,a);assert.deepEqual(m.species.find(p=>p.name==='Ninetales').abilities,slots.ninetalesreborn);
@@ -43,7 +43,17 @@ describe('Fifteen newly approved signatures',()=>{
  it('Raised Quills retaliates against a non-contact hit once, preserving status preparation',()=>{const[p,t]=start('Raised Quills');hit(p,p,'splash');hit(t,p,'watergun');assert.equal(t.status,'psn');assert(!p.abilityState.charged);t.cureStatus();hit(t,p,'watergun');assert.equal(t.status,'');});
  it('Raised Quills charge is spent even if poison is immune, and not by allied damage',()=>{const[p,t]=start('Raised Quills','doubles','Immunity');hit(p,p,'splash');hit(p.allies()[0],p,'watergun');assert(p.abilityState.charged);hit(t,p,'watergun');assert(!p.abilityState.charged);assert.equal(t.status,'');});
  it('Sun Reserve heals once per turn on absorption, retaining Flash Fire boosts',()=>{const[p,t]=start('Sun Reserve');p.hp=2000;hit(t,p,'ember');assert.equal(p.hp,2500);assert(p.volatiles.flashfire);hit(t,p,'ember');assert.equal(p.hp,2500);battle.turn++;hit(t,p,'ember');assert.equal(p.hp,3000);assert(p.hasAbility('flashfire'));const m=battle.dex.getActiveMove('ember');assert.equal(battle.runEvent('ModifySpA',p,t,m,100),150);});
- it('Sun Reserve keeps Cold Eclipse exception and field-entry boosts',()=>{const[p,t]=start('Sun Reserve');battle.field.terrain='coldeclipseterrain';entry(p);assert.equal(p.boosts.def,1);assert.equal(p.boosts.spd,1);p.hp=2000;hit(t,p,'ember');assert(p.hp<2000);assert(!p.volatiles.flashfire);});
+	it('Sun Reserve loses absorption on Cold Eclipse without obsolete entry boosts', () => {
+		const [p, t] = start('Sun Reserve');
+		battle.field.terrain = 'coldeclipseterrain';
+		entry(p);
+		assert.equal(p.boosts.def, 0);
+		assert.equal(p.boosts.spd, 0);
+		p.hp = 2000;
+		hit(t, p, 'ember');
+		assert(p.hp < 2000);
+		assert(!p.volatiles.flashfire);
+	});
  it('Sun Reserve respects Heal Block and suppression',()=>{const[p,t]=start('Sun Reserve');p.hp=2000;p.addVolatile('healblock',t);hit(t,p,'ember');assert.equal(p.hp,2000);p.removeVolatile('healblock');p.addVolatile('gastroacid',t);hit(t,p,'ember');assert(p.hp<2000);});
  it('Silent Reprisal keeps all Anticipation callbacks and full Soundproof',()=>{const[p,t]=start('Silent Reprisal');assert.equal(p.getAbility().onStart,Dex.abilities.get('anticipation').onStart);assert(p.hasAbility('anticipation'));assert(p.hasAbility('soundproof'));const hp=p.hp;hit(t,p,'hypervoice');assert.equal(p.hp,hp);battle.field.terrain='psychicterrain';entry(p);assert.equal(p.boosts.spa,2);});
  it('Dream Refuge heals normally and cures only one statused active ally once per entry',()=>{const[p,t]=start('Dream Refuge','doubles');const a=p.allies()[0];p.hp=1000;p.setStatus('brn');a.setStatus('par');const bench=p.side.pokemon[2];bench.setStatus('brn');hit(p,p,'moonlight');assert.equal(p.hp,3000);assert.equal(p.status,'brn');assert.equal(a.status,'');assert.equal(bench.status,'brn');a.setStatus('par');p.hp=1000;hit(p,p,'moonlight');assert.equal(a.status,'par');assert(p.volatiles.dreamrefugespent);});

@@ -51,8 +51,12 @@ describe('Transfixing Gaze', () => {
 		assert(!foe.trapped);
 	});
 	it('keeps full Frisk once and the other Espathra slots', () => {
-		const [holder] = setup();
-		assert.equal(holder.getAbility().onStart, battle.dex.abilities.get('frisk').onStart);
+		const [holder, foe] = setup();
+		foe.setItem('Leftovers');
+		const from = battle.log.length;
+		battle.singleEvent('Start', holder.getAbility(), holder.abilityState, holder);
+		assert(holder.hasAbility('frisk'));
+		assert.equal(battle.log.slice(from).filter(line => line.includes('|-item|') && line.includes('Leftovers')).length, 1);
 		assert.deepEqual(battle.dex.species.get('espathra').abilities, { 0: 'Opportunist', 1: 'Transfixing Gaze', H: 'Speed Boost' });
 	});
 });

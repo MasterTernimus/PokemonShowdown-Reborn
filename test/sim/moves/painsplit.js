@@ -18,18 +18,20 @@ describe('Pain Split', function () {
 		assert.equal(battle.p2.active[0].hp, (battle.p2.active[0].maxhp + 1) / 2);
 	});
 
-	it('should calculate HP changes against a dynamaxed target properly', function () {
-		battle = common.gen(8).createBattle();
+	it('should average actual HP against persistent G-Max without doubling its HP', () => {
+		battle = common.createBattle({ formatid: 'gen9factoryfield' });
 		battle.setPlayer('p1', {team: [{species: 'Drifblim', ability: 'unburden', moves: ['painsplit']}]});
-		battle.setPlayer('p2', {team: [{species: 'Blissey', ability: 'serenegrace', moves: ['doubleedge']}]});
+		battle.setPlayer('p2', { team: [{ species: 'Snorlax', ability: 'serenegrace', moves: ['sleeptalk'], gigantamax: true }] });
 
-		battle.makeChoices('move painsplit', 'move doubleedge dynamax');
+		battle.makeChoices('team 1', 'team 1');
+		battle.makeChoices('move painsplit', 'move sleeptalk dynamax');
+		assert(battle.p2.active[0].volatiles.dynamax);
+		assert.equal(battle.p2.active[0].maxhp, battle.p2.active[0].baseMaxhp);
 
-		// HP values taken from https://www.smogon.com/forums/threads/3655528/post-8289396
 		battle.p1.active[0].sethp(160); // non-dynamaxed
 		battle.p2.active[0].sethp(174); // dynamaxed
-		battle.makeChoices('move painsplit', 'move doubleedge');
-		assert.equal(battle.p1.active[0].hp, 123, 'non-dynamaxed');
-		assert.equal(battle.p2.active[0].hp, 210, 'dynamaxed');
+		battle.makeChoices('move painsplit', 'move sleeptalk');
+		assert.equal(battle.p1.active[0].hp, 167, 'ordinary form');
+		assert.equal(battle.p2.active[0].hp, 167, 'G-Max form');
 	});
 });

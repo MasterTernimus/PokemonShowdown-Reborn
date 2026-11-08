@@ -119,7 +119,7 @@ const reviewedStats = {
  sevipermega: [75,140,120,90,120,65], staraptor: [85,120,80,50,70,105], staraptormega: [85,140,110,60,100,115],
 };
 exports.stats = (id, fallback) => reviewedStats[id] ? Object.fromEntries(['hp','atk','def','spa','spd','spe'].map((key,i)=>[key,reviewedStats[id][i]])) : fallback;
-exports.types = (id, fallback) => id === 'gorebyss' ? ['Water','Fairy'] : fallback;
+exports.types = (id, fallback) => id === 'gorebyss' ? ['Water', 'Fairy'] : id === 'delcatty' ? ['Normal', 'Ghost'] : id === 'rampardos' ? ['Rock', 'Steel'] : fallback;
 exports.snapshot = old => ({id: old.id, abilities: exports.abilities(old.id, {...old.abilities}), passives: exports.current(old.id, old.passives), types: exports.types(old.id, old.types), stats: exports.stats(old.id, old.stats)});
 
 // Approved Talonflame swap: one Gale Wings passive, selectable Flame Body.
@@ -180,11 +180,11 @@ exports.abilities = (id, fallback) => ({ ...beforeCosmeticSlots(id, fallback), .
 const beforeKlefkiCurrent = exports.current;
 exports.current = (id, fallback) => id === 'klefki' ? ['prankster'] : beforeKlefkiCurrent(id, fallback);
 const beforeKlefkiPassives = exports.passives;
-exports.passives = expected => ({ ...beforeKlefkiPassives(expected), klefki: ['prankster'] });
+exports.passives = expected => Object.assign(beforeKlefkiPassives(expected), { klefki: ['prankster'] });
 
 {const prior={abilities:exports.abilities,passives:exports.passives};
 exports.abilities=(id,f)=>({...prior.abilities(id,f),...({crabominable:{H:'Controlled Fury'},primeape:{1:'Controlled Fury'}}[id]||{})});
-exports.passives=(id,f)=>['krookodile','annihilape'].includes(id)?['controlledfury']:prior.passives(id,f);}
+	exports.passives = expected => Object.assign(prior.passives(expected), { krookodile: ['controlledfury'], annihilape: ['controlledfury'] }); }
 
 // Explicit later Rivalry distributions and Dustox selected-slot approval.
 const newRivalryDistribution = Object.fromEntries(['luxray', 'beautifly', 'dustox', 'pyroar', 'unfezant', 'unfezantrejuv', 'haxorus', 'braviary', 'braviaryhisui', 'mandibuzz', 'scrafty', 'mightyena', 'mightyenagrim', 'mightyenadeso', 'delcatty'].map(id => [id, ['rivalry']]));
@@ -238,3 +238,49 @@ exports.abilities = (id, expected) => {
 const beforeGolemGalvanize = {current: exports.current, passives: exports.passives};
 exports.current = (id, fallback) => id === 'golemalola' ? ['galvanize'] : beforeGolemGalvanize.current(id, fallback);
 exports.passives = expected => Object.assign(beforeGolemGalvanize.passives(expected), {golemalola: ['galvanize']});
+
+// November approvals supersede historical snapshots without reading runtime Dex.
+{
+	const prior = { current: exports.current, passives: exports.passives, abilities: exports.abilities, stats: exports.stats };
+	const passives = { starmie: ['illuminate'], honchkrow: ['moxie'], revavroom: ['overcoat'], kingdra: ['swiftswim'],
+		drapion: ['poisontouch'], farigiraf: ['armortail'], toxicroak: ['anticipation'], dachsbun: ['wellbakedbody'],
+		maushold: ['friendguard'], mausholdfour: ['friendguard'], conkeldurr: ['rockypayload'], magneton: ['hydrabond'],
+		arcanineaevian: ['earlybird'], glalieaevian: ['levitate'], glalieaevianmega: ['levitate'],
+		froslassaevian: ['owntempo'], froslassaevianmega: ['owntempo'], gyaradosaevian: ['owntempo'], gyaradosaevianmega: ['owntempo'],
+		laprasaeviangmax: ['owntempo'], ampharosaevian: ['static'], ampharosaevianmega: ['static'], roseradeaevian: ['poisonpoint'],
+		gastrodonaevian: ['stickyhold'], gastrodoneastaevian: ['stickyhold'], mismagiusaevian: ['owntempo'], chandelureaevian: ['static'],
+		volcaronaaevian: ['bigpecks'], golisopodaevian: ['heatproof'], golisopodaevianmega: ['heatproof'], kommooaevian: ['owntempo'],
+		sneasleraevian: ['keeneye'], arbolivaaevian: ['earlybird'], glimmoraaevian: ['selfrepair'], glimmoraaevianmega: ['selfrepair'] };
+	const slots = { cinderace: { 1: 'Rising Striker' }, rillaboom: { 1: 'Rising Rhythm' }, inteleon: { 0: 'Infiltrator', 1: 'Rising Marksman' },
+		cinderacegmax: { 0: 'Grand Striker' }, rillaboomgmax: { 0: 'Grand Rhythm' }, inteleongmax: { 0: 'Grand Marksman' },
+		hydreigon: { 1: 'Strings of Ruin' }, slowkinggalar: { 1: 'Own Tempo' }, conkeldurr: { 0: 'Guts', 1: 'Stamina' },
+		farigiraf: { 1: 'Twin Focus' }, kingdra: { 0: 'Damp' }, magneton: { 0: 'Magnet Pull', 1: 'Elevate', H: 'Analytic' } };
+	exports.current = (id, fallback) => passives[id] || prior.current(id, fallback);
+	exports.passives = expected => Object.assign(prior.passives(expected), passives);
+	exports.abilities = (id, fallback) => ({ ...prior.abilities(id, fallback), ...slots[id] });
+	const stats = { glalieaevian: [110, 110, 105, 50, 85, 40], glalieaevianmega: [110, 135, 105, 90, 85, 80], froslassaevianmega: [70, 80, 80, 140, 100, 130] };
+	exports.stats = (id, fallback) => stats[id] ? Object.fromEntries(['hp', 'atk', 'def', 'spa', 'spd', 'spe'].map((stat, i) => [stat, stats[id][i]])) : prior.stats(id, fallback);
+}
+
+// Fixed review snapshot: stat-balance-approved.ts, later signature passives,
+// and the user's November roster decisions. Never derive expectations from Dex.
+{
+	const reviewed = require('./november-roster-expectations.json');
+	const prior = { current: exports.current, passives: exports.passives, abilities: exports.abilities, stats: exports.stats };
+	exports.current = (id, fallback) => reviewed.passives[id] || prior.current(id, fallback);
+	exports.passives = expected => Object.assign(prior.passives(expected), reviewed.passives);
+	exports.abilities = (id, fallback) => ({ ...prior.abilities(id, fallback), ...reviewed.abilities[id] });
+	exports.stats = (id, fallback) => reviewed.stats[id] ? Object.fromEntries(['hp', 'atk', 'def', 'spa', 'spd', 'spe'].map((key, i) => [key, reviewed.stats[id][i]])) : prior.stats(id, fallback);
+}
+
+// Bulk and per-species assertions must apply the same reviewed overrides.
+const beforeBulkConsistency = exports.passives;
+exports.passives = expected => {
+	beforeBulkConsistency(expected);
+	for (const id of new Set([...Object.keys(megaExpected), ...Object.keys(expected)])) {
+		const passive = exports.current(id, expected[id] || megaExpected[id] || []);
+		if (passive.length) expected[id] = passive;
+	}
+	delete expected.empoleonmega; // Replaced by the explicitly approved X and Y forms.
+	return expected;
+};

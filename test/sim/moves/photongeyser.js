@@ -24,25 +24,30 @@ describe(`Photon Geyser`, function () {
 		battle = common.createBattle([[
 			{species: 'Latias', ability: 'hugepower', item: 'choiceband', moves: ['photongeyser']},
 		], [
-			{species: 'Scizor-Mega', item: 'keeberry', moves: ['strugglebug', 'sleeptalk']},
+			{ species: 'Mew', item: 'keeberry', moves: ['strugglebug', 'sleeptalk'] },
 		]]);
 
-		const scizor = battle.p2.active[0];
+		const target = battle.p2.active[0];
 		battle.makeChoices(); //should be special this turn (196 vs. 256)
-		assert.statStage(scizor, 'def', 0, `incorrectly swayed by Choice Band and/or Huge Power`);
-		battle.makeChoices(); //should be special this turn (196 vs. 256)
-		assert.statStage(scizor, 'def', 1, `the stat drop should have turned Photon Geyser into a special move`);
+		assert.statStage(target, 'def', 0, `incorrectly swayed by Choice Band and/or Huge Power`);
+		battle.makeChoices(); // The Special Attack drop makes Attack the higher stat.
+		assert.statStage(target, 'def', 1, `the stat drop should have turned Photon Geyser into a physical move`);
 	});
 
 	it(`should always be a special Max Move, never physical`, function () {
-		battle = common.gen(8).createBattle([[
-			{species: 'conkeldurr', moves: ['photongeyser']},
+		battle = common.createBattle({ formatid: 'gen9factoryfield' }, [[
+			{ species: 'Orbeetle', moves: ['photongeyser'], gigantamax: true },
 		], [
 			{species: 'cresselia', item: 'marangaberry', moves: ['sleeptalk']},
 		]]);
 
+		battle.makeChoices('team 1', 'team 1');
+		battle.p1.active[0].boosts.atk = 6;
 		battle.makeChoices('move photongeyser dynamax', 'auto');
-		assert.statStage(battle.p2.active[0], 'spd', 1, `Photon Geyser behaved as a physical Max move, when it shouldn't`);
+		assert(battle.p1.active[0].volatiles.dynamax);
+		assert.equal(battle.p1.active[0].lastMove.id, 'gmaxgravitas');
+		assert.equal(battle.p1.active[0].lastMove.category, 'Special');
+		assert.false.fullHP(battle.p2.active[0]);
 	});
 
 	it(`should always be a special Z-move, never physical`, function () {

@@ -7,6 +7,18 @@ describe('Mega-Z Relentless Hunt Rough Skin and Levitate passive',()=>{
  it('suppresses Rough Skin but keeps passive Ground immunity',()=>{const[p,q]=setup();p.addVolatile('gastroacid');let hp=q.hp;battle.actions.runMove('tackle',q,q.getLocOf(p));assert.equal(q.hp,hp);hp=p.hp;battle.actions.runMove('earthquake',q,q.getLocOf(p));assert.equal(p.hp,hp);});
  it('Mold Breaker bypasses passive Levitate for its attack',()=>{const[p,q]=setup('Mold Breaker');const hp=p.hp;battle.actions.runMove('earthquake',q,q.getLocOf(p));assert(p.hp<hp);});
  for(const mode of ['gravity','ironball','thousandarrows'])it('can be grounded by '+mode,()=>{const[p,q]=setup();if(mode==='gravity')battle.field.addPseudoWeather('gravity',q);if(mode==='ironball')p.setItem('Iron Ball');if(mode==='thousandarrows')battle.actions.runMove('thousandarrows',q,q.getLocOf(p));const hp=p.hp;battle.actions.runMove('earthquake',q,q.getLocOf(p));assert(p.hp<hp);});
- it('keeps low-power priority and field power callbacks unchanged',()=>{const[p,q]=setup();for(const[bp,want]of [[60,1],[61,0]]){const m=Dex.getActiveMove('tackle');m.basePower=bp;assert.equal(battle.runEvent('ModifyPriority',p,q,m,0),want);}const m=Dex.getActiveMove('tackle');for(const[terrain,want]of [['',100],['rockyterrain',200],['desertterrain',150]]){battle.field.terrain=terrain;assert.equal(battle.runEvent('BasePower',p,q,m,100),want);}});
- it('has only Mega-Z as holder and preserves other forms',()=>{assert.deepEqual(Dex.species.all().filter(s=>Object.values(s.abilities).includes('Relentless Hunt')).map(s=>s.id),['garchompmegaz']);for(const[id,passive]of [['garchomp','roughskin'],['garchompmega','sandforce'],['garchompbattlebond','roughskin']])assert.deepEqual(Dex.species.get(id).passives,[passive]);});
+	it('keeps low-power priority with the approved field power caps', () => {
+		const [p, q] = setup();
+		for (const [bp, want] of [[60, 1], [61, 0]]) {
+			const m = Dex.getActiveMove('tackle');
+			m.basePower = bp;
+			assert.equal(battle.runEvent('ModifyPriority', p, q, m, 0), want);
+		}
+		const m = Dex.getActiveMove('tackle');
+		for (const [terrain, want] of [['', 100], ['rockyterrain', 150], ['desertterrain', 130]]) {
+			battle.field.terrain = terrain;
+			assert.equal(battle.runEvent('BasePower', p, q, m, 100), want);
+		}
+	});
+	it('has only Mega-Z as holder and preserves other forms', () => { assert.deepEqual(Dex.species.all().filter(s => Object.values(s.abilities).includes('Relentless Hunt')).map(s => s.id), ['garchompmegaz']); for (const [id, passive] of [['garchomp', 'serratedscales'], ['garchompmega', 'sharpness'], ['garchompbattlebond', 'roughskin']])assert.deepEqual(Dex.species.get(id).passives, [passive]); });
 });

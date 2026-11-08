@@ -39,10 +39,10 @@ describe('Approved fourth roster pass', () => {
 		pokemon.setItem('leftovers');
 		battle.singleEvent('Residual', pokemon.getItem(), pokemon.itemState, pokemon);
 	}
-	it('updates slots and searchable components while preserving Goodra and the Levitate component', () => {
+	it('keeps the approved slots and searchable components after later roster revisions', () => {
 		for (const [species, ability, component] of [
 			['Seviper-Mega', 'Sirius', 'Black Viper'], ['Rhyperior', 'Quarry Cannon', 'Mega Launcher'],
-			['Mamoswine', 'Tundra March', 'Oblivious'], ['Jellicent', 'Water Absorb', 'Water Absorb'],
+			['Mamoswine', 'Old North', 'Ice Body'], ['Jellicent', 'Water Absorb', 'Water Absorb'],
 			['Incineroar', 'Ringmaster', 'Tough Claws'], ['Mudsdale', 'Unyielding', 'Inner Focus'],
 		]) {
 			assert(Object.values(Dex.species.get(species).abilities).includes(ability));
@@ -56,9 +56,9 @@ describe('Approved fourth roster pass', () => {
 			assert(!abilityIncludesComponent('Lunar Dread', component));
 		}
 		assert.equal(Dex.species.get('Hydreigon').abilities[0], 'Dark Aura');
-		assert.equal(Dex.species.get('Hydreigon').abilities[1], 'Worldbreaker');
+		assert.equal(Dex.species.get('Hydreigon').abilities[1], 'Strings of Ruin');
 		assert.equal(Dex.species.get('Mienshao').abilities.H, 'Infiltrator');
-		assert.equal(Dex.species.get('Goodra').abilities[1], 'Gooey');
+		assert.equal(Dex.species.get('Goodra').abilities[1], 'Gentle Embrace');
 		assert.equal(Dex.species.get('Goodra-Hisui').abilities[1], 'Filter');
 		assert.equal(Dex.species.get('Baxcalibur').abilities[1], 'Rimeplate');
 		assert(abilityIncludesComponent('Dark Dominion', 'Dark Aura'));

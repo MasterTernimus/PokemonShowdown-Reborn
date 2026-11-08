@@ -12,12 +12,14 @@ describe('Mega Noivern and Echo Sense',function(){
 		battle.makeChoices('move splash mega','move splash');
 		assert.equal(bat.ability,'echosense');
 		assert.deepEqual(bat.species.baseStats,{hp:85,atk:100,def:80,spa:127,spd:90,spe:153});
-		assert(battle.log.some(line=>line.includes('ability: Frisk')));
+		assert.deepEqual(bat.getPassives(), ['frisk']);
+		assert(battle.log.some(line => line.includes('passive: Frisk')));
+		assert.equal(bat.ability, 'echosense');
 		const move=battle.dex.getActiveMove('boomburst');
 		battle.singleEvent('ModifyType',bat.getAbility(),bat.abilityState,move,bat);
 		battle.singleEvent('ModifyMove',bat.getAbility(),bat.abilityState,move,bat);
 		assert.equal(move.type,'Flying');assert.equal(move.infiltrates,true);
-		assert.equal(battle.runEvent('BasePower',bat,foe,move,100),150);
+		assert.equal(battle.runEvent('BasePower', bat, foe, move, 100), 120);
 		const hp=bat.hp;
 		battle.makeChoices('move splash','move boomburst');
 		assert.equal(bat.hp,hp);

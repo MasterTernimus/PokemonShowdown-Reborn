@@ -3,10 +3,13 @@ const assert=require('assert').strict,common=require('../../common');let battle;
 function start(ability,species='Overqwil') {battle=common.createBattle({gameType:'singles'},[[{species,ability,moves:['splash']}],[{species:'Mew',ability:'No Ability',moves:['splash']}]]);if(battle.requestState==='teampreview')battle.makeChoices('team 1','team 1');battle.field.terrain='';battle.randomizer=x=>x;return[battle.p1.active[0],battle.p2.active[0]];}
 describe('Water Bubble granted STAB removal',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- for(const ability of ['Water Bubble','Sea Fiend'])for(const species of ['Overqwil','Araquanid'])for(const category of ['Physical','Special'])it(ability+' retains exactly doubled '+category+' Water offense on '+species,()=>{
+	for (const ability of ['Water Bubble', 'Sea Fiend']) for (const species of ['Overqwil', 'Araquanid']) for (const category of ['Physical', 'Special'])it(ability + ' uses its approved ' + category + ' Water multiplier on ' + species, () => {
   const[p,t]=start(ability,species),m=battle.dex.getActiveMove('watergun');Object.assign(m,{category,basePower:60,willCrit:false});battle.singleEvent('ModifyMove',p.getAbility(),p.abilityState,m,p,t);assert(!m.forceSTAB);
-  const stat=category==='Physical'?'atk':'spa';assert.equal(battle.runEvent(category==='Physical'?'ModifyAtk':'ModifySpA',p,t,m,1000),2000);
-  const actual=battle.actions.getDamage(p,t,m);p.setAbility('No Ability');p.storedStats[stat]*=2;assert.equal(battle.actions.getDamage(p,t,m),actual);
+		const stat = category === 'Physical' ? 'atk' : 'spa', multiplier = ability === 'Water Bubble' ? 2 : 1; assert.equal(battle.runEvent(category === 'Physical' ? 'ModifyAtk' : 'ModifySpA', p, t, m, 1000), 1000 * multiplier);
+		const actual = battle.actions.getDamage(p, t, m);
+		p.setAbility('No Ability');
+		p.storedStats[stat] *= multiplier;
+		assert.equal(battle.actions.getDamage(p, t, m), actual);
   if(species==='Araquanid'){p.setType('Normal');assert(battle.actions.getDamage(p,t,m)<actual);}
  });
  for(const ability of ['Water Bubble','Sea Fiend'])it(ability+' preserves independently granted forceSTAB and protective hooks',()=>{

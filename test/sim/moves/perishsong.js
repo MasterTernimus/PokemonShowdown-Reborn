@@ -28,7 +28,7 @@ describe('Perish Song', function () {
 		}
 	});
 
-	it(`should cause Pokemon to faint by order of Speed`, function () {
+	it(`should process faints by Speed and draw when both final Pokemon perish`, () => {
 		battle = common.createBattle([[
 			{species: 'Weavile', moves: ['perishsong']},
 		], [
@@ -36,7 +36,12 @@ describe('Perish Song', function () {
 		]]);
 
 		for (let i = 0; i < 4; i++) { battle.makeChoices(); }
-		assert.equal(battle.winner, 'Player 2');
+		assert.deepEqual(battle.log.filter(line => line.startsWith('|faint|')), [
+			'|faint|p1a: Weavile', '|faint|p2a: Slowpoke',
+		]);
+		assert(battle.ended);
+		assert.equal(battle.winner, '');
+		assert.equal(battle.log.filter(line => line === '|tie').length, 1);
 	});
 
 	it(`should not affect other Pokemon with the ability Soundproof`, function () {

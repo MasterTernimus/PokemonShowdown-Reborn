@@ -3,7 +3,15 @@ const assert=require('assert').strict,common=require('../../common');let battle;
 describe('Galarian Rapidash Guiding Gallop passive',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  function setup(ability='Rapid Response') {const mon=(species='Mew',ability='No Ability')=>({species,ability,moves:['healpulse','splash','toxic','sludgebomb']});battle=common.createBattle({formatid:'gen9nofielddoublesbattle'},[[mon('Rapidash-Galar',ability),mon()],[mon(),mon()]]);battle.makeChoices();return[battle.p1.active[0],battle.p1.active[1],battle.p2.active[0]];}
- it('changes only Galarian passive and preserves both selected rosters',()=>{const[p]=setup();assert.deepEqual(p.getPassives(),['guidinggallop']);assert(p.hasAbilityOrPassive('pastelveil'));assert.deepEqual(p.species.abilities,{0:'Psychic Surge',1:'Speed Boost',H:'Rapid Response'});const normal=battle.dex.species.get('rapidash');assert.deepEqual(normal.abilities,{0:'Fire Mane',1:'Speed Boost',H:'Flame Body'});assert.deepEqual(normal.passives,['racingspirit']);});
+	it('changes only Galarian passive and preserves both selected rosters', () => {
+		const [p] = setup();
+		assert.deepEqual(p.getPassives(), ['guidinggallop']);
+		assert(p.hasAbilityOrPassive('pastelveil'));
+		assert.deepEqual(p.species.abilities, { 0: 'Psychic Surge', 1: 'Speed Boost', H: 'Rapid Response' });
+		const normal = battle.dex.species.get('rapidash');
+		assert.deepEqual(normal.abilities, { 0: 'Fire Mane', 1: 'Speed Boost', H: 'Power Drill' });
+		assert.deepEqual(normal.passives, ['racingspirit']);
+	});
  for(const suppressed of [false,true])it('protects holder and allies from poison, suppressed='+suppressed,()=>{const[p,a,t]=setup();if(suppressed)p.addVolatile('gastroacid');assert.equal(p.trySetStatus('tox',t),false);assert.equal(a.trySetStatus('psn',t),false);});
  for(const ability of ['Rapid Response','Guiding Gallop','Pastel Veil'])it('opposing Poison move lowers offenses exactly once with '+ability,()=>{const[p,a,t]=setup(ability);battle.runEvent('TryMove',t,a,battle.dex.getActiveMove('sludgebomb'));assert.equal(t.boosts.atk,-1);assert.equal(t.boosts.spa,-1);});
  it('successful ally support clears only negative Speed while suppressed',()=>{const[p,a]=setup();p.addVolatile('gastroacid');a.hp-=100;a.boosts.spe=-3;a.boosts.atk=-2;battle.actions.runMove('healpulse',p,p.getLocOf(a));assert.equal(a.boosts.spe,0);assert.equal(a.boosts.atk,-2);a.boosts.spe=2;a.hp-=50;battle.actions.runMove('healpulse',p,p.getLocOf(a));assert.equal(a.boosts.spe,2);});

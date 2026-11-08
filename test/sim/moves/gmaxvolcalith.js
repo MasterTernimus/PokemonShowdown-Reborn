@@ -5,38 +5,46 @@ const common = require('./../../common');
 
 let battle;
 
+// Isolate the residual condition from Furnace Engine's separate Fire chip.
+function residualSetup(type = 'Normal', item = '') {
+	battle = common.gen(8).createBattle([[
+		{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+	], [{ species: 'Mew', ability: 'No Ability', item, moves: ['splash'] }]]);
+	const source = battle.p1.active[0], target = battle.p2.active[0];
+	target.setType(type); target.hp = target.maxhp = target.baseMaxhp = 1200;
+	assert(target.side.addSideCondition('gmaxvolcalith', source, battle.dex.moves.get('gmaxvolcalith')));
+	return target;
+}
+
 describe('G-Max Volcalith', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
 
-	it(`should not damage Rock-types`, function () {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'Coalossal', moves: ['rockthrow'], gigantamax: true},
-			{species: 'Wynaut', moves: ['sleeptalk']},
-		], [
-			{species: 'Blastoise', moves: ['sleeptalk']},
-			{species: 'Boldore', moves: ['sleeptalk']},
-		]]);
-
-		battle.makeChoices('move rockthrow 1 dynamax, move sleeptalk', 'move sleeptalk, move sleeptalk');
-		assert.fullHP(battle.p2.active[1]);
+	it('a real G-Max attack starts Volcalith without attributing other chip to its Rock immunity', () => {
+		battle = common.gen(8).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Coalossal', ability: 'No Ability', moves: ['rockthrow'], gigantamax: true }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+		], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }, { species: 'Boldore', ability: 'No Ability', moves: ['splash'] }]]);
+		for (const p of battle.p2.active)p.hp = p.maxhp = p.baseMaxhp = 5000;
+		battle.makeChoices('move rockthrow 1 dynamax, move splash', 'move splash, move splash');
+		assert.equal(battle.p1.active[0].species.id, 'coalossalgmax'); assert(battle.p2.sideConditions.gmaxvolcalith);
+		assert(battle.log.some(line => line.includes('|-damage|p2a:') && line.includes('G-Max Volcalith')));
+		assert(!battle.log.some(line => line.includes('|-damage|p2b:') && line.includes('G-Max Volcalith')));
+	});
+	it(`should not damage Rock-types`, () => {
+		const target = residualSetup('Rock');
+		battle.makeChoices();
+		assert.fullHP(target);
+		assert(target.side.sideConditions.gmaxvolcalith);
 	});
 
 	it(`should deal damage for four turns, including the fourth turn`, function () {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
-			{species: 'Wynaut', moves: ['sleeptalk']},
-		], [
-			{species: 'Blastoise', moves: ['sleeptalk']},
-			{species: 'Boldore', moves: ['sleeptalk']},
-		]]);
-
-		battle.makeChoices('move rockthrow 2 dynamax, move sleeptalk', 'move sleeptalk, move sleeptalk');
-		for (let i = 0; i < 3; i++) { battle.makeChoices(); }
-
-		const blastoise = battle.p2.active[0];
-		assert.equal(blastoise.hp, blastoise.maxhp - (Math.floor(blastoise.maxhp / 6) * 4));
+		const target = residualSetup();
+		for (let turn = 1; turn <= 4; turn++) {
+			battle.makeChoices();
+			assert.equal(target.hp, 1200 - 200 * turn);
+		}
+		assert(!target.side.sideConditions.gmaxvolcalith); battle.makeChoices(); assert.equal(target.hp, 400);
 	});
 
 	it.skip(`should deal damage alongside Sea of Fire or G-Max Wildfire in the order those field effects were set`, function () {
@@ -83,30 +91,17 @@ describe('G-Max Volcalith', function () {
 	});
 
 	it(`should deal damage before Black Sludge recovery/damage`, function () {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
-			{species: 'Wynaut', moves: ['sleeptalk']},
-		], [
-			{species: 'Toxicroak', item: 'blacksludge', moves: ['sleeptalk']},
-			{species: 'Boldore', moves: ['sleeptalk']},
-		]]);
-
-		battle.makeChoices('move rockthrow 2 dynamax, move sleeptalk', 'move sleeptalk, move sleeptalk');
-		const toxicroak = battle.p2.active[0];
-		assert.equal(toxicroak.hp, toxicroak.maxhp - Math.floor(toxicroak.maxhp / 6) + Math.floor(toxicroak.maxhp / 16));
+		const target = residualSetup('Poison', 'Black Sludge'); battle.makeChoices(); assert.equal(target.hp, 1075);
+		const damage = battle.log.findIndex(line => line.includes('|-damage|p2a:') && line.includes('G-Max Volcalith'));
+		const heal = battle.log.findIndex(line => line.includes('|-heal|p2a:') && line.includes('Black Sludge')); assert(damage >= 0 && heal > damage);
 	});
 
 	it(`should deal damage before Grassy Terrain recovery`, function () {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
-			{species: 'Wynaut', moves: ['sleeptalk']},
-		], [
-			{species: 'Rillaboom', ability: 'grassysurge', moves: ['sleeptalk']},
-			{species: 'Boldore', moves: ['sleeptalk']},
-		]]);
-
-		battle.makeChoices('move rockthrow 2 dynamax, move sleeptalk', 'move sleeptalk, move sleeptalk');
-		const rillaboom = battle.p2.active[0];
-		assert.equal(rillaboom.hp, rillaboom.maxhp - Math.floor(rillaboom.maxhp / 6) + Math.floor(rillaboom.maxhp / 16));
+		const target = residualSetup();
+		battle.field.setTerrain('grassyterrain', target);
+		battle.makeChoices();
+		assert.equal(target.hp, 1075);
+		const damage = battle.log.findIndex(line => line.includes('|-damage|p2a:') && line.includes('G-Max Volcalith'));
+		const heal = battle.log.findIndex(line => line.includes('|-heal|p2a:') && line.includes('Grassy Terrain')); assert(damage >= 0 && heal > damage);
 	});
 });

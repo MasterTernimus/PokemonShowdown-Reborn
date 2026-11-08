@@ -722,10 +722,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onUpdate(pokemon) {
 			if (!this.effectState.started || pokemon.transformed) return;
 
-			if (pokemon.hasAbility('protosynthesis') && !this.field.isWeather('sunnyday') && pokemon.useItem()) {
+			if (pokemon.hasAbilityOrPassive('protosynthesis') && !this.field.isWeather('sunnyday') && pokemon.useItem()) {
 				pokemon.addVolatile('protosynthesis');
 			}
-			if (pokemon.hasAbility('quarkdrive') && !this.field.isTerrainOrAura('electricterrain') && pokemon.useItem()) {
+			if (pokemon.hasAbilityOrPassive('quarkdrive') && !this.field.isTerrainOrAura('electricterrain') && pokemon.useItem()) {
 				pokemon.addVolatile('quarkdrive');
 			}
 		},

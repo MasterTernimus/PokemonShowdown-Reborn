@@ -30,22 +30,22 @@ describe('Roost', function () {
 
 	it('should suppress user\'s current Flying type if succesful', function () {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Aggron", item: 'leftovers', ability: 'sturdy', moves: ['mudslap', 'hiddenpowergrass']}]});
+		battle.setPlayer('p1', { team: [{ species: "Aggron", item: 'leftovers', ability: 'sturdy', moves: ['mudbarrage', 'hiddenpowergrass'] }] });
 		battle.setPlayer('p2', {team: [{species: "Aerodactyl", item: 'focussash', ability: 'wonderguard', moves: ['roost', 'doubleedge']}]});
 
-		battle.makeChoices('move mudslap', 'move roost');
-		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp); // Immune to Mud Slap
+		battle.makeChoices('move mudbarrage', 'move roost');
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp); // Immune to Mud Barrage
 
 		// Ensure that Aerodactyl has some damage
-		battle.makeChoices('move mudslap', 'move doubleedge');
+		battle.makeChoices('move mudbarrage', 'move doubleedge');
 
-		battle.makeChoices('move mudslap', 'move roost');
-		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp); // Hit super-effectively by Mud Slap
+		battle.makeChoices('move mudbarrage', 'move roost');
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp); // Hit super-effectively by Mud Barrage
 
 		// Ensure that Aerodactyl has some damage
-		battle.makeChoices('move mudslap', 'move doubleedge');
+		battle.makeChoices('move mudbarrage', 'move doubleedge');
 
-		battle.makeChoices('move hiddenpowergrasss', 'move roost');
+		battle.makeChoices('move hiddenpowergrass', 'move roost');
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp); // Hit super-effectively by HP Grass
 	});
 
@@ -73,10 +73,10 @@ describe('Roost', function () {
 	it('should treat a pure Flying pokémon as Normal type', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Tornadus", item: 'focussash', ability: 'prankster', moves: ['roost']}]});
-		battle.setPlayer('p2', {team: [{species: "Gastly", item: 'laggingtail', ability: 'levitate', moves: ['astonish']}]});
-		battle.makeChoices('move roost', 'move astonish');
-		battle.makeChoices('move roost', 'move astonish');
-		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp); // Immune to Astonish
+		battle.setPlayer('p2', { team: [{ species: "Gastly", item: 'laggingtail', ability: 'levitate', moves: ['shadowball'] }] });
+		battle.makeChoices('move roost', 'move shadowball');
+		battle.makeChoices('move roost', 'move shadowball');
+		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp); // Immune to Shadow Ball
 	});
 
 	it('should not remove Flying type during Terastallization', function () {
@@ -96,7 +96,7 @@ describe('Roost - DPP', function () {
 		battle.destroy();
 	});
 
-	it('should treat a pure Flying pokémon as `???` type', function () {
+	common.itGen(4, 'should treat a pure Flying pokémon as `???` type', () => {
 		battle = common.gen(4).createBattle([
 			[{species: "Arceus-Flying", item: 'skyplate', ability: 'multitype', moves: ['roost']}],
 			[{species: "Gastly", item: 'laggingtail', ability: 'levitate', moves: ['astonish', 'earthpower']}],

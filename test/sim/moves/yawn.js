@@ -37,10 +37,11 @@ describe('Yawn', function () {
 		battle = common.createBattle([[
 			{species: "Ninjask", moves: ['yawn']},
 		], [
-			{species: "Mew", moves: ['safeguard']},
+			{ species: "Mew", moves: ['safeguard', 'sleeptalk'] },
 		]]);
-		battle.makeChoices();
-		battle.makeChoices();
+		battle.makeChoices('move yawn', 'move sleeptalk');
+		assert(battle.p2.active[0].volatiles.yawn);
+		battle.makeChoices('move yawn', 'move safeguard');
 		assert.equal(battle.p2.active[0].status, 'slp');
 	});
 });

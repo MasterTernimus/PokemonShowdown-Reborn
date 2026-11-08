@@ -38,30 +38,30 @@ describe('Hitmon passive and signature rework', () => {
    assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('firepunch'), 100), 100);
   });
  }
- it('Punch Fiend supplies Iron Fist once, Serene Grace and Keen Eye', () => {
+	it('Punch Fiend supplies Iron Fist once and Keen Eye without Serene Grace', () => {
 		const [p, q] = setup(); const move = hit(p, q, 'firepunch');
 		assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1400);
-		assert.equal(move.secondaries[0].chance, 40); assert(move.ignoreEvasion);
+		assert.equal(move.secondaries[0].chance, 20); assert(move.ignoreEvasion);
 		battle.boost({accuracy: -1}, p, q); assert.equal(p.boosts.accuracy, 0);
 	});
-	it('Kick Fiend supplies Striker, Limber and Serene Grace without first-turn stat multipliers', () => {
+	it('Kick Fiend supplies Striker and Limber without Serene Grace or first-turn stat multipliers', () => {
 		const [p, q] = setup('Hitmonlee', 'Springheel'); const move = hit(p, q, 'axekick');
 		assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1400);
-		assert.equal(move.secondaries[0].chance, 60);
+		assert.equal(move.secondaries[0].chance, 30);
 		assert(!p.trySetStatus('par', q)); battle.boost({spe: -1}, p, q); assert.equal(p.boosts.spe, 0);
 		assert.equal(battle.runEvent('ModifySpe', p, null, null, 1000), 1000);
 		assert.equal(battle.runEvent('ModifyAtk', p, q, move, 1000), 1000);
 	});
-	it('Spin Fiend supplies Technician, local Vital Spirit and Steadfast', () => {
+	it('Spin Fiend supplies Technician and Steadfast without Vital Spirit', () => {
 		const [p, q] = setup('Hitmontop', 'Cyclone Rhythm');
-		assert(!p.trySetStatus('slp', q)); assert(!p.addVolatile('yawn', q));
-		assert.equal(battle.runEvent('ModifyAtk', p, q, Dex.getActiveMove('machpunch'), 1000), 1300);
+		assert(p.trySetStatus('slp', q)); p.cureStatus(); assert(p.addVolatile('yawn', q));
+		assert.equal(battle.runEvent('ModifyAtk', p, q, Dex.getActiveMove('machpunch'), 1000), 1000);
 		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 40), 60);
 		battle.runEvent('Flinch', p); assert.equal(p.boosts.spe, 1);
 	});
 	it('selected copies of Fiend passives do not apply their components twice', () => {
 		const [p, q] = setup('Hitmonchan', 'Punch Fiend'); const move = hit(p, q, 'firepunch');
-		assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1400); assert.equal(move.secondaries[0].chance, 40);
+		assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1400); assert.equal(move.secondaries[0].chance, 20);
 	});
 	it('an acquired Vital Spirit does not double the Spin Fiend Fighting modifier', () => {
 		const [p, q] = setup('Hitmontop', 'Vital Spirit');
@@ -166,7 +166,7 @@ describe('Hitmon passive and signature rework', () => {
 	});
 	it('suppression disables Check Hook but leaves its species passive intact', () => {
 		const [p, q] = setup(); const rolls = counterRoll(true); p.addVolatile('gastroacid'); hit(q, p);
-		assert.equal(rolls(), 0); const move = hit(p, q, 'firepunch'); assert.equal(move.secondaries[0].chance, 40);
+		assert.equal(rolls(), 0); const move = hit(p, q, 'firepunch'); assert.equal(move.secondaries[0].chance, 20);
 	});
 	for (const id of ['highjumpkick', 'jumpkick', 'axekick']) {
 		it('Springheel prevents ' + id + ' crash damage on a miss', () => {

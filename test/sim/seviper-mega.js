@@ -14,7 +14,7 @@ describe('Seviper-Mega', function () {
 		assert.deepEqual(base.otherFormes, ['Seviper-Mega']);
 		assert.false(battle.dex.species.get('Seviper-Reborn').exists);
 		assert.deepEqual(mega.types, ['Poison', 'Dragon']);
-		assert.deepEqual(mega.baseStats, {hp: 75, atk: 140, def: 115, spa: 70, spd: 115, spe: 95});
+		assert.deepEqual(mega.baseStats, { hp: 75, atk: 140, def: 120, spa: 90, spd: 120, spe: 65 });
 		assert.equal(mega.bst, 610);
 		assert.equal(mega.abilities[0], 'Sirius');
 		assert.equal(mega.requiredItem, 'Sevipite');

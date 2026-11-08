@@ -211,12 +211,12 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		assert(cursedFoe);
 	}
 
-	it('should target an opponent in Doubles if the user is on left side and becomes Ghost the same turn', function () {
+	common.itGen(6, 'should target an opponent in Doubles if the user is on left side and becomes Ghost the same turn', () => {
 		battle = common.gen(6).createBattle({gameType: 'doubles'}, doublesTeams.slice());
 		runDoublesTest(battle, battle.p1.active[0]);
 	});
 
-	it('should target the ally in Doubles if the user is on right side and becomes Ghost the same turn', function () {
+	common.itGen(6, 'should target the ally in Doubles if the user is on right side and becomes Ghost the same turn', () => {
 		battle = common.gen(6).createBattle({gameType: 'doubles'}, [
 			[doublesTeams[0][1], doublesTeams[0][0]],
 			doublesTeams[1],
@@ -225,7 +225,7 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 	});
 
 	for (const cursePos of [0, 1, 2]) {
-		it('should target an opponent in Triples even if the user is on position ' + cursePos, function () {
+		common.itGen(5, 'should target an opponent in Triples even if the user is on position ' + cursePos, () => {
 			const p1team = triplesTeams[0].slice(1);
 			p1team.splice(cursePos, 0, triplesTeams[0][0]);
 			const p2team = triplesTeams[1].slice();

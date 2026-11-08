@@ -56,7 +56,7 @@ describe('Raging Beast and related species updates', () => {
 		const foe = battle.p2.active[0];
 		assert.equal(foe.boosts.atk, 0);
 		assert(!lunarDread.hasAbility('magicguard'));
-		assert(lunarDread.hasAbility('pressure'));
+		assert(!lunarDread.hasAbility('pressure'));
 		assert(lunarDread.hasAbility('insomnia'));
 		assert(lunarDread.hasAbility('dishearten'));
 		assert.equal(foe.boosts.spa, -1);
@@ -90,7 +90,9 @@ describe('Raging Beast and related species updates', () => {
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const heracross = battle.p1.active[0];
-		for (const id of ['skilllink', 'moldbreaker', 'powerdrill']) assert(heracross.hasAbility(id));
+		assert.deepEqual(heracross.getPassives(), ['skilllink']);
+		assert(heracross.hasAbilityOrPassive('skilllink'));
+		for (const id of ['moldbreaker', 'powerdrill']) assert(heracross.hasAbility(id));
 		assert(!heracross.hasAbility('guts'));
 		const attackBeforeBurn = heracross.getStat('atk');
 		heracross.setStatus('brn');

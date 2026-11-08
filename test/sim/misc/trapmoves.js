@@ -89,7 +89,7 @@ describe('Trapping Moves', function () {
 
 		if (trappers.indexOf(move) < 3) {
 			// Only test on moves that existed in gen 4
-			it('should be passed when the user uses Baton Pass in Gen 4', function () {
+			common.itGen(4, 'should be passed when the user uses Baton Pass in Gen 4', () => {
 				battle = common.gen(4).createBattle();
 				battle.setPlayer('p1', {team: [
 					{species: "Smeargle", ability: 'prankster', moves: [toID(move), 'batonpass']},
@@ -118,14 +118,15 @@ describe('Partial Trapping Moves', function () {
 
 	for (const move of partialtrappers) {
 		it('should deal 1/8 HP per turn', function () {
+			// Heal Bell creates Safeguard, which reduces residual damage in this fork.
 			battle = common.createBattle();
 			battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'noguard', moves: [toID(move), 'rest']}]});
-			battle.setPlayer('p2', {team: [{species: "Blissey", ability: 'naturalcure', moves: ['healbell']}]});
-			battle.makeChoices('move ' + toID(move), 'move healbell');
+			battle.setPlayer('p2', { team: [{ species: "Mew", ability: 'No Ability', moves: ['splash'] }] });
+			battle.makeChoices('move ' + toID(move), 'move splash');
 			const pokemon = battle.p2.active[0];
 			pokemon.heal(pokemon.maxhp);
-			battle.makeChoices('move rest', 'move healbell');
-			assert.equal(pokemon.maxhp - pokemon.hp, battle.modify(pokemon.maxhp, 1 / 8));
+			battle.makeChoices('move rest', 'move splash');
+			assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.baseMaxhp / 8));
 		});
 
 		it('should prevent Pokemon from switching out normally', function () {
@@ -201,7 +202,7 @@ describe('Partial Trapping Moves [Gen 1]', function () {
 		battle.destroy();
 	});
 
-	it('Wrap ends when wrapped Pokemon dies of residual damage', function () {
+	common.itGen(1, 'Wrap ends when wrapped Pokemon dies of residual damage', () => {
 		battle = common.gen(1).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Arbok", moves: ['wrap', 'toxic']}]});
 		battle.setPlayer('p2', {team: [{species: "Rhydon", moves: ['splash']}, {species: "Exeggutor", moves: ['splash']}]});
@@ -212,7 +213,7 @@ describe('Partial Trapping Moves [Gen 1]', function () {
 		assert(!battle.p1.active[0].volatiles['partialtrappinglock']);
 	});
 
-	it('Wrap ends when wrapped Pokemon switches to a Pokemon that dies of residual damage', function () {
+	common.itGen(1, 'Wrap ends when wrapped Pokemon switches to a Pokemon that dies of residual damage', () => {
 		battle = common.gen(1).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Dragonite", moves: ['wrap', 'seismictoss', 'toxic'], evs: {hp: 255}}]});
 		battle.setPlayer('p2', {team: [{species: "Mewtwo", moves: ['splash'], evs: {hp: 255}}, {species: "Exeggutor", moves: ['splash']}]});
@@ -226,7 +227,7 @@ describe('Partial Trapping Moves [Gen 1]', function () {
 		assert(!battle.p1.active[0].volatiles['partialtrappinglock']);
 	});
 
-	it('Wrap ends when wrapper dies to residual damage', function () {
+	common.itGen(1, 'Wrap ends when wrapper dies to residual damage', () => {
 		battle = common.gen(1).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Dragonite", moves: ['wrap', 'splash']}, {species: "Exeggutor", moves: ['splash']}]});
 		battle.setPlayer('p2', {team: [{species: "Rhydon", moves: ['toxic']}]});
@@ -237,7 +238,7 @@ describe('Partial Trapping Moves [Gen 1]', function () {
 		assert(!battle.p2.active[0].volatiles['partiallytrapped']);
 	});
 
-	it('Wrap ends when wrapper switches to a Pokemon that dies of residual damage', function () {
+	common.itGen(1, 'Wrap ends when wrapper switches to a Pokemon that dies of residual damage', () => {
 		battle = common.gen(1).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Rhydon", moves: ['splash'], evs: {hp: 255}}, {species: "Dragonite", moves: ['wrap']}]});
 		battle.setPlayer('p2', {team: [{species: "Slowbro", moves: ['seismictoss', 'toxic']}]});

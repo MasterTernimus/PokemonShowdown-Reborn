@@ -5,5 +5,12 @@ describe('Ferrothorn Mineral Grip and Iron Barbs',()=>{afterEach(()=>{b?.destroy
  it('suppression before hazards prevents removal',()=>{const p=setup(true);b.p1.addSideCondition('stealthrock',b.p2.active[0]);const hp=p.hp;b.makeChoices('switch 2','move splash');assert(b.p1.sideConditions.stealthrock);assert(p.hp<hp);assert(!b.log.some(s=>s.includes('absorbed the pointed stones')));});
  it('ability restarts do not clear hazards or restore berries',()=>{const p=setup();b.makeChoices('switch 2','move splash');b.p1.addSideCondition('stealthrock',b.p2.active[0]);p.setAbility('No Ability');p.setAbility('Mineral Grip');assert(b.p1.sideConditions.stealthrock);assert(!p.getAbility().onEatItem);assert(!p.getAbility().onDamagingHit);assert(!p.hasAbility('ironbarbs'));assert(p.hasAbilityOrPassive('ironbarbs'));});
  for(const ability of ['Mineral Grip','Iron Barbs'])it('retaliates once per contact hit with '+ability,()=>{const p=setup();b.makeChoices('switch 2','move splash');p.setAbility(ability);const q=b.p2.active[0];q.hp=q.maxhp=q.baseMaxhp=1000;b.actions.useMove(Object.assign(Dex.getActiveMove('tackle'),{accuracy:true,damage:10}),q,{target:p});assert.equal(q.hp,875);});
- it('full Suction Cups blocks forced switches and selected alternatives remain',()=>{const p=setup();b.makeChoices('switch 2','move splash');assert.equal(b.runEvent('DragOut',p,b.p2.active[0],Dex.moves.get('roar')),null);assert.deepEqual(p.species.abilities,{0:'Mineral Grip',1:'Filter',H:'Rooted Iron'});assert.deepEqual(p.getPassives(),['ironbarbs']);assert.equal(Dex.abilities.get('Barb Harvest').name,'Mineral Grip');});
+	it('full Suction Cups blocks forced switches and selected alternatives remain', () => {
+		const p = setup();
+		b.makeChoices('switch 2', 'move splash');
+		assert.equal(b.runEvent('DragOut', p, b.p2.active[0], Dex.moves.get('roar')), null);
+		assert.deepEqual(p.species.abilities, { 0: 'Mineral Grip', 1: 'Filter', H: 'Stamina' });
+		assert.deepEqual(p.getPassives(), ['ironbarbs']);
+		assert.equal(Dex.abilities.get('Barb Harvest').name, 'Mineral Grip');
+	});
 });

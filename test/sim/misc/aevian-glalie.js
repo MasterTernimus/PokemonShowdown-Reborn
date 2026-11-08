@@ -19,12 +19,12 @@ describe('Aevian Glalie', function () {
 		]]);
 		if (!battle.p1.active[0] || !battle.p2.active[0]) battle.makeChoices('team 1', 'team 1');
 		assert.deepEqual(battle.p1.active[0].species.types, ['Grass', 'Rock']);
-		assert.deepEqual(battle.p1.active[0].species.baseStats, {hp: 110, atk: 110, def: 100, spa: 50, spd: 80, spe: 50});
+		assert.deepEqual(battle.p1.active[0].species.baseStats, { hp: 110, atk: 110, def: 105, spa: 50, spd: 85, spe: 40 });
 		assert.deepEqual(battle.p1.active[0].species.abilities, {0: 'Grassy Surge', 1: 'Brute Force', H: 'Stamina'});
 		assert.equal(battle.actions.canMegaEvo(battle.p1.active[0]), 'Glalie-Aevian-Mega');
 		assert.equal(battle.actions.canMegaEvo(battle.p2.active[0]), 'Glalie-Mega');
 		const mega = battle.dex.species.get('Glalie-Aevian-Mega');
-		assert.deepEqual(mega.baseStats, {hp: 110, atk: 155, def: 115, spa: 50, spd: 90, spe: 85});
+		assert.deepEqual(mega.baseStats, { hp: 110, atk: 135, def: 105, spa: 90, spd: 85, spe: 80 });
 		assert.equal(mega.abilities[0], 'Moss Armor');
 		battle.makeChoices('move woodhammer mega', 'move icefang mega');
 		assert.equal(battle.p1.active[0].species.name, 'Glalie-Aevian-Mega');
@@ -39,7 +39,7 @@ describe('Aevian Glalie', function () {
 			'grassyglide', 'leechseed', 'bide', 'chipaway', 'disable', 'faketears', 'rollout', 'spikes',
 			'switcheroo', 'weatherball', 'wideguard', 'arenitewall', 'bodypress', 'bulletseed', 'earthquake',
 			'energyball', 'gigadrain', 'leafstorm', 'meteorbeam', 'mudshot', 'stealthrock',
-			'stoneedge', 'synthesis', 'mudslap', 'accelerock',
+			'stoneedge', 'synthesis', 'mudbarrage', 'accelerock',
 		];
 		for (const move of moves) assert(learnset[move], `Glalie-Aevian should learn ${move}`);
 	});

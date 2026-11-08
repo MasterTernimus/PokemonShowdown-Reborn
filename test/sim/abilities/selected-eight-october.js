@@ -51,8 +51,41 @@ describe('Approved October signatures',()=>{
  it('Storm Calling preserves Icy Field sound conversion',()=>{const[p,t]=setup('Storm Calling');battle.field.setTerrain('icyterrain',p);assert.equal(use(p,t,'hypervoice').type,'Ice');});
  it('Moss Armor heals only after actual opposing Grass damage and only within the timing window',()=>{const[p,t]=setup('Moss Armor');p.hp-=150;const h=p.hp;out(p);assert.equal(p.hp,h);use(p,t,'vinewhip');battle.turn++;out(p);assert.equal(p.hp,h+Math.floor(p.baseMaxhp/8));battle.turn++;const h2=p.hp;out(p);assert.equal(p.hp,h2);});
  it('Moss Armor loses its Grass switch heal after another action and cannot farm allies or substitutes',()=>{const[p,t]=setup('Moss Armor','doubles');p.hp-=150;use(p,t,'vinewhip');use(p,t,'splash');const h=p.hp;out(p);assert.equal(p.hp,h);t.addVolatile('substitute');use(p,t,'vinewhip');out(p);assert.equal(p.hp,h);use(p,p.side.active[1],'vinewhip');out(p);assert.equal(p.hp,h);});
- it('Moss Armor preserves Levitate, Stamina and Natural Cure healing',()=>{const[p,t]=setup('Moss Armor');assert(!p.isGrounded());use(t,p);assert.equal(p.boosts.def,1);p.hp=50;p.setStatus('par');use(p,t,'vinewhip');const h=p.hp;out(p);assert.equal(p.status,'');assert.equal(p.hp,h+Math.floor(p.baseMaxhp/3)+Math.floor(p.baseMaxhp/8));});
- it('Temple Chime needs an actual Heal Bell cure and resets only negative SpD once',()=>{const[p,t]=setup('Temple Chime','singles','Chimecho');assert.deepEqual(p.getPassives(),['levitate']);assert(!p.isGrounded());p.boosts.spd=-2;p.boosts.def=-1;use(p,p,'healbell');assert.equal(p.boosts.spd,-2);assert(!p.m.templeChimeUsed);p.side.pokemon[1].setStatus('par');p.hp-=100;const h=p.hp;use(p,p,'healbell');assert.equal(p.boosts.spd,0);assert.equal(p.boosts.def,-1);assert.equal(p.hp,h+Math.floor(p.baseMaxhp/4));assert(p.side.sideConditions.safeguard);p.boosts.spd=-2;p.side.pokemon[1].setStatus('par');use(p,p,'healbell');assert.equal(p.boosts.spd,-2);});
+	it('Moss Armor keeps Stamina and current Natural Cure healing without Levitate', () => {
+		const [p, t] = setup('Moss Armor');
+		assert(p.isGrounded());
+		use(t, p);
+		assert.equal(p.boosts.def, 1);
+		p.hp = 50;
+		p.setStatus('par');
+		use(p, t, 'vinewhip');
+		const h = p.hp;
+		out(p);
+		assert.equal(p.status, '');
+		assert.equal(p.hp, h + Math.floor(p.baseMaxhp / 8) * 2);
+	});
+	it('Temple Chime needs an actual Heal Bell cure and resets only negative SpD once', () => {
+		const [p, t] = setup('Temple Chime', 'singles', 'Chimecho');
+		assert.deepEqual(p.getPassives(), ['levitate']);
+		assert(!p.isGrounded());
+		p.boosts.spd = -2;
+		p.boosts.def = -1;
+		use(p, p, 'healbell');
+		assert.equal(p.boosts.spd, -2);
+		assert(!p.m.templeChimeUsed);
+		p.side.pokemon[1].setStatus('par');
+		p.hp -= 100;
+		const h = p.hp;
+		use(p, p, 'healbell');
+		assert.equal(p.boosts.spd, 0);
+		assert.equal(p.boosts.def, -1);
+		assert.equal(p.hp, h + Math.floor(p.baseMaxhp / 8));
+		assert(p.side.sideConditions.safeguard);
+		p.boosts.spd = -2;
+		p.side.pokemon[1].setStatus('par');
+		use(p, p, 'healbell');
+		assert.equal(p.boosts.spd, -2);
+	});
  it('Temple Chime preserves Elevate KO boosts',()=>{const[p,t]=setup('Temple Chime');t.hp=1;use(p,t);battle.faintMessages();assert(Object.values(p.boosts).some(x=>x>0));});
  it('entry-limited effects become available again after an actual switch cycle',()=>{
   const[p,t]=setup('Steel Plumage');use(t,p);assert.equal(t.side.sideConditions.spikes.layers,1);

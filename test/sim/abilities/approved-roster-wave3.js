@@ -37,16 +37,16 @@ describe('Approved third roster pass', () => {
 	}
 	it('assigns retained components and removes discarded components without changing Gardevoir', () => {
 		for (const [species, ability, component] of [
-			['Hariyama', 'Thick Fat', 'Thick Fat'], ['Electivire', 'Galvanic Spirit', 'Vital Spirit'],
-			['Magmortar', 'Blast Chamber', 'Vital Spirit'], ['Galvantula', 'Silk Sights', 'Compound Eyes'],
+			['Hariyama', 'Stamina', 'Stamina'], ['Electivire', 'Galvanic Spirit', 'Vital Spirit'],
+			['Magmortar', 'Volcanic Spirit', 'Vital Spirit'], ['Galvantula', 'Silk Sights', 'Compound Eyes'],
 			['Ferrothorn', 'Mineral Grip', 'Suction Cups'], ['Eelektross', 'Current Coil', 'Swift Swim'],
 			['Goodra', 'Toxic Serenity', 'Poison Heal'], ['Drednaw', 'River Shell', 'Shell Armor'],
 			['Mudsdale', 'Battle Armor', 'Battle Armor'], ['Annihilape', 'Unbound Spirit', 'Vital Spirit'],
 		]) {
 			assert(Object.values(Dex.species.get(species).abilities).includes(ability));
-			assert(abilityIncludesComponent(ability, component));
+			assert(abilityIncludesComponent(Dex.abilities.get(ability).id, component), ability + ': ' + component);
 		}
-		assert.deepEqual(Dex.species.get('Hariyama').passives, ['palmmastery']);
+		assert.deepEqual(Dex.species.get('Hariyama').passives, ['thickfat']);
 		assert(abilityIncludesComponent('Storm Circuit', 'Current Coil'));
 		assert(abilityIncludesComponent('Storm Circuit', 'Swift Swim'));
 		assert(!abilityIncludesComponent('Venom Bastion', 'Merciless'));
@@ -55,47 +55,51 @@ describe('Approved third roster pass', () => {
 		assert.equal(Dex.species.get('Mudsdale').abilities.H, 'Surefoot');
 		assert(!Dex.abilities.get('Void Voice').desc.includes('Perfect Foresight'));
 	});
-	it('Mountainbreaker selects a whole Rock/Ground matchup per target while retaining Rock type', () => {
+	it('Mountainbreaker bypasses abilities for physical Rock/Ground without changing matchups', () => {
 		const [p, , foe] = make('Mountainbreaker', 'Tyranitar');
-		foe.setType('Steel');
 		const move = modify('rockslide', p, foe);
-		assert.equal(move.type, 'Rock'); assert.equal(foe.runEffectiveness(move), 1);
-		foe.setType(['Steel', 'Flying']);
-		assert.equal(foe.runEffectiveness(move), 0);
-		foe.setType(['Fire', 'Steel']);
-		assert.equal(foe.runEffectiveness(move), 2);
-		assert.equal(modify('crunch', p, foe).type, 'Dark');
+		assert.equal(move.type, 'Rock'); assert(move.ignoreAbility);
+		for (const [types, expected] of [[['Steel'], -1], [['Steel', 'Flying'], 0], [['Fire', 'Steel'], 0]]) {
+			foe.setType(types); assert.equal(foe.runEffectiveness(move), expected);
+		}
+		assert(modify('earthquake', p, foe).ignoreAbility);
+		assert(!modify('earthpower', p, foe).ignoreAbility);
+		assert(!modify('crunch', p, foe).ignoreAbility);
+		foe.side.addSideCondition('reflect', foe);
+		hit('rockslide', p, foe);
+		assert(!foe.side.sideConditions.reflect);
 	});
-	it('Dread Presence punishes successful foe status once per turn, not failed status or allies', () => {
+	it('Dread Presence supplies Dark Aura and Unnerve without status-move chip', () => {
 		const [p, ally, foe] = make('Dread Presence');
-		const hp = foe.hp;
-		hit('splash', foe, foe); hit('splash', foe, foe);
-		assert.equal(hp - foe.hp, Math.floor(foe.maxhp / 8));
-		hit('splash', ally, ally); assert.equal(ally.hp, ally.maxhp);
-		battle.turn++;
-		p.setType('Steel'); hit('toxic', foe, p);
-		assert.equal(hp - foe.hp, Math.floor(foe.maxhp / 8));
+		assert(p.hasAbility('darkaura')); assert(p.hasAbility('unnerve'));
+		const hp = foe.hp; hit('splash', foe, foe); hit('splash', foe, foe);
+		assert.equal(foe.hp, hp);
+		for (const [source, target] of [[p, foe], [foe, p]]) {
+			const move = Dex.getActiveMove('crunch');
+			assert(battle.runEvent('BasePower', source, target, move, 1000) > 1000);
+		}
+		foe.hp = 1; foe.setItem('sitrusberry');
+		assert(!foe.eatItem()); assert.equal(foe.item, 'sitrusberry');
+		p.addVolatile('gastroacid'); assert(foe.eatItem()); assert(foe.hp > 1);
 	});
 	it('Palm Mastery guarantees primary paralysis but respects type immunity', () => {
 		const [p, , foe, other] = make('Palm Mastery', 'Hariyama', 'Shield Dust');
 		hit('forcepalm', p, foe); assert.equal(foe.status, 'par');
 		other.setType('Electric'); hit('forcepalm', p, other); assert.equal(other.status, '');
 	});
-	it('Galvanic Spirit keeps Vital Spirit and drops SpD once per turn on Electric contact', () => {
-		const [p, , foe] = make('Galvanic Spirit');
-		assert(!p.trySetStatus('slp', foe));
-		hit('thunderpunch', p, foe); hit('thunderpunch', p, foe);
-		assert.equal(foe.boosts.spd, -1);
-		assert(p.hasAbility('vitalspirit'));
-	});
-	it('Blast Chamber alternates accuracy charges and respects Protect', () => {
-		const [p, , foe] = make('Blast Chamber');
-		hit('ember', p, foe);
-		assert.equal(modify('focusblast', p, foe).accuracy, true);
-		foe.addVolatile('protect', foe); hit('focusblast', p, foe);
-		assert.equal(p.abilityState.nextType, 'Fighting');
-		foe.removeVolatile('protect'); hit('focusblast', p, foe);
-		assert.equal(modify('fireblast', p, foe).accuracy, true);
+	for (const [ability, special, physical] of [
+		['Galvanic Spirit', 'thunderbolt', 'thunderpunch'],
+		['Volcanic Spirit', 'flamethrower', 'firepunch'],
+	]) it(ability + ' retains Vital Spirit and boosts only its special elemental attacks', () => {
+		const [p, , foe] = make(ability);
+		assert(!p.trySetStatus('slp', foe)); assert(p.hasAbility('vitalspirit'));
+		assert.equal(battle.runEvent('BasePower', p, foe, Dex.getActiveMove(special), 1000), 1300);
+		assert.equal(battle.runEvent('BasePower', p, foe, Dex.getActiveMove(physical), 1000), 1000);
+		hit(physical, p, foe); hit(physical, p, foe);
+		assert.equal(foe.boosts.spd, 0);
+		assert.equal(modify('focusblast', p, foe).accuracy, 70);
+		p.addVolatile('gastroacid');
+		assert.equal(battle.runEvent('BasePower', p, foe, Dex.getActiveMove(special), 1000), 1000);
 	});
 	it('Venom Spurs replaces its charge with Bug poison and Corrosion', () => {
  const [p, , foe] = make('Venom Spurs');

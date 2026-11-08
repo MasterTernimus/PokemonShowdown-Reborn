@@ -7,7 +7,7 @@ function setup(ability = 'No Ability', foeAbility = 'No Ability') {
 }describe('Serrated Scales base Garchomp passive', () => {
 	it('changes only base Garchomp and preserves selectable abilities', () => {
 		assert.deepEqual(Dex.species.get('garchomp').passives, ['serratedscales']);
-		assert.deepEqual(Dex.species.get('garchompmega').passives, ['sandforce']);
+		assert.deepEqual(Dex.species.get('garchompmega').passives, ['sharpness']);
 		assert.deepEqual(Dex.species.get('garchompbattlebond').passives, ['roughskin']);
 		assert.deepEqual(Dex.species.get('garchomp').abilities, { 0: 'Grounded Instinct', 1: 'Supreme Overlord', H: 'Void Wrath', S: 'Battle Bond' });
 	});

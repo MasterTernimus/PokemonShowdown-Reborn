@@ -12,8 +12,8 @@ describe('Sushi Trick approved wording', () => {
 		battle.makeChoices('team 12', 'team 12');
 		const [p, ally] = battle.p1.active;
 		const ability = p.getAbility();
-		assert.equal(ability.desc, "On entry, heals each adjacent active ally by 1/4 maximum HP and removes its confusion. If there is no adjacent active ally to serve, instead clears its own confusion and negative accuracy stages, preserving positive accuracy, without self-healing.");
-		assert.equal(ability.shortDesc, "Entry heals adjacent allies 1/4 HP and clears confusion; alone, clears own confusion and negative accuracy.");
+		assert.equal(ability.desc, "On entry, heals each adjacent active ally by 1/4 max HP and removes its confusion. If there is no adjacent active ally to serve, instead clears its own confusion and negative accuracy stages, preserving positive accuracy, without self-healing.");
+		assert.equal(ability.shortDesc, "Entry: allies heal 1/4 HP and clear confusion; alone, clears own confusion/negative accuracy.");
 		assert(p.hasAbility('hospitality'));
 		ally.hp = 1; ally.addVolatile('confusion');
 		const from = battle.log.length;

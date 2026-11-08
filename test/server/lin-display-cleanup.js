@@ -1,1 +1,39 @@
-'use strict';const assert=require('assert').strict,{Dex}=require('../../dist/sim'),d=require('../../dist/data/ability-display'),{getAbilityMechanicsHTML}=require('../../dist/server/ability-lookup');describe('Global display-only ability cleanup',()=>{it('audits every ability and removes redundant nested labels without altering identity',()=>{let count=0;for(const a of Dex.abilities.all()){count++;const parts=d.getAbilityDisplayComponents(a.id);assert.equal(parts.length,new Set(parts).size,a.id);assert(!parts.includes('proficient'),a.id);for(const p of parts)for(const q of parts)if(p!==q)assert(!d.getAbilityDisplayClosure(q).has(p),a.id+': '+p);if(a.id!=='proficient')assert(!/Proficient/i.test(a.shortDesc),a.id);assert(a.desc&&a.shortDesc,a.id);}assert(count>=948);});it('Atrocity exposes the requested two packages and retains same-type mechanics',()=>{assert.deepEqual(d.getAbilityDisplayComponents('atrocity').map(id=>Dex.abilities.get(id).name),['Unbound Blaze','Tough Claws']);const a=Dex.abilities.get('atrocity');assert(/Same-type moves have 1.3x power/.test(a.desc));const {AbilityComponents}=require('../../dist/data/ability-components');assert(AbilityComponents.atrocity.includes('proficient'));assert.deepEqual(AbilityComponents.unboundblaze,['proficient']);const html=getAbilityMechanicsHTML(a,Dex);assert(html.includes('/dt Unbound Blaze, gen9'));assert(!html.includes('/dt Proficient,'));assert(!html.includes('/dt Dragonize,'));assert(!html.includes('/dt Magma Armor,'));});it('calculator labels exactly match the canonical server display lists',()=>{const meta=require('../../dist/sim/custom-calculator').calculatorMetadata();for(const[id,names]of Object.entries(meta.abilityComponents))assert.deepEqual(names,d.getAbilityDisplayComponents(id).map(id=>Dex.abilities.get(id).name),id);});});
+'use strict';
+const assert = require('assert').strict;
+const { Dex } = require('../../dist/sim');
+const display = require('../../dist/data/ability-display');
+const { getAbilityMechanicsHTML } = require('../../dist/server/ability-lookup');
+
+describe('Global display-only ability cleanup', () => {
+	it('removes redundant nested component labels without altering identity', () => {
+		let count = 0;
+		for (const ability of Dex.abilities.all()) {
+			count++;
+			const parts = display.getAbilityDisplayComponents(ability.id);
+			assert.equal(parts.length, new Set(parts).size, ability.id);
+			assert(!parts.includes('proficient'), ability.id);
+			for (const part of parts) for (const other of parts) {
+				if (part !== other) assert(!display.getAbilityDisplayClosure(other).has(part), ability.id + ': ' + part);
+			}
+			assert(ability.desc && ability.shortDesc, ability.id);
+		}
+		assert(count >= 948);
+	});
+	it('Atrocity exposes Unbound Blaze and Fire Ward without removed components', () => {
+		assert.deepEqual(display.getAbilityDisplayComponents('atrocity').map(id => Dex.abilities.get(id).name), ['Unbound Blaze', 'Fire Ward']);
+		const ability = Dex.abilities.get('atrocity');
+		assert.equal(ability.desc, 'Unbound Blaze + Fire Ward');
+		const { AbilityComponents } = require('../../dist/data/ability-components');
+		assert.deepEqual(AbilityComponents.atrocity, ['unboundblaze', 'fireward']);
+		assert.deepEqual(AbilityComponents.unboundblaze, []);
+		const html = getAbilityMechanicsHTML(ability, Dex);
+		for (const name of ['Unbound Blaze', 'Fire Ward']) assert(html.includes('/dt ' + name + ', gen9'));
+		for (const name of ['Proficient', 'Dragonize', 'Magma Armor', 'Tough Claws']) assert(!html.includes('/dt ' + name + ','));
+	});
+	it('calculator labels match the canonical server display lists', () => {
+		const meta = require('../../dist/sim/custom-calculator').calculatorMetadata();
+		for (const [id, names] of Object.entries(meta.abilityComponents)) {
+			assert.deepEqual(names, display.getAbilityDisplayComponents(id).map(part => Dex.abilities.get(part).name), id);
+		}
+	});
+});

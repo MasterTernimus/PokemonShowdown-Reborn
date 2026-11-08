@@ -183,10 +183,11 @@ describe('Endless Battle Clause (slow)', () => {
 			{species: "Blissey", moves: ['splash']},
 			{species: "Vaporeon", moves: ['splash']},
 		]});
-		for (let i = 0; i < 998; i++) {
+		for (let i = 0; i < 999; i++) {
 			battle.makeChoices('switch 2', 'switch 2');
 		}
 		assert(!battle.ended);
+		assert.equal(battle.turn, 1000);
 		battle.makeChoices('switch 2', 'switch 2');
 		assert(battle.ended);
 	});
@@ -195,5 +196,5 @@ describe('Endless Battle Clause (slow)', () => {
 // Endless Battle Clause doesn't take effect for 100 turns, so we artificially skip turns
 // to get the turn counter to be in the range which could possibly trigger the clause
 function skipTurns(battle, turns) {
-	for (let i = 0; i < turns; i++) battle.nextTurn();
+	for (let i = 0; i < turns; i++) battle.endTurn();
 }

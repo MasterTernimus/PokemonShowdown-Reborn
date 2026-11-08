@@ -94,7 +94,7 @@ describe('Brick Break', function () {
 		assert.false(battle.p2.sideConditions['reflect']);
 	});
 
-	it(`should break the foe's Reflect when used against an ally in Gen 3`, function () {
+	common.itGen(3, `should break the foe's Reflect when used against an ally in Gen 3`, () => {
 		battle = common.gen(3).createBattle({gameType: 'doubles'}, [[
 			{species: "mew", moves: ['brickbreak', 'splash']},
 			{species: "mew", moves: ['splash']},

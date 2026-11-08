@@ -9,12 +9,52 @@ function start(foeAbility='No Ability'){
 function hit(p,t,id='darkpulse',extra={}){battle.clearActiveMove();const m=battle.dex.getActiveMove(id);Object.assign(m,{accuracy:true,willCrit:false,basePower:10,secondaries:null},extra);battle.actions.useMove(m,p,{target:t});battle.clearActiveMove();}
 describe('Hydreigon Dread Wings',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- it('replaces only Levitate and preserves Tyranitar Dread Presence',()=>{assert.deepEqual(Dex.species.get('hydreigon').abilities,{0:'Dread Wings',1:'Dark Dominion',H:'Void Tyrant'});assert.equal(Dex.species.get('tyranitar').abilities.H,'Dread Presence');assert.notEqual(Dex.abilities.get('dreadpresence').onSourceDamagingHit,Dex.abilities.get('dreadwings').onSourceDamagingHit);});
- it('has both components, all Unnerve callbacks and actual Ground immunity',()=>{const[p,t]=start();assert(p.hasAbility('levitate'));assert(p.hasAbility('unnerve'));for(const k of ['onStart','onEnd','onFoeUseItem','onFoeTryEatItem','onSwitchInPriority'])assert.equal(p.getAbility()[k],Dex.abilities.get('unnerve')[k]);assert.equal(p.isGrounded(),null);const hp=p.hp;hit(t,p,'earthquake');assert.equal(p.hp,hp);battle.field.addPseudoWeather('gravity',t);hit(t,p,'earthquake');assert(p.hp<hp);});
- it('blocks berries and local seeds, and suppression releases berries',()=>{const[p,t]=start();t.setItem('sitrusberry');t.hp=1000;assert.equal(t.eatItem(),false);t.setItem('elementalseed');assert.equal(t.useItem(),false);t.setItem('sitrusberry');p.addVolatile('gastroacid',t);assert.equal(t.eatItem(),true);assert.equal(p.isGrounded(),true);});
+	it('preserves the approved Hydreigon roster and Tyranitar Dread Presence', () => {
+		assert.deepEqual(Dex.species.get('hydreigon').abilities, { 0: 'Dark Aura', 1: 'Strings of Ruin', H: 'False Liberation' });
+		assert.equal(Dex.species.get('tyranitar').abilities.H, 'Dread Presence');
+		assert.notEqual(Dex.abilities.get('dreadpresence').onSourceDamagingHit, Dex.abilities.get('dreadwings').onSourceDamagingHit);
+	});
+	it('retains Intimidate and Unnerve while Hydra Flight provides Ground immunity', () => {
+		const [p, t] = start();
+		assert(!p.hasAbility('levitate'));
+		assert(p.hasAbility('intimidate'));
+		assert.deepEqual(p.getPassives(), ['hydraflight']);
+		assert.equal(t.boosts.atk, -1);
+		assert(p.hasAbility('unnerve'));
+		for (const k of ['onEnd', 'onFoeUseItem', 'onFoeTryEatItem', 'onSwitchInPriority'])assert.equal(p.getAbility()[k], Dex.abilities.get('unnerve')[k]);
+		assert.equal(p.isGrounded(), null);
+		const hp = p.hp;
+		hit(t, p, 'earthquake');
+		assert.equal(p.hp, hp);
+		battle.field.addPseudoWeather('gravity', t);
+		hit(t, p, 'earthquake');
+		assert(p.hp < hp);
+	});
+	it('blocks berries and local seeds, and suppression releases berries', () => {
+		const [p, t] = start();
+		t.setItem('sitrusberry');
+		t.hp = 1000;
+		assert.equal(t.eatItem(), false);
+		t.setItem('elementalseed');
+		assert.equal(t.useItem(), false);
+		t.setItem('sitrusberry');
+		p.addVolatile('gastroacid', t);
+		assert.equal(t.eatItem(), true);
+		assert.equal(p.isGrounded(), null);
+	});
  it('inherits Cold Eclipse Speed drop once and resets on end',()=>{const[p,t]=start();battle.field.terrain='coldeclipseterrain';battle.singleEvent('End',p.getAbility(),p.abilityState,p);battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(t.boosts.spe,-1);battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(t.boosts.spe,-1);battle.singleEvent('End',p.getAbility(),p.abilityState,p);assert.equal(p.abilityState.unnerved,false);});
  it('Dark Pulse adds normal nonstacking Torment and disables the last move',()=>{const[p,t]=start();t.lastMove=battle.dex.getActiveMove('tackle');hit(p,t);const state=t.volatiles.torment;assert(state);battle.runEvent('DisableMove',t);assert(t.moveSlots.find(m=>m.id==='tackle').disabled);hit(p,t);assert.equal(t.volatiles.torment,state);battle.makeChoices('move splash','switch 2');assert(!t.volatiles.torment);});
  for(const mode of ['miss','protect','substitute','suppressed','othermove','dynamax','aromaveil'])it('respects '+mode,()=>{const[p,t]=start(mode==='aromaveil'?'Aroma Veil':'No Ability');if(['protect','substitute','dynamax'].includes(mode))t.addVolatile(mode,t);if(mode==='suppressed')p.addVolatile('gastroacid',t);hit(p,t,mode==='othermove'?'dragonpulse':'darkpulse',mode==='miss'?{accuracy:0}:{});assert(!t.volatiles.torment);});
- it('calculator metadata exposes the same slot and both components',()=>{const {calculatorMetadata}=require('../../../dist/sim/custom-calculator');const m=calculatorMetadata();assert.equal(m.species.find(p=>p.name==='Hydreigon').abilities[0],'Dread Wings');assert.deepEqual(m.abilityComponents.dreadwings,['Levitate','Unnerve']);});
- it('Mold Breaker can hit the Levitate component',()=>{const[p,t]=start('Mold Breaker');const hp=p.hp;hit(t,p,'earthquake');assert(p.hp<hp);});
+	it('calculator metadata exposes the same slot and both components', () => {
+		const { calculatorMetadata } = require('../../../dist/sim/custom-calculator');
+		const m = calculatorMetadata();
+		assert.equal(m.species.find(p => p.name === 'Hydreigon').abilities[0], 'Dark Aura');
+		assert.deepEqual(m.abilityComponents.dreadwings, ['Intimidate', 'Unnerve']);
+	});
+	it('Mold Breaker bypasses Hydra Flight grounding protection', () => {
+		const [p, t] = start('Mold Breaker');
+		const hp = p.hp;
+		hit(t, p, 'earthquake');
+		assert(p.hp < hp);
+	});
 });

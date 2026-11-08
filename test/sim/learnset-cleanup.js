@@ -64,7 +64,7 @@ describe('Custom learnset cleanup', function () {
 		}
 		assert(canLearn('latios', 'lusterpurge'));
 		assert(canLearn('wyrdeer', 'hypervoice'));
-		for (const species of ['flareon', 'maractus']) assert(canLearn(species, 'sizzleslide'));
+		for (const species of ['flareon', 'maractus']) assert(canLearn(species, 'sizzlyslide'));
 		assert(canLearn('abomasnow', 'glaciallance'));
 		assert(canLearn('cradily', 'sappyseed'));
 		for (const move of ['gyroball', 'heavyslam', 'irondefense', 'ironhead', 'metalburst', 'smartstrike', 'steelroller']) {

@@ -20,7 +20,13 @@ describe('Approved ordinary passive cleanup',()=>{
   const slots={gyarados:'Unbridled Wrath',crobatalt:'Poison Touch',gastrodonazzy:'Rain Dish',gastrodonazzy2:'Rain Dish',gliscor:'Venom Pincer',gliscoralt:'Venom Pincer'};
   const revisions=require('./gmax-snapshot-approved-overrides.json');
   const revisedStats={mewtwomegax:[106,195,130,99,100,150],mewtwomegay:[106,90,100,199,130,155],probopass:[75,35,150,110,155,25],stunfisk:[109,66,99,95,109,32],stunfiskgalar:[109,95,109,66,99,32],staraptor:[85,120,80,50,70,105],staraptormega:[85,140,110,60,100,115],sevipermega:[75,140,120,90,120,65],kingdra:[85,105,90,105,90,95],mightyena:[90,115,80,75,80,110],mightyenadeso:[90,115,80,75,80,110],toxicroak:[83,121,70,111,70,95],toxicroakdeso:[83,121,70,111,70,95],cinccinodeso:[75,110,90,60,90,125]};
-  for(const old of before){const s=Dex.species.get(old.id);assert.deepEqual(s.passives,revisions.passives[old.id]||require('./passive-approval-overlays').current(old.id,passives[old.id]||old.passives),old.id);assert.deepEqual(s.abilities,revisions.abilities[old.id]||require('./passive-approval-overlays').abilities(old.id,old.id==='silvally'?{0:'RKS System',1:'Adaptive Arsenal',H:'Memory Leak'}:old.id==='conkeldurr'?{...old.abilities,1:'Rocky Payload'}:slots[old.id]?{...old.abilities,0:slots[old.id]}:{...old.abilities}),old.id);assert.deepEqual(Object.values(s.baseStats),revisedStats[old.id]||Object.values(old.stats),old.id);assert.deepEqual(s.types,{gorebyss:['Water','Fairy'],huntail:['Water','Dark']}[old.id]||old.types);}
+		for (const old of before) {
+			const s = Dex.species.get(old.id);
+			assert.deepEqual(s.passives, require('./passive-approval-overlays').current(old.id, revisions.passives[old.id] || passives[old.id] || old.passives), old.id);
+			assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, revisions.abilities[old.id] || (old.id === 'silvally' ? { 0: 'RKS System', 1: 'Adaptive Arsenal', H: 'Memory Leak' } : old.id === 'conkeldurr' ? { ...old.abilities, 1: 'Rocky Payload' } : slots[old.id] ? { ...old.abilities, 0: slots[old.id] } : { ...old.abilities })), old.id);
+			assert.deepEqual(Object.values(s.baseStats), Object.values(require('./passive-approval-overlays').stats(old.id, revisedStats[old.id] ? Object.fromEntries(['hp', 'atk', 'def', 'spa', 'spd', 'spe'].map((k, i) => [k, revisedStats[old.id][i]])) : old.stats)), old.id);
+			assert.deepEqual(s.types, require('./passive-approval-overlays').types(old.id, { gorebyss: ['Water', 'Fairy'], huntail: ['Water', 'Dark'] }[old.id] || old.types));
+		}
  });
  for(const ability of ['Venom Pincer','Toxic Boost','Wind Rider','Poison Heal'])for(const suppressed of [false,true])it('Gliscor Poison Heal heals once with '+ability+' suppressed='+suppressed,()=>{
   const [p,q]=setup('Gliscor',ability);if(suppressed)p.addVolatile('gastroacid',q);p.status='psn';p.hp=800;residual(p);assert.equal(p.hp,1000);assert.equal(p.status,'psn');
@@ -33,8 +39,30 @@ describe('Approved ordinary passive cleanup',()=>{
  it('Venom Pincer no longer grants Hyper Cutter',()=>{const [p,q]=setup();battle.boost({atk:-1},p,q);assert.equal(p.boosts.atk,-1);});
  it('selected package has no bonus Poison STAB, healing or curing on nonrecipients',()=>{const [p,q]=setup('Mew');const m=Dex.getActiveMove('poisonjab');assert.equal(battle.runEvent('ModifySTAB',p,q,m,1),1);p.setType('Poison');assert.equal(battle.runEvent('ModifySTAB',p,q,m,1.5),1.5);p.hp=800;p.status='brn';residual(p);assert.equal(p.status,'brn');assert(p.hp<=800);assert(!p.getAbility().onResidual);assert(!p.getAbility().onDamage);assert(!p.getAbility().onDamagingHit);});
  it('Milotic retains one Marvel Scale passive through suppression',()=>{const [p,q]=setup('Milotic','Prism Scale');p.addVolatile('gastroacid',q);battle.field.terrain='fairytaleterrain';assert.equal(battle.runEvent('ModifyDef',p,null,null,100),150);});
- it('Alolan Raichu Static remains active through suppression',()=>{const [p,q]=setup('Raichu-Alola','Surge Surfer');p.addVolatile('gastroacid',q);battle.randomChance=()=>true;attack(q,p);assert.equal(q.status,'par');});
+	it('Alolan Raichu keeps Surge Surfer passive while selected Static respects suppression', () => {
+		const [p, q] = setup('Raichu-Alola', 'Static');
+		assert.deepEqual(p.getPassives(), ['surgesurfer']);
+		battle.randomChance = () => true;
+		attack(q, p);
+		assert.equal(q.status, 'par');
+		q.cureStatus();
+		p.addVolatile('gastroacid', q);
+		attack(q, p);
+		assert.equal(q.status, '');
+		battle.field.terrain = 'electricterrain';
+		assert.equal(battle.runEvent('ModifySpe', p, null, null, 100), 200);
+	});
  for(const species of ['Wishiwashi-Sevii','Wishiwashi-Sevii-Schooling'])it(species+' has Infiltrator through suppression',()=>{const [p,q]=setup(species,'No Ability');p.addVolatile('gastroacid',q);q.addVolatile('substitute');q.volatiles.substitute.hp=500;attack(p,q);assert(q.hp<1600);assert.equal(q.volatiles.substitute.hp,500);});
- it('Includes are unique and custom descriptions survive contextual rendering',()=>{const {getAbilityDisplayComponents}=require('../../../dist/data/ability-display');const {SharedPassiveAbilityDescriptions}=require('../../../dist/data/passive-ability-cleanup');assert.deepEqual(getAbilityDisplayComponents('venompincer',['poisonheal'],'gliscor'),['poisontouch']);assert.deepEqual(getAbilityDisplayComponents('freezerburn',['refrigerate'],'glaliemega'),['slushrush','levitate']);assert.deepEqual(getAbilityDisplayComponents('cursedmarionette',['prankster'],'banettemega'),['frisk']);assert.match(SharedPassiveAbilityDescriptions.cursedmarionette.desc,/20%/);assert.match(SharedPassiveAbilityDescriptions.cursedmarionette.desc,/1\/4/);assert.deepEqual(getAbilityDisplayComponents('scaleshelter',['shielddust'],'masquerain'),['overcoat']);});
+	it('Includes are unique and custom descriptions survive contextual rendering', () => {
+		const { getAbilityDisplayComponents } = require('../../../dist/data/ability-display');
+		const { SharedPassiveAbilityDescriptions } = require('../../../dist/data/passive-ability-cleanup');
+		assert.deepEqual(getAbilityDisplayComponents('venompincer', ['poisonheal'], 'gliscor'), ['poisontouch']);
+		assert.deepEqual(getAbilityDisplayComponents('freezerburn', ['refrigerate'], 'glaliemega'), ['slushrush', 'levitate']);
+		assert.deepEqual(getAbilityDisplayComponents('cursedmarionette', ['prankster'], 'banettemega'), []);
+		assert.equal(SharedPassiveAbilityDescriptions.cursedmarionette, undefined);
+		assert.match(Dex.abilities.get('cursedmarionette').desc, /1\/8/);
+		assert.match(Dex.abilities.get('cursedmarionette').desc, /1\.3x/);
+		assert.deepEqual(getAbilityDisplayComponents('scaleshelter', ['shielddust'], 'masquerain'), ['overcoat']);
+	});
  for(const field of ['electricterrain','watersurfaceterrain','underwaterterrain','murkwatersurfaceterrain','shortcircuitterrain',''])it('Surge Surfer retains existing speed on '+field,()=>{const [p]=setup('Raichu-Alola','Surge Surfer');battle.field.terrain=field;assert.equal(battle.runEvent('ModifySpe',p,null,null,100),field&&field!=='underwaterterrain'?200:100);});
 });

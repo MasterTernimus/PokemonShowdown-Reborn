@@ -19,8 +19,8 @@ export const LoreDescriptions: Record<string, { name: string, shortDesc: string,
 		shortDesc: 'Inner Focus; Ground/Dark hit slowed foes harder. Sand reduces damage before it moves.',
 		desc: 'Inner Focus. Ground and Dark attacks gain 30% power against foes with negative Speed stages. During effective sand, takes 25% less attack damage before acting that turn.' },
 	breakingnews: { name: 'Breaking News',
-		shortDesc: 'Forewarn; exposes status users: bypass their defensive boosts; Psychic/Fairy gains 25%.',
-		desc: 'Forewarn: scans each foe on entry and every opposing switch-in, reveals a strongest attack and removes Illusion. Takes 20% less move damage, or 25% less from the latest warned attack; these reductions do not stack. Successful reveals on Psychic Terrain grant +2 Sp. Atk. Successful opposing status moves expose their user through the following turn. The reporter and adjacent allies ignore exposed foes\' positive defensive stages; the reporter\'s Psychic/Fairy attacks also gain 25% power. An exposed foe switching out clears its mark; leaving ends that reporter\'s marks.' },
+		shortDesc: 'Forewarn; exposes status users so it and adjacent allies bypass their defensive boosts.',
+		desc: 'Forewarn: scans each foe on entry and every opposing switch-in, reveals a strongest attack and removes Illusion. Takes 20% less move damage, or 25% less from the latest warned attack; these reductions do not stack. Successful reveals on Psychic Terrain grant +2 Sp. Atk. Successful opposing status moves expose their user through the following turn. The reporter and adjacent allies ignore exposed foes\' positive defensive stages. An exposed foe switching out clears its mark; leaving ends that reporter\'s marks.' },
 	blackwateranchor: { name: 'Blackwater Anchor',
 		shortDesc: 'Steelworker; Grass/Steel hits slow foes. Anchor Shot drains; water fields share poisoned-foe drain.',
 		desc: 'Full Steelworker, including Steel STAB, its attacking-stat boost and field effects. Grass/Steel hits lower each foe\'s Speed by 1, once per turn. Anchor Shot tethers one trapped foe, draining 1/16 max HP per turn and healing the user by actual damage dealt. On Water Surface or Underwater, draining a poisoned tethered foe also heals adjacent allies by that amount. Either participant leaving ends the tether; escape, suppression, damage immunity and healing restrictions apply.' },
@@ -144,12 +144,6 @@ export function installLorePairs(abilities: AbilityDataTable) {
 			!(attacker === reporter || (reporter.isAlly(attacker) && reporter.isAdjacent(attacker)))) return;
 		if ((boosts.def || 0) > 0) boosts.def = 0;
 		if ((boosts.spd || 0) > 0) boosts.spd = 0;
-	};
-	abilities.breakingnews.onBasePowerPriority = 21;
-	abilities.breakingnews.onBasePower = function (basePower, source, target, move) {
-		if (exposedTo(this, target, source) && (this.movehasType(move, 'Psychic') || this.movehasType(move, 'Fairy'))) {
-			return this.chainModify(1.25);
-		}
 	};
 	abilities.breakingnews.onSwitchOut = clearReports;
 	abilities.breakingnews.onEnd = clearReports;

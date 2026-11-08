@@ -6,7 +6,12 @@ function start(mode='singles',ability='No Ability'){
 function hit(p,t,id='sludgebomb',extra={}){battle.clearActiveMove();const m=battle.dex.getActiveMove(id);Object.assign(m,{accuracy:true,willCrit:false,basePower:10,secondaries:null},extra);battle.actions.useMove(m,p,{target:t});battle.clearActiveMove();return m;}
 describe('Venusaur Creeping Bloom',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- it('replaces only Hospitality and retains full Infiltrator',()=>{assert.deepEqual(Dex.species.get('venusaur').abilities,{0:'Pollen Bloom',1:'Creeping Bloom',H:'Chlorophyll'});const[p]=start();assert(p.hasAbility('infiltrator'));assert.equal(p.getAbility().onModifyMove,battle.dex.abilities.get('infiltrator').onModifyMove);});
+	it('keeps legacy Creeping Bloom mechanics while Venusaur selects Soothing Bouquet', () => {
+		assert.deepEqual(Dex.species.get('venusaur').abilities, { 0: 'Pollen Bloom', 1: 'Soothing Bouquet', H: 'Chlorophyll' });
+		const [p] = start();
+		assert(p.hasAbility('infiltrator'));
+		assert.equal(p.getAbility().onModifyMove, battle.dex.abilities.get('infiltrator').onModifyMove);
+	});
  it('first damaging Poison move poisons once; subsequent moves cannot reuse the charge',()=>{const[p,t]=start();hit(p,t);assert.equal(t.status,'psn');assert(p.volatiles.creepingbloomspent);t.cureStatus();hit(p,t);assert.equal(t.status,'');});
  for(const mode of ['doubles','ffa'])it('one spread move poisons every damaged foe but never allies in '+mode,()=>{const[p,t]=start(mode);hit(p,t,'sludgewave');for(const foe of p.foes())assert.equal(foe.status,'psn');for(const ally of p.allies())assert.equal(ally.status,'');for(const foe of p.foes())foe.cureStatus();hit(p,t,'sludgewave');for(const foe of p.foes())assert.equal(foe.status,'');});
  it('miss, Protect and damage immunity do not spend the charge',()=>{const[p,t]=start();hit(p,t,'sludgebomb',{accuracy:0});assert(!p.volatiles.creepingbloomspent);t.addVolatile('protect',t);hit(p,t);assert(!p.volatiles.creepingbloomspent);t.removeVolatile('protect');t.setType('Steel');hit(p,t);assert(!p.volatiles.creepingbloomspent);t.setType('Psychic');hit(p,t);assert.equal(t.status,'psn');});

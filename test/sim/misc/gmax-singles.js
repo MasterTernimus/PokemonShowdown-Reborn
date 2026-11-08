@@ -30,7 +30,9 @@ describe('G-Max field Singles option', function () {
 			{species: 'Blastoise', moves: ['splash']},
 		]]);
 		battle.makeChoices('team 1', 'team 1');
-		battle.makeChoices('move flamethrower dynamax', 'move splash');
+		assert.cantMove(() => battle.choose('p1', 'move flamethrower dynamax'));
+		assert.false(battle.p1.choice.dynamax);
+		battle.makeChoices('move flamethrower', 'move splash');
 
 		assert.false(battle.p1.active[0].volatiles.dynamax);
 		assert.species(battle.p1.active[0], 'Charizard');

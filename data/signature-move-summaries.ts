@@ -41,7 +41,7 @@ export const SignatureMoveSummaries: {[id: string]: string} = {
 	sirensveil: '+1 Def/SpD; suppresses foes; next damaging move 1.3x.',
 	sirenswrath: 'Adaptive; ignores abilities; next incoming attack deals 25% less.',
 	rocknroll: 'Lowers Defense by 1; sets Stealth Rock.',
-	dragonrend: 'Adaptive; Fairy is neutral; turns Volcanic into Dragon\'s Den.',
+	dragonrend: 'Adaptive; Fairy neutral; Den rocks; Cave/Volcanic become Dragon\'s Den.',
 	airstreamassault: 'Adaptive; clears own hazards.',
 	wisteriamaelstrom: 'Adaptive; hit boosts active Grass/Bug allies\' stronger offense.',
 	deiludicium: 'Cures user\'s major status after a hit.',

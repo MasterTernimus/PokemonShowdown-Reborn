@@ -50,7 +50,8 @@ describe('Great Marsh full Toxic Chain', () => {
 		battle.field.changeTerrain('watersurfaceterrain', p); const hp = p.hp;
 		battle.singleEvent('Residual', p.getAbility(), p.abilityState, p); assert.equal(p.hp, hp + Math.floor(p.baseMaxhp / 16));
 	});
-	it('exposes the final four components once to the calculator', () => {
-		assert.deepEqual(calculatorMetadata().abilityComponents.greatmarsh, ['Anticipation', 'Dry Skin', 'Adaptability', 'Toxic Chain']);
+	it('exposes the three selected components and separate Anticipation passive once to the calculator', () => {
+		assert.deepEqual(calculatorMetadata().abilityComponents.greatmarsh, ['Dry Skin', 'Adaptability', 'Toxic Chain']);
+		const [p] = setup(); assert.deepEqual(p.getPassives(), ['anticipation']);
 	});
 });

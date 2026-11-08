@@ -3,17 +3,26 @@ import {composeSelectedAbility} from './selected-mega-simplifications';
 import {skipPassiveComponent} from './passive-ability-cleanup';
 
 export const HitmonComponents: {[id: string]: string[]} = {
-	punchfiend: ['ironfist', 'serenegrace', 'keeneye'],
-	kickfiend: ['striker', 'limber', 'serenegrace'],
-	spinfiend: ['technician', 'vitalspirit', 'steadfast'],
+	punchfiend: ['ironfist', 'keeneye'],
+	kickfiend: ['striker', 'limber'],
+	spinfiend: ['technician', 'steadfast'],
 	checkhook: ['unseenfist', 'ironfist'],
 	springheel: ['unseenfist'],
 	cyclonerhythm: ['unseenfist'],
 };
 export const HitmonDescriptions = {
-	punchfiend: {shortDesc: 'Iron Fist + Serene Grace + Keen Eye.', desc: 'Punching moves have 1.4x power. Doubles eligible secondary-effect chances. Prevents opposing accuracy drops, ignores evasion boosts, and reveals opposing Illusions. Mirror Arena entry grants +1 accuracy and Laser Focus.'},
-	kickfiend: {shortDesc: 'Striker + Limber + Serene Grace.', desc: 'Kicking moves have 1.4x power. Prevents and cures paralysis and blocks opposing or field-induced Speed drops. Doubles eligible secondary-effect chances.'},
-	spinfiend: {shortDesc: 'Technician + Vital Spirit + Steadfast.', desc: 'Moves with effective power of 60 or less gain 50% power (80 or less on Factory Field). Prevents sleep and Yawn; Fighting attacks use 1.3x Attack or Sp. Atk. Flinching raises Speed by 1; entering Electric Terrain also raises Speed by 1.'},
+	punchfiend: {
+		shortDesc: 'Iron Fist + Keen Eye.',
+		desc: 'Punching moves have 1.4x power. Prevents opposing accuracy drops, ignores evasion boosts, and reveals opposing Illusions. Mirror Arena entry grants +1 accuracy and Laser Focus.',
+	},
+	kickfiend: {
+		shortDesc: 'Striker + Limber.',
+		desc: 'Kicking moves have 1.4x power. Prevents and cures paralysis and blocks opposing or field-induced Speed drops.',
+	},
+	spinfiend: {
+		shortDesc: 'Technician + Steadfast.',
+		desc: 'Moves with effective power of 60 or less gain 50% power (80 or less on Factory Field). Flinching raises Speed by 1; entering Electric Terrain also raises Speed by 1.',
+	},
 	checkhook: {shortDesc: 'Unseen Fist; 50% pre-hit Sucker Punch counter if known, at double PP.', desc: 'Contact moves pierce protection at 1/4 damage, except Max Guard; punches have 1.4x power. Before an opposing damaging attack hits, has a fixed 50% chance to counter with Sucker Punch if it is in the moveset. Costs double its usual PP, including Pressure, and requires the full cost. Uses no normal action. Rolls once per attack; Serene Grace does not affect the chance. Priority blockers apply; counters cannot chain. A KO stops the incoming attack.'},
 	springheel: {shortDesc: 'Unseen Fist; kicks ignore positive defensive stages and cause no crash damage.', desc: 'Contact moves pierce protection at 1/4 damage, except Max Guard. Kicking moves ignore positive defensive stat stages and cause no crash damage. Accuracy checks and defensive screens still apply.'},
 	cyclonerhythm: {shortDesc: 'Unseen Fist; listed spin attacks gain 20% power and grant +1 Defense on a hit.', desc: 'Contact moves pierce protection at 1/4 damage, except Max Guard. Rapid Spin, Mortal Spin, Ice Spinner, Gyro Ball, and Triple Axel gain 20% power. Damaging an opponent or its Substitute with one grants +1 Defense once per attack, regardless of hits or targets.'},

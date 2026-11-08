@@ -104,14 +104,15 @@ describe(`Pressure`, function () {
 		assert.equal(move.pp, move.maxpp - 4, `Imprison should lose 3 additional PP from Pressure`);
 	});
 
-	common.itGen(8, `should deduct additional PP from Max Moves`, function () {
-		battle = common.gen(8).createBattle([[
-			{species: 'wynaut', moves: ['darkpulse']},
-		], [
-			{species: 'absol', ability: 'pressure', moves: ['sleeptalk']},
-		]]);
-		battle.makeChoices('move darkpulse dynamax', 'auto');
-		const move = battle.p1.active[0].getMoveData(Dex.moves.get('darkpulse'));
+	it('deducts additional PP from a supported G-Max signature move', () => {
+		battle = common.createBattle({ formatid: 'gen9mistyfieldadrienn' }, [[
+			{ species: 'Charizard', ability: 'No Ability', gigantamax: true, moves: ['ember'] },
+		], [{ species: 'Mew', ability: 'Pressure', moves: ['splash'] }]]);
+		battle.makeChoices('team 1', 'team 1');
+		battle.makeChoices('move ember dynamax', 'move splash');
+		assert.equal(battle.p1.active[0].species.id, 'charizardgmax');
+		assert(battle.log.some(line => line.includes('|G-Max Wildfire|')));
+		const move = battle.p1.active[0].getMoveData(Dex.moves.get('ember'));
 		assert.equal(move.pp, move.maxpp - 2);
 	});
 

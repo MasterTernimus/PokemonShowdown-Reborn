@@ -24,19 +24,22 @@ describe('Approved Corsola and Octillery refinements', () => {
   assert(Dex.species.getLearnsetData('corsola').learnset.flipturn.length);
   assert(Dex.species.getLearnsetData('octillery').learnset.trickroom.length);
  });
- for(const status of ['', 'brn','tox'])it('heals one third on actual switch with status '+(status||'none'),()=>{
+	for (const status of ['', 'brn', 'tox'])it('applies Regenerator and the approved status-cure healing on actual switch with status ' + (status || 'none'), () => {
   const p=setup();p.hp=1;if(status)p.setStatus(status);
   battle.makeChoices('switch 2','move splash');
-  assert.equal(p.hp,1+Math.floor(p.baseMaxhp/3));assert.equal(p.status,'');
+		assert.equal(p.hp, 1 + Math.floor(p.baseMaxhp / 3) + (status ? Math.floor(p.baseMaxhp / 8) : 0)); assert.equal(p.status, '');
  });
  it('does not change separate Natural Recovery status-dependent healing',()=>{
   const p=setup('Mew','Natural Recovery');p.hp=1;p.setStatus('brn');
   battle.makeChoices('switch 2','move splash');
-  assert.equal(p.hp,1+2*Math.floor(p.baseMaxhp/3));assert.equal(p.status,'');
+		assert.equal(p.hp, 1 + Math.floor(p.baseMaxhp / 3) + Math.floor(p.baseMaxhp / 8)); assert.equal(p.status, '');
  });
- it('boosts pulse and bullet moves only and exposes both components',()=>{
+	it('boosts pulse and bullet moves while Suction Cups remains its passive', () => {
   const p=setup('Octillery','Anchored Battery');const foe=battle.p2.active[0];
-  assert(p.hasAbility('Mega Launcher'));assert(p.hasAbility('Suction Cups'));
+		assert(p.hasAbility('Mega Launcher'));
+		assert(!p.hasAbility('Suction Cups'));
+		assert(p.hasAbilityOrPassive('Suction Cups'));
+		assert.deepEqual(p.getPassives(), ['suctioncups']);
   for(const [id,expected] of [['waterpulse',150],['octazooka',150],['armorcannon',150],['surf',100]]){
    const m=battle.dex.getActiveMove(id);assert.equal(battle.runEvent('BasePower',p,foe,m,100),expected);
   }

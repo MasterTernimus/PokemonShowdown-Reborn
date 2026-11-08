@@ -64,17 +64,5 @@ export function installFireEmblemSignatures(abilities: AbilityDataTable) {
   onModifyDamage(damage, source, target, move) {
    if (move.category === 'Physical' && target.hasType('Dragon')) return this.chainModify([5325, 4096]);
   },
-  onSourceDamagingHit(damage, target, source, move) {
-   if (damage > 0 && !target.isAlly(source) && target.getMoveHitData(move).crit && source.m.burningQuakeTurn !== this.turn) {
-    this.effectState.criticalMove = move;
-   }
-  },
-  onAfterMove(source, target, move) {
-   if (this.effectState.criticalMove !== move) return;
-   delete this.effectState.criticalMove;
-   if (!source.hp || source.m.burningQuakeTurn === this.turn) return;
-   source.m.burningQuakeTurn = this.turn;
-   this.boost({spe: 1}, source, source, this.effect);
-  },
  };
 }

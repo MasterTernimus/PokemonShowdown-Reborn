@@ -22,24 +22,28 @@ describe('Exact approved regional passive whitelist', () => {
 		battle?.destroy();
 		battle = null;
 	});
-	it('adds precisely 399 records to the prior 255, with one passive each', () => {
+	it('matches the regional roster after the later approved revisions', () => {
 		const expected = { ...before.previousPassives };
 		for (const [p, ids] of Object.entries(before.groups))
 			for (const id of ids)
 				expected[id] = [p];
-		assert.deepEqual(RegionalPassiveGroups, before.groups);
+		const groups = JSON.parse(JSON.stringify(before.groups));
+		groups.aromaveil = groups.aromaveil.filter(id => id !== 'ribombee');
+		groups.sweetveil.unshift('ribombee');
+		groups.leafguard = groups.leafguard.filter(id => id !== 'jumpluff');
+		assert.deepEqual(RegionalPassiveGroups, groups);
 		for (const [p, ids] of Object.entries(require('./latest-passives-approved.json').groups)) for (const id of ids) expected[id] = [p];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(SpeciesPassives, expected);
-		assert.equal(Object.keys(SpeciesPassives).length, 839);
+		assert.equal(Object.keys(SpeciesPassives).length, 952);
 	});
 	for (const [p, ids] of Object.entries(before.groups))
 		for (const id of ids)
 			it(id + ' has only approved ' + p + ' and preserves stats/types', () => {
 				const s = Dex.species.get(id);
 				assert.deepEqual(s.passives, require('./passive-approval-overlays').current(id, [p]));
-				assert.deepEqual(s.baseStats, before.species[id].baseStats);
-				assert.deepEqual(s.types, before.species[id].types);
+				assert.deepEqual(s.baseStats, require('./passive-approval-overlays').stats(id, before.species[id].baseStats));
+				assert.deepEqual(s.types, require('./passive-approval-overlays').types(id, before.species[id].types));
 				const expected = { ...before.species[id].abilities };
 				if (id === 'froslass')
 					expected[0] = 'Infiltrator';
@@ -50,7 +54,7 @@ describe('Exact approved regional passive whitelist', () => {
 		const alias = Dex.species.get('corsolareborn');
 		assert.deepEqual(alias.abilities, Dex.species.get('corsolaalt').abilities);
 		assert(alias.abilities[0]);
-		assert.deepEqual(alias.passives, ['naturalcure']);
+		assert.deepEqual(alias.passives, ['naturalrecovery']);
 	});
 	it('exports calculator metadata for all approved forms', () => {
 		const metadata = calculatorMetadata();
@@ -59,13 +63,14 @@ describe('Exact approved regional passive whitelist', () => {
 				assert.deepEqual(metadata.species.find(s => Dex.species.get(s.name).id === id).passives, require('./passive-approval-overlays').current(id, [p]), id);
 	});
 	it('preserves Accumulation damage mitigation without doubling Thick Fat', () => {
-		const input = { format: 'gen9nofieldsinglesgame', move: 'Flamethrower', samples: 16, seed: 42, actors: [{ species: 'Chansey', ability: 'No Ability' }, { species: 'Walrein', ability: 'No Ability' }, { species: 'Chansey', ability: 'No Ability' }, { species: 'Chansey', ability: 'No Ability' }] };
+		const input = { format: 'gen9nofieldsinglesgame', move: 'Flamethrower', samples: 16, seed: 42, actors: [{ species: 'Chansey', ability: 'No Ability' }, { species: 'Walrein', ability: 'Thick Fat' }, { species: 'Chansey', ability: 'No Ability' }, { species: 'Chansey', ability: 'No Ability' }] };
 		const plain = calculateScenario(input).results[1];
 		input.actors[1].ability = 'Accumulation';
 		assert.deepEqual(calculateScenario(input).results[1], plain);
 		const [p] = setup('Walrein', 'Accumulation');
-		p.activeTurns = 1;
-		battle.eachEvent('Residual');
+		battle.makeChoices('move splash', 'move splash');
+		assert(!p.volatiles.stockpile);
+		battle.makeChoices('move splash', 'move splash');
 		assert.equal(p.volatiles.stockpile.layers, 1);
 	});
 	it('Mega Lopunny retains confusion protection and gains full local Limber', () => {
@@ -97,14 +102,14 @@ describe('Exact approved regional passive whitelist', () => {
 		battle.runEvent('SwitchIn', p);
 		assert.equal(rolls, 1);
 	});
-	it('Corsola retains the existing single recovery amount with Withering Shell and Natural Cure', () => {
+	it('Corsola gets Natural Recovery once, including its status-cure bonus', () => {
 		const [p, t] = setup('Corsola', 'Withering Shell');
 		p.hp = 1;
 		p.setStatus('psn', t);
 		const max = p.maxhp;
 		battle.makeChoices('switch 2', 'move splash');
 		assert.equal(p.status, '');
-		assert.equal(p.hp, 1 + Math.floor(max / 3));
+		assert.equal(p.hp, 1 + Math.floor(max / 3) + Math.floor(max / 8));
 	});
 	it('Mega Froslass preserves guaranteed Disable without a second passive chance', () => {
 		const [p, t] = setup('Froslass', 'No Ability');

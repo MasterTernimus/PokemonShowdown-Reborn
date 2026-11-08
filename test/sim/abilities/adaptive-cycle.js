@@ -23,6 +23,45 @@ describe('Adaptive Cycle', () => {
 		assert(A.adaptiveAnalyzed(p, foe));
 	}
 
+	it('removes Conversion from Kecleon while retaining Conversion 2', () => {
+		const moves = Dex.species.getLearnsetData('kecleon').learnset;
+		assert(!moves.conversion);
+		assert(moves.conversion2);
+		const set = { species: 'Kecleon', ability: 'Adaptive Cycle', moves: ['Conversion'], nature: 'Serious' };
+		const result = new TeamValidator('gen9nofieldsinglesgame@@@Obtainable Abilities,Obtainable Moves').validateTeam([set]);
+		assert(result && result.some(line => /Conversion/.test(line)), JSON.stringify(result));
+	});
+	it('does not erase offensive boosts from Z-Moves against fully adapted Kecleon', () => {
+		setup(); analyzed();
+		battle.randomizer = damage => damage;
+		const attack = () => Object.assign(Dex.getActiveMove('infernooverdrive'), { category: 'Special', basePower: 100, willCrit: false });
+		const neutral = battle.actions.getDamage(foe, p, attack());
+		foe.boosts.spa = 2;
+		const boosted = battle.actions.getDamage(foe, p, attack());
+		assert(boosted > neutral * 1.8, boosted + ' vs ' + neutral);
+	});
+
+	for (const [category, offense, defense] of [['Physical', 'atk', 'def'], ['Special', 'spa', 'spd']]) {
+		it('Z-Moves bypass Kecleon ' + defense + ' boosts but retain attacker penalties', () => {
+			setup(); analyzed();
+			battle.randomizer = damage => damage;
+			const attack = () => Object.assign(Dex.getActiveMove('infernooverdrive'), { category, basePower: 100, willCrit: false });
+			const damage = () => battle.actions.getDamage(foe, p, attack());
+			const baseline = damage();
+			p.boosts[defense] = 6;
+			assert.equal(damage(), baseline, 'positive defense stages must be ignored');
+			foe.boosts[offense] = -2;
+			assert(damage() < baseline, 'attacker penalties still apply');
+			foe.boosts[offense] = 0;
+			p.boosts[defense] = -2;
+			assert(damage() > baseline, 'defensive drops still apply');
+			p.boosts[defense] = 0;
+			p.setAbility('No Ability');
+			const ordinary = damage();
+			p.boosts[defense] = 6;
+			assert(damage() < ordinary, 'other Kecleon abilities keep ordinary defensive stages');
+		});
+	}
 	for (const weather of ['', 'raindance', 'primordialsea']) it('takes the full Fire Z-Move through Protect: '+(weather || 'clear'),()=>{
 		setup();
 		battle.randomizer = damage => damage;

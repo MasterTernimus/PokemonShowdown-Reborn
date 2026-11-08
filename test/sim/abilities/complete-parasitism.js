@@ -63,11 +63,12 @@ describe('Mega Parasect and Complete Parasitism', () => {
 			lethal(pokemon);
 		});
 	}
-	it('retains Filter and Self Repair alongside Parasitism', () => {
+	it('retains Self Repair and its native Mycelial Bond without Filter', () => {
 		const pokemon = setup();
 		battle.makeChoices('move splash mega', 'move splash');
-		assert(pokemon.hasAbility('parasitism'));
-		assert(pokemon.hasAbility('filter'));
+		assert(!pokemon.hasAbility('parasitism'));
+		assert(!pokemon.hasAbility('filter'));
+		assert.deepEqual(pokemon.getPassives(), ['mycelialbond']);
 		assert(pokemon.hasAbility('selfrepair'));
 		pokemon.sethp(100);
 		const hp = pokemon.hp;
@@ -75,7 +76,7 @@ describe('Mega Parasect and Complete Parasitism', () => {
 		assert.equal(pokemon.hp - hp, Math.floor(pokemon.baseMaxhp / 16));
 		const move = battle.dex.getActiveMove('shadowball');
 		pokemon.getMoveHitData(move).typeMod = 1;
-		assert.equal(battle.runEvent('ModifyDamage', battle.p2.active[0], pokemon, move, 100), 60);
+		assert.equal(battle.runEvent('ModifyDamage', battle.p2.active[0], pokemon, move, 100), 100);
 	});
 	it('keeps the old host name as an alias', () => {
 		setup();

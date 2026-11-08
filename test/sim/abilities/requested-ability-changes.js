@@ -21,7 +21,7 @@ describe('Requested ability changes', () => {
 			['Typhlosion-Hisui', 'H', 'Wraith Procession'],
 			['Politoed', '0', 'Zen'],
 			['Politoed', 'H', 'Storm Song'],
-			['Espeon', '1', 'Astral Ward'],
+			['Espeon', '1', 'Remembered Step'],
 			['Espeon', 'H', 'Psychic Surge'],
 			['Umbreon', '1', 'Lunar Ward'],
 			['Umbreon', 'H', 'Dark Aura'],
@@ -184,16 +184,20 @@ describe('Requested ability changes', () => {
 		assert.equal(battle.runEvent('ModifyCritRatio', holder, foe, tackle, 0), 0);
 	});
 
-	it('uses five turns for both Mega domain faint effects', () => {
+	it('uses the revised Mega domain farewell gifts without creating fields', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Tyrantrum-Mega', ability: 'Tyrant Domain', moves: ['splash']}],
+			[{ species: 'Tyrantrum-Mega', ability: 'Tyrant Domain', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.p1.active[0].faint();
 		battle.faintMessages();
-		assert.equal(battle.field.terrain, 'dragonsdenterrain');
-		assert.equal(battle.field.terrainState.duration, 5);
+		assert.equal(battle.field.terrain, '');
+		const replacement = battle.p1.pokemon[1];
+		battle.actions.switchIn(replacement, 0);
+		battle.actions.runSwitch(replacement);
+		assert.equal(battle.p1.active[0].boosts.atk, 1);
+		assert(!battle.p1.slotConditions[0].tyrantlegacy);
 		battle.destroy();
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
 			[{species: 'Aurorus-Mega', ability: 'Aurora Domain', moves: ['splash']}],
@@ -204,8 +208,7 @@ describe('Requested ability changes', () => {
 		assert.equal(aurorus.side.sideConditions.auroraveil, undefined);
 		aurorus.faint();
 		battle.faintMessages();
-		assert.equal(battle.field.terrain, 'fairytaleterrain');
-		assert.equal(battle.field.terrainState.duration, 5);
+		assert.equal(battle.field.terrain, '');
 		assert.equal(aurorus.side.sideConditions.auroraveil.duration, 5);
 	});
 });

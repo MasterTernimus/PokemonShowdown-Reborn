@@ -10,6 +10,7 @@ approved.exact.siegelauncher = ['megalauncher', 'waterbarrage', 'overcoat'];
 approved.exact.railguncircuit = ['lightningrod'];
 approved.exact.ange = ['fairyaura'];
 approved.removed.ange = ['eternalflower', 'moldbreaker', 'magicguard'];
+approved.removed.lunarorbit = approved.removed.lunarorbit.filter(id => id !== 'serenegrace');
 approved.removed.ragingcurrent = approved.removed.ragingcurrent.filter(id => id !== 'stamina');
 let battle;
 function setup(species = 'Mew', ability = 'No Ability', doubles = false) {
@@ -207,7 +208,7 @@ describe('Individually selected Mega simplifications', () => {
 			assert.equal(battle.runEvent('Damage', p, q, move, reduced), 80);
 			const fixed = Dex.getActiveMove('seismictoss');
 			assert.equal(battle.runEvent('Damage', p, q, fixed, 100), 80);
-			assert.equal(battle.runEvent('ModifyDef', p, q, move, 300), terrain === 'coldeclipseterrain' ? 450 : 300);
+			assert.equal(battle.runEvent('ModifyDef', p, q, move, 300), 300);
 		});
 	}
 	it('Ange supplies Fairy Aura and keeps Eternal Flower as its passive', () => {

@@ -10,8 +10,18 @@ it('respects Heal Block',()=>{const[p,t]=setup();p.hp=50;p.addVolatile('healbloc
 it('respects Liquid Ooze',()=>{const[p,t]=setup('Digestive Sap',false,'Mew','Liquid Ooze');p.hp=100;hit(p,t);assert.equal(p.hp,80);});
 it('excludes substitute HP',()=>{const[p,t]=setup();p.hp=50;t.addVolatile('substitute');hit(p,t);assert.equal(p.hp,50);});
 it('does not count resisted overkill beyond actual HP',()=>{const[p,t]=setup();p.hp=50;t.hp=9;hit(p,t);assert.equal(p.hp,53);});
-it('base assignment preserves alternative slots and stats',()=>{const[p]=setup();assert.deepEqual(p.species.abilities,{0:'Chlorophyll',1:'Digestive Sap',H:'Gluttony'});assert.equal(p.species.bst,530);});
-it('Mega package preserves Accumulation and gains Digestive Sap and Liquid Ooze',()=>{const[p]=setup('Solar Trap');for(const a of ['accumulation','digestivesap','liquidooze'])assert(p.hasAbility(a));for(const a of ['innardsout','solarpower'])assert(!p.hasAbility(a));const a=b.dex.abilities.get('solartrap');for(const h of ['onResidual','onAnyAfterDamageApplied','onTryHeal','onSourceTryHeal','onSourceModifyAtk','onSourceModifySpA'])assert.equal(typeof a[h],'function');});
+	it('base assignment preserves alternative slots and stats', () => {
+		const [p] = setup();
+		assert.deepEqual(p.species.abilities, { 0: 'Chlorophyll', 1: 'Corrosion', H: 'Baited Bloom' });
+		assert.equal(p.species.bst, 530);
+	});
+	it('Mega package keeps Accumulation and Liquid Ooze without Digestive Sap', () => {
+		const [p] = setup('Solar Trap');
+		for (const a of ['accumulation', 'liquidooze'])assert(p.hasAbility(a));
+		for (const a of ['innardsout', 'solarpower', 'digestivesap'])assert(!p.hasAbility(a));
+		const a = b.dex.abilities.get('solartrap');
+		for (const h of ['onResidual', 'onSourceTryHeal', 'onSourceModifyAtk', 'onSourceModifySpA'])assert.equal(typeof a[h], 'function');
+	});
 for(const species of ['Registeel','Muk'])it('Venom Veil poisons '+species+' without defense drops',()=>{const[p,t]=setup('Venom Veil',false,species);p.moveSlots[0]={...p.moveSlots[0],id:'toxic',move:'Toxic'};b.makeChoices('move toxic','move splash');assert.equal(t.status,'tox');assert.equal(t.boosts.def,0);assert.equal(t.boosts.spd,0);assert(p.volatiles.aquaring);});
 it('Tentacruel learns Clear Smog',()=>{setup();assert(b.dex.species.getLearnsetData('tentacruel').learnset.clearsmog.includes('9M'));});
 });

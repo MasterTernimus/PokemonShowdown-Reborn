@@ -21,24 +21,29 @@ function attack(name, source, target, secondary = false) {
 }
 describe('Exact five winged bug passive forms', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
-	it('adds only four holders and extends base Butterfree without changing stats, types or moves; applies only approved support slots', () => {
+	it('retains the five approved winged bug records and support slots', () => {
 		assert.deepEqual(WingedBugPassiveForms, ['beedrill', 'beedrillmega', 'butterfree', 'butterfreemega', 'butterfreegmax']);
-		assert.equal(Object.keys(SpeciesPassives).length, 700);
+		for (const id of WingedBugPassiveForms) assert.deepEqual(SpeciesPassives[id], traits(id));
 		for (const old of require('./winged-bug-before.json')) {
 			const s = Dex.species.get(old.id); assert.deepEqual(s.passives, traits(old.id));
 			const expectedAbilities = { ...old.abilities };
 			if (old.id === 'butterfree') expectedAbilities[0] = 'Gentle Scales';
 			if (old.id === 'beedrill') expectedAbilities[0] = 'Hive Courier';
-			assert.deepEqual(s.abilities, expectedAbilities);
-			for (const k of ['types', 'baseStats', 'weightkg']) assert.deepEqual(s[k], old[k], old.id + k);
-			assert.deepEqual(Dex.species.getLearnsetData(old.id).learnset, old.learnset);
+			const reviewed = require('./passive-approval-overlays');
+			assert.deepEqual(s.abilities, reviewed.abilities(old.id, expectedAbilities));
+			assert.deepEqual(s.types, reviewed.types(old.id, old.types));
+			assert.deepEqual(s.baseStats, reviewed.stats(old.id, old.baseStats));
+			assert.equal(s.weightkg, old.weightkg);
+			const expectedLearnset = old.learnset ? { ...old.learnset } : undefined;
+			if (old.id === 'butterfree') for (const move of ['flutterscales', 'swarmsnare', 'irritation']) expectedLearnset[move] = ['9L1'];
+			assert.deepEqual(Dex.species.getLearnsetData(old.id).learnset, expectedLearnset);
 		}
 		for (const id of ['weedle', 'kakuna', 'caterpie', 'metapod']) assert.deepEqual(Dex.species.get(id).passives, []);
 		assert.deepEqual(Dex.species.get('butterfree').abilities, { '0': 'Gentle Scales', '1': 'Tinted Lens', H: 'Magic Guard' });
 	});
 	for (const id of WingedBugPassiveForms) {
         const pair = traits(id);
-		it(id + ' keeps both passives through suppression and active ability replacement', () => {
+		it(id + ' keeps its single passive through suppression and active ability replacement', () => {
 			const [p, t] = setup(id);
 			for (const state of ['normal', 'gastroacid', 'meridianseal', 'gas', 'replacement']) {
 				if (state === 'gas') t.setAbility('Neutralizing Gas');
@@ -82,15 +87,22 @@ describe('Exact five winged bug passive forms', () => {
 			t.formeChange('Chansey', null, true); assert.deepEqual(t.getPassives(), []);
 			p.illusion = battle.p1.pokemon[1]; const start = battle.log.length;
 			p.runImmunity('Ground', true); assert(!battle.log.slice(start).join('\n').includes('Levitate'));
-			assert.deepEqual(p.getPassives(), []);
+			assert.deepEqual(p.getPassives(), pair);
 		});
 	}
-	for (const id of ['spiralevolution', 'toxicevolution', 'mythicscale']) it(id + ' restores selected Shield Dust without copying passive Levitate', () => {
+	for (const id of ['toxicevolution', 'mythicscale']) it(id + ' restores selected Shield Dust without copying passive Levitate', () => {
 		const a = Dex.abilities.get(id); assert(!a.onImmunity); assert(a.onModifySecondaries);
 		const [p, t] = setup('Mew', a.name); assert.equal(p.isGrounded(), true);
 		assert(p.hasAbility('shielddust'));assert(!p.hasAbility('levitate'));
 		const hp = p.hp; attack('earthquake', t, p); assert(p.hp < hp);
 		attack('thunderbolt', t, p, true); assert.equal(p.status, '');
+	});
+	it('simplified Spiral Evolution leaves Levitate native and no longer supplies Shield Dust', () => {
+		const [p, t] = setup('Beedrill-Mega', 'Spiral Evolution');
+		assert.deepEqual(p.getPassives(), ['levitate']);
+		assert(!p.hasAbility('shielddust')); assert(!p.hasAbility('levitate'));
+		assert(p.hasAbilityOrPassive('levitate'));
+		attack('thunderbolt', t, p, true); assert.equal(p.status, 'par');
 	});
 	for (const [species, item, gimmick, expected] of [
 		['Beedrill', 'Beedrillite', 'mega', 'beedrillmega'],

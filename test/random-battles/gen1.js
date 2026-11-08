@@ -2,11 +2,12 @@
  * Tests for Gen 1 randomized formats
  */
 'use strict';
+const common = require('../common');
 
 const assert = require('../assert');
 const {testTeam} = require('./tools');
 
-describe('[Gen 1] Random Battle (slow)', () => {
+common.describeGen(1, '[Gen 1] Random Battle (slow)', () => {
 	const options = {format: 'gen1randombattle'};
 
 	const badPokemon = ['Magikarp', 'Weedle', 'Kakuna', 'Caterpie', 'Metapod'];

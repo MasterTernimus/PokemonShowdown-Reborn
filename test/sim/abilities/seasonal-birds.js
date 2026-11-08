@@ -9,6 +9,17 @@ describe('Approved seasonal Kanto birds',()=>{
  it('Summer Herald blocks Fire, heals only opposing Fire and only once each turn',()=>{const p=setup('Moltres','Summer Herald'),ally=b.p1.active[1],foe=b.p2.active[0];assert.equal(b.field.weather,'sunnyday');p.hp=100;b.actions.runMove('flamethrower',ally,ally.getLocOf(p),{externalMove:true});assert.equal(p.hp,100);b.actions.runMove('flamethrower',foe,foe.getLocOf(p));const healed=p.hp;assert.equal(healed,100+Math.floor(p.baseMaxhp/8));b.actions.runMove('flamethrower',foe,foe.getLocOf(p));assert.equal(p.hp,healed);b.turn++;b.actions.runMove('flamethrower',foe,foe.getLocOf(p));assert.equal(p.hp,healed+Math.floor(p.baseMaxhp/8));});
  it('Winter Herald protects holder and ally Speed only from opponents in effective hail/snow',()=>{const p=setup('Articuno','Winter Herald'),ally=b.p1.active[1],foe=b.p2.active[0];assert.equal(b.field.weather,'hail');for(const t of [p,ally]){b.boost({spe:-1,def:-1},t,foe,Dex.moves.get('icywind'));assert.equal(t.boosts.spe,0);assert.equal(t.boosts.def,-1);}b.boost({spe:-1},ally,p,Dex.moves.get('scaryface'));assert.equal(ally.boosts.spe,-1);b.field.clearWeather();b.boost({spe:-1},p,foe,Dex.moves.get('scaryface'));assert.equal(p.boosts.spe,-1);});
  it('passive Pressure persists under suppression and selected Pressure does not double PP',()=>{const p=setup('Zapdos','Pressure'),foe=b.p2.active[0];p.addVolatile('gastroacid');const pp=foe.moveSlots[1].pp;b.actions.runMove('flamethrower',foe,foe.getLocOf(p));assert.equal(pp-foe.moveSlots[1].pp,2);assert(p.hasAbilityOrPassive('static'));assert(p.hasAbilityOrPassive('pressure'));});
- it('Summer Pressure retains Cold Eclipse Flame Body and Pressure entry effects',()=>{const p=setup('Moltres','No Ability'),foe=b.p2.active[0];b.field.setTerrain('coldeclipseterrain',p);p.boosts.def=p.boosts.spd=0;foe.boosts.def=foe.boosts.spd=0;const pass=require('../../../dist/sim/species-passives');b.singleEvent('SwitchIn',pass.passiveEffect(b,'summerpressure'),pass.passiveState(p,'summerpressure'),p);assert.equal(p.boosts.def,1);assert.equal(p.boosts.spd,1);assert.equal(foe.boosts.def,-2);assert.equal(foe.boosts.spd,-2);});
+	it('Summer Pressure keeps Cold Eclipse Pressure debuffs without the moved Flame Body bonus', () => {
+		const p = setup('Moltres', 'No Ability'), foe = b.p2.active[0];
+		b.field.setTerrain('coldeclipseterrain', p);
+		p.boosts.def = p.boosts.spd = 0;
+		foe.boosts.def = foe.boosts.spd = 0;
+		const pass = require('../../../dist/sim/species-passives');
+		b.singleEvent('SwitchIn', pass.passiveEffect(b, 'summerpressure'), pass.passiveState(p, 'summerpressure'), p);
+		assert.equal(p.boosts.def, 0);
+		assert.equal(p.boosts.spd, 0);
+		assert.equal(foe.boosts.def, -2);
+		assert.equal(foe.boosts.spd, -2);
+	});
 });
 

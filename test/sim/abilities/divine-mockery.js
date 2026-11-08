@@ -17,7 +17,7 @@ describe('Divine Mockery', () => {
 		assert.equal(Dex.abilities.get('Hydra Breaker').id, 'divinemockery');
 	});
 
-	it('combines Hydra Bond, Mold Breaker, Sniper, and Water STAB', () => {
+	it('combines Hydra Bond and Water STAB with its separate Mold Breaker passive', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 			{ species: 'Barbaracle', item: 'Barbaracite', moves: ['splash', 'waterfall'] },
 		], [
@@ -29,12 +29,16 @@ describe('Divine Mockery', () => {
 		const foe = battle.p2.active[0];
 		assert.equal(holder.species.id, 'barbaraclemega');
 		assert.equal(holder.ability, 'divinemockery');
-		assert.equal(holder.boosts.accuracy, 1);
-		for (const component of ['hydrabond', 'moldbreaker', 'sniper']) {
+		assert.equal(holder.boosts.accuracy, 0);
+		assert.deepEqual(holder.getPassives(), ['moldbreaker']);
+		assert(!holder.hasAbility('sniper'));
+		assert(!holder.hasAbility('moldbreaker'));
+		assert(holder.hasAbilityOrPassive('moldbreaker'));
+		for (const component of ['hydrabond']) {
 			assert(holder.hasAbility(component), `Missing ${component}`);
 		}
 		const waterMove = battle.dex.getActiveMove('waterfall');
-		battle.singleEvent('ModifyMove', holder.getAbility(), holder.abilityState, waterMove, holder, foe);
+		battle.runEvent('ModifyMove', holder, foe, waterMove, waterMove);
 		assert.equal(waterMove.multihit, 3);
 		assert.equal(waterMove.multihitType, 'hydrabond');
 		assert.equal(waterMove.ignoreAbility, true);
@@ -57,6 +61,6 @@ describe('Divine Mockery', () => {
 		assert(!holder.volatiles.aquaring);
 		assert.equal(holder.setStatus('brn'), true);
 		foe.getMoveHitData(waterMove).crit = true;
-		assert.equal(battle.runEvent('ModifyDamage', holder, foe, waterMove, 100), 225);
+		assert.equal(battle.runEvent('ModifyDamage', holder, foe, waterMove, 100), 100);
 	});
 });

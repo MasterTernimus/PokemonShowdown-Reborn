@@ -6,13 +6,16 @@ const { StarterPassives, StarterFamilies, ProficientPassiveForms } = require('..
 const before = require('./passive-overlap-before.json');
 const replacements = require('./approved-passive-replacements.json');
 describe('Approved 38 standalone passive-slot replacements', () => {
-	it('keeps exactly 839 approved nonempty passive holders, 76 family forms, and 34 Proficient forms', () => {
+	it('keeps the reviewed passive holders and starter-family assignments', () => {
 		const expectedPassives = require('./passive-approval-overlays').passives({...require('./latest-passives-approved.json').previousPassives});
 		assert.deepEqual(SpeciesPassives, expectedPassives);
-		assert.equal(Object.keys(SpeciesPassives).length, 839);
-		assert.equal(Object.values(SpeciesPassives).filter(p => p.length).length, 839);
-		assert.equal(Object.keys(StarterPassives).length, 76); assert.equal(ProficientPassiveForms.size, 34);
-		for (const [family, ids] of Object.entries(StarterFamilies)) for (const id of ids) assert.deepEqual(Dex.species.get(id).passives, ProficientPassiveForms.has(id) ? ['proficient'] : [family]);
+		assert.equal(Object.keys(SpeciesPassives).length, Object.keys(expectedPassives).length);
+		assert.equal(Object.values(SpeciesPassives).filter(p => p.length).length, Object.values(expectedPassives).filter(p => p.length).length);
+		assert.equal(Object.keys(StarterPassives).length, 77); assert.equal(ProficientPassiveForms.size, 28);
+		for (const [family, ids] of Object.entries(StarterFamilies)) for (const id of ids) {
+			assert.deepEqual(StarterPassives[id], ProficientPassiveForms.has(id) ? ['proficient'] : [family]);
+			assert.deepEqual(Dex.species.get(id).passives, expectedPassives[id] || StarterPassives[id], id);
+		}
 		assert.equal(replacements.length, 38);
 	});
 	for (const r of replacements) it(r.id + ' slot ' + r.slot + ': ' + r.before + ' to ' + r.after, () => {

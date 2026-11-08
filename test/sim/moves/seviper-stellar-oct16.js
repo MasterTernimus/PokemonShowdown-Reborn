@@ -3,7 +3,23 @@ const assert=require('assert').strict,common=require('../../common'),{Dex,TeamVa
 describe('October 16 explicit Seviper and mystery-type changes',()=>{
  let battle;afterEach(()=>{battle?.destroy();battle=null;});
  function setup(ability='No Ability',species='Mew'){const m={species,ability,moves:['poisontail','splash','tackle','protect']};battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[m],[{...m,species:'Mew',ability:'No Ability'}]]);battle.makeChoices();battle.randomizer=x=>x;return battle.p1.active.concat(battle.p2.active);}
- it('Poison Tail keeps power, crit, poison and flags but has no native healing',()=>{const[p,q]=setup();p.hp=50;q.hp=q.maxhp=10000;battle.actions.runMove(Object.assign(Dex.getActiveMove('poisontail'),{willCrit:false,accuracy:true}),p,p.getLocOf(q));assert.equal(p.hp,50);const m=Dex.moves.get('poisontail');assert.equal(m.drain,undefined);assert.equal(m.basePower,85);assert.equal(m.critRatio,2);assert.equal(m.secondary.chance,50);assert(m.flags.tail&&m.flags.slicing);assert(!/heal|restor/i.test(m.desc));});
+	it('Poison Tail keeps its status payoff and flags without native healing', () => {
+		const [p, q] = setup();
+		p.hp = 50;
+		q.hp = q.maxhp = 10000;
+		battle.actions.runMove(Object.assign(Dex.getActiveMove('poisontail'), { willCrit: false, accuracy: true }), p, p.getLocOf(q));
+		assert.equal(p.hp, 50);
+		const m = Dex.moves.get('poisontail');
+		assert.equal(m.drain, undefined);
+		assert.equal(m.basePower, 60);
+		assert.equal(m.basePowerCallback.call(battle, p, q, Dex.getActiveMove(m.id)), 60);
+		q.status = 'psn';
+		assert.equal(m.basePowerCallback.call(battle, p, q, Dex.getActiveMove(m.id)), 120);
+		assert.equal(m.critRatio, 1);
+		assert(!m.secondaries?.length);
+		assert(m.flags.tail && m.flags.slicing);
+		assert(!/heal|restor/i.test(m.desc));
+	});
  for(const id of ['lycanroc','lycanrocmidnight','lycanrocdusk'])it(id+' cannot learn Mighty Cleave',()=>{assert(!Dex.species.getLearnsetData(id).learnset.mightycleave);assert(TeamValidator.get('gen9nofieldsinglesgame').checkCanLearn(Dex.moves.get('mightycleave'),Dex.species.get(id)));});
  it('unrelated Mighty Cleave user retains the move',()=>assert.equal(TeamValidator.get('gen9nofieldsinglesgame').checkCanLearn(Dex.moves.get('mightycleave'),Dex.species.get('ironboulder')),null));
  for(const success of [false,true])it('Sirius delegates full local Shed Skin, activation='+success,()=>{const[p]=setup('Sirius','Seviper-Mega');p.hp=100;p.status='par';p.boosts.atk=-2;p.boosts.spe=2;p.addVolatile('confusion');p.addVolatile('healblock');battle.randomChance=()=>success;const hp=p.hp;battle.singleEvent('Residual',p.getAbility(),p.abilityState,p);assert.equal(p.hp,success?hp+Math.floor(p.maxhp/4):hp);assert.equal(p.status,success?'':'par');assert.equal(p.boosts.atk,success?0:-2);assert.equal(p.boosts.spe,2);assert.equal(!!p.volatiles.confusion,!success);assert.equal(!!p.volatiles.healblock,!success);assert.equal(p.getAbility().onResidualOrder,Dex.abilities.get('shedskin').onResidualOrder);});

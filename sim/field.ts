@@ -100,7 +100,9 @@ export class Field {
 	}
 
 	eclipseAfterMove(source: Pokemon, move: ActiveMove) {
-		if (!this.isEclipse() || source.moveThisTurnResult !== true || source.volatiles.twoturnmove ||
+		// A completed charge move retains twoturnmove until its AfterMove cleanup.
+		// Its successful result distinguishes completion from the charge-only turn.
+		if (!this.isEclipse() || source.moveThisTurnResult !== true ||
 			this.moveTransitionBlocked(source, move)) return;
 		if (this.shiftEclipseWithAura(source, move)) return;
 		if ((this.terrain === 'rifteclipseterrain' && move.id === 'seedflare') ||
@@ -193,7 +195,10 @@ export class Field {
   if (['frozenaura', 'ashenaura', 'riftaura', 'hauntedaura', 'bewitchedaura'].includes(aura.id) && this.pulseBlockadeHolder(source, sourceEffect)) return false;
   const previousSource = this.auraState.sourceEffect?.id;
 		// Forest Surge installs its companion Aura without promoting an older Grassy Aura over Forest.
-		const forestCompanion = this.terrain === 'forestterrain' && aura.id === 'grassyterrain' && sourceEffect?.id === 'forestsurge';
+		const forestCompanion = this.terrain === 'forestterrain' && aura.id === 'grassyterrain' && [
+			'forestsurge',
+			'grandrhythm',
+		].includes(sourceEffect?.id || '');
 		if (!['frozenaura', 'ashenaura', 'riftaura', 'hauntedaura', 'bewitchedaura'].includes(aura.id) && !noTerrainPromotion && !forestCompanion && this.auraField === aura.id && source && sourceEffect?.id && previousSource &&
 			!['raindance', 'sunnyday'].includes(sourceEffect.id) &&
 			sourceEffect.id !== previousSource && this.promoteAura(source, sourceEffect)) return true;
@@ -1038,7 +1043,7 @@ export class Field {
 			this.battle.add('-fieldstart', current_terrain.id === 'icyterrain' ? 'Icy Field' : current_terrain.name);
 		} else {
 			this.terrain = '';
-			this.terrainState = this.battle.initEffectState({ id: '' });
+			this.terrainState = this.battle.initEffectState({ id: '', terrainChanges: new Map<string, number>(), prevTerrain: '' });
 		}
 		this.clearDepartedWaterFieldEffects(clearedTerrain);
 		// Restored fields do not replay FieldStart, but Infernal's weather restriction remains active.
@@ -1074,7 +1079,7 @@ export class Field {
 		if (!pokemon.hp || !this.flowerGardenStage()) return;
 		// One growth per entrant, not per component of a composite ability such as Ancient Bloom.
 		if (pokemon.hasAbilityOrPassive(['drizzle', 'drought', 'flowergift', 'flowerveil', 'orichalcumpulse',
-			'megasol', 'searingpetals', 'seedsower', 'grassysurge', 'forestsurge', 'pollenbloom', 'toxicbloom', 'ancientbloom'])) {
+			'megasol', 'searingpetals', 'seedsower', 'grassysurge', 'forestsurge', 'grandrhythm', 'pollenbloom', 'toxicbloom', 'ancientbloom'])) {
 			this.growFlowerGarden(pokemon, pokemon.getAbility());
 		}
 	}

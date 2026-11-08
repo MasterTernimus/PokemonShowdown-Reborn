@@ -3,7 +3,7 @@
 export const RemainingFieldGuide: { [id: string]: { [section: string]: string[] } } = {
 	bewitchedwoodsterrain: {
 		Transitions: [
-			'Origin Pulse, Purify, Sacred Fire, Dazzling Gleam and Flash attempt to restore Forest after use, but the shared field-replacement rule currently blocks that change. Judgment also fails to trigger the attempted change. These are current implementation discrepancies, not guaranteed ways out.',
+			'Origin Pulse, Purify, Sacred Fire, Dazzling Gleam, Flash and Judgment do not restore Forest here.',
 			'Electric, Grassy, Misty, Psychic, Forest, Rainbow and Cold Eclipse cannot replace this field through ordinary field-setting or field-changing effects.',
 		],
 		'Boosts and general effects': [
@@ -20,7 +20,7 @@ export const RemainingFieldGuide: { [id: string]: { [section: string]: string[] 
 		'Battle messages': ['Evil spirits gathered!', 'Mystical aura amplified the attack!'],
 	},
 	chessboardterrain: {
-		Transitions: ['The shared field rules prevent another full field from replacing the Chessboard. It has no move-triggered exit in its own handler.'],
+		Transitions: ['The shared field rules prevent another full field from replacing the Chessboard. No move directly clears this field.'],
 		'Boosts and general effects': [
 			'In formats using Assign Roles, the first team member is a Pawn in singles; the first two are Pawns in doubles. The last member becomes Queen. Among the remaining members, a King’s Rock holder becomes King, otherwise the member with the lowest base maximum HP does. Remaining roles follow the highest stat: offense → Bishop, defense → Rook, Speed → Knight. FFA does not receive the singles/doubles Pawn assignment.',
 			'Rook and Queen gain one Defense and Special Defense stage on entry; Bishop gains one Attack and Special Attack stage. King receives +1 move priority. Queen gains 1.5× move power. Knight gains 3× power against a Queen and 1.25× for moves aimed at all adjacent foes.',
@@ -65,11 +65,11 @@ export const RemainingFieldGuide: { [id: string]: { [section: string]: string[] 
 			'Bulldoze, Earthquake, Fissure or Magnitude cracks the crystals; a second use from this group changes the field to Cave. Tectonic Rage changes it immediately. The breaking attack gains 1.3× power.',
 			'Dark Pulse, Dark Void, Night Daze or Light That Burns the Sky changes it to Dark Crystal Cavern unless ordinary sunlight is active. If ordinary sunlight created this Crystal Cavern, its ending also restores Dark Crystal Cavern.',
 		],
-		'Boosts and general effects': ['Primary Rock and Dragon attacks gain 1.5× power. Damaging Rock attacks, Multi-Attack, Rock Climb, Strength and Prismatic Laser use Rock plus the current crystal element: Fire → Water → Grass → Psychic. The cycle advances during qualifying damage events, so multi-hit attacks can advance it more than once.'],
+		'Boosts and general effects': ['Primary Rock and Dragon attacks gain 1.5× power. Damaging Rock attacks, Multi-Attack, Rock Climb, Strength and Prismatic Laser use Rock plus the current crystal element: Fire → Water → Grass → Psychic. Each qualifying hit advances the cycle; multi-hit attacks can advance it several times.'],
 		Moves: [
 			'Multi-Attack, Rock Climb, Strength and Prismatic Laser gain 1.5×. Ancient Power, Diamond Storm, Power Gem, Rock Smash and Rock Tomb gain another named 1.5× bonus.',
 			'Aurora Beam, Doom Desire, Dazzling Gleam, Flash Cannon, Mirror Beam, Luster Purge, Mirror Shot, Moongeist Beam, Photon Geyser, Signal Beam and Techno Blast gain 1.3×.',
-			'The listed Judgment crystal effect, Menacing Moonraze Maelstrom light bonus, and darkness-trigger power bonus currently contain mismatched checks and do not activate as their older notes imply. Their other ordinary effects remain.',
+			'Judgment does not gain crystal typing. Menacing Moonraze Maelstrom and darkness-triggering moves receive no extra light or darkness power bonus here.',
 		],
 		'Seeds and other effects': ['Magical Seed raises Special Attack by one stage and applies Magic Coat.'],
 		'Battle messages': ['The crystals were broken up...', 'The crystals were shattered!'],
@@ -88,22 +88,19 @@ export const RemainingFieldGuide: { [id: string]: { [section: string]: string[] 
 		'Battle messages': ['The darkness is gathering...', 'The cavern brightened!'],
 	},
 	dragonsdenterrain: {
-		Transitions: [
-			'Surf or Muddy Water adds one cooling point; Sparkling Aria adds two. At three points, the lava solidifies into Cave. Draco Meteor and Dragon Energy damage events subtract one point; Devastating Drake subtracts two. Cooling can go below zero, and multi-hit damage events can repeat the subtraction.',
-			'Glaciate, Hydro Vortex, Oceanic Operetta or Subzero Slammer changes it to Volcanic. Mist Ball changes it to Fairy Tale. If the cooling threshold is already met, the Cave change takes precedence.',
-			'Hail is removed on formation. Ordinary field-setting effects cannot replace Dragon’s Den, but its specific field-changing moves can, subject to shared locks.',
-		],
+		Transitions: ['Ordinary field setters cannot replace Dragon’s Den. Effects that prevent field changes still apply.'],
 		'Boosts and general effects': [
-			'Primary Dragon and Fire attacks gain 1.5× power, Rock attacks 1.3×, and Ice or Water attacks 0.5×. Dragon types gain 1.3× Defense. The corresponding Special Defense check uses a mismatched type name and currently does not grant its advertised bonus.',
+			'Dragon and Fire attacks gain 1.5× power. Ice and Water attacks deal half damage. Dragon-types gain 1.3× Defense and Sp. Def.',
 			'Multiscale makes a super-effective matchup against the target’s Dragon typing neutral; the other defensive type still contributes.',
 		],
 		Moves: [
+			'Dragon Rend sets Stealth Rock on the opposing side after hitting a foe, including Substitute. Protect, a miss or an immunity prevents it.',
 			'Smack Down, Thousand Arrows, Continental Crush, Tectonic Rage, Rock Climb and Earthquake add Fire typing. Strength becomes Rock/Fire.',
 			'Smack Down, Thousand Arrows, Continental Crush, Tectonic Rage, Dragon Ascent, Pay Day, Luster Purge and Mist Ball gain 2× power.',
 			'Magma Drift, Matrix Shot, Lava Plume, Magma Storm, Mega Kick, Make It Rain, Rock Climb, Strength, Diamond Storm, Power Gem, Shell Trap, Earth Power and Stomping Tantrum gain 1.5×.',
-			'The instant transition moves and Mist Ball gain 1.3×; attacks that meet the cooling threshold can also gain this modifier. Type and named bonuses stack.',
+			'Some field-changing attacks gain an extra 1.3× power. Type and named bonuses stack.',
 		],
-		'Seeds and other effects': ['Elemental Seed raises Special Attack by one stage and grants the Flash Fire power-up volatile.'],
+		'Seeds and other effects': ['Elemental Seed raises Special Attack by one stage and grants the Flash Fire power boost.'],
 		'Battle messages': ['The lava solidified!', 'If you wish to slay a dragon...'],
 	},
 	mirrorarenaterrain: {
@@ -157,7 +154,7 @@ export const RemainingFieldGuide: { [id: string]: { [section: string]: string[] 
 	snowymountainterrain: {
 		Transitions: [
 			'Eruption, Fire Pledge, Flame Burst, Heat Wave, Incinerate, Lava Plume, Mind Blown, Searing Shot, Inferno Overdrive or a Fire-type Max move melts it into Mountain. Infernal Rage does so only when its own field-clearing condition succeeded.',
-			'The ordinary sunlight counter currently requests Snowy Mountain again instead of Mountain, so it does not melt the field as older notes may suggest.',
+			'Ordinary sunlight does not melt this field into Mountain.',
 		],
 		'Boosts and general effects': ['Primary Rock, Ice and Flying attacks gain 1.5× power; Fire attacks have 0.5×. Rock attacks add Ice typing.'],
 		Moves: [
@@ -169,7 +166,7 @@ export const RemainingFieldGuide: { [id: string]: { [section: string]: string[] 
 		'Battle messages': ['The snow melted away!', 'The snow glows white on the mountain...'],
 	},
 	starlightarenaterrain: {
-		Transitions: ['Gravity, Geomancy or Light of Ruin changes New World into Starlight Arena. Successful Geomancy or Light of Ruin changes Cold Eclipse into permanent Starlight Arena. This field’s own handler has no move-triggered exit.'],
+		Transitions: ['Gravity, Geomancy or Light of Ruin changes New World into Starlight Arena. Successful Geomancy or Light of Ruin changes Cold Eclipse into permanent Starlight Arena. No move directly clears this field.'],
 		'Boosts and general effects': ['With no weather present, primary Dark and Psychic attacks gain 1.5× power and Fairy attacks 1.3×; Nostra’s Wish instead gets a 2× Fairy modifier. Dark moves add Fairy typing even when weather disables the power bonuses.'],
 		Moves: [
 			'With no weather: Doom Desire gains 4× power. Aurora Beam, Signal Beam, Flash Cannon, Luster Purge, Dazzling Gleam, Mirror Shot, Techno Blast, Solar Beam, Photon Geyser, Moonblast, Meteor Beam and Mirror Beam gain 1.5×.',
@@ -194,7 +191,7 @@ export const RemainingFieldGuide: { [id: string]: { [section: string]: string[] 
 	superheatedterrain: {
 		Transitions: [
 			'Eruption, Explosion, Fire Pledge, Flame Burst, Heat Wave, Incinerate, Lava Plume, Mind Blown, Searing Shot, Self-Destruct or Inferno Overdrive changes it to Burning unless Water Sport is active. Infernal Rage requires its own successful field-clearing condition. Fire-type Max moves also change it and bypass that Water Sport check.',
-			'The intended rain blocker uses a mismatched weather name here, so ordinary rain does not currently block this transition. Blizzard, Glaciate or Subzero Slammer clears the field. Hail and snow are removed at turn end.',
+			'Ordinary rain does not prevent this change. Blizzard, Glaciate or Subzero Slammer clears the field. Hail and snow are removed at turn end.',
 		],
 		'Boosts and general effects': ['Fire attacks gain 1.1× power; Ice attacks have 0.5×. Most Water attacks have 0.9×, with the specific steam exceptions below.'],
 		Moves: [
@@ -218,15 +215,15 @@ export const RemainingFieldGuide: { [id: string]: { [section: string]: string[] 
 		Moves: [
 			'Clear Smog and Smog gain 2× power and add Fire typing. Smack Down, Thousand Arrows and Rock Slide gain 1.5× and add Fire. Infernal Parade and Ethereal Tempest gain 1.5×.',
 			'The Cave-changing Z-Moves gain 1.3×, as do the ordinary Cave-changing moves once that counter is already primed. Dragon Pulse and Dragon Energy gain 1.3×; the immediate Dragon-changing moves gain that modifier when the Dragon counter is primed.',
-			'The Burn Up residual handler restores a typeless slot to Fire after using Burn Up.',
+			'Burn Up users regain Fire typing at turn end if they became typeless.',
 		],
 		Abilities: ['Blazing Mane grants one Speed stage when the field starts and when its holder enters.'],
 		'Seeds and other effects': ['Elemental Seed raises Attack, Special Attack and Speed by one stage, then uses Fire Spin on its holder.'],
 		'Battle messages': ['Draconic energy seeps in...', 'The draconic energy mutated the field'],
 	},
 	wastelandterrain: {
-		Transitions: ['When set through its duration callback, Wasteland lasts five turns from an ability or three from another effect; Amplifield Rock adds three. Its own handler has no move-triggered exit. Format-defined permanent fields follow their format setup.'],
-		'Boosts and general effects': ['Recorded hazards erupt during residual processing rather than behaving only as ordinary entry hazards. Grounded targets outside a semi-invulnerable turn take 1/3 base maximum HP from Spikes. Toxic Spikes attempts poison and deals 1/8 to grounded non-Poison/non-Steel targets. Sticky Web attempts a four-stage Speed drop even against airborne targets. Stealth Rock deals Rock-effectiveness-scaled damage based on 1/4 maximum HP, including to airborne targets. Semi-invulnerable targets avoid these eruptions; normal protections still apply.'],
+		Transitions: ['Wasteland normally lasts 5 turns when created by an ability or 3 turns otherwise; Amplifield Rock adds 3. No move directly clears it. A battle’s starting field may be permanent.'],
+		'Boosts and general effects': ['Recorded hazards erupt at turn end rather than behaving only as ordinary entry hazards. Grounded targets outside a semi-invulnerable turn take 1/3 base maximum HP from Spikes. Toxic Spikes attempts poison and deals 1/8 to grounded non-Poison/non-Steel targets. Sticky Web attempts a four-stage Speed drop even against airborne targets. Stealth Rock deals Rock-effectiveness-scaled damage based on 1/4 maximum HP, including to airborne targets. Semi-invulnerable targets avoid these eruptions; normal protections still apply.'],
 		Moves: [
 			'Mud Bomb, Mud Shot and Mud Barrage add Poison typing. These moves, Power Whip and Vine Whip gain 1.5× power. Gunk Shot, Octazooka, Sludge, Sludge Bomb and Sludge Wave gain 1.2×. Bulldoze, Earthquake and Magnitude have 0.25×. Spit Up gains 2×.',
 			'The field’s status guard prevents the listed sludge/Octazooka/Acid Downpour effects and Corrosion users from applying status to Poison or Steel types or holders of Immunity, Toxic Boost or Poison Heal. It does not grant a general ability to poison those targets.',

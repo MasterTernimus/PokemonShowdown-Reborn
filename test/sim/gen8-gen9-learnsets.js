@@ -17,7 +17,7 @@ describe('Gen 8/9 and regional learnsets', function () {
 				'nastyplot', 'nightshade', 'painsplit', 'payback', 'phantomforce', 'poltergeist', 'protect',
 				'psybeam', 'psychic', 'psyshock', 'reflect', 'rest', 'round', 'selfdestruct', 'shadowball',
 				'shellsmash', 'skillswap', 'sleeptalk', 'snore', 'spite', 'storedpower', 'strengthsap',
-				'substitute', 'suckerpunch', 'sweetscent', 'teatime', 'terablast', 'trick', 'trickroom',
+				'substitute', 'suckerpunch', 'sweetscent', 'teatime', 'trick', 'trickroom',
 				'willowisp', 'withdraw', 'wonderroom',
 			],
 			tandemaus: ['celebrate'],
@@ -27,7 +27,7 @@ describe('Gen 8/9 and regional learnsets', function () {
 				'batonpass', 'chillingwater', 'counter', 'dragoncheer', 'dragondance', 'dragonpulse', 'endure',
 				'facade', 'gigaimpact', 'harden', 'hydropump', 'hyperbeam', 'icywind', 'lunge', 'memento',
 				'mirrorcoat', 'nastyplot', 'outrage', 'protect', 'raindance', 'rapidspin', 'rest', 'sleeptalk',
-				'soak', 'splash', 'substitute', 'surf', 'takedown', 'taunt', 'terablast', 'watergun',
+				'soak', 'splash', 'substitute', 'surf', 'takedown', 'taunt', 'watergun',
 				'waterpulse', 'whirlpool',
 			],
 			annihilape: ['helpinghand'],
@@ -36,6 +36,7 @@ describe('Gen 8/9 and regional learnsets', function () {
 
 		for (const [species, moves] of Object.entries(expected)) {
 			const learnset = Dex.species.getLearnsetData(species).learnset;
+			assert(!learnset.terablast, `${species} should retain the global Tera Blast removal`);
 			for (const move of moves) assert(learnset[move], `${species} should learn ${move}`);
 		}
 	});

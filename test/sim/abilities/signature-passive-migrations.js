@@ -3,7 +3,7 @@
 const assert = require('assert').strict, common = require('../../common');
 const { Dex } = require('../../../dist/sim');
 const { passiveEffect, passiveState } = require('../../../dist/sim/species-passives');
-const grants = { slowkinggalar: 'eldritchremedy', mrmime: 'mimecraft', raichu: 'chargedtail', fearow: 'lancepoint', kingler: 'titanpincer', cloyster: 'pearlcurrent', garganacl: 'saltbastion' };
+const grants = { slowkinggalar: 'eldritchremedy', mrmime: 'mimecraft', raichu: 'chargedtail', fearow: 'lancepoint', kingler: 'titanpincer', cloyster: 'waterabsorb', garganacl: 'saltbastion' };
 let battle;
 function setup(species, ability = 'No Ability', doubles = false) {
 	const set = (species = 'Mew', ability = 'No Ability') => ({ species, ability, moves: ['splash', 'reflect', 'tackle', 'eeriespell'] });
@@ -89,13 +89,24 @@ describe('Approved native signature passive migrations', () => {
 		}
 		battle.boost({ atk: -1 }, p, q, Dex.moves.get('growl')); assert.equal(p.boosts.atk, ability === 'Hyper Cutter' ? 0 : -1);
 	});
-	for (const ability of ['Shell Armor', 'Pearl Current', 'Water Absorb']) it('Pearl Current absorbs once, retains its ally budget and underwater recovery with ' + ability, () => {
+	for (const ability of ['Shell Armor', 'Pearl Current', 'Water Absorb']) it('Cloyster Water Absorb stays passive while selected Pearl Current owns ally recovery: ' + ability, () => {
 		const [p, q] = setup('Cloyster', ability, true), ally = battle.p1.active[1]; p.hp = ally.hp = 1000; p.addVolatile('gastroacid');
-		hit(q, p, 'watergun'); assert.equal(p.hp, 2000); assert.equal(ally.hp, 1500);
+		hit(q, p, 'watergun'); assert.equal(p.hp, 2000); assert.equal(ally.hp, 1000);
 		p.removeVolatile('gastroacid'); p.setAbility('No Ability'); p.setAbility(ability); p.hp = 1000;
-		hit(q, p, 'watergun'); assert.equal(p.hp, 2000); assert.equal(ally.hp, 1500);
+		hit(q, p, 'watergun'); assert.equal(p.hp, 2000); assert.equal(ally.hp, ability === 'Pearl Current' ? 1500 : 1000);
 		battle.field.terrain = 'underwaterterrain'; battle.runEvent('Residual', p); assert.equal(p.hp, 2250);
 		assert(p.hasAbilityOrPassive('waterabsorb'));
+	});
+	for (const shield of [false, true]) it('copied Pearl Current respects absorption bypass with Ability Shield=' + shield, () => {
+		const [p, q] = setup('Cloyster', 'Pearl Current', true), ally = battle.p1.active[1];
+		p.hp = ally.hp = 1000; q.setAbility('Mold Breaker');
+		if (shield) p.setItem('Ability Shield');
+		hit(q, p, 'watergun');
+		if (!shield) { assert(p.hp < 1000); assert.equal(ally.hp, 1000); assert(!p.m.pearlCurrentUsed); } else {
+			assert.equal(p.hp, 2000); assert.equal(ally.hp, 1500);
+			p.hp = p.maxhp; hit(q, p, 'watergun');
+			assert.equal(p.hp, 4000); assert.equal(ally.hp, 1500);
+		}
 	});
 	for (const ability of ['Inner Focus', 'Salt Bastion', 'Sturdy']) it('Salt Bastion supplies one actual Sturdy save and Safeguard with ' + ability, () => {
 		const [p, q] = setup('Garganacl', ability); p.addVolatile('gastroacid'); hit(q, p, 'tackle', { damage: 5000 });
@@ -103,10 +114,10 @@ describe('Approved native signature passive migrations', () => {
 		assert.equal(battle.log.filter(line => line.includes('|-activate|') && line.includes('passive: Salt Bastion')).length, 1);
 		assert(p.hasAbilityOrPassive('sturdy'));
 	});
-	it('Salt Bastion does not reward ordinary damage or blocked OHKO, and Mold Breaker bypasses it', () => {
+	it('Salt Bastion treats reworked Fissure as damage and Mold Breaker bypasses its full-HP save', () => {
 		const [p, q] = setup('Garganacl', 'Inner Focus'); hit(q, p, 'tackle', { damage: 100 }); assert(!p.side.sideConditions.safeguard);
-		p.hp = p.maxhp; hit(q, p, 'fissure'); assert.equal(p.hp, 4000); assert(!p.side.sideConditions.safeguard);
-		q.setAbility('Mold Breaker'); hit(q, p, 'tackle', { damage: 5000 }); assert.equal(p.hp, 0); assert(!p.side.sideConditions.safeguard);
+		p.hp = p.maxhp; assert(!Dex.moves.get('fissure').ohko); hit(q, p, 'fissure'); assert(p.hp > 1 && p.hp < 4000); assert(!p.side.sideConditions.safeguard);
+		p.hp = p.maxhp; q.setAbility('Mold Breaker'); hit(q, p, 'tackle', { damage: 5000 }); assert.equal(p.hp, 0); assert(!p.side.sideConditions.safeguard);
 	});
 	it('a nonrecipient still uses a copied signature normally', () => {
 		const [p, q] = setup('Mew', 'Lance Point'); const move = Dex.getActiveMove('drillpeck');

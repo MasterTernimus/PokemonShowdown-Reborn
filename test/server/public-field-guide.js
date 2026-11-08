@@ -12,7 +12,7 @@ describe('Public Field Guide', () => {
 		assert.equal(g.coverage.exhaustive, false);
 		for (const e of g.entries.filter(e => e.kind === 'field')) {
 			assert(Object.keys(e.sections).length >= 3, e.id);
-			assert.match(e.review, /Source-reviewed/);
+			assert.match(e.review, /Field effects/);
 			assert.equal(e.legacyNotes.length, 0);
 		} const n = g.entries.find(e => e.id === 'newworldterrain');
 		assert(!JSON.stringify(n.sections).match(/Void Crossing|voidcrossing/));
@@ -160,3 +160,16 @@ describe('Field message trigger explanations', () => {
    const magic=JSON.stringify(entries.find(e=>e.id==='magicroom').sections);assert(magic.includes('Arenite Wall'));assert(magic.includes('Atlantis Wall'));
   });
  });
+
+describe('Player-facing Field Notes', () => {
+	it('keeps programming terms out of all field effects and interaction notes', () => {
+		for (const entry of publicFieldGuide().entries) {
+			const text = [entry.review, ...Object.values(entry.sections).flat(), ...Object.values(entry.referenceDetails || {}).flatMap(rows => rows.flatMap(row => row.fieldEffects))].join(' ');
+			assert(!/\b(handler|callback|helper|implementation|indexed|volatile|code)\b/i.test(text), entry.id);
+		}
+	});
+	it('does not expose Dragon Den cooling recipes in Field Notes', () => {
+		const sections = publicFieldGuide().entries.find(e => e.id === 'dragonsdenterrain').sections;
+		assert(!/cooling point|Surf|Muddy Water|Sparkling Aria|Glaciate|Hydro Vortex|Oceanic Operetta|Subzero Slammer/.test(Object.values(sections).flat().join(' ')));
+	});
+});

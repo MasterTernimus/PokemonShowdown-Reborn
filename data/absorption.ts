@@ -28,7 +28,10 @@ export function absorbHit(battle: Battle, target: Pokemon, source: Pokemon, move
 	for (const component of [healID, boostID]) {
 		for (const provider of providers) {
 			const id = provider.state?.speciesPassive || provider.effect.id;
-			const matches = id === target.ability ? target.hasAbility(component) : contains(id, component);
+			// A passive can share the selected ability's ID. Resolve that provider
+			// independently: hasAbility excludes components owned by the passive.
+			const matches = !provider.state?.speciesPassive && id === target.ability ?
+				target.hasAbility(component) : contains(id, component);
 			// Abyss Lure's local absorption boost is the same reward, not a second stack.
 			if (!matches && !(component === boostID && contains(id, 'abysslure'))) continue;
 			let applied = false;

@@ -2,7 +2,7 @@
 'use strict';
 const assert = require('assert').strict, common = require('../../common');
 const { Dex } = require('../../../dist/sim');
-const grants = { vikavolt: 'rechargerelay', jellicent: 'undertow', jellicentazzy: 'undertow', pinsir: 'lockinggrip', hariyama: 'palmmastery', drednaw: 'lockjaw', mudsdale: 'stamina', seismitoad: 'mirechorus' };
+const grants = { vikavolt: 'rechargerelay', jellicent: 'undertow', jellicentazzy: 'undertow', pinsir: 'lockinggrip', hariyama: 'thickfat', drednaw: 'lockjaw', mudsdale: 'stamina', seismitoad: 'mirechorus' };
 let battle;
 function setup(species, ability = 'No Ability', doubles = false) {
 	const mon = (species = 'Mew', ability = 'No Ability') => ({ species, ability, moves: ['splash', 'voltswitch', 'uturn', 'forcepalm'] });
@@ -51,12 +51,13 @@ describe('Approved custom-only signature passives', () => {
 	for (const kind of ['miss', 'protect'])it('Locking Grip preserves its allowance on ' + kind, () => {
 		const [p, q] = setup('Pinsir'); if (kind === 'protect')q.addVolatile('protect'); hit(p, q, 'bugbite', { accuracy: kind === 'miss' ? 0 : true }); assert(!p.volatiles.lockinggripspent);
 	});
-	for (const ability of ['No Ability', 'Palm Mastery', 'Thick Fat'])it('Palm Mastery supplies primary paralysis without Thick Fat with ' + ability, () => {
-		const [p, q] = setup('Hariyama', ability); p.addVolatile('gastroacid'); q.setAbility('Shield Dust'); q.setItem('Covert Cloak'); hit(p, q, 'forcepalm', { damage: 100 }); assert.equal(q.status, 'par');
-		assert.equal(battle.runEvent('SourceModifyAtk', q, p, Dex.getActiveMove('firepunch'), 100), 100);
+	for (const ability of ['No Ability', 'Palm Mastery', 'Thick Fat'])it('Hariyama retains native Thick Fat while selected Palm Mastery remains suppressible with ' + ability, () => {
+		const [p, q] = setup('Hariyama', ability); p.addVolatile('gastroacid'); q.setAbility('Shield Dust'); q.setItem('Covert Cloak'); hit(p, q, 'forcepalm', { damage: 100 }); assert.equal(q.status, '');
+		p.removeVolatile('gastroacid'); hit(p, q, 'forcepalm', { damage: 100 }); assert.equal(q.status, ability === 'Palm Mastery' ? 'par' : '');
+		assert.equal(battle.runEvent('ModifyAtk', q, p, Dex.getActiveMove('firepunch'), 100), 50);
 	});
 	it('Palm Mastery respects Electric immunity and does not change unrelated secondary chances', () => {
-		const [p, q] = setup('Hariyama'); q.setType('Electric'); hit(p, q, 'forcepalm', { damage: 100 }); assert.equal(q.status, ''); q.setType('Normal'); const move = Dex.getActiveMove('bodyslam'); battle.runEvent('ModifyMove', p, q, move, move); assert.equal(move.status, undefined); assert.equal(move.secondaries[0].chance, 30);
+		const [p, q] = setup('Hariyama', 'Palm Mastery'); q.setType('Electric'); hit(p, q, 'forcepalm', { damage: 100 }); assert.equal(q.status, ''); q.setType('Normal'); const move = Dex.getActiveMove('bodyslam'); battle.runEvent('ModifyMove', p, q, move, move); assert.equal(move.status, undefined); assert.equal(move.secondaries[0].chance, 30);
 	});
 	for (const ability of ['No Ability', 'Lockjaw', 'Strong Jaw'])it('Lockjaw adds two-turn Torment without bite power under ' + ability, () => {
 		const [p, q] = setup('Drednaw', ability); p.addVolatile('gastroacid'); assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('crunch'), 100), 100);

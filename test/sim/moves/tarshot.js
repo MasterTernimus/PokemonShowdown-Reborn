@@ -44,6 +44,7 @@ describe('Tar Shot', function () {
 			{species: 'tornadus', moves: ['sleeptalk']},
 			{species: 'thundurus', ability: 'deltastream', moves: ['sleeptalk']},
 		]]);
+		battle.onEvent('CriticalHit', battle.format, false);
 		battle.makeChoices('move tarshot 1, move fusionflare 1', 'auto');
 		const torn = battle.p2.active[0];
 		const damage = torn.maxhp - torn.hp;

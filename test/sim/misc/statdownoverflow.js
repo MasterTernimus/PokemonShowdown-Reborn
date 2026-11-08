@@ -10,7 +10,7 @@ describe('[Gen 1] Stat Drop Overflow', function () {
 		battle.destroy();
 	});
 
-	it(`SafeTwo`, function () {
+	common.itGen(1, `SafeTwo`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Mewtwo', moves: ['amnesia', 'psychic'], ivs: {'spa': 28, 'spd': 28}},
 		], [
@@ -30,7 +30,7 @@ describe('[Gen 1] Stat Drop Overflow', function () {
 		assert.false.fainted(mewtwo);
 	});
 
-	it(`Not SafeTwo`, function () {
+	common.itGen(1, `Not SafeTwo`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Mewtwo', moves: ['amnesia', 'luckychant'], evs: {'spa': 255, 'spd': 255}},
 		], [

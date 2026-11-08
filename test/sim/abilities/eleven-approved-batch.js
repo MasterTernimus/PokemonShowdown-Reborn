@@ -1,16 +1,33 @@
 'use strict';
 const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim/dex');let battle;
-const species={curiousmedicine:'Slowking-Galar',eldritchremedy:'Slowking-Galar',infernaldominion:'Charizard',hydraulicarmor:'Blastoise',hauntingpresence:'Gengar',slumberinggiant:'Snorlax',oceanlullaby:'Lapras',shadowscreen:'Greninja',voidpromise:'Clefable',voiddrift:'Flygon',voidguile:'Delphox'};
+const species = { curiousmedicine: 'Mew', eldritchremedy: 'Slowking-Galar', infernaldominion: 'Charizard', hydraulicarmor: 'Blastoise', hauntingpresence: 'Gengar', slumberinggiant: 'Snorlax', oceanlullaby: 'Lapras', shadowscreen: 'Greninja', voidpromise: 'Clefable', voiddrift: 'Flygon', voidguile: 'Delphox' };
 function start(id,mode='singles',foeAbility='No Ability'){
- const p={species:species[id],ability:id,moves:['splash','matblock','protect','wish']},t={species:'Mew',ability:foeAbility,moves:['splash','tackle']};const team=[p,{...t},{...t}],other=[t,{...t},{...t}];
+	const p = { species: species[id], ability: id === 'eldritchremedy' ? 'Own Tempo' : id, moves: ['splash', 'matblock', 'protect', 'wish'] }, t = { species: 'Mew', ability: foeAbility, moves: ['splash', 'tackle'] }; const team = [p, { ...t }, { ...t }], other = [t, { ...t }, { ...t }];
  battle=common.createBattle({formatid:mode==='ffa'?'gen9freeforall4pmistyfieldadrienn':mode==='doubles'?'gen9nofielddoublesbattle':'gen9nofieldsinglesgame'},mode==='ffa'?[team,other,other,other]:[team,other]);battle.makeChoices(...battle.sides.map(()=> 'team 123'));battle.field.terrain='';battle.randomizer=d=>d;battle.randomChance=(a,b)=>a>=b;
  for(const side of battle.sides)for(const p of side.active){p.hp=p.maxhp=p.baseMaxhp=1600;p.activeTurns=1;}
  return[battle.p1.active[0],battle.p2.active[0]];
 }
-function hit(p,t,id,extra={}){battle.clearActiveMove();const m=battle.dex.getActiveMove(id);Object.assign(m,{accuracy:true,willCrit:false},extra);p.lastMove=m;battle.actions.useMove(m,p,{target:t});const used=battle.activeMove;battle.runEvent('AfterMove',p,t,used);battle.clearActiveMove();return used;}
+function hit(p, t, id, extra = {}) {
+	battle.clearActiveMove();
+	const m = battle.dex.getActiveMove(id);
+	Object.assign(m, { accuracy: true, willCrit: false }, extra);
+	p.lastMove = m;
+	battle.actions.useMove(m, p, { target: t });
+	const used = battle.activeMove;
+	battle.runEvent('AfterMove', p, t, used);
+	battle.runEvent('AfterAttackResolved', p, t, used);
+	battle.clearActiveMove();
+	return used;
+}
 function residual(){battle.fieldEvent('Residual');}
 describe('Approved eleven-species batch',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
+	it('copied Eldritch Remedy remains suppressible away from its native passive holder', () => {
+		const [p, t] = start('eldritchremedy'); p.formeChange('Mew', null, true); p.setAbility('Eldritch Remedy');
+		assert(!p.getPassives().includes('eldritchremedy')); p.setStatus('brn', t); p.addVolatile('gastroacid', t);
+		hit(p, t, 'eeriespell', { basePower: 1 }); assert.equal(p.status, 'brn');
+		p.removeVolatile('gastroacid'); hit(p, t, 'eeriespell', { basePower: 1 }); assert.equal(p.status, '');
+	});
  it('Ocean Lullaby heals active allies once across spread and multi-hit sound attacks, never the bench',()=>{
   const[p,t]=start('oceanlullaby','doubles'),ally=p.allies()[0],bench=p.side.pokemon[2];
   p.hp=ally.hp=800;bench.hp=100;const benchHP=bench.hp;
@@ -29,22 +46,93 @@ describe('Approved eleven-species batch',()=>{
   hit(p,t,'hypervoice',{basePower:1});assert.equal(p.hp,900);for(const side of battle.sides.slice(1))assert(side.active[0].hp<=800);
  });
 
- it('sets only approved slots, including Greninja event S; leaves Garchomp pending',()=>{for(const [id,slot,name] of [['slowkinggalar','1','Eldritch Remedy'],['charizard','1','Infernal Dominion'],['blastoise','H','Hydraulic Armor'],['gengar','1','Haunting Presence'],['snorlax','1','Slumbering Giant'],['lapras','1','Ocean Lullaby'],['greninja','H','Shadow Screen'],['clefable','H','Void Promise'],['flygon','0','Void Drift'],['delphox','H','Void Guile']])assert.equal(Dex.species.get(id).abilities[slot],name);assert.deepEqual(Dex.species.get('greninja').abilities,{0:'Liquid Arsenal',1:'Protean',H:'Shadow Screen',S:'Battle Bond'});assert.equal(Dex.species.get('garchomp').abilities.H,'Void Wrath');assert.equal(Dex.species.get('greninjaash').abilities[0],'Shadow Bond');});
+	it('keeps current selectable slots separate from native passives', () => {
+		for (const [id, slot, name] of [['slowkinggalar', '1', 'Own Tempo'], ['charizard', '1', 'Infernal Dominion'], ['blastoise', 'H', 'Hydraulic Armor'], ['gengar', '1', 'Haunting Presence'], ['snorlax', '1', 'Slumbering Giant'], ['lapras', '1', 'Ocean Lullaby'], ['greninja', 'H', 'Shadow Screen'], ['clefable', 'H', 'Void Promise'], ['flygon', '0', 'Mirage Drift'], ['delphox', 'H', 'Void Guile']])assert.equal(Dex.species.get(id).abilities[slot], name);
+		assert.deepEqual(Dex.species.get('greninja').abilities, { 0: 'Liquid Arsenal', 1: 'Protean', H: 'Shadow Screen', S: 'Battle Bond' });
+		assert.equal(Dex.species.get('garchomp').abilities.H, 'Void Wrath');
+		assert.equal(Dex.species.get('greninjaash').abilities[0], 'Shadow Bond');
+	});
  it('Curious Medicine globally cleans only negative stages/confusion and heals only cleansed active Pokemon',()=>{const[p,t]=start('curiousmedicine','doubles'),ally=p.allies()[0],bench=p.side.pokemon[2];p.hp=ally.hp=bench.hp=800;p.boosts.atk=2;p.boosts.def=-2;ally.addVolatile('confusion',t);bench.boosts.atk=-2;battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.hp,1000);assert.equal(ally.hp,1000);assert.equal(bench.hp,800);assert.equal(p.boosts.atk,2);assert.equal(p.boosts.def,0);assert.equal(bench.boosts.atk,-2);assert(!ally.volatiles.confusion);battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.hp,1000);});
  it('Curious Medicine respects healing restrictions and never cleans foes in FFA',()=>{const[p,t]=start('curiousmedicine','ffa');p.hp=800;p.boosts.def=-2;p.addVolatile('healblock',t);t.boosts.atk=-1;t.hp=800;battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.hp,800);assert.equal(p.boosts.def,0);assert.equal(t.hp,800);assert.equal(t.boosts.atk,-1);});
  it('Eldritch Remedy retains Own Tempo and prioritizes self then lowest-percent active ally once per turn',()=>{const[p,t]=start('eldritchremedy','doubles'),ally=p.allies()[0];assert(p.hasAbility('owntempo'));assert(!p.addVolatile('confusion',t));p.setStatus('brn',t);ally.setStatus('par',t);hit(p,t,'eeriespell',{basePower:1,multihit:2});assert.equal(p.status,'');assert.equal(ally.status,'par');hit(p,t,'eeriespell',{basePower:1});assert.equal(ally.status,'par');battle.turn++;hit(p,t,'eeriespell',{basePower:1});assert.equal(ally.status,'');});
- for(const mode of ['protect','miss','suppressed'])it('Eldritch remedy does not cure on '+mode,()=>{const[p,t]=start('eldritchremedy');p.setStatus('brn',t);if(mode==='protect')t.addVolatile('protect',t);if(mode==='suppressed')p.addVolatile('gastroacid',t);hit(p,t,'eeriespell',mode==='miss'?{accuracy:0}:{});assert.equal(p.status,'brn');});
- it('Infernal Dominion retains Intimidate and one two-tick Fire Spin trap',()=>{const[p,t]=start('infernaldominion');assert.equal(t.boosts.atk,-1);hit(p,t,'ember',{basePower:1});assert(t.volatiles.partiallytrapped);t.hp=1600;residual();assert.equal(t.hp,1400);residual();assert.equal(t.hp,1200);assert(!t.volatiles.partiallytrapped);residual();assert.equal(t.hp,1200);});
- it('a new infernal trap releases the old without stacking an existing partial trap',()=>{const[p,t]=start('infernaldominion','doubles'),u=battle.p2.active[1];hit(p,t,'ember',{basePower:1});hit(p,u,'ember',{basePower:1});assert(!t.volatiles.partiallytrapped);assert(u.volatiles.partiallytrapped);t.addVolatile('partiallytrapped',u,battle.dex.getActiveMove('whirlpool'));hit(p,t,'ember',{basePower:1});assert.equal(t.volatiles.partiallytrapped.source,u);assert(u.volatiles.partiallytrapped);});
- for(const mode of ['protect','substitute','immune','suppressed'])it('Infernal Dominion does not trap through '+mode,()=>{const[p,t]=start('infernaldominion','singles',mode==='immune'?'Flash Fire':'No Ability');if(mode==='protect'||mode==='substitute')t.addVolatile(mode,t);if(mode==='suppressed')p.addVolatile('gastroacid',t);hit(p,t,'ember',{basePower:1});assert(!t.volatiles.partiallytrapped);});
- it('infernal trap ends on leaving or Mega ability replacement',()=>{const[p,t]=start('infernaldominion');hit(p,t,'ember',{basePower:1});p.setAbility('Drought');assert(!t.volatiles.partiallytrapped);p.setAbility('Infernal Dominion');hit(p,t,'ember',{basePower:1});battle.makeChoices('switch 2','move splash');assert(!t.volatiles.partiallytrapped);});
+	for (const mode of ['protect', 'miss', 'suppressed'])it('native Eldritch Remedy: protected/missed hits fail, selected suppression leaves the passive active: ' + mode, () => {
+		const [p, t] = start('eldritchremedy');
+		p.setStatus('brn', t);
+		if (mode === 'protect')t.addVolatile('protect', t);
+		if (mode === 'suppressed')p.addVolatile('gastroacid', t);
+		hit(p, t, 'eeriespell', mode === 'miss' ? { accuracy: 0 } : {});
+		assert.equal(p.status, mode === 'suppressed' ? '' : 'brn');
+	});
+	it('Infernal Dominion retains Intimidate and grants Molten Guard instead of trapping', () => {
+		const [p, t] = start('infernaldominion');
+		assert.equal(t.boosts.atk, -1);
+		hit(p, t, 'ember', { basePower: 1 });
+		assert(p.volatiles.moltenguard);
+		assert(!t.volatiles.partiallytrapped);
+		const hp = p.hp;
+		hit(t, p, 'rockblast', { basePower: 1, multihit: 3 });
+		assert.equal(p.hp, hp);
+		assert(!p.volatiles.moltenguard);
+	});
+	it('Infernal Dominion preserves existing traps and clears sand without stacking guards', () => {
+		const [p, t] = start('infernaldominion', 'doubles'), u = battle.p2.active[1];
+		t.addVolatile('partiallytrapped', u, battle.dex.getActiveMove('whirlpool'));
+		hit(p, t, 'ember', { basePower: 1 });
+		assert.equal(t.volatiles.partiallytrapped.source, u);
+		hit(t, p, 'rockblast', { basePower: 1 });
+		assert(!p.volatiles.moltenguard);
+		battle.field.setWeather('sandstorm', t);
+		hit(p, u, 'ember', { basePower: 1 });
+		assert.equal(battle.field.weather, '');
+		assert(!p.volatiles.moltenguard);
+		assert(!u.volatiles.partiallytrapped);
+	});
+	for (const mode of ['protect', 'substitute', 'immune', 'suppressed'])it('Infernal Dominion does not arm Molten Guard through ' + mode, () => {
+		const [p, t] = start('infernaldominion', 'singles', mode === 'immune' ? 'Flash Fire' : 'No Ability');
+		if (mode === 'protect' || mode === 'substitute')t.addVolatile(mode, t);
+		if (mode === 'suppressed')p.addVolatile('gastroacid', t);
+		hit(p, t, 'ember', { basePower: 1 });
+		assert(!p.volatiles.moltenguard);
+	});
+	it('Molten Guard clears on ability replacement and switching', () => {
+		const [p, t] = start('infernaldominion');
+		hit(p, t, 'ember', { basePower: 1 });
+		assert(p.volatiles.moltenguard);
+		p.setAbility('Drought');
+		assert(!p.volatiles.moltenguard);
+		p.setAbility('Infernal Dominion');
+		battle.turn++;
+		hit(p, t, 'ember', { basePower: 1 });
+		assert(p.volatiles.moltenguard);
+		battle.makeChoices('switch 2', 'move splash');
+		assert(!p.volatiles.moltenguard);
+	});
  it('infernal trap uses normal Ghost/Shed Shell escape and Magic Guard damage rules',()=>{const[p,t]=start('infernaldominion','singles','Magic Guard');t.setType('Ghost');hit(p,t,'ember',{basePower:1});t.hp=1600;residual();assert.equal(t.hp,1600);battle.makeChoices('move splash','switch 2');assert(!t.volatiles.partiallytrapped);});
  it('Hydraulic Armor keeps Stamina and selects the boosted offensive stat while remaining Special',()=>{const[p,t]=start('hydraulicarmor');assert(p.hasAbility('stamina'));p.storedStats.def=300;p.storedStats.spa=100;let m=hit(p,t,'waterpulse',{basePower:1});assert.equal(m.overrideOffensiveStat,'def');assert.equal(m.category,'Special');assert.equal(m.overrideDefensiveStat,undefined);p.boosts.spa=6;m=hit(p,t,'hydropump',{basePower:1});assert.equal(m.overrideOffensiveStat,undefined);m=hit(p,t,'surf',{basePower:1});assert.equal(m.overrideOffensiveStat,undefined);p.hp=800;hit(t,p,'tackle',{basePower:1,multihit:2});assert.equal(p.boosts.def,1);assert(p.hp>800);});
  for(const volatile of ['taunt','encore','disable','healblock'])it('Haunting Presence extends Hex to '+volatile+' without extra doubling',()=>{const[p,t]=start('hauntingpresence');t.volatiles[volatile]={id:volatile};const m=battle.dex.getActiveMove('hex');assert.equal(m.basePowerCallback.call(battle,p,t,m),130);t.status='brn';assert.equal(m.basePowerCallback.call(battle,p,t,m),130);assert(!p.isGrounded());});
  it('ordinary Hex and suppressed Haunting Presence retain original rules',()=>{const[p,t]=start('hauntingpresence');t.volatiles.taunt={id:'taunt'};p.addVolatile('gastroacid',t);const m=battle.dex.getActiveMove('hex');assert.equal(m.basePowerCallback.call(battle,p,t,m),65);});
  it('Slumbering Giant has complete Comatose sleep/status recognition and Thick Fat',()=>{const[p,t]=start('slumberinggiant');assert(p.hasAbility('comatose'));assert(p.hasAbility('thickfat'));assert(!p.trySetStatus('brn',t));assert(!p.trySetStatus('slp',t));hit(t,p,'yawn');assert(!p.volatiles.yawn);p.addVolatile('gastroacid',t);assert(p.hasAbility('comatose'));const hp=t.hp;hit(p,t,'snore');assert(t.hp<hp);const m=battle.dex.getActiveMove('hex');assert.equal(m.basePowerCallback.call(battle,t,p,m),130);assert.equal(battle.runEvent('ModifySpA',t,p,battle.dex.getActiveMove('flamethrower'),1000),500);});
  for(const field of ['rainbowterrain','corrosiveterrain','swampterrain'])it('Comatose field recognition on '+field,()=>{const[p,t]=start('slumberinggiant','singles','Comatose');p.hp=t.hp=800;battle.field.setTerrain(field,p);residual();assert.equal(p.hp,t.hp);assert.notEqual(p.hp,800);});
- it('Ocean Lullaby cleans active allies once per turn, preserving other stages',()=>{const[p,t]=start('oceanlullaby','doubles'),ally=p.allies()[0];p.addVolatile('confusion',t);ally.addVolatile('confusion',t);p.boosts.accuracy=-2;p.boosts.atk=-2;ally.boosts.accuracy=2;hit(p,t,'hypervoice',{basePower:1,multihit:2});assert(!p.volatiles.confusion&&!ally.volatiles.confusion);assert.equal(p.boosts.accuracy,0);assert.equal(p.boosts.atk,-2);assert.equal(ally.boosts.accuracy,2);p.boosts.accuracy=-1;hit(p,t,'hypervoice',{basePower:1});assert.equal(p.boosts.accuracy,-1);battle.turn++;hit(p,t,'hypervoice',{basePower:1});assert.equal(p.boosts.accuracy,0);assert(p.hasAbility('shellarmor'));});
+	it('Ocean Lullaby clears confusion while preserving all stat stages', () => {
+		const [p, t] = start('oceanlullaby', 'doubles'), ally = p.allies()[0];
+		p.addVolatile('confusion', t);
+		ally.addVolatile('confusion', t);
+		p.boosts.accuracy = -2;
+		p.boosts.atk = -2;
+		ally.boosts.accuracy = 2;
+		hit(p, t, 'hypervoice', { basePower: 1, multihit: 2 });
+		assert(!p.volatiles.confusion && !ally.volatiles.confusion);
+		assert.equal(p.boosts.accuracy, -2);
+		assert.equal(p.boosts.atk, -2);
+		assert.equal(ally.boosts.accuracy, 2);
+		p.boosts.accuracy = -1;
+		hit(p, t, 'hypervoice', { basePower: 1 });
+		assert.equal(p.boosts.accuracy, -1);
+		battle.turn++;
+		hit(p, t, 'hypervoice', { basePower: 1 });
+		assert.equal(p.boosts.accuracy, -1);
+		assert(p.hasAbility('shellarmor'));
+	});
  it('Ocean Lullaby ignores failed/non-sound/status moves and never changes Sing accuracy',()=>{const[p,t]=start('oceanlullaby');p.boosts.accuracy=-1;hit(p,t,'watergun',{basePower:1});assert.equal(p.boosts.accuracy,-1);t.addVolatile('protect',t);hit(p,t,'hypervoice',{basePower:1});assert.equal(p.boosts.accuracy,-1);const m=battle.dex.getActiveMove('sing');battle.singleEvent('ModifyMove',p.getAbility(),p.abilityState,m,p,t);assert.equal(m.accuracy,55);});
  it('Shadow Screen allows later Mat Block, with shared normal protection counter and no added priority',()=>{const[p,t]=start('shadowscreen');assert(p.hasAbility('infiltrator'));battle.makeChoices('move splash','move splash');battle.makeChoices('move matblock','move tackle');assert.equal(p.hp,1600);assert(p.volatiles.stall);assert.equal(p.volatiles.stall.counter,3);battle.makeChoices('move matblock','move tackle');assert(p.hp<1600);assert.equal(battle.dex.moves.get('matblock').priority,1);});
  it('Protect and Shadow Screen Mat Block share their failure counter',()=>{const[p,t]=start('shadowscreen');battle.makeChoices('move protect','move tackle');assert(p.volatiles.stall);battle.makeChoices('move matblock','move tackle');assert(p.hp<1600);});
@@ -55,7 +143,18 @@ describe('Approved eleven-species batch',()=>{
  it('Void Guile retains theft and replaces Embargo with Infiltrator',()=>{const[p,t]=start('voidguile');t.setItem('leftovers');t.addVolatile('substitute',t);hit(p,t,'mysticalfire',{basePower:1});assert.equal(p.item,'leftovers');assert(!t.volatiles.embargo);assert(p.hasAbility('infiltrator'));});
  for(const mode of ['protect','substitute','suppressed'])it('Void Guile does not Embargo through '+mode,()=>{const[p,t]=start('voidguile');if(mode==='suppressed')p.addVolatile('gastroacid',t);else t.addVolatile(mode,t);hit(p,t,'mysticalfire',{basePower:1});assert(!t.volatiles.embargo);});
  it('Eldritch Remedy selects lowest HP percentage among multiple active allies, never the bench',()=>{const holder={species:'Slowking-Galar',ability:'Eldritch Remedy',moves:['eeriespell']},ally={species:'Mew',ability:'No Ability',moves:['splash']};battle=common.createBattle({gameType:'triples'},[[holder,{...ally},{...ally},{...ally}],[ally,{...ally},{...ally}]]);const p=battle.p1.active[0],a=battle.p1.active[1],b=battle.p1.active[2],bench=battle.p1.pokemon[3],t=battle.p2.active[0];a.maxhp=1000;a.hp=400;b.maxhp=200;b.hp=100;a.setStatus('brn',t);b.setStatus('par',t);bench.status='brn';t.hp=t.maxhp=4000;hit(p,t,'eeriespell',{basePower:1});assert.equal(a.status,'');assert.equal(b.status,'par');assert.equal(bench.status,'brn');});
- it('Ocean Lullaby does not cleanse opponents in FFA or while suppressed',()=>{const[p,t]=start('oceanlullaby','ffa');p.boosts.accuracy=t.boosts.accuracy=-1;hit(p,t,'hypervoice',{basePower:1});assert.equal(p.boosts.accuracy,0);assert.equal(t.boosts.accuracy,-1);battle.turn++;p.addVolatile('gastroacid',t);p.boosts.accuracy=-1;hit(p,t,'hypervoice',{basePower:1});assert.equal(p.boosts.accuracy,-1);});
+	it('Ocean Lullaby leaves accuracy stages unchanged in FFA', () => {
+		const [p, t] = start('oceanlullaby', 'ffa');
+		p.boosts.accuracy = t.boosts.accuracy = -1;
+		hit(p, t, 'hypervoice', { basePower: 1 });
+		assert.equal(p.boosts.accuracy, -1);
+		assert.equal(t.boosts.accuracy, -1);
+		battle.turn++;
+		p.addVolatile('gastroacid', t);
+		p.boosts.accuracy = -1;
+		hit(p, t, 'hypervoice', { basePower: 1 });
+		assert.equal(p.boosts.accuracy, -1);
+	});
  it('Void Drift recovery is suppressed by ability suppression or Cloud Nine',()=>{const[p,t]=start('voiddrift');p.hp=800;battle.field.setWeather('sandstorm',p);t.setAbility('Cloud Nine');residual();assert.equal(p.hp,800);t.setAbility('No Ability');p.addVolatile('gastroacid',t);residual();assert.equal(p.hp,800);});
 
  it('Infernal Dominion retains Intimidate-specific immunities',()=>{const[p,t]=start('infernaldominion','singles','Own Tempo');assert.equal(t.boosts.atk,0);});

@@ -5,7 +5,7 @@ const {abilityIncludesComponent}=require('../../../dist/data/ability-components'
 describe('Approved server audit fixes',()=>{
  let battle;afterEach(()=>{battle?.destroy();battle=undefined;});
  function setup(ability,format='singles'){
-  const p={species:'Mew',ability,moves:['splash','healbell']},f={species:'Mew',ability:'No Ability',moves:['splash']};
+		const p = { species: ability === 'Solar Hydra' ? 'Sunflora-Mega' : 'Mew', ability, moves: ['splash', 'healbell'] }, f = { species: 'Mew', ability: 'No Ability', moves: ['splash'] };
   const formats={singles:'gen9nofieldsinglesgame',doubles:'gen9nofielddoublesbattle',ffa:'gen9freeforall4pmistyfieldadrienn'};
   const teams=format==='ffa'?[[p,f],[f,f],[f,f],[f,f]]:format==='doubles'?[[p,f,f],[f,f,f]]:[[p,f],[f,f]];
   battle=common.createBattle({formatid:formats[format]},teams);battle.makeChoices(...teams.map(t=>t.length===3?'team 123':'team 12'));
@@ -17,17 +17,24 @@ describe('Approved server audit fixes',()=>{
   battle.runEvent('BeforeMove',p,t,m);battle.actions.useMove(m,p,{target:t});const active=battle.activeMove;
   battle.runEvent('AfterMove',p,t,active);return active;
  }
- function residual(p){battle.singleEvent('Residual',p.getAbility(),p.abilityState,p);}
+
  function out(p){battle.singleEvent('SwitchOut',p.getAbility(),p.abilityState,p);}
  const {resolveForesight}=require('../../../dist/data/foresight-memory');
  function queue(p,t){use(p,t,'psychic',{basePower:1});const e=battle.field.pseudoWeather.foresightmemory.entries[0];assert(e);return e;}
  function resolve(entry){battle.turn=entry.turn;resolveForesight(battle);battle.faintMessages();}
  function swapBack(p,t){use(t,p,'skillswap');use(t,p,'skillswap');}
- const budgets={'Steel Plumage':'steelPlumageUsed','Temple Chime':'templeChimeUsed','Solar Hydra':'solarBudSpent','Storm Calling':'dissonantEchoUsed'};
+	const budgets = { 'Steel Plumage': 'steelPlumageUsed', 'Temple Chime': 'templeChimeUsed', 'Solar Hydra': 'solarBudSpent' };
  function trigger(p,t,a){
   if(a==='Steel Plumage'){use(t,p);return t.side.sideConditions.spikes?.layers||0;}
   if(a==='Temple Chime'){p.side.removeSideCondition('safeguard');p.boosts.spd=-2;p.setStatus('par');use(p,p,'healbell');return p.boosts.spd===0;}
-  if(a==='Solar Hydra'){battle.field.clearTerrain();battle.field.setWeather('sunnyday',p);residual(p);const ready=!!p.abilityState.solarBudReady;use(p,t,'vinewhip',{multihit:1,basePower:1});return ready;}
+		if (a === 'Solar Hydra') {
+			battle.field.clearTerrain();
+			battle.field.setWeather('sunnyday', p);
+			battle.fieldEvent('Residual');
+			const ready = !!p.passiveStates.solarbud?.solarBudReady;
+			use(p, t, 'vinewhip', { multihit: 1, basePower: 1 });
+			return ready;
+		}
   t.setType('Water');use(p,t,'hypervoice',{basePower:1});const marked=!!p.abilityState.echoTarget;use(p,t,'hypervoice',{basePower:1});return marked;
  }
  for(const[a,marker]of Object.entries(budgets)){
@@ -40,9 +47,44 @@ describe('Approved server audit fixes',()=>{
    const[p,t]=setup(a);trigger(p,t,a);p.setAbility('No Ability');battle.makeChoices('switch 2','move 1');battle.makeChoices('switch 2','move 1');p.setAbility(a);assert(!p.m[marker]);assert.equal(trigger(p,t,a),a==='Steel Plumage'?2:true);
   });
  }
- it('pending Echo marks and Solar Buds survive temporary suppression without refreshing their spent limits',()=>{
-  const[p,t]=setup('Storm Calling');t.setType('Water');use(p,t,'hypervoice',{basePower:1});assert(p.m.dissonantEchoUsed);p.addVolatile('gastroacid');p.removeVolatile('gastroacid');const m=use(p,t,'hypervoice',{basePower:1});assert.equal(t.getMoveHitData(m).typeMod,0);assert(!p.abilityState.echoTarget);
-  p.setAbility('Solar Hydra');battle.field.setWeather('sunnyday',p);residual(p);assert(p.abilityState.solarBudReady);p.addVolatile('gastroacid');p.removeVolatile('gastroacid');use(p,t,'vinewhip',{multihit:1,basePower:1});assert(p.m.solarBudSpent);assert(!p.abilityState.solarBudReady);
+	it('Solar Bud passive preserves its pending charge through selected ability suppression', () => {
+		const [p, t] = setup('Solar Hydra');
+		battle.field.setWeather('sunnyday', p);
+		battle.fieldEvent('Residual');
+		assert(p.passiveStates.solarbud.solarBudReady);
+		p.addVolatile('gastroacid');
+		use(p, t, 'vinewhip', { multihit: 1, basePower: 1 });
+		assert(p.m.solarBudSpent);
+		assert(!p.passiveStates.solarbud.solarBudReady);
+		p.removeVolatile('gastroacid'); battle.fieldEvent('Residual'); assert(!p.passiveStates.solarbud.solarBudReady);
+	});
+	for (const change of ['swap', 'replace', 'suppress', 'switch'])it('Storm Calling clears shared marks on ' + change + ' and can earn fresh marks afterward', () => {
+		const [p, t] = setup('Storm Calling'); p.hp = p.maxhp = p.baseMaxhp = t.hp = t.maxhp = t.baseMaxhp = 5000; t.setType('Water');
+		const mark = () => p.side.sideConditions.dissonantechomark;
+		use(p, t, 'hypervoice', { basePower: 1 }); assert.equal(mark()?.marked, t);
+		if (change === 'swap') {
+			use(t, p, 'skillswap');
+			assert(!mark());
+			use(t, p, 'skillswap');
+		}
+		if (change === 'replace') {
+			p.setAbility('No Ability');
+			assert(!mark());
+			p.setAbility('Storm Calling');
+		}
+		if (change === 'suppress') {
+			p.addVolatile('gastroacid');
+			assert(!mark());
+			p.removeVolatile('gastroacid');
+		}
+		if (change === 'switch') {
+			battle.makeChoices('switch 2', 'move 1');
+			assert(!mark());
+			battle.makeChoices('switch 2', 'move 1');
+		}
+		assert(!mark()); use(p, t, 'hypervoice', { basePower: 1 }); assert.equal(mark()?.marked, t);
+		const move = use(p, t, 'hypervoice', { basePower: 1 }); assert.equal(t.getMoveHitData(move).typeMod, 0); assert(!mark());
+		use(p, t, 'hypervoice', { basePower: 1 }); assert.equal(mark()?.marked, t);
  });
  it('Transform does not copy a spent entry budget to another Pokemon',()=>{const[p,t]=setup('Steel Plumage');use(t,p);assert(p.m.steelPlumageUsed);assert(t.transformInto(p));assert(!t.m.steelPlumageUsed);use(p,t);assert(t.m.steelPlumageUsed);});
  it('whole-turn stored Foresight cannot award a false Destiny Bond win',()=>{

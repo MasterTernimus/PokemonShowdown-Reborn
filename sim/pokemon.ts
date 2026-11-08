@@ -6,7 +6,7 @@ import {arsenalType} from './adaptive-arsenal';
 import {getAbilityComponentExclusions, getAbilityComponentAdditions} from '../data/passive-ability-cleanup';
 import { PULSE_FIXED_MOVES } from '../data/pulse-fixed-moves';
 import {adaptiveIgnoresAbility, adaptiveSuppressionException, adaptiveBlocksCondition, adaptiveStatus} from './adaptive-cycle';
-import { AbilityComponents } from '../data/ability-components';
+import { AbilityComponents, unstableEvoComponents } from '../data/ability-components';
 import {startGainedPassives} from './species-passives';
 import {SignaturePassiveComponents} from '../data/signature-passive-data';
 import { getGigantamaxForm } from './gigantamax';
@@ -1177,9 +1177,12 @@ export class Pokemon {
 			if (this.species.cannotDynamax || this.illusion?.species.cannotDynamax) return;
 		}
 		const result: DynamaxOptions = { maxMoves: [] };
+		// Non-signature moves stay ordinary in this fork. Match their regular
+		// request restrictions, including PP and hidden-information handling.
+		const regularMoves = this.getMoves(null, this.isLastActive());
 		let atLeastOne = false;
 		const protectVolatiles = ['protect', 'detect', 'maxguard', 'kingsshield', 'spikyshield', 'banefulbunker', 'obstruct', 'silktrap', 'burningbulwark'];
-		for (const moveSlot of this.moveSlots) {
+		for (const [index, moveSlot] of this.moveSlots.entries()) {
 			const move = this.battle.dex.moves.get(moveSlot.id);
 			let protectMove = false;
 			if (move.volatileStatus && protectVolatiles.includes(move.volatileStatus)) protectMove = true;
@@ -1228,8 +1231,9 @@ export class Pokemon {
 			const maxMove = this.battle.actions.getMaxMove(move, this);
 			if (maxMove) {
 				if (maxMove?.name !== this.canGigantamax) {
-					result.maxMoves.push({ move: move.id, target: actualTarget, disabled: protectMove });
-					atLeastOne = atLeastOne || !protectMove;
+					const disabled = protectMove || !regularMoves[index] || !!regularMoves[index].disabled;
+					result.maxMoves.push({ move: move.id, target: actualTarget, disabled });
+					atLeastOne = atLeastOne || !disabled;
 					continue;
 				}
 				if (this.maxMoveDisabled(move)) {
@@ -2357,6 +2361,7 @@ export class Pokemon {
 		// Identity lookup only: composites still dispatch their own component callbacks.
 		const components = new Set<string>();
 		const pending: string[] = [this.ability, ...(this.species.id === 'zangoose' && this.ability === 'venomarmor' ? ['runaway'] : []), ...(this.species.id === 'gardevoir' && this.ability === 'dreamsickness' ? ['insomnia','swornduty'] : []), ...(this.species.id === 'gardevoir' && this.ability === 'voidveil' ? ['telepathy'] : []), ...(this.ability === 'carryon' && !this.transformed && this.m.carryOnAbility ? [this.m.carryOnAbility] : []), ...memoryComponents, ...getAbilityComponentAdditions(this.ability, this.getPassives())];
+		if (this.ability === 'unstableevo') pending.push(...unstableEvoComponents(this));
 		if (this.ability === 'perfectforesight' && this.m.perfectForesightAbility) {
 			pending.push(this.m.perfectForesightAbility);
 		}
@@ -2477,14 +2482,8 @@ export class Pokemon {
 		}
 	}
 
-	getHealth = (useIllusion = true): { side: SideID; secret: string; shared: string } => {
-		// Only public health may follow a living disguise. Private switch requests
-		// must retain this Pokemon's real HP/status, even after its disguise faints.
-		if (useIllusion && this.hp && this.illusion && this.illusion !== this && this.illusion.hp && !this.illusion.fainted) {
-			const health = this.getHealth(false);
-			health.shared = this.illusion.getHealth(false).shared;
-			return health;
-		}
+	getHealth = (): { side: SideID, secret: string, shared: string } => {
+		// Illusion changes identity, never the holder's HP or status reporting.
 		if (!this.hp) return { side: this.side.id, secret: '0 fnt', shared: '0 fnt' };
 		let secret = `${this.hp}/${this.maxhp}`;
 		let shared;

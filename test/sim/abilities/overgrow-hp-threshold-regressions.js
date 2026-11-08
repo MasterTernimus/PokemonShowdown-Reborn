@@ -28,11 +28,11 @@ describe('Overgrow and per-target HP threshold regressions', () => {
 		}
 	}
 
-	for (const [species, ability, level] of [['Hydreigon', 'Worldbreaker', 100], ['Klawf', 'Anger Shell', 50]]) {
+	for (const [species, ability, level] of [['Hydreigon', 'Strings of Ruin', 100], ['Klawf', 'Anger Shell', 50]]) {
 		for (const fraction of [0.49, 0.5, 0.6]) {
 			it(`${species}: FFA multihit Surf only triggers on its own HP crossing (${fraction})`, () => {
 				battle = common.createBattle({formatid: 'gen9freeforall4pmistyfieldadrienn'}, [
-					[{species: 'Hydreigon', level, ability: 'Worldbreaker', moves: ['surf']}],
+					[{ species: 'Hydreigon', level, ability: 'Strings of Ruin', moves: ['surf'] }],
 					[{species, ability, moves: ['splash']}],
 					[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
 					[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],

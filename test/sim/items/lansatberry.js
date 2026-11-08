@@ -23,7 +23,7 @@ describe('Lansat Berry', function () {
 	it('should start to apply the effect even in middle of an attack', function () {
 		battle = common.createBattle([
 			[{species: 'Makuhita', ability: 'guts', item: 'lansatberry', moves: ['triplekick']}],
-			[{species: 'Muk', ability: 'noguard', item: 'rockyhelmet', moves: ['acidarmor']}],
+			[{ species: 'Mew', ability: 'noguard', item: 'rockyhelmet', moves: ['acidarmor'] }],
 		]);
 		const holder = battle.p1.active[0];
 

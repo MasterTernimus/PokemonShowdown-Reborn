@@ -8,7 +8,8 @@ describe('Approved Nido pair and defensive passive swaps',()=>{afterEach(()=>{ba
  for(const kind of ['friendly','residual','substitute','faint','alreadyLow','suppressed'])it('excludes '+kind,()=>{const[p,a,q]=setup();a.hp=kind==='alreadyLow'?400:550;if(kind==='substitute'){a.addVolatile('substitute');a.volatiles.substitute.hp=999;}if(kind==='suppressed')p.addVolatile('gastroacid',q);if(kind==='residual')battle.damage(100,a,q,Dex.conditions.get('psn'));else hit(kind==='friendly'?p:q,a,{damage:kind==='faint'?600:100});assert.equal(a.boosts.def,0);assert(!p.m.matriarchVigilUsed);});
  it('full components remain separate from Rivalry',()=>{const[p,a,q]=setup();assert(p.hasAbility('thickfat'));assert(!p.hasAbility('aromaveil'));assert(p.hasAbility('powerdrill'));assert(p.hasAbility('friendguard'));assert.deepEqual(p.getPassives(),['rivalry']);assert.equal(battle.runEvent('ModifyDamage',q,a,Dex.getActiveMove('tackle'),100),56);assert.equal(battle.runEvent('ModifyAtk',q,p,Dex.getActiveMove('firepunch'),100),50);battle.actions.useMove('taunt',q,{target:a});assert(a.volatiles.taunt);});
  it('Patriarch has full components, category adaptation and crit without blanket boost',()=>{const[p,a,q]=setup();p.setAbility("Patriarch's Wrath");assert.equal(p.boosts.accuracy,1);q.gender='M';p.gender='F';for(const[id,power]of [['tackle',100],['hornattack',150],['drillrun',150],['irontail',150]])assert.equal(battle.runEvent('BasePower',p,q,Dex.getActiveMove(id),100),power,id);p.storedStats.atk=400;p.storedStats.spa=50;let move=Dex.getActiveMove('sludgebomb');battle.runEvent('ModifyMove',p,q,move,move);assert.equal(move.category,'Physical');p.storedStats.atk=40;p.storedStats.spa=500;move=Dex.getActiveMove('earthquake');battle.runEvent('ModifyMove',p,q,move,move);assert.equal(move.category,'Special');assert.equal(battle.runEvent('ModifyCritRatio',p,q,Dex.getActiveMove('irontail'),1),2);battle.field.terrain='rockyterrain';assert.equal(battle.runEvent('BasePower',p,q,Dex.getActiveMove('hornattack'),100),300);move=Dex.getActiveMove('hornattack');battle.runEvent('ModifyMove',p,q,move,move);assert(!move.flags.protect);});
- it('exact distribution and excluded Dodrio/Floatzel preserved',()=>{const before=require('../../../artifacts/nido-dragonite-before.json');
+	it('matches the reviewed distribution including subsequent approved revisions', () => {
+		const before = require('../../../artifacts/nido-dragonite-before.json');
   // Later explicit approvals override only these expectations; retain the historical fixture.
   const approvedStats={mewtwomegax:{hp:106,atk:195,def:130,spa:99,spd:100,spe:150},mewtwomegay:{hp:106,atk:90,def:100,spa:199,spd:130,spe:155},probopass:{hp:75,atk:35,def:150,spa:110,spd:155,spe:25},stunfisk:{hp:109,atk:66,def:99,spa:95,spd:109,spe:32},stunfiskgalar:{hp:109,atk:95,def:109,spa:66,spd:99,spe:32},staraptor:{hp:85,atk:120,def:80,spa:50,spd:70,spe:105},staraptormega:{hp:85,atk:140,def:110,spa:60,spd:100,spe:115},
    sevipermega:{hp:75,atk:140,def:120,spa:90,spd:120,spe:65},
@@ -29,5 +30,25 @@ describe('Approved Nido pair and defensive passive swaps',()=>{afterEach(()=>{ba
    nidoking:{H:'Royal Onslaught'},clefable:{1:'Friend Guard'},rapidashgalar:{0:'Psychic Surge'},
    kecleon:{1:'Pickpocket'},drifblim:{H:'Aftermath'},nidoqueen:{H:'Royal Aegis'},
   };
-  for(const old of before){const s=Dex.species.get(old.id);assert.deepEqual(s.types,{gorebyss:['Water','Fairy'],huntail:['Water','Dark']}[old.id]||old.types);assert.deepEqual(s.baseStats,approvedStats[old.id]||(old.id==='kingdra'?{...old.stats,atk:105,spa:105}:old.stats),old.id);assert.deepEqual(s.abilities,{...require('./passive-approval-overlays').abilities(old.id,{...old.abilities}),...approvedSlots[old.id]},old.id);assert.deepEqual(s.passives,approvedPassives[old.id]||require('./passive-approval-overlays').current(old.id,old.passives),old.id);}assert.deepEqual(Dex.species.get('duraludon').passives,['keeneye']);assert.deepEqual(Dex.species.get('murkrow').passives,['infiltrator']);assert.deepEqual(Dex.species.get('porygon2').passives,['download']);assert.deepEqual(Dex.species.get('dusclops').passives,['unnerve']);assert.deepEqual(Dex.species.get('gligar').passives,['poisontouch']);assert.deepEqual(Dex.species.get('corsolagalar').passives,['infiltrator']);assert.deepEqual(Dex.species.get('mightyena').passives,['rattled']);assert.deepEqual(Dex.species.get('mightyenadeso').passives,['rattled']);assert.deepEqual(Dex.species.get('toxicroakdeso').passives,['limber']);assert.deepEqual(Dex.species.get('cinccinodeso').passives,['shielddust']);assert.equal(Dex.species.get('nidoking').abilities.H,"Royal Onslaught");assert.equal(Dex.species.get('nidoqueen').abilities.H,'Royal Aegis');for(const[id,passive]of [['arcaninehisui','sturdy'],['dragonite','championscommand'],['dragonitemega','multiscale']])assert.deepEqual(Dex.species.get(id).passives,[passive]);});
+		for (const old of before) {
+			const s = Dex.species.get(old.id);
+			assert.deepEqual(s.types, require('./passive-approval-overlays').types(old.id, { gorebyss: ['Water', 'Fairy'], huntail: ['Water', 'Dark'] }[old.id] || old.types));
+			assert.deepEqual(s.baseStats, require('./passive-approval-overlays').stats(old.id, approvedStats[old.id] || (old.id === 'kingdra' ? { ...old.stats, atk: 105, spa: 105 } : old.stats)), old.id);
+			assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, { ...old.abilities, ...approvedSlots[old.id] }), old.id);
+			assert.deepEqual(s.passives, require('./passive-approval-overlays').current(old.id, approvedPassives[old.id] || old.passives), old.id);
+		}
+		assert.deepEqual(Dex.species.get('duraludon').passives, ['keeneye']);
+		assert.deepEqual(Dex.species.get('murkrow').passives, ['infiltrator']);
+		assert.deepEqual(Dex.species.get('porygon2').passives, ['download']);
+		assert.deepEqual(Dex.species.get('dusclops').passives, ['unnerve']);
+		assert.deepEqual(Dex.species.get('gligar').passives, ['poisontouch']);
+		assert.deepEqual(Dex.species.get('corsolagalar').passives, ['infiltrator']);
+		assert.deepEqual(Dex.species.get('mightyena').passives, ['rivalry']);
+		assert.deepEqual(Dex.species.get('mightyenadeso').passives, ['rivalry']);
+		assert.deepEqual(Dex.species.get('toxicroakdeso').passives, ['limber']);
+		assert.deepEqual(Dex.species.get('cinccinodeso').passives, ['shielddust']);
+		assert.equal(Dex.species.get('nidoking').abilities.H, "Royal Onslaught");
+		assert.equal(Dex.species.get('nidoqueen').abilities.H, 'Royal Aegis');
+		for (const [id, passive] of [['arcaninehisui', 'sturdy'], ['dragonite', 'championscommand'], ['dragonitemega', 'multiscale']])assert.deepEqual(Dex.species.get(id).passives, [passive]);
+	});
 });

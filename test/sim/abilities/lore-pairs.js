@@ -132,7 +132,7 @@ describe('Lore partnership reworks', () => {
 		battle.makeChoices('move splash', 'move tackle');
 		assert(!t.volatiles.gossipexposed);
 	});
-	it('exposes successful status moves, gives the reporter power and allies defensive-stage bypass', () => {
+	it('exposes successful status moves and grants defensive-stage bypass without bonus power', () => {
 		const [p, t] = start('Gardevoir', 'No Ability', 'doubles');
 		const ally = p.allies()[0];
 		const ownNormal = hit(p, t, 'psychic', { secondaries: [] }).damage;
@@ -140,7 +140,8 @@ describe('Lore partnership reworks', () => {
 		hit(t, t, 'calmmind');
 		assert(t.volatiles.gossipexposed, JSON.stringify({ result: t.moveThisTurnResult, log: battle.log.slice(-12) }));
 		assert(battle.log.some(l => l.includes('Gossip Gardevoir exposes')));
-		assert(hit(p, t, 'psychic', { secondaries: [] }).damage > ownNormal * 1.2);
+		assert.equal(hit(p, t, 'psychic', { secondaries: [] }).damage, ownNormal);
+		for (const id of ['psychic', 'moonblast']) assert.equal(battle.runEvent('BasePower', p, t, Dex.getActiveMove(id), 100), 100);
 		assert.equal(hit(ally, t, 'psychic', { secondaries: [] }).damage, allyNormal);
 		assert.equal(t.boosts.spd, 1);
 		p.addVolatile('gastroacid', t);

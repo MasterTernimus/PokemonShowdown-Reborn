@@ -1,211 +1,83 @@
 'use strict';
-
-const assert = require('../../assert');
-
-describe("Custom Rules", function () {
-	it('should support legality tags', function () {
-		let team = [
-			{species: 'kitsunoh', ability: 'frisk', moves: ['shadowstrike'], evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen7anythinggoes');
-		assert.legalTeam(team, 'gen7anythinggoes@@@+cap');
-
-		team = [
-			{species: 'pikachu', ability: 'airlock', moves: ['thunderbolt'], evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen7anythinggoes');
-		assert.legalTeam(team, 'gen7ou@@@!obtainableabilities');
-
-		team = [
-			{species: 'pikachu', ability: 'airlock', moves: ['dragondance'], evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen7ou@@@!obtainableabilities');
+const assert = require('assert').strict;
+const { TeamValidator, Dex } = require('../../../dist/sim');
+const { Format } = require('../../../dist/sim/dex-formats');
+// Test mechanics independently of the retired upstream ladder names. Unexpected
+// format errors must fail, rather than masquerading as an illegal team result.
+function validate(team, customRules = [], options = {}) {
+	const format = new Format({ name: 'Custom rule regression', effectType: 'Format', mod: 'gen9', ruleset: ['Obtainable'], ...options, customRules });
+	return new TeamValidator(format).validateTeam(structuredClone(team));
+}
+const mew = (extra = {}) => ({ species: 'Mew', ability: 'Natural Cure', moves: ['Psychic'], evs: { hp: 1 }, ...extra });
+function rejected(errors, pattern) {
+	assert(Array.isArray(errors) && errors.length, 'Expected explicit rejection');
+	assert(errors.some(error => pattern.test(error)), errors.join('\n'));
+}
+describe('Custom Rules on the supported Reborn dex', () => {
+	it('accepts the control team before banning it', () => {
+		assert.equal(validate([mew()]), null); rejected(validate([mew()], ['-Mew']), /Mew.*banned/);
 	});
-
-	it('should allow Pokemon to be banned', function () {
-		let team = [
-			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen7anythinggoes@@@-Pikachu');
-
-		team = [
-			{species: 'greninjaash', ability: 'battlebond', moves: ['surf'], evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen7anythinggoes@@@-Greninja-Bond');
-
-		team = [
-			{species: 'greninjabond', ability: 'battlebond', moves: ['surf'], evs: {hp: 1}},
-		];
-		assert.legalTeam(team, 'gen7anythinggoes@@@!Obtainable Formes,-Greninja-Ash');
+	for (const [label, ban, set, pattern] of [
+		['species', 'Mew', {}, /Mew.*banned/], ['move', 'Psychic', {}, /Psychic.*banned/],
+		['item', 'Leftovers', { item: 'Leftovers' }, /Leftovers.*banned/], ['ability', 'Natural Cure', {}, /Natural Cure.*banned/],
+	]) it(`adds and repeals a ${label} ban`, () => {
+		const team = [mew(set)]; assert.equal(validate(team), null);
+		rejected(validate(team, [], { banlist: [ban] }), pattern);
+		assert.equal(validate(team, ['+' + ban], { banlist: [ban] }), null);
 	});
-
-	it('should allow Pokemon to be unbanned', function () {
-		const team = [
-			{species: 'blaziken', ability: 'blaze', moves: ['skyuppercut'], evs: {hp: 1}},
-		];
-		assert.legalTeam(team, 'gen7ou@@@+Blaziken');
+	it('whitelists one species', () => {
+		assert.equal(validate([mew()], ['-All Pokemon', '+Mew']), null);
+		rejected(validate([mew({ species: 'Mewtwo', ability: 'Pressure' })], ['-All Pokemon', '+Mew']), /Mewtwo.*(banned|allowed)/);
 	});
-
-	it('should allow Pokemon to be whitelisted', function () {
-		let team = [
-			{species: 'giratina', ability: 'pressure', moves: ['protect'], evs: {hp: 1}},
-		];
-		assert.legalTeam(team, 'gen7ubers@@@-allpokemon,+giratinaaltered');
-
-		team = [
-			{species: 'giratinaorigin', ability: 'levitate', moves: ['protect'], evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen7ubers@@@-allpokemon,+giratinaaltered');
-
-		team = [
-			{species: 'tyrantrum', ability: 'strongjaw', moves: ['protect'], evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen8nationaldex@@@-allpokemon');
+	it('bans no-item sets while allowing held items', () => {
+		rejected(validate([mew()], ['-No Item']), /item/i);
+		assert.equal(validate([mew({ item: 'Leftovers' })], ['-No Item']), null);
 	});
-
-	it('should support banning/unbanning tag combinations', function () {
-		let team = [
-			{species: 'Crucibelle-Mega', ability: 'Regenerator', moves: ['protect'], evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen8customgame@@@-nonexistent,+mega',
-			"Nonexistent should override all tags that aren't existence-related");
-
-		team = [
-			{species: 'Crucibelle-Mega', ability: 'Regenerator', moves: ['protect'], evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen8customgame@@@+mega,-nonexistent',
-			"Nonexistent should override all tags that aren't existence-related");
-
-		team = [
-			{species: 'Crucibelle-Mega', ability: 'Regenerator', moves: ['protect'], evs: {hp: 1}},
-		];
-		assert.legalTeam(team, 'gen8customgame@@@-nonexistent,+crucibellemega',
-			"Nonexistent should override all tags that aren't existence-related");
-
-		team = [
-			{species: 'Moltres-Galar', ability: 'Berserk', moves: ['protect'], evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen8customgame@@@-sublegendary');
+	it('supports an item whitelist', () => {
+		assert.equal(validate([mew({ item: 'Leftovers' })], ['-All Items', '+Leftovers']), null);
+		rejected(validate([mew({ item: 'Life Orb' })], ['-All Items', '+Leftovers']), /Life Orb.*(banned|allowed)/);
 	});
-
-	it('should support restrictions', function () {
-		let team = [
-			{species: 'Yveltal', ability: 'No Ability', moves: ['protect'], evs: {hp: 1}},
-		];
-		assert.legalTeam(team, 'gen7customgame@@@limitonerestricted,*restrictedlegendary');
-
-		team = [
-			{species: 'Yveltal', ability: 'No Ability', moves: ['protect'], evs: {hp: 1}},
-			{species: 'Xerneas', ability: 'No Ability', moves: ['protect'], evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen7customgame@@@limitonerestricted,*restrictedlegendary');
+	it('removes ability legality without removing move legality', () => {
+		const team = [mew({ ability: 'Air Lock' })]; rejected(validate(team), /Air Lock/);
+		assert.equal(validate(team, ['!Obtainable Abilities']), null);
+		rejected(validate([mew({ ability: 'Air Lock', moves: ['Spore'] })], ['!Obtainable Abilities']), /Spore/);
 	});
-
-	it('should allow moves to be banned', function () {
-		const team = [
-			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen7anythinggoes@@@-Agility');
+	it('supports legality tags without admitting unknown species', () => {
+		const team = [{ species: 'Kitsunoh', ability: 'Frisk', moves: ['Shadow Strike'], evs: { hp: 1 } }];
+		rejected(validate(team), /Kitsunoh/); assert.equal(validate(team, ['+CAP']), null);
+		rejected(validate([mew({ species: 'Not A Pokemon' })], ['+CAP']), /exist|recogniz|invalid/i);
 	});
-
-	it('should allow moves to be unbanned', function () {
-		const team = [
-			{species: 'absol', ability: 'pressure', moves: ['batonpass'], evs: {hp: 1}},
-		];
-		assert.legalTeam(team, 'gen7ou@@@+Baton Pass');
+	it('supports tagged restrictions', () => {
+		const rules = ['Limit One Restricted', '*Restricted Legendary'];
+		const first = mew({ species: 'Yveltal', ability: 'No Ability' }), second = mew({ species: 'Xerneas', ability: 'No Ability' });
+		assert.equal(validate([first], rules, { ruleset: [] }), null);
+		rejected(validate([first, second], rules, { ruleset: [] }), /one restricted/);
 	});
-
-	it('should allow items to be banned', function () {
-		let team = [
-			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], item: 'lightball', evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen7anythinggoes@@@-Light Ball');
-
-		team = [
-			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], item: 'lightball', evs: {hp: 1}},
-		];
-		assert.legalTeam(team, 'gen7anythinggoes@@@-noitem');
-
-		team = [
-			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen7anythinggoes@@@-noitem');
-
-		team = [
-			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: {hp: 1}},
-		];
-		assert.legalTeam(team, 'gen7anythinggoes@@@-allitems');
+	it('applies a set combination ban only when both parts coexist', () => {
+		rejected(validate([mew()], ['-Mew + Psychic']), /Mew.*Psychic|Psychic.*Mew/);
+		assert.equal(validate([mew({ moves: ['Protect'] })], ['-Mew + Psychic']), null);
 	});
-
-	it('should allow items to be unbanned', function () {
-		const team = [
-			{species: 'eevee', ability: 'runaway', moves: ['tackle'], item: 'eeviumz', evs: {hp: 1}},
-		];
-		assert.legalTeam(team, 'gen7lc@@@+Eevium Z');
+	it('applies team combination bans across sets', () => {
+		rejected(validate([mew(), mew({ moves: ['Protect'] })], ['-Psychic ++ Protect']), /Psychic.*Protect|Protect.*Psychic/);
+		assert.equal(validate([mew()], ['-Psychic ++ Protect']), null);
 	});
-
-	it('should allow abilities to be banned', function () {
-		const team = [
-			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen7anythinggoes@@@-Static');
+	it('alters a team combination limit', () => {
+		const rules = ['-Psychic ++ Protect > 2'];
+		assert.equal(validate([mew(), mew({ moves: ['Protect'] })], rules), null);
+		rejected(validate([mew(), mew(), mew({ moves: ['Protect'] })], rules), /Psychic|Protect/);
 	});
-
-	it('should allow abilities to be unbanned', function () {
-		const team = [
-			{species: 'wobbuffet', ability: 'shadowtag', moves: ['counter'], evs: {hp: 1}},
-		];
-		assert.legalTeam(team, 'gen7ou@@@+Shadow Tag');
+	it('removes a team combination ban', () => {
+		const team = [mew(), mew({ moves: ['Protect'] })], ban = 'Psychic ++ Protect';
+		rejected(validate(team, [], { banlist: [ban] }), /Psychic|Protect/);
+		assert.equal(validate(team, ['+' + ban], { banlist: [ban] }), null);
 	});
-
-	it('should allow complex bans to be added', function () {
-		let team = [
-			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen7anythinggoes@@@-Pikachu + Agility');
-
-		team = [
-			{species: 'smeargle', ability: 'owntempo', moves: ['gravity'], evs: {hp: 1}},
-			{species: 'pikachu', ability: 'static', moves: ['thunderbolt'], evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen7doublesou@@@-Gravity ++ Thunderbolt');
+	it('adds and removes a validator rule', () => {
+		const team = [mew(), mew()]; assert.equal(validate(team), null);
+		rejected(validate(team, ['Species Clause']), /Species Clause/);
+		assert.equal(validate(team, ['!Species Clause'], { ruleset: ['Obtainable', 'Species Clause'] }), null);
 	});
-
-	it('should allow complex bans to be altered', function () {
-		let team = [
-			{species: 'smeargle', ability: 'owntempo', moves: ['gravity'], evs: {hp: 1}},
-			{species: 'abomasnow', ability: 'snowwarning', moves: ['grasswhistle'], evs: {hp: 1}},
-		];
-		assert.legalTeam(team, 'gen7doublesou@@@-Gravity ++ Grass Whistle > 2');
-
-		team = [
-			{species: 'smeargle', ability: 'owntempo', moves: ['gravity'], evs: {hp: 1}},
-			{species: 'abomasnow', ability: 'snowwarning', moves: ['grasswhistle'], evs: {hp: 1}},
-			{species: 'cacturne', ability: 'sandveil', moves: ['grasswhistle'], evs: {hp: 1}},
-		];
-		assert.false.legalTeam(team, 'gen7doublesou@@@-Gravity ++ Grass Whistle > 2');
-	});
-
-	it('should allow complex bans to be removed', function () {
-		const team = [
-			{species: 'smeargle', ability: 'owntempo', moves: ['gravity'], evs: {hp: 1}},
-			{species: 'abomasnow', ability: 'snowwarning', moves: ['grasswhistle'], evs: {hp: 1}},
-		];
-		assert.legalTeam(team, 'gen7doublesou@@@+Gravity ++ Grass Whistle');
-	});
-
-	it('should allow rule bundles to be removed', function () {
-		const team = [
-			{species: 'azumarill', ability: 'hugepower', moves: ['waterfall'], evs: {hp: 1}},
-			{species: 'azumarill', ability: 'hugepower', moves: ['waterfall'], evs: {hp: 1}},
-		];
-		assert.legalTeam(team, 'gen7ou@@@!Standard');
-	});
-
-	it('should allow rule bundles to be overridden', function () {
-		const team = [
-			{species: 'charizard-mega-y', ability: 'drought', item: 'charizarditey', moves: ['wingattack'], evs: {hp: 1}},
-		];
-		assert.legalTeam(team, 'gen7customgame@@@Standard');
+	it('parses custom rules on a real public format', () => {
+		const format = Dex.formats.get('gen9nofieldsinglesgame@@@-Mew', true); assert.equal(format.effectType, 'Format');
+		rejected(new TeamValidator(format).validateTeam([mew()]), /Mew.*banned/);
 	});
 });

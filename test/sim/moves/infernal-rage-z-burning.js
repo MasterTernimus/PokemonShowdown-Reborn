@@ -38,20 +38,23 @@ describe('Infernal Rage and Z-Move Burning Field ownership', () => {
   setup();ignite();const state=battle.field.terrainState;state.duration=2;ignite(q,p);use('infernalrage');
   assert(battle.field.terrainState===state);assert.equal(state.duration,2);
  });
- it('still clears ordinary Burning Field',()=>{
+	it('preserves ordinary Burning Field through its matching Yang field bonus', () => {
   setup();battle.field.setTerrain('burningterrain',p,Dex.moves.get('willowisp'));
-  assert(!battle.field.terrainState.zMoveTerrain);use('infernalrage');assert.equal(battle.field.terrain,'factoryterrain');
+		const state = battle.field.terrainState, hp = q.hp;
+		assert(!state.zMoveTerrain); use('infernalrage'); assert.equal(battle.field.terrainState, state);
+		assert(q.hp < hp); assert(q.volatiles.torment); assert(!state.zMoveTerrain);
  });
  it('does not promote an unchanged ordinary Burning Field to Z ownership',()=>{
   setup();battle.field.setTerrain('burningterrain',p,Dex.moves.get('willowisp'));const state=battle.field.terrainState;
   use('flamethrower',p,q,{zMove:'Inferno Overdrive'});assert(battle.field.terrainState===state);assert(!state.zMoveTerrain);
-  use('infernalrage');assert.equal(battle.field.terrain,'factoryterrain');
+		use('infernalrage'); assert.equal(battle.field.terrainState, state); assert(!state.zMoveTerrain);
  });
  it('does not carry protection to a fresh ordinary replacement with the same name',()=>{
   setup();ignite();const old=battle.field.terrainState;battle.field.clearTerrain();
   battle.field.setTerrain('burningterrain',p,Dex.moves.get('willowisp'));
   assert(battle.field.terrainState!==old);assert(!battle.field.terrainState.zMoveTerrain);
-  use('infernalrage');assert.equal(battle.field.terrain,'factoryterrain');
+		const state = battle.field.terrainState;
+		use('infernalrage'); assert.equal(battle.field.terrainState, state); assert(!state.zMoveTerrain);
  });
  it('does not exempt another Z-owned field from normal Infernal Rage clearing',()=>{
   setup();p.setItem('Groundium Z');use('earthpower',p,q,{zMove:'Tectonic Rage'});

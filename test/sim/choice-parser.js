@@ -188,14 +188,14 @@ describe('Choice parser', function () {
 				assert(battle.choose('p2', `move Blaze Kick zmove 1, move irondefense`));
 			});
 
-			it('should allow Dynamax use in multiple possible formats', function () {
-				battle = common.gen(8).createBattle([[
-					{species: "Mew", moves: ['psychic']},
+			it('accepts a G-Max move name and max suffix in an eligible format', () => {
+				battle = common.createBattle({ formatid: 'gen9rockyfield' }, [[
+					{ species: "Charizard", gigantamax: true, moves: ['flamethrower'] },
 				], [
-					{species: "Mew", moves: ['psychic']},
+					{ species: "Charizard", gigantamax: true, moves: ['flamethrower'] },
 				]]);
-
-				battle.makeChoices(`move max mindstorm`, `move psychic max`);
+				battle.makeChoices('team 1', 'team 1');
+				battle.makeChoices(`move gmax wildfire`, `move flamethrower max`);
 				assert(battle.p1.active[0].volatiles['dynamax']);
 				assert(battle.p2.active[0].volatiles['dynamax']);
 			});
@@ -275,7 +275,7 @@ describe('Choice parser', function () {
 		});
 
 		describe('Triples', function () {
-			it('should accept only `move` and `switch` choices for a healthy Pokémon on the center', function () {
+			common.itGen(5, 'should accept only `move` and `switch` choices for a healthy Pokémon on the center', () => {
 				battle = common.gen(5).createBattle({gameType: 'triples'});
 				battle.setPlayer('p1', {team: [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
@@ -304,7 +304,7 @@ describe('Choice parser', function () {
 				}
 			});
 
-			it('should accept only `move`, `switch` and `shift` choices for a healthy Pokémon on the left', function () {
+			common.itGen(5, 'should accept only `move`, `switch` and `shift` choices for a healthy Pokémon on the left', () => {
 				battle = common.gen(5).createBattle({gameType: 'triples'});
 				battle.setPlayer('p1', {team: [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
@@ -334,7 +334,7 @@ describe('Choice parser', function () {
 				}
 			});
 
-			it('should accept only `move`, `switch` and `shift` choices for a healthy Pokémon on the right', function () {
+			common.itGen(5, 'should accept only `move`, `switch` and `shift` choices for a healthy Pokémon on the right', () => {
 				battle = common.gen(5).createBattle({gameType: 'triples'});
 				battle.setPlayer('p1', {team: [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
@@ -364,7 +364,7 @@ describe('Choice parser', function () {
 				}
 			});
 
-			it('should enforce `pass` choices for fainted Pokémon', function () {
+			common.itGen(5, 'should enforce `pass` choices for fainted Pokémon', () => {
 				battle = common.gen(5).createBattle({gameType: 'triples'});
 				battle.setPlayer('p1', {team: [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},

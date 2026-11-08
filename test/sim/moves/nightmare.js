@@ -10,7 +10,7 @@ describe('Nightmare [Gen 2]', function () {
 		battle.destroy();
 	});
 
-	it('should not deal damage to the affected if the opponent is KOed', function () {
+	common.itGen(2, 'should not deal damage to the affected if the opponent is KOed', () => {
 		battle = common.gen(2).createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: "Slugma", moves: ['sleeptalk']},
@@ -25,7 +25,7 @@ describe('Nightmare [Gen 2]', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it('should continue dealing damage to the affected if it falls asleep while asleep', function () {
+	common.itGen(2, 'should continue dealing damage to the affected if it falls asleep while asleep', () => {
 		battle = common.gen(2).createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: "Magcargo", moves: ['sleeptalk', 'rest']},

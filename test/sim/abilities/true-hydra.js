@@ -16,7 +16,8 @@ describe('Mega Hydreigon X and True Hydra', () => {
 		const mega = Dex.species.get('Hydreigon-Mega-X');
 		if (!ENABLE_MEGA_HYDREIGON_X) {
 			assert(!mega.exists);
-			assert(!Dex.items.get('Hydreigonite').exists);
+			assert.deepEqual(Dex.items.get('Hydreigonite').megaStone, { Hydreigon: 'Hydreigon-Mega' });
+			assert(Dex.species.get('Hydreigon-Mega').exists);
 			assert(!Dex.species.get('Hydreigon').otherFormes?.includes('Hydreigon-Mega-X'));
 			return;
 		}
@@ -37,7 +38,7 @@ describe('Mega Hydreigon X and True Hydra', () => {
 		], [{species: 'Aggron', moves: ['splash']}]]);
 		battle.makeChoices('team 1', 'team 1');
 		if (!ENABLE_MEGA_HYDREIGON_X) {
-			assert.equal(battle.p1.active[0].canMegaEvo, null);
+			assert.equal(battle.p1.active[0].canMegaEvo, 'Hydreigon-Mega');
 			battle.p1.active[0].setAbility('True Hydra');
 		} else assert.equal(battle.p1.active[0].canMegaEvo, 'Hydreigon-Mega-X');
 		battle.makeChoices(ENABLE_MEGA_HYDREIGON_X ? 'move dragonclaw mega' : 'move dragonclaw', 'move splash');
@@ -45,7 +46,7 @@ describe('Mega Hydreigon X and True Hydra', () => {
 		assert.equal(hydreigon.species.id, ENABLE_MEGA_HYDREIGON_X ? 'hydreigonmegax' : 'hydreigon');
 		assert.equal(hydreigon.ability, 'truehydra');
 		for (const component of ['hydrabond', 'regenerator', 'shedskin', 'selfsufficient']) {
-			assert(hydreigon.hasAbility(component), component);
+			assert(hydreigon.hasAbilityOrPassive(component), component);
 		}
 		assert(battle.log.some(line => line.startsWith('|-hitcount|') && line.endsWith('|3')), battle.log.join('\n'));
 	});

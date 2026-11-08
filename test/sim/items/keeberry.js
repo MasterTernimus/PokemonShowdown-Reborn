@@ -18,8 +18,13 @@ describe('Kee Berry', function () {
 		]]);
 
 		const alakazam = battle.p2.active[0];
+		const stagesDuringHits = [];
+		battle.onEvent('DamagingHit', battle.format, -99, (damage, target) => {
+			if (target === alakazam) stagesDuringHits.push(target.boosts.def);
+		});
 		battle.makeChoices();
-		const damage = alakazam.maxhp - alakazam.hp;
-		assert.bounded(damage, [28 * 2, 34 * 2]); // Otherwise range would be 47-57
+		assert.deepEqual(stagesDuringHits, [0, 0], 'Neither hit should use the post-move Defense boost');
+		assert.statStage(alakazam, 'def', 1);
+		assert.false.holdsItem(alakazam);
 	});
 });

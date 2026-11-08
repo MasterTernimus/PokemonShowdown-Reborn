@@ -38,29 +38,29 @@ describe('Lash Out', function () {
 
 	it(`should double in base power if the user's stats were lowered at the start of the match`, function () {
 		battle = common.createBattle([[
-			{species: 'Wynaut', ability: 'shellarmor', moves: ['lashout']},
+			{ species: 'Wynaut', ability: 'limber', moves: ['lashout'] },
 		], [
 			{species: 'Blissey', ability: 'intimidate', moves: ['skillswap']},
 		]]);
+		battle.onEvent('CriticalHit', battle.format, false);
+		assert.statStage(battle.p1.active[0], 'atk', -1);
 		battle.makeChoices();
-		const blissey = battle.p2.active[0];
-		const damage = blissey.maxhp - blissey.hp;
-		assert.bounded(damage, [104, 123]); // If it wasn't doubled, range would be 52-62
+		assert.bounded(battle.p2.active[0].maxhp - battle.p2.active[0].hp, [104, 123]);
 	});
 
 	it(`should not double in base power if the user's stats were lowered at a switch after a KO`, function () {
 		battle = common.createBattle([[
-			{species: 'Wynaut', ability: 'shellarmor', moves: ['lashout']},
+			{ species: 'Wynaut', ability: 'limber', moves: ['lashout'] },
 		], [
 			{species: 'Shedinja', moves: ['sleeptalk']},
 			{species: 'Blissey', ability: 'intimidate', moves: ['skillswap']},
 		]]);
 		battle.makeChoices();
 		battle.makeChoices();
+		assert.statStage(battle.p1.active[0], 'atk', -1);
+		battle.onEvent('CriticalHit', battle.format, false);
 		battle.makeChoices();
-		const blissey = battle.p2.active[0];
-		const damage = blissey.maxhp - blissey.hp;
-		assert.bounded(damage, [52, 62]); // If it was doubled, range would be 104-123
+		assert.bounded(battle.p2.active[0].maxhp - battle.p2.active[0].hp, [52, 62]);
 	});
 
 	it(`should double in base power even if stat resets are reset by Haze`, function () {

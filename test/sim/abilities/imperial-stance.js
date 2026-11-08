@@ -2,11 +2,12 @@
 const assert = require('assert').strict;
 const common = require('../../common');
 let battle;
-function start(species = 'Mew') {
+function start(species = 'Mew', field) {
 	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
 		[{species, ability: 'No Ability', moves: ['tackle', 'kingsshield']}],
 		[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
 	]);
+	if (field) battle.field.startTerrain(field);
 	battle.makeChoices('team 1', 'team 1');
 	return battle.p1.active[0];
 }
@@ -65,7 +66,8 @@ describe('Imperial Mandate and Stance Change field modes', () => {
 	}
 	for (const field of ['fairytaleterrain', 'chessboardterrain']) {
 		it(`${field}: Stance Change swaps both offensive and defensive stats`, () => {
-			const mon = start('Aegislash'); battle.field.startTerrain(field); mon.setAbility('stancechange', null, null, true);
+			// Native Stance Change starts on entry, before any stance swaps.
+			const mon = start('Aegislash', field);
 			assert.equal(mon.boosts.def, 1); assert.equal(mon.boosts.spd, 1);
 			battle.makeChoices('move 1', 'move 1');
 			assert.equal(mon.species.name, 'Aegislash-Blade');

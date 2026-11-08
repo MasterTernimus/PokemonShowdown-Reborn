@@ -10,7 +10,7 @@ describe('Requiem', function () {
 		battle?.destroy();
 	});
 
-	it('should mark each foe with Perish Song only on its first direct damaging interaction', function () {
+	it('should disable the damaging move instead of applying a Perish Song mark', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Dusknoir', ability: 'requiem', moves: ['splash', 'shadowpunch']},
 		], [
@@ -20,15 +20,15 @@ describe('Requiem', function () {
 		const foe = battle.p2.active[0];
 
 		battle.makeChoices('move splash', 'move crunch');
-		assert(foe.volatiles.perishsong);
+		assert.false(foe.volatiles.perishsong);
 		assert.false(foe.volatiles.curse);
 
 		battle.makeChoices('move splash', 'move bite');
-		assert(foe.volatiles.perishsong);
+		assert.false(foe.volatiles.perishsong);
 		assert.false(foe.volatiles.curse);
 	});
 
-	it('should mark a foe when Dusknoir damages it', function () {
+	it('should not apply a mark when Dusknoir damages a foe', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Dusknoir', ability: 'requiem', moves: ['shadowpunch']},
 		], [
@@ -38,11 +38,11 @@ describe('Requiem', function () {
 		const foe = battle.p2.active[0];
 
 		battle.makeChoices('move shadowpunch', 'move splash');
-		assert(foe.volatiles.requiem);
-		assert(foe.volatiles.perishsong);
+		assert.false(foe.volatiles.requiem);
+		assert.false(foe.volatiles.perishsong);
 	});
 
-	it('should clear its mark when the marked foe switches out', function () {
+	it('should clear the inflicted Disable when the foe switches out', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Dusknoir', ability: 'requiem', moves: ['splash']},
 		], [
@@ -51,14 +51,16 @@ describe('Requiem', function () {
 		]]);
 		battle.makeChoices('team 1', 'team 1, 2');
 		const markedFoe = battle.p2.active[0];
+		battle.randomChance = (n, d) => n >= d || (n === 3 && d === 10);
 
 		battle.makeChoices('move splash', 'move bite');
-		assert(markedFoe.volatiles.requiem);
+		assert(markedFoe.volatiles.disable);
+		assert.false(markedFoe.volatiles.requiem);
 		battle.makeChoices('move splash', 'switch 2');
 		assert.false(markedFoe.volatiles.requiem);
 	});
 
-	it('should restore 1/4 max HP when an opposing Pokemon faints', function () {
+	it('should not heal when an opposing Pokemon faints', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Dusknoir', ability: 'requiem', moves: ['shadowpunch']},
 		], [
@@ -72,10 +74,10 @@ describe('Requiem', function () {
 		foe.sethp(1);
 
 		battle.makeChoices('move shadowpunch', 'move splash');
-		assert.equal(dusknoir.hp, hpBefore + Math.floor(dusknoir.baseMaxhp / 4));
+		assert.equal(dusknoir.hp, hpBefore);
 	});
 
-	it('should create Haunted Field without cursing active Pokemon when it faints', function () {
+	it('should not create a field or curse active Pokemon when it faints', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Dusknoir', ability: 'requiem', moves: ['splash']},
 			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
@@ -87,7 +89,7 @@ describe('Requiem', function () {
 		dusknoir.sethp(1);
 		battle.makeChoices('move splash', 'move shadowball');
 
-		assert.equal(battle.field.terrain, 'hauntedterrain');
+		assert.equal(battle.field.terrain, '');
 		assert.false(battle.p2.active[0].volatiles.curse);
 	});
 });

@@ -17,22 +17,22 @@ describe('Mega Proficient and Illusion audit', function () {
    assert.equal(calc(60,'Dragon'),ability==='shadowcurrent'?90:60);
   });
  }
- it('copies a Mega composite, grants its Proficient component, and restores Illusion after damage', function () {
+	for (const disguise of ['illusion', 'perfectillusion']) it(disguise + ' copies only its permitted traits and clears them after damage', () => {
   battle=common.createBattle({formatid:'gen9nofieldsinglesgame', preview:false},[[
-   {species:'Zoroark',ability:'illusion',moves:['splash']},
+			{ species: 'Zoroark', ability: disguise, moves: ['splash'] },
    {species:'Swampert-Mega',ability:'ragingcurrent',moves:['earthquake']},
   ],[{species:'Mew',ability:'noability',moves:['tackle']}]]);
   if (battle.requestState === 'teampreview') battle.makeChoices();
    const user=battle.p1.active[0],ally=battle.p1.pokemon[1];
   assert.equal(user.illusion,ally);
-  assert.equal(user.ability,'ragingcurrent');
-  ally.formeChange('Swampert-Mega', null, true); assert(user.getPassives().includes('proficient'));
+		assert.equal(user.ability, disguise === 'perfectillusion' ? 'ragingcurrent' : 'illusion');
+		ally.formeChange('Swampert-Mega', null, true); assert.equal(user.getPassives().includes('proficient'), disguise === 'perfectillusion');
   const hp=user.hp, allyHp=ally.hp;
   battle.makeChoices('move splash','move tackle');
   assert(user.hp<hp);
   assert.equal(ally.hp,allyHp);
   assert.equal(user.illusion,null);
-  assert.equal(user.ability,'illusion');
+		assert.equal(user.ability, disguise);
   assert(!user.volatiles.illusioncopy);
   assert(!user.hasAbility('proficient'));
  });

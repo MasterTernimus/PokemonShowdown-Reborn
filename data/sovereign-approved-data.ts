@@ -10,7 +10,7 @@ export const SovereignDescriptions: { [id: string]: { shortDesc: string, desc: s
 	},
 	stormsovereign: {
 		shortDesc: 'Updraft (Competitive), eight-turn Strong Winds and opposing Flying chip.',
-		desc: 'Summons replaceable Strong Winds for 8 turns on entry. Each turn, non-immune foes take Flying damage equal to 1/16 base maximum HP; type effectiveness scales this chip only in Free-for-All. Flying-type foes are immune. ' + updraft + "Mega Pidgeot receives No Guard from its species passive and has no Gale Wings priority. Other holders retain their existing full-HP Flying priority and never-miss effect when no No Guard passive is present.",
+		desc: 'Summons replaceable Strong Winds for 8 turns on entry. Each turn, non-immune foes take Flying damage equal to 1/16 base maximum HP; type effectiveness scales this chip only in Free-for-All. Flying-type foes are immune.' + updraft + "Mega Pidgeot receives No Guard from its species passive and has no Gale Wings priority. Other holders retain their existing full-HP Flying priority and never-miss effect when no No Guard passive is present.",
 	},
 	sandsovereign: {
 		shortDesc: 'Solid Rock; better Rock/Ground matchup; eight-turn sand and Rock chip.',
@@ -23,5 +23,5 @@ export const SovereignDescriptions: { [id: string]: { shortDesc: string, desc: s
 };
 export const NativeStormDescription = {
 	passive: 'noguard', shortDesc: 'Updraft (Competitive), eight-turn Strong Winds and opposing Flying chip.',
-	desc: 'Summons replaceable Strong Winds for 8 turns on entry. Each turn, non-immune foes take Flying damage equal to 1/16 base maximum HP; type effectiveness scales this chip only in Free-for-All. Flying-type foes are immune. ' + updraft + "",
+	desc: 'Summons replaceable Strong Winds for 8 turns on entry. Each turn, non-immune foes take Flying damage equal to 1/16 base maximum HP; type effectiveness scales this chip only in Free-for-All. Flying-type foes are immune.' + updraft + "",
 };

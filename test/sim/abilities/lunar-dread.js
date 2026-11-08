@@ -30,8 +30,8 @@ describe('Dishearten and Lunar Dread', () => {
 		const ability = Dex.abilities.get('dishearten');
 		assert(ability.exists && ability.desc.includes('Sp. Atk'));
 		assert.equal(Dex.abilities.all().filter(a => a.num === ability.num).length, 1);
-		assert.deepEqual(Dex.species.get('ursalunabloodmoon').abilities, { 0: "Mind's Eye", 1: 'Lunar Dread', H: 'Shadow Shield' });
-		assert.deepEqual(Dex.species.get('ursalunabloodmoon').baseStats, { hp: 133, atk: 40, def: 130, spa: 135, spd: 110, spe: 52 });
+		assert.deepEqual(Dex.species.get('ursalunabloodmoon').abilities, { 0: 'Bloodmoon Gaze', 1: 'Lunar Dread', H: 'Moonlit Hide' });
+		assert.deepEqual(Dex.species.get('ursalunabloodmoon').baseStats, { hp: 123, atk: 65, def: 130, spa: 135, spd: 95, spe: 52 });
 	});
 	it('lowers only opposing Sp. Atk in singles, once per entry', () => {
 		const [holder, foe] = make();
@@ -81,21 +81,21 @@ describe('Dishearten and Lunar Dread', () => {
 		assert(holder.abilityState.disheartenActivated);
 		assert.equal(battle.p2.active[0].boosts.spa, 0);
 	});
-	it('Lunar Dread combines entry drops, Insomnia and Pressure without legacy effects', () => {
+	it('Lunar Dread combines Dishearten and Insomnia without Pressure', () => {
 		const [holder, foe] = make('Lunar Dread');
-		assert.equal(foe.boosts.spa, -1); assert.equal(foe.boosts.def, -1); assert.equal(foe.boosts.spd, -1);
-		for (const component of ['dishearten', 'insomnia', 'pressure']) assert(holder.hasAbility(component));
-		for (const removed of ['intimidate', 'magicguard', 'unaware']) assert(!holder.hasAbility(removed));
+		assert.equal(foe.boosts.spa, -1); assert.equal(foe.boosts.def, 0); assert.equal(foe.boosts.spd, 0);
+		for (const component of ['dishearten', 'insomnia']) assert(holder.hasAbility(component));
+		for (const removed of ['intimidate', 'magicguard', 'unaware', 'pressure']) assert(!holder.hasAbility(removed));
 		hit('tackle', holder, foe);
 		assert(!foe.volatiles.lunardread);
 		assert.equal(battle.runEvent('ModifyDamage', foe, holder, battle.dex.getActiveMove('tackle'), 100), 100);
 		assert.equal(battle.runEvent('ModifyCritRatio', holder, foe, battle.dex.getActiveMove('earthpower'), 1), 1);
 	});
-	it('Lunar Dread deducts extra PP from opponents targeting it', () => {
+	it('Lunar Dread does not retain the removed Pressure PP drain', () => {
 		const [, foe] = make('Lunar Dread');
 		const slot = foe.moveSlots.find(m => m.id === 'tackle'); const pp = slot.pp;
 		battle.makeChoices('move splash', 'move tackle');
-		assert.equal(slot.pp, pp - 2);
+		assert.equal(slot.pp, pp - 1);
 	});
 	it('Lunar Dread prevents sleep, Rest and Yawn', () => {
 		const [holder, foe] = make('Lunar Dread');
@@ -109,7 +109,7 @@ describe('Dishearten and Lunar Dread', () => {
 		assert.equal(holder.status, '');
 		assert.equal(battle.runEvent('BasePower', holder, foe, battle.dex.getActiveMove('shadowball'), 100), 130);
 	});
-	it('Lunar Dread sleep immunity and PP effects are suppressed by Gastro Acid', () => {
+	it('Lunar Dread sleep immunity is suppressed by Gastro Acid', () => {
 		const [holder, foe] = make('Lunar Dread');
 		hit('gastroacid', foe, holder);
 		assert(holder.ignoringAbility());
@@ -117,10 +117,11 @@ describe('Dishearten and Lunar Dread', () => {
 		battle.makeChoices('move splash', 'move tackle'); assert.equal(slot.pp, pp - 1);
 		hit('spore', foe, holder); assert.equal(holder.status, 'slp');
 	});
-	it('Lunar Dread retains Pressure field behavior', () => {
+	it('Lunar Dread does not create the removed Pressure field transition', () => {
 		const [holder, foe] = make('No Ability');
 		battle.field.setTerrain('underwaterterrain', holder); holder.setAbility('Lunar Dread');
-		assert.equal(battle.field.terrain, 'midnightzoneterrain');
-		assert.equal(battle.runEvent('DeductPP', holder, foe), 2);
+		assert.equal(battle.field.terrain, 'underwaterterrain');
+		assert(!holder.hasAbility('Pressure'));
+		assert.equal(Dex.abilities.get('Lunar Dread').onDeductPP, undefined);
 	});
 });

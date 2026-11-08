@@ -5,14 +5,25 @@ function use(p,t,id,extra={}){battle.clearActiveMove();const m=battle.dex.getAct
 function nw(p){battle.field.setTerrain('newworldterrain',p);}
 describe('Final Void family mechanics and compatibility',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- for(const row of require('./void-family-baseline.json'))it(row.old+' aliases to exactly one '+row.name+' with unchanged distribution',()=>{
+	for (const row of require('./void-family-baseline.json'))it(row.old + ' retains one compatible ' + row.name + ' identity and the approved distribution', () => {
   const a=Dex.abilities.get(row.old);assert.equal(a.id,row.id);assert.equal(a.name,row.name);assert.equal(a,Dex.abilities.get(row.name));assert.equal(Dex.abilities.all().filter(x=>x.id===row.id).length,1);assert(!Dex.abilities.all().some(x=>x.id===row.oldid));
-  assert.deepEqual(Dex.species.all().flatMap(p=>Object.entries(p.abilities).filter(([slot,n])=>Dex.abilities.get(n).id===row.id).map(([slot])=>[p.id,slot])),row.holders);
-  const {AbilityComponents}=require('../../../dist/data/ability-components');assert.deepEqual(AbilityComponents[row.id]||[],row.id==='voidguile'?[...row.components,'infiltrator']:row.id==='voiddrift'?row.components.filter(id=>id!=='levitate'):row.id==='voidomen'?row.components.filter(id=>id!=='moldbreaker'):row.components);
+		const replacements = { voidtyrant: ['hydreigon', 'H', 'False Liberation'], voidreprisal: ['conkeldurr', '0', 'Guts'], voiddrift: ['flygon', '0', 'Mirage Drift'] };
+		const replacement = replacements[row.id];
+		const expectedHolders = replacement ? [] : row.holders;
+		if (replacement)assert.equal(Dex.species.get(replacement[0]).abilities[replacement[1]], replacement[2]);
+		assert.deepEqual(Dex.species.all().flatMap(p => Object.entries(p.abilities).filter(([slot, n]) => Dex.abilities.get(n).id === row.id).map(([slot]) => [p.id, slot])), expectedHolders);
+		const { AbilityComponents } = require('../../../dist/data/ability-components'); assert.deepEqual(AbilityComponents[row.id] || [], row.id === 'voidguile' ? [...row.components, 'infiltrator'] : row.id === 'voiddrift' ? row.components.filter(id => id !== 'levitate') : row.id === 'voidomen' ? ['friendguard'] : row.id === 'voidwrath' ? [...row.components, 'infiltrator'] : row.components);
   const team=Teams.import(row.holders[0][0]+'\nAbility: '+row.old+'\n- Tackle');assert.equal(Dex.abilities.get(Teams.unpack(Teams.pack(team))[0].ability).id,row.id);
   const validator=new TeamValidator('gen9nofieldsinglesgame');const old=validator.validateTeam(structuredClone(team));team[0].ability=row.name;assert.deepEqual(validator.validateTeam(structuredClone(team)),old);
   const {getAbilityMechanicsHTML}=require('../../../dist/server/ability-lookup');assert.equal(getAbilityMechanicsHTML(a,Dex),getAbilityMechanicsHTML(Dex.abilities.get(row.name),Dex));
-  const metadata=require('../../../dist/sim/custom-calculator').calculatorMetadata();assert(metadata.species.some(x=>Object.values(x.abilities).includes(row.name))); const {validateScenario}=require('../../../dist/sim/custom-calculator');const input={format:'gen9nofieldsinglesgame',move:'Tackle',actors:Array.from({length:4},()=>({species:'Mew',ability:'No Ability'}))};input.actors[0].ability=row.old;const oldCalc=validateScenario(input);input.actors[0].ability=row.name;assert.deepEqual(validateScenario(input),oldCalc);
+		const metadata = require('../../../dist/sim/custom-calculator').calculatorMetadata();
+		assert.equal(metadata.species.some(x => Object.values(x.abilities).includes(row.name)), expectedHolders.length > 0);
+		const { validateScenario } = require('../../../dist/sim/custom-calculator');
+		const input = { format: 'gen9nofieldsinglesgame', move: 'Tackle', actors: Array.from({ length: 4 }, () => ({ species: 'Mew', ability: 'No Ability' })) };
+		input.actors[0].ability = row.old;
+		const oldCalc = validateScenario(input);
+		input.actors[0].ability = row.name;
+		assert.deepEqual(validateScenario(input), oldCalc);
  });
  it('Void Drift ignores negative SpA only for special Ground damage and preserves actual/positive stages',()=>{const[p,t]=start('Void Drift','Flygon');nw(p);const base=use(p,t,'earthpower');battle.boost({spa:-2},p,t);assert.equal(p.boosts.spa,-2);assert.equal(use(p,t,'earthpower'),base);assert.equal(p.boosts.spa,-2);p.boosts.spa=2;assert(use(p,t,'earthpower')>base);p.boosts.spa=0;const dragon=use(p,t,'dragonpulse');p.boosts.spa=-2;assert(use(p,t,'dragonpulse')<dragon);const quake=use(p,t,'earthquake');p.boosts.spa=0;assert.equal(use(p,t,'earthquake'),quake);});
  it('Void Drift does not repair Draco Meteor stages or strengthen later Draco Meteors',()=>{const[p,t]=start('Void Drift','Flygon');nw(p);const first=use(p,t,'dracometeor');assert.equal(p.boosts.spa,-2);use(p,t,'earthpower');assert.equal(p.boosts.spa,-2);assert(use(p,t,'dracometeor')<first);assert.equal(p.boosts.spa,-4);});

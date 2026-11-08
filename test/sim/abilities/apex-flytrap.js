@@ -21,10 +21,10 @@ describe('Apex Flytrap and approved roster adjustments', () => {
 		assert.deepEqual(holder.species.abilities, {0: 'Apex Flytrap', 1: 'Dry Skin', H: 'Regenerator'});
 		const toad = battle.dex.species.get('Seismitoad');
 		assert.deepEqual(toad.baseStats, {hp: 105, atk: 110, def: 90, spa: 95, spd: 90, spe: 75});
-		assert.deepEqual(toad.abilities, {0: 'Swift Swim', 1: 'Mire Chorus', H: 'Marsh Conduit'});
+		assert.deepEqual(toad.abilities, { 0: 'Swift Swim', 1: 'Poison Touch', H: 'Marsh Hide' });
 	});
 
-	it('is airborne and traps a contact attacker once per switch-in', () => {
+	it('is airborne and refreshes its contact trap on later hits', () => {
 		const [holder, foe] = start();
 		assert.equal(holder.hasAbility('levitate'), true);
 		assert.equal(holder.isGrounded(), null);
@@ -35,10 +35,12 @@ describe('Apex Flytrap and approved roster adjustments', () => {
 		assert.equal(foe.isAlly(holder), false);
 		battle.singleEvent('DamagingHit', holder.getAbility(), holder.abilityState, holder, foe, tackle, 10);
 		assert(foe.volatiles.apexflytraptrapped);
-		assert.equal(holder.abilityState.trapUsed, true);
+		foe.volatiles.apexflytraptrapped.duration = 1;
+		battle.singleEvent('DamagingHit', holder.getAbility(), holder.abilityState, holder, foe, tackle, 10);
+		assert.equal(foe.volatiles.apexflytraptrapped.duration, 2);
 		foe.removeVolatile('apexflytraptrapped');
 		battle.singleEvent('DamagingHit', holder.getAbility(), holder.abilityState, holder, foe, tackle, 10);
-		assert.equal(foe.volatiles.apexflytraptrapped, undefined);
+		assert(foe.volatiles.apexflytraptrapped);
 	});
 
 	it('does not trap attackers using noncontact moves', () => {

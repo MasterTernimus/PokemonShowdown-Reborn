@@ -48,11 +48,11 @@ describe('Composite ability cleanup', function () {
 		assert(ability.onSourceModifyDamage);
 	});
 
-	it('should replace Lunar Dread marks with Dishearten, Insomnia and Pressure', () => {
+	it('should replace Lunar Dread marks with Dishearten and Insomnia without Pressure', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const ability = battle.dex.abilities.get('lunardread');
-		for (const hook of ['onStart', 'onSetStatus', 'onTryAddVolatile', 'onDeductPP']) assert(ability[hook]);
-		for (const hook of ['onDamage', 'onAnyModifyBoost', 'onSourceDamagingHit', 'onModifyCritRatio', 'condition']) {
+		for (const hook of ['onStart', 'onSetStatus', 'onTryAddVolatile']) assert(ability[hook]);
+		for (const hook of ['onDamage', 'onAnyModifyBoost', 'onSourceDamagingHit', 'onModifyCritRatio', 'condition', 'onDeductPP']) {
 			assert.equal(ability[hook], undefined);
 		}
 	});
@@ -71,14 +71,14 @@ describe('Composite ability cleanup', function () {
 		assert.equal(ability.onSourceDamagingHit, undefined);
 	});
 
-	it('should give Still Waters Cloud Nine, Magic Guard, and Unaware hooks', function () {
+	it('should give Still Waters Cloud Nine and Unaware without Magic Guard', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const ability = battle.dex.abilities.get('stillwaters');
 		assert(ability.onSwitchIn);
 		assert(ability.onStart);
 		assert(ability.onResidual);
 		assert(ability.onEnd);
-		assert(ability.onDamage);
+		assert.equal(ability.onDamage, undefined);
 		assert(ability.onAnyModifyBoost);
 		assert.equal(ability.suppressWeather, true);
 	});
@@ -96,16 +96,17 @@ describe('Composite ability cleanup', function () {
 		assert.equal(blastoise.status, 'brn');
 	});
 
-	it('should make Wrath Shield only Bulletproof, Filter, and Self Repair', function () {
+	it('should make Wrath Shield Bulletproof, Stamina and Friend Guard without Self Repair', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const ability = battle.dex.abilities.get('wrathshield');
-		assert.equal(ability.onDamagingHit, undefined);
+		assert.equal(ability.onDamagingHit, battle.dex.abilities.get('stamina').onDamagingHit);
 		assert.equal(ability.onAfterEachBoost, undefined);
 		assert.equal(ability.onCriticalHit, undefined);
 		assert(ability.onTryHit);
 		assert(ability.onSourceModifyDamage);
-		assert(ability.onResidual);
-		assert(ability.onSwitchOut);
+		assert.equal(ability.onAnyModifyDamage, battle.dex.abilities.get('friendguard').onAnyModifyDamage);
+		assert.equal(ability.onResidual, undefined);
+		assert.equal(ability.onSwitchOut, undefined);
 	});
 
 	it('should give Bulletproof and Mirror Armor their armor damage hooks', function () {
@@ -114,7 +115,7 @@ describe('Composite ability cleanup', function () {
 		assert(battle.dex.abilities.get('mirrorarmor').onSourceModifyDamage);
 	});
 
-	it('should keep Haxorus Battle Armor as a passive alongside Raging Storm', function () {
+	it('should keep Haxorus Rivalry as a passive alongside Raging Storm', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Haxorus', ability: 'ragingstorm', moves: ['splash']},
 		], [
@@ -123,7 +124,8 @@ describe('Composite ability cleanup', function () {
 		battle.makeChoices('team 1', 'team 1');
 		const haxorus = battle.p1.active[0];
 		assert.false(haxorus.hasAbility('battlearmor'));
-		assert(haxorus.hasAbilityOrPassive('battlearmor'));
+		assert(!haxorus.hasAbilityOrPassive('battlearmor'));
+		assert(haxorus.hasAbilityOrPassive('rivalry'));
 		assert(haxorus.hasAbility('moldbreaker'));
 	});
 
@@ -162,7 +164,7 @@ describe('Composite ability cleanup', function () {
 		assert.equal(battle.dex.abilities.get('abysssniper').name, 'Abyss Sniper');
 	});
 
-	it('should give Defeatist every Relic Armor hook', function () {
+	it('should keep Defeatist defensive retaliation without removed residual healing', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Archeops', ability: 'defeatist', moves: ['splash']},
 		], [
@@ -177,7 +179,7 @@ describe('Composite ability cleanup', function () {
 		battle.directDamage(80, archeops);
 		const hpBefore = archeops.hp;
 		battle.makeChoices('move splash', 'move growl');
-		assert.equal(archeops.hp - hpBefore, Math.floor(archeops.baseMaxhp / 16));
+		assert.equal(archeops.hp, hpBefore);
 		assert.statStage(archeops, 'def', 1);
 		assert.statStage(archeops, 'spd', 1);
 	});
@@ -239,14 +241,14 @@ describe('Composite ability cleanup', function () {
 		assert(ability.onAfterMove);
 	});
 
-	it('should give Toxic Evolution only its requested visible components and hidden reduction', function () {
+	it('should give Toxic Evolution Corrosion and Shield Dust without removed damage reduction', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const ability = battle.dex.abilities.get('toxicevolution');
 		assert.equal(ability.name, 'Toxic Evolution');
 		assert(ability.onNegateImmunity);
 		assert(ability.onModifyMove);
 		assert(ability.onModifySecondaries);
-		assert(ability.onSourceModifyDamage);
+		assert.equal(ability.onSourceModifyDamage, undefined);
 		assert.equal(ability.onAnyTryHeal, undefined);
 		assert.equal(ability.onResidual, undefined);
 		assert.equal(ability.onAnyModifyDamage, undefined);
@@ -258,7 +260,7 @@ describe('Composite ability cleanup', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const base = {
 			0: 'Competitive',
-			1: 'Exalt',
+			1: 'Imperial Edge',
 			H: 'Royal Decree',
 		};
 		assert.deepEqual(battle.dex.species.get('Empoleon').abilities, base);
@@ -307,7 +309,8 @@ describe('Composite ability cleanup', function () {
 		assert.statStage(aerodactyl, 'atk', 1);
 		const ability = battle.dex.abilities.get('apexpredator');
 		assert.equal(ability.onModifyCritRatio, undefined);
-		assert(ability.onModifyType);
+		assert.equal(ability.onModifyType, undefined);
+		assert(aerodactyl.hasAbility('toughclaws'));
 		assert.equal(ability.onCriticalHit, undefined);
 		assert(aerodactyl.hasAbilityOrPassive('relicarmor'));
 	});
@@ -404,11 +407,11 @@ describe('Composite ability cleanup', function () {
 		const pokemon = battle.p1.active[0];
 		const composites = {
 			alchemistsurge: ['psychicsurge', 'competitive', 'hydrabond', 'prankster'],
-			apexpredator: ['dragonize', 'windrider'],
+			apexpredator: ['windrider', 'toughclaws'],
 			alloycore: ['magicguard', 'selfsufficient', 'stalwart'],
-			ancientbloom: ['effectspore', 'selfsufficient'],
+			ancientbloom: ['pollenbloom', 'friendguard'],
 			astralcore: ['purepower', 'naturalcure', 'illuminate'],
-			bloomingsun: ['megasol', 'invigorate', 'naturalcure'],
+			bloomingsun: ['megasol', 'flowerveil'],
 			celestialheart: ['soulheart', 'friendguard', 'serenegrace'],
 			doomwarning: ['magicbounce', 'magicguard'],
 			draconicforce: ['dragonize', 'strongjaw', 'moldbreaker'],
@@ -423,30 +426,32 @@ describe('Composite ability cleanup', function () {
 			hauntedchime: ['elevate', 'windpower', 'cursedbody'],
 			auramaster: ['dualwield', 'innerfocus', 'technician'],
 		lunarorbit: ['magicbounce', 'serenegrace', 'triage'],
-		stillwaters: ['cloudnine', 'magicguard', 'unaware'],
-		relentlesshunt: ['levitate'],
+			stillwaters: ['cloudnine', 'unaware'],
+			relentlesshunt: ['roughskin'],
 			omenedge: ['sharpness', 'dualwield', 'pressure'],
 			ragingcurrent: ['swiftswim', 'dryskin', 'stamina'],
 			shadowcurrent: ['protean', 'technician', 'anticipation', 'infiltrator'],
 			calderacore: ['magmaarmor', 'drought'],
-			doublestrike: ['ironfist', 'technician', 'skilllink'],
-			ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker', 'battlearmor'],
+			doublestrike: ['technician', 'skilllink'],
+			ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker'],
 			riotamp: ['galvanize', 'resonanceforce', 'voltabsorb'],
 			perfectstriker: ['striker', 'noguard', 'libero'],
-			mossarmor: ['stamina', 'naturalcure', 'levitate'],
+			mossarmor: ['stamina', 'naturalcure'],
 		stormcalling: ['drizzle', 'liquidvoice', 'dissonantecho'],
 		aevianglacier: ['snowwarning', 'icebody', 'refrigerate'],
 			aevianbolt: ['stormpower', 'static', 'voltabsorb'],
 			heatcoil: ['speedboost', 'magmaarmor', 'flamebody'],
-			sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil', 'pastelveil'],
+			sweetsanctuary: ['stamina'],
 			treasuretitan: ['filter', 'eartheater', 'heavymetal'],
-			wickedsnare: ['stakeout', 'tanglinghair', 'prankster'],
+			wickedsnare: ['intimidate'],
 			waterbubble: ['waterveil'],
 		};
 		for (const [ability, components] of Object.entries(composites)) {
 			pokemon.setAbility(ability, pokemon, battle.dex.abilities.get('noability'), true);
 			for (const component of components) {
-				if (require('./selected-simplifications-approved.json').removed[ability]?.includes(component)) {
+				// Serene Grace was explicitly restored to Lunar Orbit after that fixture.
+				if (require('./selected-simplifications-approved.json').removed[ability]?.includes(component) &&
+					!(ability === 'lunarorbit' && component === 'serenegrace')) {
 					assert(!pokemon.hasAbility(component), `${ability} must no longer expose ${component}`);
 					continue;
 				}
@@ -455,7 +460,7 @@ describe('Composite ability cleanup', function () {
 		}
 		const bloomingSun = battle.dex.abilities.get('bloomingsun');
 		assert.equal(bloomingSun.onCheckShow, undefined); // Natural Cure was removed.
-		assert(bloomingSun.onResidual);
+		assert.equal(bloomingSun.onResidual, undefined); // Invigorate healing was removed.
 		pokemon.setAbility('ragingcurrent', pokemon, battle.dex.abilities.get('noability'), true);
 		assert.false(pokemon.hasAbility('regenerator'));
 		assert.equal(battle.dex.abilities.get('ragingcurrent').onSwitchOut, undefined);

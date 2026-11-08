@@ -26,7 +26,7 @@ describe('Territorial approved rework', () => {
 		if (finish) battle.runEvent('AfterMove', source, target, active);
 		return active;
 	}
-	it('uses actual Stamina and raises Defense immediately between hits while healing every hit', () => {
+	it('uses actual Stamina and raises Defense immediately, healing once per multihit move', () => {
 		const [holder, foe] = make();
 		assert.equal(holder.getAbility().onDamagingHit, battle.dex.abilities.get('stamina').onDamagingHit);
 		assert.equal(holder.getAbility().onAnyAfterMove, undefined);
@@ -39,8 +39,8 @@ describe('Territorial approved rework', () => {
 		const move = battle.dex.getActiveMove('bulletseed');
 		Object.assign(move, { damage: 20, multihit: 5, accuracy: true });
 		battle.actions.useMove(move, foe, { target: holder });
-		assert.deepEqual(heals, [1, 1, 1, 1, 1]);
-		assert.equal(holder.hp, 200 - 100 + 5 * Math.floor(holder.baseMaxhp / 16));
+		assert.deepEqual(heals, [1]);
+		assert.equal(holder.hp, 200 - 100 + Math.floor(holder.baseMaxhp / 16));
 		assert.equal(holder.m.territorialDefenseTurn, undefined);
 	});
 	it('accepts special hits, heals successive attacks and resets its boost next turn', () => {
@@ -140,7 +140,7 @@ describe('Territorial approved rework', () => {
 		const [p] = make();
 		for (const id of ['unnerve', 'stamina', 'guarddog']) assert(p.hasAbility(id));
 		assert.deepEqual(battle.dex.species.get('ursaluna').abilities, { 0: 'Raging Beast', 1: 'Bulletproof', H: 'Territorial' });
-		assert.deepEqual(battle.dex.species.get('ursalunabloodmoon').abilities, { 0: "Mind's Eye", 1: 'Lunar Dread', H: 'Shadow Shield' });
+		assert.deepEqual(battle.dex.species.get('ursalunabloodmoon').abilities, { 0: 'Bloodmoon Gaze', 1: 'Lunar Dread', H: 'Moonlit Hide' });
 		p.setAbility('Raging Beast');
 		assert(p.hasAbility('guts')); assert(p.hasAbility('moldbreaker'));
 		p.setStatus('brn');

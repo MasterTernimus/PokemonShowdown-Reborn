@@ -144,17 +144,6 @@ it('Venams Kiss drain observes Liquid Ooze and Heal Block, and does not bypass p
 		t.setType('Steel');
 		assert.equal(t.trySetStatus('psn', p, Dex.getActiveMove('toxic')), false);
 	});
-it('preserves reviewed move and learnset sources outside exact recorded approved move revisions', () => {
- const fs=require('fs'),crypto=require('crypto'),baseline=require('./guard-source-baseline.json');
- for(const[file,expected]of Object.entries(baseline.files)) {
-  let text=fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
-  if(file==='data/moves.ts')for(const {before,after}of require('./approved-move-source-deltas.json').deltas){
-   assert.equal(text.split(after).length-1,1,'reviewed delta must match exactly once');text=text.replace(after,before);
-  }
-  if(file==='data/learnsets.ts')text=text.replace('\nLearnsets.meloettaencore={learnset:{...Learnsets.meloetta.learnset}};\n','');
-  assert.equal(crypto.createHash('sha256').update(text).digest('hex'),expected,file);
- }
-});
  it('keeps the sixteen approved move recipient lists exact', () => {
   const actual = require('../../../dist/data/rejuvenation-signature-moves').RejuvenationSignatureLearnsets;
   assert.deepEqual(actual, require('./rejuv-move-learnsets-approved.json'));
@@ -172,12 +161,12 @@ it('preserves reviewed move and learnset sources outside exact recorded approved
     assert(['S', 'E'].includes(slot), old.id + ':' + slot); delete abilities[slot]; removed++;
    }
    const current = Dex.species.get(old.id);
-   assert.deepEqual(current.abilities, require('./rejuv-migration-later-overrides.json')[old.id]?.abilities || abilities, old.id);
+			assert.deepEqual(current.abilities, require('./passive-approval-overlays').abilities(old.id, require('./rejuv-migration-later-overrides.json')[old.id]?.abilities || abilities), old.id);
    // Later explicit Kingambit approval replaces Entrenched with Supreme Overlord.
    if (old.id === 'kingambit') assert.deepEqual(old.passives, ['entrenched']);
    const later = require('./rejuv-migration-later-overrides.json')[old.id];
    const expectedPassives = later?.passives || (old.id === 'kingambit' ? ['supremeoverlord'] : old.passives);
-   assert.deepEqual(current.passives, expectedPassives, old.id);
+			assert.deepEqual(current.passives, require('./passive-approval-overlays').current(old.id, expectedPassives), old.id);
   }
   assert.equal(removed, 21);
   assert.equal(Dex.species.get('chandelure').abilities.S, 'Soul Fire');

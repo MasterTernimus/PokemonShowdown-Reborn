@@ -12,7 +12,7 @@ describe('Gyarados-Aevian', function () {
 	it('has the requested independent regional profile', function () {
 		const species = Dex.species.get('Gyarados-Aevian');
 		assert.deepEqual(species.types, ['Fire', 'Dragon']);
-		assert.deepEqual(species.baseStats, {hp: 95, atk: 165, def: 115, spa: 99, spd: 145, spe: 81});
+		assert.deepEqual(species.baseStats, { hp: 95, atk: 80, def: 84, spa: 125, spd: 105, spe: 81 });
 		assert.deepEqual(species.abilities, {0: 'Multiscale', 1: 'Competitive', H: 'Intimidate'});
 	});
 
@@ -41,7 +41,7 @@ describe('Gyarados-Aevian', function () {
 		assert.equal(battle.field.weather, 'sunnyday');
 	});
 
-	it('gives Helios the Mold Breaker and Multiscale effects', function () {
+	it('gives Helios Drought, Mold Breaker, Berserk and Swift Swim', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame', preview: false}, [[
 			{species: 'Gyarados-Aevian', ability: 'Multiscale', item: 'Gyaradosite', moves: ['snarl']},
 		], [
@@ -50,14 +50,11 @@ describe('Gyarados-Aevian', function () {
 		if (!battle.p1.active[0] || !battle.p2.active[0]) battle.makeChoices('team 1', 'team 1');
 		const gyarados = battle.p1.active[0];
 		battle.makeChoices('move snarl mega', 'move dragonclaw');
-		for (const component of ['drought', 'moldbreaker', 'multiscale']) {
+		for (const component of ['drought', 'moldbreaker', 'berserk', 'swiftswim']) {
 			assert(gyarados.hasAbility(component), `Helios should expose ${component}`);
 		}
-		const firstDamage = gyarados.maxhp - gyarados.hp;
-		const hpBeforeSecondHit = gyarados.hp;
-		battle.makeChoices('move snarl', 'move dragonclaw');
-		const secondDamage = hpBeforeSecondHit - gyarados.hp;
-		assert(secondDamage > firstDamage * 1.7, 'Multiscale should halve the first full-HP hit');
+		assert.false(gyarados.hasAbility('multiscale'));
+		assert.equal(battle.field.weather, 'sunnyday');
 
 		battle.destroy();
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame', preview: false}, [[

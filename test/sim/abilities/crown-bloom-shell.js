@@ -13,19 +13,23 @@ describe('Crown, Bloom, and Shell updates', function () {
 		battle.makeChoices('team 1', 'team 1');
 		return battle.p1.active[0];
 	}
-	it('blocks hostile stat drops, allows self drops, and bypasses Wonder Guard', function () {
+	it('uses Intimidate, Unbound Blaze and Levitate without White Smoke or Mold Breaker', () => {
 		const holder = setup('burningcrown', 'wonderguard');
 		const foe = battle.p2.active[0];
+		assert.statStage(foe, 'atk', -1);
+		for (const component of ['intimidate', 'unboundblaze', 'levitate']) assert(holder.hasAbility(component));
 		battle.boost({atk: -1}, holder, foe, battle.dex.moves.get('growl'));
-		assert.statStage(holder, 'atk', 0);
-		battle.boost({atk: -1}, holder, holder, battle.dex.moves.get('superpower'));
 		assert.statStage(holder, 'atk', -1);
+		battle.boost({ atk: -1 }, holder, holder, battle.dex.moves.get('superpower'));
+		assert.statStage(holder, 'atk', -2);
 		const hp = foe.hp;
-		battle.makeChoices('move psychic', 'move splash');
-		assert(foe.hp < hp);
-		assert(!battle.log.some(line => line.includes('|-immune|')));
+		// Exercise the attack itself: end-of-turn Unbound Blaze chip is separate.
+		battle.actions.useMove('psychic', holder, { target: foe });
+		assert.equal(foe.hp, hp);
+		assert(battle.log.some(line => line.includes('|-immune|')));
 		assert.equal(holder.getAbility().onAnyFaint, undefined);
-		assert(holder.hasAbility('moldbreaker'));
+		assert(!holder.hasAbility('moldbreaker'));
+		assert(!holder.hasAbility('whitesmoke'));
 	});
 	for (const ability of ['ancientbloom', 'pollenbloom', 'thickfat']) {
 		it(`${ability} applies exactly one Thick Fat reduction`, function () {

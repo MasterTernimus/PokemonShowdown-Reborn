@@ -1,8 +1,8 @@
 'use strict';
 const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim/dex');let battle;
 const specs={'Liquid Arsenal':'Greninja',"Knight's Reprisal":'Chesnaught','Void Sanctum':'Ninetales-Alola','Charged Tail':'Raichu','Stance Change':'Aegislash','False Bouquet':'Meowscarada'};
-function start(ability,mode='singles',foeAbility='No Ability'){
- const p={species:specs[ability],ability,moves:['splash','tackle','spikyshield','kingsshield']},t={species:'Mew',ability:foeAbility,moves:['splash','tackle','watergun','doublehit']};
+function start(ability, mode = 'singles', foeAbility = 'No Ability', selectedAbility = ability) {
+	const p = { species: specs[ability], ability: selectedAbility, moves: ['splash', 'tackle', 'spikyshield', 'kingsshield'] }, t = { species: 'Mew', ability: foeAbility, moves: ['splash', 'tackle', 'watergun', 'doublehit'] };
  battle=common.createBattle({formatid:mode==='ffa'?'gen9freeforall4pmistyfieldadrienn':mode==='doubles'?'gen9nofielddoublesbattle':'gen9nofieldsinglesgame'},mode==='ffa'?[[p,{...t}],[t,{...t}],[t,{...t}],[t,{...t}]]:[[p,{...t}],[t,{...t}]]);battle.makeChoices(...battle.sides.map(()=> 'team 12'));battle.field.terrain='';battle.randomizer=d=>d;battle.randomChance=(a,b)=>a>=b;
  for(const side of battle.sides)for(const p of side.active)p.hp=p.maxhp=p.baseMaxhp=4000;
  return[battle.p1.active[0],battle.p2.active[0]];
@@ -12,7 +12,7 @@ function damage(p,t,id,extra={}){const m=battle.dex.getActiveMove(id);Object.ass
 describe('Six approved starter, shield and Nuzzle revisions',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  it('changes only approved slots and preserves the approved Greninja event relocation and pending Garchomp',()=>{
-  for(const [id,abilities] of [['greninja',{0:'Liquid Arsenal',1:'Protean',H:'Shadow Screen',S:'Battle Bond'}],['garchomp',{0:'Rough Skin',1:'Supreme Overlord',H:'Void Wrath',S:'Battle Bond'}],['chesnaught',{0:'Friend Guard',1:'Royal Decree',H:"Knight's Reprisal"}],['ninetalesalola',{0:'Magic Bounce',1:'Serene Grace',H:'Void Sanctum'}],['raichu',{0:'Charged Tail',1:'Grounding Tail',H:'Lightning Rod'}]])assert.deepEqual(Dex.species.get(id).abilities,abilities);
+		for (const [id, abilities] of [['greninja', { 0: 'Liquid Arsenal', 1: 'Protean', H: 'Shadow Screen', S: 'Battle Bond' }], ['garchomp', { 0: 'Rough Skin', 1: 'Supreme Overlord', H: 'Void Wrath', S: 'Battle Bond' }], ['chesnaught', { 0: 'Friend Guard', 1: 'Royal Decree', H: "Knight's Reprisal" }], ['ninetalesalola', { 0: 'Magic Bounce', 1: 'Serene Grace', H: 'Void Sanctum' }], ['raichu', { 0: 'Charged Tail', 1: 'Grounding Tail', H: 'Lightning Rod' }]])assert.deepEqual(Dex.species.get(id).abilities, require('./passive-approval-overlays').abilities(id, abilities));
   assert(!Object.values(Dex.species.get('raichualola').abilities).includes('Charged Tail'));assert(!Object.values(Dex.species.get('raichumega').abilities).includes('Charged Tail'));
  });
  for(const id of ['watergun','aquatail'])for(const lower of ['def','spd'])it('Liquid Arsenal '+id+' selects lower '+lower+' without changing offense/category',()=>{const[p,t]=start('Liquid Arsenal');t.storedStats.def=lower==='def'?100:300;t.storedStats.spd=lower==='spd'?100:300;p.storedStats.atk=90;p.storedStats.spa=240;const d=damage(p,t,id),expected=damage(p,t,id,{overrideDefensiveStat:lower});assert.equal(d,expected);});
@@ -28,20 +28,64 @@ describe('Six approved starter, shield and Nuzzle revisions',()=>{
  for(const mode of ['singles','doubles','ffa'])it('Void Sanctum protects only its own side in '+mode,()=>{const[p,t]=start('Void Sanctum',mode);p.side.addSideCondition('auroraveil',p);battle.boost({atk:-1},p,t);assert.equal(p.boosts.atk,0);for(const ally of p.allies()){battle.boost({def:-1},ally,t);assert.equal(ally.boosts.def,0);}battle.boost({atk:-1},t,p);assert.equal(t.boosts.atk,-1);battle.boost({spa:-1},p,p);assert.equal(p.boosts.spa,-1);});
  it('Aurora stat protection ends with veil or suppression, adds no extra reduction',()=>{const[p,t]=start('Void Sanctum');assert.equal(battle.field.weather,'hail');p.side.addSideCondition('auroraveil',p);assert.equal(battle.runEvent('ModifyDamage',t,p,battle.dex.getActiveMove('tackle'),1000),500);p.side.removeSideCondition('auroraveil');battle.boost({atk:-1},p,t);assert.equal(p.boosts.atk,-1);p.side.addSideCondition('auroraveil',p);p.addVolatile('gastroacid',t);battle.boost({atk:-1},p,t);assert.equal(p.boosts.atk,-2);});
  it('Nuzzle grants standard Charge after action and consumes it on the next Electric move',()=>{const[p,t]=start('Charged Tail');hit(p,t,'nuzzle');assert.equal(t.status,'par');assert(p.volatiles.charge);assert.equal(p.boosts.spd,0);const m=battle.dex.getActiveMove('thunderbolt');assert.equal(battle.runEvent('BasePower',p,t,m,100),200);hit(p,p,'splash');assert(p.volatiles.charge);hit(p,t,'thunderbolt');assert(!p.volatiles.charge);});
- for(const mode of ['already','immune','protect','substitute','suppressed'])it('failed Nuzzle paralysis gives no Charge: '+mode,()=>{const[p,t]=start('Charged Tail');if(mode==='already')t.setStatus('par',t);if(mode==='immune')t.setType('Electric');if(mode==='protect'||mode==='substitute')t.addVolatile(mode,t);if(mode==='suppressed')p.addVolatile('gastroacid',t);hit(p,t,'nuzzle');assert(!p.volatiles.charge);});
- it('Static remains full local; unrelated or ally Nuzzle cannot charge holder',()=>{const[p,t]=start('Charged Tail','doubles');assert(p.hasAbility('static'));battle.randomChance=()=>true;hit(t,p,'tackle');assert.equal(t.status,'par');assert(!p.volatiles.charge);t.cureStatus();hit(p.allies()[0],t,'nuzzle');assert(!p.volatiles.charge);});
- it('Stance Change disables only after contact attack finishes and for two following turns',()=>{const[p,t]=start('Stance Change');battle.makeChoices('move kingsshield','move doublehit');assert.equal(p.hp,4000);assert.equal(t.volatiles.disable.move,'doublehit');assert.equal(t.volatiles.disable.duration,2);assert(p.volatiles.stancechangereprisalspent);battle.makeChoices('move splash','move splash');assert.equal(t.volatiles.disable.duration,1);battle.makeChoices('move splash','move splash');assert(!t.volatiles.disable);});
+	for (const mode of ['already', 'immune', 'protect', 'substitute'])it('failed Nuzzle paralysis gives no Charge: ' + mode, () => {
+		const [p, t] = start('Charged Tail');
+		if (mode === 'already')t.setStatus('par', t);
+		if (mode === 'immune')t.setType('Electric');
+		if (mode === 'protect' || mode === 'substitute')t.addVolatile(mode, t);
+		if (mode === 'suppressed')p.addVolatile('gastroacid', t);
+		hit(p, t, 'nuzzle');
+		assert(!p.volatiles.charge);
+	});
+	it('Charged Tail passive survives suppression without granting removed Static', () => {
+		const [p, t] = start('Charged Tail');
+		assert(!p.hasAbilityOrPassive('static'));
+		p.addVolatile('gastroacid', t);
+		hit(p, t, 'nuzzle');
+		assert(p.volatiles.charge);
+	});
+	it('Stance Change no longer disables contact attackers after King Shield', () => {
+		const [p, t] = start('Stance Change');
+		battle.makeChoices('move kingsshield', 'move doublehit');
+		assert.equal(p.hp, 4000);
+		assert(!t.volatiles.disable);
+		assert(!p.volatiles.stancechangereprisalspent);
+	});
  for(const mode of ['noncontact','bypass','aromaveil'])it('King shield bonus excludes '+mode,()=>{const[p,t]=start('Stance Change','singles',mode==='aromaveil'?'Aroma Veil':'No Ability');p.addVolatile('kingsshield',p);hit(t,p,mode==='noncontact'?'watergun':'tackle',mode==='bypass'?{breaksProtect:true}:{});assert(!t.volatiles.disable);assert(!p.volatiles.stancechangereprisalspent);});
- it('Stance Change keeps dual hits, forms, field entry and Gmax exclusion',()=>{const[p,t]=start('Stance Change');hit(p,t,'airslash');assert.equal(p.species.id,'aegislashblade');assert(battle.log.some(x=>x.startsWith('|-hitcount|')&&x.endsWith('|2')));assert(p.getAbility().flags.cantsuppress);battle.field.terrain='fairytaleterrain';battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.boosts.def,1);assert.equal(p.boosts.spd,1);assert.notEqual(Dex.species.get('aegislashgmax').abilities[0],'Stance Change');});
- it('Stance retaliation resets on switching and has one budget across attackers',()=>{const[p,t]=start('Stance Change','doubles');p.addVolatile('kingsshield',p);hit(t,p,'tackle');assert(t.volatiles.disable);const u=battle.p2.active[1];hit(u,p,'tackle');assert(!u.volatiles.disable);p.clearVolatile();p.isActive=true;p.addVolatile('kingsshield',p);hit(u,p,'tackle');assert(u.volatiles.disable);});
+	it('Stance Change uses single hits and changes stats when changing forms on Fairy Tale', () => {
+		const [p, t] = start('Stance Change');
+		battle.field.terrain = 'fairytaleterrain';
+		hit(p, t, 'airslash');
+		assert.equal(p.species.id, 'aegislashblade');
+		assert(!battle.log.some(x => x.startsWith('|-hitcount|')));
+		assert.equal(p.boosts.atk, 1);
+		assert.equal(p.boosts.spa, 1);
+		assert.equal(p.boosts.def, -1);
+		hit(p, p, 'kingsshield');
+		assert.equal(p.species.id, 'aegislash');
+		assert.equal(p.boosts.def, 0);
+		assert.equal(p.boosts.atk, 0);
+		assert.notEqual(Dex.species.get('aegislashgmax').passives[0], 'stancechange');
+	});
+	it('Stance passive stays active under selected-ability suppression', () => {
+		const [p, t] = start('Stance Change', 'singles', 'No Ability', 'Infiltrator');
+		p.addVolatile('gastroacid', t);
+		hit(p, t, 'airslash');
+		assert.equal(p.species.id, 'aegislashblade');
+		assert.equal(p.ability, 'infiltrator');
+	});
  it('False Bouquet retains seed and adds normal Magician item theft',()=>{const[p,t]=start('False Bouquet');t.setItem('leftovers');hit(p,t,'flowertrick');assert(t.volatiles.leechseed);assert.equal(p.item,'leftovers');assert.equal(t.item,'');assert(p.hasAbility('magician'));t.removeVolatile('leechseed');p.item='';t.setItem('sitrusberry');hit(p,t,'flowertrick');assert(!t.volatiles.leechseed);assert.equal(p.item,'sitrusberry');});
  for(const mode of ['held','stickyhold','protect','suppressed'])it('Magician theft respects '+mode,()=>{const[p,t]=start('False Bouquet','singles',mode==='stickyhold'?'Sticky Hold':'No Ability');t.setItem('leftovers');if(mode==='held')p.setItem('oranberry');if(mode==='protect')t.addVolatile('protect',t);if(mode==='suppressed')p.addVolatile('gastroacid',t);hit(p,t,'tackle');assert.equal(t.item,'leftovers');});
  it('False Bouquet preserves every nonoverlapping Magician hook and field effect',()=>{const[p,t]=start('False Bouquet'),base=battle.dex.abilities.get('magician');for(const key of ['onModifyAccuracy','onAfterMoveSecondarySelf'])assert.equal(p.getAbility()[key],base[key]);battle.field.terrain='fairytaleterrain';battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.boosts.spa,1);});
  it('Liquid Arsenal keeps category-based screens and recomputes each spread target',()=>{const[p,t]=start('Liquid Arsenal','doubles'),u=battle.p2.active[1];t.storedStats.def=100;t.storedStats.spd=300;u.storedStats.def=300;u.storedStats.spd=100;const before=damage(p,t,'surf');t.side.addSideCondition('reflect',t);assert.equal(damage(p,t,'surf'),before);t.side.addSideCondition('lightscreen',t);assert(damage(p,t,'surf')<before);assert.equal(damage(p,t,'surf'),damage(p,t,'surf',{overrideDefensiveStat:'def'}));assert.equal(damage(p,u,'surf'),damage(p,u,'surf',{overrideDefensiveStat:'spd'}));});
  it('Liquid Arsenal uses current item-modified defense and preserves an explicit Water Psyshock override',()=>{const[p,t]=start('Liquid Arsenal');t.storedStats.def=140;t.storedStats.spd=100;t.setItem('assaultvest');assert.equal(damage(p,t,'surf'),damage(p,t,'surf',{overrideDefensiveStat:'def'}));assert.equal(damage(p,t,'psyshock',{type:'Water'}),damage(p,t,'psyshock',{type:'Water',overrideDefensiveStat:'def'}));});
  it('charged Nuzzle can replenish Charge only if it inflicts fresh paralysis',()=>{const[p,t]=start('Charged Tail','doubles'),u=battle.p2.active[1];hit(p,t,'nuzzle');hit(p,u,'nuzzle');assert(p.volatiles.charge);hit(p,u,'nuzzle');assert(!p.volatiles.charge);});
- it('King shield Disable names the blocked called attack, preserving the real last selected move',()=>{const[p,t]=start('Stance Change');p.addVolatile('kingsshield',p);const m=battle.dex.getActiveMove('tackle');m.sourceEffect='sleeptalk';t.lastMove=battle.dex.getActiveMove('sleeptalk');battle.actions.useMove(m,t,{target:p});const blocked=battle.activeMove;t.lastMove=battle.dex.getActiveMove('sleeptalk');battle.runEvent('AfterMove',t,p,blocked);assert.equal(t.volatiles.disable.move,'tackle');assert.equal(t.lastMove.id,'sleeptalk');});
+	it('King Shield does not disable a called attack', () => {
+		const [p, t] = start('Stance Change');
+		p.addVolatile('kingsshield', p);
+		hit(t, p, 'tackle', { sourceEffect: 'sleeptalk' });
+		assert(!t.volatiles.disable);
+	});
  it('Void Sanctum still retains Snow Warning Cold Eclipse retaliation',()=>{const[p,t]=start('Void Sanctum');battle.field.terrain='coldeclipseterrain';hit(t,p,'tackle');assert(t.volatiles.disable);});
- it('all new components are exposed to calculator metadata',()=>{const {calculatorMetadata}=require('../../../dist/sim/custom-calculator'),meta=calculatorMetadata();for(const [id,component] of Object.entries({liquidarsenal:'Technician',knightsreprisal:'Bulletproof',voidsanctum:'Snow Warning',chargedtail:'Static',falsebouquet:'Magician'}))assert(meta.abilityComponents[id].includes(component));});
-
+	it('all new components are exposed to calculator metadata', () => { const { calculatorMetadata } = require('../../../dist/sim/custom-calculator'), meta = calculatorMetadata(); for (const [id, component] of Object.entries({ liquidarsenal: 'Technician', knightsreprisal: 'Bulletproof', voidsanctum: 'Snow Warning', falsebouquet: 'Magician' }))assert(meta.abilityComponents[id].includes(component)); });
 });

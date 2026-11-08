@@ -27,6 +27,56 @@ const pairs = [
 	['Lightning Rod', ['abysslure'], 'thunderbolt'], ['Storm Drain', ['abysslure'], 'waterpulse'],
 ];
 describe('Coexisting absorption effects', () => {
+	for (const [species, move, component, other] of [
+		['Jolteon', 'thunderbolt', 'lightningrod', 'stormdrain'],
+		['Vaporeon', 'waterpulse', 'stormdrain', 'lightningrod'],
+	]) for (const mode of ['normal', 'suppressed', 'moldbreaker', 'shield']) {
+		it(`Unstable Evo uses only its current ${species} components: ${mode}`, () => {
+			const { battle, target, source, cleanup } = setup('Unstable Evo', null, {
+				species: 'Eevee-Starter',
+				sourceAbility: ['moldbreaker', 'shield'].includes(mode) ? 'Mold Breaker' : 'No Ability',
+			});
+			try {
+				target.formeChange(species, target.getAbility());
+				assert(target.hasAbility(component));
+				assert(!target.hasAbility(other));
+				if (mode === 'suppressed') target.addVolatile('gastroacid');
+				if (mode === 'shield') target.setItem('Ability Shield');
+				target.sethp(Math.floor(target.maxhp / 2));
+				const hp = target.hp;
+				battle.actions.runMove(move, source, source.getLocOf(target));
+				if (mode === 'moldbreaker') {
+					assert(target.hp < hp);
+					assert.equal(target.boosts.spa, 0);
+				} else {
+					assert.equal(target.hp, hp + Math.floor(target.baseMaxhp / 4));
+					assert.equal(target.boosts.spa, mode === 'suppressed' ? 0 : 1);
+					assert.equal(target.boosts.atk, mode === 'suppressed' ? 0 : 1);
+				}
+				target.formeChange('Eevee-Starter', target.getAbility());
+				assert(!target.hasAbility(component));
+			} finally { cleanup(); }
+		});
+	}
+	for (const [species, selected, move] of [
+		['Vaporeon', 'Water Absorb', 'waterpulse'],
+		['Jolteon', 'Volt Absorb', 'thunderbolt'],
+		['Maractus', 'Cactus Chorus', 'waterpulse'],
+	]) for (const mode of ['normal', 'suppressed', 'moldbreaker', 'shield']) {
+		it(`${species} absorbs once with identical selected/passive identity: ${mode}`, () => {
+			const { battle, target, source, cleanup } = setup(selected, null, {
+				species, sourceAbility: ['moldbreaker', 'shield'].includes(mode) ? 'Mold Breaker' : 'No Ability',
+			});
+			try {
+				if (mode === 'suppressed') target.addVolatile('gastroacid');
+				if (mode === 'shield') target.setItem('Ability Shield');
+				const hp = target.hp;
+				battle.actions.runMove(move, source, source.getLocOf(target));
+				if (mode === 'moldbreaker') assert(target.hp < hp);
+				else assert.equal(target.hp, hp + Math.floor(target.baseMaxhp / 4));
+			} finally { cleanup(); }
+		});
+	}
 	for (const [selected, move, heal, boost] of [['Water Absorb', 'waterpulse', true, false], ['Storm Drain', 'waterpulse', false, true], ['Volt Absorb', 'thunderbolt', true, false], ['Lightning Rod', 'thunderbolt', false, true], ['Abyss Lure', 'waterpulse', true, true], ['Abyss Lure', 'thunderbolt', true, true]]) it(`preserves standalone ${selected}/${move}`, () => {
 		const {battle, target, source, cleanup} = setup(selected, []);
 		try {const hp = target.hp; battle.actions.runMove(move, source, source.getLocOf(target)); assert.equal(target.hp, hp + (heal ? Math.floor(target.baseMaxhp / 4) : 0)); assert.equal(target.boosts.spa, boost ? 1 : 0);} finally {cleanup();}

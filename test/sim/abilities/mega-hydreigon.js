@@ -9,7 +9,7 @@ describe('Mega Hydreigon: Expiration and Abyssal Rebirth', () => {
 	const set = (species = 'Mew', ability = 'No Ability', item = '') =>
 		({species, ability, item, moves: ['splash', 'tackle', 'darkpulse', 'outrage', 'gildedhelix', 'earthpower']});
 	function setup(gameType = 'singles', foeAbility = 'No Ability') {
-		const teams = [[set('Hydreigon', 'Worldbreaker', 'Hydreigonite'), set()], [set('Mew', foeAbility), set()]];
+		const teams = [[set('Hydreigon', 'Strings of Ruin', 'Hydreigonite'), set()], [set('Mew', foeAbility), set()]];
 		if (gameType === 'freeforall') teams.push([set()], [set()]);
 		battle = common.createBattle({gameType}, teams);
 		const p = battle.p1.active[0], q = battle.p2.active[0];
@@ -40,11 +40,11 @@ describe('Mega Hydreigon: Expiration and Abyssal Rebirth', () => {
 		assert.equal(p.species.bst, 700);
 		assert.equal(p.ability, 'expiration');
 		assert.deepEqual(p.getPassives(), ['abyssalrebirth']);
-		for (const id of ['worldbreaker', 'controlledfury', 'berserk', 'duskilate', 'angerpoint', 'hydrabond', 'levitate']) {
+		for (const id of ['stringsofruin', 'controlledfury', 'berserk', 'duskilate', 'angerpoint', 'hydrabond', 'levitate']) {
 			assert(p.hasAbilityOrPassive(id), id);
 		}
 		assert.equal(p.isGrounded(), null);
-		const imported = {...set('Hydreigon', 'Worldbreaker', 'Hydreigonite'), moves: ['darkpulse', 'earthpower', 'outrage', 'gildedhelix']};
+		const imported = { ...set('Hydreigon', 'Strings of Ruin', 'Hydreigonite'), moves: ['darkpulse', 'earthpower', 'outrage', 'gildedhelix'] };
 		const errors = new TeamValidator('gen9nofieldsinglesgame').validateSet(imported, {}) || [];
 		assert.deepEqual(errors, []);
 	});

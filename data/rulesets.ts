@@ -541,7 +541,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	forcemonotype: {
 		effectType: 'ValidatorRule',
 		name: 'Force Monotype',
-		desc: `Forces all teams to have the same type. Usage: Force Monotype = [Type], e.g. "Force Monotype = Water"`,
+		desc: `Forces all teams to have the same type. Usage: Force Monotype = [Type], e.g."Force Monotype = Water"`,
 		hasValue: true,
 		onValidateRule(value) {
 			const type = this.dex.types.get(value);
@@ -569,7 +569,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	forcemonocolor: {
 		effectType: 'ValidatorRule',
 		name: 'Force Monocolor',
-		desc: `Forces all teams to have Pok&eacute;mon of the same color. Usage: Force Monocolor = [Color], e.g. "Force Monocolor = Blue"`,
+		desc: `Forces all teams to have Pok&eacute;mon of the same color. Usage: Force Monocolor = [Color], e.g."Force Monocolor = Blue"`,
 		hasValue: true,
 		onValidateRule(value) {
 			const validColors = ["Black", "Blue", "Brown", "Gray", "Green", "Pink", "Purple", "Red", "White", "Yellow"];
@@ -592,7 +592,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	forceteratype: {
 		effectType: 'ValidatorRule',
 		name: 'Force Tera Type',
-		desc: `Forces all Pok&eacute;mon to have the same Tera Type. Usage: Force Tera Type = [Type], e.g. "Force Tera Type = Dragon"`,
+		desc: `Forces all Pok&eacute;mon to have the same Tera Type. Usage: Force Tera Type = [Type], e.g."Force Tera Type = Dragon"`,
 		hasValue: true,
 		onValidateRule(value) {
 			if (this.dex.gen !== 9) {
@@ -614,7 +614,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	forceselect: {
 		effectType: 'ValidatorRule',
 		name: 'Force Select',
-		desc: `Forces a Pokemon to be on the team and selected at Team Preview. Usage: Force Select = [Pokemon], e.g. "Force Select = Magikarp"`,
+		desc: `Forces a Pokemon to be on the team and selected at Team Preview. Usage: Force Select = [Pokemon], e.g."Force Select = Magikarp"`,
 		hasValue: true,
 		onValidateRule(value) {
 			if (!this.dex.species.get(value).exists) throw new Error(`Misspelled Pokemon "${value}"`);

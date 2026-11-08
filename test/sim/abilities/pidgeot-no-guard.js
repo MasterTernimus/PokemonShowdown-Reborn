@@ -60,7 +60,7 @@ describe('Mega Pidgeot No Guard replacement', () => {
 			}
 		});
 	}
-	it('selected callbacks retain Keen Eye but do not force accuracy or invulnerability', () => {
+	it('selected callbacks retain Updraft and react to accuracy drops with Competitive', () => {
 		const [p, q] = setup(), move = Dex.getActiveMove('airslash');
 		battle.singleEvent('ModifyMove', p.getAbility(), p.abilityState, move, p, q);
 		assert.equal(move.accuracy, 95);
@@ -68,16 +68,17 @@ describe('Mega Pidgeot No Guard replacement', () => {
 		assert.equal(p.getAbility().onAnyAccuracy, undefined);
 		assert.equal(p.getAbility().onAnyInvulnerability, undefined);
 		battle.boost({ accuracy: -1 }, p, q);
-		assert.equal(p.boosts.accuracy, 0);
+		assert.equal(p.boosts.accuracy, -1);
+		assert.equal(p.boosts.spa, 2);
 	});
-	it('retains replaceable eight-turn Strong Winds and Mirror Arena Keen Eye entry', () => {
+	it('retains replaceable eight-turn Strong Winds without the old Keen Eye entry', () => {
 		const [p] = setup();
 		battle.field.terrain = 'mirrorarenaterrain';
 		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
 		assert.equal(battle.field.weather, 'deltastream');
 		assert.equal(battle.field.weatherState.duration, 8);
-		assert.equal(p.boosts.accuracy, 1);
-		assert(p.volatiles.laserfocus);
+		assert.equal(p.boosts.accuracy, 0);
+		assert(!p.volatiles.laserfocus);
 		assert(battle.field.setWeather('raindance', p));
 	});
 	it('copied Storm Sovereign retains outgoing accuracy and Gale Wings, without incoming No Guard', () => {
@@ -111,14 +112,14 @@ describe('Mega Pidgeot No Guard replacement', () => {
 		assert.equal(battle.runEvent('ModifyPriority', p, q, Dex.getActiveMove('airslash'), 0), 1);
 		assert(p.hasAbility('galewings'));
 		const { getAbilityDisplayComponents } = require('../../../dist/data/ability-display');
-		assert.deepEqual(getAbilityDisplayComponents('stormsovereign', ['noguard'], 'pidgeotmega'), ['keeneye']);
+		assert.deepEqual(getAbilityDisplayComponents('stormsovereign', ['noguard'], 'pidgeotmega'), ['updraft']);
 		assert(getAbilityDisplayComponents('stormsovereign', ['noguard'], 'raichumegay').includes('galewings'));
 	});
-	it('calculator metadata and resolved damage remain unchanged by accuracy-only extraction', () => {
+	it('calculator keeps No Guard metadata and matches damage when Strong Winds is controlled', () => {
 		const { calculateScenario, calculatorMetadata } = require('../../../dist/sim/custom-calculator');
 		assert.deepEqual(calculatorMetadata().species.find(s => s.name === 'Pidgeot-Mega').passives, ['noguard']);
 		const actors = [{ species: 'Pidgeot-Mega', ability: 'Storm Sovereign' }, { species: 'Mew', ability: 'No Ability' }, { species: 'Mew', ability: 'No Ability' }, { species: 'Mew', ability: 'No Ability' }];
-		const input = { format: 'gen9nofieldsinglesgame', move: 'Air Slash', samples: 16, seed: 42, actors };
+		const input = { format: 'gen9nofieldsinglesgame', move: 'Air Slash', weather: 'deltastream', samples: 16, seed: 42, actors };
 		const selected = calculateScenario(input);
 		actors[0].ability = 'No Ability';
 		const passiveOnly = calculateScenario(input);

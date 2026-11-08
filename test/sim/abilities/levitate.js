@@ -58,7 +58,7 @@ describe('Levitate', function () {
 		]]);
 		battle.makeChoices('move sleeptalk', 'move spikes');
 		battle.makeChoices('move sleeptalk', 'move tackle');
-		assert.false.hurts(battle.p1.pokemon[1], () => battle.makeChoices('switch 2', 'move tackle'));
+		assert.false.hurts(battle.p1.pokemon[1], () => battle.makeChoices('switch 2', ''));
 	});
 
 	it('should not have its airborne property suppressed by Mold Breaker if that Pokemon is no longer active', function () {

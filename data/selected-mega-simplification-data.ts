@@ -88,7 +88,6 @@ export const SelectedComponentRemovals: { [id: string]: string[] } = {
 	],
 	"lunarorbit": [
 		"triage",
-		"serenegrace",
 	],
 	"completeparasitism": [
 		"filter",
@@ -373,7 +372,7 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 	},
 	"hauntedchime": {
 		"shortDesc": "Wind Power + Cursed Body.",
-		"desc": "Airborne: immune to Ground attacks and grounded hazards unless grounded. Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn. Damaging attacks have a 30% chance to be disabled, guaranteed on Haunted and disabled on Holy Field. Excludes Max moves, delayed attacks and Struggle. On fainting, curses all active foes.",
+		"desc": "Airborne: immune to Ground attacks and grounded hazards unless grounded. Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn. Damaging attacks have a 30% chance to be disabled, guaranteed on Haunted and disabled on Holy Field. Excludes Max moves, delayed attacks and Struggle. On fainting, active foes are cursed for two end-of-turn ticks of 1/8 max HP each, then the curse ends.",
 	},
 	"freezerburn": {
 		"shortDesc": "Slush Rush + Levitate; Ice damage is 1.2x against burned targets.",

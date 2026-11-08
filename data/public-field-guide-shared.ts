@@ -30,14 +30,14 @@ export const FieldSeedNotes: { [id: string]: string } = {
 	electricterrain: 'Elemental Seed raises Speed by one stage and applies Charge.',
 	grassyterrain: 'Elemental Seed raises Defense by one stage and applies Ingrain.',
 	mistyterrain: 'Elemental Seed raises Special Defense by one stage and uses Wish on its holder.',
-	burningterrain: 'Elemental Seed raises Attack, Special Attack and Speed by one stage and uses Fire Spin on its holder. Telluric Seed is also consumed here, but its use handler has no Burning effect.',
+	burningterrain: 'Elemental Seed raises Attack, Special Attack and Speed by one stage and uses Fire Spin on its holder. Telluric Seed is also consumed here, but grants no benefit.',
 	corrosivemistterrain: 'Elemental Seed raises Attack and Special Attack by one stage and attempts to badly poison its holder.',
 	watersurfaceterrain: 'Elemental Seed raises Special Defense by one stage and applies Aqua Ring.',
 	underwaterterrain: 'Elemental Seed raises Speed by one stage and uses Soak on its holder, normally changing it to Water.',
 	midnightzoneterrain: 'Elemental Seed raises Special Attack by one stage and applies Aqua Ring.',
 	murkwatersurfaceterrain: 'Elemental Seed raises Speed by one stage, applies Aqua Ring and attempts to badly poison its holder.',
 	icyterrain: 'Elemental Seed raises Speed by two stages and invokes the field’s icy-spikes damage on its holder.',
-	dragonsdenterrain: 'Elemental Seed raises Special Attack by one stage and grants the Flash Fire power-up volatile.',
+	dragonsdenterrain: 'Elemental Seed raises Special Attack by one stage and grants the Flash Fire power boost.',
 	coldeclipseterrain: 'Elemental Seed raises Speed by one stage and uses Soak on its holder; Soak changes its target to Ice on Cold Eclipse.',
 	volcanicterrain: 'Elemental Seed raises Attack, Special Attack and Speed by one stage and uses Fire Spin on its holder.',
 	psychicterrain: 'Magical Seed raises Special Attack by two stages and attempts to confuse its holder.',
@@ -113,7 +113,7 @@ export function appendReviewedHazards(sections: { [id: string]: { [section: stri
 			"Sticky Web lowers Speed by two stages instead of one, subject to its ordinary entry-hazard exemptions.",
 		],
 		"wastelandterrain": [
-			"Newly placed Spikes, Toxic Spikes, Sticky Web and Stealth Rock are swallowed and removed as side conditions, recording that side for the corresponding eruption. The field clears its eruption records during its field-residual handler; these are not permanently stacking entry hazards.",
+			"Newly placed Spikes, Toxic Spikes, Sticky Web and Stealth Rock are swallowed and removed as side conditions, recording that side for the corresponding eruption. These eruption effects are resolved at turn end and do not remain as entry hazards.",
 		],
 		"newworldterrain": [
 			"Named 1.5x signature/light list: Aurora Beam, Signal Beam, Flash Cannon, Dazzling Gleam, Mirror Shot, Photon Geyser, Psystrike, Aeroblast, Sacred Fire, Mist Ball, Luster Purge, Origin Pulse, Precipice Blades, Dragon Ascent, Psycho Boost, Roar of Time, Magma Storm, Crush Grip, Judgment, Dei Ludicium, Seed Flare, Shadow Force, Searing Shot, V-create, Secret Sword, Sacred Sword, Relic Song, Fusion Bolt, Fusion Flare, Ice Burn, Freeze Shock, Bolt Strike, Blue Flare, Techno Blast, Oblivion Wing, Land's Wrath, Thousand Arrows, Thousand Waves, Diamond Storm, Steam Eruption, Core Enforcer, Fleur Cannon, Prismatic Laser, Sunsteel Strike, Spectral Thief, Moongeist Beam, Multi-Attack, Mind Blown, Plasma Fists, Earth Power, Power Gem, Eruption, Continental Crush, Genesis Supernova, Soul-Stealing 7-Star Strike, Searing Sunraze Smash, Menacing Moonraze Maelstrom, Astral Barrage, Behemoth Bash, Behemoth Blade, Collision Course, Double Iron Bash, Dragon Energy, Dynamax Cannon, Electro Drift, Eternabeam, Fiery Wrath, Glacial Lance, Ruination, Freezing Glare, Tera Starstorm, Surging Strikes, Malignant Chain, Tachyon Cutter, Mighty Cleave, Hydro Steam, Thunderclap, Ivy Cudgel, Psyblade, Sandsear Storm, Wildbolt Storm, Springtide Storm, Thunder Cage, Thunderous Kick, Wicked Blow, Mirror Beam.",
@@ -167,10 +167,10 @@ export const FieldSecretPowerNotes: { [id: string]: string } = {
 	"wastelandterrain": "Secret Power: separate 7.5% secondary rolls for burn, paralysis, poison and freeze/frostbite. Normal secondary-effect and status protections apply; other move/ability modifiers can alter these chances.",
 	"flowergarden1": "Secret Power becomes Sweet Scent with its secondary effects removed.",
 	"flowergarden5": "Secret Power becomes Petal Dance aimed at all adjacent foes, with its secondary effects removed.",
-	"flowergarden2": "Secret Power has no field-specific secondary assigned here; the current handler clears its secondary list.",
-	"flowergarden3": "Secret Power has no field-specific secondary assigned here; the current handler clears its secondary list.",
-	"flowergarden4": "Secret Power has no field-specific secondary assigned here; the current handler clears its secondary list.",
-	"snowyterrain": "Secret Power has no field-specific secondary assigned here; the current handler clears its secondary list.",
+	"flowergarden2": "Secret Power has no additional effect here.",
+	"flowergarden3": "Secret Power has no additional effect here.",
+	"flowergarden4": "Secret Power has no additional effect here.",
+	"snowyterrain": "Secret Power has no additional effect here.",
 };
 export function appendSecretPowerGuide(sections: { [id: string]: { [section: string]: string[] } }) { for (const [id, text] of Object.entries(FieldSecretPowerNotes)) (sections[id].Moves ||= []).push(text); }
 

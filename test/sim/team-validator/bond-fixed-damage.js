@@ -21,12 +21,17 @@ describe('Fixed-level moves with multi-strike Bond abilities', () => {
   for (const ability of ['Hydra Bond', 'Parental Bond']) it(`rejects ${move} with ${ability}`, () => banned({ability, moves: [move]}, move, ability));
   for (const ability of ['Dread Dominion', 'Pulse Triad', 'Sevii Schooling']) it(`rejects ${move} through ${ability}`, () => banned({ability, moves: [move]}, move, 'Hydra Bond'));
   it(`rejects ${move} through Mega Evolution`, () => banned({species: 'Kangaskhan', ability: 'Scrappy', item: 'Kangaskhanite', moves: [move]}, move, 'Parental Bond'));
-  it(`rejects ${move} through custom Mega Evolution`, () => banned({species: 'Mightyena-Grim', ability: 'Intimidate', item: 'Grimyinite', moves: [move]}, move, 'Hydra Bond'));
+		it(`rejects the retired custom Mega route with ${move}`, () => assert(errors({ species: 'Mightyena', ability: 'Intimidate', item: 'Grimyinite', moves: [move] }).some(error => error.includes('Mightyena-Mega is disabled'))));
   it(`rejects ${move} through Anomaly Core`, () => banned({species: 'Magnezone', ability: 'Sturdy', item: 'Anomaly Core', moves: [move]}, move, 'Hydra Bond'));
   it(`allows ${move} without Bond`, () => assert.deepEqual(errors({moves: [move]}), []));
  }
  it('does not ban the moves simply because the species has an unused Bond option', () => assert.deepEqual(errors({species: 'Kangaskhan', ability: 'Scrappy', moves: ['Seismic Toss']}), []));
  it('does not ban other attacks with Bond', () => assert.deepEqual(errors({ability: 'Hydra Bond', moves: ['Tackle']}), []));
+	it('keeps the retired Grim profile disabled independently of the Bond restriction', () => {
+		assert(errors({ species: 'Mightyena-Grim', item: 'Grimyinite', moves: ['Tackle'] }).some(error => /disabled/.test(error)));
+		assert(errors({ species: 'Mightyena', item: 'Grimyinite', moves: ['Tackle'] }).some(error => error.includes('Mightyena-Mega is disabled')));
+		assert.deepEqual(errors({ species: 'Mightyena', moves: ['Tackle'] }), []);
+	});
  it('reports both restricted moves', () => {
   const result = errors({ability: 'Hydra Bond', moves: ['Night Shade', 'Seismic Toss']});
   assert.equal(result.filter(e => e.includes("can't use")).length, 2);

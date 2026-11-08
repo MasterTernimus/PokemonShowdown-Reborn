@@ -8,16 +8,45 @@
 const assert = require('assert').strict;
 const IPTools = require('../../dist/server/ip-tools').IPTools;
 const Utils = require('../../dist/lib/utils').Utils;
+const dns = require('node:dns');
 
 describe("IP tools", () => {
-	it('should resolve 127.0.0.1 to localhost', async () => {
+	const reverse = dns.reverse;
+	const testConnection = IPTools.testConnection;
+	afterEach(() => {
+		dns.reverse = reverse;
+		IPTools.testConnection = testConnection;
+	});
+	it('should use the reverse-DNS hostname when one is returned', async () => {
+		dns.reverse = (ip, callback) => {
+			assert.equal(ip, '127.0.0.1');
+			queueMicrotask(() => callback(null, ['localhost']));
+		};
 		const lookup = await IPTools.lookup('127.0.0.1');
 		assert.equal(lookup.host, 'localhost');
 	});
 
 	it('should resolve unknown IPs correctly', async () => {
+		dns.reverse = (ip, callback) => {
+			assert.equal(ip, '255.255.255.255');
+			queueMicrotask(() => callback(Object.assign(new Error('No PTR record'), { code: 'ENOTFOUND' })));
+		};
 		const lookup = await IPTools.lookup('255.255.255.255');
 		assert.equal(lookup.host, '255.255?/unknown');
+		assert.equal(lookup.hostType, 'unknown');
+	});
+
+	it('should handle an empty reverse-DNS response without assuming localhost', async () => {
+		dns.reverse = (ip, callback) => queueMicrotask(() => callback(null, []));
+		let tested = false;
+		IPTools.testConnection = (ip, callback) => {
+			assert.equal(ip, '127.0.0.1');
+			tested = true;
+			callback(false);
+		};
+		const lookup = await IPTools.lookup('127.0.0.1');
+		assert(tested);
+		assert.equal(lookup.host, '127.0?/unknown');
 		assert.equal(lookup.hostType, 'unknown');
 	});
 

@@ -23,7 +23,7 @@ describe('Custom alts and Haunted field rules', function () {
 			assert.equal(alt.baseSpecies, baseName);
 			assert.equal(alt.forme, 'Deso');
 			assert.deepEqual(alt.types, base.types);
-			assert.deepEqual(alt.abilities, base.abilities);
+			assert.deepEqual(alt.abilities, baseName === 'Cinccino' ? { ...base.abilities, 0: 'Pixilate' } : base.abilities);
 		}
 		assert.equal(battle.dex.species.get('Mightyena-Alt').name, 'Mightyena-Deso');
 		assert.equal(battle.dex.species.get('Toxicroak-Alt').name, 'Toxicroak-Deso');
@@ -53,7 +53,7 @@ describe('Custom alts and Haunted field rules', function () {
 		assert.equal(hitmonlee.accelrock, undefined);
 	});
 
-	it('should prevent core terrains and Cold Eclipse from forming in Haunted Terrain', function () {
+	it('allows core Auras over Haunted Terrain while blocking replacement fields', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Mew', ability: 'synchronize', moves: ['splash']},
 		], [
@@ -65,8 +65,14 @@ describe('Custom alts and Haunted field rules', function () {
 		for (const terrain of [
 			'electricterrain', 'grassyterrain', 'mistyterrain', 'psychicterrain', 'coldeclipseterrain',
 		]) {
-			assert.false(battle.field.canSetTerrain(terrain, source));
-			assert.false(battle.field.setTerrain(terrain, source));
+			if (terrain === 'coldeclipseterrain') {
+				assert.false(battle.field.canSetTerrain(terrain, source));
+				assert.false(battle.field.setTerrain(terrain, source));
+			} else {
+				assert(battle.field.canSetTerrain(terrain, source));
+				assert(battle.field.setTerrain(terrain, source));
+				assert.equal(battle.field.auraField, terrain);
+			}
 			assert.false(battle.field.changeTerrain(terrain, source));
 			assert(battle.field.isTerrain('hauntedterrain'));
 		}

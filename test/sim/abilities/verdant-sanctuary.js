@@ -28,7 +28,7 @@ describe('Verdant Sanctuary Mega Arboliva', () => {
 		assert.deepEqual(mega.abilities, { 0: 'Verdant Sanctuary' });
 		assert.equal(mega.requiredItem, 'Arbolivite');
 		assert.equal(Dex.items.get('Arbolivite').megaStone.Arboliva, 'Arboliva-Mega');
-		for (const component of ['grassysurge', 'invigorate', 'hospitality', 'friendguard']) {
+		for (const component of ['grassysurge', 'hospitality', 'friendguard']) {
 			assert(Dex.abilities.get('Verdant Sanctuary').exists, `Missing composite ability for ${component}`);
 		}
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
@@ -43,8 +43,10 @@ describe('Verdant Sanctuary Mega Arboliva', () => {
 		assert.equal(arboliva.species.id, 'arbolivamega');
 		assert.equal(arboliva.ability, 'verdantsanctuary');
 		assert(battle.field.isTerrain('grassyterrain'));
-		for (const component of ['grassysurge', 'invigorate', 'hospitality', 'friendguard']) {
-			assert(arboliva.hasAbility(component), `Missing ${component} effect`);
+		assert.deepEqual(arboliva.getPassives(), ['grassysurge']);
+		assert(!arboliva.hasAbility('invigorate'));
+		for (const component of ['grassysurge', 'hospitality', 'friendguard']) {
+			assert(arboliva.hasAbilityOrPassive(component), `Missing ${component} effect`);
 		}
 	});
 
@@ -67,12 +69,12 @@ describe('Verdant Sanctuary Mega Arboliva', () => {
 		const foe = battle.p2.active[0];
 		const move = battle.dex.getActiveMove('tackle');
 		assert.equal(battle.runEvent('ModifyDamage', foe, ally, move, 100), 75);
-		assert.equal(battle.runEvent('TryHeal', ally, holder, null, 100), 130);
+		assert.equal(battle.runEvent('TryHeal', ally, holder, null, 100), 100);
 		ally.setStatus('brn');
 		const randomChance = battle.randomChance;
 		battle.randomChance = () => true;
 		battle.singleEvent('Residual', holder.getAbility(), holder.abilityState, holder);
 		battle.randomChance = randomChance;
-		assert.equal(ally.status, '');
+		assert.equal(ally.status, 'brn');
 	});
 });

@@ -6,7 +6,7 @@ const {Dex} = require('../../../dist/sim/dex');
 const {PRNG} = require('../../../dist/sim/prng');
 
 describe('Type cleanup runtime regressions', () => {
-	it('canonicalizes an imported ability alias and preserves its components after switching', () => {
+	it('canonicalizes an imported ability alias and preserves its effects after switching', () => {
 		const battle = common.createBattle([[
 			{species: 'Mew', ability: 'Wildfire Core', moves: ['splash']},
 			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
@@ -14,11 +14,13 @@ describe('Type cleanup runtime regressions', () => {
 		try {
 			const pokemon = battle.p1.active[0];
 			assert.equal(pokemon.baseAbility, 'unboundblaze');
-			assert(pokemon.hasAbility('proficient'));
+			assert.equal(battle.runEvent('Immunity', pokemon, null, null, 'hail'), false);
+			assert(!pokemon.hasAbility('proficient'));
 			battle.makeChoices('switch 2', 'move splash');
 			battle.makeChoices('switch 2', 'move splash');
 			assert.equal(pokemon.ability, 'unboundblaze');
-			assert(pokemon.hasAbility('proficient'));
+			assert.equal(battle.runEvent('Immunity', pokemon, null, null, 'hail'), false);
+			assert(!pokemon.hasAbility('proficient'));
 		} finally {
 			battle.destroy();
 		}
@@ -70,7 +72,7 @@ describe('Type cleanup runtime regressions', () => {
 			const move = battle.dex.getActiveMove('tackle');
 			const [first, second] = battle.p2.active;
 			for (const target of [first, second, first]) {
-				battle.singleEvent('SourceHit', source.getAbility(), source.abilityState, target, source, move);
+				battle.singleEvent('SourceDamagingHit', source.getAbility(), source.abilityState, target, source, move, 1);
 			}
 			assert.equal(first.boosts.atk, -1);
 			assert.equal(second.boosts.atk, -1);

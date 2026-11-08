@@ -48,11 +48,12 @@ describe('G-Max Chi Strike', function () {
 	});
 
 	it(`should be copied by Psych Up`, function () {
-		battle = common.gen(8).createBattle([[
+		battle = common.createBattle({ formatid: 'gen9factoryfield' }, [[
 			{species: 'Machamp', moves: ['rocksmash', 'sleeptalk'], gigantamax: true},
 		], [
 			{species: 'Wynaut', moves: ['psychup', 'tackle']},
 		]]);
+		battle.makeChoices('team 1', 'team 1');
 
 		battle.onEvent('ModifyCritRatio', battle.format, function (critRatio, target, source, move) {
 			if (move.id === 'tackle') {
@@ -65,12 +66,13 @@ describe('G-Max Chi Strike', function () {
 	});
 
 	it(`should not be passed by Baton Pass`, function () {
-		battle = common.gen(8).createBattle([[
+		battle = common.createBattle({ formatid: 'gen9factoryfield' }, [[
 			{species: 'Machamp', moves: ['rocksmash', 'batonpass'], gigantamax: true},
 			{species: 'Magikarp', moves: ['tackle']},
 		], [
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		]]);
+		battle.makeChoices('team 12', 'team 1');
 
 		battle.onEvent('ModifyCritRatio', battle.format, function (critRatio, target, source, move) {
 			if (move.id === 'tackle') {
@@ -79,8 +81,8 @@ describe('G-Max Chi Strike', function () {
 		});
 
 		battle.makeChoices('move rocksmash 1 dynamax', 'auto');
-		battle.makeChoices('move maxguard', 'auto');
-		battle.makeChoices('move maxguard', 'auto');
+		assert(battle.p1.active[0].volatiles.gmaxchistrike);
+		// Persistent G-Max allows ordinary Baton Pass; no Max Guard waiting turns.
 
 		battle.makeChoices('move batonpass', 'auto');
 		battle.makeChoices('switch 2');

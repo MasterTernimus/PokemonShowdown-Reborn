@@ -55,7 +55,7 @@ describe('Approved healing, PP and Atrocity components', () => {
  for(const field of ['', 'coldeclipseterrain','dragonsdenterrain']) it('Fire Ward defense factor on '+field,()=>{
   const [p]=start('Fire Ward');if(field)battle.field.setTerrain(field,p);
   const raw=p.getStat('def',false,true);
-  assert.equal(p.getStat('def'),battle.modify(raw,field?1.5:1.3));
+		assert.equal(p.getStat('def'), battle.modify(raw, field === 'dragonsdenterrain' ? 1.5 : 1.3));
  });
  it('Atrocity keeps generic power equal on normal and Cold Eclipse',()=>{
   const [p,q]=start('Atrocity');
@@ -73,7 +73,7 @@ describe('Approved healing, PP and Atrocity components', () => {
   assert.equal(battle.runEvent('BasePower',p,q,m,100),130);
   for(const terrain of ['', 'coldeclipseterrain','dragonsdenterrain']) {
    if(terrain)battle.field.setTerrain(terrain,p);
-   assert.equal(p.getStat('def'),battle.modify(p.getStat('def',false,true),terrain?1.5:1.3));
+			assert.equal(p.getStat('def'), battle.modify(p.getStat('def', false, true), terrain === 'dragonsdenterrain' ? 1.5 : 1.3));
   }
  });
 

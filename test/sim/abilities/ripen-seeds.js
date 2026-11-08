@@ -6,7 +6,7 @@ describe('Ripen held Seeds',()=>{
   b=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species,ability,item,moves:['splash','seedbomb','leechseed']},{species:'Mew',ability:'No Ability',moves:['splash']}],[{species:'Mew',ability:'No Ability',moves:['splash']}]]);
   b.makeChoices('team 12','team 1');b.randomizer=d=>d;return b.p1.active[0];
  }
- for(const ability of ['Ripen','Evergreen','Soothing Cream'])it('doubles selected/component '+ability+' exactly once on consumption',()=>{
+	for (const ability of ['Ripen', 'Soothing Cream'])it('doubles selected/component ' + ability + ' exactly once on consumption', () => {
   const p=setup('Mew',ability);assert.equal(p.item,'elementalseed');assert.equal(p.boosts.def,0);
   b.field.setTerrain('grassyterrain',p);assert.equal(p.item,'');assert.equal(p.boosts.def,2);assert(p.volatiles.ingrain);
   b.fieldEvent('TerrainChange');assert.equal(p.boosts.def,2);

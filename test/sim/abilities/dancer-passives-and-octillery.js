@@ -4,6 +4,7 @@ const common = require('../../common');
 const { Dex } = require('../../../dist/sim');
 const { SpeciesPassives } = require('../../../dist/data/species-passives');
 const before = require('./dancer-passives-before.json');
+const approved = require('./passive-approval-overlays');
 let battle;
 function setup(id, ability = Dex.species.get(id).abilities[0], doubles = false, foe = 'No Ability') {
 	const mon = (species = 'Mew', ability = 'No Ability') => ({ species, ability, moves: ['splash', 'dragondance', 'relicsong', 'waterpulse'] });
@@ -17,11 +18,12 @@ function setup(id, ability = Dex.species.get(id).abilities[0], doubles = false, 
 function use(id, source, target, extra = {}) {
 	const move = Dex.getActiveMove(id); Object.assign(move, { accuracy: true, willCrit: false }, extra);
 	battle.actions.useMove(move, source, { target });
+	battle.runEvent('AfterMove', source, target, battle.activeMove);
 	battle.clearActiveMove();
 }
 describe('Approved eleven dancer passives and Anchored Battery extension', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
-	it('adds Own Tempo to exactly eleven forms, retaining every prior passive, slot, stat, type and move', () => {
+	it('matches reviewed dancer rosters and learnsets after subsequent approvals', () => {
 		const expected = JSON.parse(JSON.stringify(before.previousPassives));
 		for (const id of before.forms) expected[id] = [...(expected[id] || []), 'owntempo'];
 		for (const id of require('../../../dist/data/species-passives').RelicArmorPassiveForms) expected[id] = [...(expected[id] || []), 'relicarmor'];
@@ -29,23 +31,37 @@ describe('Approved eleven dancer passives and Anchored Battery extension', () =>
 		for (const [passive, ids] of Object.entries(require('./regional-passives-approved.json').groups)) for (const id of ids) expected[id] = [...(expected[id] || []), passive];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(SpeciesPassives, expected);
-		assert.equal(Object.keys(expected).length, 839);
-		for (let old of before.species) {
+		assert.equal(Object.keys(expected).length, 952);
+		for (const old of before.species) {
 			const s = Dex.species.get(old.id);
-			if (old.id === 'ludicolo') old = { ...old, abilities: { ...old.abilities, H: 'Rain Dish' } }; for (const key of ['abilities', 'baseStats', 'types']) assert.deepEqual(s[key], old[key], old.id + key);
+			// Own Tempo moved to Ludicolo's passive; Rain Dish fills its former slot.
+			if (old.id === 'ludicolo') old.abilities.H = 'Rain Dish';
+			assert.deepEqual(s.abilities, approved.abilities(old.id, old.abilities), old.id + '/abilities');
+			assert.deepEqual(s.baseStats, approved.stats(old.id, old.baseStats), old.id + '/stats');
+			assert.deepEqual(s.types, old.types, old.id + '/types');
 			let expectedLearnset = old.learnset && {...old.learnset};
+			// The approved Invigorate-user grant adds a current-generation source.
+			if (old.id === 'lilliganthisui') expectedLearnset.safeguard = ['9M'];
+			if (expectedLearnset?.mudslap) {
+				expectedLearnset.mudbarrage = expectedLearnset.mudslap;
+				delete expectedLearnset.mudslap;
+			}
 			const grants = {...require('./rejuv-move-learnsets-approved.json'), ...require('./yang-move-learnsets-approved.json')};
 			for (const [move, users] of Object.entries(grants)) if (users.includes(old.id)) {
 				assert(!Object.hasOwn(old.learnset || {}, move));
 				expectedLearnset ||= {};
 				expectedLearnset[move] = ['9L1'];
 			}
+			// Sources are normalized for the validator; preserve every historical source.
+			for (const [move, sources] of Object.entries(expectedLearnset || {})) {
+				expectedLearnset[move] = [...sources].sort((a, b) => Number(b[0]) - Number(a[0]) || 'MTLREVDSC'.indexOf(a[1]) - 'MTLREVDSC'.indexOf(b[1]));
+			}
 			assert.deepEqual(Dex.species.getLearnsetData(old.id).learnset, expectedLearnset, old.id + '/learnset');
 		}
 		assert.deepEqual(Dex.species.get('quaquaval').passives, ['torrent']);
 		for (const id of ['lotad', 'lombre', 'petilil', 'oddish', 'gloom', 'quaxly', 'quaxwell', 'meloettamega']) assert(!Dex.species.get(id).passives.includes('owntempo'));
 	});
-	for (const id of before.forms.filter(id => id !== 'quaquaval')) it(id + ' blocks confusion and Intimidate through suppression and copying only the active ability', () => {
+	for (const id of before.forms.filter(id => !['quaquaval', 'meloetta', 'meloettapirouette'].includes(id))) it(id + ' blocks confusion and Intimidate through suppression and copying only the active ability', () => {
 		const [p, t] = setup(id);
 		for (const state of ['normal', 'gastroacid', 'meridianseal', 'gas', 'replacement']) {
 			if (state === 'gas') t.setAbility('Neutralizing Gas'); else if (state === 'replacement') {
@@ -74,22 +90,22 @@ describe('Approved eleven dancer passives and Anchored Battery extension', () =>
 	it('Transform adopts target passives and switch reversion restores the original form', () => {
 		const [p, t] = setup('Meloetta');
 		assert(t.transformInto(p));
-		assert.deepEqual(t.getPassives(), ['owntempo']);
+		assert.deepEqual(t.getPassives(), ['serenegrace']);
 		assert(p.transformInto(battle.p2.pokemon[1]));
 		assert.deepEqual(p.getPassives(), ['synchronize']);
 		battle.makeChoices('switch 3', 'move splash');
 		battle.makeChoices('switch 3', 'move splash');
-		assert.deepEqual(p.getPassives(), ['owntempo']);
+		assert.deepEqual(p.getPassives(), ['serenegrace']);
 	});
-	it('Relic Song changes both Meloetta forms while keeping Serene Grace and Own Tempo', () => {
+	it('Relic Song changes both Meloetta forms while keeping selected Dancer and passive Serene Grace', () => {
 		const [p] = setup('Meloetta');
 		battle.makeChoices('move relicsong', 'move splash');
 		assert.equal(p.species.id, 'meloettapirouette');
-		assert.equal(p.ability, 'serenegrace');
-		assert.deepEqual(p.getPassives(), ['owntempo']);
+		assert.equal(p.ability, 'dancer');
+		assert.deepEqual(p.getPassives(), ['serenegrace']);
 		battle.makeChoices('move relicsong', 'move splash');
 		assert.equal(p.species.id, 'meloetta');
-		assert.deepEqual(p.getPassives(), ['owntempo']);
+		assert.deepEqual(p.getPassives(), ['serenegrace']);
 	});
 	it('Illusion copies the disguise and does not keep actual-species Own Tempo', () => {
 		const [p, t] = setup('Ludicolo', 'Pressure');
@@ -121,23 +137,23 @@ describe('Approved eleven dancer passives and Anchored Battery extension', () =>
 		use('confuseray', t, p);
 		assert(!p.volatiles.confusion);
 	});
-	for (const move of ['waterpulse', 'aurasphere', 'bulletseed']) it('Anchored Battery rewards one actual ' + move + ' hit once per entry', () => {
+	for (const move of ['waterpulse', 'aurasphere', 'bulletseed']) it('Anchored Battery rewards one actual ' + move + ' hit once per whole move', () => {
 		const [p, t] = setup('Octillery', 'Anchored Battery');
 		use(move, p, t, { basePower: 1, ...(move === 'bulletseed' ? { multihit: 5 } : {}) });
 		assert.equal(t.boosts.spe, -1);
-		assert(p.volatiles.anchoredbatteryspent);
+		assert(!p.volatiles.anchoredbatteryspent);
 		use(move, p, t, { basePower: 1 });
-		assert.equal(t.boosts.spe, -1);
+		assert.equal(t.boosts.spe, -2);
 		p.setAbility('Pressure');
 		p.setAbility('Anchored Battery');
 		use(move, p, t, { basePower: 1 });
-		assert.equal(t.boosts.spe, -1);
+		assert.equal(t.boosts.spe, -3);
 		battle.makeChoices('switch 3', 'move splash');
 		battle.makeChoices('switch 3', 'move splash');
 		use(move, p, t, { basePower: 1 });
-		assert.equal(t.boosts.spe, -2);
+		assert.equal(t.boosts.spe, -4);
 	});
-	for (const reason of ['miss', 'protect', 'immunity', 'substitute', 'zero', 'ally', 'nonpulse', 'suppression']) it('Anchored Battery preserves its budget after ' + reason, () => {
+	for (const reason of ['miss', 'protect', 'immunity', 'substitute', 'zero', 'ally', 'nonpulse', 'suppression']) it('Anchored Battery does not lower Speed after ' + reason, () => {
 		const [p, t, ally] = setup('Octillery', 'Anchored Battery', true);
 		const target = reason === 'ally' ? ally : t;
 		if (reason === 'protect' || reason === 'substitute') target.addVolatile(reason, target);
@@ -147,13 +163,13 @@ describe('Approved eleven dancer passives and Anchored Battery extension', () =>
 		assert.equal(target.boosts.spe, 0);
 		assert(!p.volatiles.anchoredbatteryspent);
 	});
-	it('Anchored Battery handles spread only once and obeys normal stat-drop protection', () => {
+	it('Anchored Battery lowers each damaged spread target once and respects stat-drop protection', () => {
 		const [p, t] = setup('Octillery', 'Anchored Battery', true);
 		t.setAbility('Clear Body');
 		use('waterpulse', p, t, { basePower: 1, target: 'allAdjacentFoes' });
 		assert.equal(t.boosts.spe, 0);
-		assert.equal(battle.p2.active[1].boosts.spe, 0);
-		assert(p.volatiles.anchoredbatteryspent);
+		assert.equal(battle.p2.active[1].boosts.spe, -1);
+		assert(!p.volatiles.anchoredbatteryspent);
 	});
 	it('calculator publishes all Own Tempo forms and executes the Octillery Speed drop once', () => {
 		const { calculatorMetadata, calculateScenario } = require('../../../dist/sim/custom-calculator');

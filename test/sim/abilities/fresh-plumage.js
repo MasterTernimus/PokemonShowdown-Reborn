@@ -25,7 +25,7 @@ describe('Fresh Plumage', () => {
 		p.setStatus('par');
 		battle.singleEvent('SwitchOut', p.getAbility(), p.abilityState, p);
 		assert.equal(p.status, '');
-		assert.equal(p.hp, 1 + Math.floor(p.baseMaxhp / 3));
+		assert.equal(p.hp, 1 + Math.floor(p.baseMaxhp / 8));
 		const hp = p.hp;
 		battle.singleEvent('SwitchOut', p.getAbility(), p.abilityState, p);
 		assert.equal(p.hp, hp);
@@ -35,13 +35,13 @@ describe('Fresh Plumage', () => {
 		assert.equal(p.status, '');
 		assert.equal(p.hp, hp);
 	});
-	it('boosts the entire multihit move once and resets only on reentry', () => {
+	it('does not boost multihit moves or gain a damage bonus on reentry', () => {
 		const [p, foe] = setup(), damage = [];
 		battle.onEvent('DamagingHit', battle.format, n => damage.push(n));
 		hit(p, foe, 'dualwingbeat', { multihit: 2 });
 		assert.equal(damage.length, 2);
 		assert.equal(damage[0], damage[1]);
-		assert(p.m.approvedSignatures.freshPlumageUsed);
+		assert(!p.m.approvedSignatures?.freshPlumageUsed);
 		const m = battle.dex.getActiveMove('bravebird');
 		assert.equal(battle.runEvent('ModifyDamage', p, foe, m, 100), 100);
 		p.setAbility('No Ability');
@@ -49,7 +49,7 @@ describe('Fresh Plumage', () => {
 		assert.equal(battle.runEvent('ModifyDamage', p, foe, m, 100), 100);
 		battle.actions.switchIn(p.side.pokemon[1], 0);
 		battle.actions.switchIn(p, 0);
-		assert.equal(battle.runEvent('ModifyDamage', p, foe, m, 100), 120);
+		assert.equal(battle.runEvent('ModifyDamage', p, foe, m, 100), 100);
 	});
 	for (const mode of ['miss', 'protect', 'immune']) it('does not consume on ' + mode, () => {
 		const [p, foe] = setup();
@@ -58,7 +58,7 @@ describe('Fresh Plumage', () => {
 		hit(p, foe, 'bravebird', mode === 'miss' ? { accuracy: 0 } : {});
 		assert(!p.m.approvedSignatures?.freshPlumageUsed);
 	});
-	it('consumes on Substitute, preserves recoil, and does not boost Body Press', () => {
+	it('preserves recoil and does not boost Flying attacks or Body Press', () => {
 		const [p, foe] = setup();
 		const press = battle.dex.getActiveMove('bodypress');
 		assert.equal(battle.runEvent('ModifyDamage', p, foe, press, 100), 100);
@@ -66,7 +66,7 @@ describe('Fresh Plumage', () => {
 		const hp = p.hp;
 		hit(p, foe, 'bravebird');
 		assert(p.hp < hp);
-		assert(p.m.approvedSignatures.freshPlumageUsed);
-		assert.deepEqual(battle.dex.species.get('skarmory').abilities, { 0: 'Fresh Plumage', 1: 'Sturdy', H: 'Weak Armor' });
+		assert(!p.m.approvedSignatures?.freshPlumageUsed);
+		assert.deepEqual(battle.dex.species.get('skarmory').abilities, { 0: 'Fresh Plumage', 1: 'Sturdy', H: 'Burning Quake' });
 	});
 });

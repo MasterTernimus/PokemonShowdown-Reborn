@@ -6,6 +6,7 @@ const approved = { arbokmegax: 'regenerator', arbokmegay: 'shedskin', raichumega
 let battle;
 Object.assign(approved, {arbokmegax:'shedskin',sunfloramega:'solarbud'});
 Object.assign(approved, require('./hoenn-mega-approved.json'), require('./sinnoh-unova-mega-approved.json'));
+Object.assign(approved, { parasectmega: 'mycelialbond', ariadosmega: 'venomthread', sevipermega: 'rivalmalice', haxorusmega: 'twinfang' });
 function setup(species, ability, doubles = false) {
 	const set = (species = 'Mew', ability = 'No Ability') => ({ species, ability, moves: ['splash', 'protect', 'thunderbolt', 'sludgebomb'] });
 	battle = common.createBattle({ formatid: doubles ? 'gen9nofielddoublesbattle' : 'gen9nofieldsinglesgame' }, [[set(species, ability || Dex.species.get(species).abilities[0]), set()], [set(), set()]]);
@@ -42,7 +43,7 @@ describe('Approved Kanto and Johto Mega splits', () => {
 		assert.equal(p.species.id, id);
 		assert.deepEqual(p.getPassives(), [approved[id]]);
 	});
-	it('calculator publishes all six passives and matches live Dry Skin absorption', () => {
+	it('calculator publishes all approved passives and matches live Dry Skin absorption', () => {
 		const { calculateScenario, calculatorMetadata } = require('../../../dist/sim/custom-calculator');
 		const metadata = calculatorMetadata();
 		for (const [id, passive] of Object.entries(approved)) assert.deepEqual(metadata.species.find(s => s.name === Dex.species.get(id).name).passives, [passive]);
@@ -50,7 +51,7 @@ describe('Approved Kanto and Johto Mega splits', () => {
 			actors: [{ species: 'Mew', ability: 'No Ability' }, { species: 'Parasect-Mega', ability: 'Complete Parasitism' }, { species: 'Mew', ability: 'No Ability' }, { species: 'Mew', ability: 'No Ability' }] };
 		const result = calculateScenario(input);
 		assert.equal(result.results[1].max, 0);
-		assert.deepEqual(result.resolved.actors[1].passives, ['dryskin']);
+		assert.deepEqual(result.resolved.actors[1].passives, ['mycelialbond']);
 	});
 	for (const [id, passive] of Object.entries(approved)) it(id + ' keeps the passive through suppression, copying and Transform', () => {
 		const [p, q] = setup(id);
@@ -165,7 +166,7 @@ describe('Approved Kanto and Johto Mega splits', () => {
 		battle.runEvent('Residual', p);
 		assert.equal(p.hp, 250);
 	});
-	it('revives into Parasect-Parasite with its own package and no retained Dry Skin', () => {
+	it('revives into Parasect-Parasite with Resuscitation and its native Mycelial Bond', () => {
 		const [p, q] = setup('Parasect-Mega');
 		p.hp = 100;
 		battle.damage(200, p, q, Dex.getActiveMove('tackle'));
@@ -173,11 +174,11 @@ describe('Approved Kanto and Johto Mega splits', () => {
 		battle.singleEvent('Residual', Dex.conditions.get('resuscitationpending'), p.volatiles.resuscitationpending, p);
 		assert.equal(p.species.id, 'parasectparasite');
 		assert.equal(p.ability, 'resuscitation');
-		assert.deepEqual(p.getPassives(), []);
+		assert.deepEqual(p.getPassives(), ['mycelialbond']);
 		assert.equal(p.hp, p.maxhp);
 		p.hp = 100;
 		battle.actions.useMove('watergun', q, { target: p });
-		assert(p.hp < 100);
+		assert.equal(p.hp, 100 + Math.floor(p.baseMaxhp / 4));
 	});
 	it('Digestive Sap is passive on Mega Victreebel and remains available as a selected primitive', () => {
 		const [p, q] = setup('Victreebel-Mega');
@@ -255,17 +256,16 @@ describe('Approved Kanto and Johto Mega splits', () => {
 		p.addVolatile('gastroacid');
 		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('machpunch'), 100), 140);
 	});
-	it('Ariados heals once and stays immune to sand/hail even while suppressed', () => {
-		const [p] = setup('Ariados-Mega');
-		p.hp = 100;
-		battle.runEvent('Residual', p);
-		assert.equal(p.hp, 175);
-		p.addVolatile('gastroacid');
-		battle.runEvent('Residual', p);
-		assert.equal(p.hp, 250);
-		assert.equal(battle.runEvent('Immunity', p, null, null, 'sandstorm'), false);
-		assert.equal(battle.runEvent('Immunity', p, null, null, 'hail'), false);
+	it('Ariados selected recovery is suppressed while Venom Thread remains active', () => {
+		const [p, q] = setup('Ariados-Mega'); p.hp = 100;
+		battle.runEvent('Residual', p); assert.equal(p.hp, 175);
+		p.addVolatile('gastroacid'); battle.runEvent('Residual', p); assert.equal(p.hp, 175);
+		assert.notEqual(battle.runEvent('Immunity', p, null, null, 'sandstorm'), false);
+		assert.notEqual(battle.runEvent('Immunity', p, null, null, 'hail'), false);
+		q.setStatus('psn', p); assert.equal(battle.runEvent('ModifySpe', q, null, null, 100), 75);
+		q.cureStatus(); assert.equal(battle.runEvent('ModifySpe', q, null, null, 100), 100);
 	});
+
 	it('Silken Decoy still blocks a hit and renews its cocoon when another Pokemon faints', () => {
 		const [p, q] = setup('Ariados-Mega');
 		assert(p.m.silkenDecoyCocoon);

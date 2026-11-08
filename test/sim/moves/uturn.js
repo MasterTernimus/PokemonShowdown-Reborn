@@ -15,10 +15,11 @@ describe('U-turn', function () {
 			{species: 'Beedrill', ability: 'swarm', moves: ['uturn']},
 			{species: 'Kakuna', ability: 'shedskin', moves: ['harden']},
 		], [
-			{species: 'Alakazam', ability: 'magicguard', moves: ['substitute']},
+			{ species: 'Alakazam', ability: 'magicguard', evs: { spe: 252 }, nature: 'Timid', moves: ['substitute'] },
 		]]);
 
 		battle.makeChoices('move uturn', 'move substitute');
+		assert(battle.log.some(line => line.includes('|-start|p2a: Alakazam|Substitute')));
 		assert.equal(battle.requestState, 'switch');
 	});
 });

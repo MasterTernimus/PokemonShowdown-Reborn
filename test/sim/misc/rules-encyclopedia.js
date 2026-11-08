@@ -7,7 +7,8 @@ describe('Public custom rules and read-only team clinic', () => {
 		const c = rulesCatalog();
 		assert(c.species.length > 1600);
 		assert(c.abilities.length > 1000);
-		assert.equal(c.fields.length, 48);
+		assert.equal(c.fields.length, 50);
+		for (const id of ['infernaleclipseterrain', 'rifteclipseterrain']) assert(c.fields.some(f => f.id === id), id);
 		assert(c.formats.some(f => f.id === 'gen9nofieldsinglesgame'));
 	});
 	it('shows Politoed regular slots, passive, forms and event distinctions', () => {

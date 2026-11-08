@@ -18,6 +18,7 @@ describe('Field Guide checked source facts', () => {
 	function after(b, p, q, id) {
 		p.moveThisTurnResult = true;
 		const move = Dex.getActiveMove(id), condition = b.field.getTerrain();
+		move.totalDamage = 1;
 		condition.onAfterMove.call(b, p, q, move);
 	}
 	it('checks bright and dark crystal break thresholds against real shared field rules', () => {
@@ -35,12 +36,12 @@ describe('Field Guide checked source facts', () => {
 			}
 		}
 	});
-	it('checks Dragon Den cooling and the separate instant Volcanic transition', () => {
-		for (const moves of [['surf', 'sparklingaria'], ['glaciate']]) {
+	it('checks Dragon Den two-use and one-use cooling', () => {
+		for (const moves of [['surf', 'surf'], ['glaciate']]) {
 			const { battle: b, mons: [p, q] } = setup('dragonsdenterrain');
 			try {
 				for (const m of moves)after(b, p, q, m);
-				assert.equal(b.field.terrain, moves.length === 1 ? 'volcanicterrain' : 'caveterrain');
+				assert.equal(b.field.terrain, 'caveterrain');
 			} finally {
 				b.destroy();
 			}
@@ -52,7 +53,7 @@ describe('Field Guide checked source facts', () => {
 			after(b, p, q, 'dazzlinggleam');
 			assert.equal(b.field.terrain, 'bewitchedwoodsterrain');
 			const g = publicFieldGuide().entries.find(e => e.id === 'bewitchedwoodsterrain');
-			assert.match(g.sections.Transitions.join(' '), /currently blocks/);
+			assert.match(g.sections.Transitions.join(' '), /do not restore Forest/);
 		} finally {
 			b.destroy();
 		}

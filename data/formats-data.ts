@@ -5427,6 +5427,11 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
+	arbolivaaevian: {
+		tier: "PU",
+		doublesTier: "(DUU)",
+		natDexTier: "RU",
+	},
 	arbolivamega: {
 		tier: "Illegal",
 		doublesTier: "Illegal",

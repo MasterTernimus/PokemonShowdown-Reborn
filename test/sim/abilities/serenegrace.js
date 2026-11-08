@@ -31,7 +31,7 @@ describe(`Serene Grace`, function () {
 		battle.makeChoices('move bite 1, move sleeptalk', 'auto');
 	});
 
-	common.itGen(8, `[Gen 8] should overflow when quadrupling a stat drop effect with Pledge Rainbow`, function () {
+	common.itGen(8, `[Gen 8] custom Pledge Rainbow Field does not quadruple stat effects`, () => {
 		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'wynaut', ability: 'serenegrace', moves: ['poweruppunch', 'waterpledge']},
 			{species: 'wobbuffet', ability: 'serenegrace', moves: ['acidspray', 'firepledge']},
@@ -41,7 +41,7 @@ describe(`Serene Grace`, function () {
 		]]);
 
 		// Modding secondary chances so it will either always apply or never apply
-		// (64 * 2 * 2) % 256 === 0
+		// Rainbow does not stack with Serene Grace; the shared helper caps 64 × 2 at 100%.
 		battle.onEvent('ModifyMove', battle.format, 1, function (move) {
 			if (move.secondaries) {
 				for (const secondary of move.secondaries) {
@@ -51,12 +51,18 @@ describe(`Serene Grace`, function () {
 		});
 
 		battle.makeChoices('move waterpledge 1, move firepledge 1', 'auto');
+		assert.equal(battle.field.terrain, 'rainbowterrain');
+		battle.onEvent('ModifyMove', battle.format, -99, move => {
+			if (['poweruppunch', 'acidspray'].includes(move.id)) {
+				for (const secondary of move.secondaries) assert.equal(secondary.chance, 100);
+			}
+		});
 		battle.makeChoices('move poweruppunch 1, move acidspray 2', 'auto');
 
 		const wynaut = battle.p1.active[0];
-		assert.statStage(wynaut, 'atk', 0);
+		assert.statStage(wynaut, 'atk', 1);
 		const feebas = battle.p2.active[1];
-		assert.statStage(feebas, 'spd', 0);
+		assert.statStage(feebas, 'spd', -2);
 	});
 
 	it(`should not overflow when quadrupling a status effect with Pledge Rainbow`, function () {

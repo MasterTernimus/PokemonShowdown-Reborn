@@ -32,13 +32,22 @@ describe('Exalt and War Path Mold Breaker', () => {
 			battle.actions.useMove('earthquake', holder, {target: foe});
 			assert.equal(foe.hp, foe.maxhp);
 		});
-		it(`${ability} preserves its existing move boosts`, () => {
+		it(`${ability} preserves its current move rules`, () => {
 			const [holder, foe] = start(ability, 'No Ability');
 			const move = battle.dex.getActiveMove(ability === 'Exalt' ? 'slash' : 'rockslide');
 			battle.singleEvent('ModifyMove', holder.getAbility(), holder.abilityState, move, holder, foe);
 			assert(move.ignoreAbility);
-			assert.equal(battle.runEvent('BasePower', holder, foe, move, 1000), ability === 'Exalt' ? 1500 : 1300);
-			if (ability === 'War Path') { assert(move.infiltrates); assert(move.ignoreDefensive); }
+			assert.equal(battle.runEvent('BasePower', holder, foe, move, 1000), ability === 'Exalt' ? 1500 : 1000);
+			if (ability === 'War Path') {
+				assert.equal(holder.ability, 'grandstrategy');
+				assert(!move.infiltrates); assert(!move.ignoreDefensive);
+				assert.deepEqual(move.grandStrategyTargets, []);
+				battle.actions.runMove('tackle', holder, holder.getLocOf(foe));
+				assert(foe.volatiles.prepared.owners.includes(holder));
+				const followup = battle.dex.getActiveMove('rockslide');
+				battle.runEvent('ModifyMove', holder, foe, followup, followup);
+				assert.deepEqual(followup.grandStrategyTargets, [foe]);
+			}
 		});
 	}
 });

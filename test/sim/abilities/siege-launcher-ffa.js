@@ -18,16 +18,18 @@ describe('Siege Launcher Free-for-All power', () => {
 	}
 	for (const mode of ['singles', 'doubles', 'freeforall']) {
 		for (const move of ['metalclaw', 'aurasphere', 'psychocut']) {
-			it(`${mode}: both ${move} hits retain independent boosts`, () => {
+			it(`${mode}: ${move} uses its approved two-hit scaling`, () => {
 				const [source, target] = setup(mode);
 				const activeMove = Dex.getActiveMove(move);
 				battle.runEvent('ModifyMove', source, target, activeMove, activeMove);
 				assert.equal(activeMove.multihit, 2);
 				assert.equal(activeMove.multihitType, 'dualwield');
 				const boost = activeMove.flags.pulse || activeMove.flags.bullet ? 1.5 : 1;
-				const expected = 100 * (mode === 'freeforall' ? 1 : 0.6) * boost;
+				// FFA keeps both full-power hits. Elsewhere an offensive boost
+				// gives a boosted first hit and an unboosted 15% follow-up.
 				for (const hit of [1, 2]) {
 					activeMove.hit = hit;
+					const expected = mode === 'freeforall' ? 100 * boost : boost > 1 ? (hit === 1 ? 100 * boost : 15) : 60;
 					assert.equal(battle.runEvent('BasePower', source, target, activeMove, 100), expected);
 				}
 			});

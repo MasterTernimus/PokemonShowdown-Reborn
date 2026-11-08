@@ -275,7 +275,7 @@ Object.assign(SharedPassiveAbilityDescriptions, {
   },
   "echofiend": {
     "passive": "soundproof",
-    "desc": "Sound moves become Flying, Fire on Volcanic Field, or Crystal on Crystal Cavern. Sound moves have 1.5x power, or 2x on Cave, Volcanic and Crystal Cavern. Protects allies from allied damaging sound moves. This selected package cannot be suppressed.",
+		"desc": "Sound moves become Flying, Fire on Volcanic Field, or Crystal on Crystal Cavern. Sound moves have 1.2x power, 1.5x on Mountain, Snowy Mountain, Cave, Volcanic and Crystal Cavern. Protects allies from allied damaging sound moves. This selected package cannot be suppressed.",
     "shortDesc": "Converts and boosts sound attacks; protects allies from allied sound damage."
   },
   "vaultkeeper": {
@@ -363,7 +363,7 @@ Object.assign(SharedPassiveAbilityDescriptions, {
   },
   "glacialmass": {
     "passive": "thickfat",
-    "desc": "Doubles weight and halves physical attack damage. On entry to Factory Field, Defense rises one stage and Speed falls one stage. On Cold Eclipse, Defense and Sp. Def are 1.5x, the field Speed penalty is ignored, and hail heals 1/10 max HP each turn.",
+		"desc": "Doubles weight and halves physical attack damage. On entry to Factory Field, Defense rises one stage and Speed falls one stage.",
     "shortDesc": "Halves physical and Fire/Ice damage; hail immunity."
   },
   "apexarmor": {
@@ -644,7 +644,7 @@ for (const id of ['sandsovereign', 'frostsovereign']) {
 SharedPassiveAbilityDescriptions.cursedmarionette = {
  passive: 'prankster',
  shortDesc: 'Curses opposing targets and attackers; cursed foes deal 20% less damage; Curse damage heals it.',
- desc: "Full local Frisk reveals opposing held items on entry. Attacks and status moves curse opposing targets, and taking a damaging hit curses the attacker. Cursed foes deal 20% less damage to it. Its curses deal 1/8 max HP and restore half of that damage to it. After taking a hit at half HP or less, once per battle it creates Haunted Field for 3 turns or extends it to at least 3 turns. Fainting curses opposing Pokemon and creates Haunted Field for 5 turns, or extends an existing Haunted Field by 5 turns. Ordinary Ghost Curse costs 1/3 max HP; ability-applied curses do not pay that move cost. Prankster is supplied separately by the species passive.",
+	desc: "Full local Frisk reveals opposing held items on entry. Attacks and status moves curse opposing targets, and taking a damaging hit curses the attacker. Cursed foes deal 20% less damage to it. Its curses deal 1/8 max HP and restore half of that damage to it. After taking a hit at half HP or less, once per battle it creates Haunted Field for 3 turns or extends it to at least 3 turns. Fainting curses opposing Pokemon and creates Haunted Field for 5 turns, or extends an existing Haunted Field by 5 turns. Ordinary Ghost Curse costs 1/3 max HP; ability-applied curses do not pay that move cost.",
 };
 
 if (SharedPassiveAbilityDescriptions.toxicspines) {
@@ -705,3 +705,8 @@ AbilityComponentExclusions.fortressshell = AbilityComponentExclusions.fortresssh
 // The approved Marionette rework has Prankster only in its native passive slot.
 delete SharedPassiveComponentAdditions.cursedmarionette;
 delete SharedPassiveAbilityDescriptions.cursedmarionette;
+
+for (const id of ['evergreen', 'scavenger']) {
+	delete SharedPassiveAbilityDescriptions[id];
+	delete SharedPassiveComponents[id];
+}

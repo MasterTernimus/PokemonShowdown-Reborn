@@ -10,7 +10,7 @@ describe('[Gen 1] Bide', function () {
 		battle.destroy();
 	});
 
-	it(`should be possible to roll two-turn Bide`, function () {
+	common.itGen(1, `should be possible to roll two-turn Bide`, () => {
 		battle = common.gen(1).createBattle({seed: [0, 1, 1, 1]}, [[
 			{species: 'Aerodactyl', moves: ['bide', 'whirlwind']},
 		], [
@@ -32,7 +32,7 @@ describe('[Gen 1] Bide', function () {
 		assert.equal(gyarados.maxhp - gyarados.hp, 160);
 	});
 
-	it(`should be possible to roll three-turn Bide`, function () {
+	common.itGen(1, `should be possible to roll three-turn Bide`, () => {
 		battle = common.gen(1).createBattle({seed: [1, 1, 1, 1]}, [[
 			{species: 'Aerodactyl', moves: ['bide']},
 		], [
@@ -49,7 +49,7 @@ describe('[Gen 1] Bide', function () {
 		assert.equal(gyarados.maxhp - gyarados.hp, 240);
 	});
 
-	it(`should damage Substitute with Bide damage`, function () {
+	common.itGen(1, `should damage Substitute with Bide damage`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Aerodactyl', moves: ['bide', 'whirlwind']},
 		], [
@@ -67,7 +67,7 @@ describe('[Gen 1] Bide', function () {
 		assert.false(gyarados.volatiles['substitute']);
 	});
 
-	it(`should accumulate damage as the opponent switches or uses moves that don't reset lastDamage`, function () {
+	common.itGen(1, `should accumulate damage as the opponent switches or uses moves that don't reset lastDamage`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Aerodactyl', moves: ['bide']},
 		], [
@@ -86,7 +86,7 @@ describe('[Gen 1] Bide', function () {
 		assert.equal(exeggutor.maxhp - exeggutor.hp, 240);
 	});
 
-	it(`should zero out accumulated damage when an enemy faints (Desync Clause Mod)`, function () {
+	common.itGen(1, `should zero out accumulated damage when an enemy faints (Desync Clause Mod)`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Aerodactyl', moves: ['bide']},
 		], [
@@ -112,7 +112,7 @@ describe('[Gen 1] Bide', function () {
 		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
 	});
 
-	it(`should pause Bide's duration when asleep or frozen`, function () {
+	common.itGen(1, `should pause Bide's duration when asleep or frozen`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Aerodactyl', moves: ['bide']},
 		], [
@@ -128,7 +128,7 @@ describe('[Gen 1] Bide', function () {
 		}
 	});
 
-	it(`should pause Bide's duration when disabled`, function () {
+	common.itGen(1, `should pause Bide's duration when disabled`, () => {
 		battle = common.gen(1).createBattle({seed: [1, 1, 1, 0]}, [[
 			{species: 'Aerodactyl', moves: ['bide', 'whirlwind']},
 		], [

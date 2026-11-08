@@ -14,18 +14,22 @@ describe('October audit follow-up', () => {
   battle.makeChoices('team 1', 'team 1');
   return battle.p1.active[0];
  }
- it('recognizes nested Thick Fat without doubling Proficient and respects suppression', () => {
+	it('recognizes nested Thick Fat without removed Proficient or Cold Eclipse stat boosts', () => {
   const p = setup('Toxic Bloom'), foe = battle.p2.active[0];
   const stats = {def: p.getStat('def'), spd: p.getStat('spd'), spe: p.getStat('spe')};
-  assert(p.hasAbility('thickfat')); assert(p.hasAbility('proficient'));
-  assert.equal(battle.runEvent('BasePower', p, foe, battle.dex.getActiveMove('razorleaf'), 100), 130);
+		assert(p.hasAbility('thickfat')); assert(!p.hasAbility('proficient'));
+		const incoming = () => battle.runEvent('ModifySpA', foe, p, battle.dex.getActiveMove('icebeam'), 100);
+		assert.equal(incoming(), 50);
+		assert.equal(battle.runEvent('BasePower', p, foe, battle.dex.getActiveMove('razorleaf'), 100), 100);
   battle.field.setTerrain('coldeclipseterrain', p);
-  assert.equal(p.getStat('def'), Math.floor(stats.def * 1.5));
-  assert.equal(p.getStat('spd'), Math.floor(stats.spd * 1.5));
+		assert.equal(p.getStat('def'), stats.def);
+		assert.equal(p.getStat('spd'), stats.spd);
   assert.equal(p.getStat('spe'), stats.spe);
+		assert.equal(incoming(), 50);
   p.addVolatile('gastroacid');
+		assert.equal(incoming(), 100);
   assert(!p.hasAbility('thickfat')); assert.equal(p.getStat('def'), stats.def);
-  assert.equal(p.getStat('spe'), Math.floor(stats.spe * 0.75));
+		assert.equal(p.getStat('spe'), stats.spe);
  });
  it('terminates a component cycle and does not invent missing identities', () => {
   const p = setup('Toxic Bloom'), prior = AbilityComponents.selfsufficient;

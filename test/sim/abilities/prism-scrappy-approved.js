@@ -10,6 +10,22 @@ describe('Approved Prism Scale and Hitmontop revisions',()=>{
  it('Prism Scale reduces only allies damage; suppression stops Friend Guard but not Marvel Scale',()=>{const[p,a,q]=setup();const move=Dex.getActiveMove('tackle');assert.equal(battle.runEvent('ModifyDamage',q,a,move,100),75);assert.equal(battle.runEvent('ModifyDamage',q,p,move,100),100);p.status='brn';assert.equal(battle.runEvent('ModifyDef',p,null,null,100),150);p.addVolatile('gastroacid',q);assert.equal(battle.runEvent('ModifyDamage',q,a,move,100),100);assert.equal(battle.runEvent('ModifyDef',p,null,null,100),150);});
  it('retains Oblivious and Swift Swim',()=>{const[p,,q]=setup();battle.actions.useMove('taunt',q,{target:p});assert(!p.volatiles.taunt);battle.boost({atk:-1},p,q,Dex.abilities.get('intimidate'));assert.equal(p.boosts.atk,0);battle.field.setWeather('raindance');assert.equal(battle.runEvent('ModifySpe',p,null,null,100),200);});
  it('Prism Scale has no Marvel Scale on nonrecipients; Royal Scales keeps it without Friend Guard',()=>{let[p,a,q]=setup('Mew');p.status='brn';assert.equal(battle.runEvent('ModifyDef',p,null,null,100),100);p.setAbility('Royal Scales');assert.equal(battle.runEvent('ModifyDef',p,null,null,100),150);assert.equal(battle.runEvent('ModifyDamage',q,a,Dex.getActiveMove('tackle'),100),100);assert.deepEqual(require('../../../dist/data/ability-components').AbilityComponents.prismscale,['friendguard','oblivious','swiftswim']);assert(!require('../../../dist/data/ability-components').AbilityComponents.royalscales.includes('prismscale'));assert.match(Dex.abilities.get('prismscale').desc,/Friend Guard/);assert(!Dex.abilities.get('prismscale').desc.includes('Marvel Scale'));});
- for(const suppressed of [false,true])for(const move of ['tackle','machpunch'])it('Hitmontop '+move+' hits Ghost while suppressed='+suppressed,()=>{const[p,,q,g]=setup('Hitmontop','No Ability');if(suppressed)p.addVolatile('gastroacid',q);assert.deepEqual(p.getPassives(),['scrappy']);const hp=g.hp;battle.actions.useMove(Object.assign(Dex.getActiveMove(move),{accuracy:true,willCrit:false}),p,{target:g});assert(g.hp<hp);battle.boost({atk:-1},p,q,Dex.abilities.get('intimidate'));assert.equal(p.boosts.atk,0);});
- it('Scrappy blocks Intimidate even with Contrary but preserves other Contrary boosts',()=>{const[p,,q]=setup('Hitmontop','Contrary');battle.boost({atk:-1},p,q,Dex.abilities.get('intimidate'));assert.equal(p.boosts.atk,0);battle.boost({def:-1},p,q,Dex.moves.get('tailwhip'));assert.equal(p.boosts.def,1);});
+	for (const suppressed of [false, true]) for (const move of ['tackle', 'machpunch'])it('Hitmontop ' + move + ' keeps Ghost immunity while suppressed=' + suppressed, () => {
+		const [p,,q, g] = setup('Hitmontop', 'No Ability');
+		if (suppressed)p.addVolatile('gastroacid', q);
+		assert.deepEqual(p.getPassives(), ['spinfiend']);
+		const hp = g.hp;
+		battle.actions.useMove(Object.assign(Dex.getActiveMove(move), { accuracy: true, willCrit: false }), p, { target: g });
+		assert.equal(g.hp, hp);
+		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove(move), 40), 60);
+		battle.boost({ atk: -1 }, p, q, Dex.abilities.get('intimidate'));
+		assert.equal(p.boosts.atk, -1);
+	});
+	it('Spin Fiend does not prevent Contrary from reversing Intimidate and other drops', () => {
+		const [p,,q] = setup('Hitmontop', 'Contrary');
+		battle.boost({ atk: -1 }, p, q, Dex.abilities.get('intimidate'));
+		assert.equal(p.boosts.atk, 1);
+		battle.boost({ def: -1 }, p, q, Dex.moves.get('tailwhip'));
+		assert.equal(p.boosts.def, 1);
+	});
 });

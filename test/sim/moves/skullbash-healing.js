@@ -20,6 +20,19 @@ describe('Skull Bash 15 percent recovery',()=>{
  it('Heal Block stops recovery without stopping its damaging attack',()=>{const[p,q]=setup('No Ability','Power Herb');p.addVolatile('healblock',q);use(p,q);assert.equal(p.hp,400);assert.equal(q.hp,9980);});
  it('contact recoil fainting prevents recovery or revival',()=>{const[p,q]=setup('No Ability','Power Herb');p.hp=1;q.setAbility('Rough Skin');use(p,q);assert.equal(p.hp,0);assert.equal(q.hp,9980);});
  it('Power Herb keeps charge boosts and skips charge protection',()=>{const[p,q]=setup('No Ability','Power Herb');use(p,q);assert.equal(p.item,'');assert.equal(p.hp,550);assert.equal(p.boosts.atk,1);assert.equal(p.boosts.def,1);assert.equal(p.boosts.spd,1);assert(!p.volatiles.skullbash);assert.equal(battle.runEvent('ModifyDamage',q,p,Dex.getActiveMove('tackle'),100),100);});
- for(const ability of ['Serene Grace'])it(ability+' retains the existing charge-skipping attack and new recovery',()=>{const[p,q]=setup(ability);use(p,q);assert.equal(q.hp,9980);assert.equal(p.hp,550);assert.equal(p.boosts.atk,1);assert.equal(p.boosts.def,1);assert.equal(p.boosts.spd,1);assert(!p.volatiles.skullbash);});
+	it('Serene Grace preserves the charge turn and heals only after release', () => {
+		const [p, q] = setup('Serene Grace');
+		use(p, q);
+		assert.equal(q.hp, 10000);
+		assert.equal(p.hp, 400);
+		assert(p.volatiles.skullbash);
+		assert.equal(p.boosts.atk, 1);
+		assert.equal(p.boosts.def, 1);
+		assert.equal(p.boosts.spd, 1);
+		use(p, q);
+		assert.equal(q.hp, 9980);
+		assert.equal(p.hp, 550);
+		assert(!p.volatiles.skullbash);
+	});
  it('preserves the existing Encore Aria charge behavior while raising its eventual recovery',()=>{const[p,q]=setup('Encore Aria');use(p,q);assert.equal(q.hp,10000);assert.equal(p.hp,400);assert(p.volatiles.skullbash);use(p,q);assert.equal(q.hp,9980);assert.equal(p.hp,550);});
 });

@@ -130,9 +130,15 @@ Object.assign(LoreEntryDescriptions, {
 });
 
 Object.assign(LoreEntryDescriptions, {
- beyondfear:{shortDesc:'Immune to flinching and opposing Taunt.',desc:'Immune to flinching and opposing Taunt. Does not prevent Intimidate or other stat drops and does not raise defenses in response. When supplied as a species passive, remains active through selected-ability suppression.'},
+	beyondfear: {
+		shortDesc: 'Immune to flinching and opposing Taunt.',
+		desc: 'Immune to flinching and opposing Taunt. Does not prevent Intimidate or other stat drops and does not raise defenses in response.',
+	},
  unboundspirit:{shortDesc:'Vital Spirit; Ghost attacks ignore Reflect and Light Screen.',desc:'Full revised Vital Spirit prevents and cures sleep, blocks Yawn, and gives Fighting attacks 1.3x Attack or Sp. Atk. Ghost attacks ignore Reflect and Light Screen only. Does not bypass Aurora Veil, Substitute, type immunities or abilities.'},
- ragingheart:{"shortDesc":"Inner Focus; selected Thrash becomes Ghost with no ending confusion.","desc":"Full local Inner Focus prevents flinching and Intimidate Attack drops, subject to normal suppression and ability bypass. Directly selected Thrash becomes Ghost type, retaining its physical category, 140 power, chosen adjacent opposing target and 30% Defense-drop chance, with no extra power multiplier. Without separate Controlled Fury it has its 2-3-turn rampage lock but does not cause its own ending confusion while Raging Heart is active. External confusion remains. Annihilape supplies Controlled Fury separately as its species passive."},
+	ragingheart: {
+		"shortDesc": "Inner Focus; selected Thrash becomes Ghost with no ending confusion.",
+		"desc": "Full local Inner Focus prevents flinching and Intimidate Attack drops, subject to normal suppression and ability bypass. Directly selected Thrash becomes Ghost type, retaining its physical category, 140 power, chosen adjacent opposing target and 30% Defense-drop chance, with no extra power multiplier. Without separate Controlled Fury it has its 2-3-turn rampage lock but does not cause its own ending confusion while Raging Heart is active. External confusion remains.",
+	},
 });
 
 Object.assign(LoreEntryDescriptions, {

@@ -125,7 +125,7 @@ describe('Thousand Arrows', function () {
 		battle = common.createBattle([[
 			{species: 'Zygarde', level: 1, moves: ['thousandarrows']},
 		], [
-			{species: 'Regieleki', ability: 'wonderguard', item: 'airballoon', moves: ['sleeptalk']},
+			{ species: 'Jolteon', ability: 'wonderguard', item: 'airballoon', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.false.fullHP(battle.p2.active[0]);

@@ -1341,6 +1341,54 @@ for (const id of ['machamp', 'machampalt', 'machampgmax', 'machampgmaxalt']) Spe
 ThematicPassiveIds.add('innerfocus');
 SpeciesPassives.sableye = Object.freeze(['prankster']);
 ThematicPassiveIds.add('prankster');
+SpeciesPassives.magneton = Object.freeze(['hydrabond']);
+SpeciesPassives.kingdra = Object.freeze(['swiftswim']);
+SpeciesPassives.honchkrow = Object.freeze(['moxie']);
+ThematicPassiveIds.add('swiftswim');
+ThematicPassiveIds.add('moxie');
+SpeciesPassives.drapion = Object.freeze(['poisontouch']);
+SpeciesPassives.toxicroak = Object.freeze(['anticipation']);
+ThematicPassiveIds.add('poisontouch');
+ThematicPassiveIds.add('anticipation');
+SpeciesPassives.conkeldurr = Object.freeze(['rockypayload']);
+ThematicPassiveIds.add('rockypayload');
+for (const id of ['maushold', 'mausholdfour']) SpeciesPassives[id] = Object.freeze(['friendguard']);
+SpeciesPassives.dachsbun = Object.freeze(['wellbakedbody']);
+ThematicPassiveIds.add('friendguard');
+ThematicPassiveIds.add('wellbakedbody');
+SpeciesPassives.revavroom = Object.freeze(['overcoat']);
+ThematicPassiveIds.add('overcoat');
+SpeciesPassives.farigiraf = Object.freeze(['armortail']);
+ThematicPassiveIds.add('armortail');
+SpeciesPassives.greattusk = Object.freeze(['protosynthesis']);
+SpeciesPassives.screamtail = Object.freeze(['protosynthesis']);
+SpeciesPassives.brutebonnet = Object.freeze(['protosynthesis']);
+SpeciesPassives.fluttermane = Object.freeze(['protosynthesis']);
+SpeciesPassives.slitherwing = Object.freeze(['protosynthesis']);
+SpeciesPassives.sandyshocks = Object.freeze(['protosynthesis']);
+SpeciesPassives.roaringmoon = Object.freeze(['protosynthesis']);
+SpeciesPassives.walkingwake = Object.freeze(['protosynthesis']);
+SpeciesPassives.gougingfire = Object.freeze(['protosynthesis']);
+SpeciesPassives.ragingbolt = Object.freeze(['protosynthesis']);
+SpeciesPassives.irontreads = Object.freeze(['quarkdrive']);
+SpeciesPassives.ironbundle = Object.freeze(['quarkdrive']);
+SpeciesPassives.ironhands = Object.freeze(['quarkdrive']);
+SpeciesPassives.ironjugulis = Object.freeze(['quarkdrive']);
+SpeciesPassives.ironmoth = Object.freeze(['quarkdrive']);
+SpeciesPassives.ironthorns = Object.freeze(['quarkdrive']);
+SpeciesPassives.ironvaliant = Object.freeze(['quarkdrive']);
+SpeciesPassives.ironleaves = Object.freeze(['quarkdrive']);
+SpeciesPassives.ironboulder = Object.freeze(['quarkdrive']);
+SpeciesPassives.ironcrown = Object.freeze(['quarkdrive']);
+ThematicPassiveIds.add('protosynthesis');
+ThematicPassiveIds.add('quarkdrive');
+SpeciesPassives.starmie = Object.freeze(['illuminate']);
+ThematicPassiveIds.add('illuminate');
+import { AevianMinorPassives } from './aevian-minor-passives';
+for (const [id, passive] of Object.entries(AevianMinorPassives)) {
+	if (!SpeciesPassives[id]?.length) SpeciesPassives[id] = Object.freeze([passive]);
+	ThematicPassiveIds.add(passive);
+}
 // Synchronize final passives after all base-form revisions.
 for (const [skin, base] of Object.entries(CosmeticBattleCounterparts)) {
  SpeciesPassives[skin] = Object.freeze([...(SpeciesPassives[base] || [])]);

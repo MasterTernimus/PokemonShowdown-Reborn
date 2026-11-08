@@ -8,7 +8,7 @@ export const AwakeningDragonDescriptions = {
 	},
 	rightfulexalt: {
 		shortDesc: 'Serene Grace + Inner Focus.',
-		desc: "Full local Serene Grace and Inner Focus. Doubles eligible move secondary-effect chances, with Serene Grace's existing exceptions and field interactions. Prevents flinching and Intimidate's Attack drop. Does not increase critical-hit chances.",
+		desc: "Full local Serene Grace and Inner Focus. Doubles eligible move secondary-effect chances, with Serene Grace's existing exceptions and field interactions. Prevents flinching and Intimidate's Attack drop.",
 	},
 };
 

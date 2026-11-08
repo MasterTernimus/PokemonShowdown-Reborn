@@ -4,13 +4,16 @@ const {AbilityComponents}=require('../../../dist/data/ability-components');
 describe('Approved Mega Zangoose Battle Armor removal',()=>{
  let b;afterEach(()=>b?.destroy());
  function setup(species='Zangoose-Mega',ability='Toxic Armor'){b=common.createBattle({gameType:'singles'},[[{species,ability,moves:['metalclaw','quickattack','swordsdance']}],[{species:'Mew',ability:'No Ability',moves:['tackle','growl']}]]);return[b.p1.active[0],b.p2.active[0]];}
- it('removes the inherited component and every Battle Armor callback from Toxic Armor only',()=>{
+	it('removes the inherited component and every Battle Armor callback from both Toxic Armor and Venom Armor', () => {
   const a=Dex.abilities.get('toxicarmor');for(const key of ['onCriticalHit','onSourceModifyDamage','onStart','onAfterEachBoost'])assert.equal(a[key],undefined,key);
-  assert.deepEqual(AbilityComponents.toxicarmor,['dualwield','violentrush']);assert(AbilityComponents.venomarmor.includes('battlearmor'));assert.equal(Dex.abilities.get('venomarmor').onCriticalHit,false);assert(!a.desc.includes('Venom Armor'));
+		assert.deepEqual(AbilityComponents.toxicarmor, ['dualwield', 'violentrush']);
+		assert(!AbilityComponents.venomarmor.includes('battlearmor'));
+		assert.equal(Dex.abilities.get('venomarmor').onCriticalHit, undefined);
+		assert(!a.desc.includes('Venom Armor'));
  });
- it('allows critical hits and takes unreduced damage; base Venom Armor retains both protections',()=>{
+	it('allows critical hits and takes unreduced damage; base Venom Armor also lacks those protections', () => {
   const[p,q]=setup();const m=Dex.getActiveMove('tackle');assert.equal(b.runEvent('CriticalHit',p,q,m),true);assert.equal(b.runEvent('ModifyDamage',q,p,m,100),100);
-  p.setAbility('Venom Armor',p,null,true);assert.equal(b.runEvent('CriticalHit',p,q,m),false);assert.equal(b.runEvent('ModifyDamage',q,p,m,100),80);
+		p.setAbility('Venom Armor', p, null, true); assert.equal(b.runEvent('CriticalHit', p, q, m), true); assert.equal(b.runEvent('ModifyDamage', q, p, m, 100), 100);
  });
  it('does not gain Fairy Tale entry Defense or reactive Defense after opposing stat drops',()=>{
   const[p,q]=setup();b.field.terrain='fairytaleterrain';b.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.boosts.def,0);b.boost({atk:-1},p,q,Dex.moves.get('growl'));assert.equal(p.boosts.def,0);

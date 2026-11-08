@@ -14,7 +14,9 @@ describe('Mega Noctowl and Sacred Power',function(){
   assert.equal(mon.ability,'sacredpower');
   assert.deepEqual(mon.species.baseStats,{hp:100,atk:65,def:98,spa:106,spd:141,spe:100});
   assert.deepEqual(mon.getTypes(),['Dark','Flying']);
-  for(const id of ['duskilate','insomnia','magicguard'])assert(mon.hasAbility(id));
+		assert.deepEqual(mon.getPassives(), ['insomnia']);
+		for (const id of ['duskilate', 'magicguard'])assert(mon.hasAbility(id));
+		assert(mon.hasAbilityOrPassive('insomnia'));
   let move=battle.dex.getActiveMove('hypervoice');
   battle.singleEvent('ModifyType',mon.getAbility(),mon.abilityState,move,mon);
   assert.equal(move.type,'Dark');
@@ -32,7 +34,7 @@ describe('Mega Noctowl and Sacred Power',function(){
   // Duskilate's 1.5x and Holy Field's special Fairy 1.5x both apply.
   assert.equal(battle.runEvent('BasePower',mon,foe,move,100),225);
   battle.field.setTerrain('fairytaleterrain',mon);
-  battle.singleEvent('Start',mon.getAbility(),mon.abilityState,mon);
+		battle.runEvent('SwitchIn', mon);
   assert.statStage(mon,'spd',1);
  });
 });

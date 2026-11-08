@@ -12,7 +12,7 @@ import { DisabledSpecies } from '../../data/disabled-species';
 
 import * as ConfigLoader from '../config-loader';
 import { ProcessManager, Utils } from '../../lib';
-import type { FormatData } from '../../sim/dex-formats';
+import { Format, type FormatData } from '../../sim/dex-formats';
 import type { Move } from '../../sim/dex-moves';
 import { TeamValidator } from '../../sim/team-validator';
 import { Chat } from '../chat';
@@ -691,15 +691,19 @@ function getRule(target: string) {
 }
 
 function prepareDexsearchValidator(usedMod: string | undefined, rules: FormatData[], nationalSearch: boolean | null) {
-	const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9ou';
-	const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(format));
+	// Learnset searches need generation rules, not a ladder's tier bans. The
+	// upstream OU formats are not necessarily installed in this fork.
+	const format = new Format({
+		name: 'Dex search', effectType: 'Format', mod: usedMod || 'gen9', ruleset: ['Obtainable'],
+	});
+	const ruleTable = Dex.formats.getRuleTable(format);
 	const additionalRules = [];
 	for (const rule of rules) {
 		if (!ruleTable.has(toID(rule.name))) additionalRules.push(toID(rule.name));
 	}
 	if (nationalSearch && !ruleTable.has('natdexmod')) additionalRules.push('natdexmod');
 	if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
-	return TeamValidator.get(`${format}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
+	return TeamValidator.get(new Format({ ...format, ruleset: [...format.ruleset, ...additionalRules] }));
 }
 
 function runDexsearch(target: string, cmd: string, message: string, isTest: boolean) {

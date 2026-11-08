@@ -3,6 +3,7 @@ const assert = require('assert').strict;
 const common = require('../../common');
 const {Dex} = require('../../../dist/sim');
 const expected = {
+	alakazamrejuv: 'composed',
 	parasectrejuv: 'mycelialbond', poliwrathrejuv: 'innerfocus', politoedrejuv: 'royalremedy',
 	donphanrejuv: 'heatproof', breloomrejuv: 'owntempo', bronzongrejuv: 'clearbody',
 	drapionrejuv: 'stickyhold', musharnarejuv: 'synchronize', unfezantrejuv: 'rivalry',
@@ -25,7 +26,7 @@ describe('Approved Rejuv passives', () => {
 	it('covers every Rejuv form and leaves ordinary forms unchanged', () => {
 		assert.deepEqual(Dex.species.all().filter(s => s.id.endsWith('rejuv')).map(s => s.id).sort(), Object.keys(expected).sort());
 		for (const [id, passive] of Object.entries(expected)) assert.deepEqual(Dex.species.get(id).passives, [passive], id);
-		for (const [id, passive] of Object.entries({parasect: 'mycelialbond', poliwrath: 'tirelessmuscle', politoed: 'oraclesrefrain', donphan: 'battlearmor', breloom: 'effectspore', bronzong: 'clearbody', drapion: 'keeneye', musharna: 'owntempo', unfezant: 'rivalry', sigilyph: 'anticipation', galvantula: 'compoundeyes', druddigon: 'roughskin', turtonator: 'aftermath', veluza: 'keeneye'})) {
+		for (const [id, passive] of Object.entries({ parasect: 'mycelialbond', poliwrath: 'tirelessmuscle', politoed: 'oraclesrefrain', donphan: 'battlearmor', breloom: 'effectspore', bronzong: 'clearbody', drapion: 'poisontouch', musharna: 'owntempo', unfezant: 'rivalry', sigilyph: 'anticipation', galvantula: 'compoundeyes', druddigon: 'roughskin', turtonator: 'aftermath', veluza: 'keeneye' })) {
 			assert.deepEqual(Dex.species.get(id).passives, [passive], id);
 		}
 	});

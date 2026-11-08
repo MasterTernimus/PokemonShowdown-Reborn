@@ -5,25 +5,31 @@ const common = require('./../../common');
 
 let battle;
 
+function recordRageFistPower() {
+	const powers = [];
+	battle.onEvent('BasePower', battle.format, (power, source, target, move) => {
+		if (move.id === 'ragefist') powers.push([source.name, power]);
+	});
+	return powers;
+}
+
 describe('Rage Fist', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
 
-	it(`should increase BP by 50 each time the user is hit`, function () {
+	it(`should increase BP by 20 each time the user is hit`, () => {
 		battle = common.createBattle([[
 			{species: 'Primeape', moves: ['ragefist']},
 		], [
 			{species: 'Umbreon', ability: 'shellarmor', moves: ['tackle']},
 		]]);
+		const powers = recordRageFistPower();
 		battle.makeChoices();
-		const umbreon = battle.p2.active[0];
-		let rageFistDamage = umbreon.maxhp - umbreon.hp;
-		assert.bounded(rageFistDamage, [17, 21], `Rage Fist should be 50 BP`);
+		assert.deepEqual(powers, [['Primeape', 50]]);
 
 		battle.makeChoices();
-		rageFistDamage = umbreon.maxhp - rageFistDamage - umbreon.hp;
-		assert.bounded(rageFistDamage, [34, 41], `Rage Fist should be 100 BP`);
+		assert.deepEqual(powers, [['Primeape', 50], ['Primeape', 70]]);
 	});
 
 	it(`should not increase BP after being hit by status moves`, function () {
@@ -32,15 +38,13 @@ describe('Rage Fist', function () {
 		], [
 			{species: 'Umbreon', ability: 'shellarmor', moves: ['taunt']},
 		]]);
+		const powers = recordRageFistPower();
 
 		battle.makeChoices();
-		const umbreon = battle.p2.active[0];
-		let rageFistDamage = umbreon.maxhp - umbreon.hp;
-		assert.bounded(rageFistDamage, [17, 21]);
+		assert.deepEqual(powers, [['Primeape', 50]]);
 
 		battle.makeChoices();
-		rageFistDamage = umbreon.maxhp - rageFistDamage - umbreon.hp;
-		assert.bounded(rageFistDamage, [17, 21]);
+		assert.deepEqual(powers, [['Primeape', 50], ['Primeape', 50]]);
 	});
 
 	it(`should increase BP after each hit of multi-hit moves`, function () {
@@ -49,11 +53,12 @@ describe('Rage Fist', function () {
 		], [
 			{species: 'Umbreon', ability: 'shellarmor', moves: ['doublehit', 'sleeptalk']},
 		]]);
+		const powers = recordRageFistPower();
 
 		battle.makeChoices();
 		battle.makeChoices('move ragefist', 'move sleeptalk');
-		const umbreon = battle.p2.active[0];
-		assert.bounded(umbreon.maxhp - umbreon.hp, [52, 61]);
+		assert.equal(battle.p1.active[0].timesAttacked, 2);
+		assert.deepEqual(powers, [['Primeape', 90]]);
 	});
 
 	it(`should use user's own number of times hit when called by another move`, function () {
@@ -62,10 +67,10 @@ describe('Rage Fist', function () {
 		], [
 			{species: 'Umbreon', ability: 'shellarmor', moves: ['copycat']},
 		]]);
+		const powers = recordRageFistPower();
 
 		battle.makeChoices();
-		const primeape = battle.p1.active[0];
-		assert.bounded(primeape.maxhp - primeape.hp, [77, 91]);
+		assert.deepEqual(powers, [['Primeape', 50], ['Umbreon', 70]]);
 	});
 
 	it(`should not increase BP when the user's Substitute is damaged or broken`, function () {

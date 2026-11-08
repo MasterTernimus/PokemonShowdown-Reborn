@@ -43,11 +43,14 @@ describe('Shell Trap', function () {
 	});
 
 	it('should not Max if hit by a Max move', function () {
-		battle = common.gen(8).createBattle({}, [
+		battle = common.createBattle({ formatid: 'gen9factoryfield' }, [
 			[{species: 'Turtonator', moves: ['shelltrap']}],
-			[{species: 'Magikarp', moves: ['flail']}],
+			[{ species: 'Snorlax', ability: 'No Ability', gigantamax: true, moves: ['tackle'] }],
 		]);
-		battle.makeChoices('move shelltrap', 'move flail dynamax');
+		battle.makeChoices('team 1', 'team 1');
+		battle.makeChoices('move shelltrap', 'move tackle dynamax');
+		assert(battle.p2.active[0].volatiles.dynamax);
+		assert(battle.log.some(line => line.includes('|G-Max Replenish|')));
 		assert(battle.log.some(line => line.includes('|Shell Trap|')));
 	});
 });

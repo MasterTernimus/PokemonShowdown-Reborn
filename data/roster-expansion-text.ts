@@ -131,7 +131,7 @@ Object.assign(RosterExpansionDescriptions, {
 	funeralchoir: 'Damaging sound moves restore 1/32 maximum HP per currently fainted teammate, capped at 1/8 and once per turn. While a teammate is fainted, damaging Ghost moves also become sound moves, including sound interactions such as Soundproof and Substitute bypass.',
 	voidtyrant: "Hydra Bond + Berserk. Once per battle, after Draco Meteor applies its Sp. Atk drops, restores all negative stat stages to zero after the entire attack finishes. Positive stages remain.",
 	meridianseal: 'Its first Fighting hit against a surviving foe each entry attempts to suppress that foe\'s Ability for 2 turns, including the current turn. Protect, Substitute, Ability Shield and unsuppressible Abilities prevent suppression. Switching clears the seal.',
-	rimeplate: 'Takes 75% less damage from hits after the first hit of a multi-hit attack. The first hit and separate attacks deal normal damage. Does not change Glaive Rush\'s effects.',
+	rimeplate: 'Takes 75% less damage from hits after the first hit of a multi-hit attack. The first hit and separate attacks deal normal damage.',
 	darkdominion: 'Dark Aura. Damaging Dark hits inflict Heal Block on surviving foes for 2 turns, including the current turn. Respects protection and Substitute; does not shorten a longer existing Heal Block.',
 });
 

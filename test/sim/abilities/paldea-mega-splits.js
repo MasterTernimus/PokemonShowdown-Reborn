@@ -32,7 +32,8 @@ describe('Approved six Paldea Mega passive migrations', () => {
 		it(id + ' uses real Mega evolution and Transform, with passives surviving selected suppression', () => {
 			const [p, q] = setup(id);
 			assert.deepEqual(p.getPassives(), [passive]);
-			assert(p.getAbilityComponentExclusions().includes(passive));
+			if (id === 'baxcaliburmega') assert(!p.hasAbility(passive));
+			else assert(p.getAbilityComponentExclusions().includes(passive));
 			assert(q.transformInto(p));
 			assert.deepEqual(q.getPassives(), [passive]);
 			p.setAbility('No Ability');
@@ -112,13 +113,13 @@ describe('Approved six Paldea Mega passive migrations', () => {
 			assert.equal(p.boosts.atk, 1);
 		});
 	}
-	it('Baxcalibur extracts full Thermal Exchange while retaining Ice Body and Stalwart', () => {
+	it('Baxcalibur keeps Thermal Exchange passive and Ice Body without removed Stalwart', () => {
 		const [p, q] = setup('baxcaliburmega');
 		assert(p.hasAbility('icebody'));
-		assert(p.hasAbility('stalwart'));
+		assert(!p.hasAbility('stalwart'));
 		const move = Dex.getActiveMove('surf');
 		battle.runEvent('ModifyMove', p, q, move, move);
-		assert(move.tracksTarget);
+		assert(!move.tracksTarget);
 		for (const ability of ['Glacial Heart', 'Thermal Exchange', 'No Ability']) {
 			p.setAbility(ability);
 			p.boosts.atk = 0;

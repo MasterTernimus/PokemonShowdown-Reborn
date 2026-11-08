@@ -78,6 +78,8 @@ describe('Revival Blessing', function () {
 			{species: 'mareep', ability: 'static', moves: ['sleeptalk']},
 			{species: 'chienpao', ability: 'swordofruin', moves: ['sheercold']},
 		]]);
+		// Sheer Cold is a damaging move here, not an OHKO; guarantee the intended faint.
+		battle.p1.active[1].hp = 1;
 		battle.makeChoices('auto', 'move sleeptalk, move sheercold 2');
 		battle.makeChoices('switch 2', '');
 		assert.equal(battle.p1.active[1].boosts.evasion, 0, "Lycanroc should not have used Double Team");

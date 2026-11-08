@@ -7,7 +7,7 @@ export const CheckedFieldReferences: { [field: string]: { [kind: string]: { [id:
 			mindfreeze: ['Retains Ice Body healing: restores 1/16 base maximum HP each turn on Icy Terrain without hail or snow; during those weathers, the weather-healing path supplies that 1/16 instead. Its separate Ice immunity heals 1/4 maximum HP when another Pokémon’s Ice attack hits it.'],
 			relicarmor: ['Lapras-Aevian gains Ice typing here. Icy Terrain does not activate Relic Armor’s Rock-weakness protection or its field-entry defensive boosts. Its ordinary 10% damage reduction, 1/16 recovery, hail/sand immunity and response to opposing stat drops remain.'],
 			forecast: ['The current resolved Forecast has no Icy-only form trigger. Castform follows effective weather: hail or snow gives Snowy form. Icy Terrain alone does not supply form-specific ability bonuses; copied/transformed Pokémon do not change form.'],
-			icebody: ['Heals 1/16 base maximum HP each turn on this field without hail or snow. During hail or snow it heals the same amount through its weather callback instead, not both. Retains hail immunity and the usual 30% contact-attacker frostbite chance.'],
+			icebody: ['Heals 1/16 base maximum HP each turn on this field without hail or snow. During hail or snow it heals the same amount from the weather instead; the two heals do not stack. Retains hail immunity and the usual 30% contact-attacker frostbite chance.'],
 			icescales: ['Super-effective attacks against the holder’s Ice typing become neutral for that defensive type; the other defensive type still contributes. Retains half damage from special attacks and hail immunity. This does not grant blanket immunity to super-effective attacks.'],
 			liquidvoice: ['Sound moves become Ice instead of Water on Icy Terrain and receive Liquid Voice’s 1.2× power modifier. The field’s Ice power bonus can then also apply.'],
 			mimicry: ['Changes the holder to Ice when it activates or the field changes. An active aura overrides this type selection. Terastallized holders do not change type; this field does not grant Cold Eclipse’s extra defensive stages.'],
@@ -43,7 +43,7 @@ CheckedFieldReferences.coldeclipseterrain = {
       "On entry, prioritizes a foe whose active Speed-related ability matches the present conditions, then the highest current Attack or Sp. Atk. The field checks count Sand Rush on Desert/Ashen Beach; Swift Swim on Water Surface/Underwater/Murkwater/Midnight Zone; Slush Rush on Icy/Snowy Mountain/Cold Eclipse; Surge Surfer on Water Surface/Underwater/Murkwater/Short-Circuit/Electric; Quick Feet on Electric; Telepathy on Psychic Field or its aura. Speed Boost is always prioritized. Chlorophyll is checked against effective sun, not its garden exception. It copies the chosen actual ability and runs its entry behavior; Trace, Perfect Foresight and Void Voice are excluded."
     ],
     "forecast": [
-      "The current Forecast implementation selects Castform forms from effective weather, not this field alone. Copied/Transformed Pokémon do not change form. Climate Reserve can select its stored weather-rock form when effective weather is absent. Older field-only Forecast references in the source index are superseded; ordinary weather and Utility Umbrella rules still apply."
+			"Forecast selects Castform forms from effective weather, not this field alone. Copied/Transformed Pokémon do not change form. Climate Reserve can select its stored weather-rock form when effective weather is absent. Ordinary weather and Utility Umbrella rules still apply.",
     ],
     "zenmode": [
       "Standard Darmanitan is forced into Zen on Ashen Beach or Psychic Field; Galarian Darmanitan is forced into Galar-Zen on Icy, Snowy Mountain or Cold Eclipse. These checks run on entry, field change and turn end, regardless of HP. Transformed Pokémon are excluded. Outside the matching fields, the usual half-HP form condition applies."
@@ -100,7 +100,7 @@ CheckedFieldReferences.coldeclipseterrain = {
       "Heals 1/16 base max HP each turn on Icy, Snowy Mountain and Cold Eclipse when hail/snow is not already supplying its weather recovery. Hail on Cold Eclipse heals 1/8 instead of 1/16. Hail immunity and the ordinary 30% contact frostbite chance remain."
     ],
     "iceface": [
-      "Cold Eclipse allows the intact Ice Face to absorb special as well as physical move damage before breaking. Volcanic marks the face broken on entry, so the update changes intact Eiscue into Noice Face rather than granting a shield. Ordinary restoration when hail or snow begins still follows the weather callback; resuming suppressed weather does not trigger restoration."
+			"Cold Eclipse allows the intact Ice Face to absorb special as well as physical move damage before breaking. Volcanic marks the face broken on entry, so the update changes intact Eiscue into Noice Face rather than granting a shield. Hail or snow can still restore Ice Face when it begins; resuming suppressed weather does not trigger restoration.",
     ],
     "icescales": [
       "Cold Eclipse and Infernal Eclipse double Defense once through Ice Scales. Its normal halving of special damage and hail immunity remain; type-based field bonuses stack separately."
@@ -172,7 +172,7 @@ CheckedFieldReferences.coldeclipseterrain = {
       "Cold Eclipse strengthens its conversion bonus to 1.5x and grants hail immunity. It does not grant extra defenses; Cold Eclipse no longer has a grounded Speed penalty."
     ],
     "execution": [
-      "Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, its current stat-change handler blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate."
+			"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, it blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
     ],
     "flashfire": [
       "Cold Eclipse disables Fire absorption without granting entry defensive stages. Ordinary rules apply outside this exception."
@@ -205,7 +205,7 @@ CheckedFieldReferences.coldeclipseterrain = {
       "Its converted Dragon attacks gain a 1.5x conversion modifier on Dragon Den and Fairy Tale instead of 1.2x. Cold Eclipse adds a 1.3x power modifier and raises its defensive multiplier to 1.5x instead of 1.3x. Its inherited Magma Armor field behavior remains: entry defenses on Dragon Den, Volcanic Summit and Infernal Eclipse, with Dragon Den and Infernal Eclipse Fire protection and Cold Eclipse’s freeze exception. Dragon Rush additionally receives its existing 1.5x modifier. Royal Decree/Empress adds the existing authority bonus only while Neutralization is absent."
     ],
     "irondominion": [
-      "Fairy Tale increases its adjacent-ally entry healing from one quarter to one third maximum HP; the shared-mead message accompanies each attempted ally heal. This healing is skipped when Sworn Duty is already the species passive. Fairy Tale also grants one Defense and Special Defense stage once per ability activation; Mirror Arena grants one evasion stage. Cold Eclipse changes its Pressure drops to two stages in both defenses, retaining the per-target attempt memory and Substitute check. Starlight Arena blocks opposing positive-priority moves aimed at its protected side, with the callback’s field-wide targeting exclusions."
+			"Fairy Tale increases its adjacent-ally entry healing from one quarter to one third maximum HP; the shared-mead message accompanies each attempted ally heal. This healing is skipped when Sworn Duty is already the species passive. Fairy Tale also grants one Defense and Special Defense stage once per ability activation; Mirror Arena grants one evasion stage. Cold Eclipse changes its Pressure drops to two stages in both defenses, retaining the per-target attempt memory and Substitute check. Starlight Arena blocks opposing positive-priority moves aimed at its protected side, with the usual targeting exceptions.",
     ],
     "prismarmor": [
       "Cold Eclipse and Infernal Eclipse multiply Defense and Special Defense by 4/3. Ordinary incoming damage is multiplied by 0.8, with a further 0.75 against super-effective attacks. Cold Eclipse retains its hail immunity."
@@ -231,10 +231,10 @@ CheckedFieldReferences.coldeclipseterrain = {
       "On Cold Eclipse, halves incoming Ice move power while its guard is active. Its independent next-damaging-hit guard reduces damage by 20% and then removes Shelter."
     ],
     "tailwind": [
-      "After use on Mountain, Snowy Mountain or Cold Eclipse, attempts to start Strong Winds unless harsh sun or heavy rain is active. Mountain and Snowy Mountain extend Tailwind to six turns; the current implementation prints a Persistent activation message for this field extension even without that ability."
+			"After use on Mountain, Snowy Mountain or Cold Eclipse, attempts to start Strong Winds unless harsh sun or heavy rain is active. Mountain and Snowy Mountain extend Tailwind to six turns; this field extension displays a Persistent message even without that ability.",
     ],
     "auroraveil": [
-      "Can be used without hail or snow on Rainbow, Icy, Mirror Arena, Dark Crystal Cavern, Crystal Cavern, Snowy Mountain, Starlight Arena and Cold Eclipse. Mirror Arena extends ordinary Aurora Veil to eight turns and its after-use callback grants one evasion stage if a successful move has been recorded that turn. Royal Decree can still prevent the screen. G-Max-generated veil keeps its separate four-turn duration."
+			"Can be used without hail or snow on Rainbow, Icy, Mirror Arena, Dark Crystal Cavern, Crystal Cavern, Snowy Mountain, Starlight Arena and Cold Eclipse. Mirror Arena extends ordinary Aurora Veil to eight turns and after use it grants one evasion stage if a successful move has been recorded that turn. Royal Decree can still prevent the screen. G-Max-generated veil keeps its separate four-turn duration.",
     ],
     "arenitewall": [
       "Can be used without sand on Desert, Rocky Field, Ashen Beach and Cold Eclipse. Desert, Rocky Field and Ashen Beach also extend it to eight turns; Cold Eclipse alone permits use but keeps five turns. Light Clay or Sand Sovereign separately extend it to eight. It halves super-effective attack damage, except critical hits and moves that bypass screens."
@@ -243,7 +243,7 @@ CheckedFieldReferences.coldeclipseterrain = {
       "On Haunted, fixed damage is 1.5 times the user’s level; on Cold Eclipse it is 140. Verified with level-100 Night Shade: 150 damage on Haunted and 140 on Cold Eclipse. Type immunity still applies."
     ],
     "bleakwindstorm": [
-      "Never misses on Cold Eclipse through its own move callback. The former blanket wind power bonus is removed."
+			"Never misses on Cold Eclipse  The former blanket wind power bonus is removed.",
     ],
     "blizzard": [
       "Never misses on Cold Eclipse. Ice power receives the field 1.2x modifier."
@@ -291,7 +291,7 @@ Object.assign(CheckedFieldReferences.infernaleclipseterrain.abilities, {
  flashfire: ['Immediately activates its Fire power-up on entry or field change. A power-up granted only by Infernal Eclipse ends when the field is left; actually absorbing a Fire attack makes it persist under ordinary Flash Fire rules.'],
  iceface: ['Eiscue immediately changes to Noice form on entry or field change. Ice Face cannot rebuild in hail while Infernal Eclipse is active.'],
  magmaarmor: ['On entry, grants +1 Defense and Special Defense. Incoming Fire attacks are nullified; ordinary frostbite protection remains.'],
- pastelveil: ['Its status protection and status-curing callbacks are inactive on Infernal Eclipse.'],
+	pastelveil: ['Its status protection and curing are inactive on Infernal Eclipse.'],
  perishbody: ['An opposing attacker that makes actual damaging contact receives a one-turn Perish countdown and a trap linked to the holder. Only that attacker is affected; it faints at the end of the following turn if still active. An already shorter countdown is not extended. Normal Ghost, Shed Shell and other escape exceptions apply.'],
 });
 Object.assign(CheckedFieldReferences.infernaleclipseterrain.moves, {
@@ -311,7 +311,7 @@ CheckedFieldReferences.snowyterrain = {abilities: {
 
 Object.assign(CheckedFieldReferences.coldeclipseterrain.abilities, {
  refrigerate: ['Normal-to-Ice conversion gains a 1.5x power modifier on Cold Eclipse.'],
- relentlesshunt: ['Cold Eclipse keeps its independent ability callbacks; the former terrain-level 2x move power and low-power priority bonus are removed.'],
+	relentlesshunt: ['Cold Eclipse adds no extra move power or priority bonus to this ability.'],
  snowcloak: ['Reduces opposing move accuracy to approximately 0.8x even without hail or snow.']
 });
 

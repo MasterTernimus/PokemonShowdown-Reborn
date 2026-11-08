@@ -52,9 +52,12 @@ describe('Clawitzer custom data', function () {
 		assert(clawitzer.hasAbility('unaware'));
 		assert(!clawitzer.hasAbility('moldbreaker'));
 		assert(!clawitzer.hasAbility('swiftswim'));
-		assert(clawitzer.hasAbility('shellarmor'));
-		assert.equal(clawitzer.boosts.def, -1);
-		assert.equal(clawitzer.boosts.spd, -1);
+		assert(!clawitzer.hasAbility('shellarmor'));
+		assert.equal(clawitzer.boosts.def, 0);
+		assert.equal(clawitzer.boosts.spd, 0);
+		const effective = battle.runEvent('ModifyBoost', clawitzer, null, null, { ...clawitzer.boosts });
+		assert.equal(effective.def, -1);
+		assert.equal(effective.spd, -1);
 		assert(battle.p2.active[0].hp < battle.p2.active[0].maxhp, 'Heavy Artillery should hit the first opposing slot');
 		assert(battle.p2.active[1].hp < battle.p2.active[1].maxhp, 'Heavy Artillery should hit the second opposing slot');
 	});

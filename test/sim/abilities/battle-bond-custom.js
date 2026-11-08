@@ -14,7 +14,7 @@ describe('Battle Bond custom Greninja behavior', function () {
 
 	it('gives regular Greninja only the requested normal ability slots', function () {
 		assert.deepEqual(Dex.species.get('Greninja').abilities, {
-			0: 'Technician', 1: 'Protean', H: 'Battle Bond',
+			0: 'Liquid Arsenal', 1: 'Protean', H: 'Shadow Screen', S: 'Battle Bond',
 		});
 	});
 

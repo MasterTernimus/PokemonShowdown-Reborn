@@ -3,7 +3,13 @@ const assert=require('assert').strict,common=require('../../common'),{Dex}=requi
 function setup(species,ability,field=''){battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species,ability,moves:['tackle','thunderbolt','doubleedge']},{species:'Mew',ability:'No Ability',moves:['splash']}],[{species:'Mew',ability:'No Ability',moves:['splash']}]]);battle.makeChoices('team 12','team 1');if(field)battle.field.startTerrain(field);return [battle.p1.active[0],battle.p2.active[0]];}
 describe('Archaludon and Rhydon approved passive swaps',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- it('exact species scope and slots',()=>{assert.deepEqual(Dex.species.get('archaludon').passives,['stalwart']);assert.deepEqual(Dex.species.get('rhydon').passives,['powerdrill']);assert.deepEqual(Dex.species.get('rhydon').abilities,{0:'Brute Force',1:'War Path',H:'Lightning Rod'});assert.deepEqual(Dex.species.get('rhyperior').passives,['solidrock']);assert.deepEqual(Dex.species.get('rhyperior').abilities,{0:'Lightning Rod',1:'Quarry Cannon',H:'Hyper Drill'});});
+	it('exact species scope and slots', () => {
+		assert.deepEqual(Dex.species.get('archaludon').passives, ['stalwart']);
+		assert.deepEqual(Dex.species.get('rhydon').passives, ['powerdrill']);
+		assert.deepEqual(Dex.species.get('rhydon').abilities, { 0: 'Grand Strategy', 1: 'Lightning Rod', H: 'Brute Force' });
+		assert.deepEqual(Dex.species.get('rhyperior').passives, ['solidrock']);
+		assert.deepEqual(Dex.species.get('rhyperior').abilities, { 0: 'Lightning Rod', 1: 'Quarry Cannon', H: 'Hyper Drill' });
+	});
  for(const ability of ['Stamina','Anchor Bridge','Rail Sight'])it('Stalwart persists through suppression with '+ability,()=>{const[p,q]=setup('Archaludon',ability);p.addVolatile('gastroacid');const m=Dex.getActiveMove('thunderbolt');battle.runEvent('ModifyMove',p,q,m,m);assert(m.tracksTarget);assert(p.hasAbilityOrPassive('stalwart'));assert(!p.hasAbilityOrPassive('lightningrod'));});
  for(const ability of ['Rail Sight','Stalwart'])it('Stalwart field boost once with '+ability,()=>{const[p]=setup('Archaludon',ability,'fairytaleterrain');battle.makeChoices('switch 2','move splash');battle.makeChoices('switch 2','move splash');assert.equal(p.boosts.spa,1);});
  it('Rail Sight grants Inner Focus and loses active Stalwart identity',()=>{const[p,q]=setup('Archaludon','Rail Sight');assert(p.hasAbility('innerfocus'));assert(!p.hasAbility('stalwart'));assert(!p.addVolatile('flinch'));battle.boost({atk:-1},p,q,Dex.abilities.get('intimidate'));assert.equal(p.boosts.atk,0);p.addVolatile('gastroacid');assert(p.addVolatile('flinch'));});

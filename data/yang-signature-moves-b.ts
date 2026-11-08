@@ -11,6 +11,9 @@ function nostrasEffectiveness(this: Battle, typeMod: number, target: Pokemon | n
 import type {MoveDataTable} from '../sim/dex-moves';
 
 function dragonField(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
+	if ((move as ActiveMove & { dragonRendDen?: boolean }).dragonRendDen && this.field.isTerrain('dragonsdenterrain')) {
+		target.side.addSideCondition('stealthrock', source, move);
+	}
  if (this.field.isTerrain(['volcanicterrain', 'caveterrain'])) this.field.changeTerrain('dragonsdenterrain', source, move);
 }
 const hitFlags = {protect: 1, mirror: 1} as const;
@@ -163,7 +166,10 @@ export const YangSignatureMovesB: MoveDataTable = {
   pp: 10, priority: 0, target: 'normal', flags: hitFlags,
   ignoreImmunity: {Dragon: true},
   onEffectiveness(typeMod, target, type) { if (type === 'Fairy') return 0; },
-  onModifyMove: adaptiveCategory,
+		onModifyMove(move, source) {
+			adaptiveCategory(move, source);
+			(move as ActiveMove & { dragonRendDen?: boolean }).dragonRendDen = this.field.isTerrain('dragonsdenterrain');
+		},
   onHit(target, source, move) { if (!target.isAlly(source) && hasHPDamage(target, move)) dragonField.call(this, target, source, move); },
   onAfterSubDamage(damage, target, source, move) { if (damage > 0 && !target.isAlly(source)) dragonField.call(this, target, source, move); },
  },
@@ -257,7 +263,7 @@ const summaries: {[id: string]: string} = {
  sirensveil: 'Raises Defense and Sp. Def by 1; suppresses active opposing abilities until they switch. Also readies 1.3x power for the user\'s next damaging move, including all hits and targets. This charge does not stack, survives status moves, clears on switching, and is spent on a damaging move attempt even if it misses or is blocked. Respects Ability Shield and unsuppressible abilities. On Short Circuit, a working Covert Cloak also prevents suppression.',
  sirenswrath: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). Ignores defensive abilities for this attack. After damaging a foe, reduces the next opposing whole attack by 25% before the user next acts. Does not stack. Breaks Icy Field back into Water Surface only when that water is recorded underneath.',
  rocknroll: 'Lowers the target Defense by 1 and sets Stealth Rock on its side. Cannot place Stealth Rock in Midnight Zone.',
- dragonrend: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). Treats Fairy as neutral while preserving the other defensive type: Fairy/Steel resists and Fairy/Dragon is weak. This exception does not carry to generic Z or Max moves. Turns Volcanic Field or Cave into Dragon\'s Den after a hit. Does not place an entry hazard.',
+	dragonrend: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). Treats Fairy as neutral while preserving the other defensive type: Fairy/Steel resists and Fairy/Dragon is weak. This exception does not carry to generic Z or Max moves. Turns Volcanic Field or Cave into Dragon\'s Den after a hit. On Dragon’s Den, a successful hit sets Stealth Rock on the opposing side, including hits against Substitute.',
  airstreamassault: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). After a hit, clears own-side entry hazards. Bypasses accuracy checks in Strong Winds. Clears fields that existing blowing moves clear.',
  wisteriamaelstrom: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). After a hit, each active allied Grass or Bug Pokemon raises its higher staged offense by 1, once per use (Sp. Atk on ties). Grows Flower Garden by one stage per damaging use, up to stage 5.',
  deiludicium: 'After a hit, cures the user of its status condition. Uses Judgment\'s existing named field boosts without its held-item typing. Rainbow Aura also grants its named 1.5x boost; matching Rainbow Terrain and Aura do not duplicate it.',

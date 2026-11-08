@@ -14,7 +14,7 @@ describe('Aevian Dream', () => {
 
 	it('defines Musharna and its Rejuv profile', () => {
 		assert.deepEqual(Dex.species.get('Musharna').abilities, {
-			0: 'Neutralization', 1: 'Telepathy', H: 'Aevian Dream',
+			0: 'Neutralization', 1: 'Dream Refuge', H: 'Aevian Dream',
 		});
 		const rejuv = Dex.species.get('Musharna-Rejuv');
 		assert.deepEqual(rejuv.types, ['Dark', 'Fairy']);

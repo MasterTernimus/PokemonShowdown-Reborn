@@ -10,7 +10,7 @@ describe('[Gen 1] Haze', function () {
 		battle.destroy();
 	});
 
-	it('should remove stat changes', function () {
+	common.itGen(1, 'should remove stat changes', () => {
 		battle = common.gen(1).createBattle([
 			[{species: "Mew", moves: ['agility', 'haze']}],
 			[{species: "Mewtwo", moves: ['swordsdance', 'splash']}],
@@ -25,7 +25,7 @@ describe('[Gen 1] Haze', function () {
 		assert.equal(battle.p2.active[0].boosts.atk, 0);
 	});
 
-	it(`should remove opponent's status`, function () {
+	common.itGen(1, `should remove opponent's status`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Mew', moves: ['thunderwave', 'haze']},
 		], [
@@ -39,7 +39,7 @@ describe('[Gen 1] Haze', function () {
 		assert.equal(battle.p2.active[0].status, '');
 	});
 
-	it(`should not remove the user's status`, function () {
+	common.itGen(1, `should not remove the user's status`, () => {
 		battle = common.gen(1).createBattle({forceRandomChance: false}, [[
 			{species: 'Mew', moves: ['recover']},
 		], [
@@ -53,7 +53,7 @@ describe('[Gen 1] Haze', function () {
 		assert.equal(battle.p2.active[0].status, 'par');
 	});
 
-	it('should remove focus energy', function () {
+	common.itGen(1, 'should remove focus energy', () => {
 		battle = common.gen(1).createBattle([
 			[{species: "Mew", moves: ['splash']}],
 			[{species: "Mewtwo", moves: ['focusenergy', 'haze']}],
@@ -66,7 +66,7 @@ describe('[Gen 1] Haze', function () {
 		assert.equal(typeof battle.p2.active[0].volatiles['focusenergy'], 'undefined');
 	});
 
-	it('should remove reflect and light screen', function () {
+	common.itGen(1, 'should remove reflect and light screen', () => {
 		battle = common.gen(1).createBattle([
 			[{species: "Mew", moves: ['reflect', 'lightscreen', 'haze']}],
 			[{species: "Mewtwo", moves: ['splash']}],
@@ -83,7 +83,7 @@ describe('[Gen 1] Haze', function () {
 		assert.equal(typeof battle.p1.active[0].volatiles['lightscreen'], 'undefined');
 	});
 
-	it(`should remove Leech Seed and confusion`, function () {
+	common.itGen(1, `should remove Leech Seed and confusion`, () => {
 		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
 			{species: 'Mew', moves: ['leechseed', 'confuse ray', 'haze']},
 		], [
@@ -101,7 +101,7 @@ describe('[Gen 1] Haze', function () {
 		assert.false('confusion' in mukVolatiles);
 	});
 
-	it(`should remove Disable`, function () {
+	common.itGen(1, `should remove Disable`, () => {
 		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
 			{species: 'Mew', moves: ['disable', 'haze', 'splash']},
 		], [
@@ -117,7 +117,7 @@ describe('[Gen 1] Haze', function () {
 		assert.false('disable' in p2volatiles);
 	});
 
-	it(`should still make previously disabled Pokemon (on the same turn) with 1 move use Struggle`, function () {
+	common.itGen(1, `should still make previously disabled Pokemon (on the same turn) with 1 move use Struggle`, () => {
 		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
 			{species: 'Mew', moves: ['disable', 'haze']},
 		], [
@@ -131,7 +131,7 @@ describe('[Gen 1] Haze', function () {
 		assert.equal(battle.lastMove.name, 'Struggle');
 	});
 
-	it(`should convert toxic poisoning to regular poisoning for the user and effectively reset the toxic counter`, function () {
+	common.itGen(1, `should convert toxic poisoning to regular poisoning for the user and effectively reset the toxic counter`, () => {
 		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
 			{species: 'Mew', moves: ['toxic']},
 		], [
@@ -144,7 +144,7 @@ describe('[Gen 1] Haze', function () {
 		assert.equal(abra.maxhp - abra.hp, Math.floor(abra.maxhp / 16) * 2);
 	});
 
-	it('should not remove substitute from either side', function () {
+	common.itGen(1, 'should not remove substitute from either side', () => {
 		battle = common.gen(1).createBattle([
 			[{species: "Mew", moves: ['substitute', 'haze']}],
 			[{species: "Muk", moves: ['substitute', 'splash']}],

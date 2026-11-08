@@ -12,7 +12,7 @@ function setup() {
 		assert.deepEqual(Dex.species.get('politoed').types, ['Water']);
 		for (const id of ['politoedrejuv', 'poliwrathrejuv'])assert.deepEqual(Dex.species.get(id).types, ['Normal', 'Dragon']);
 		const r = Dex.species.get('poliwrathrejuv');
-		assert.deepEqual(r.baseStats, { hp: 100, atk: 55, def: 100, spa: 160, spd: 90, spe: 55 });
+		assert.deepEqual(r.baseStats, { hp: 100, atk: 75, def: 95, spa: 145, spd: 90, spe: 55 });
 		assert.equal(r.bst, p.bst);
 	});
 	it('transforms on entry with its event ability and form-specific passive convention', () => {

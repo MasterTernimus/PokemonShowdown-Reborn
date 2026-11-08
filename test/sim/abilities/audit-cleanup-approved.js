@@ -32,16 +32,25 @@ describe('Approved audit cleanup', () => {
   if(ability==='Cold Open')assert(fresh.ignoreScreens);
   move(p,q,id);if(ability==='Purifying Frost')assert(battle.p1.sideConditions.safeguard);
  });
- it('Gooey keeps once-per-move retaliation and Murkwater enhancement, without Grass absorption or rain cure',()=>{
+	it('Gooey lowers Speed once per contact hit, including on Murkwater, without Grass absorption or rain cure', () => {
   const [p,q]=setup('Gooey');p.setStatus('brn');battle.field.setWeather('raindance',p);
-  move(q,p,'gigadrain');assert(p.hp<10000);assert.equal(q.boosts.spe,-2);assert.equal(p.status,'brn');assert.equal(p.boosts.atk,0);
-  q.boosts.spe=0;battle.field.setTerrain('murkwatersurfaceterrain',p);move(q,p,'doublehit');assert.equal(q.boosts.spe,-4);
+		move(q, p, 'gigadrain');
+		assert(p.hp < 10000);
+		assert.equal(q.boosts.spe, 0);
+		assert.equal(p.status, 'brn');
+		assert.equal(p.boosts.atk, 0);
+		move(q, p, 'tackle'); assert.equal(q.boosts.spe, -1);
+		q.boosts.spe = 0;
+		battle.field.setTerrain('murkwatersurfaceterrain', p);
+		move(q, p, 'doublehit');
+		assert.equal(q.boosts.spe, -2);
   assert.deepEqual(getAbilityDisplayComponents('gooey'),[]);
  });
- it('Triple Threat keeps Hydra Bond and accuracy protection but permits paralysis and Defense drops',()=>{
+	it('Triple Threat has Inner Focus, Keen Eye and Early Bird without extra hits', () => {
   const[p,q]=setup('Triple Threat');assert(p.trySetStatus('par',q));battle.boost({def:-1,accuracy:-1},p,q);assert.equal(p.boosts.def,-1);assert.equal(p.boosts.accuracy,0);
-  const m=Dex.getActiveMove('tackle');battle.runEvent('ModifyMove',p,q,m,m);assert.equal(m.multihit,3);
-  assert.deepEqual(getAbilityDisplayComponents('triplethreat'),['hydrabond','keeneye','innerfocus','owntempo']);
+		const m = Dex.getActiveMove('tackle'); battle.runEvent('ModifyMove', p, q, m, m); assert.equal(m.multihit, undefined);
+		assert(!p.addVolatile('flinch', q));
+		assert.deepEqual(getAbilityDisplayComponents('triplethreat'), ['innerfocus', 'keeneye', 'earlybird']);
  });
  it('Primeval Hunger retains drain and stage reduction without adding or refreshing Heal Block',()=>{
   const[p,q]=setup('Primeval Hunger','Cradily');q.boosts.spa=2;p.hp=8000;move(p,q,'gigadrain');assert(!q.volatiles.healblock);assert.equal(q.boosts.spa,1);assert(p.hp>8000);

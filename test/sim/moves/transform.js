@@ -164,7 +164,7 @@ describe('Transform', function () {
 		assert.equal(abilityAnnounceIndex, -1, `It should not announce the user's ability was suppressed.`);
 	});
 
-	it("should copy the target's old types, not the Tera Type", function () {
+	it("should copy the target's original types and retain them under Stellar Tera", () => {
 		battle = common.createBattle([[
 			{species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire"},
 		], [
@@ -173,17 +173,20 @@ describe('Transform', function () {
 		battle.makeChoices('auto', 'move sleeptalk terastallize');
 		assert.equal(battle.p1.active[0].getTypes().join('/'), 'Electric');
 		battle.makeChoices('move sleeptalk terastallize', 'auto');
-		assert.equal(battle.p1.active[0].getTypes().join('/'), 'Fire');
+		assert.equal(battle.p1.active[0].terastallized, 'Stellar');
+		assert.equal(battle.p1.active[0].getTypes().join('/'), 'Electric');
 	});
 
-	it("should keep the user's Tera Type when Terastallized", function () {
+	it("should retain the user's original type and reject Transform after Stellar Tera", () => {
 		battle = common.createBattle([[
 			{species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire"},
 		], [
 			{species: "Ampharos", ability: "static", moves: ['sleeptalk'], teraType: "Dragon"},
 		]]);
 		battle.makeChoices('move transform terastallize', 'move sleeptalk terastallize');
-		assert.equal(battle.p1.active[0].getTypes().join('/'), 'Fire');
+		assert.equal(battle.p1.active[0].terastallized, 'Stellar');
+		assert.equal(battle.p1.active[0].getTypes().join('/'), 'Normal');
+		assert.false(battle.p1.active[0].transformed);
 	});
 
 	it("should fail against Ogerpon when the user is Terastallized", function () {
@@ -217,7 +220,7 @@ describe('Transform', function () {
 	});
 
 	it("should not allow Pokemon transformed into Ogerpon to Terastallize later if they couldn't before transforming", function () {
-		battle = common.createBattle({formatid: 'gen9customgame@@@!teampreview,terastalclause'}, [[
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame@@@!teampreview,terastalclause' }, [[
 			{species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire"},
 			{species: "Shedinja", ability: "wonderguard", moves: ['transform'], teraType: "Fire"},
 		], [
@@ -246,7 +249,7 @@ describe('Transform [Gen 5]', function () {
 		battle.destroy();
 	});
 
-	it("should not copy the target's focus energy status", function () {
+	common.itGen(5, "should not copy the target's focus energy status", () => {
 		battle = common.gen(5).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
 		battle.setPlayer('p2', {team: [{species: "Sawk", ability: 'sturdy', moves: ['focusenergy']}]});
@@ -259,7 +262,7 @@ describe('Transform [Gen 4]', function () {
 		battle.destroy();
 	});
 
-	it('should revert Pokemon transformed into Giratina-Origin to Giratina-Alternate if not holding a Griseous Orb', function () {
+	common.itGen(4, 'should revert Pokemon transformed into Giratina-Origin to Giratina-Alternate if not holding a Griseous Orb', () => {
 		battle = common.gen(4).createBattle([
 			[{species: "Ditto", ability: 'limber', moves: ['transform']}],
 			[{species: "Giratina-Origin", ability: 'levitate', item: 'griseousorb', moves: ['rest']}],
@@ -268,7 +271,7 @@ describe('Transform [Gen 4]', function () {
 		assert.equal(battle.p1.active[0].species.name, 'Giratina');
 	});
 
-	it('should cause Pokemon transformed into Giratina-Alternate to become Giratina-Origin if holding a Griseous Orb', function () {
+	common.itGen(4, 'should cause Pokemon transformed into Giratina-Alternate to become Giratina-Origin if holding a Griseous Orb', () => {
 		battle = common.gen(4).createBattle([
 			[{species: "Ditto", ability: 'limber', item: 'griseousorb', moves: ['transform']}],
 			[{species: "Giratina", ability: 'pressure', moves: ['rest']}],
@@ -277,7 +280,7 @@ describe('Transform [Gen 4]', function () {
 		assert.equal(battle.p1.active[0].species.name, 'Giratina-Origin');
 	});
 
-	it('should cause Pokemon transformed into Arceus to become an Arceus forme corresponding to its held Plate', function () {
+	common.itGen(4, 'should cause Pokemon transformed into Arceus to become an Arceus forme corresponding to its held Plate', () => {
 		battle = common.gen(4).createBattle([
 			[{species: "Ditto", ability: 'limber', item: 'flameplate', moves: ['transform']}],
 			[{species: "Arceus-Steel", ability: 'multitype', item: 'ironplate', moves: ['rest']}],
@@ -287,7 +290,7 @@ describe('Transform [Gen 4]', function () {
 		assert.deepEqual(battle.p1.active[0].getTypes(), ["Fire"]);
 	});
 
-	it('should succeed against a Substitute', function () {
+	common.itGen(4, 'should succeed against a Substitute', () => {
 		battle = common.gen(4).createBattle([
 			[{species: "Ditto", ability: 'limber', moves: ['transform']}],
 			[{species: "Mewtwo", ability: 'pressure', moves: ['substitute']}],
@@ -302,7 +305,7 @@ describe('Transform [Gen 1]', function () {
 		battle.destroy();
 	});
 
-	it("should not send |-endability|", function () {
+	common.itGen(1, "should not send |-endability|", () => {
 		battle = common.gen(1).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Ditto", moves: ['transform']}]});
 		battle.setPlayer('p2', {team: [{species: "Gengar", moves: ['lick']}]});
@@ -311,7 +314,7 @@ describe('Transform [Gen 1]', function () {
 		assert(battle.log.every(line => !line.startsWith('|-endability|')));
 	});
 
-	it(`should copy the target's boosted stats`, function () {
+	common.itGen(1, `should copy the target's boosted stats`, () => {
 		battle = common.gen(1).createBattle({forceRandomChance: false}, [[ // disable crits
 			{species: 'Ditto', moves: ['transform']},
 		], [
@@ -326,7 +329,7 @@ describe('Transform [Gen 1]', function () {
 		assert.fainted(battle.p2.active[0]);
 	});
 
-	it(`should copy the target's stats (except HP), even if different level`, function () {
+	common.itGen(1, `should copy the target's stats (except HP), even if different level`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Ditto', moves: ['transform'], level: 5},
 		], [
@@ -341,7 +344,7 @@ describe('Transform [Gen 1]', function () {
 		}
 	});
 
-	it(`should copy the target's status-modified stats`, function () {
+	common.itGen(1, `should copy the target's status-modified stats`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Ditto', moves: ['transform', 'thunderwave']},
 		], [
@@ -355,7 +358,7 @@ describe('Transform [Gen 1]', function () {
 		assert.equal(p1poke.modifiedStats['spe'], p2poke.modifiedStats['spe']);
 	});
 
-	it(`should not re-apply status stat modifier after transforming`, function () {
+	common.itGen(1, `should not re-apply status stat modifier after transforming`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Ditto', moves: ['transform', 'splash']},
 		], [

@@ -14,14 +14,14 @@ describe('Historical generation test registration', () => {
 		module.exports.hasGeneration = () => false;
 		return module.exports;
 	}
-	it('registers a requested test even when the module is absent', () => {
+	it('explicitly skips a requested test when generation data is absent', () => {
 		const calls = [];
 		const register = (title, callback) => calls.push({ title, callback });
-		register.skip = () => { throw new Error('Missing modules must not be skipped'); };
+		register.skip = register;
 		const common = load(register), callback = () => {};
 		common.itGen(2, 'mechanics contract', callback);
 		assert.equal(calls.length, 1);
-		assert.equal(calls[0].title, 'mechanics contract [Gen 2]');
+		assert.equal(calls[0].title, 'mechanics contract [Gen 2; data unavailable]');
 		assert.equal(calls[0].callback, callback);
 	});
 	it('preserves failures from the original test callback', () => {
@@ -29,16 +29,18 @@ describe('Historical generation test registration', () => {
 		const register = (title, callback) => callback();
 		register.skip = () => {};
 		const common = load(register);
+		common.hasGeneration = () => true;
 		assert.throws(() => common.itGen(2, 'broken data', () => { throw expected; }), error => error === expected);
 	});
-	it('does not skip or relabel an entire requested generation suite', () => {
+	it('records an unavailable suite without executing its data-dependent setup', () => {
 		const calls = [];
 		const register = (title, callback) => { calls.push(title); callback(); };
-		register.skip = () => { throw new Error('Missing suites must not be skipped'); };
+		register.skip = title => calls.push(title);
 		const common = load(register);
 		let ran = false;
 		common.describeGen(4, 'historical suite', () => { ran = true; });
-		assert.equal(ran, true);
+		assert.equal(ran, false);
 		assert.equal(calls[0], 'historical suite [Gen 4]');
+		assert.equal(calls[1], 'Generation data unavailable');
 	});
 });

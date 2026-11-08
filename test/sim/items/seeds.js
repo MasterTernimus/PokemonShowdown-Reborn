@@ -12,9 +12,9 @@ describe('Seeds', function () {
 
 	it(`should activate even on a double-switch-in`, function () {
 		battle = common.createBattle([[
-			{species: 'Tapu Koko', ability: 'electricsurge', item: 'grassyseed', moves: ['protect']},
+			{ species: 'Tapu Koko', ability: 'electricsurge', item: 'elementalseed', moves: ['protect'] },
 		], [
-			{species: 'Tapu Bulu', ability: 'grassysurge', item: 'electricseed', moves: ['protect']},
+			{ species: 'Tapu Bulu', ability: 'grassysurge', item: 'elementalseed', moves: ['protect'] },
 		]]);
 		assert.false.holdsItem(battle.p1.active[0]);
 		assert.false.holdsItem(battle.p2.active[0]);
@@ -23,7 +23,7 @@ describe('Seeds', function () {
 	it(`should not activate when Magic Room ends`, function () {
 		battle = common.createBattle([[
 			{species: 'Tapu Koko', ability: 'electricsurge', moves: ['protect']},
-			{species: 'Hawlucha', item: 'electricseed', moves: ['protect']},
+			{ species: 'Hawlucha', item: 'elementalseed', moves: ['protect'] },
 		], [
 			{species: 'Alakazam', moves: ['magicroom']},
 		]]);
@@ -38,7 +38,7 @@ describe('Seeds', function () {
 			{species: 'Groudon', ability: 'drought', item: 'redorb', moves: ['sleeptalk']},
 		], [
 			{species: 'Bounsweet', moves: ['sleeptalk']},
-			{species: 'Shuckle', item: 'electricseed', moves: ['sleeptalk']},
+			{ species: 'Shuckle', item: 'elementalseed', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices();

@@ -10,64 +10,56 @@ describe("Tera Stellar", function () {
 		battle.destroy();
 	});
 
-	it(`should increase the damage of non-STAB moves by 1.2x on the first use of that move type`, function () {
-		battle = common.createBattle([[
-			{species: 'Wynaut', ability: 'noguard', moves: ['surf', 'hydropump', 'extrasensory', 'hyperspacehole'], teraType: 'Stellar'},
-		], [
-			{species: 'Happiny', ability: 'shellarmor', moves: ['softboiled']},
-		]]);
-
-		const happiny = battle.p2.active[0];
-
-		battle.makeChoices('move surf terastallize', 'auto');
-		let damage = happiny.maxhp - happiny.hp;
-		assert.bounded(damage, [40, 47], `Surf should have ~1.2x damage on its first use`);
-
-		battle.makeChoices('move surf', 'auto');
-		damage = happiny.maxhp - happiny.hp;
-		assert.bounded(damage, [33, 39], `Surf should have regular damage on its second use`);
-
-		battle.makeChoices('move hydropump', 'auto');
-		damage = happiny.maxhp - happiny.hp;
-		assert.bounded(damage, [39, 47], `Hydro Pump should have regular damage, because Water-type was already used`);
-
-		battle.makeChoices('move extrasensory', 'auto');
-		damage = happiny.maxhp - happiny.hp;
-		assert.bounded(damage, [58, 70], `Extrasensory should have 2x damage on its first use`);
-
-		battle.makeChoices('move extrasensory', 'auto');
-		damage = happiny.maxhp - happiny.hp;
-		assert.bounded(damage, [43, 52], `Extrasensory should have 1.5x damage on its second use`);
-
-		battle.makeChoices('move hyperspacehole', 'auto');
-		damage = happiny.maxhp - happiny.hp;
-		assert.bounded(damage, [43, 52], `Hyperspace Hole should have 1.5x damage on its first use, because Psychic-type was already used`);
+	function fixture(species = 'Mew', ability = 'No Ability') {
+		battle = common.createBattle([[{ species, ability, moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
+		const p = battle.p1.active[0], q = battle.p2.active[0];
+		battle.randomizer = n => n;
+		battle.actions.terastallize(p);
+		p.hp = p.maxhp = p.baseMaxhp = q.hp = q.maxhp = q.baseMaxhp = 10000;
+		return [p, q];
+	}
+	function attack(p, q, id) {
+		const move = Object.assign(battle.dex.getActiveMove(id), { accuracy: true, willCrit: false, secondaries: null });
+		const hp = q.hp;
+		battle.actions.runMove(move, p, p.getLocOf(q), { externalMove: true });
+		return hp - q.hp;
+	}
+	function unboostedDamage(p, q, id) {
+		const tera = p.terastallized; p.terastallized = '';
+		try { return battle.actions.getDamage(p, q, Object.assign(battle.dex.getActiveMove(id), { willCrit: false })); } finally { p.terastallized = tera; }
+	}
+	it('boosts non-STAB damage 1.2x only on the first successful attack of each type', () => {
+		const [p, q] = fixture();
+		const water = unboostedDamage(p, q, 'waterpulse');
+		assert.bounded(attack(p, q, 'waterpulse'), [Math.floor(water * 1.2) - 1, Math.floor(water * 1.2) + 1]);
+		assert.deepEqual(p.stellarBoostedTypes, ['Water']);
+		assert.equal(attack(p, q, 'waterpulse'), water);
+		assert.equal(attack(p, q, 'hydropump'), unboostedDamage(p, q, 'hydropump'));
+		const psychic = unboostedDamage(p, q, 'extrasensory');
+		assert.equal(attack(p, q, 'extrasensory'), psychic);
+		assert.equal(attack(p, q, 'extrasensory'), psychic);
+		assert.equal(attack(p, q, 'hyperspacehole'), unboostedDamage(p, q, 'hyperspacehole'));
+		assert.deepEqual(p.stellarBoostedTypes, ['Water', 'Psychic']);
 	});
-
-	it(`should not have the once-per-type restriction when used by Terapagos`, function () {
-		battle = common.createBattle([[
-			{species: 'Terapagos', ability: 'terashift', moves: ['surf', 'hypervoice'], item: 'laggingtail', teraType: 'Stellar'},
-		], [
-			{species: 'Chansey', ability: 'shellarmor', moves: ['softboiled']},
-		]]);
-
-		const chansey = battle.p2.active[0];
-
-		battle.makeChoices('move surf terastallize', 'auto');
-		let damage = chansey.maxhp - chansey.hp;
-		assert.bounded(damage, [94, 110], `Surf should have ~1.2x damage on its first use`);
-
-		battle.makeChoices('move surf', 'auto');
-		damage = chansey.maxhp - chansey.hp;
-		assert.bounded(damage, [94, 110], `Surf should have ~1.2x damage on its second use`);
-
-		battle.makeChoices('move hypervoice', 'auto');
-		damage = chansey.maxhp - chansey.hp;
-		assert.bounded(damage, [156, 184], `Hyper Voice should have 2x damage on its first use`);
-
-		battle.makeChoices('move hypervoice', 'auto');
-		damage = chansey.maxhp - chansey.hp;
-		assert.bounded(damage, [156, 184], `Hyper Voice should have 2x damage on its second use`);
+	it('uses the same once-per-type budget for Terapagos after its real Stellar form change', () => {
+		const [p, q] = fixture('Terapagos', 'Tera Shift');
+		assert.equal(p.species.id, 'terapagosstellar');
+		const water = unboostedDamage(p, q, 'waterpulse');
+		assert.bounded(attack(p, q, 'waterpulse'), [Math.floor(water * 1.2) - 1, Math.floor(water * 1.2) + 1]);
+		assert.equal(attack(p, q, 'waterpulse'), water);
+		const normal = unboostedDamage(p, q, 'hypervoice');
+		assert.equal(attack(p, q, 'hypervoice'), normal);
+		assert.equal(attack(p, q, 'hypervoice'), normal);
+	});
+	it('does not spend a type bonus on Protect or status moves', () => {
+		const [p, q] = fixture();
+		q.addVolatile('protect'); assert.equal(attack(p, q, 'waterpulse'), 0);
+		assert.deepEqual(p.stellarBoostedTypes, []);
+		battle.actions.runMove('splash', p, p.getLocOf(p), { externalMove: true });
+		assert.deepEqual(p.stellarBoostedTypes, []);
+		q.removeVolatile('protect'); assert(attack(p, q, 'waterpulse') > 0);
+		assert.deepEqual(p.stellarBoostedTypes, ['Water']);
 	});
 
 	it(`should not modify the Pokemon's base type for defensive purposes`, function () {
@@ -117,29 +109,15 @@ describe("Tera Stellar", function () {
 		assert.statStage(inkay, 'spa', 1);
 	});
 
-	it(`should not work with Adapatability`, function () {
-		battle = common.createBattle([[
-			{species: 'Wynaut', ability: 'adaptability', moves: ['hyperspacehole', 'terablast'], teraType: 'Stellar'},
-		], [
-			{species: 'Happiny', ability: 'shellarmor', moves: ['softboiled']},
-		]]);
-
-		const happiny = battle.p2.active[0];
-
-		battle.makeChoices('move hyperspacehole terastallize', 'auto');
-		let damage = happiny.maxhp - happiny.hp;
-		assert.bounded(damage, [58, 70], `Hyperspace Hole should only have 2x damage on its first use`);
-
-		battle.makeChoices('move hyperspacehole', 'auto');
-		damage = happiny.maxhp - happiny.hp;
-		assert.bounded(damage, [43, 52], `Hyperspace Hole should only have 1.5x damage on its second use`);
-
-		battle.makeChoices('move terablast', 'auto');
-		damage = happiny.maxhp - happiny.hp;
-		assert.bounded(damage, [43, 52], `Tera Blast should only have ~1.2x damage on its first use`);
-
-		battle.makeChoices('move terablast', 'auto');
-		damage = happiny.maxhp - happiny.hp;
-		assert.bounded(damage, [24, 29], `Tera Blast should not have any boosted damage on its second use`);
+	it('ignores Adaptability for both fresh and spent Stellar move types', () => {
+		const [p, q] = fixture('Mew', 'Adaptability');
+		p.setAbility('No Ability');
+		const psychic = unboostedDamage(p, q, 'psychic');
+		const water = unboostedDamage(p, q, 'waterpulse');
+		p.setAbility('Adaptability');
+		assert.equal(attack(p, q, 'psychic'), psychic);
+		assert.equal(attack(p, q, 'psychic'), psychic);
+		assert.bounded(attack(p, q, 'waterpulse'), [Math.floor(water * 1.2) - 1, Math.floor(water * 1.2) + 1]);
+		assert.equal(attack(p, q, 'waterpulse'), water);
 	});
 });

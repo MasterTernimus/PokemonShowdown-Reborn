@@ -55,14 +55,21 @@ describe('Flower Gift', function () {
 		assert.equal(battle.p1.active[1].getStat('spd'), battle.modify(baseSpd, 1.5));
 	});
 
-	common.itGen(8, `should not trigger if the Pokemon was KOed`, function () {
-		// TODO: Is this interaction possible in Gen 9?
-		battle = common.gen(8).createBattle([[
-			{species: 'Cherrim', ability: 'flowergift', moves: ['sleeptalk']},
+	it(`should not trigger if Max Flare KOs the Pokemon`, () => {
+		battle = common.createBattle({ formatid: 'gen9factoryfield' }, [[
+			{ species: 'Cherrim', level: 1, ability: 'flowergift', moves: ['sleeptalk'] },
 		], [
-			{species: 'Heatran', moves: ['blastburn']},
+			{ species: 'Snorlax', ability: 'No Ability', gigantamax: true, moves: ['blastburn'] },
 		]]);
-		battle.makeChoices('auto', 'move blastburn dynamax');
-		assert(battle.log.every(line => !line.startsWith('|-formechange')));
+		battle.makeChoices('team 1', 'team 1');
+		const attacker = battle.p2.active[0];
+		attacker.addVolatile('dynamax');
+		// Reborn G-Max only converts signature-type moves. Exercise the retained
+		// Max Flare effect directly rather than requesting unsupported Dynamax.
+		const flare = battle.actions.getActiveMaxMove(battle.dex.getActiveMove('blastburn'), attacker);
+		battle.actions.useMove(flare, attacker, { target: battle.p1.active[0] });
+		assert.equal(battle.p1.active[0].hp, 0);
+		assert(battle.log.some(line => line.includes('|Max Flare|')));
+		assert(battle.log.every(line => !line.startsWith('|-formechange|p1')));
 	});
 });

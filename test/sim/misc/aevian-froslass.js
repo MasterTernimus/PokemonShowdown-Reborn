@@ -22,13 +22,13 @@ describe('Aevian Froslass', function () {
 		assert.equal(aevian.gender, 'F');
 		assert.deepEqual(aevian.species.types, ['Grass', 'Water']);
 		assert.deepEqual(aevian.species.baseStats, {hp: 70, atk: 70, def: 70, spa: 110, spd: 70, spe: 110});
-		assert.deepEqual(aevian.species.abilities, {0: 'Adaptability', 1: 'Gooey', H: 'Storm Power'});
+		assert.deepEqual(aevian.species.abilities, { 0: 'Adaptability', 1: 'Dissonant Echo', H: 'Storm Power' });
 		assert.equal(battle.actions.canMegaEvo(aevian), 'Froslass-Aevian-Mega');
 		assert.equal(battle.actions.canMegaEvo(battle.p2.active[0]), 'Froslass-Mega');
 		battle.makeChoices('move surf mega', 'move icebeam mega');
 		assert.equal(battle.p1.active[0].species.name, 'Froslass-Aevian-Mega');
 		assert.equal(battle.p2.active[0].species.name, 'Froslass-Mega');
-		assert.deepEqual(battle.p1.active[0].species.baseStats, {hp: 70, atk: 80, def: 70, spa: 140, spd: 100, spe: 140});
+		assert.deepEqual(battle.p1.active[0].species.baseStats, { hp: 70, atk: 80, def: 80, spa: 140, spd: 100, spe: 130 });
 		assert.equal(battle.p1.active[0].ability, 'stormcalling');
 	});
 
@@ -50,7 +50,7 @@ describe('Aevian Froslass', function () {
 			'dynamicpunch', 'echoedvoice', 'energyball', 'facade', 'fling', 'focusblast', 'gigadrain', 'gigaimpact',
 			'grassknot', 'grassyglide', 'grassyterrain', 'gyroball', 'hail', 'headbutt', 'hex', 'hydropump',
 			'hyperbeam', 'hypervoice', 'icebeam', 'icywind', 'ironhead', 'knockoff', 'leafstorm', 'magicalleaf',
-			'magnetrise', 'megakick', 'megapunch', 'moonblast', 'mudshot', 'mudslap', 'muddywater', 'naturepower',
+			'magnetrise', 'megakick', 'megapunch', 'moonblast', 'mudshot', 'mudbarrage', 'muddywater', 'naturepower',
 			'petaldance', 'powergem', 'psyshock', 'raindance', 'razorleaf', 'return', 'round', 'sandstorm', 'scald',
 			'secretpower', 'seedbomb', 'seismictoss', 'shadowball', 'sleeptalk', 'solarbeam', 'spikes', 'stomp',
 			'strength', 'sunnyday', 'surf', 'swordsdance', 'synthesis', 'tackle', 'uproar', 'waterpulse', 'waterfall',

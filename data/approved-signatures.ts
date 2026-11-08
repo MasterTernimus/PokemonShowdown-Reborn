@@ -590,22 +590,12 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 		onResidual(pokemon) {
 			if (pokemon.status) base.naturalcure.onResidual?.call(this, pokemon);
 		},
-		onModifyDamage(damage, source, target, move) {
-			const entry = budget(source);
-			if ((!entry.freshPlumageUsed || entry.freshPlumageMove === move) &&
-				move.category !== 'Status' && this.movehasType(move, 'Flying')) return this.chainModify(1.2);
+		onTryBoost(boosts, target, source) {
+			if (boosts.accuracy && boosts.accuracy < 0 && source && !source.isAlly(target)) {
+				delete boosts.accuracy;
+				this.add('-fail', target, 'unboost', 'accuracy', '[from] ability: Fresh Plumage');
+			}
 		},
-		onSourceDamagingHit(damage, target, source, move) {
-			if (damage <= 0 || budget(source).freshPlumageUsed || !this.movehasType(move, 'Flying')) return;
-			budget(source).freshPlumageUsed = true;
-			budget(source).freshPlumageMove = move;
-		},
-		onSourceAfterSubDamage(damage, target, source, move) {
-			if (damage <= 0 || budget(source).freshPlumageUsed || !this.movehasType(move, 'Flying')) return;
-			budget(source).freshPlumageUsed = true;
-			budget(source).freshPlumageMove = move;
-		},
-		onAfterMove(source) { delete budget(source).freshPlumageMove; },
 		name: 'Fresh Plumage', num: num++,
 	};
 	// Compound Eyes already supplies the same Mirror Arena entry reward as Keen Eye.

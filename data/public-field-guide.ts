@@ -5,21 +5,21 @@ import { appendSharedFieldGuide, appendReviewedHazards, appendSecretPowerGuide }
 export const ReviewedFieldGuide: { [id: string]: { [section: string]: string[] } } = {
 	hauntedterrain: {
 		Transitions: [
-			"From Holy: Ominous Wind, Phantom Force, Shadow Force, Spectral Scream, Trick-or-Treat, or Curse used by a Ghost type can create Haunted after the move. The Holy handler blocks this transition while Neutralization is active; shared field locks still apply.",
-			"To Holy: Origin Pulse, Purify, Sacred Fire, Dazzling Gleam and Flash request Holy after the move. Judgment is also listed for this change, but currently does not trigger it.",
+			"From Holy: Ominous Wind, Phantom Force, Shadow Force, Spectral Scream, Trick-or-Treat, or Curse used by a Ghost type can create Haunted after the move. Neutralization and other effects that prevent field changes can block this transition.",
+			"To Holy: Origin Pulse, Purify, Sacred Fire, Dazzling Gleam and Flash request Holy after the move. Judgment does not change this field.",
 		],
 		'Boosts and general effects': [
 			"Primary Ghost attacks gain 1.5× base power. Ghost attacks can hit Normal typing; additional move typing can still affect effectiveness.",
 			"Ghost Pokémon gain 1.3× Defense and Special Defense.",
 			"Sleeping non-Ghost Pokémon lose 1/16 base maximum HP each turn. Other immunity and damage-prevention mechanics still apply.",
-			"Field boosts use the engine’s adaptive-field modifier; conditional abilities can alter their contribution. Named bonuses can stack with the type bonus.",
+			"Adaptive Cycle and other protective abilities can reduce field bonuses. Named bonuses can stack with the type bonus.",
 		],
 		Abilities: [
 			"Cursed Body: the usual eligible damaging-hit Disable roll always succeeds here, unless the attacker is already disabled or the move is excluded. Its local fainting curse is a shared ability effect, not a Haunted-only effect.",
 			"Mimicry selects Ghost. Power Spot boosts allies’ move power by 1.5× instead of its ordinary 1.3×.",
 			"Rattled grants +1 Speed on entry. Shadow Tag reveals opposing held items on entry. Wandering Spirit loses one Speed stage each turn.",
-			"Perish Body adds its trapping volatile when its damaging-hit handler activates here; its normal targeting and trapping exceptions still apply.",
-			"This reviewed list is not exhaustive. Custom field-setting composites and shared helpers are indexed below for further documentation.",
+			"Perish Body traps attackers when its damaging-hit effect activates; normal trapping exceptions apply.",
+			"See the ability and move entries below for additional interactions.",
 		],
 		Moves: [
 			"Fire Spin, Flame Burst, Flame Charge and Inferno: named 1.5× power bonus. Astonish, Bone Club, Bone Rush and Bonemerang: named 1.5× bonus. Shadow Bone: named 1.2× bonus, in addition to the Ghost bonus.",
@@ -28,8 +28,8 @@ export const ReviewedFieldGuide: { [id: string]: { [section: string]: string[] }
 			"Lick has a 100% paralysis secondary. Bitter Malice has a 100% Special Attack drop secondary and a separate 30% freeze-status secondary; ordinary secondary-effect protections still apply.",
 			"Fire Spin targets all adjacent foes. Spite removes up to 6 PP. Nightmare deals 1/3 base maximum HP each turn.",
 			"Spirit Break is super effective against Ghost typing. Nature Power calls Phantom Force. Camouflage and Terrain Pulse select Ghost. Secret Power has a 30% Ghost Curse secondary.",
-			"Scary Face currently retains its primary −2 Speed and adds a separate −4 Speed secondary. It is not documented as a simple replacement with −4.",
-			"Shelter’s Haunted mapping is commented out in the current source. Do not assume the example’s Ghost-damage reduction is implemented.",
+			"Scary Face lowers Speed by 2 stages, then attempts an additional 4-stage drop. Protection from secondary effects can block the extra drop.",
+			"Shelter does not grant extra Ghost resistance here.",
 		],
 		'Seeds and other effects': [
 			"Magical Seed raises Defense and Special Defense by one stage and attempts to burn its holder when consumed on Haunted. Ordinary item, stat and status restrictions apply.",
@@ -55,7 +55,7 @@ Object.assign(ReviewedFieldGuide, {
 			"Nature Power calls Wood Hammer. Terrain Pulse becomes Bug. Nature's Madness removes three quarters of current HP, subject to its normal restrictions.",
 		],
 		"Abilities": [
-			"Grass Pelt grants its 1.5x Defense modifier here. Other indexed ability interactions remain under review.",
+			"Grass Pelt grants its 1.5x Defense modifier here.",
 		],
 	},
 	"factoryterrain": {
@@ -79,7 +79,7 @@ Object.assign(ReviewedFieldGuide, {
 			"Aura Wheel, Charge Beam, Discharge, Gigavolt Havoc, Ion Deluge, Overdrive, Parabolic Charge, Wild Charge and Rising Voltage request Factory after use. Special Super UMD Move can also transition from Short Circuit when its field-resolution guard permits.",
 		],
 		"Boosts and general effects": [
-			"Primary Electric power cycles through 0.8x, 1.5x, 0.5x, 1.2x and 2x. The counter advances when the power callback runs, not simply once per turn. Named bonuses can stack; adaptive field modifiers apply.",
+			"Primary Electric power cycles through 0.8x, 1.5x, 0.5x, 1.2x and 2x. The power level advances for each attack damage calculation, rather than once per turn. Named bonuses can stack; adaptive field modifiers apply.",
 		],
 		"Moves": [
 			"Flash Cannon, Gear Grind, Gyro Ball, Magnet Bomb, Muddy Water, Surf, Steel Beam and Double Iron Bash gain additional Electric typing. Zap Cannon has 80% accuracy.",
@@ -102,7 +102,7 @@ Object.assign(ReviewedFieldGuide, {
 			"Stealth Rock doubles the type-effectiveness exponent here; this is not a flat doubling of all Stealth Rock damage.",
 		],
 		"Abilities": [
-			"Power Drill's eligible drill and horn moves gain its 2x field power modifier and protection bypass. Other indexed ability interactions remain under review.",
+			"Power Drill's eligible drill and horn moves gain its 2x field power modifier and protection bypass.",
 		],
 	},
 });
@@ -134,7 +134,7 @@ Object.assign(ReviewedFieldGuide, {
 		"Moves": [
 			"Primary Rock moves gain additional Ice typing. Bitter Malice gains 1.5x power and ten percentage points on its freeze/frostbite secondary, once per move.",
 			"Scald, Steam Eruption and Hydro Steam have a 0.5x modifier and an additional 1.3x when the stored hot-water counter is one. Snipe Shot gains 1.2x; Chilling Water gains 2x.",
-			"Grounded users receive the engine's icy-momentum marker for eligible physical priority contact moves and the named rolling/sliding moves; the downstream momentum behavior remains under review.",
+			"Grounded users gain 1 Speed stage after eligible physical priority contact moves and rolling or sliding moves.",
 		],
 		"Battle messages": [
 			"The field is covered in ice.",
@@ -155,7 +155,7 @@ Object.assign(ReviewedFieldGuide, {
 			"Aeroblast, Air Cutter, Air Slash, Bleakwind Storm, Chilling Water, Fairy Wind, Glaciate, Gust, Hurricane, Ominous Wind, Razor Wind, Silver Wind and Twister gain a separate 1.5x bonus, stacking when both lists apply.",
 		],
 		"Transitions": [
-			"At field residual, ordinary rain changes to hail. Sun or extreme sun without Water Sport records a sun counter, then clears the field on the next eligible residual check. The counter is not reset by the shown non-sun branch. Move-triggered transitions remain under review.",
+			"At turn end, ordinary rain becomes hail. Two turns of sun or harsh sun without Water Sport clear the field; the sunny turns need not be consecutive.",
 		],
 	},
 	"mountainterrain": {
@@ -168,7 +168,7 @@ Object.assign(ReviewedFieldGuide, {
 			"Blizzard, Glaciate, Subzero Slammer and Mountain Gale gain 1.3x.",
 		],
 		"Transitions": [
-			"Consecutive hail field-residual checks advance a counter toward Snowy Mountain. An initially undefined counter is first set to zero; the transition occurs at two. Non-hail residual checks reset it. Move-triggered transitions remain under review.",
+			"Three consecutive turns of hail turn the field into Snowy Mountain. A turn without hail resets the progress.",
 		],
 		"Battle messages": [
 			"The whole mountain is moving!",
@@ -200,7 +200,7 @@ Object.assign(ReviewedFieldGuide, {
 			"Sludge Wave and Acid Downpour gain 1.3x. Surf and Muddy Water gain an additional 1.3x when reaching the swamp-counter threshold.",
 		],
 		"Transitions": [
-			"The ignition list includes Eruption, Explosion, Fire Pledge, Flame Burst, Heat Wave, Incinerate, Lava Plume, Mind Blown, Searing Shot, Self-Destruct and Inferno Overdrive; Fire Max moves also request Burning. The ordinary ignition branch checks rain and Water Sport. The heavy-rain check is currently misspelled and does not correctly recognize Primordial Sea.",
+			"The ignition list includes Eruption, Explosion, Fire Pledge, Flame Burst, Heat Wave, Incinerate, Lava Plume, Mind Blown, Searing Shot, Self-Destruct and Inferno Overdrive; Fire Max moves also request Burning. Rain and Water Sport prevent ordinary ignition; heavy rain alone does not.",
 			"Sludge Wave or Acid Downpour requests Corrosive unless Neutralization blocks it. Surf adds one swamp counter and Muddy Water adds two; three counters request Swamp.",
 			"Changing weather to extreme sun requests Desert and sets an existing terrain duration to 9999.",
 		],
@@ -348,16 +348,16 @@ ReviewedFieldGuide.flowergarden5 = {
 Object.assign(ReviewedFieldGuide, {
 	"inverseterrain": {
 		"Boosts and general effects": [
-			"Type-effectiveness exponents are reversed. Ordinary type immunities become weaknesses. Freeze-Dry's special interaction with Water is excluded from this field's reversal callback.",
+			"Weaknesses become resistances, and resistances and immunities become weaknesses. Freeze-Dry keeps its special Water matchup.",
 			"The field includes a special Ground-type immunity override for Thunder Wave. Shared move-specific immunity handling still applies.",
-			"The duration callback gives Topsy-related sources three turns, or six with Amplifield Rock. Other sources receive five turns in this callback; other setters may override it.",
+			"Topsy-Turvy creates the field for 3 turns, or 6 with Amplifield Rock. Other setters normally last 5 turns unless they specify a different duration.",
 		],
 	},
 	"glitchterrain": {
 		"Boosts and general effects": [
 			"Damaging Grass, Fire, Water, Electric, Ice, Dragon, Psychic and Dark moves become special. Normal, Fighting, Ghost, Poison, Bug, Flying, Ground, Rock and Steel moves become physical. Damaging Fairy moves first become Normal.",
-			"A faster attacker gains one critical-hit stage based on the callback's unmodified Speed comparison. Psychic moves gain 1.2x power.",
-			"Ghost moves fail against Psychic targets. Bug is super effective against Poison, Poison is super effective against Bug, Ice is neutral against Fire, and Ghost/Dark are resisted by Steel. Dragon effectiveness is set neutral by this callback, but immunity handling remains separate.",
+			"A faster attacker gains one critical-hit stage based on Speed before temporary modifiers. Psychic moves gain 1.2x power.",
+			"Ghost moves fail against Psychic targets. Bug is super effective against Poison, Poison is super effective against Bug, Ice is neutral against Fire, and Ghost/Dark are resisted by Steel. Dragon attacks lose their usual weakness and resistance matchups; type immunities still apply.",
 			"Ordinary duration is five turns, or eight with Amplifield Rock. Additional shared stat interactions and transitions remain under review.",
 		],
 		"Moves": [
@@ -387,23 +387,23 @@ Object.assign(ReviewedFieldGuide, {
 			"Damaging primary Ground moves fail unless recognized by the shared ground-bone exception. Sand Attack also fails.",
 			"Anchor Shot and Dragon Darts gain 2x power. Triple Dive gains 1.5x and Wave Crash gains 2x.",
 			"Dive, Muddy Water, Surf, Whirlpool, Hydro Vortex and Splishy Splash gain a named 1.5x modifier. Whirlpool, Surf, Muddy Water, Dive, Sludge Wave, Octazooka, Origin Pulse and Hydro Vortex independently gain 1.2x, stacking for moves in both lists.",
-			"Dive, Gravity, Acid Downpour, Blizzard, Subzero Slammer, Glaciate and Grav Apple have a named 5325/4096 power modifier where applicable. Sludge Wave gains that modifier when its stored counter is one. Full move-triggered transition rules remain under review.",
+			"Dive, Gravity, Acid Downpour, Blizzard, Subzero Slammer, Glaciate and Grav Apple have a named 1.3× power modifier where applicable. Sludge Wave gains that modifier when its stored counter is one.",
 		],
 		"Abilities": [
-			"Propeller Tail users gain an additional 1.5x power modifier on positive-priority moves. Other shared ability healing and suppression interactions remain indexed for review.",
+			"Propeller Tail users gain an additional 1.5x power modifier on positive-priority moves.",
 		],
 	},
 	"underwaterterrain": {
 		"Boosts and general effects": [
 			"Non-Water Pokemon have half Speed unless Limber, Web Assassin, Spiral Evolution, Elevate, Swift Swim or Steelworker exempts them. Starting this field clears existing weather.",
 			"Primary Water attacks gain 1.5x power. Primary Electric attacks gain 2x power and numeric accuracy checks succeed. Physical non-Water moves have a 0.5x power modifier when the user is not Water-type and lacks Steelworker, Elevate, Schooling and Swift Swim. Named modifiers can stack, with adaptive field modifiers.",
-			"Water-weak Pokemon take base maximum HP/8 multiplied by Water effectiveness each residual, unless Dry Skin, Magic Guard, Protective Ward, Swift Swim, Storm Drain or Water Absorb exempts them. Flame Body and Magma Armor double eligible damage. Neutral or Water-resistant typing does not take this field damage.",
-			"Tar Shot is washed away. Pure Water attacks are neutral against Water typing; additional move typing follows the callback's separate combined-type handling.",
+			"Water-weak Pokemon take base maximum HP/8 multiplied by Water effectiveness each turn, unless Dry Skin, Magic Guard, Protective Ward, Swift Swim, Storm Drain or Water Absorb exempts them. Flame Body and Magma Armor double eligible damage. Neutral or Water-resistant typing does not take this field damage.",
+			"Tar Shot is washed away. Pure Water attacks are neutral against Water typing; attacks with multiple types still combine their type matchups.",
 		],
 		"Moves": [
 			"Tar Shot, Spicy Extract, Sunny Day, Hail, Sandstorm and Rain Dance fail. All primary Fire moves fail.",
 			"Ground moves gain additional Water typing unless recognized by the ground-bone exception. Dragon Darts and Grav Apple become Water, replacing their previous move typing.",
-			"Anchor Shot and Dragon Darts gain 2x power. Triple Dive and Water Pulse gain 1.5x. Bounce, Dive, Sky Drop, Fly and Acid Downpour gain a named 1.3x modifier where applicable; Sludge Wave also gains it when its stored counter is one. Full transition rules remain under review.",
+			"Anchor Shot and Dragon Darts gain 2x power. Triple Dive and Water Pulse gain 1.5x. Bounce, Dive, Sky Drop, Fly and Acid Downpour gain a named 1.3x modifier where applicable; Sludge Wave also gains it when its stored counter is one.",
 		],
 		"Abilities": [
 			"Propeller Tail users gain an additional 1.5x modifier on positive-priority moves. Shared Water Absorb and other ability healing remain separately applicable.",
@@ -412,8 +412,8 @@ Object.assign(ReviewedFieldGuide, {
 	"swampterrain": {
 		"Boosts and general effects": [
 			"Primary Poison attacks against grounded targets gain 1.5x. Primary Bug, Grass and Water attacks gain 1.3x; primary Fire attacks have a 0.8x modifier. Named modifiers can stack, with adaptive field modifiers.",
-			"Grounded Pokemon receive a residual Speed-drop attempt: one stage normally, two when trapped. Quick Feet, Swift Swim, Clear Body, White Smoke, Full Metal Body, Mycelium Might, Propeller Tail and Steam Engine exempt them, but the current Heavy-Duty Boots branch re-enables that attempt even for these abilities.",
-			"Sleeping or Comatose Pokemon without Magic Guard take one sixteenth base maximum HP each turn, or one eighth when trapped. A volatile sourced from Infestation, Spider Web, Leech Seed or Snap Trap also triggers one random stat-drop attempt per residual.",
+			"Grounded Pokemon receive a residual Speed-drop attempt: one stage normally, two when trapped. Quick Feet, Swift Swim, Clear Body, White Smoke, Full Metal Body, Mycelium Might, Propeller Tail and Steam Engine exempt them, but Heavy-Duty Boots still allows the Speed drop despite these abilities.",
+			"Sleeping or Comatose Pokemon without Magic Guard take one sixteenth base maximum HP each turn, or one eighth when trapped. Infestation, Spider Web, Leech Seed or Snap Trap also attempts to lower one random stat each turn.",
 			"Ordinary duration is four turns, or seven with Amplifield Rock.",
 		],
 		"Moves": [
@@ -422,7 +422,7 @@ Object.assign(ReviewedFieldGuide, {
 			"Thousand Arrows, Smack Down, Brine, Gunk Shot, Hydro Vortex, Mud Barrage, Mud Bomb, Mud Shot, Muddy Water, Savage Spin-Out and Sludge Wave gain 1.5x. Bulldoze, Earthquake and Magnitude have a 0.25x modifier.",
 		],
 		"Transitions": [
-			"Sun adds one drying counter per residual; extreme sun adds three. At three, the field requests its previous terrain, or clears if none is recorded. Move-driven drying and the exact shared stack restrictions remain under review.",
+			"Sun adds 1 drying point each turn; harsh sun adds 3. At 3 points, the field dries out and reveals the field underneath, or clears if there is none.",
 		],
 	},
 });
@@ -434,7 +434,7 @@ Object.assign(ReviewedFieldGuide, {
 		],
 		"Moves": [
 			"Sand Tomb, Mud Bomb, Mud Shot and Mud Barrage gain 2x power. Hidden Power, Land's Wrath, Muddy Water, Strength, Surf, Thousand Waves and Clangorous Soulblaze gain 1.5x. Aura Sphere, Focus Blast, Stored Power and Zen Headbutt gain 1.3x. Psychic gains 1.2x. Adaptive field modifiers apply.",
-			"After Fire Spin, Leaf Tornado, Twister, Whirlpool or a special Flying move, every active Pokemon that is not semi-invulnerable receives a one-stage accuracy-drop attempt. Sand Tomb's field volatile also causes a residual accuracy-drop attempt.",
+			"After Fire Spin, Leaf Tornado, Twister, Whirlpool or a special Flying move, every active Pokemon that is not semi-invulnerable receives a one-stage accuracy-drop attempt. Sand Tomb also attempts to lower accuracy each turn.",
 		],
 		"Battle messages": [
 			"Dust swirled around the battlefield...",
@@ -449,7 +449,7 @@ Object.assign(ReviewedFieldGuide, {
 			"Pay Day and Make It Rain gain 2x power. Wind Dance, Acrobatics, Fiery Dance, Fire Lash, First Impression, Fly, Petal Dance, Power Whip, Revelation Dance and Vine Whip gain 1.5x. Skitter Smack, Body Press and Triple Axel gain 1.2x.",
 		],
 		"Abilities": [
-			"Guts, Sheer Force, Huge Power, Pure Power, Punk Rock, Striker, Ultra Ego and Ultra Instinct use the special StrikerBonus odds table. Body Press also uses it with Bulletproof, Sturdy, Heavy Metal, Thick Fat or Solid Rock. The helper uses active-ability checks; passive equivalence must not be assumed without checking the caller.",
+			"Guts, Sheer Force, Huge Power, Pure Power, Punk Rock, Striker, Ultra Ego and Ultra Instinct improve the odds of stronger hits. Body Press also uses it with Bulletproof, Sturdy, Heavy Metal, Thick Fat or Solid Rock. These bonuses require the listed ability; having it only as a passive does not qualify.",
 		],
 		"Battle messages": [
 			"Now presenting!",
@@ -493,13 +493,13 @@ Object.assign(ReviewedFieldGuide, {
 Object.assign(ReviewedFieldGuide, {
 	"burningterrain": {
 		"Boosts and general effects": [
-			"Grounded users' primary Fire attacks gain 1.5x power. Primary Grass attacks against grounded targets and primary Ice attacks have a 0.5x modifier. Freeze/frostbite is prevented. Hail is cleared on field start and during residual handling.",
-			"Grounded non-Fire Pokemon take base maximum HP/8 multiplied by Fire effectiveness each residual, unless Aqua Ring, Flame Body, Flare Boost, Flash Fire, Heatproof, Magma Armor, Water Bubble, Water Veil or Well-Baked Body exempts them. Leaf Guard, Fluffy, Grass Pelt, Ice Body or Tar Shot doubles eligible damage. Normal damage prevention still applies.",
-			"The duration callback gives four turns, or seven with Amplifield Rock; other field setters and the burning-garden state can override normal lifetime.",
+			"Grounded users' primary Fire attacks gain 1.5x power. Primary Grass attacks against grounded targets and primary Ice attacks have a 0.5x modifier. Freeze/frostbite is prevented. Hail is cleared on field start and at the end of each turn.",
+			"Grounded non-Fire Pokemon take base maximum HP/8 multiplied by Fire effectiveness each turn, unless Aqua Ring, Flame Body, Flare Boost, Flash Fire, Heatproof, Magma Armor, Water Bubble, Water Veil or Well-Baked Body exempts them. Leaf Guard, Fluffy, Grass Pelt, Ice Body or Tar Shot doubles eligible damage. Normal damage prevention still applies.",
+			"Normally lasts 4 turns, or 7 with Amplifield Rock. Specific field setters and a burning garden can change this duration.",
 		],
 		"Moves": [
 			"Rock Slide, Smack Down and Thousand Arrows gain additional Fire typing and 2x power. Smog and Clear Smog gain Fire typing and 1.5x. Infernal Parade gains 1.5x. Field-clearing moves gain a named 1.3x modifier where applicable. Named bonuses can stack, with adaptive field modifiers.",
-			"After Burn Up, the residual handler replaces any ??? type with Fire.",
+			"After Burn Up, a typeless Pokémon regains Fire typing at turn end.",
 		],
 		"Abilities": [
 			"Blazing Mane raises Speed by one when entering Burning, and for existing active holders when Burning starts.",
@@ -528,14 +528,14 @@ Object.assign(ReviewedFieldGuide, {
 	"corrosivemistterrain": {
 		"Boosts and general effects": [
 			"Primary Fire attacks gain 1.5x power. Special Flying moves, Apple Acid, Bubble Beam, Bubble, Sparkling Aria and Energy Ball gain additional Poison typing.",
-			"At field residual, non-Poison/non-Steel active Pokemon are offered ordinary poison; a successful status application also requests one eighth base maximum HP damage through the poison damage event. This branch is skipped when the stored Neutralizing Gas counter is one.",
+			"At turn end, eligible non-Poison/non-Steel Pokémon are poisoned and immediately take 1/8 max HP poison damage. The field’s Neutralizing Gas effect can prevent this.",
 		],
 		"Moves": [
 			"Apple Acid, Bubble, Bubble Beam, Sparkling Aria, Smog, Clear Smog and Acid Spray gain 1.5x power. Clearing/ignition moves gain 1.3x where applicable; Seed Flare appears in that list and also receives another 1.3x. Adaptive field modifiers apply.",
 		],
 		"Transitions": [
-			"Eruption, Explosion, Fire Pledge, Flame Burst, Heat Wave, Incinerate, Lava Plume, Mind Blown, Searing Shot, Self-Destruct, Inferno Overdrive and Fire Max moves combust the mist. Infernal Rage participates only after its field-clear flag is set. Any active Damp holder prevents this combustion branch.",
-			"Combustion requests full base-maximum-HP damage, then clears the field. Flash Fire, Well-Baked Body, semi-invulnerability, protection and Wide Guard exempt a target. Sturdy or Endure instead requests base maximum HP minus one through the damage event; this is not a guarantee of survival when already injured.",
+			"Eruption, Explosion, Fire Pledge, Flame Burst, Heat Wave, Incinerate, Lava Plume, Mind Blown, Searing Shot, Self-Destruct, Inferno Overdrive and Fire Max moves combust the mist. Infernal Rage can also ignite it after a qualifying hit. An active Damp holder prevents combustion.",
+			"Combustion deals damage equal to max HP, then clears the field. Flash Fire, Well-Baked Body, semi-invulnerability, protection and Wide Guard exempt a target. Sturdy or Endure reduces this to max HP minus 1; an already injured Pokémon can still faint.",
 			"Gravity requests Corrosive. Seed Flare requests Misty. Defog, Gust, Wind Dance, Airstream Assault, Hurricane, Razor Wind, Tailwind, Twister, Whirlwind, Supersonic Skystrike and G-Max Wind Rage clear the field. Shared field restrictions still apply.",
 		],
 		"Battle messages": [
@@ -551,8 +551,8 @@ Object.assign(ReviewedFieldGuide, {
 			"Special Fairy and Normal attacks gain 1.5x power. Primary Dragon and Psychic gain 1.2x. Primary Ghost and special Dark attacks have a 0.5x modifier. Named bonuses can stack, with adaptive field modifiers.",
 		],
 		"Moves": [
-			"Radiant Assault, Mystical Fire, Magical Leaf, Ancient Power, Judgment, Dei Iudicium, Sacred Fire, Extreme Speed, Sacred Sword and Return gain a named 1.5x modifier. ",
-			"Multipulse, Psystrike, Aeroblast, Origin Pulse, Doom Desire, Mist Ball, Crush Grip, Luster Purge, Secret Sword, Psycho Boost, Relic Song, Spacial Rend, Hyperspace Hole, Roar of Time, Land's Wrath, Precipice Blades, Dragon Ascent, Moongeist Beam, Sunsteel Strike, Prismatic Laser, Fleur Cannon, Diamond Storm, Genesis Supernova, Searing Sunraze Smash and Menacing Moonraze Maelstrom gain 1.3x where their registered IDs match the source list.",
+			"Radiant Assault, Mystical Fire, Magical Leaf, Ancient Power, Judgment, Dei Iudicium, Sacred Fire, Extreme Speed, Sacred Sword and Return gain a named 1.5x modifier.",
+			"Multipulse, Psystrike, Aeroblast, Origin Pulse, Doom Desire, Mist Ball, Crush Grip, Luster Purge, Secret Sword, Psycho Boost, Relic Song, Spacial Rend, Hyperspace Hole, Roar of Time, Land's Wrath, Precipice Blades, Dragon Ascent, Moongeist Beam, Sunsteel Strike, Prismatic Laser, Fleur Cannon, Diamond Storm, Genesis Supernova, Searing Sunraze Smash and Menacing Moonraze Maelstrom gain 1.3x here.",
 			"The Haunted-transition moves gain a named 1.3x modifier where applicable.",
 		],
 		"Transitions": [
@@ -575,22 +575,22 @@ Object.assign(ReviewedFieldGuide, {
 			"Draining Kiss and Mist Ball gain 2x power.",
 		],
 		"Abilities": [
-			"Fortress Shell grants +1 Defense and Special Defense on field start or entry, with a stored guard against duplicate Fairy Tale activation. Other field-specific ability handlers remain indexed for review.",
+			"Fortress Shell grants +1 Defense and Special Defense on field start or entry, once per switch-in for this field.",
 		],
 	},
 	"rainbowterrain": {
 		"Boosts and general effects": [
 			"Secondary chances double unless the move is Secret Power or the user has Serene Grace. A move's self-effect chance doubles only inside that same eligible secondary-list branch.",
 			"Special Normal moves gain a randomly selected additional type and 1.5x power. Named bonuses can stack, with adaptive field modifiers.",
-			"Sleeping Pokemon heal one sixteenth base maximum HP each residual. Comatose users also heal unless they have Magic Guard; the code's Magic Guard check applies to the Comatose branch, not the ordinary sleep branch.",
-			"Pledge-created duration is four turns, or seven with Amplifield Rock. Rain Dance/Sunny Day creation uses the current weather duration, falling back to five. Other sources get five in this callback.",
+			"Sleeping Pokemon heal one sixteenth base maximum HP each turn. Comatose users also heal unless they have Magic Guard; Magic Guard does not prevent healing from ordinary sleep.",
+			"Pledge-created duration is four turns, or seven with Amplifield Rock. Rain Dance/Sunny Day creation uses the current weather duration, falling back to five. Other setters normally last 5 turns.",
 		],
 		"Moves": [
 			"Aurora Beam, Dazzling Gleam, Dragon Pulse, the three Pledges, Fleur Cannon, Heart Stamp, Hidden Power, Judgment, Dei Iudicium, Mirror Beam, Mist Ball, Moonblast, Mystical Fire, Oceanic Operetta, Prismatic Laser, Relic Song, Sacred Fire, Secret Power, Silver Wind, Solar Beam, Solar Blade, Sparkling Aria, Tri Attack, Twinkle Tackle, Weather Ball and Zen Headbutt gain 1.5x.",
 			"Dark Pulse, Night Daze, Never-Ending Nightmare and Shadow Ball have a 0.5x modifier. Light That Burns the Sky gains 1.3x.",
 		],
 		"Transitions": [
-			"Light That Burns the Sky clears the field. Hail or sandstorm also clears it during residual handling.",
+			"Light That Burns the Sky clears the field. Hail or sandstorm also clears it at the end of each turn.",
 		],
 		"Battle messages": [
 			"The bright light pierced through the technicolor madness!",
@@ -616,8 +616,8 @@ for (const [id, lines] of Object.entries({
 		"Illuminate grants two Special Attack stages on entry. In multi-active formats it also applies Spotlight to a living adjacent ally if that ally does not already have it.",
 	],
 	"bewitchedwoodsterrain": [
-		"Natural Cure clears its holder's major status during residual processing. Flower Veil protects all allied types here, not just Grass: it blocks eligible external stat drops, major status and Yawn; its ordinary source/effect exceptions still apply.",
-		"Flower Gift's field-change handler changes an eligible Cherrim to Sunshine form here. Its weather-change handler also preserves Sunshine on this field.",
+		"Natural Cure clears its holder's major status at turn end. Flower Veil protects all allied types here, not just Grass: it blocks eligible external stat drops, major status and Yawn; its ordinary source/effect exceptions still apply.",
+		"Flower Gift changes an eligible Cherrim to Sunshine form here and keeps that form when the weather changes.",
 		"Power Spot gives allies 1.5x move power here instead of its ordinary 1.3x. Magician grants one Special Attack stage on entry.",
 	],
 	"holyterrain": [

@@ -6,7 +6,7 @@ export const FieldMessageTriggers: Record<string, string[]> = {
 		"“Will-o'-wisps joined the attack...” — Fire Spin, Flame Burst, Flame Charge or Inferno receives its named 1.5× field modifier. Their added Ghost typing is handled separately.",
 		"“Boo!” — Astonish, Bone Club, Bone Rush or Bonemerang receives its named 1.5× modifier.",
 		"“Spooky scary skeletons!” — Shadow Bone receives its separate 1.2× modifier, in addition to applicable type bonuses.",
-		"“The evil spirits have been exorcised!” — after Origin Pulse, Purify, Sacred Fire, Dazzling Gleam or Flash, the handler requests Holy Field. The message is emitted even if a field lock prevents the change. The misspelled Judgment check does not trigger it.",
+		"“The evil spirits have been exorcised!” — after Origin Pulse, Purify, Sacred Fire, Dazzling Gleam or Flash, the field attempts to become Holy Field. The message is emitted even if a field lock prevents the change. Judgment does not trigger it.",
 		"“[Pokémon]’s dream is corrupted by the evil spirits!” — at turn end, a sleeping non-Ghost Pokémon has 1/16 base max HP damage attempted. Damage immunity can prevent the loss without suppressing this message.",
 	],
 	"icyterrain": [
@@ -16,7 +16,7 @@ export const FieldMessageTriggers: Record<string, string[]> = {
 		"“The cold air crystallized the missile” — Snipe Shot receives its named 1.2× modifier. Its added Ice typing is handled separately.",
 		"“The freezing air boosted the attack!” — Chilling Water receives its named 2× modifier.",
 		"“[Pokémon] gained momentum on the ice!” — after a grounded user uses Defense Curl, Feint, Ice Ball, Ice Spinner, Lunge, Rollout, Steamroller, or a physical contact move with positive priority, the surviving user successfully gains Speed. Contrary instead lowers Speed and prints “lost momentum”. The source’s misspelled Spin Out check does not match Spin Out.",
-		"“The Anchor broke past the Ice!” — after Anchor Shot, the handler requests restoration of the underlying field, or Water Surface if none exists.",
+		"“The Anchor broke past the Ice!” — after Anchor Shot, the ice breaks, revealing the field underneath or Water Surface if none exists.",
 		"“The quake broke up the ice and revealed…” — after Bulldoze, Earthquake, Fissure, Magnitude or Tectonic Rage with an underlying field, restoration is requested. Without an underlying field, each side instead receives Spikes and this message is not printed.",
 		"“The ice melted away!” — after Burning Jealousy, Eruption, Fire Pledge, Flame Burst, Heat Wave, Incinerate, Inferno Overdrive, Lava Plume, Magma Drift, Mind Blown, Raging Fury, Searing Shot or a Fire Max move, restoration is requested, falling back to Cave. Magma Drift respects its transition block; Infernal Rage uses this path only when its own field-clearing flag was set.",
 		"“The hot water melted the ice!” — the second accumulated Scald, Steam Eruption or Hydro Steam use requests restoration, falling back to Water Surface.",
@@ -32,7 +32,7 @@ Object.assign(FieldMessageTriggers, {
 	],
 	"bigtopterrain": [
 		"“Back, foul beast!” — Fire Lash, Vine Whip or Power Whip is attempted. “What grace!” — Fiery Dance, Petal Dance or Revelation Dance is attempted. “An extravagant aerial finish!” — Acrobatics or Fly is attempted. Their named field power bonus is 1.5x.",
-		"“Loud and Clear!” — a sound-flagged move or Drum Beating is attempted; the separate power callback gives damaging qualifying moves 1.5x power. Attempt messages do not prove the move hit.",
+		"“Loud and Clear!” — a sound-flagged move or Drum Beating is attempted; qualifying damaging moves gain 1.5× power. Attempt messages do not prove the move hit.",
 		"“Weak!”, “Ok!”, “Nice!”, “Powerful!” and “OVER 9000!” report the Striker roll on eligible physical Fighting attacks (except Seismic Toss/Counter) or the field’s listed striking moves. They correspond to damage multipliers 0.5x, 1x, 1.5x, 2x and 3x respectively; the Striker rules determine the roll.",
 	],
 	"caveterrain": [
@@ -52,13 +52,13 @@ Object.assign(FieldMessageTriggers, {
 		"“The toxic mist combusted!” — after Eruption, Explosion, Fire Pledge, Flame Burst, Heat Wave, Incinerate, Lava Plume, Mind Blown, Searing Shot, Self-Destruct, Inferno Overdrive or a Fire Max move, if no active Damp holder prevents it. Infernal Rage additionally requires its own successful field-clearing flag. Exposed active Pokémon receive explosion damage, then the field clears; Flash Fire, Well-Baked Body, semi-invulnerability, protection and Wide Guard are checked, with Sturdy/Endure handled separately.",
 	],
 	"corrosiveterrain": [
-		"“The polluted field was purified!” — after Purify or Seed Flare, the handler requests Grassy Field. This message precedes the transition request and does not guarantee that a field lock permits it.",
+		"“The polluted field was purified!” — after Purify or Seed Flare, the field attempts to become Grassy Field. This message precedes the transition request and does not guarantee that a field lock permits it.",
 	],
 	"crystalcavernterrain": [
 		"“The crystals were broken up...” — the first accumulated Bulldoze, Earthquake, Fissure or Magnitude use records breakage. “The crystals were shattered!” — the second qualifying use, or Tectonic Rage immediately, requests Cave.",
 	],
 	"darkcrystalcavernterrain": [
-		"“The cavern brightened!” — a weather-change callback sees ordinary Sunny Day and requests Crystal Cavern. Harsh sun is not this exact check.",
+		"“The cavern brightened!” — ordinary sun attempts to turn the field into Crystal Cavern. Harsh sun does not qualify.",
 	],
 	"desertterrain": [
 		"“The intense desert heat blunted the attack!” — a grounded user’s primary Water move, excluding Scald, Steam Eruption and Hydro Steam, receives 0.5x power.",
@@ -67,11 +67,13 @@ Object.assign(FieldMessageTriggers, {
 		"“The lifeless desert strengthened the attack!” — Bonemerang, Bone Club, Bone Rush or Shadow Bone receives its named 1.5x modifier. Adaptive Cycle rules apply to these field modifiers.",
 	],
 	"dragonsdenterrain": [
-		"“The lava solidified!” — cooling progress reaches three: Surf or Muddy Water adds one, Sparkling Aria adds two. The handler then requests Cave. The separately documented immediate cooling moves use their own transition branches.",
+		"“The lava cooled, but the dragon fire still burns!” — the field has begun cooling.",
+		"“The sparkling song stirred the lava into a volcanic eruption!” — the field changes into Volcanic Field.",
+		"“The dragon fire faded as the lava hardened into a cavern!” — the field changes into Cave.",
 	],
 	"glitchterrain": [
 		"“ERROR! MOVE NOT FOUND!” — Roar or Whirlwind is prevented before execution.",
-		"“Ghosts forgot how to beat Psychics!” — a primary Ghost move attempts to hit a Psychic target and is blocked; the matching immunity callback can also emit the message.",
+		"“Ghosts forgot how to beat Psychics!” — a primary Ghost move attempts to hit a Psychic target and is blocked; the immunity can also display this message.",
 	],
 	"holyterrain": [
 		"“Godspeed!” — Extreme Speed receives its named 1.5x modifier.",
@@ -83,25 +85,25 @@ Object.assign(FieldMessageTriggers, {
 		"“The mountain was covered in snow!” — after Blizzard, Glaciate or Subzero Slammer, or when the hail counter reaches two, the field requests Snowy Mountain. The first hail residual initializes the counter to zero, so uninterrupted hail from a fresh field reaches that threshold on its third check.",
 	],
 	"murkwatersurfaceterrain": [
-		"“The maelstrom flushed out the poison!” — after Whirlpool, the handler requests Water Surface. This transition callback is separate from damage success.",
+		"“The maelstrom flushed out the poison!” — after Whirlpool, the field attempts to become Water Surface, even if the move dealt no damage.",
 	],
 	"newworldterrain": [
-		"“The world’s matter reformed!” — after Gravity, Geomancy or Light of Ruin, the handler requests Starlight Arena.",
+		"“The world’s matter reformed!” — after Gravity, Geomancy or Light of Ruin, the field attempts to become Starlight Arena.",
 		"“The ethereal energy strengthened the attack!” — one of the explicitly named 1.5x moves in this page’s move-power list is evaluated. This is not a bonus for all signature moves; the exact listed move must match. Adaptive Cycle rules apply.",
 	],
 	"rainbowterrain": [
 		"“The bright light pierced through the technicolor madness!” — after Light That Burns the Sky, Rainbow is cleared.",
-		"“The violent weather tore the field apart!” — the residual callback finds hail or sandstorm and clears Rainbow. Snow is not included in this check.",
+		"“The violent weather tore the field apart!” — hail or sandstorm clears Rainbow at turn end. Snow does not.",
 	],
 	"snowymountainterrain": [
-		"“The snow melted away!” — after Eruption, Fire Pledge, Flame Burst, Heat Wave, Incinerate, Lava Plume, Mind Blown, Searing Shot, Inferno Overdrive or a Fire Max move, the handler requests Mountain. Infernal Rage uses this path only with its successful field-clearing flag.",
+		"“The snow melted away!” — after Eruption, Fire Pledge, Flame Burst, Heat Wave, Incinerate, Lava Plume, Mind Blown, Searing Shot, Inferno Overdrive or a Fire Max move, the field attempts to become Mountain. Infernal Rage requires a qualifying hit to do this.",
 	],
 	"starlightarenaterrain": [
 		"“A star came crashing down!” — Doom Desire receives its named 4x power modifier while the field’s weather gate permits starlight bonuses. Adaptive Cycle rules apply.",
 	],
 	"superheatedterrain": [
 		"“Steam shot up from the field!” — Muddy Water, Sparkling Aria, Surf, Water Pledge, Water Spout, Hydro Vortex or Oceanic Operetta receives a 0.5625x named modifier. After use, those moves and Water Sport also attempt one Accuracy drop on each non-semi-invulnerable active Pokémon.",
-		"“The field cooled off!” — the power callback applies a 1.3x modifier to Blizzard, Glaciate or Subzero Slammer; their after-use callback clears the field. The current text-selection branch also prints this phrase for Fire Max moves even though their separate after-use effect changes the field to Burning. The message alone is not proof of cooling.",
+		"“The field cooled off!” — Blizzard, Glaciate or Subzero Slammer gains 1.3× power and clears the field after use. Fire Max moves also display this message but change the field to Burning instead.",
 	],
 	"midnightzoneterrain": [
 		"“The water pressure is crushing...” — Midnight Zone starts; this announces the field, not a separate damage event.",
@@ -112,7 +114,7 @@ Object.assign(FieldMessageTriggers, {
 		"“The draconic energy mutated the field” — a second Dragon Pulse/Dragon Energy, or Devastating Drake, Draco Meteor or Core Enforcer immediately, requests Dragon Den.",
 	],
 	"wastelandterrain": [
-		"“...Stalagmites burst up from the ground!” — the residual callback finds swallowed Spikes recorded for this Pokémon’s side. A grounded, non-semi-invulnerable Pokémon then receives one-third-max-HP damage; the message can appear even if that eligibility check prevents damage.",
+		"“...Stalagmites burst up from the ground!” — swallowed Spikes erupt on this Pokémon’s side at turn end. A grounded, non-semi-invulnerable Pokémon then receives one-third-max-HP damage; the message can appear even if that eligibility check prevents damage.",
 		"“...Poison needles shot up from the ground!” — swallowed Toxic Spikes are recorded for its side. A grounded, non-semi-invulnerable, non-Poison/non-Steel Pokémon then faces poison plus one-eighth-max-HP damage. The message is printed before these eligibility checks.",
 	],
 	"flowergarden1": [

@@ -83,16 +83,16 @@ describe('Protective Pads', function () {
 		assert.statStage(battle.p1.active[0], 'atk', -1, `Attack should be lowered`);
 	});
 
-	it(`should not start Perish Body on either Pokemon`, function () {
+	it(`should not block Perish Body, which triggers from any damaging hit`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch']},
 		], [
 			{species: 'cursola', ability: 'perishbody', moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices();
-		assert.false(battle.p1.active[0].volatiles['perishsong'], 'Perish Body should not have activated on Wynaut due to Protective Pads.');
-		assert.false(battle.p2.active[0].volatiles['perishsong'], 'Perish Body should not have activated on Cursola due to Protective Pads.');
-		assert(battle.log.every(line => !line.includes('Perish Body')));
+		assert(battle.p1.active[0].volatiles['perishsong'], 'Perish Body affects foes even without contact.');
+		assert.false(battle.p2.active[0].volatiles['perishsong'], 'Perish Body does not affect its holder.');
+		assert(battle.log.some(line => line.includes('Perish Body')));
 		assert(battle.log.every(line => !line.includes('Protective Pads')));
 	});
 

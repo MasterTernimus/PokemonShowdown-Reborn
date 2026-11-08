@@ -42,9 +42,11 @@ describe('Serene Grace and Togekiss support', () => {
 		const [p, ally, q] = setup();
 		assert.equal(chance(p, q), 30); assert.equal(chance(ally, q), 60); assert.equal(chance(q, p), 30);
 	});
-	it('Void Omen keeps its own Serene Grace without sharing it', () => {
+	it('Void Omen does not grant Serene Grace to its holder or allies', () => {
 		const [p, ally, q] = setup('Void Omen');
-		assert.equal(chance(p, q), 60);
+		assert.deepEqual(require('../../../dist/data/ability-components').AbilityComponents.voidomen, ['friendguard']);
+		assert.doesNotMatch(Dex.abilities.get('voidomen').desc, /Serene Grace|doubles.*chance/i);
+		assert.equal(chance(p, q), 30);
 		assert.equal(chance(ally, q), 30);
 		assert.equal(chance(q, p), 30);
 		const move = Dex.getActiveMove('airslash');
@@ -53,7 +55,13 @@ describe('Serene Grace and Togekiss support', () => {
 		p.addVolatile('gastroacid');
 		assert.equal(chance(p, q), 30);
 	});
-	it('Fortunate Wing boosts the ally while Void Omen remains self-only', () => {
+	it('Void Omen leaves an independent Serene Grace passive intact', () => {
+		const [p, ally, q] = setup('Void Omen');
+		p.getPassives = () => ['serenegrace'];
+		assert.equal(chance(p, q), 60);
+		assert.equal(chance(ally, q), 30);
+	});
+	it('Fortunate Wing boosts a Void Omen ally independently', () => {
 		const [p, ally, q] = setup('Fortunate Wing', 'Void Omen');
 		assert.equal(chance(p, q), 30);
 		assert.equal(chance(ally, q), 60);

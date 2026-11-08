@@ -22,7 +22,7 @@ function cycle() {
 describe('Approved per-entry budgets and base Victreebel follow-up', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	for (const ability of ['Dream Sickness', 'Void Voice']) it(ability + ' shares its rescue budget across replacement, restart and genuine reentry', () => {
-		const [p, ally, foe] = setup('Gardevoir', ability); ally.hp = 100;
+		const [p, ally, foe] = setup('Gardevoir-Void', ability); ally.hp = 100;
 		const rescue = () => battle.runEvent('Damage', ally, foe, Dex.getActiveMove('tackle'), 100);
 		assert.equal(rescue(), 99); assert.equal(p.hp, 3000); assert.equal(rescue(), 100);
 		p.setAbility('No Ability'); p.setAbility(ability); assert.equal(rescue(), 100);
@@ -38,7 +38,7 @@ describe('Approved per-entry budgets and base Victreebel follow-up', () => {
 		assert.equal(p.ability, 'voidvoice'); assert.equal(rescue(), 100); assert.equal(p.hp, afterMegaHP);
 	});
 	it('suppressed rescue does not spend the shared allowance and Telepathy remains', () => {
-		const [p, ally, foe] = setup('Gardevoir', 'Dream Sickness'); ally.hp = 100; p.addVolatile('gastroacid');
+		const [p, ally, foe] = setup('Gardevoir-Void', 'Dream Sickness'); ally.hp = 100; p.addVolatile('gastroacid');
 		assert.equal(battle.runEvent('Damage', ally, foe, Dex.getActiveMove('tackle'), 100), 100); assert(!p.m.dreamRescueUsed);
 		p.removeVolatile('gastroacid'); assert.equal(battle.runEvent('Damage', ally, foe, Dex.getActiveMove('tackle'), 100), 99);
 		const hp = p.hp; hit(ally, p, 'tackle'); assert.equal(p.hp, hp);
@@ -52,18 +52,18 @@ describe('Approved per-entry budgets and base Victreebel follow-up', () => {
 		cycle(); hit(p, foe, 'airslash'); assert.equal(p.side.sideConditions.tailwind.duration, 3);
 		assert.deepEqual(p.getPassives(), ['levitate']);
 	});
-	for (const [species, ability, kind] of [['Mr. Mime', 'Mimecraft', 'screen'], ['Cloyster', 'Pearl Current', 'water'], ['Carnivine', 'Apex Flytrap', 'trap']]) {
+	// Cloyster now has Water Absorb and Frozen Fortress; exercise legacy Pearl Current on a neutral holder.
+	for (const [species, ability, kind] of [['Mr. Mime', 'Mimecraft', 'screen'], ['Mew', 'Pearl Current', 'water']]) {
 		it(ability + ' retains its spent allowance through replacement and resets only on reentry', () => {
 			const [p, ally, foe] = setup(species, ability); ally.hp = 100;
 			const trigger = () => {
 				if (kind === 'screen') { p.side.removeSideCondition('reflect'); hit(p, p, 'reflect'); }
 				if (kind === 'water') { p.hp = 1000; hit(foe, p, 'watergun'); assert(p.hp > 1000); }
-				if (kind === 'trap') { foe.removeVolatile('apexflytraptrapped'); hit(foe, p, 'tackle'); }
 			};
-			trigger(); assert(kind === 'trap' ? foe.volatiles.apexflytraptrapped : ally.hp === 600);
+			trigger(); assert.equal(ally.hp, 600);
 			p.setAbility('No Ability'); p.setAbility(ability); battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
-			trigger(); assert(kind === 'trap' ? !foe.volatiles.apexflytraptrapped : ally.hp === 600);
-			cycle(); ally.hp = 100; trigger(); assert(kind === 'trap' ? foe.volatiles.apexflytraptrapped : ally.hp === 600);
+			trigger(); assert.equal(ally.hp, 600);
+			cycle(); ally.hp = 100; trigger(); assert.equal(ally.hp, 600);
 		});
 	}
 	it('Mimecraft keeps its per-move screen eligibility and suppressed moves spend nothing', () => {
@@ -72,15 +72,19 @@ describe('Approved per-entry budgets and base Victreebel follow-up', () => {
 		p.removeVolatile('gastroacid'); hit(p, p, 'reflect'); assert.equal(ally.hp, 100);
 		hit(p, p, 'lightscreen'); assert.equal(ally.hp, 600);
 	});
-	it('Apex Flytrap spends only a successful trap', () => {
-		const [p, , foe] = setup('Carnivine', 'Apex Flytrap'); foe.addVolatile('apexflytraptrapped', p);
-		hit(foe, p, 'tackle'); assert(!p.m.apexFlytrapUsed); foe.removeVolatile('apexflytraptrapped');
-		hit(foe, p, 'tackle'); assert(p.m.apexFlytrapUsed);
+	it('Apex Flytrap refreshes its short contact trap and releases it on departure', () => {
+		const [p, , foe] = setup('Carnivine', 'Apex Flytrap');
+		hit(foe, p, 'tackle'); assert.equal(foe.volatiles.apexflytraptrapped.duration, 2);
+		foe.volatiles.apexflytraptrapped.duration = 1;
+		hit(foe, p, 'tackle'); assert.equal(foe.volatiles.apexflytraptrapped.duration, 2);
+		p.setAbility('No Ability'); p.setAbility('Apex Flytrap');
+		foe.removeVolatile('apexflytraptrapped'); hit(foe, p, 'tackle'); assert(foe.volatiles.apexflytraptrapped);
+		battle.makeChoices('switch 3, move 2', 'move 2, move 2'); assert(!foe.volatiles.apexflytraptrapped);
 	});
 	it('Baited Bloom initializes Gluttony, enhances Leftovers and heals one third on actual switch-out', () => {
 		const [p] = setup('Victreebel', 'Baited Bloom', 'Leftovers'); p.hp = 1000;
 		assert(p.abilityState.gluttony); assert(p.hasAbility('gluttony')); assert(p.hasAbility('regenerator'));
-		assert(!p.hasAbility('stickyhold')); assert(p.hasAbilityOrPassive('stickyhold'));
+		assert(!p.hasAbility('digestivesap')); assert(p.hasAbilityOrPassive('digestivesap'));
 		battle.singleEvent('Residual', p.getItem(), p.itemState, p); assert.equal(p.hp, 1500);
 		battle.makeChoices('switch 3, move 2', 'move 2, move 2'); assert.equal(p.hp, 2833);
 		assert.deepEqual(Dex.species.get('victreebelmega').passives, ['digestivesap']);
@@ -90,9 +94,9 @@ describe('Approved per-entry budgets and base Victreebel follow-up', () => {
 		battle.runEvent('Update', p); assert.equal(p.item, ''); assert(p.hp > 1999);
 		assert.equal(p.boosts.spa, 0); assert.equal(p.boosts.atk, 0);
 	});
-	it('suppression disables Baited Bloom regeneration but keeps Sticky Hold passive', () => {
+	it('suppression disables Baited Bloom regeneration but keeps Digestive Sap passive', () => {
 		const [p] = setup('Victreebel', 'Baited Bloom'); p.hp = 1000; p.addVolatile('gastroacid');
 		battle.makeChoices('switch 3, move 2', 'move 2, move 2'); assert.equal(p.hp, 1000);
-		assert.deepEqual(p.getPassives(), ['stickyhold']);
+		assert.deepEqual(p.getPassives(), ['digestivesap']);
 	});
 });

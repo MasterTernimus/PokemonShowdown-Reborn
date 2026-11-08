@@ -4,6 +4,18 @@ function setup(ability='Requiem',attacker='No Ability'){const set=(species,abili
 describe('Requiem full local Filter addition',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  for(const superEffective of [false,true])for(const mode of ['normal','gastroacid','neutralizinggas','moldbreaker','ignoreability'])it((superEffective?'super-effective':'neutral')+' damage under '+mode,()=>{const[p,q]=setup('Requiem',mode==='neutralizinggas'?'Neutralizing Gas':mode==='moldbreaker'?'Mold Breaker':'No Ability');if(mode==='gastroacid')q.addVolatile('gastroacid');const m=Dex.getActiveMove(superEffective?'moonblast':'icebeam');if(mode==='ignoreability')m.ignoreAbility=true;battle.setActiveMove(m,p,q);q.getMoveHitData(m).typeMod=superEffective?1:0;assert.equal(battle.runEvent('ModifyDamage',p,q,m,100),superEffective?60:80);assert.equal(q.ignoringAbility(),false);});
- it('keeps Requiem marking after incoming damage',()=>{const[p,q]=setup();battle.actions.useMove(Object.assign(Dex.getActiveMove('icebeam'),{accuracy:true,willCrit:false}),p,{target:q});assert(p.volatiles.perishsong);assert(p.volatiles.requiem);});
- it('preserves flags, selected slots, passive and Mega ability',()=>{const before=require('../../../artifacts/requiem-filter/before.json');assert.deepEqual(Dex.abilities.get('requiem').flags,before.flags);assert.deepEqual(Dex.species.get('dusknoir').abilities,{...before.dusknoir,H:'Soul Reaver'});assert.deepEqual(Dex.species.get('dusknoirmega').abilities,before.mega);assert.deepEqual(Dex.species.get('dusknoir').passives,['levitate']);assert.deepEqual(require('../../../dist/data/ability-display').getAbilityDisplayComponents('requiem'),['cursedbody','filter']);});
+	it('does not retain the removed Perish Song marking after incoming damage', () => {
+		const [p, q] = setup();
+		battle.actions.useMove(Object.assign(Dex.getActiveMove('icebeam'), { accuracy: true, willCrit: false }), p, { target: q });
+		assert(!p.volatiles.perishsong);
+		assert(!p.volatiles.requiem);
+	});
+	it('preserves flags, selected slots, passive and Mega ability', () => {
+		const before = require('../../../artifacts/requiem-filter/before.json');
+		assert.deepEqual(Dex.abilities.get('requiem').flags, before.flags);
+		assert.deepEqual(Dex.species.get('dusknoir').abilities, { ...before.dusknoir, H: 'Soul Reaver' });
+		assert.deepEqual(Dex.species.get('dusknoirmega').abilities, before.mega);
+		assert.deepEqual(Dex.species.get('dusknoir').passives, ['soulescort']);
+		assert.deepEqual(require('../../../dist/data/ability-display').getAbilityDisplayComponents('requiem'), ['cursedbody', 'filter']);
+	});
 });

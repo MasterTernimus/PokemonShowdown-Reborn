@@ -3,7 +3,16 @@ const assert=require('assert').strict,common=require('../../common'),{Dex}=requi
 describe('Grounded Instinct and base Garchomp Rough Skin',()=>{
  let battle;afterEach(()=>battle?.destroy());
  function setup(ability='Grounded Instinct',foe='No Ability'){const m={species:'Mew',ability:foe,moves:['splash','earthquake','tackle','sandattack']};battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{...m,species:'Garchomp',ability,moves:['splash','swordsdance','dragonrush','stoneedge']},m],[m,m]]);battle.makeChoices('team 12','team 12');for(const s of battle.sides)for(const p of s.pokemon)p.hp=p.maxhp=p.baseMaxhp=4800;return[battle.p1.active[0],battle.p2.active[0]];}
- it('changes base only and retains special form packages',()=>{const s=Dex.species.get('garchomp');assert.deepEqual(s.abilities,{0:'Grounded Instinct',1:'Supreme Overlord',H:'Void Wrath',S:'Battle Bond'});assert.deepEqual(s.passives,['roughskin']);for(const[id,ability,passive]of [['garchompmega','Apex Cleave','sandforce'],['garchompmegaz','Relentless Hunt','levitate'],['garchompbattlebond','Apex Bond','roughskin']]){assert.deepEqual(Dex.species.get(id).abilities,{0:ability});assert.deepEqual(Dex.species.get(id).passives,[passive]);}assert.equal(Dex.abilities.get('Grounded Instinct').id,'pyrousdominion');});
+	it('changes base only and retains special form packages', () => {
+		const s = Dex.species.get('garchomp');
+		assert.deepEqual(s.abilities, { 0: 'Grounded Instinct', 1: 'Supreme Overlord', H: 'Void Wrath', S: 'Battle Bond' });
+		assert.deepEqual(s.passives, ['serratedscales']);
+		for (const [id, ability, passive] of [['garchompmega', 'Dune Carver', 'sharpness'], ['garchompmegaz', 'Relentless Hunt', 'levitate'], ['garchompbattlebond', 'Apex Bond', 'roughskin']]) {
+			assert.deepEqual(Dex.species.get(id).abilities, { 0: ability });
+			assert.deepEqual(Dex.species.get(id).passives, [passive]);
+		}
+		assert.equal(Dex.abilities.get('Grounded Instinct').id, 'pyrousdominion');
+	});
  it('absorbs Ground exactly once and has no Pressure entry drops',()=>{const[p,q]=setup();assert.equal(q.boosts.def,0);assert.equal(q.boosts.spd,0);assert(p.hasAbility('eartheater'));assert(p.hasAbility('keeneye'));assert(!p.hasAbility('pressure'));p.hp=1200;battle.actions.runMove('earthquake',q,q.getLocOf(p));assert.equal(p.hp,2400);});
  for(const terrain of ['caveterrain','desertterrain'])it('heals once on '+terrain,()=>{const[p]=setup();p.hp=1200;battle.field.terrain=terrain;battle.singleEvent('Residual',p.getAbility(),p.abilityState,p);assert.equal(p.hp,1500);});
  it('blocks external accuracy drops but keeps ordinary move accuracy',()=>{const[p,q]=setup();battle.boost({accuracy:-1},p,q);assert.equal(p.boosts.accuracy,0);for(const id of ['dragonrush','stoneedge']){const m=Dex.getActiveMove(id),accuracy=m.accuracy;battle.runEvent('ModifyMove',p,q,m,m);assert.equal(m.accuracy,accuracy);assert(m.ignoreEvasion);}assert(p.addVolatile('flinch',q));});
@@ -12,5 +21,11 @@ describe('Grounded Instinct and base Garchomp Rough Skin',()=>{
  it('allows Mold Breaker to bypass both defensive components',()=>{const[p,q]=setup('Grounded Instinct','Mold Breaker');p.hp=2400;battle.actions.runMove('earthquake',q,q.getLocOf(p));assert(p.hp<2400);battle.actions.runMove('sandattack',q,q.getLocOf(p));assert.equal(p.boosts.accuracy,-1);});
  it('does not duplicate Rough Skin when selected and has no Poise healing',()=>{const[p,q]=setup('Rough Skin');const hp=q.hp;battle.actions.runMove('tackle',q,q.getLocOf(p));assert.equal(hp-q.hp,600);p.hp=1200;battle.actions.runMove('swordsdance',p,p.getLocOf(p));assert.equal(p.hp,1200);assert(!p.getPassives().includes('championspoise'));});
  it('reveals opposing Illusion on entry',()=>{const[p,q]=setup();q.illusion=q.side.pokemon[1];battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert(!q.illusion);});
- for(const [form,passive]of [['Garchomp-Mega','sandforce'],['Garchomp-Mega-Z','levitate'],['Garchomp-Battle-Bond','roughskin']])it('real form change uses '+form+' own package',()=>{const[p]=setup();assert(p.formeChange(form,Dex.abilities.get('battlebond'),true));assert.deepEqual(p.getPassives(),[passive]);assert(!p.hasAbility('eartheater'));assert(!p.hasAbility('keeneye'));});
+	for (const [form, passive] of [['Garchomp-Mega', 'sharpness'], ['Garchomp-Mega-Z', 'levitate'], ['Garchomp-Battle-Bond', 'roughskin']])it('real form change uses ' + form + ' own package', () => {
+		const [p] = setup();
+		assert(p.formeChange(form, Dex.abilities.get('battlebond'), true));
+		assert.deepEqual(p.getPassives(), [passive]);
+		assert(!p.hasAbility('eartheater'));
+		assert(!p.hasAbility('keeneye'));
+	});
 });

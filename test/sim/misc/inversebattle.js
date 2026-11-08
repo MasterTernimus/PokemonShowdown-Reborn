@@ -24,7 +24,7 @@ describe('Inverse Battle', function () {
 		battle = common.createBattle({inverseMod: true}, [[
 			{species: 'wynaut', moves: ['vitalthrow']},
 		], [
-			{species: 'absol', moves: ['sleeptalk']},
+			{ species: 'umbreon', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
@@ -34,7 +34,7 @@ describe('Inverse Battle', function () {
 		battle = common.createBattle({inverseMod: true}, [[
 			{species: 'wynaut', moves: ['vitalthrow']},
 		], [
-			{species: 'dusknoir', moves: ['sleeptalk']},
+			{ species: 'duskull', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
@@ -47,7 +47,7 @@ describe('Inverse Battle', function () {
 		], [
 			{species: 'ninjask', moves: ['sleeptalk']},
 			{species: 'steelix', moves: ['sleeptalk']},
-			{species: 'hitmonchan', moves: ['sleeptalk']},
+			{ species: 'machop', moves: ['sleeptalk'] },
 			{species: 'chansey', moves: ['sleeptalk']},
 			{species: 'staraptor', moves: ['sleeptalk']},
 			{species: 'volcarona', moves: ['sleeptalk']},

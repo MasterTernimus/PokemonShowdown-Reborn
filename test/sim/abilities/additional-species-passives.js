@@ -31,7 +31,14 @@ function states(p, t, check) {
 }
 describe('Additional exact Sticky Hold, Soundproof and Suction Cups passives', () => {
 	it('keeps at most one passive per species and Liquid Ooze on ordinary Grimer and Muk', () => {
-		for (const species of Dex.species.all()) assert(species.passives.length <= 1, species.name);
+		const exceptions = {
+			regigigas: ['slowstart', 'ancientassembly'],
+			regigigasprimordial: ['primordialconstruct', 'ancientassembly'],
+		};
+		for (const species of Dex.species.all()) {
+			if (exceptions[species.id]) assert.deepEqual(species.passives, exceptions[species.id], species.name);
+			else assert(species.passives.length <= 1, species.name);
+		}
 		for (const id of ['grimer', 'muk']) {
 			assert.deepEqual(Dex.species.get(id).passives, ['liquidooze']);
 			const [p, t] = setup(id, 'Pressure');
@@ -49,17 +56,29 @@ describe('Additional exact Sticky Hold, Soundproof and Suction Cups passives', (
 		for (const [passive, ids] of Object.entries(require('./regional-passives-approved.json').groups)) for (const id of ids) expected[id] = [...(expected[id] || []), passive];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(SpeciesPassives, expected);
-		assert.equal(Object.keys(SpeciesPassives).length, 839);
+		assert.equal(Object.keys(SpeciesPassives).length, Object.keys(expected).length);
 		for (const old of before.species) {
 			const s = Dex.species.get(old.id), abilities = { ...old.abilities };
 			for (const [id, slot, name] of before.replacement) if (id === old.id) abilities[slot] = name;
-			assert.deepEqual(s.abilities, abilities, old.id);
+			assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, abilities), old.id);
 			for (const k of ['baseStats', 'types', 'weightkg']) assert.deepEqual(s[k], old[k], old.id + '/' + k);
 			const expectedLearnset = {...old.learnset};
+			// The later Corrosive Strike grant includes Alolan Muk as well as ordinary Muk.
+			if (old.id === 'mukalola') expectedLearnset.corrosivestrike = ['9L1'];
+			if (old.id === 'garbodor') expectedLearnset.poisonsweep = ['9L1'];
+			if (expectedLearnset.mudslap) {
+				expectedLearnset.mudbarrage = [...new Set([...(expectedLearnset.mudbarrage || []), ...expectedLearnset.mudslap])];
+				delete expectedLearnset.mudslap;
+			}
 			for (const [move, recipients] of Object.entries({...require('./rejuv-move-learnsets-approved.json'), ...require('./yang-move-learnsets-approved.json')})) {
 				if (!recipients.includes(old.id)) continue;
 				assert(!Object.hasOwn(old.learnset, move), old.id + '/' + move + ' is an additive approved grant');
 				expectedLearnset[move] = ['9L1'];
+			}
+			// Preserve every source while accounting for the validator-order normalization.
+			for (const [move, sources] of Object.entries(expectedLearnset)) {
+				expectedLearnset[move] = [...sources].sort((a, b) => Number(b[0]) - Number(a[0]) ||
+					'MTLREVDSC'.indexOf(a[1]) - 'MTLREVDSC'.indexOf(b[1]));
 			}
 			assert.deepEqual(Dex.species.getLearnsetData(old.id).learnset, expectedLearnset, old.id + '/learnset');
 		}

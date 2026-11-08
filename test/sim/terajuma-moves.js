@@ -41,10 +41,11 @@ describe('Milotic-Terajuma moves and Whiplash', function () {
 
 	it('doubles Deluge power only after damage from that target this turn', function () {
 		const [milotic, foe] = setup(['deluge'], ['tackle']);
+		battle.onEvent('CriticalHit', battle.format, false);
 		const move = battle.dex.moves.get('deluge');
 		assert.equal(move.priority, -4);
 		assert.equal(move.flags.tailmove, undefined);
-		assert.equal(move.basePowerCallback.call(battle, milotic, foe, move), 65);
+		assert.equal(move.basePowerCallback.call(battle, milotic, foe, move), 80);
 		battle.makeChoices('move deluge', 'move tackle');
 		assert(milotic.hp < milotic.maxhp);
 		assert(foe.hp < foe.maxhp);
@@ -52,9 +53,10 @@ describe('Milotic-Terajuma moves and Whiplash', function () {
 		const hit = milotic.attackedBy.find(entry => entry.source === foe && entry.damage > 0);
 		assert(hit);
 		hit.thisTurn = true;
-		assert.equal(move.basePowerCallback.call(battle, milotic, foe, move), 130);
+		assert.equal(move.basePowerCallback.call(battle, milotic, foe, move), 160);
 		battle.destroy();
 		const [, freshFoe] = setup(['deluge']);
+		battle.onEvent('CriticalHit', battle.format, false);
 		battle.makeChoices('move deluge', 'move splash');
 		const normalDamage = freshFoe.maxhp - freshFoe.hp;
 		assert(boostedDamage > normalDamage * 1.5);

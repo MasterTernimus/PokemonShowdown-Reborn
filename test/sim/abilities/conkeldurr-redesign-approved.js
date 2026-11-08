@@ -4,7 +4,12 @@ function start(ability='Void Reprisal',foeAbility='No Ability') {battle=common.c
 function hit(p,t,id,extra={}){battle.clearActiveMove();const m=battle.dex.getActiveMove(id);Object.assign(m,{accuracy:true,willCrit:false,secondaries:null},extra);battle.actions.useMove(m,p,{target:t});const result=battle.activeMove;battle.clearActiveMove();return result;}
 describe('Approved Conkeldurr redesign',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- it('preserves Stamina and exposes both full components in calculator metadata',()=>{assert.deepEqual(Dex.species.get('conkeldurr').abilities,{0:'Void Reprisal',1:'Stamina',H:'Wrecking Crew'});const m=require('../../../dist/sim/custom-calculator').calculatorMetadata();assert.deepEqual(m.abilityComponents.voidreprisal,['Guts']);assert.deepEqual(m.abilityComponents.wreckingcrew,['Iron Fist']);});
+	it('preserves Stamina and exposes both full components in calculator metadata', () => {
+		assert.deepEqual(Dex.species.get('conkeldurr').abilities, { 0: 'Guts', 1: 'Stamina', H: 'Wrecking Crew' });
+		const m = require('../../../dist/sim/custom-calculator').calculatorMetadata();
+		assert.deepEqual(m.abilityComponents.voidreprisal, ['Guts']);
+		assert.deepEqual(m.abilityComponents.wreckingcrew, ['Iron Fist']);
+	});
  it('Void Reprisal retains Guts without the former Defense reward',()=>{const[p,t]=start();p.setStatus('brn');hit(t,p,'tackle');assert(p.volatiles.gritreprisalcharge);assert.equal(p.boosts.def,0);assert.equal(battle.runEvent('ModifyAtk',p,t,battle.dex.getActiveMove('machpunch'),100),150);assert(p.hasAbility('guts'));});
  it('charged punches ignore positive relevant defense only and consume on successful damage',()=>{const[p,t]=start();t.boosts.def=4;hit(t,p,'tackle');const before=t.hp;const m=hit(p,t,'machpunch');const charged=before-t.hp;assert.equal(m.category,'Physical');assert(!m.ignoreAbility);assert(!p.volatiles.gritreprisalcharge);const hp=t.hp;hit(p,t,'machpunch');assert(hp-t.hp<charged);t.boosts.def=0;const clean=t.hp;hit(p,t,'machpunch');assert.equal(clean-t.hp,charged);});
  it('a special punch uses SpD and keeps negative defensive stages',()=>{const[p,t]=start();hit(t,p,'tackle');t.boosts.spd=4;const hp=t.hp;const m=hit(p,t,'machpunch',{category:'Special'});assert.equal(m.category,'Special');const charged=hp-t.hp;t.boosts.spd=0;const before=t.hp;hit(p,t,'machpunch',{category:'Special'});assert.equal(before-t.hp,charged);hit(t,p,'tackle');t.boosts.spd=-2;const lower=t.hp;hit(p,t,'machpunch',{category:'Special'});assert(lower-t.hp>charged);});

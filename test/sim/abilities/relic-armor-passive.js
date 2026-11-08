@@ -59,7 +59,7 @@ describe('Exact Relic Armor species passive migration', () => {
 			assert.equal(p.boosts.def, 1);
 			assert.equal(p.boosts.spd, 1);
 		});
-	it('preserves Rock weakness cancellation, reactive boosts, healing and weather immunity', () => {
+	it('preserves Rock weakness cancellation, reactive boosts and weather immunity without passive recovery', () => {
 		const [p, t] = setup();
 		assert.equal(p.runEffectiveness(Dex.getActiveMove('energyball')), 2);
 		battle.field.setTerrain('rockyterrain', p);
@@ -69,8 +69,8 @@ describe('Exact Relic Armor species passive migration', () => {
 		assert.equal(p.boosts.spd, 1);
 		p.hp = Math.floor(p.maxhp / 2);
 		const hp = p.hp;
-		battle.eachEvent('Residual');
-		assert.equal(p.hp - hp, Math.floor(p.baseMaxhp / 16));
+		battle.fieldEvent('Residual');
+		assert.equal(p.hp, hp);
 		assert.equal(battle.runEvent('Immunity', p, null, null, 'sandstorm'), false);
 	});
 	it('does not duplicate Shell/Battle Armor reduction but preserves their distinct stat responses', () => {
@@ -115,7 +115,7 @@ describe('Exact Relic Armor species passive migration', () => {
 		const start = battle.log.length;
 		p.hp = Math.floor(p.maxhp / 2);
 		battle.boost({ atk: -1 }, p, t);
-		battle.eachEvent('Residual');
+		battle.fieldEvent('Residual');
 		assert(!battle.log.slice(start).some(l => /Relic Armor|Omastar/.test(l)));
 	});
 	it('preserves original unbreakable Relic Armor behavior during Mold Breaker attacks', () => {
@@ -143,14 +143,14 @@ describe('Exact Relic Armor species passive migration', () => {
 		assert.deepEqual(calculateScenario(input).results, passive);
 	});
 	for (const [species, ability] of [['Tyrantrum-Mega', 'Tyrant Domain'], ['Aurorus-Mega', 'Aurora Domain']])
-		it(ability + ' keeps one armor reduction and one Self Sufficient recovery', () => {
+		it(ability + ' keeps one armor reduction without removed Self Sufficient recovery', () => {
 			const [p, t] = setup(species, ability);
 			p.formeChange(species);
 			p.setAbility(ability);
 			assert.equal(mod(p, t), 90);
 			p.hp = Math.floor(p.maxhp / 2);
 			const hp = p.hp;
-			battle.eachEvent('Residual');
-			assert.equal(p.hp - hp, Math.floor(p.baseMaxhp / 16));
+			battle.fieldEvent('Residual');
+			assert.equal(p.hp, hp);
 		});
 });

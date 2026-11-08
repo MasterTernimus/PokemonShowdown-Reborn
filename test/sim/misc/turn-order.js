@@ -64,7 +64,7 @@ describe('Mega Evolution [Gen 6]', function () {
 		battle.destroy();
 	});
 
-	it('should not cause mega ability to affect the order of the turn in which it happens', function () {
+	common.itGen(6, 'should not cause mega ability to affect the order of the turn in which it happens', () => {
 		battle = common.gen(6).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Banette', ability: 'frisk', item: 'banettite', moves: ['psychup']}]});
 		battle.setPlayer('p2', {team: [{species: 'Deoxys-Speed', ability: 'pressure', moves: ['calmmind']}]});
@@ -73,7 +73,7 @@ describe('Mega Evolution [Gen 6]', function () {
 		assert.statStage(pranksterMega, 'spa', 1);
 	});
 
-	it('should not cause an ability copied with Trace by a mega to affect the order of the turn in which it happens', function () {
+	common.itGen(6, 'should not cause an ability copied with Trace by a mega to affect the order of the turn in which it happens', () => {
 		battle = common.gen(6).createBattle([
 			[{species: "Politoed", ability: 'drizzle', item: '', moves: ['scald']}, {species: "Kingdra", ability: 'swiftswim', item: '', moves: ['dragondance']}],
 			[{species: "Marowak", ability: 'rockhead', item: '', moves: ['earthquake']}, {species: "Alakazam", ability: 'magicguard', item: 'alakazite', moves: ['psychup']}],
@@ -85,7 +85,7 @@ describe('Mega Evolution [Gen 6]', function () {
 		assert.species(battle.p2.active[0], 'Alakazam-Mega');
 	});
 
-	it('should cause base ability to affect the order of the turn in which it happens', function () {
+	common.itGen(6, 'should cause base ability to affect the order of the turn in which it happens', () => {
 		battle = common.gen(6).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Sableye', ability: 'prankster', item: 'sablenite', moves: ['psychup']}]});
 		battle.setPlayer('p2', {team: [{species: 'Deoxys-Speed', ability: 'pressure', moves: ['calmmind']}]});
@@ -94,7 +94,7 @@ describe('Mega Evolution [Gen 6]', function () {
 		assert.statStage(noPranksterMega, 'spa', 0);
 	});
 
-	it('should cause base forme speed to decide turn order', function () {
+	common.itGen(6, 'should cause base forme speed to decide turn order', () => {
 		battle = common.gen(6).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Beedrill', ability: 'swarm', item: 'beedrillite', moves: ['xscissor']}]});
 		battle.setPlayer('p2', {team: [{species: 'Hoopa-Unbound', ability: 'magician', moves: ['psyshock']}]});
@@ -175,23 +175,28 @@ describe('Switching', function () {
 
 describe('Speed ties', function () {
 	it('(slow) Perish Song faint order should be random', function () {
-		const wins = {p1: 0, p2: 0};
+		const firstFaints = { p1: 0, p2: 0 };
 		for (let i = 0; i < 20; i++) {
 			battle = common.createBattle({
 				seed: [i, 2, 3, 4],
 			}, [[
-				{species: "Politoed", moves: ['perishsong']},
+				{ species: "Mew", ability: 'No Ability', moves: ['perishsong'] },
 			], [
-				{species: "Politoed", moves: ['perishsong']},
+				{ species: "Mew", ability: 'No Ability', moves: ['perishsong'] },
 			]]);
 			battle.makeChoices('auto', 'auto');
 			battle.makeChoices('auto', 'auto');
 			battle.makeChoices('auto', 'auto');
 			battle.makeChoices('auto', 'auto');
-			wins[battle.winner === 'Player 1' ? 'p1' : 'p2']++;
-			if (wins.p1 && wins.p2) break;
+			assert(battle.ended);
+			assert.equal(battle.winner, '', 'Reborn draws when both final Pokemon faint');
+			const faints = battle.log.filter(line => line.startsWith('|faint|'));
+			assert.equal(faints.length, 2);
+			firstFaints[faints[0].includes('|p1') ? 'p1' : 'p2']++;
+			battle.destroy();
+			if (firstFaints.p1 && firstFaints.p2) break;
 		}
-		assert(wins.p1);
-		assert(wins.p2);
+		assert(firstFaints.p1);
+		assert(firstFaints.p2);
 	});
 });

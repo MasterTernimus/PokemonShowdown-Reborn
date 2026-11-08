@@ -27,35 +27,44 @@ describe('Sunflora-Mega', function () {
 		assert.equal(sunflora.ability, 'solarhydra');
 		assert.equal(battle.field.terrain, 'grassyterrain');
 	});
-	it('uses Hydra Bond three-hit attacks and Solar Power sun boost', () => {
+	it('uses Hydra Bond three-hit attacks with a separate Solar Bud passive', () => {
 		const sunflora = setup();
+		assert.deepEqual(sunflora.getPassives(), ['solarbud']);
 		const spa = sunflora.getStat('spa');
 		battle.field.setWeather('sunnyday', sunflora);
-		assert.equal(sunflora.getStat('spa'), Math.floor(spa * 1.5));
+		assert.equal(sunflora.getStat('spa'), spa);
 		battle.makeChoices('move energyball', 'move splash');
 		assert(battle.log.some(line => line.includes('|-hitcount|p2a: Blissey|3')));
 	});
-	it('applies Self Repair healing and Solar Power recoil each turn', () => {
+	it('charges Solar Bud in sun, then cures and heals once after a damaging Grass hit', () => {
 		const sunflora = setup();
 		battle.field.clearTerrain();
 		sunflora.hp = 100;
 		battle.makeChoices('move splash', 'move splash');
-		const heal = Math.floor(sunflora.baseMaxhp / 16);
-		assert.equal(sunflora.hp, 100 + heal);
+		assert.equal(sunflora.hp, 100);
 		battle.field.setWeather('sunnyday', sunflora);
-		const before = sunflora.hp;
 		battle.makeChoices('move splash', 'move splash');
-		assert.equal(sunflora.hp, before - Math.floor(sunflora.baseMaxhp / 8) + heal);
+		assert.equal(sunflora.hp, 100);
+		sunflora.setStatus('par', sunflora);
+		battle.randomChance = () => false;
+		battle.onEvent('Accuracy', battle.format, true);
+		battle.makeChoices('move energyball', 'move splash');
+		assert.equal(sunflora.status, '');
+		assert.equal(sunflora.hp, 100 + Math.floor(sunflora.baseMaxhp / 8));
+		assert.equal(sunflora.m.solarBudSpent, true);
+		const healed = sunflora.hp;
+		battle.makeChoices('move energyball', 'move splash');
+		assert.equal(sunflora.hp, healed);
 	});
-	it('cures status on switch-out and avoids sandstorm damage', () => {
+	it('takes ordinary sandstorm damage and retains status on switch-out', () => {
 		const sunflora = setup();
 		battle.field.clearTerrain();
 		battle.field.setWeather('sandstorm', sunflora);
 		battle.makeChoices('move splash', 'move splash');
-		assert.equal(sunflora.hp, sunflora.maxhp);
+		assert.equal(sunflora.hp, sunflora.maxhp - Math.floor(sunflora.maxhp / 16));
 		sunflora.setStatus('par', sunflora);
 		assert.equal(sunflora.status, 'par');
 		battle.makeChoices('switch 2', 'move splash');
-		assert.equal(sunflora.status, '');
+		assert.equal(sunflora.status, 'par');
 	});
 });

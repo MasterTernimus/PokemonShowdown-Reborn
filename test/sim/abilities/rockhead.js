@@ -41,7 +41,7 @@ describe('Rock Head', function () {
 
 	it(`should not block indirect damage`, function () {
 		battle = common.createBattle([[
-			{species: 'Rampardos', ability: 'rockhead', moves: ['splash']},
+			{ species: 'Mew', ability: 'rockhead', moves: ['splash'] },
 		], [
 			{species: 'Crobat', moves: ['toxic']},
 		]]);

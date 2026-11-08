@@ -33,8 +33,8 @@ describe('Approved Gmax migrations and selected redesigns', () => {
 		const slots = { kinglergmax: { 0: 'Crushing Depths' }, gengargmax: { 0: 'Afterlife Gate' }, meowthgmax: { 0: 'Technician', H: 'Unnerve' }, machampgmax: { 0: 'Raging Fists' }, machampgmaxalt: { 0: 'Raging Fists' } };
 		for (const old of require('./gmax-selection-species-before.json')) {
 			const s = Dex.species.get(old.id);
-			assert.deepEqual(s.passives, laterApprovals.passives[old.id] || require('./passive-approval-overlays').current(old.id, grants[old.id] ? [grants[old.id]] : old.passives), old.id);
-			assert.deepEqual(s.abilities, laterApprovals.abilities[old.id] || require('./passive-approval-overlays').abilities(old.id, {...(slots[old.id] || old.abilities)}), old.id);
+			assert.deepEqual(s.passives, require('./passive-approval-overlays').current(old.id, laterApprovals.passives[old.id] || (grants[old.id] ? [grants[old.id]] : old.passives)), old.id);
+			assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, { ...(laterApprovals.abilities[old.id] || slots[old.id] || old.abilities) }), old.id);
 			assert.deepEqual(s.types, old.id === 'kinglergmax' ? ['Water', 'Steel'] : require('./passive-approval-overlays').types(old.id, old.types), old.id);
 			if (grants[old.id]) changed++;
 		}
@@ -143,10 +143,10 @@ describe('Approved Gmax migrations and selected redesigns', () => {
 			battle.destroy(); battle = null;
 		}
 	});
-	it('Cold Eclipse Flame Body entry is exactly +1 Def/SpD for both native composites', () => {
-		for (const species of ['Coalossal-Gmax', 'Centiskorch-Gmax']) {
-			const [p] = setup('Mew'); battle.field.terrain = 'coldeclipseterrain';
-			p.formeChange(species, null, true); assert.equal(p.boosts.def, 1, species); assert.equal(p.boosts.spd, 1, species);
+	it('Infernal Eclipse grants one native Flame Body boost plus Furnace Engine entry defenses', () => {
+		for (const [species, expected] of [['Coalossal-Gmax', 2], ['Centiskorch-Gmax', 1]]) {
+			const [p] = setup('Mew'); battle.field.terrain = 'infernaleclipseterrain';
+			p.formeChange(species, null, true); assert.equal(p.boosts.def, expected, species); assert.equal(p.boosts.spd, expected, species);
 			battle.destroy(); battle = null;
 		}
 	});

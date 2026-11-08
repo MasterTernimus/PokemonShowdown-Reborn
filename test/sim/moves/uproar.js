@@ -33,7 +33,7 @@ describe('Uproar [Gen 5]', function () {
 		battle.destroy();
 	});
 
-	it('should not pierce through substitutes', function () {
+	common.itGen(5, 'should not pierce through substitutes', () => {
 		battle = common.gen(5).createBattle([
 			[{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'uproar']}],
 			[{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}],

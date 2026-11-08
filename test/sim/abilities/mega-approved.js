@@ -6,6 +6,7 @@ const approved = require('./mega-approved-choices.json');
 const before = require('./mega-approved-before.json');
 const variants = require('./mega-approved-variants.json');
 const paused = require('./mega-paused-explicit.json');
+const reviewed = require('./passive-approval-overlays');
 let battle;
 function setup(species, ability, doubles = false) {
 	const set = (species, ability = 'No Ability') => ({ species, ability, moves: ['tackle', 'crunch', 'protect', 'psychocut'] });
@@ -32,13 +33,14 @@ describe('Approved Mega component/passive splits', () => {
 		Object.assign(expected, require('./shortlist-approved.json').passives);
 		for (const [id, p] of Object.entries(expected)) assert.deepEqual(Dex.species.get(id).passives, require('./passive-approval-overlays').current(id, p), id);
 		for (const id of ['beedrillmega', 'gyaradosmega', 'houndoommega', 'aggronmega', 'alakazammega', 'excadrillmega', 'sharpedomegay'])
-			assert.deepEqual(Dex.species.get(id).passives, before.find(s => s.id === id).passives, id);
+			assert.deepEqual(Dex.species.get(id).passives, reviewed.current(id, before.find(s => s.id === id).passives), id);
 	});
 	for (const [id, passive] of Object.entries(approved)) it(id + ' retains its approved passive under suppression and Transform', () => {
 		const [p, q] = setup(id, Dex.species.get(id).abilities[0]);
-		assert.deepEqual(p.getPassives(), [passive]);
-		p.addVolatile('gastroacid'); assert.deepEqual(p.getPassives(), [passive]);
-		q.transformInto(p); assert.deepEqual(q.getPassives(), [passive]);
+		const expected = reviewed.current(id, [passive]);
+		assert.deepEqual(p.getPassives(), expected);
+		p.addVolatile('gastroacid'); assert.deepEqual(p.getPassives(), expected);
+		q.transformInto(p); assert.deepEqual(q.getPassives(), expected);
 	});
 	it('doubles Mawile Attack once, adds Strong Jaw, and preserves nonrecipient Dread Maw', () => {
 		const [p, q] = setup('Mawile-Mega', 'Dread Maw');

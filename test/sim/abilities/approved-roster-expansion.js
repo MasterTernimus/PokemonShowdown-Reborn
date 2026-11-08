@@ -51,9 +51,9 @@ describe('Approved roster expansion and component search', () => {
 		assert(abilityIncludesComponent('Broodguard', 'Friend Guard'));
 		assert(!abilityIncludesComponent('Abyss Lure', 'Lightning Rod'));
 		assert(!abilityIncludesComponent('Terra Resolve', 'Rocky Payload'));
-		assert.deepEqual(Dex.species.get('Dustox').abilities, { 0: 'Compound Eyes', 1: 'Unaware', H: 'Toxic Cocoon' });
-		assert.deepEqual(Dex.species.get('Dustox').passives, ['shielddust']);
-		assert.deepEqual(Dex.species.get('Beautifly').abilities, { 0: 'Windy Surge', 1: 'Pastel Veil', H: 'Gale Bloom' });
+		assert.deepEqual(Dex.species.get('Dustox').abilities, { 0: 'Night Forager', 1: 'Unaware', H: 'Toxic Cocoon' });
+		assert.deepEqual(Dex.species.get('Dustox').passives, ['rivalry']);
+		assert.deepEqual(Dex.species.get('Beautifly').abilities, { 0: 'Windy Surge', 1: 'Pastel Sanctuary', H: 'Gale Bloom' });
 		for (const [name, bst] of [['Raticate', 480], ['Raticate-Alola', 480], ['Dustox', 530], ['Beautifly', 530], ['Kricketune', 500]])
 			assert.equal(Dex.species.get(name).bst, bst);
 		assert.equal(Dex.species.get('Scolipede-Mega').abilities[0], 'Venom Bastion');
@@ -252,11 +252,12 @@ describe('Approved roster expansion and component search', () => {
 		hit(frost, p, foe);
 		assert.equal(p.side.sideConditions.safeguard.duration, 5);
 	});
-	it('Snowpack keeps Ice Body while Mamoswine supplies Thick Fat as its passive', () => {
-		const [p, , foe] = make('Mamoswine', 'Snowpack');
+	it('legacy Snowpack retains Ice Body independently of Mamoswine’s new passive', () => {
+		const [p] = make('Mew', 'Snowpack');
+		assert.deepEqual(Dex.species.get('Mamoswine').passives, ['coldexpertise']);
 		assert(p.hasAbility('icebody'));
 		assert(!p.hasAbility('thickfat'));
-		assert(p.hasAbilityOrPassive('thickfat'));
+		assert(!p.hasAbilityOrPassive('thickfat'));
 		p.hp -= 80;
 		const before = p.hp;
 		battle.field.setWeather('snow', p);

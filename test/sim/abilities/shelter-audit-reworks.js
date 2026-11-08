@@ -27,55 +27,52 @@ describe('Approved Shelter, Rough Scale and audit fixes', () => {
 		assert.deepEqual(getAbilityDisplayComponents('astralwatcher', ['frisk'], 'orbeetlegmax'), []);
 		assert.deepEqual(getAbilityDisplayComponents('baitedbloom', ['stickyhold'], 'victreebel'), ['gluttony', 'regenerator']);
 	});
-	it('grants one ward on a successful queued Quiver Dance, without evasion', () => {
+	it('Quiver Dance grants its normal boosts without the retired ward', () => {
 		const [p] = setup(); battle.makeChoices('move 1', 'move 2');
-		assert(p.volatiles.scaleshelterward); assert(p.volatiles.scaleshelterspent); assert.equal(p.boosts.evasion, 0);
+		assert(!p.volatiles.scaleshelterward); assert(!p.volatiles.scaleshelterspent);
+		assert.equal(p.boosts.spa, 1); assert.equal(p.boosts.spd, 1); assert.equal(p.boosts.spe, 1);
+		assert.equal(p.boosts.evasion, 0);
 		assert.deepEqual(p.getPassives(), ['prismskimmer']); assert(p.hasAbility('overcoat'));
 	});
-	it('reduces every hit of a whole opposing attack, then expires', () => {
+	it('does not reduce incoming attack damage after a dance', () => {
 		const [p, q] = setup(); hit(p, p, 'quiverdance');
 		const hp = p.hp, during = [];
 		hit(q, p, 'tackle', { damage: 100, multihit: 3, onAfterHit() { during.push(p.hp); } });
-		assert.deepEqual(during, [hp - 80, hp - 160, hp - 240]); assert(!p.volatiles.scaleshelterward);
-		hit(q, p, 'tackle', { damage: 100 }); assert.equal(p.hp, hp - 340);
-		p.setAbility('No Ability'); p.setAbility('Scale Shelter'); hit(p, p, 'quiverdance'); assert(!p.volatiles.scaleshelterward);
+		assert.deepEqual(during, [hp - 100, hp - 200, hp - 300]);
+		hit(q, p, 'tackle', { damage: 100 }); assert.equal(p.hp, hp - 400);
 	});
-	for (const kind of ['miss', 'protect', 'immune', 'substitute', 'zero', 'ally']) it('ward is preserved by ' + kind, () => {
-		const [p, q] = setup('Masquerain', 'Scale Shelter', true); hit(p, p, 'quiverdance');
-		if (kind === 'protect') p.addVolatile('protect');
-		if (kind === 'immune') p.setType('Ghost');
-		if (kind === 'substitute') { p.addVolatile('substitute'); p.volatiles.substitute.hp = 3000; }
-		const hp = p.hp;
-		if (kind === 'zero') battle.damage(0, p, q, Dex.getActiveMove('tackle'));
-		else hit(kind === 'ally' ? battle.p1.active[1] : q, p, 'tackle', { damage: 100, accuracy: kind === 'miss' ? 0 : true });
-		assert(p.volatiles.scaleshelterward); assert.equal(p.hp, hp - (kind === 'ally' ? 100 : 0));
+	it('blocks opposing accuracy drops repeatedly without blocking other stats', () => {
+		const [p, q] = setup();
+		for (let i = 0; i < 2; i++) {
+			battle.boost({ accuracy: -1, def: -1 }, p, q, Dex.moves.get('sandattack'));
+			assert.equal(p.boosts.accuracy, 0); assert.equal(p.boosts.def, -i - 1);
+			battle.turn++;
+		}
 	});
-	it('failed maxed Quiver Dance does not use its allowance', () => {
-		const [p] = setup(); p.boosts.spa = p.boosts.spd = p.boosts.spe = 6; hit(p, p, 'quiverdance');
-		assert(!p.volatiles.scaleshelterspent); p.boosts.spe = 5; hit(p, p, 'quiverdance'); assert(p.volatiles.scaleshelterward);
+	it('permits self and ally accuracy changes', () => {
+		const [p] = setup('Masquerain', 'Scale Shelter', true);
+		battle.boost({ accuracy: -1 }, p, p, Dex.moves.get('sandattack'));
+		battle.boost({ accuracy: -1 }, p, p.allies()[0], Dex.moves.get('sandattack'));
+		assert.equal(p.boosts.accuracy, -2);
 	});
-	for (const caller of ['sleeptalk', 'copycat', 'metronome', 'dancer', 'instruct']) it('does not grant a ward to Quiver Dance called by ' + caller, () => {
-		const [p] = setup(); hit(p, p, 'quiverdance', { sourceEffect: caller });
-		assert(!p.volatiles.scaleshelterspent); assert.equal(p.boosts.spa, 1);
+	it('suppression disables accuracy protection until restored', () => {
+		const [p, q] = setup(); p.addVolatile('gastroacid', q);
+		battle.boost({ accuracy: -1 }, p, q, Dex.moves.get('sandattack')); assert.equal(p.boosts.accuracy, -1);
+		p.removeVolatile('gastroacid');
+		battle.boost({ accuracy: -1 }, p, q, Dex.moves.get('sandattack')); assert.equal(p.boosts.accuracy, -1);
 	});
-	it('actual Instruct queues a called dance without granting a ward', () => {
-		const [p, q] = setup(); p.setAbility('No Ability'); battle.makeChoices('move 1', 'move 2'); p.setAbility('Scale Shelter');
-		q.storedStats.spe = 2000; p.storedStats.spe = 1;
-		battle.makeChoices('move 2', 'move 4'); assert(!p.volatiles.scaleshelterspent);
-		assert.equal(p.boosts.spa, 2);
+	it('Mold Breaker bypasses accuracy protection unless Ability Shield is held', () => {
+		const [p, q] = setup(); q.setAbility('Mold Breaker');
+		hit(q, p, 'sandattack'); assert.equal(p.boosts.accuracy, -1);
+		p.setItem('Ability Shield'); hit(q, p, 'sandattack'); assert.equal(p.boosts.accuracy, -1);
 	});
-	it('switching resets the ward allowance and drops an unused ward', () => {
-		const [p] = setup(); hit(p, p, 'quiverdance'); battle.makeChoices('switch 2', 'move 2');
-		assert(!p.volatiles.scaleshelterward); battle.makeChoices('switch 2', 'move 2');
-		hit(p, p, 'quiverdance'); assert(p.volatiles.scaleshelterward);
-	});
-	it('a ward is not copied by Transform', () => {
-		const [p, q] = setup(); hit(p, p, 'quiverdance'); q.transformInto(p); assert(!q.volatiles.scaleshelterward);
-	});
-	it('blocked Quiver Dance boosts do not grant a ward', () => {
-		const [p] = setup();
-		battle.onEvent('TryBoost', battle.format, boost => { for (const stat of Object.keys(boost)) delete boost[stat]; });
-		hit(p, p, 'quiverdance'); assert(!p.volatiles.scaleshelterspent);
+	it('switching and Transform retain the current protection without a dance budget', () => {
+		const [p, q] = setup(); hit(p, p, 'quiverdance');
+		battle.makeChoices('switch 2', 'move 2'); battle.makeChoices('switch 2', 'move 2');
+		battle.boost({ accuracy: -1 }, p, q, Dex.moves.get('sandattack')); assert.equal(p.boosts.accuracy, 0);
+		assert(q.transformInto(p));
+		battle.boost({ accuracy: -1 }, q, p, Dex.moves.get('sandattack')); assert.equal(q.boosts.accuracy, 0);
+		assert(!q.volatiles.scaleshelterward);
 	});
 	it('Rough Scale raises Defense only after the entire resisted move, once per entry', () => {
 		const [p, q] = setup('Druddigon', 'Rough Scale'); const during = [];

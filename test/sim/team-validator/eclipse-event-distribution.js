@@ -4,12 +4,13 @@ const {Dex, TeamValidator, Teams} = require('../../../dist/sim');
 const common = require('../../common');
 
 const holders = [
-	['Arboliva-Aevian', 'Bad Seeds', 'blizzard', []],
+	['Arboliva-Aevian', 'Bad Seeds', 'blizzard', ['earlybird']],
 	['Froslass', 'Bad Seeds', 'blizzard', ['levitate']],
 	['Glalie', 'Bad Seeds', 'blizzard', ['levitate']],
 	['Weavile', 'Bad Seeds', 'blizzard', ['infiltrator']],
 	['Typhlosion-Hisui', 'Ashen Seeds', 'eruption', ['blaze']],
 	['Ninetales', 'Ashen Seeds', 'eruption', ['cursedbody']],
+	['Ninetales-Reborn', 'Ashen Seeds', 'eruption', ['cursedbody']],
 	['Camerupt', 'Ashen Seeds', 'eruption', ['soundproof']],
 	['Torkoal', 'Ashen Seeds', 'eruption', ['whitesmoke']],
 	['Hoopa', 'Rift Herald', 'riftopening', []],
@@ -58,7 +59,7 @@ describe('Eclipse Special Event ability distribution', () => {
 
 	it('does not assign the event abilities to independently defined related forms', () => {
 		for (const name of ['Froslass-Mega', 'Froslass-Aevian', 'Glalie-Mega', 'Weavile-Mega',
-			'Typhlosion', 'Ninetales-Alola', 'Ninetales-Reborn', 'Camerupt-Mega', 'Camerupt-Pulse',
+			'Typhlosion', 'Ninetales-Alola', 'Camerupt-Mega', 'Camerupt-Pulse',
 			'Hoopa-Unbound', 'Bronzong-Mega', 'Mismagius-Mega']) {
 			assert(!Object.values(Dex.species.get(name).abilities).some(a =>
 				['Bad Seeds', 'Ashen Seeds', 'Rift Herald'].includes(a)), name);

@@ -3,6 +3,7 @@
 const assert = require('assert').strict, common = require('../../common');
 const { Dex, TeamValidator } = require('../../../dist/sim');
 const approved = require('./shortlist-approved.json');
+const reviewed = require('./passive-approval-overlays');
 let battle;
 function setup(species, ability = 'No Ability', doubles = false) {
 	const set = (species = 'Mew', ability = 'No Ability') => ({ species, ability, moves: ['splash', 'tackle', 'gigadrain', 'thunderbolt'] });
@@ -49,16 +50,17 @@ describe('Approved ordinary-species shortlist', () => {
 			}
 		} finally { AbilityComponents.burningrage = current; }
 	});
-	for (const [species, passives] of Object.entries(approved.passives)) it(species + ' keeps its new passive through suppression, ability replacement and Transform', () => {
+	for (const [species, historical] of Object.entries(approved.passives)) it(species + ' keeps its reviewed passive through suppression, ability replacement and Transform', () => {
+		const passives = reviewed.current(species, historical);
 		const [p, q] = setup(species); assert.deepEqual(p.getPassives(), passives);
 		p.setAbility('Run Away'); p.addVolatile('gastroacid'); q.setAbility('Neutralizing Gas'); assert.deepEqual(p.getPassives(), passives);
 		// Transform cannot target a disguised Pokémon; reveal first.
 		p.illusion = null;
 		assert(q.transformInto(p)); assert.deepEqual(q.getPassives(), passives);
 	});
-	for (const field of ['', 'corrosivemistterrain']) for (const ability of ['No Ability', 'Aftermath']) it('Drifblim applies one full Aftermath with ' + ability + ' on ' + (field || 'no field'), () => {
+	for (const field of ['', 'corrosivemistterrain']) for (const ability of ['No Ability', 'Aftermath']) it('Drifblim applies Aftermath only when selected, with ' + ability + ' on ' + (field || 'no field'), () => {
 		const [p, q] = setup('Drifblim', ability); p.setType('Normal'); p.hp = 1; battle.field.terrain = field;
-		hit(q, p, 'tackle', { damage: 100 }); assert.equal(q.hp, field ? 2000 : 3000);
+		hit(q, p, 'tackle', { damage: 100 }); assert.equal(q.hp, ability === 'Aftermath' ? (field ? 2000 : 3000) : 4000);
 	});
 	it('Aftermath remains contact-only and active under Gastro Acid', () => {
 		const [p, q] = setup('Drifblim', 'No Ability'); p.hp = 1; p.addVolatile('gastroacid');
@@ -72,13 +74,16 @@ describe('Approved ordinary-species shortlist', () => {
 		assert.equal(battle.runEvent('BasePower', p, q, move, 100), 130);
 		p.addVolatile('gastroacid'); assert.equal(battle.runEvent('BasePower', p, q, move, 100), 130);
 	});
-	for (const ability of ['Twin Appetite', 'Armor Tail', 'Royal Decree']) it('Farigiraf eats its Liechi Berry at half HP with ' + ability, () => {
+	for (const ability of ['Twin Appetite', 'Twin Focus', 'Royal Decree']) it('Farigiraf eats its Liechi Berry at quarter HP with ' + ability, () => {
 		const [p] = setup('Farigiraf', ability);
 		p.setItem('liechiberry');
 		p.hp = p.maxhp / 2 + 1;
 		battle.singleEvent('Update', p.getItem(), p.itemState, p);
 		assert.equal(p.item, 'liechiberry');
 		p.hp--;
+		battle.singleEvent('Update', p.getItem(), p.itemState, p);
+		assert.equal(p.item, 'liechiberry');
+		p.hp = p.maxhp / 4;
 		battle.singleEvent('Update', p.getItem(), p.itemState, p);
 		assert.equal(p.item, '');
 		assert.equal(p.boosts.atk, 1);
@@ -137,8 +142,8 @@ describe('Approved ordinary-species shortlist', () => {
 	});
 	it('Klinklang remains unchanged and Galarian Slowking uses the approved replacement', () => {
 		assert.deepEqual(Dex.species.get('klinklang').abilities, { 0: 'Closed Circuit', 1: 'Galvanize', H: 'Light Metal' });
-		assert.deepEqual(Dex.species.get('klinklang').passives, ['soundproof']);
-		assert.deepEqual(Dex.species.get('slowkinggalar').abilities, { 0: 'Neutralization', 1: 'Telepathy', H: 'Regenerator' });
+		assert.deepEqual(Dex.species.get('klinklang').passives, ['aimassist']);
+		assert.deepEqual(Dex.species.get('slowkinggalar').abilities, { 0: 'Neutralization', 1: 'Own Tempo', H: 'Regenerator' });
 		assert.deepEqual(Dex.species.get('slowkinggalar').passives, ['eldritchremedy']);
 	});
 	it('calculator applies each new damage passive once', () => {

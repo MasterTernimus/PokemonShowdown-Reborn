@@ -13,19 +13,19 @@ function setup(ability, other = 'No Ability') {
 function modify(p, q, id) { const m = Dex.getActiveMove(id); battle.runEvent('ModifyMove', p, q, m, m); return m; }
 describe('Late composite components preserve full local behavior', () => {
  afterEach(() => { battle?.destroy(); battle = null; });
- it('Heat Coil inherits Long Reach contact, accuracy, crit and mountain power', () => {
+	it('Heat Coil inherits Long Reach contact protection without removed bonuses', () => {
   const [p, q] = setup('Heat Coil');
-  assert.equal(p.boosts.accuracy, 1);
+		assert.equal(p.boosts.accuracy, 0);
   let move = modify(p, q, 'tackle');
   assert(!move.flags.contact);
-  assert(move.ignoreEvasion);
+		assert(!move.ignoreEvasion);
   battle.boost({accuracy: -1}, p, q, Dex.getActiveMove('sandattack'));
-  assert.equal(p.boosts.accuracy, 1);
+		assert.equal(p.boosts.accuracy, -1);
   battle.field.terrain = 'rockyterrain';
-  assert.equal(modify(p, q, 'tackle').accuracy, 90);
+		assert.equal(modify(p, q, 'tackle').accuracy, 100);
   battle.field.terrain = 'mountainterrain';
-  assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1500);
-  assert.equal(battle.runEvent('ModifyCritRatio', p, q, move, 0), 1);
+		assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1000);
+		assert.equal(battle.runEvent('ModifyCritRatio', p, q, move, 0), 0);
  });
  it('Heat Coil Long Reach stops through suppression', () => {
   const [p, q] = setup('Heat Coil'); p.addVolatile('gastroacid', q);
@@ -59,19 +59,25 @@ describe('Late composite components preserve full local behavior', () => {
   battle.actions.useMove('growl', q, {target: p});
   assert.equal(p.boosts.atk, -1);
  });
- it('Iron Mountain does not gain Mold Breaker and retains its once-turn defense/heal', () => {
+	it('Iron Mountain preserves Brute Force without the removed defense/heal', () => {
   const [p, q] = setup('Iron Mountain', 'Water Absorb');
   assert(!modify(p, q, 'watergun').ignoreAbility);
   const hp = q.hp; battle.actions.useMove('watergun', p, {target: q}); assert.equal(q.hp, hp);
   p.hp = p.maxhp = p.baseMaxhp = 1600; p.hp = 1000;
   const hit = () => battle.actions.useMove(Object.assign(Dex.getActiveMove('tackle'), {damage: 100, willCrit: false}), q, {target: p});
-  hit(); assert.equal(p.boosts.def, 1); assert.equal(p.hp, 1000);
-  hit(); assert.equal(p.boosts.def, 1); assert.equal(p.hp, 900);
+		hit(); assert.equal(p.boosts.def, 0); assert.equal(p.hp, 900);
+		hit(); assert.equal(p.boosts.def, 0); assert.equal(p.hp, 800);
+		const recoil = Dex.getActiveMove('doubleedge');
+		assert.equal(battle.runEvent('BasePower', p, q, recoil, 1000), 1200);
  });
  for (const ability of ['Serene Grace', 'No Ability']) it(ability + ' actual Solar Beam charge behavior', () => {
   const [p, q] = setup(ability); const hp = q.hp;
-  battle.actions.useMove('solarbeam', p, {target: q});
-  assert.equal(q.hp < hp, ability === 'Serene Grace');
-  assert.equal(!!p.volatiles.twoturnmove, ability !== 'Serene Grace');
+		battle.makeChoices('move solarbeam', 'move splash');
+		assert.equal(q.hp, hp);
+		assert(p.volatiles.twoturnmove);
+		battle.makeChoices('move solarbeam', 'move splash');
+		assert(q.hp < hp);
+		assert(!p.volatiles.twoturnmove);
+		assert.equal(modify(p, q, 'psychic').secondaries[0].chance, ability === 'Serene Grace' ? 20 : 10);
  });
 });

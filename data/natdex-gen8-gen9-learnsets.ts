@@ -1385,7 +1385,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 		"learnset": {
 			"acrobatics": [
 				"9M",
-				"9S11",
+				"9S1",
 				"8M"
 			],
 			"aerialace": [
@@ -1408,7 +1408,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M"
 			],
 			"bellydrum": [
-				"9S11"
+				"9S1",
 			],
 			"blastburn": [
 				"9M",
@@ -1442,7 +1442,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"crunch": [
 				"9M",
-				"9S11",
+				"9S1",
 				"8M",
 				"8V"
 			],
@@ -1482,7 +1482,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"dragontail": [
 				"9M",
 				"8V",
-				"8S10"
+				"8S0",
 			],
 			"dualwingbeat": [
 				"8T"
@@ -1545,12 +1545,12 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M",
 				"8L30",
 				"8V",
-				"8S10"
+				"8S0",
 			],
 			"flareblitz": [
 				"9M",
 				"9L62",
-				"9S11",
+				"9S1",
 				"8M",
 				"8L62",
 				"8V"
@@ -1690,7 +1690,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"seismictoss": [
 				"8V",
-				"8S10"
+				"8S0",
 			],
 			"shadowclaw": [
 				"9M",
@@ -1700,7 +1700,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L24",
 				"8L24",
 				"8V",
-				"8S10"
+				"8S0",
 			],
 			"sleeptalk": [
 				"9M",
@@ -4244,7 +4244,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"charge": [
 				"9M",
 				"9E",
-				"9S6",
+				"9S0",
 				"8E"
 			],
 			"charm": [
@@ -4275,7 +4275,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"endure": [
 				"9M",
-				"9S6",
+				"9S0",
 				"8M"
 			],
 			"facade": [
@@ -4300,7 +4300,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"helpinghand": [
 				"9M",
-				"9S6",
+				"9S0",
 				"8M"
 			],
 			"irontail": [
@@ -4430,7 +4430,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"volttackle": [
 				"9R",
-				"9S6",
+				"9S0",
 				"8R"
 			],
 			"wildcharge": [
@@ -4487,10 +4487,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8V"
 			],
 			"celebrate": [
-				"9S55",
-				"8S50",
-				"8S51",
-				"8S52"
+				"9S5",
+				"8S0",
+				"8S1",
+				"8S2",
 			],
 			"charge": [
 				"9M"
@@ -4540,7 +4540,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L12",
 				"8M",
 				"8L12",
-				"8S52"
+				"8S2",
 			],
 			"electroweb": [
 				"9M",
@@ -4549,7 +4549,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"encore": [
 				"9M",
 				"8M",
-				"8S52"
+				"8S2",
 			],
 			"endeavor": [
 				"9M"
@@ -4575,7 +4575,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M"
 			],
 			"fly": [
-				"9S53"
+				"9S3",
 			],
 			"focuspunch": [
 				"9M"
@@ -4599,7 +4599,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"irontail": [
 				"9L28",
-				"9S54",
+				"9S4",
 				"8M",
 				"8V"
 			],
@@ -4635,17 +4635,17 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"playnice": [
 				"9L1",
-				"9S55",
+				"9S5",
 				"8L1",
-				"8S50"
+				"8S0",
 			],
 			"playrough": [
 				"9M",
-				"9S54",
+				"9S4",
 				"8M"
 			],
 			"present": [
-				"9S55"
+				"9S5",
 			],
 			"protect": [
 				"9M",
@@ -4654,10 +4654,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"quickattack": [
 				"9L1",
-				"9S53",
+				"9S3",
 				"8L1",
 				"8V",
-				"8S50"
+				"8S0",
 			],
 			"raindance": [
 				"9M",
@@ -4687,7 +4687,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8V"
 			],
 			"sing": [
-				"8S52"
+				"8S2",
 			],
 			"slam": [
 				"8L28",
@@ -4711,7 +4711,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"surf": [
 				"9M",
-				"9S54",
+				"9S4",
 				"8M"
 			],
 			"sweetkiss": [
@@ -4721,11 +4721,11 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"swift": [
 				"9M",
 				"8M",
-				"8S51"
+				"8S1",
 			],
 			"tailwhip": [
 				"9L1",
-				"9S53",
+				"9S3",
 				"8L1",
 				"8V"
 			],
@@ -4742,7 +4742,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"thunder": [
 				"9M",
 				"9L44",
-				"9S54",
+				"9S4",
 				"8M",
 				"8L44",
 				"8V"
@@ -4750,11 +4750,11 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"thunderbolt": [
 				"9M",
 				"9L36",
-				"9S55",
+				"9S5",
 				"8M",
 				"8L36",
 				"8V",
-				"8S51"
+				"8S1",
 			],
 			"thunderpunch": [
 				"9M",
@@ -4763,10 +4763,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"thundershock": [
 				"9L1",
-				"9S53",
+				"9S3",
 				"8L1",
 				"8V",
-				"8S50"
+				"8S0",
 			],
 			"thunderwave": [
 				"9M",
@@ -4796,7 +4796,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M"
 			],
 			"wish": [
-				"8S51"
+				"8S1",
 			]
 		},
 		"eventData": [
@@ -4957,7 +4957,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"electroweb": [
 				"9M",
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"encore": [
 				"9M",
@@ -5009,7 +5009,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"irontail": [
 				"9L28",
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"knockoff": [
 				"9M"
@@ -5057,7 +5057,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"quickattack": [
 				"9L1",
 				"8L1",
-				"8S1"
+				"8S0",
 			],
 			"raindance": [
 				"9M",
@@ -5136,7 +5136,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L36",
 				"8M",
 				"8L36",
-				"8S1"
+				"8S0",
 			],
 			"thunderpunch": [
 				"9M",
@@ -5169,7 +5169,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M"
 			],
 			"volttackle": [
-				"8S1"
+				"8S0",
 			],
 			"wildcharge": [
 				"9M",
@@ -5267,7 +5267,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"electroweb": [
 				"9M",
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"encore": [
 				"9M",
@@ -5319,7 +5319,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"irontail": [
 				"9L28",
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"knockoff": [
 				"9M"
@@ -5367,7 +5367,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"quickattack": [
 				"9L1",
 				"8L1",
-				"8S1"
+				"8S0",
 			],
 			"raindance": [
 				"9M",
@@ -5446,7 +5446,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L36",
 				"8M",
 				"8L36",
-				"8S1"
+				"8S0",
 			],
 			"thunderpunch": [
 				"9M",
@@ -5479,7 +5479,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M"
 			],
 			"volttackle": [
-				"8S1"
+				"8S0",
 			],
 			"wildcharge": [
 				"9M",
@@ -5577,7 +5577,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"electroweb": [
 				"9M",
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"encore": [
 				"9M",
@@ -5629,7 +5629,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"irontail": [
 				"9L28",
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"knockoff": [
 				"9M"
@@ -5677,7 +5677,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"quickattack": [
 				"9L1",
 				"8L1",
-				"8S1"
+				"8S0",
 			],
 			"raindance": [
 				"9M",
@@ -5756,7 +5756,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L36",
 				"8M",
 				"8L36",
-				"8S1"
+				"8S0",
 			],
 			"thunderpunch": [
 				"9M",
@@ -5789,7 +5789,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M"
 			],
 			"volttackle": [
-				"8S1"
+				"8S0",
 			],
 			"wildcharge": [
 				"9M",
@@ -5887,7 +5887,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"electroweb": [
 				"9M",
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"encore": [
 				"9M",
@@ -5939,7 +5939,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"irontail": [
 				"9L28",
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"knockoff": [
 				"9M"
@@ -5987,7 +5987,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"quickattack": [
 				"9L1",
 				"8L1",
-				"8S1"
+				"8S0",
 			],
 			"raindance": [
 				"9M",
@@ -6066,7 +6066,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L36",
 				"8M",
 				"8L36",
-				"8S1"
+				"8S0",
 			],
 			"thunderpunch": [
 				"9M",
@@ -6099,7 +6099,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M"
 			],
 			"volttackle": [
-				"8S1"
+				"8S0",
 			],
 			"wildcharge": [
 				"9M",
@@ -6197,7 +6197,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"electroweb": [
 				"9M",
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"encore": [
 				"9M",
@@ -6249,7 +6249,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"irontail": [
 				"9L28",
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"knockoff": [
 				"9M"
@@ -6297,7 +6297,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"quickattack": [
 				"9L1",
 				"8L1",
-				"8S1"
+				"8S0",
 			],
 			"raindance": [
 				"9M",
@@ -6376,7 +6376,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L36",
 				"8M",
 				"8L36",
-				"8S1"
+				"8S0",
 			],
 			"thunderpunch": [
 				"9M",
@@ -6409,7 +6409,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M"
 			],
 			"volttackle": [
-				"8S1"
+				"8S0",
 			],
 			"wildcharge": [
 				"9M",
@@ -6507,7 +6507,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"electroweb": [
 				"9M",
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"encore": [
 				"9M",
@@ -6559,7 +6559,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"irontail": [
 				"9L28",
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"knockoff": [
 				"9M"
@@ -6607,7 +6607,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"quickattack": [
 				"9L1",
 				"8L1",
-				"8S1"
+				"8S0",
 			],
 			"raindance": [
 				"9M",
@@ -6686,7 +6686,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L36",
 				"8M",
 				"8L36",
-				"8S1"
+				"8S0",
 			],
 			"thunderpunch": [
 				"9M",
@@ -6719,7 +6719,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M"
 			],
 			"volttackle": [
-				"8S1"
+				"8S0",
 			],
 			"wildcharge": [
 				"9M",
@@ -6817,7 +6817,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"electroweb": [
 				"9M",
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"encore": [
 				"9M",
@@ -6869,7 +6869,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"irontail": [
 				"9L28",
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"knockoff": [
 				"9M"
@@ -6917,7 +6917,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"quickattack": [
 				"9L1",
 				"8L1",
-				"8S1"
+				"8S0",
 			],
 			"raindance": [
 				"9M",
@@ -6996,7 +6996,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L36",
 				"8M",
 				"8L36",
-				"8S1"
+				"8S0",
 			],
 			"thunderpunch": [
 				"9M",
@@ -7029,7 +7029,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M"
 			],
 			"volttackle": [
-				"8S1"
+				"8S0",
 			],
 			"wildcharge": [
 				"9M",
@@ -21419,7 +21419,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"extremespeed": [
 				"9L0",
-				"9S2",
+				"9S0",
 				"8L0"
 			],
 			"facade": [
@@ -21459,7 +21459,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"flareblitz": [
 				"9M",
 				"9L1",
-				"9S2",
+				"9S0",
 				"8M",
 				"8L1"
 			],
@@ -21528,7 +21528,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"protect": [
 				"9M",
-				"9S2",
+				"9S0",
 				"8M",
 				"8V"
 			],
@@ -21638,7 +21638,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"willowisp": [
 				"9M",
-				"9S2",
+				"9S0",
 				"8M",
 				"8V"
 			]
@@ -34125,7 +34125,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9M",
 				"8M",
 				"8V",
-				"8S7"
+				"8S0",
 			],
 			"destinybond": [
 				"9L54",
@@ -34340,7 +34340,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M",
 				"8L48",
 				"8V",
-				"8S7"
+				"8S0",
 			],
 			"shadowclaw": [
 				"9M",
@@ -34366,7 +34366,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9M",
 				"8M",
 				"8V",
-				"8S7"
+				"8S0",
 			],
 			"sludgewave": [
 				"9M",
@@ -34453,7 +34453,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9M",
 				"8M",
 				"8V",
-				"8S7"
+				"8S0",
 			],
 			"wonderroom": [
 				"8M"
@@ -41854,7 +41854,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L1",
 				"8M",
 				"8L1",
-				"8S3"
+				"8S0",
 			],
 			"chillingwater": [
 				"9M"
@@ -42048,7 +42048,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"present": [
 				"8E",
-				"8S3"
+				"8S0",
 			],
 			"protect": [
 				"9M",
@@ -42126,7 +42126,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L44",
 				"8L44",
 				"8V",
-				"8S3"
+				"8S0",
 			],
 			"solarbeam": [
 				"9M",
@@ -42158,7 +42158,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"sweetkiss": [
 				"9L1",
 				"8L1",
-				"8S3"
+				"8S0",
 			],
 			"swift": [
 				"9M"
@@ -49760,7 +49760,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"protect": [
 				"9M",
-				"9S2",
+				"9S0",
 				"8M",
 				"8V"
 			],
@@ -49846,7 +49846,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"taunt": [
 				"9M",
-				"9S2",
+				"9S0",
 				"8M",
 				"8V"
 			],
@@ -49873,7 +49873,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"thunderwave": [
 				"9M",
-				"9S2",
+				"9S0",
 				"8M",
 				"8V"
 			],
@@ -49890,7 +49890,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"waterfall": [
 				"9M",
 				"9L21",
-				"9S2",
+				"9S0",
 				"8M",
 				"8L21",
 				"8V"
@@ -50297,7 +50297,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9M"
 			],
 			"celebrate": [
-				"8S6"
+				"8S0",
 			],
 			"charm": [
 				"9M",
@@ -50312,7 +50312,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"covet": [
 				"9L1",
 				"8L1",
-				"8S6"
+				"8S0",
 			],
 			"curse": [
 				"9M",
@@ -50373,7 +50373,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M",
 				"8L1",
 				"8V",
-				"8S6"
+				"8S0",
 			],
 			"hypervoice": [
 				"9M",
@@ -50468,7 +50468,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L1",
 				"8L1",
 				"8V",
-				"8S6"
+				"8S0",
 			],
 			"tailwhip": [
 				"9L1",
@@ -52817,7 +52817,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"conversion2": [
 				"9L25",
 				"8L25",
-				"8S1"
+				"8S0",
 			],
 			"discharge": [
 				"9L40",
@@ -52893,7 +52893,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"magnetrise": [
 				"9L10",
 				"8L10",
-				"8S1"
+				"8S0",
 			],
 			"powerswap": [
 				"8M"
@@ -52908,7 +52908,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L20",
 				"8L20",
 				"8V",
-				"8S1"
+				"8S0",
 			],
 			"psychic": [
 				"9M",
@@ -53010,7 +53010,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"thundershock": [
 				"9L15",
 				"8L15",
-				"8S1"
+				"8S0",
 			],
 			"thunderwave": [
 				"9M",
@@ -54813,7 +54813,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"lick": [
 				"9L1",
-				"9S3",
+				"9S0",
 				"8L1"
 			],
 			"megakick": [
@@ -54927,7 +54927,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"tackle": [
 				"9L1",
-				"9S3",
+				"9S0",
 				"8L1"
 			],
 			"takedown": [
@@ -55013,7 +55013,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"block": [
 				"9L1",
-				"9S2",
+				"9S0",
 				"8L1"
 			],
 			"bodypress": [
@@ -55023,7 +55023,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"bodyslam": [
 				"9M",
 				"9L28",
-				"9S2",
+				"9S0",
 				"8M",
 				"8L28",
 				"8V"
@@ -55258,7 +55258,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"rest": [
 				"9M",
 				"9L20",
-				"9S2",
+				"9S0",
 				"8M",
 				"8L20",
 				"8V"
@@ -55410,7 +55410,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"yawn": [
 				"9L12",
-				"9S2",
+				"9S0",
 				"8L12",
 				"8V"
 			],
@@ -55474,7 +55474,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"blizzard": [
 				"9M",
 				"9L65",
-				"9S10",
+				"9S2",
 				"8M",
 				"8L65",
 				"8V"
@@ -55510,7 +55510,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"freezedry": [
 				"9L35",
 				"8L35",
-				"8S8"
+				"8S0",
 			],
 			"gigaimpact": [
 				"9M",
@@ -55528,7 +55528,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"haze": [
 				"9M",
 				"9L60",
-				"9S10"
+				"9S2",
 			],
 			"headbutt": [
 				"8V"
@@ -55539,10 +55539,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"hurricane": [
 				"9M",
 				"9L55",
-				"9S10",
+				"9S2",
 				"8M",
 				"8L55",
-				"8S8"
+				"8S0",
 			],
 			"hyperbeam": [
 				"9M",
@@ -55555,7 +55555,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M",
 				"8L45",
 				"8V",
-				"8S8"
+				"8S0",
 			],
 			"iceshard": [
 				"9L15",
@@ -55589,7 +55589,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L1",
 				"8L1",
 				"8V",
-				"8S8"
+				"8S0",
 			],
 			"powdersnow": [
 				"9L5",
@@ -55633,7 +55633,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"sheercold": [
 				"9L70",
-				"9S10",
+				"9S2",
 				"8L70"
 			],
 			"skyattack": [
@@ -56009,7 +56009,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M",
 				"8L20",
 				"8V",
-				"8S8"
+				"8S0",
 			],
 			"aircutter": [
 				"9M"
@@ -56025,7 +56025,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"bravebird": [
 				"9M",
 				"8M",
-				"8S8"
+				"8S0",
 			],
 			"charge": [
 				"9M",
@@ -56034,7 +56034,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"detect": [
 				"9L60",
-				"9S10",
+				"9S2",
 				"8L60"
 			],
 			"discharge": [
@@ -56045,7 +56045,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L35",
 				"8L35",
 				"8V",
-				"8S8"
+				"8S0",
 			],
 			"dualwingbeat": [
 				"9M",
@@ -56113,7 +56113,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"magneticflux": [
 				"9L65",
-				"9S10",
+				"9S2",
 				"8L65"
 			],
 			"metalsound": [
@@ -56203,11 +56203,11 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"thunder": [
 				"9M",
 				"9L55",
-				"9S10",
+				"9S2",
 				"8M",
 				"8L55",
 				"8V",
-				"8S8"
+				"8S0",
 			],
 			"thunderbolt": [
 				"9M",
@@ -56248,7 +56248,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"zapcannon": [
 				"9L70",
-				"9S10",
+				"9S2",
 				"8L70"
 			]
 		},
@@ -56617,7 +56617,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"endure": [
 				"9M",
 				"9L60",
-				"9S10",
+				"9S2",
 				"8M",
 				"8L60"
 			],
@@ -56635,7 +56635,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9M",
 				"8M",
 				"8V",
-				"8S8"
+				"8S0",
 			],
 			"flamecharge": [
 				"9M"
@@ -56671,7 +56671,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M",
 				"8L45",
 				"8V",
-				"8S8"
+				"8S0",
 			],
 			"helpinghand": [
 				"9M"
@@ -56679,7 +56679,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"hurricane": [
 				"9M",
 				"9L55",
-				"9S10",
+				"9S2",
 				"8M",
 				"8L55"
 			],
@@ -56696,7 +56696,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L1",
 				"8L1",
 				"8V",
-				"8S8"
+				"8S0",
 			],
 			"mysticalfire": [
 				"8M"
@@ -56704,7 +56704,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"overheat": [
 				"9M",
 				"9L65",
-				"9S10",
+				"9S2",
 				"8M"
 			],
 			"protect": [
@@ -56750,7 +56750,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"skyattack": [
 				"9L70",
-				"9S10",
+				"9S2",
 				"8L70",
 				"8V"
 			],
@@ -56817,7 +56817,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L15",
 				"8L15",
 				"8V",
-				"8S8"
+				"8S0",
 			]
 		},
 		"eventData": [
@@ -57713,7 +57713,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"dracometeor": [
 				"9M",
 				"8T",
-				"8S9"
+				"8S0",
 			],
 			"dragoncheer": [
 				"9M"
@@ -57721,14 +57721,14 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"dragonclaw": [
 				"9M",
 				"8M",
-				"8S9"
+				"8S0",
 			],
 			"dragondance": [
 				"9M",
 				"9L62",
 				"8M",
 				"8L62",
-				"8S9"
+				"8S0",
 			],
 			"dragonpulse": [
 				"9M",
@@ -57834,7 +57834,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L0",
 				"8M",
 				"8L0",
-				"8S9"
+				"8S0",
 			],
 			"hydropump": [
 				"9M",
@@ -58122,7 +58122,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"aurasphere": [
 				"9M",
 				"9L40",
-				"9S9",
+				"9S2",
 				"8M",
 				"8L40"
 			],
@@ -58137,7 +58137,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9M",
 				"8M",
 				"8V",
-				"8S7"
+				"8S0",
 			],
 			"bodyslam": [
 				"9M",
@@ -58162,7 +58162,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"calmmind": [
 				"9M",
-				"9S9",
+				"9S2",
 				"8M",
 				"8V"
 			],
@@ -58188,7 +58188,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L1",
 				"8L1",
 				"8V",
-				"8S7"
+				"8S0",
 			],
 			"dive": [
 				"8M"
@@ -58308,7 +58308,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"icebeam": [
 				"9M",
-				"9S9",
+				"9S2",
 				"8M",
 				"8V"
 			],
@@ -58411,7 +58411,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M",
 				"8L48",
 				"8V",
-				"8S7"
+				"8S0",
 			],
 			"psychicnoise": [
 				"9M"
@@ -58434,7 +58434,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"psystrike": [
 				"9L72",
-				"9S9",
+				"9S2",
 				"8L72"
 			],
 			"psywave": [
@@ -58448,7 +58448,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L80",
 				"8L80",
 				"8V",
-				"8S7"
+				"8S0",
 			],
 			"reflect": [
 				"9M",
@@ -58688,7 +58688,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"airslash": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M"
 			],
 			"alluringvoice": [
@@ -58717,7 +58717,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"aurasphere": [
 				"9M",
 				"9L90",
-				"9S27",
+				"9S2",
 				"8M",
 				"8L90"
 			],
@@ -58855,13 +58855,13 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"darkpulse": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M",
 				"8V"
 			],
 			"dazzlinggleam": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M",
 				"8V"
 			],
@@ -58895,7 +58895,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"dragonpulse": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M",
 				"8V"
 			],
@@ -58925,7 +58925,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"earthpower": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M"
 			],
 			"earthquake": [
@@ -58962,7 +58962,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"energyball": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M"
 			],
 			"expandingforce": [
@@ -59011,7 +59011,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"flamethrower": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M",
 				"8V"
 			],
@@ -59021,7 +59021,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"flashcannon": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M",
 				"8V"
 			],
@@ -59152,12 +59152,12 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"hypervoice": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M"
 			],
 			"icebeam": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M",
 				"8V"
 			],
@@ -59219,12 +59219,12 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"lifedew": [
 				"9L40",
-				"9S27",
+				"9S2",
 				"8L40"
 			],
 			"lightscreen": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M",
 				"8V"
 			],
@@ -59360,7 +59360,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"pollenpuff": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M"
 			],
 			"poltergeist": [
@@ -59374,11 +59374,11 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L1",
 				"8L1",
 				"8V",
-				"8S25"
+				"8S0",
 			],
 			"powergem": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M"
 			],
 			"powerswap": [
@@ -59421,7 +59421,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"psyshock": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M"
 			],
 			"psywave": [
@@ -59527,7 +59527,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"shadowball": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M",
 				"8V"
 			],
@@ -59549,7 +59549,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"sludgebomb": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M",
 				"8V"
 			],
@@ -59643,13 +59643,13 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"surf": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M",
 				"8V"
 			],
 			"swift": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M",
 				"8V"
 			],
@@ -59698,7 +59698,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"thunderbolt": [
 				"9M",
-				"9S27",
+				"9S2",
 				"8M",
 				"8V"
 			],
@@ -79322,7 +79322,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"discharge": [
 				"9L54",
-				"9S10",
+				"9S2",
 				"8L54"
 			],
 			"doubleedge": [
@@ -79348,13 +79348,13 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"extrasensory": [
 				"9L48",
-				"9S10",
+				"9S2",
 				"8L48"
 			],
 			"extremespeed": [
 				"9L1",
 				"8L1",
-				"8S8"
+				"8S0",
 			],
 			"facade": [
 				"9M",
@@ -79371,7 +79371,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"howl": [
 				"9L36",
 				"8L36",
-				"8S8"
+				"8S0",
 			],
 			"hyperbeam": [
 				"9M",
@@ -79406,14 +79406,14 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"raindance": [
 				"9M",
 				"9L66",
-				"9S10",
+				"9S2",
 				"8M",
 				"8L66"
 			],
 			"reflect": [
 				"9M",
 				"9L60",
-				"9S10",
+				"9S2",
 				"8M",
 				"8L60"
 			],
@@ -79496,7 +79496,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"thunderbolt": [
 				"9M",
 				"8M",
-				"8S8"
+				"8S0",
 			],
 			"thunderfang": [
 				"9M",
@@ -79522,7 +79522,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"weatherball": [
 				"9M",
 				"8M",
-				"8S8"
+				"8S0",
 			],
 			"wildcharge": [
 				"9M",
@@ -79599,7 +79599,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L42",
 				"8M",
 				"8L42",
-				"8S8"
+				"8S0",
 			],
 			"dig": [
 				"9M",
@@ -79622,13 +79622,13 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"extrasensory": [
 				"9L48",
-				"9S10",
+				"9S2",
 				"8L48"
 			],
 			"extremespeed": [
 				"9L1",
 				"8L1",
-				"8S8"
+				"8S0",
 			],
 			"facade": [
 				"9M",
@@ -79656,7 +79656,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"flamethrower": [
 				"9M",
 				"8M",
-				"8S8"
+				"8S0",
 			],
 			"flamewheel": [
 				"9L6",
@@ -79691,7 +79691,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"lavaplume": [
 				"9L54",
-				"9S10",
+				"9S2",
 				"8L54"
 			],
 			"leer": [
@@ -79742,7 +79742,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L36",
 				"8M",
 				"8L36",
-				"8S8"
+				"8S0",
 			],
 			"scorchingsands": [
 				"9M",
@@ -79790,13 +79790,13 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"sunnyday": [
 				"9M",
 				"9L66",
-				"9S10",
+				"9S2",
 				"8M",
 				"8L66"
 			],
 			"swagger": [
 				"9L60",
-				"9S10",
+				"9S2",
 				"8L60"
 			],
 			"swift": [
@@ -79897,7 +79897,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L18",
 				"8M",
 				"8L18",
-				"8S7"
+				"8S0",
 			],
 			"chillingwater": [
 				"9M"
@@ -79923,14 +79923,14 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"extrasensory": [
 				"9L48",
-				"9S9",
+				"9S2",
 				"8L48",
-				"8S7"
+				"8S0",
 			],
 			"extremespeed": [
 				"9L1",
 				"8L1",
-				"8S7"
+				"8S0",
 			],
 			"facade": [
 				"9M",
@@ -79989,11 +79989,11 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"liquidation": [
 				"9M",
 				"8M",
-				"8S7"
+				"8S0",
 			],
 			"mirrorcoat": [
 				"9L60",
-				"9S9",
+				"9S2",
 				"8L60"
 			],
 			"mist": [
@@ -80007,7 +80007,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"raindance": [
 				"9M",
 				"9L66",
-				"9S9",
+				"9S2",
 				"8M",
 				"8L66"
 			],
@@ -80066,7 +80066,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"surf": [
 				"9M",
 				"9L54",
-				"9S9",
+				"9S2",
 				"8M",
 				"8L54"
 			],
@@ -81066,7 +81066,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"aeroblast": [
 				"9L54",
-				"9S13",
+				"9S2",
 				"8L54"
 			],
 			"aircutter": [
@@ -81079,7 +81079,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"ancientpower": [
 				"9L1",
 				"8L1",
-				"8S11"
+				"8S0",
 			],
 			"avalanche": [
 				"9M",
@@ -81126,7 +81126,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"dragonpulse": [
 				"9M",
 				"8M",
-				"8S11"
+				"8S0",
 			],
 			"dragonrush": [
 				"9L1",
@@ -81153,9 +81153,9 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"extrasensory": [
 				"9L36",
-				"9S13",
+				"9S2",
 				"8L36",
-				"8S11"
+				"8S0",
 			],
 			"facade": [
 				"9M",
@@ -81259,13 +81259,13 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"raindance": [
 				"9M",
 				"9L63",
-				"9S13",
+				"9S2",
 				"8M",
 				"8L63"
 			],
 			"recover": [
 				"9L45",
-				"9S13",
+				"9S2",
 				"8L45"
 			],
 			"reflect": [
@@ -81373,7 +81373,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"whirlpool": [
 				"9M",
 				"8M",
-				"8S11"
+				"8S0",
 			],
 			"whirlwind": [
 				"9L1",
@@ -81439,7 +81439,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"ancientpower": [
 				"9L1",
 				"8L1",
-				"8S10"
+				"8S0",
 			],
 			"bodyslam": [
 				"9M"
@@ -81484,9 +81484,9 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"extrasensory": [
 				"9L36",
-				"9S12",
+				"9S2",
 				"8L36",
-				"8S10"
+				"8S0",
 			],
 			"facade": [
 				"9M",
@@ -81512,7 +81512,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"flareblitz": [
 				"9M",
 				"8M",
-				"8S10"
+				"8S0",
 			],
 			"fly": [
 				"9M",
@@ -81596,7 +81596,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"recover": [
 				"9L45",
-				"9S12",
+				"9S2",
 				"8L45"
 			],
 			"reflect": [
@@ -81612,7 +81612,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"sacredfire": [
 				"9L54",
-				"9S12",
+				"9S2",
 				"8L54"
 			],
 			"safeguard": [
@@ -81657,10 +81657,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"sunnyday": [
 				"9M",
 				"9L63",
-				"9S12",
+				"9S2",
 				"8M",
 				"8L63",
-				"8S10"
+				"8S0",
 			],
 			"swift": [
 				"9M",
@@ -81790,7 +81790,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"futuresight": [
 				"8M",
 				"8L70",
-				"8S8"
+				"8S0",
 			],
 			"gigadrain": [
 				"8M"
@@ -81809,7 +81809,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"healbell": [
 				"8L1",
-				"8S8"
+				"8S0",
 			],
 			"healingwish": [
 				"8L80"
@@ -81835,7 +81835,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"lifedew": [
 				"8L40",
-				"8S8"
+				"8S0",
 			],
 			"lightscreen": [
 				"8M"
@@ -81843,7 +81843,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"magicalleaf": [
 				"8M",
 				"8L10",
-				"8S8"
+				"8S0",
 			],
 			"magicroom": [
 				"8M"
@@ -107662,7 +107662,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9M",
 				"9L30",
 				"8L30",
-				"8S7"
+				"8S0",
 			],
 			"dig": [
 				"9M",
@@ -107724,7 +107724,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"hammerarm": [
 				"9L42",
 				"8L42",
-				"8S7"
+				"8S0",
 			],
 			"hardpress": [
 				"9M"
@@ -107840,7 +107840,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L48",
 				"8M",
 				"8L48",
-				"8S7"
+				"8S0",
 			],
 			"substitute": [
 				"9M",
@@ -107854,7 +107854,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L54",
 				"8M",
 				"8L54",
-				"8S7"
+				"8S0",
 			],
 			"takedown": [
 				"9M"
@@ -107917,7 +107917,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L36",
 				"8M",
 				"8L36",
-				"8S7"
+				"8S0",
 			],
 			"ancientpower": [
 				"9L12",
@@ -108020,7 +108020,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L24",
 				"8M",
 				"8L24",
-				"8S7"
+				"8S0",
 			],
 			"icepunch": [
 				"9M",
@@ -108038,7 +108038,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L1",
 				"8M",
 				"8L1",
-				"8S7"
+				"8S0",
 			],
 			"ironhead": [
 				"9M",
@@ -108132,7 +108132,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"zapcannon": [
 				"9L66",
 				"8L66",
-				"8S7"
+				"8S0",
 			]
 		},
 		"eventData": [
@@ -108196,7 +108196,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9M",
 				"9L1",
 				"8L1",
-				"8S7"
+				"8S0",
 			],
 			"curse": [
 				"9M",
@@ -108227,7 +108227,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L24",
 				"8M",
 				"8L24",
-				"8S7"
+				"8S0",
 			],
 			"fling": [
 				"9M",
@@ -108259,7 +108259,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L48",
 				"8M",
 				"8L48",
-				"8S7"
+				"8S0",
 			],
 			"hyperbeam": [
 				"9M",
@@ -108279,7 +108279,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L36",
 				"8M",
 				"8L36",
-				"8S7"
+				"8S0",
 			],
 			"ironhead": [
 				"9M",
@@ -108513,7 +108513,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"dive": [
 				"8M",
-				"8S11"
+				"8S1",
 			],
 			"doubleedge": [
 				"9M"
@@ -108525,7 +108525,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"dragonbreath": [
 				"9L25",
 				"8L25",
-				"8S10"
+				"8S0",
 			],
 			"dragoncheer": [
 				"9M"
@@ -108543,7 +108543,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L45",
 				"8M",
 				"8L45",
-				"8S11"
+				"8S1",
 			],
 			"drainingkiss": [
 				"9M"
@@ -108586,12 +108586,12 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"guardsplit": [
 				"9L65",
-				"9S13",
+				"9S3",
 				"8L65"
 			],
 			"healingwish": [
 				"9L70",
-				"9S13",
+				"9S3",
 				"8L70"
 			],
 			"healpulse": [
@@ -108629,7 +108629,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"mistball": [
 				"9L35",
 				"8L35",
-				"8S11"
+				"8S1",
 			],
 			"mysticalfire": [
 				"8M"
@@ -108645,7 +108645,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"psychic": [
 				"9M",
 				"9L60",
-				"9S13",
+				"9S3",
 				"8M",
 				"8L60"
 			],
@@ -108676,9 +108676,9 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"reflecttype": [
 				"9L55",
-				"9S13",
+				"9S3",
 				"8L55",
-				"8S10"
+				"8S0",
 			],
 			"rest": [
 				"9M",
@@ -108743,10 +108743,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"surf": [
 				"9M",
 				"8M",
-				"8S10"
+				"8S0",
 			],
 			"sweetkiss": [
-				"8S11"
+				"8S1",
 			],
 			"swift": [
 				"9M",
@@ -108805,7 +108805,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L40",
 				"8M",
 				"8L40",
-				"8S10"
+				"8S0",
 			]
 		},
 		"eventData": [
@@ -108883,7 +108883,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"aurasphere": [
 				"9M",
 				"8M",
-				"8S11"
+				"8S0",
 			],
 			"batonpass": [
 				"9M",
@@ -108927,7 +108927,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"dragonbreath": [
 				"9L25",
-				"9S13",
+				"9S2",
 				"8L25"
 			],
 			"dragoncheer": [
@@ -108942,15 +108942,15 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L1",
 				"8M",
 				"8L1",
-				"8S11"
+				"8S0",
 			],
 			"dragonpulse": [
 				"9M",
 				"9L45",
-				"9S13",
+				"9S2",
 				"8M",
 				"8L45",
-				"8S11"
+				"8S0",
 			],
 			"dualwingbeat": [
 				"9M",
@@ -109022,7 +109022,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"lusterpurge": [
 				"9L35",
-				"9S13",
+				"9S2",
 				"8L35"
 			],
 			"memento": [
@@ -109199,10 +109199,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"zenheadbutt": [
 				"9M",
 				"9L40",
-				"9S13",
+				"9S2",
 				"8M",
 				"8L40",
-				"8S11"
+				"8S0",
 			]
 		},
 		"eventData": [
@@ -109249,9 +109249,9 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"aquaring": [
 				"9L54",
-				"9S13",
+				"9S2",
 				"8L54",
-				"8S11"
+				"8S0",
 			],
 			"aquatail": [
 				"9L9",
@@ -109270,7 +109270,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L1",
 				"8M",
 				"8L1",
-				"8S11"
+				"8S0",
 			],
 			"brickbreak": [
 				"9M",
@@ -109339,7 +109339,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"icebeam": [
 				"9M",
 				"9L36",
-				"9S13",
+				"9S2",
 				"8M",
 				"8L36"
 			],
@@ -109358,7 +109358,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"muddywater": [
 				"9M",
 				"9L27",
-				"9S13",
+				"9S2",
 				"8M",
 				"8L27"
 			],
@@ -109406,7 +109406,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"sheercold": [
 				"9L45",
-				"9S13",
+				"9S2",
 				"8L45"
 			],
 			"sleeptalk": [
@@ -109423,7 +109423,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"surf": [
 				"9M",
 				"8M",
-				"8S11"
+				"8S0",
 			],
 			"takedown": [
 				"9M"
@@ -109434,7 +109434,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"thunder": [
 				"9M",
 				"8M",
-				"8S11"
+				"8S0",
 			],
 			"thunderbolt": [
 				"9M",
@@ -109561,10 +109561,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"earthquake": [
 				"9M",
 				"9L27",
-				"9S13",
+				"9S2",
 				"8M",
 				"8L27",
-				"8S11"
+				"8S0",
 			],
 			"endure": [
 				"9M",
@@ -109593,7 +109593,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"fissure": [
 				"9L45",
-				"9S13",
+				"9S2",
 				"8L45"
 			],
 			"flamethrower": [
@@ -109617,9 +109617,9 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"hammerarm": [
 				"9L36",
-				"9S13",
+				"9S2",
 				"8L36",
-				"8S11"
+				"8S0",
 			],
 			"heatcrash": [
 				"9M",
@@ -109653,7 +109653,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"lavaplume": [
 				"9L1",
 				"8L1",
-				"8S11"
+				"8S0",
 			],
 			"megakick": [
 				"8M"
@@ -109688,7 +109688,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"rest": [
 				"9M",
 				"9L54",
-				"9S13",
+				"9S2",
 				"8M",
 				"8L54"
 			],
@@ -109724,7 +109724,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L1",
 				"8M",
 				"8L1",
-				"8S11"
+				"8S0",
 			],
 			"scorchingsands": [
 				"9M",
@@ -109882,7 +109882,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"brutalswing": [
 				"8M",
-				"8S9"
+				"8S0",
 			],
 			"bulkup": [
 				"9M",
@@ -109914,7 +109914,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"dragonascent": [
 				"9L1",
 				"8L1",
-				"8S9"
+				"8S0",
 			],
 			"dragoncheer": [
 				"9M"
@@ -109932,7 +109932,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"dragonpulse": [
 				"9M",
 				"9L36",
-				"9S11",
+				"9S2",
 				"8M",
 				"8L36"
 			],
@@ -109958,7 +109958,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"extremespeed": [
 				"9L27",
 				"8L27",
-				"8S9"
+				"8S0",
 			],
 			"facade": [
 				"9M",
@@ -109979,7 +109979,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"fly": [
 				"9M",
 				"9L63",
-				"9S11",
+				"9S2",
 				"8M",
 				"8L63"
 			],
@@ -110017,7 +110017,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"hypervoice": [
 				"9M",
 				"9L45",
-				"9S11",
+				"9S2",
 				"8M",
 				"8L45"
 			],
@@ -110061,7 +110061,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"rest": [
 				"9M",
 				"9L54",
-				"9S11",
+				"9S2",
 				"8M",
 				"8L54"
 			],
@@ -110159,7 +110159,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"twister": [
 				"9L1",
 				"8L1",
-				"8S9"
+				"8S0",
 			],
 			"uproar": [
 				"8M"
@@ -110394,7 +110394,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"meteormash": [
 				"9L49",
 				"8L49",
-				"8S15"
+				"8S0",
 			],
 			"metronome": [
 				"9M",
@@ -110419,7 +110419,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L42",
 				"8M",
 				"8L42",
-				"8S15"
+				"8S0",
 			],
 			"psychicnoise": [
 				"9M"
@@ -110444,7 +110444,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L63",
 				"8M",
 				"8L63",
-				"8S15"
+				"8S0",
 			],
 			"round": [
 				"8M"
@@ -110537,7 +110537,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"wish": [
 				"9L1",
 				"8L1",
-				"8S15"
+				"8S0",
 			],
 			"zenheadbutt": [
 				"9M",
@@ -110647,7 +110647,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"gravity": [
 				"9M",
 				"9L37",
-				"9S11"
+				"9S0",
 			],
 			"hyperbeam": [
 				"9M",
@@ -110714,7 +110714,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"psychic": [
 				"9M",
 				"9L31",
-				"9S11"
+				"9S0",
 			],
 			"psychicnoise": [
 				"9M"
@@ -110759,7 +110759,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"skillswap": [
 				"9M",
 				"9L43",
-				"9S11"
+				"9S0",
 			],
 			"sleeptalk": [
 				"9M"
@@ -110839,7 +110839,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"zenheadbutt": [
 				"9M",
 				"9L49",
-				"9S11"
+				"9S0",
 			]
 		},
 		"eventData": [
@@ -111010,7 +111010,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"tackle": [
 				"9L1",
-				"9S2"
+				"9S0",
 			],
 			"takedown": [
 				"9M"
@@ -111567,7 +111567,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"scratch": [
 				"9L1",
-				"9S4"
+				"9S0",
 			],
 			"shadowclaw": [
 				"9M"
@@ -112239,7 +112239,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"pound": [
 				"9L1",
-				"9S6"
+				"9S0",
 			],
 			"powertrip": [
 				"9E"
@@ -120037,10 +120037,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"aurasphere": [
 				"9M",
 				"9L0",
-				"9S7",
+				"9S1",
 				"8M",
 				"8L0",
-				"8S6"
+				"8S0",
 			],
 			"blazekick": [
 				"8M"
@@ -120065,8 +120065,8 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"8M"
 			],
 			"bulletpunch": [
-				"9S7",
-				"8S6"
+				"9S1",
+				"8S0",
 			],
 			"calmmind": [
 				"9M",
@@ -120144,7 +120144,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"flashcannon": [
 				"9M",
-				"9S7",
+				"9S1",
 				"8M"
 			],
 			"fling": [
@@ -120185,7 +120185,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"icepunch": [
 				"9M",
-				"9S7",
+				"9S1",
 				"8M"
 			],
 			"irondefense": [
@@ -120286,7 +120286,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L1",
 				"8M",
 				"8L1",
-				"8S6"
+				"8S0",
 			],
 			"roar": [
 				"9M"
@@ -120333,7 +120333,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"steelbeam": [
 				"9M",
 				"8T",
-				"8S6"
+				"8S0",
 			],
 			"stoneedge": [
 				"9M",
@@ -123052,7 +123052,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L63",
 				"8M",
 				"8L63",
-				"8S5"
+				"8S0",
 			],
 			"gigadrain": [
 				"9M",
@@ -123098,7 +123098,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"magicroom": [
 				"9L1",
 				"8M",
-				"8S5"
+				"8S0",
 			],
 			"memento": [
 				"9L77",
@@ -123139,7 +123139,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L49",
 				"8M",
 				"8L49",
-				"8S5"
+				"8S0",
 			],
 			"psychicnoise": [
 				"9M"
@@ -123184,7 +123184,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"shadowball": [
 				"9M",
 				"8M",
-				"8S5"
+				"8S0",
 			],
 			"skillswap": [
 				"9M",
@@ -123342,7 +123342,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L42",
 				"8M",
 				"8L42",
-				"8S5"
+				"8S0",
 			],
 			"confuseray": [
 				"9M"
@@ -123365,7 +123365,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"drainingkiss": [
 				"9M",
 				"8M",
-				"8S5"
+				"8S0",
 			],
 			"drainpunch": [
 				"9M",
@@ -123497,7 +123497,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L49",
 				"8M",
 				"8L49",
-				"8S5"
+				"8S0",
 			],
 			"psychicnoise": [
 				"9M"
@@ -123599,7 +123599,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"triattack": [
 				"9L1",
 				"8M",
-				"8S5"
+				"8S0",
 			],
 			"trick": [
 				"9M",
@@ -123694,7 +123694,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"dazzlinggleam": [
 				"9M",
 				"8M",
-				"8S5"
+				"8S0",
 			],
 			"detect": [
 				"9L14",
@@ -123742,7 +123742,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"facade": [
 				"9M",
 				"8M",
-				"8S5"
+				"8S0",
 			],
 			"fireblast": [
 				"9M",
@@ -123826,7 +123826,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L42",
 				"8M",
 				"8L42",
-				"8S5"
+				"8S0",
 			],
 			"payback": [
 				"9L1",
@@ -123850,7 +123850,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L49",
 				"8M",
 				"8L49",
-				"8S5"
+				"8S0",
 			],
 			"psychocut": [
 				"9L1",
@@ -124030,7 +124030,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"ancientpower": [
 				"9L16",
 				"8L16",
-				"8S11"
+				"8S0",
 			],
 			"aurasphere": [
 				"9M",
@@ -124068,7 +124068,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"dracometeor": [
 				"9M",
-				"9S15",
+				"9S4",
 				"8T"
 			],
 			"dragonbreath": [
@@ -124080,7 +124080,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L40",
 				"8M",
 				"8L40",
-				"8S11"
+				"8S0",
 			],
 			"dragonpulse": [
 				"9M",
@@ -124092,7 +124092,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"earthpower": [
 				"9M",
 				"9L72",
-				"9S15",
+				"9S4",
 				"8M",
 				"8L72"
 			],
@@ -124110,7 +124110,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"fireblast": [
 				"9M",
-				"9S15",
+				"9S4",
 				"8M"
 			],
 			"flamethrower": [
@@ -124122,8 +124122,8 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L32",
 				"8M",
 				"8L32",
-				"8S12",
-				"8S11"
+				"8S1",
+				"8S0",
 			],
 			"focusblast": [
 				"9M"
@@ -124167,7 +124167,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"metalburst": [
 				"9L64",
 				"8L64",
-				"8S12"
+				"8S1",
 			],
 			"metalclaw": [
 				"9M",
@@ -124184,7 +124184,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"overheat": [
 				"9M",
 				"8M",
-				"8S12"
+				"8S1",
 			],
 			"powergem": [
 				"9M",
@@ -124213,7 +124213,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"roaroftime": [
 				"9L88",
 				"8L88",
-				"8S12"
+				"8S1",
 			],
 			"rockslide": [
 				"9M",
@@ -124250,7 +124250,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"slash": [
 				"9L24",
 				"8L24",
-				"8S11"
+				"8S0",
 			],
 			"sleeptalk": [
 				"9M",
@@ -124265,7 +124265,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"steelbeam": [
 				"9M",
-				"9S15",
+				"9S4",
 				"8T"
 			],
 			"stompingtantrum": [
@@ -124385,7 +124385,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"ancientpower": [
 				"9L16",
 				"8L16",
-				"8S11"
+				"8S0",
 			],
 			"aquaring": [
 				"9L32",
@@ -124400,7 +124400,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L48",
 				"8M",
 				"8L48",
-				"8S12"
+				"8S1",
 			],
 			"avalanche": [
 				"9M",
@@ -124445,7 +124445,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"dracometeor": [
 				"9M",
-				"9S15",
+				"9S4",
 				"8T"
 			],
 			"dragonbreath": [
@@ -124456,7 +124456,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9M",
 				"8M",
 				"8L40",
-				"8S11"
+				"8S0",
 			],
 			"dragonpulse": [
 				"9M",
@@ -124474,7 +124474,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L72",
 				"8M",
 				"8L72",
-				"8S12"
+				"8S1",
 			],
 			"earthquake": [
 				"9M",
@@ -124490,7 +124490,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"fireblast": [
 				"9M",
-				"9S15",
+				"9S4",
 				"8M"
 			],
 			"flamethrower": [
@@ -124522,10 +124522,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"hydropump": [
 				"9M",
 				"9L88",
-				"9S15",
+				"9S4",
 				"8M",
 				"8L88",
-				"8S12"
+				"8S1",
 			],
 			"hyperbeam": [
 				"9M",
@@ -124609,7 +124609,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"slash": [
 				"9L24",
 				"8L24",
-				"8S11"
+				"8S0",
 			],
 			"sleeptalk": [
 				"9M",
@@ -124624,7 +124624,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"spacialrend": [
 				"9L80",
 				"8L80",
-				"8S12"
+				"8S1",
 			],
 			"stompingtantrum": [
 				"9M",
@@ -124645,7 +124645,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"surf": [
 				"9M",
 				"8M",
-				"8S11"
+				"8S0",
 			],
 			"swift": [
 				"9M",
@@ -124659,7 +124659,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"thunder": [
 				"9M",
-				"9S15",
+				"9S4",
 				"8M"
 			],
 			"thunderbolt": [
@@ -124783,7 +124783,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L36",
 				"8M",
 				"8L36",
-				"8S8"
+				"8S0",
 			],
 			"darkpulse": [
 				"9M",
@@ -124879,12 +124879,12 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L30",
 				"8M",
 				"8L30",
-				"8S8"
+				"8S0",
 			],
 			"lavaplume": [
 				"9L42",
 				"8L42",
-				"8S8"
+				"8S0",
 			],
 			"leer": [
 				"9L1",
@@ -124906,7 +124906,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9M",
 				"9L48",
 				"8L48",
-				"8S8"
+				"8S0",
 			],
 			"overheat": [
 				"9M",
@@ -125086,7 +125086,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"crushgrip": [
 				"9L78",
 				"8L78",
-				"8S8"
+				"8S0",
 			],
 			"darkestlariat": [
 				"8M"
@@ -125135,7 +125135,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L72",
 				"8M",
 				"8L72",
-				"8S8"
+				"8S0",
 			],
 			"gravity": [
 				"9M"
@@ -125143,7 +125143,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"hammerarm": [
 				"9L66",
 				"8L66",
-				"8S8"
+				"8S0",
 			],
 			"hardpress": [
 				"9M"
@@ -125300,7 +125300,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L54",
 				"8M",
 				"8L54",
-				"8S8"
+				"8S0",
 			]
 		},
 		"eventData": [
@@ -125345,7 +125345,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"ancientpower": [
 				"9L14",
 				"8L14",
-				"8S8"
+				"8S0",
 			],
 			"aurasphere": [
 				"9M",
@@ -125403,7 +125403,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L63",
 				"8M",
 				"8L63",
-				"8S8"
+				"8S0",
 			],
 			"dragonpulse": [
 				"9M",
@@ -125524,12 +125524,12 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L35",
 				"8M",
 				"8L35",
-				"8S8"
+				"8S0",
 			],
 			"shadowball": [
 				"9M",
 				"8M",
-				"8S8"
+				"8S0",
 			],
 			"shadowclaw": [
 				"9M",
@@ -125730,7 +125730,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"icywind": [
 				"9M",
 				"8M",
-				"8S5"
+				"8S0",
 			],
 			"lightscreen": [
 				"9M",
@@ -125753,7 +125753,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"moonblast": [
 				"9L60",
 				"8L60",
-				"8S5"
+				"8S0",
 			],
 			"moonlight": [
 				"9L42",
@@ -125790,7 +125790,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L36",
 				"8M",
 				"8L36",
-				"8S5"
+				"8S0",
 			],
 			"psychoshift": [
 				"8L24"
@@ -125801,7 +125801,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"psyshock": [
 				"9M",
 				"8M",
-				"8S5"
+				"8S0",
 			],
 			"raindance": [
 				"9M",
@@ -126066,7 +126066,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 		"learnset": {
 			"acidarmor": [
 				"9L31",
-				"9S9"
+				"9S2",
 			],
 			"alluringvoice": [
 				"9M"
@@ -126082,7 +126082,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"bubblebeam": [
 				"9L24",
-				"9S9"
+				"9S2",
 			],
 			"calmmind": [
 				"9M"
@@ -126230,7 +126230,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"waterpulse": [
 				"9M",
 				"9L46",
-				"9S9"
+				"9S2",
 			],
 			"weatherball": [
 				"9M"
@@ -126238,7 +126238,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"whirlpool": [
 				"9M",
 				"9L39",
-				"9S9"
+				"9S2",
 			],
 			"zenheadbutt": [
 				"9M"
@@ -126312,7 +126312,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"darkpulse": [
 				"9M",
 				"9L93",
-				"9S10"
+				"9S2",
 			],
 			"darkvoid": [
 				"9L66"
@@ -126328,7 +126328,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"dreameater": [
 				"9L84",
-				"9S10"
+				"9S2",
 			],
 			"endure": [
 				"9M"
@@ -126363,7 +126363,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"hypnosis": [
 				"9L20",
-				"9S10"
+				"9S2",
 			],
 			"icebeam": [
 				"9M"
@@ -126420,7 +126420,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"shadowball": [
 				"9M",
-				"9S10"
+				"9S2",
 			],
 			"shadowclaw": [
 				"9M"
@@ -127144,7 +127144,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"flamecharge": [
 				"8L1",
-				"8S7"
+				"8S0",
 			],
 			"flamethrower": [
 				"8M"
@@ -127303,7 +127303,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"vcreate": [
 				"8L1",
-				"8S7"
+				"8S0",
 			],
 			"wildcharge": [
 				"8M"
@@ -127314,12 +127314,12 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"workup": [
 				"8M",
 				"8L7",
-				"8S7"
+				"8S0",
 			],
 			"zenheadbutt": [
 				"8M",
 				"8L42",
-				"8S7"
+				"8S0",
 			]
 		},
 		"eventData": [
@@ -155853,10 +155853,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"closecombat": [
 				"9M",
 				"9L70",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L70",
-				"8S5"
+				"8S0",
 			],
 			"coaching": [
 				"9M",
@@ -155913,10 +155913,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"ironhead": [
 				"9M",
 				"9L63",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L63",
-				"8S5"
+				"8S0",
 			],
 			"leer": [
 				"9L1",
@@ -155987,9 +155987,9 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"sacredsword": [
 				"9L49",
-				"9S6",
+				"9S1",
 				"8L49",
-				"8S5"
+				"8S0",
 			],
 			"safeguard": [
 				"8M"
@@ -156042,10 +156042,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"swordsdance": [
 				"9M",
 				"9L56",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L56",
-				"8S5"
+				"8S0",
 			],
 			"takedown": [
 				"9M",
@@ -156141,10 +156141,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"closecombat": [
 				"9M",
 				"9L70",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L70",
-				"8S5"
+				"8S0",
 			],
 			"coaching": [
 				"9M",
@@ -156270,9 +156270,9 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"sacredsword": [
 				"9L49",
-				"9S6",
+				"9S1",
 				"8L49",
-				"8S5"
+				"8S0",
 			],
 			"safeguard": [
 				"8M"
@@ -156312,10 +156312,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"stoneedge": [
 				"9M",
 				"9L63",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L63",
-				"8S5"
+				"8S0",
 			],
 			"substitute": [
 				"9M",
@@ -156331,10 +156331,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"swordsdance": [
 				"9M",
 				"9L56",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L56",
-				"8S5"
+				"8S0",
 			],
 			"takedown": [
 				"9M",
@@ -156421,10 +156421,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"closecombat": [
 				"9M",
 				"9L70",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L70",
-				"8S5"
+				"8S0",
 			],
 			"coaching": [
 				"9M",
@@ -156487,10 +156487,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"leafblade": [
 				"9L63",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L63",
-				"8S5"
+				"8S0",
 			],
 			"leafstorm": [
 				"9M",
@@ -156556,9 +156556,9 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"sacredsword": [
 				"9L49",
-				"9S6",
+				"9S1",
 				"8L49",
-				"8S5"
+				"8S0",
 			],
 			"safeguard": [
 				"8M"
@@ -156611,10 +156611,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"swordsdance": [
 				"9M",
 				"9L56",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L56",
-				"8S5"
+				"8S0",
 			],
 			"synthesis": [
 				"9L42"
@@ -156689,7 +156689,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L25",
 				"8M",
 				"8L25",
-				"8S7"
+				"8S0",
 			],
 			"aircutter": [
 				"9M",
@@ -156794,14 +156794,14 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"heatwave": [
 				"9M",
 				"8M",
-				"8S7"
+				"8S0",
 			],
 			"hurricane": [
 				"9M",
 				"9L65",
 				"8M",
 				"8L65",
-				"8S7"
+				"8S0",
 			],
 			"hyperbeam": [
 				"9M",
@@ -156810,7 +156810,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"icywind": [
 				"9M",
 				"8M",
-				"8S7"
+				"8S0",
 			],
 			"irontail": [
 				"8M"
@@ -157123,7 +157123,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L60",
 				"8M",
 				"8L60",
-				"8S7"
+				"8S0",
 			],
 			"rest": [
 				"9M",
@@ -157157,7 +157157,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"sludgewave": [
 				"9M",
 				"8M",
-				"8S7"
+				"8S0",
 			],
 			"smackdown": [
 				"9M"
@@ -157212,7 +157212,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L65",
 				"8M",
 				"8L65",
-				"8S7"
+				"8S0",
 			],
 			"thunderbolt": [
 				"9M",
@@ -157249,7 +157249,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"weatherball": [
 				"9M",
 				"8M",
-				"8S7"
+				"8S0",
 			],
 			"wildboltstorm": [
 				"9L75"
@@ -157334,7 +157334,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"dragonclaw": [
 				"9M",
 				"8M",
-				"8S7"
+				"8S0",
 			],
 			"dragondance": [
 				"9M",
@@ -157364,7 +157364,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"extrasensory": [
 				"9L24",
 				"8L24",
-				"8S7"
+				"8S0",
 			],
 			"facade": [
 				"9M",
@@ -157373,7 +157373,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"fireblast": [
 				"9M",
 				"9L64",
-				"9S8",
+				"9S1",
 				"8M",
 				"8L64"
 			],
@@ -157392,7 +157392,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"flamethrower": [
 				"9M",
 				"9L40",
-				"9S8",
+				"9S1",
 				"8M",
 				"8L40"
 			],
@@ -157414,9 +157414,9 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"fusionflare": [
 				"9L48",
-				"9S8",
+				"9S1",
 				"8L48",
-				"8S7"
+				"8S0",
 			],
 			"gigaimpact": [
 				"9M",
@@ -157441,7 +157441,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"hypervoice": [
 				"9M",
 				"9L56",
-				"9S8",
+				"9S1",
 				"8M",
 				"8L56"
 			],
@@ -157461,7 +157461,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"nobleroar": [
 				"9L1",
 				"8L1",
-				"8S7"
+				"8S0",
 			],
 			"outrage": [
 				"9M",
@@ -157670,7 +157670,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L32",
 				"8M",
 				"8L32",
-				"8S7"
+				"8S0",
 			],
 			"dragondance": [
 				"9M",
@@ -157727,9 +157727,9 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"fusionbolt": [
 				"9L48",
-				"9S8",
+				"9S1",
 				"8L48",
-				"8S7"
+				"8S0",
 			],
 			"gigaimpact": [
 				"9M",
@@ -157749,7 +157749,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"hypervoice": [
 				"9M",
 				"9L56",
-				"9S8",
+				"9S1",
 				"8M",
 				"8L56"
 			],
@@ -157766,7 +157766,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"nobleroar": [
 				"9L1",
 				"8L1",
-				"8S7"
+				"8S0",
 			],
 			"outrage": [
 				"9M",
@@ -157835,7 +157835,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"slash": [
 				"9L8",
 				"8L8",
-				"8S7"
+				"8S0",
 			],
 			"sleeptalk": [
 				"9M",
@@ -157880,14 +157880,14 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"thunder": [
 				"9M",
 				"9L64",
-				"9S8",
+				"9S1",
 				"8M",
 				"8L64"
 			],
 			"thunderbolt": [
 				"9M",
 				"9L40",
-				"9S8",
+				"9S1",
 				"8M",
 				"8L40"
 			],
@@ -157977,7 +157977,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L15",
 				"8M",
 				"8L15",
-				"8S5"
+				"8S0",
 			],
 			"calmmind": [
 				"9M",
@@ -158029,7 +158029,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"focusblast": [
 				"9M",
 				"8M",
-				"8S5"
+				"8S0",
 			],
 			"gigaimpact": [
 				"9M",
@@ -158102,7 +158102,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L35",
 				"8M",
 				"8L35",
-				"8S5"
+				"8S0",
 			],
 			"rockthrow": [
 				"8L1"
@@ -158130,7 +158130,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L1",
 				"8M",
 				"8L1",
-				"8S5"
+				"8S0",
 			],
 			"scaryface": [
 				"9M",
@@ -158247,7 +158247,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"blizzard": [
 				"9M",
 				"9L56",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L56"
 			],
@@ -158356,17 +158356,17 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"hypervoice": [
 				"9M",
 				"9L40",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L40",
-				"8S5"
+				"8S0",
 			],
 			"icebeam": [
 				"9M",
 				"9L32",
 				"8M",
 				"8L32",
-				"8S5"
+				"8S0",
 			],
 			"icefang": [
 				"9M"
@@ -158382,7 +158382,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"imprison": [
 				"9M",
 				"9L64",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L64"
 			],
@@ -158451,15 +158451,15 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"scaryface": [
 				"9M",
 				"9L48",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L48",
-				"8S5"
+				"8S0",
 			],
 			"shadowball": [
 				"9M",
 				"8M",
-				"8S5"
+				"8S0",
 			],
 			"shadowclaw": [
 				"9M",
@@ -158556,7 +158556,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"blizzard": [
 				"9M",
 				"9L56",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L56"
 			],
@@ -158649,9 +158649,9 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"fusionbolt": [
 				"9L48",
-				"9S6",
+				"9S1",
 				"8L48",
-				"8S5"
+				"8S0",
 			],
 			"gigaimpact": [
 				"9M",
@@ -158671,17 +158671,17 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"hypervoice": [
 				"9M",
 				"9L40",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L40",
-				"8S5"
+				"8S0",
 			],
 			"icebeam": [
 				"9M",
 				"9L32",
 				"8M",
 				"8L32",
-				"8S5"
+				"8S0",
 			],
 			"icefang": [
 				"9M"
@@ -158697,7 +158697,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"imprison": [
 				"9M",
 				"9L64",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L64"
 			],
@@ -158770,7 +158770,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"shadowball": [
 				"9M",
 				"8M",
-				"8S5"
+				"8S0",
 			],
 			"shadowclaw": [
 				"9M",
@@ -158867,7 +158867,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"blizzard": [
 				"9M",
 				"9L56",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L56"
 			],
@@ -158956,9 +158956,9 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"fusionflare": [
 				"9L48",
-				"9S6",
+				"9S1",
 				"8L48",
-				"8S5"
+				"8S0",
 			],
 			"gigaimpact": [
 				"9M",
@@ -158978,17 +158978,17 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"hypervoice": [
 				"9M",
 				"9L40",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L40",
-				"8S5"
+				"8S0",
 			],
 			"icebeam": [
 				"9M",
 				"9L32",
 				"8M",
 				"8L32",
-				"8S5"
+				"8S0",
 			],
 			"iceburn": [
 				"9L80",
@@ -159008,7 +159008,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"imprison": [
 				"9M",
 				"9L64",
-				"9S6",
+				"9S1",
 				"8M",
 				"8L64"
 			],
@@ -159081,7 +159081,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"shadowball": [
 				"9M",
 				"8M",
-				"8S5"
+				"8S0",
 			],
 			"shadowclaw": [
 				"9M",
@@ -159178,8 +159178,8 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"aquatail": [
 				"9L35",
-				"9S5",
-				"9S6",
+				"9S1",
+				"9S2",
 				"8L35"
 			],
 			"aurasphere": [
@@ -159222,7 +159222,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"doublekick": [
 				"9L21",
-				"9S6",
+				"9S2",
 				"8L21"
 			],
 			"endure": [
@@ -159263,7 +159263,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L63",
 				"8M",
 				"8L63",
-				"8S4"
+				"8S0",
 			],
 			"hyperbeam": [
 				"9M",
@@ -159308,7 +159308,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"quickguard": [
 				"9L14",
-				"9S6",
+				"9S2",
 				"8L14"
 			],
 			"raindance": [
@@ -159325,7 +159325,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"retaliate": [
 				"9L28",
-				"9S5",
+				"9S1",
 				"8M",
 				"8L28"
 			],
@@ -159344,10 +159344,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"sacredsword": [
 				"9L49",
-				"9S5",
-				"9S6",
+				"9S1",
+				"9S2",
 				"8L49",
-				"8S4"
+				"8S0",
 			],
 			"safeguard": [
 				"8M"
@@ -159358,7 +159358,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"secretsword": [
 				"9L1",
 				"8L1",
-				"8S4"
+				"8S0",
 			],
 			"sleeptalk": [
 				"9M",
@@ -159399,12 +159399,12 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L56",
 				"8M",
 				"8L56",
-				"8S4"
+				"8S0",
 			],
 			"takedown": [
 				"9M",
 				"9L42",
-				"9S5",
+				"9S1",
 				"8L42"
 			],
 			"taunt": [
@@ -159524,7 +159524,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"echoedvoice": [
 				"9L36",
-				"9S5"
+				"9S1",
 			],
 			"endure": [
 				"9M"
@@ -159568,7 +159568,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"hypervoice": [
 				"9M",
 				"9L64",
-				"9S4"
+				"9S0",
 			],
 			"icepunch": [
 				"9M"
@@ -159600,12 +159600,12 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"psybeam": [
 				"9M",
 				"9L31",
-				"9S5"
+				"9S1",
 			],
 			"psychic": [
 				"9M",
 				"9L57",
-				"9S4"
+				"9S0",
 			],
 			"psychup": [
 				"9M"
@@ -159621,8 +159621,8 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"relicsong": [
 				"9L50",
-				"9S4",
-				"9S5"
+				"9S0",
+				"9S1",
 			],
 			"rest": [
 				"9M"
@@ -159644,8 +159644,8 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"sing": [
 				"9L1",
-				"9S4",
-				"9S5"
+				"9S0",
+				"9S1",
 			],
 			"skillswap": [
 				"9M"
@@ -159772,7 +159772,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"fellstinger": [
 				"8L21",
-				"8S4"
+				"8S0",
 			],
 			"flamecharge": [
 				"8L28"
@@ -159824,7 +159824,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"metalclaw": [
 				"8L14",
-				"8S4"
+				"8S0",
 			],
 			"metalsound": [
 				"8L35"
@@ -159881,7 +159881,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"technoblast": [
 				"8L84",
-				"8S4"
+				"8S0",
 			],
 			"thunder": [
 				"8M"
@@ -159901,7 +159901,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"xscissor": [
 				"8M",
 				"8L42",
-				"8S4"
+				"8S0",
 			],
 			"zapcannon": [
 				"8L70"
@@ -169727,12 +169727,12 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"hyperbeam": [
 				"9M",
-				"9S3",
+				"9S0",
 				"8M"
 			],
 			"hypervoice": [
 				"9M",
-				"9S3",
+				"9S0",
 				"8M"
 			],
 			"irontail": [
@@ -169839,7 +169839,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"sleeptalk": [
 				"9M",
-				"9S3",
+				"9S0",
 				"8M"
 			],
 			"snore": [
@@ -169878,7 +169878,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"terablast": [
 				"9M",
-				"9S3"
+				"9S0",
 			],
 			"trailblaze": [
 				"9M"
@@ -174224,7 +174224,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"dazzlinggleam": [
 				"8M",
-				"8S5"
+				"8S0",
 			],
 			"drainingkiss": [
 				"8M"
@@ -174262,7 +174262,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"hornleech": [
 				"8L35",
-				"8S5"
+				"8S0",
 			],
 			"hyperbeam": [
 				"8M"
@@ -174272,7 +174272,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"ingrain": [
 				"8L45",
-				"8S5"
+				"8S0",
 			],
 			"lightscreen": [
 				"8M",
@@ -174291,7 +174291,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"moonblast": [
 				"8L60",
-				"8S5"
+				"8S0",
 			],
 			"naturepower": [
 				"8L15"
@@ -174428,7 +174428,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"dragonrush": [
 				"8L65",
-				"8S5"
+				"8S0",
 			],
 			"dualwingbeat": [
 				"8T"
@@ -174475,7 +174475,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"oblivionwing": [
 				"8L50",
-				"8S5"
+				"8S0",
 			],
 			"payback": [
 				"8M"
@@ -174533,7 +174533,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"suckerpunch": [
 				"8L20",
-				"8S5"
+				"8S0",
 			],
 			"sunnyday": [
 				"8M"
@@ -174547,7 +174547,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"taunt": [
 				"8M",
 				"8L5",
-				"8S5"
+				"8S0",
 			],
 			"thief": [
 				"8M"
@@ -174588,7 +174588,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 		"learnset": {
 			"bind": [
 				"8L1",
-				"8S9"
+				"8S0",
 			],
 			"bite": [
 				"8L1"
@@ -174632,7 +174632,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"dragonpulse": [
 				"8M",
 				"8L40",
-				"8S9"
+				"8S0",
 			],
 			"earthpower": [
 				"8M"
@@ -174676,7 +174676,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"landswrath": [
 				"8L48",
-				"8S9"
+				"8S0",
 			],
 			"outrage": [
 				"8M",
@@ -174749,7 +174749,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"thousandarrows": [
 				"8L1",
-				"8S9"
+				"8S0",
 			],
 			"thousandwaves": [
 				"8L1"
@@ -174776,16 +174776,16 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 	"zygarde10": {
 		"learnset": {
 			"bind": [
-				"8S5"
+				"8S0",
 			],
 			"dragonpulse": [
-				"8S5"
+				"8S0",
 			],
 			"landswrath": [
-				"8S5"
+				"8S0",
 			],
 			"thousandarrows": [
-				"8S5"
+				"8S0",
 			]
 		},
 		"eventData": [
@@ -175397,7 +175397,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L78",
 				"8M",
 				"8L78",
-				"8S2"
+				"8S0",
 			],
 			"flashcannon": [
 				"9M",
@@ -175426,7 +175426,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9M",
 				"9L60",
 				"8L60",
-				"8S2"
+				"8S0",
 			],
 			"heatcrash": [
 				"9M",
@@ -175453,7 +175453,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"incinerate": [
 				"9L36",
 				"8L36",
-				"8S2"
+				"8S0",
 			],
 			"leer": [
 				"9L6",
@@ -175554,7 +175554,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"steameruption": [
 				"9L1",
 				"8L72",
-				"8S2"
+				"8S0",
 			],
 			"stomp": [
 				"9L42",
@@ -184820,7 +184820,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9M"
 			],
 			"celebrate": [
-				"9S1"
+				"9S0",
 			],
 			"charm": [
 				"9M",
@@ -184828,7 +184828,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"dazzlinggleam": [
 				"9M",
-				"9S1",
+				"9S0",
 				"8M"
 			],
 			"drainingkiss": [
@@ -184954,7 +184954,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"splash": [
 				"9L1",
-				"9S1",
+				"9S0",
 				"8L1"
 			],
 			"stomp": [
@@ -184967,7 +184967,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"sunnyday": [
 				"9M",
-				"9S1",
+				"9S0",
 				"8M"
 			],
 			"sweetscent": [
@@ -187030,7 +187030,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"ironhead": [
 				"8M",
 				"8L45",
-				"8S2"
+				"8S0",
 			],
 			"metalsound": [
 				"8L20"
@@ -187086,7 +187086,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"takedown": [
 				"8L50",
-				"8S2"
+				"8S0",
 			],
 			"terrainpulse": [
 				"8T"
@@ -187097,7 +187097,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"triattack": [
 				"8M",
 				"8L35",
-				"8S2"
+				"8S0",
 			],
 			"uturn": [
 				"8M"
@@ -187108,7 +187108,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"xscissor": [
 				"8M",
 				"8L40",
-				"8S2"
+				"8S0",
 			]
 		},
 		"eventData": [
@@ -188110,7 +188110,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"curse": [
 				"9M",
 				"9E",
-				"9S3",
+				"9S0",
 				"8E"
 			],
 			"darkpulse": [
@@ -188123,7 +188123,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"destinybond": [
 				"9E",
-				"9S3",
+				"9S0",
 				"8E"
 			],
 			"doubleteam": [
@@ -188204,7 +188204,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"phantomforce": [
 				"9M",
-				"9S3",
+				"9S0",
 				"8M"
 			],
 			"playrough": [
@@ -188310,7 +188310,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"thunderbolt": [
 				"9M",
-				"9S3",
+				"9S0",
 				"8M"
 			],
 			"thunderwave": [
@@ -189769,7 +189769,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"bravebird": [
 				"8M",
 				"8L65",
-				"8S3"
+				"8S0",
 			],
 			"calmmind": [
 				"8M"
@@ -189848,7 +189848,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"quickattack": [
 				"8L1",
-				"8S3"
+				"8S0",
 			],
 			"raindance": [
 				"8M"
@@ -189895,7 +189895,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"taunt": [
 				"8M",
-				"8S3"
+				"8S0",
 			],
 			"thief": [
 				"8M"
@@ -189905,7 +189905,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"thunderbolt": [
 				"8M",
-				"8S3"
+				"8S0",
 			],
 			"thunderpunch": [
 				"8M"
@@ -189966,7 +189966,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"charm": [
 				"8M",
-				"8S2"
+				"8S0",
 			],
 			"confusion": [
 				"8L1"
@@ -190022,7 +190022,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"magicroom": [
 				"8M",
-				"8S2"
+				"8S0",
 			],
 			"meanlook": [
 				"8L50"
@@ -190035,7 +190035,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"playrough": [
 				"8M",
-				"8S2"
+				"8S0",
 			],
 			"powerswap": [
 				"8M"
@@ -190048,7 +190048,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"psychic": [
 				"8M",
-				"8S2"
+				"8S0",
 			],
 			"psychicterrain": [
 				"8M",
@@ -190233,7 +190233,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"megahorn": [
 				"8M",
 				"8L65",
-				"8S2"
+				"8S0",
 			],
 			"megapunch": [
 				"8M"
@@ -190277,7 +190277,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"scaryface": [
 				"8M",
 				"8L35",
-				"8S2"
+				"8S0",
 			],
 			"seedbomb": [
 				"8M"
@@ -190314,7 +190314,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"superpower": [
 				"8M",
-				"8S2"
+				"8S0",
 			],
 			"swordsdance": [
 				"8M"
@@ -190330,7 +190330,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"woodhammer": [
 				"8L60",
-				"8S2"
+				"8S0",
 			],
 			"workup": [
 				"8M"
@@ -190365,7 +190365,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"brine": [
 				"8M",
 				"8L25",
-				"8S2"
+				"8S0",
 			],
 			"calmmind": [
 				"8M"
@@ -190446,7 +190446,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"moonblast": [
 				"8L60",
-				"8S2"
+				"8S0",
 			],
 			"muddywater": [
 				"8M",
@@ -190518,11 +190518,11 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"waterpulse": [
 				"8L20",
-				"8S2"
+				"8S0",
 			],
 			"whirlpool": [
 				"8M",
-				"8S2"
+				"8S0",
 			],
 			"withdraw": [
 				"8L5"
@@ -190550,12 +190550,12 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"splash": [
 				"9L1",
 				"8L1",
-				"8S1"
+				"8S0",
 			],
 			"teleport": [
 				"9L1",
 				"8L1",
-				"8S1"
+				"8S0",
 			]
 		},
 		"eventData": [
@@ -190644,7 +190644,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"firespin": [
 				"9M",
 				"8M",
-				"8S3"
+				"8S0",
 			],
 			"flamecharge": [
 				"9M"
@@ -190656,7 +190656,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"flareblitz": [
 				"9M",
 				"9L70",
-				"9S4",
+				"9S1",
 				"8M",
 				"8L70"
 			],
@@ -190716,7 +190716,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"irontail": [
 				"8M",
-				"8S3"
+				"8S0",
 			],
 			"knockoff": [
 				"9M"
@@ -190727,7 +190727,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"metalburst": [
 				"9L49",
-				"9S4",
+				"9S1",
 				"8L49"
 			],
 			"metalclaw": [
@@ -190754,7 +190754,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"nobleroar": [
 				"9L1",
 				"8L1",
-				"8S3"
+				"8S0",
 			],
 			"outrage": [
 				"9M",
@@ -190822,7 +190822,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"solarbeam": [
 				"9M",
 				"9L63",
-				"9S4",
+				"9S1",
 				"8M",
 				"8L63"
 			],
@@ -190888,7 +190888,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"wildcharge": [
 				"9M",
 				"9L56",
-				"9S4",
+				"9S1",
 				"8M",
 				"8L56"
 			],
@@ -190900,7 +190900,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L21",
 				"8M",
 				"8L21",
-				"8S3"
+				"8S0",
 			]
 		},
 		"eventData": [
@@ -190977,7 +190977,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"dreameater": [
 				"9L70",
-				"9S4",
+				"9S1",
 				"8L70"
 			],
 			"dualwingbeat": [
@@ -191047,7 +191047,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"magiccoat": [
 				"8L49",
-				"8S3"
+				"8S0",
 			],
 			"magicroom": [
 				"8M"
@@ -191058,9 +191058,9 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"moonblast": [
 				"9L56",
-				"9S4",
+				"9S1",
 				"8L56",
-				"8S3"
+				"8S0",
 			],
 			"moongeistbeam": [
 				"9L0",
@@ -191082,7 +191082,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"phantomforce": [
 				"9M",
 				"9L63",
-				"9S4",
+				"9S1",
 				"8M",
 				"8L63"
 			],
@@ -191097,7 +191097,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"psychic": [
 				"9M",
 				"9L49",
-				"9S4",
+				"9S1",
 				"8M"
 			],
 			"psychocut": [
@@ -191136,7 +191136,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L28",
 				"8M",
 				"8L28",
-				"8S3"
+				"8S0",
 			],
 			"shadowclaw": [
 				"9M",
@@ -191167,7 +191167,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"swift": [
 				"9M",
 				"8M",
-				"8S3"
+				"8S0",
 			],
 			"tailwind": [
 				"9M"
@@ -191244,7 +191244,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"acidspray": [
 				"8L15",
-				"8S2"
+				"8S0",
 			],
 			"allyswitch": [
 				"8M"
@@ -191254,7 +191254,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"brutalswing": [
 				"8M",
-				"8S2"
+				"8S0",
 			],
 			"clearsmog": [
 				"8L20"
@@ -191355,7 +191355,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"sludgewave": [
 				"8M",
-				"8S2"
+				"8S0",
 			],
 			"snore": [
 				"8M"
@@ -191397,7 +191397,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"wonderroom": [
 				"8M",
 				"8L65",
-				"8S2"
+				"8S0",
 			],
 			"wrap": [
 				"8L1"
@@ -191458,7 +191458,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"dynamicpunch": [
 				"8L50",
-				"8S2"
+				"8S0",
 			],
 			"earthquake": [
 				"8M"
@@ -191509,7 +191509,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"leechlife": [
 				"8M",
-				"8S2"
+				"8S0",
 			],
 			"lowsweep": [
 				"8M"
@@ -191532,7 +191532,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"poweruppunch": [
 				"8L1",
-				"8S2"
+				"8S0",
 			],
 			"protect": [
 				"8M"
@@ -191578,7 +191578,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"taunt": [
 				"8M",
 				"8L5",
-				"8S2"
+				"8S0",
 			],
 			"thunderpunch": [
 				"8M"
@@ -191671,7 +191671,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"highjumpkick": [
 				"8L70",
-				"8S2"
+				"8S0",
 			],
 			"hyperbeam": [
 				"8M"
@@ -191694,7 +191694,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"lunge": [
 				"8L45",
-				"8S2"
+				"8S0",
 			],
 			"outrage": [
 				"8M"
@@ -191741,14 +191741,14 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"swift": [
 				"8M",
-				"8S2"
+				"8S0",
 			],
 			"taunt": [
 				"8M"
 			],
 			"throatchop": [
 				"8M",
-				"8S2"
+				"8S0",
 			],
 			"tripleaxel": [
 				"8T"
@@ -191778,7 +191778,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 		"learnset": {
 			"brutalswing": [
 				"8M",
-				"8S2"
+				"8S0",
 			],
 			"calmmind": [
 				"8M"
@@ -191791,12 +191791,12 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"discharge": [
 				"8L45",
-				"8S2"
+				"8S0",
 			],
 			"eerieimpulse": [
 				"8M",
 				"8L35",
-				"8S2"
+				"8S0",
 			],
 			"electricterrain": [
 				"8M",
@@ -191844,7 +191844,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"powerwhip": [
 				"8M",
 				"8L65",
-				"8S2"
+				"8S0",
 			],
 			"protect": [
 				"8M"
@@ -191958,7 +191958,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"earthquake": [
 				"8M",
-				"8S2"
+				"8S0",
 			],
 			"endure": [
 				"8M"
@@ -191994,7 +191994,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"gyroball": [
 				"8M",
-				"8S2"
+				"8S0",
 			],
 			"harden": [
 				"8L5"
@@ -192018,7 +192018,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"leechseed": [
 				"8L55",
-				"8S2"
+				"8S0",
 			],
 			"megadrain": [
 				"8L15"
@@ -192058,7 +192058,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"smackdown": [
 				"8L20",
-				"8S2"
+				"8S0",
 			],
 			"smartstrike": [
 				"8M"
@@ -192118,7 +192118,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"aircutter": [
 				"8L20",
-				"8S2"
+				"8S0",
 			],
 			"airslash": [
 				"8M"
@@ -192166,7 +192166,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"leafblade": [
 				"8M",
 				"8L55",
-				"8S2"
+				"8S0",
 			],
 			"nightslash": [
 				"8L35"
@@ -192213,14 +192213,14 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"swordsdance": [
 				"8M",
 				"8L65",
-				"8S2"
+				"8S0",
 			],
 			"synthesis": [
 				"8L40"
 			],
 			"vacuumwave": [
 				"8L1",
-				"8S2"
+				"8S0",
 			],
 			"xscissor": [
 				"8M"
@@ -192263,7 +192263,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"brutalswing": [
 				"8M",
-				"8S2"
+				"8S0",
 			],
 			"bulldoze": [
 				"8M"
@@ -192289,7 +192289,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"dragonrush": [
 				"8L55",
-				"8S2"
+				"8S0",
 			],
 			"dragontail": [
 				"8L1"
@@ -192364,7 +192364,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"megapunch": [
 				"8M",
-				"8S2"
+				"8S0",
 			],
 			"outrage": [
 				"8M"
@@ -192420,7 +192420,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"stompingtantrum": [
 				"8M",
 				"8L20",
-				"8S2"
+				"8S0",
 			],
 			"stoneedge": [
 				"8M"
@@ -192465,7 +192465,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"autotomize": [
 				"8L80",
-				"8S3"
+				"8S0",
 			],
 			"bodyslam": [
 				"9M"
@@ -192492,7 +192492,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9M",
 				"9L1",
 				"8L1",
-				"8S3"
+				"8S0",
 			],
 			"confusion": [
 				"9L1",
@@ -192577,7 +192577,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"irondefense": [
 				"9M",
 				"9L56",
-				"9S4",
+				"9S1",
 				"8M",
 				"8L56"
 			],
@@ -192624,10 +192624,10 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"powergem": [
 				"9M",
 				"9L64",
-				"9S4",
+				"9S1",
 				"8M",
 				"8L64",
-				"8S3"
+				"8S0",
 			],
 			"prismaticlaser": [
 				"9L88",
@@ -192649,7 +192649,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 				"9L32",
 				"8M",
 				"8L32",
-				"8S3"
+				"8S0",
 			],
 			"psyshock": [
 				"9M",
@@ -192666,7 +192666,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"rockblast": [
 				"9M",
 				"9L48",
-				"9S4",
+				"9S1",
 				"8M",
 				"8L48"
 			],
@@ -192724,7 +192724,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"storedpower": [
 				"9M",
 				"9L40",
-				"9S4",
+				"9S1",
 				"8M",
 				"8L40"
 			],
@@ -193519,7 +193519,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"drainpunch": [
 				"8M",
 				"8L1",
-				"8S1"
+				"8S0",
 			],
 			"endeavor": [
 				"8L90"
@@ -193548,7 +193548,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"forcepalm": [
 				"8L27",
-				"8S1"
+				"8S0",
 			],
 			"foulplay": [
 				"8M"
@@ -193640,7 +193640,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"shadowsneak": [
 				"8L1",
-				"8S1"
+				"8S0",
 			],
 			"skittersmack": [
 				"8T"
@@ -193653,7 +193653,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"spectralthief": [
 				"8L72",
-				"8S1"
+				"8S0",
 			],
 			"stoneedge": [
 				"8M"
@@ -193708,7 +193708,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 		"learnset": {
 			"acid": [
 				"8L1",
-				"8S2"
+				"8S0",
 			],
 			"charm": [
 				"8M",
@@ -193726,11 +193726,11 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"fellstinger": [
 				"8L14",
-				"8S2"
+				"8S0",
 			],
 			"furyattack": [
 				"8L7",
-				"8S2"
+				"8S0",
 			],
 			"gastroacid": [
 				"8L56"
@@ -193744,7 +193744,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"helpinghand": [
 				"8M",
 				"8L1",
-				"8S2"
+				"8S0",
 			],
 			"irontail": [
 				"8M"
@@ -194024,7 +194024,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"autotomize": [
 				"8L35",
-				"8S1"
+				"8S0",
 			],
 			"block": [
 				"8L20"
@@ -194037,14 +194037,14 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"brutalswing": [
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"bulldoze": [
 				"8M"
 			],
 			"doubleedge": [
 				"8L70",
-				"8S1"
+				"8S0",
 			],
 			"earthquake": [
 				"8M"
@@ -194116,7 +194116,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"rockslide": [
 				"8M",
 				"8L25",
-				"8S1"
+				"8S0",
 			],
 			"rockthrow": [
 				"8L5"
@@ -194233,7 +194233,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"fireblast": [
 				"8M",
 				"8L65",
-				"8S1"
+				"8S0",
 			],
 			"firepunch": [
 				"8M"
@@ -194313,7 +194313,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"shadowclaw": [
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"sleeptalk": [
 				"8M"
@@ -194335,7 +194335,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"taunt": [
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"thief": [
 				"8M"
@@ -194353,7 +194353,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"zenheadbutt": [
 				"8M",
-				"8S1"
+				"8S0",
 			]
 		},
 		"eventData": [
@@ -194387,7 +194387,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"blazekick": [
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"bounce": [
 				"8M"
@@ -194410,7 +194410,7 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			"closecombat": [
 				"8M",
 				"8L96",
-				"8S1"
+				"8S0",
 			],
 			"coaching": [
 				"8T"
@@ -194486,14 +194486,14 @@ export const Gen8Gen9NatDexLearnsets: import('../sim/dex-species').LearnsetDataT
 			],
 			"outrage": [
 				"8M",
-				"8S1"
+				"8S0",
 			],
 			"payday": [
 				"8M"
 			],
 			"plasmafists": [
 				"8L88",
-				"8S1"
+				"8S0",
 			],
 			"playrough": [
 				"8M"

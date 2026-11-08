@@ -15,8 +15,8 @@ describe('Skeledirge-Aevian', () => {
 		assert.deepEqual(species.abilities, {'0': 'Unaware', '1': 'Misty Surge', H: 'Venom Canticle'});
 		const learnset = Dex.species.getLearnsetData(species.id).learnset;
 		assert.equal(Object.keys(learnset).length, 38);
-		assert.deepEqual(learnset.flamethrower, ['9L1', '9M']);
-		assert.deepEqual(learnset.venoshock, ['9L25', '9M']);
+		assert.deepEqual(learnset.flamethrower, ['9M', '9L1']);
+		assert.deepEqual(learnset.venoshock, ['9M', '9L25']);
 		assert.deepEqual(learnset.torchsong, ['9L70']);
 		assert.deepEqual(learnset.fly, ['9M']);
 		assert.equal(learnset.terablast, undefined);

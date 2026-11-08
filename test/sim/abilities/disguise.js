@@ -12,7 +12,8 @@ describe('Disguise', function () {
 		battle = common.gen(7).createBattle([[
 			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
 		], [
-			{species: 'Mewtwo', ability: 'pressure', moves: ['psystrike']},
+			// Mewtwo's native Absolute Pressure bypasses defensive abilities.
+			{ species: 'Mew', ability: 'pressure', moves: ['psystrike'] },
 		]]);
 		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices());
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices());
@@ -35,7 +36,8 @@ describe('Disguise', function () {
 		]]);
 
 		battle.makeChoices();
-		assert(battle.p1.active[0].abilityState.busted);
+		assert.species(battle.p1.active[0], 'Mimikyu-Busted');
+		assert(battle.p1.active[0].passiveStates.disguise.busted);
 	});
 
 	it('should not block damage from weather effects', function () {
@@ -66,7 +68,7 @@ describe('Disguise', function () {
 		]]);
 		const pokemon = battle.p1.active[0];
 		assert.sets(() => pokemon.status, 'tox', () => battle.makeChoices());
-		assert.statStage(pokemon, 'spe', -2);
+		assert.statStage(pokemon, 'spe', -1);
 		assert.false.fullHP(pokemon);
 	});
 

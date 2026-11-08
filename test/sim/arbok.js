@@ -63,8 +63,9 @@ describe('Arbok custom data', function () {
 		battle.makeChoices('move tackle mega', 'move splash');
 		assert.species(arbok, 'Arbok-Mega-X');
 		assert.equal(arbok.ability, 'neurotoxin');
-		assert(arbok.hasAbility('strongjaw'));
-		assert(arbok.hasAbility('shedskin'));
+		assert(!arbok.hasAbility('strongjaw'));
+		assert.deepEqual(arbok.getPassives(), ['shedskin']);
+		assert(arbok.hasAbilityOrPassive('shedskin'));
 		assert(arbok.hasAbility('hydrabond'));
 		assert(arbok.hasAbility('regenerator'));
 		assert(battle.log.some(line => line.startsWith('|-hitcount|') && line.endsWith('|3')));
@@ -83,7 +84,7 @@ describe('Arbok custom data', function () {
 		assert.species(arbok, 'Arbok-Mega-Y');
 		assert.equal(arbok.ability, 'patternshift');
 		assert(arbok.hasAbility('protean'));
-		assert(arbok.hasAbility('shedskin'));
+		assert(arbok.hasAbilityOrPassive('shedskin'));
 		assert(arbok.hasAbility('unaware'));
 	});
 

@@ -12,10 +12,11 @@ describe('Glaive Rush', function () {
 
 	it(`should cause the user to take double damage after use`, function () {
 		battle = common.createBattle([[
-			{species: 'Baxcalibur', ability: 'battlearmor', moves: ['glaiverush']},
+			{ species: 'Baxcalibur', ability: 'noability', moves: ['glaiverush'] },
 		], [
 			{species: 'Skeledirge', moves: ['shadowball']},
 		]]);
+		battle.onEvent('CriticalHit', battle.format, false);
 		battle.makeChoices();
 		const baxcalibur = battle.p1.active[0];
 		const damage = baxcalibur.maxhp - baxcalibur.hp;
@@ -28,8 +29,12 @@ describe('Glaive Rush', function () {
 		], [
 			{species: 'Dondozo', moves: ['fissure']},
 		]]);
+		battle.onEvent('ModifyMove', battle.format, move => {
+			if (move.id === 'fissure') move.accuracy = 0;
+		});
 		battle.makeChoices();
-		assert.fainted(battle.p1.active[0]);
+		assert.false.fullHP(battle.p1.active[0]);
+		assert(!battle.log.some(line => line.startsWith('|-miss|')));
 	});
 
 	it(`should only apply its drawback until the user's next turn`, function () {

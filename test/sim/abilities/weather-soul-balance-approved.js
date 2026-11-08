@@ -5,8 +5,24 @@ function setup(species='Mew',ability='No Ability',foeAbility='No Ability'){battl
 function hit(p,q,id,extra={}){battle.actions.useMove(Object.assign(Dex.getActiveMove(id),{accuracy:true,willCrit:false},extra),p,{target:q});return battle.activeMove;}
 describe('Approved weather choices, faint scaling and Soul Fire matchup',()=>{
  const had=ThematicPassiveIds.has('soulfire');before(()=>ThematicPassiveIds.add('soulfire'));after(()=>{if(!had)ThematicPassiveIds.delete('soulfire');});afterEach(()=>{battle?.destroy();battle=null;});
- it('changes only base weather choices',()=>{assert.deepEqual(Dex.species.get('tyranitar').abilities,{0:'Mountain Hide',1:'Mountainbreaker',H:'Dread Presence'});assert.deepEqual(Dex.species.get('abomasnow').abilities,{0:'Rimebark',1:'Evergreen',H:'Soundproof'});assert.deepEqual(Dex.species.get('tyranitarmega').abilities,{0:'Sand Sovereign'});assert.deepEqual(Dex.species.get('abomasnowmega').abilities,{0:'Frost Sovereign'});});
- it('Mountain Hide retains local Solid Rock and Inner Focus',()=>{const[p,q]=setup('Tyranitar','Mountain Hide');assert(p.hasAbility('solidrock'));assert(p.hasAbility('innerfocus'));const water=Dex.getActiveMove('waterpulse');p.getMoveHitData(water).typeMod=1;assert.equal(battle.runEvent('ModifyDamage',q,p,water,100),60);assert.equal(battle.runEvent('ModifyDamage',q,p,Dex.getActiveMove('psychocut'),100),80);assert(!p.addVolatile('flinch',q));battle.boost({atk:-1},p,q,Dex.abilities.get('intimidate'));assert.equal(p.boosts.atk,0);});
+	it('changes only base weather choices', () => {
+		assert.deepEqual(Dex.species.get('tyranitar').abilities, { 0: 'Earth Eater', 1: 'Battle Armor', H: 'Dread Presence' });
+		assert.deepEqual(Dex.species.get('abomasnow').abilities, { 0: 'Rimebark', 1: 'Evergreen', H: 'Soundproof' });
+		assert.deepEqual(Dex.species.get('tyranitarmega').abilities, { 0: 'Sand Sovereign' });
+		assert.deepEqual(Dex.species.get('abomasnowmega').abilities, { 0: 'Frost Sovereign' });
+	});
+	it('Mountain Hide retains Inner Focus and physical-only sand protection', () => {
+		const [p, q] = setup('Tyranitar', 'Mountain Hide');
+		assert(!p.hasAbility('solidrock'));
+		assert(p.hasAbility('innerfocus'));
+		const water = Dex.getActiveMove('waterpulse');
+		p.getMoveHitData(water).typeMod = 1;
+		assert.equal(battle.runEvent('ModifyDamage', q, p, water, 100), 100);
+		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('psychocut'), 100), 75);
+		assert(!p.addVolatile('flinch', q));
+		battle.boost({ atk: -1 }, p, q, Dex.abilities.get('intimidate'));
+		assert.equal(p.boosts.atk, 0);
+	});
  it('Rimebark retains Thick Fat, Ice Body healing and hail immunity',()=>{const[p,q]=setup('Abomasnow','Rimebark');assert(p.hasAbility('thickfat'));assert(p.hasAbility('icebody'));assert.equal(battle.runEvent('ModifySpA',q,p,Dex.getActiveMove('flamethrower'),100),50);p.hp=5000;battle.singleEvent('Weather',p.getAbility(),p.abilityState,p,null,Dex.conditions.get('hail'));assert.equal(p.hp,5625);assert.equal(battle.runEvent('Immunity',p,null,null,'hail'),false);});
  for(const count of [0,1,3,5])it('current faint scaling at '+count,()=>{const[p,q]=setup();for(let i=1;i<=count;i++)p.side.pokemon[i].fainted=true;p.side.totalFainted=99;const m=Dex.getActiveMove('bunrakubeatdown');battle.singleEvent('ModifyMove',m,{},p,q,m,m);assert.equal(m.basePower,Math.min(140,80+15*count));assert(m.flags.bypasssub);assert.equal(Dex.moves.get('lastrespects').basePowerCallback.call(battle,p,q,Dex.getActiveMove('lastrespects')),Math.min(140,50+20*count));});
  it('revival removes power and extra faint counts cannot inflate either move',()=>{const[p,q]=setup();p.side.pokemon[1].fainted=true;p.side.totalFainted=1000;p.side.pokemon[1].fainted=false;const m=hit(p,q,'bunrakubeatdown');assert.equal(m.basePower,80);assert.equal(Dex.moves.get('lastrespects').basePowerCallback.call(battle,p,q,m),50);});

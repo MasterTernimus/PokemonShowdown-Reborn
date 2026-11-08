@@ -7,10 +7,11 @@ let battle;
 let damages;
 function referenceDamage(choice) {
 	const control = common.createBattle([[
-		{species: 'Kangaskhan', ability: 'toughclaws', item: 'electriumz', moves: ['thunderpunch', 'doublekick']},
-	], [{species: 'Aggron', ability: 'battlearmor', moves: ['rest']}]]);
+		{ species: 'Kangaskhan', ability: 'No Ability', item: 'electriumz', moves: ['thunderbolt', 'doublekick'] },
+	], [{ species: 'Aggron', ability: 'No Ability', moves: ['rest'] }]]);
 	try {
 		control.randomizer = damage => damage;
+		control.randomChance = (n, d) => n >= d;
 		const hits = [];
 		control.onEvent('ModifyDamage', control.format, -9, damage => { hits.push(damage); });
 		control.makeChoices(choice, 'move rest');
@@ -23,12 +24,14 @@ function referenceDamage(choice) {
 describe('Parental Bond', function () {
 	beforeEach(function () {
 		battle = common.createBattle([[
-			{species: 'Kangaskhan', ability: 'parentalbond', item: 'electriumz', moves: ['thunderpunch', 'doublekick']},
+			{ species: 'Kangaskhan', ability: 'parentalbond', item: 'electriumz', moves: ['thunderbolt', 'doublekick'] },
 		], [
-			{species: 'Aggron', ability: 'battlearmor', moves: ['rest']},
+			{ species: 'Aggron', ability: 'No Ability', moves: ['rest'] },
 		]]);
 
+		// Keep the damage reference free of defense changes (Thunder Punch can lower Defense).
 		battle.randomizer = damage => damage;
+		battle.randomChance = (n, d) => n >= d;
 		damages = [];
 		battle.onEvent('ModifyDamage', battle.format, -9, function (damage, attacker, defender, move) {
 			damages.push(damage);
@@ -40,9 +43,9 @@ describe('Parental Bond', function () {
 	});
 
 	it(`should cause single-hit attacks to strike twice, with the second hit dealing the custom 0.8x damage`, function () {
-		battle.makeChoices('move thunderpunch', 'move rest');
+		battle.makeChoices('move thunderbolt', 'move rest');
 		assert.equal(damages.length, 2);
-		const [first] = referenceDamage('move thunderpunch');
+		const [first] = referenceDamage('move thunderbolt');
 		assert.equal(damages[0], first);
 		assert(Math.abs(damages[1] - first * 0.8) <= 2);
 	});
@@ -53,9 +56,9 @@ describe('Parental Bond', function () {
 	});
 
 	it(`should not have any effect Z-Moves`, function () {
-		battle.makeChoices('move thunderpunch zmove', 'move rest');
+		battle.makeChoices('move thunderbolt zmove', 'move rest');
 		assert.equal(damages.length, 1);
-		assert.deepEqual(damages, referenceDamage('move thunderpunch zmove'));
+		assert.deepEqual(damages, referenceDamage('move thunderbolt zmove'));
 	});
 });
 

@@ -11,12 +11,17 @@ export const GraceSupportDescriptions = {
 		desc: 'Raises crit rate by 1 stage. Active allies gain Serene Grace. Once per switch-in, a crit that damages a foe\'s HP grants at least 5 turns of Safeguard and cures active allies\' confusion.',
 	},
 	voidomen: {
-		shortDesc: 'Serene Grace; ally damage protection and team confusion immunity. Charge skip + wards.',
-		desc: 'The user has Serene Grace. Allies take 25% less attack damage. The user and active allies cannot become confused. Each Pokemon skips one charge turn per switch-in, shared with Lunar Orbit. Once per user switch-in, a successful attack secondary or self-targeting status move grants at least 3 turns of Safeguard. The first applied secondary also blocks one enemy stat-drop event against the user or an adjacent ally, until used or the user leaves.',
+		shortDesc: 'Friend Guard; team confusion immunity; one charge skip, Safeguard and stat-drop ward.',
+		desc: 'Allies take 25% less attack damage. The user and active allies cannot become confused. Each Pokemon skips one charge turn per switch-in, shared with Lunar Orbit. Once per user switch-in, a successful attack secondary or self-targeting status move grants at least 3 turns of Safeguard. The first applied secondary also blocks one enemy stat-drop event against the user or an adjacent ally, until used or the user leaves.',
 	},
 };
 
 export function installGraceSupport(abilities: AbilityDataTable) {
+	// Secondary-chance support belongs to Fortunate Wing, not Void Omen.
+	delete abilities.voidomen.onModifyMove;
+	delete abilities.voidomen.onModifyMovePriority;
+	delete abilities.voidomen.onAllyModifyMove;
+	delete (abilities.voidomen as AbilityData & { onAllyModifyMovePriority?: number }).onAllyModifyMovePriority;
 	(abilities.fortunatewing as AbilityData & {onAllyModifyMovePriority: number}).onAllyModifyMovePriority = -2;
 	abilities.fortunatewing.onAllyModifyMove = function (move, source) {
 		const holder = this.effectState.target;

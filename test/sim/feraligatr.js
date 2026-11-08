@@ -87,7 +87,8 @@ describe('Feraligatr custom data', function () {
 		assert(feraligatr.hasAbility('strongjaw'));
 		assert(feraligatr.hasAbility('swiftswim'));
 		assert(feraligatr.hasAbility('filter'));
-		assert(feraligatr.hasAbility('proficient'));
+		assert.deepEqual(feraligatr.getPassives(), ['torrent']);
+		assert(!feraligatr.hasAbilityOrPassive('proficient'));
 		assert(battle.log.some(line => line.includes('G-Max Death Roll')));
 	});
 
@@ -96,11 +97,12 @@ describe('Feraligatr custom data', function () {
 			{species: 'Feraligatr', gigantamax: true, moves: ['bite']},
 			{species: 'Wynaut', moves: ['splash']},
 		], [
-			{species: 'Umbreon', moves: ['splash']},
-			{species: 'Umbreon', moves: ['splash']},
+			{ species: 'Blissey', ability: 'No Ability', moves: ['splash'] },
+			{ species: 'Blissey', ability: 'No Ability', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1, 2', 'team 1, 2');
 		const flinchRolls = [];
+		for (const foe of battle.p2.active) foe.hp = foe.maxhp = foe.baseMaxhp = 10000;
 		const randomChance = battle.randomChance;
 		battle.randomChance = (numerator, denominator) => {
 			if (numerator === 3 && denominator === 10) {
@@ -113,8 +115,8 @@ describe('Feraligatr custom data', function () {
 		assert(battle.p2.active[0].hp < battle.p2.active[0].maxhp);
 		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 		assert.equal(flinchRolls.length, 2);
-		assert(battle.log.some(line => line.includes('p2a: Umbreon') && line.includes('flinch')));
-		assert(battle.log.some(line => line.includes('p2b: Umbreon') && line.includes('flinch')));
+		assert(battle.log.some(line => line.includes('p2a: Blissey') && line.includes('flinch')));
+		assert(battle.log.some(line => line.includes('p2b: Blissey') && line.includes('flinch')));
 	});
 
 	it('keeps Water Veil Aqua Ring healing through G-Max', function () {

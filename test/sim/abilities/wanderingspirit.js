@@ -19,15 +19,16 @@ describe('Wandering Spirit', function () {
 		assert(battle.p2.active[0].hasAbility('overgrow'));
 	});
 
-	common.itGen(8, `should not activate while Dynamaxed`, function () {
+	common.itGen(8, `still swaps contact abilities after unavailable ordinary Dynamax is rejected`, () => {
 		battle = common.gen(8).createBattle([[
 			{species: 'Decidueye', ability: 'overgrow', moves: ['shadowsneak']},
 		], [
 			{species: 'Runerigus', ability: 'wanderingspirit', moves: ['bodypress']},
 		]]);
-		battle.makeChoices('auto', 'move bodypress dynamax');
-		assert(battle.p1.active[0].hasAbility('overgrow'));
-		assert(battle.p2.active[0].hasAbility('wanderingspirit'));
+		assert.cantMove(() => battle.choose('p2', 'move bodypress dynamax'));
+		battle.makeChoices('auto', 'move bodypress');
+		assert(battle.p1.active[0].hasAbility('wanderingspirit'));
+		assert(battle.p2.active[0].hasAbility('overgrow'));
 	});
 
 	it(`should not swap with Wonder Guard`, function () {

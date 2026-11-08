@@ -6,24 +6,29 @@ let battle;
 describe('Blazing Tempo, Void Hex, and Shadow Tag rework', () => {
 	afterEach(() => battle?.destroy());
 
-	it('gives Mega Blaziken every Blazing Tempo component', () => {
+	it('gives Mega Blaziken Raging Flame and a separate Proficient passive', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Blaziken-Mega', ability: 'Blazing Tempo', moves: ['highjumpkick', 'splash']}],
+			[{ species: 'Blaziken-Mega', ability: 'Raging Flame', moves: ['highjumpkick', 'splash'] }],
 			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const mon = battle.p1.active[0], foe = battle.p2.active[0];
-		for (const part of ['proficient', 'speedboost', 'striker', 'magmaarmor', 'keeneye']) {
+		assert.equal(mon.getAbility().name, 'Raging Flame');
+		assert.deepEqual(mon.getPassives(), ['proficient']);
+		for (const part of ['speedboost', 'magmaarmor', 'innerfocus']) {
 			assert(mon.hasAbility(part), `Missing ${part}`);
 		}
-		assert.equal(battle.runEvent('BasePower', mon, foe, battle.dex.getActiveMove('highjumpkick'), 100), 182);
+		assert.equal(battle.runEvent('BasePower', mon, foe, battle.dex.getActiveMove('highjumpkick'), 100), 130);
 		assert.equal(battle.runEvent('SourceModifyAtk', mon, foe, battle.dex.getActiveMove('waterfall'), 100), 50);
 		assert.equal(mon.trySetStatus('frz', foe), false);
 		const move = battle.dex.getActiveMove('tackle');
 		battle.singleEvent('ModifyMove', mon.getAbility(), mon.abilityState, move, mon, foe);
-		assert.equal(move.ignoreEvasion, true);
+		assert(!move.ignoreEvasion);
 		battle.boost({accuracy: -1}, mon, foe);
-		assert.equal(mon.boosts.accuracy, 0);
+		assert.equal(mon.boosts.accuracy, -1);
+		assert(!mon.addVolatile('flinch', foe));
+		battle.boost({ atk: -1 }, mon, foe, battle.dex.abilities.get('intimidate'));
+		assert.equal(mon.boosts.atk, 0);
 		battle.makeChoices('move splash', 'move splash');
 		assert.equal(mon.boosts.spe, 1);
 	});
@@ -63,13 +68,13 @@ describe('Blazing Tempo, Void Hex, and Shadow Tag rework', () => {
 		}
 	});
 
-	it('replaces Victreebel Accumulation with Digestive Sap', () => {
+	it('keeps Victreebel’s approved Corrosion option', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
 			[{species: 'Victreebel', ability: 'Arena Trap', moves: ['splash']}],
 			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
 		]);
 		assert.deepEqual(battle.dex.species.get('Victreebel').abilities, {
-			0: 'Chlorophyll', 1: 'Digestive Sap', H: 'Baited Bloom',
+			0: 'Chlorophyll', 1: 'Corrosion', H: 'Baited Bloom',
 		});
 	});
 });

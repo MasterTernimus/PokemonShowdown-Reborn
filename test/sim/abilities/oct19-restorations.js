@@ -3,18 +3,68 @@ const assert=require('assert').strict,common=require('../../common'),{Dex}=requi
 describe('October 19 approved restorations',()=>{
  let battle;afterEach(()=>{battle?.destroy();battle=null;});
  function setup(species,ability,doubles=false){const mon={species:'Mew',ability:'No Ability',moves:['splash','tackle','watergun','dragonrend','thunderbolt','doubleshock','thunderpunch']};battle=common.createBattle({formatid:doubles?'gen9nofielddoublesbattle':'gen9nofieldsinglesgame'},[[{...mon,species,ability},mon],[mon,mon]]);battle.makeChoices('team 12','team 12');for(const s of battle.sides)for(const p of s.pokemon)p.hp=p.maxhp=p.baseMaxhp=4800;return[battle.p1.active[0],battle.p2.active[0]];}
- it('Hydra Heart restores Stamina healing per hit and Defense once per turn',()=>{const[p,q]=setup('Hydrapple','Hydra Heart');p.hp=2000;const m=Dex.getActiveMove('tackle');battle.runEvent('DamagingHit',p,q,m,100);assert.equal(p.hp,2300);assert.equal(p.boosts.def,1);battle.runEvent('DamagingHit',p,q,m,100);assert.equal(p.hp,2600);assert.equal(p.boosts.def,1);assert(p.hasAbility('hydrabond'));assert(p.hasAbility('stamina'));});
+	it('Hydra Heart heals once per attack and raises Defense once per turn', () => {
+		const [p, q] = setup('Hydrapple', 'Hydra Heart'); p.hp = 2000; const m = Dex.getActiveMove('tackle');
+		battle.runEvent('DamagingHit', p, q, m, 100); assert.equal(p.hp, 2300); assert.equal(p.boosts.def, 1);
+		battle.runEvent('DamagingHit', p, q, m, 100); assert.equal(p.hp, 2300); assert.equal(p.boosts.def, 1);
+		battle.runEvent('DamagingHit', p, q, Dex.getActiveMove('tackle'), 100); assert.equal(p.hp, 2600); assert.equal(p.boosts.def, 1);
+		assert(p.hasAbility('hydrabond')); assert(p.hasAbility('stamina'));
+	});
  it('Maractus selects Iron Barbs and keeps Cactus Chorus as an unsuppressed passive',()=>{const[p,q]=setup('Maractus','Iron Barbs');assert.equal(Dex.species.get('maractus').abilities[1],'Iron Barbs');assert.deepEqual(p.getPassives(),['cactuschorus']);p.addVolatile('gastroacid');p.hp=2000;battle.actions.runMove('watergun',q,q.getLocOf(p));assert.equal(p.hp,3200);battle.field.setWeather('sandstorm');assert.equal(battle.runEvent('ModifySpe',p,null,null,100),200);});
- for(const species of ['Corsola','Corsola-Reborn'])for(const status of ['', 'par'])it(species+' Natural Recovery switch healing '+(status||'healthy'),()=>{const[p]=setup(species,'Withering Shell');assert.deepEqual(p.getPassives(),['naturalrecovery']);p.hp=1000;if(status)p.setStatus(status);battle.makeChoices('switch 2','move splash');assert.equal(p.status,'');assert.equal(p.hp,status?4200:2600);});
- it('Withering Shell includes three complete primitives and excludes recovery identities',()=>{const[p,q]=setup('Corsola','Withering Shell');for(const id of ['crumblingshell','cursedbody','raindish'])assert(p.hasAbility(id),id);for(const id of ['regenerator','naturalcure','naturalrecovery'])assert(!p.hasAbility(id),id);battle.randomChance=()=>true;battle.actions.runMove('tackle',q,q.getLocOf(p));assert(q.side.sideConditions.stealthrock);assert(q.volatiles.disable);p.hp=2000;battle.field.setWeather('raindance');battle.singleEvent('Weather',p.getAbility(),p.abilityState,p,null,Dex.conditions.get('raindance'));assert.equal(p.hp,2300);p.faint();battle.faintMessages();assert(q.volatiles.curse);});
- it('Dodrio head utilities prevent flinch/confusion/accuracy loss without extra hit power',()=>{const[p,q]=setup('Dodrio','Triple Threat');assert.equal(Dex.species.get('dodrio').abilities.H,'Reckless');assert.deepEqual(p.getPassives(),['earlybird']);assert(!p.addVolatile('flinch',q));assert(!p.addVolatile('confusion',q));battle.boost({accuracy:-1},p,q);assert.equal(p.boosts.accuracy,0);const move=Dex.getActiveMove('tackle');battle.runEvent('ModifyMove',p,q,move,move);assert.equal(move.multihit,3);assert.equal(battle.runEvent('BasePower',p,q,move,100),100);});
+	for (const species of ['Corsola', 'Corsola-Reborn']) for (const status of ['', 'par'])it(species + ' Natural Recovery switch healing ' + (status || 'healthy'), () => {
+		const [p] = setup(species, 'Withering Shell');
+		assert.deepEqual(p.getPassives(), ['naturalrecovery']);
+		p.hp = 1000;
+		if (status)p.setStatus(status);
+		battle.makeChoices('switch 2', 'move splash');
+		assert.equal(p.status, '');
+		assert.equal(p.hp, status ? 3200 : 2600);
+	});
+	it('Withering Shell retains Crumbling Shell, Rain Dish and Sticky Hold without Cursed Body', () => {
+		const [p, q] = setup('Corsola', 'Withering Shell'); for (const id of ['crumblingshell', 'raindish', 'stickyhold'])assert(p.hasAbility(id), id);
+		for (const id of ['regenerator', 'naturalcure', 'naturalrecovery', 'cursedbody'])assert(!p.hasAbility(id), id);
+		battle.randomChance = () => true;
+		battle.actions.runMove('tackle', q, q.getLocOf(p));
+		assert(q.side.sideConditions.stealthrock);
+		assert(!q.volatiles.disable);
+		p.setItem('Leftovers');
+		assert.equal(p.takeItem(q), false);
+		p.hp = 2000;
+		battle.field.setWeather('raindance');
+		battle.singleEvent('Weather', p.getAbility(), p.abilityState, p, null, Dex.conditions.get('raindance')); assert.equal(p.hp, 2300);
+		p.faint(); battle.faintMessages(); assert(!q.volatiles.curse);
+	});
+	it('Dodrio separates Triple Threat utility from passive Hydra Bond', () => {
+		const [p, q] = setup('Dodrio', 'Triple Threat'); assert.equal(Dex.species.get('dodrio').abilities.H, 'Long Stride');
+		assert.deepEqual(p.getPassives(), ['hydrabond']); assert(!p.addVolatile('flinch', q));
+		assert(p.addVolatile('confusion', q)); p.removeVolatile('confusion');
+		battle.boost({ accuracy: -1 }, p, q); assert.equal(p.boosts.accuracy, 0);
+		const move = Dex.getActiveMove('tackle'); battle.runEvent('ModifyMove', p, q, move, move); assert.equal(move.multihit, 3);
+		assert.equal(battle.runEvent('BasePower', p, q, move, 100), 100); assert(p.hasAbility('earlybird'));
+	});
  it('Marsh Hide combines Water absorption with defensive Poison Point',()=>{const[p,q]=setup('Seismitoad','Marsh Hide');p.hp=2000;battle.actions.runMove('watergun',q,q.getLocOf(p));assert.equal(p.hp,3200);battle.randomChance=()=>true;battle.clearActiveMove();battle.actions.runMove('tackle',q,q.getLocOf(p));assert.equal(q.status,'psn');assert(p.hasAbility('waterabsorb'));assert(p.hasAbility('poisonpoint'));assert.deepEqual(p.getPassives(),['mirechorus']);});
- it('Ancient Bloom drains and regenerates exactly once and includes all three components',()=>{const[p,q]=setup('Mew','Ancient Bloom');p.hp=2000;battle.singleEvent('Residual',p.getAbility(),p.abilityState,p);assert.equal(q.hp,4500);assert.equal(p.hp,2600);for(const id of ['pollenbloom','selfsufficient','friendguard'])assert(p.hasAbility(id),id);assert(!p.hasAbility('effectspore'));});
+	it('Ancient Bloom drains once without the removed Self-Sufficient healing', () => {
+		const [p, q] = setup('Mew', 'Ancient Bloom'); p.hp = 2000; battle.singleEvent('Residual', p.getAbility(), p.abilityState, p);
+		assert.equal(q.hp, 4500); assert.equal(p.hp, 2300); for (const id of ['pollenbloom', 'friendguard'])assert(p.hasAbility(id), id);
+		assert(!p.hasAbility('selfsufficient')); assert(!p.hasAbility('effectspore'));
+	});
  it('Ancient Bloom Friend Guard protects allies but not itself',()=>{const[p,q]=setup('Mew','Ancient Bloom',true);const ally=battle.p1.active[1],m=Dex.getActiveMove('tackle');assert.equal(battle.runEvent('ModifyDamage',q,ally,m,100),75);assert.equal(battle.runEvent('ModifyDamage',q,p,m,100),100);});
  for (const ability of ['Cactus Chorus','Sand Rush','Water Absorb']) it('Cactus Chorus passive deduplicates selected '+ability,()=>{const[p,q]=setup('Maractus',ability);battle.field.setWeather('sandstorm');assert.equal(battle.runEvent('ModifySpe',p,null,null,100),200);p.hp=2000;battle.actions.runMove('watergun',q,q.getLocOf(p));assert.equal(p.hp,3200);p.setAbility('Cactus Chorus');assert.equal(battle.runEvent('ModifySpe',p,null,null,100),200);p.hp=2000;battle.clearActiveMove();battle.actions.runMove('watergun',q,q.getLocOf(p));assert.equal(p.hp,3200);});
  it('shared Sand Rush and Water Absorb work normally without Cactus Chorus',()=>{const[p,q]=setup('Mew','Sand Rush');battle.field.setWeather('sandstorm');assert.equal(battle.runEvent('ModifySpe',p,null,null,100),200);p.setAbility('Water Absorb');p.hp=2000;battle.actions.runMove('watergun',q,q.getLocOf(p));assert.equal(p.hp,3200);});
  it('Fortress Shell removes Dual Wield only from its effective package',()=>{const[p,q]=setup('Mew','Fortress Shell');const m=Dex.getActiveMove('waterpulse');battle.runEvent('ModifyMove',p,q,m,m);assert(!m.multihit);assert(m.tracksTarget);assert(!p.hasAbility('dualwield'));assert.equal(battle.runEvent('BasePower',p,q,m,100),100);p.setAbility('Water Barrage');const n=Dex.getActiveMove('waterpulse');battle.runEvent('ModifyMove',p,q,n,n);assert.equal(n.multihit,2);assert(p.hasAbility('dualwield'));});
- it('Fortress Shell preserves cycling chip and heals once per residual',()=>{const[p,q]=setup('Mew','Fortress Shell');p.hp=1000;const losses=[];for(let i=0;i<3;i++){const hp=q.hp;battle.singleEvent('Residual',p.getAbility(),p.abilityState,p);losses.push(hp-q.hp);}assert.deepEqual(losses,[300,600,900]);assert.equal(p.hp,1900);assert.equal(battle.runEvent('ModifyDamage',q,p,Dex.getActiveMove('tackle'),100),80);});
+	it('Fortress Shell preserves cycling chip without removed residual healing', () => {
+		const [p, q] = setup('Mew', 'Fortress Shell');
+		p.hp = 1000;
+		const losses = [];
+		for (let i = 0; i < 3; i++) {
+			const hp = q.hp;
+			battle.singleEvent('Residual', p.getAbility(), p.abilityState, p);
+			losses.push(hp - q.hp);
+		}
+		assert.deepEqual(losses, [300, 600, 900]);
+		assert.equal(p.hp, 1000);
+		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('tackle'), 100), 80);
+	});
  it('Guardian Presence boosts and guards allies once, never the holder',()=>{const[p,q]=setup('Mew','Guardian Presence',true);const ally=battle.p1.active[1],m=Dex.getActiveMove('tackle');assert.equal(battle.runEvent('ModifyDamage',q,ally,m,100),75);assert.equal(battle.runEvent('ModifyDamage',q,p,m,100),100);assert.equal(battle.runEvent('BasePower',ally,q,m,100),130);assert.equal(battle.runEvent('BasePower',p,q,m,100),100);battle.field.terrain='holyterrain';assert.equal(battle.runEvent('BasePower',ally,q,m,100),150);});
  it('Fortress Shell conditional Electric absorption retains all seven fields and not no-field',()=>{const[p,q]=setup('Mew','Fortress Shell');const m=Dex.getActiveMove('thunderbolt');assert.notEqual(battle.runEvent('TryHit',p,q,m),null);for(const field of ['electricterrain','murkwatersurfaceterrain','watersurfaceterrain','underwaterterrain','midnightzoneterrain','factoryterrain','shortcircuitterrain']){battle.field.terrain=field;p.boosts.atk=0;p.boosts.spa=0;assert.equal(battle.runEvent('TryHit',p,q,m),null,field);assert.equal(p.boosts.atk,1);assert.equal(p.boosts.spa,1);}});
  it('Burning Crown removes White Smoke/Mold Breaker, retains Levitate and one 20 percent guard',()=>{const[p,q]=setup('Mew','Burning Crown');assert.equal(q.boosts.atk,-1);assert(p.hasAbility('levitate'));assert(!p.hasAbility('whitesmoke'));assert(!p.hasAbility('moldbreaker'));assert(!p.isGrounded());const m=Dex.getActiveMove('tackle');battle.runEvent('ModifyMove',p,q,m,m);assert(!m.ignoreAbility);battle.boost({accuracy:-1},p,q);assert.equal(p.boosts.accuracy,-1);assert.equal(battle.runEvent('ModifyDamage',q,p,m,100),80);assert(!Dex.abilities.get('burningcrown').shortDesc.includes('20%'));assert(Dex.abilities.get('burningcrown').desc.includes('20%'));});

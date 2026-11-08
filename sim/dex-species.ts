@@ -563,7 +563,9 @@ export class DexSpecies {
 						cosmeticFormes: null,
 					});
 				}
-				if (species.cosmeticFormes) {
+				// Public-name aliases can already resolve to this cosmetic form. Do not
+				// synthesize it again with itself as its base species.
+				if (species.cosmeticFormes && species.id !== id) {
 					for (const forme of species.cosmeticFormes) {
 						if (this.dex.data.Pokedex.hasOwnProperty(toID(forme))) continue;
 						if (toID(forme) === id) {

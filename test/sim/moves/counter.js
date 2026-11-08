@@ -39,7 +39,7 @@ describe('Counter', function () {
 		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices());
 	});
 
-	it('should target the opposing Pokemon that hit the user with a Physical attack most recently that turn', function () {
+	common.itGen(5, 'should target the opposing Pokemon that hit the user with a Physical attack most recently that turn', () => {
 		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Bastiodon', ability: 'sturdy', moves: ['counter']},
@@ -174,7 +174,7 @@ describe('Counter', function () {
 		battle.destroy();
 	});
 
-	it(`[Gen 1] Counter Desync Clause`, function () {
+	common.itGen(1, `[Gen 1] Counter Desync Clause`, () => {
 		// seed chosen so Water Gun succeeds and Pound full paras
 		battle = common.gen(1).createBattle({seed: [1, 2, 3, 3]}, [[
 			{species: 'Mew', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
@@ -216,7 +216,7 @@ describe('Counter', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it(`[Gen 1] should counter attacks made against substitutes`, function () {
+	common.itGen(1, `[Gen 1] should counter attacks made against substitutes`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Chansey', moves: ['substitute', 'counter']},
 		], [
@@ -237,7 +237,7 @@ describe('Counter', function () {
 		assert.fainted(battle.p2.active[0]);
 	});
 
-	it(`[Gen 1] simultaneous counters should both fail`, function () {
+	common.itGen(1, `[Gen 1] simultaneous counters should both fail`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Golem', moves: ['bodyslam']},
 			{species: 'Chansey', moves: ['counter']},
@@ -252,7 +252,7 @@ describe('Counter', function () {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`[Gen 1 Stadium] should counter Normal/Fighting moves only`, function () {
+	common.itGen(1, `[Gen 1 Stadium] should counter Normal/Fighting moves only`, () => {
 		// should counter Normal/Fighting moves
 		battle = common.mod('gen1stadium').createBattle([[
 			{species: 'Mew', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
@@ -265,7 +265,7 @@ describe('Counter', function () {
 		assert.false.fullHP(battle.p1.active[0]);
 	});
 
-	it(`[Gen 1 Stadium] should counter attacks made against substitutes`, function () {
+	common.itGen(1, `[Gen 1 Stadium] should counter attacks made against substitutes`, () => {
 		battle = common.mod('gen1stadium').createBattle([[
 			{species: 'Chansey', moves: ['substitute', 'counter']},
 		], [
@@ -276,7 +276,7 @@ describe('Counter', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`[Gen 1] (High) Jump Kick recoil can be countered`, function () {
+	common.itGen(1, `[Gen 1] (High) Jump Kick recoil can be countered`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Gengar', moves: ['counter']},
 		], [
@@ -287,7 +287,7 @@ describe('Counter', function () {
 		assert.equal(hitmonlee.maxhp - hitmonlee.hp, 3);
 	});
 
-	it(`[Gen 1] confusion damage can be countered`, function () {
+	common.itGen(1, `[Gen 1] confusion damage can be countered`, () => {
 		battle = common.gen(1).createBattle({seed: [1, 0, 0, 0]}, [[
 			{species: 'Gengar', moves: ['confuseray', 'counter']},
 		], [
@@ -301,7 +301,7 @@ describe('Counter', function () {
 		assert.false.equal(alakazam.maxhp - alakazam.hp, 200);
 	});
 
-	it(`[Gen 1] draining can be countered`, function () {
+	common.itGen(1, `[Gen 1] draining can be countered`, () => {
 		battle = common.gen(1).createBattle({seed: [1, 0, 0, 0]}, [[
 			{species: 'Gengar', moves: ['megadrain', 'counter']},
 		], [
@@ -315,7 +315,7 @@ describe('Counter', function () {
 		assert.equal(exeggutor.maxhp - exeggutor.hp, (gengar.hp - (gengar.maxhp - 100)) * 2);
 	});
 
-	it(`[Gen 1] Mirror Move can be countered when it calls a counterable move`, function () {
+	common.itGen(1, `[Gen 1] Mirror Move can be countered when it calls a counterable move`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Pidgeot', moves: ['mirrormove']},
 		], [
@@ -327,7 +327,7 @@ describe('Counter', function () {
 		assert.equal(pidgeot.maxhp - pidgeot.hp, 300);
 	});
 
-	it(`[Gen 1] Moves with unique damage calculation don't overdamage a target with less HP`, function () {
+	common.itGen(1, `[Gen 1] Moves with unique damage calculation don't overdamage a target with less HP`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Gengar', moves: ['seismictoss']},
 		], [
@@ -337,7 +337,7 @@ describe('Counter', function () {
 		assert(battle.lastDamage < 100);
 	});
 
-	it(`[Gen 1] Metronome calling Counter fails`, function () {
+	common.itGen(1, `[Gen 1] Metronome calling Counter fails`, () => {
 		battle = common.gen(1).createBattle({seed: [1, 3, 1, 7]}, [[
 			{species: 'Persian', moves: ['Swift']},
 		], [

@@ -30,7 +30,10 @@ describe('Pikachu-Gmax and Gigavolt', () => {
 		battle.makeChoices('move thundershock dynamax', 'move splash');
 		assert.equal(pokemon.species.id, 'pikachugmax');
 		assert.equal(pokemon.ability, 'gigavolt');
-		for (const component of ['moldbreaker', 'lightningrod', 'static']) {
+		assert.deepEqual(pokemon.getPassives(), ['static']);
+		assert(!pokemon.hasAbility('static'));
+		assert(pokemon.hasAbilityOrPassive('static'));
+		for (const component of ['moldbreaker', 'lightningrod']) {
 			assert(pokemon.hasAbility(component), component);
 		}
 	});

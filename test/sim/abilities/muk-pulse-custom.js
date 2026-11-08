@@ -33,7 +33,7 @@ describe('Muk-Pulse custom effects', () => {
 			{species: 'Mew', moves: ['splash']},
 		]]);
 		battle.makeChoices('team 1', 'team 1');
-		battle.makeChoices('move splash mega', 'move splash');
+		battle.makeChoices('move 1 mega', 'move splash');
 		const muk = battle.p1.active[0];
 		assert.equal(muk.species.name, 'Muk-Pulse');
 		const target = battle.p2.active[0];
@@ -53,7 +53,9 @@ describe('Muk-Pulse custom effects', () => {
 			{species: 'Mew', moves: ['splash']},
 		]]);
 		battle.makeChoices('team 12', 'team 1');
-		battle.makeChoices('move splash mega', 'move splash');
+		const foe = battle.p2.active[0];
+		foe.hp = foe.maxhp = foe.baseMaxhp = 2000;
+		battle.makeChoices('move 1 mega', 'move splash');
 		const muk = battle.p1.active[0];
 		assert.equal(muk.species.name, 'Muk-Pulse');
 		assert(muk.hasAbility('protean'));
@@ -76,10 +78,14 @@ describe('Muk-Pulse custom effects', () => {
 			battle.makeChoices('team 1', 'team 1');
 			const originalSample = battle.sample.bind(battle);
 			battle.sample = choices => choices.includes('belch') ? release : originalSample(choices);
-			for (let turn = 0; turn < 5; turn++) {
+			for (let turn = 0; turn < 6; turn++) {
 				battle.makeChoices('move splash', 'move splash');
 			}
-			assert(battle.log.some(line => line.includes(`|move|p1a: Muk|${displayName}|`)));
+			const released = () => battle.log.some(line => line.includes(`|move|p1a: Muk|${displayName}|`));
+			assert(!released(), 'Three stockpiles wait until the next turn to release');
+			assert.equal(battle.p1.active[0].volatiles.stockpile.layers, 3);
+			battle.makeChoices('move splash', 'move splash');
+			assert(released());
 		});
 	}
 });

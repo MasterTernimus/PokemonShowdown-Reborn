@@ -22,7 +22,7 @@ describe('Ability boost attribution', () => {
 			[{ species: 'Mew', ability: 'Synchronize', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1'); const [source, target] = [battle.p1.active[0], battle.p2.active[0]];
-		const start = battle.log.length; battle.boost({ atk: -1 }, target, source, battle.dex.abilities.get('pressure'));
+		const start = battle.log.length; battle.boost({ spa: -1 }, target, source, battle.dex.abilities.get('dishearten'));
 		const log = battle.log.slice(start); assert(log.some(line => line.includes('|-ability|p1a: Mew|Lunar Dread')));
 		assert(!log.some(line => line.includes('|-ability|p2a:'))); assert.equal(target.ability, 'synchronize');
 	});

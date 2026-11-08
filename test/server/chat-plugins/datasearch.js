@@ -9,6 +9,14 @@ const assert = require('../../assert').strict;
 const datasearch = require('../../../dist/server/chat-plugins/datasearch');
 
 describe("Datasearch Plugin", () => {
+	for (const suffix of ['', ', mod=gen9', ', mod=gen8', ', natdex']) {
+		it('searches learnsets without requiring an installed OU ladder: ' + (suffix || 'default'), () => {
+			const target = 'u-turn' + suffix;
+			const result = datasearch.testables.runDexsearch(target, 'ds', true, `/ds ${target}`, true);
+			assert(!result.error, result.error);
+			assert(result.results.includes('Mew'));
+		});
+	}
 	it('should return pokemon with pivot moves', async () => {
 		const cmd = 'ds';
 		const target = 'pivot|batonpass, mod=gen8';

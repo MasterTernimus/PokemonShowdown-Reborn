@@ -40,7 +40,7 @@ describe('Approved ability followups', () => {
 
 	for (const ability of ['Shadow Shield', 'Voidcraft', 'Cursed Doll', 'Phantom Fist', 'Surge Conduit']) {
 		for (const hp of [1, 0.5])
-			it(`${ability}: universal and super-effective reductions at ${hp} HP`, () => {
+			it(`${ability}: reviewed incoming-damage effects at ${hp} HP`, () => {
 				const [p, t] = start(ability);
 				p.hp = Math.floor(p.maxhp * hp);
 
@@ -48,7 +48,7 @@ describe('Approved ability followups', () => {
 					const move = b.dex.getActiveMove('tackle');
 					p.getMoveHitData(move).typeMod = mod;
 
-					assert.equal(b.runEvent('ModifyDamage', t, p, move, 100), mod > 0 ? 60 : 80);
+					assert.equal(b.runEvent('ModifyDamage', t, p, move, 100), ['Phantom Fist', 'Surge Conduit'].includes(ability) ? 100 : mod > 0 ? 60 : 80);
 				}
 			});
 	}
@@ -110,7 +110,7 @@ describe('Approved ability followups', () => {
 		b.setActiveMove(m, t, p);
 		assert(b.runEvent('SetStatus', p, t, m, b.dex.conditions.get('slp')));
 
-		assert.equal(Dex.species.get('Mismagius-Mega').abilities[0], 'Voidcraft');
+		assert.equal(Dex.species.get('Mismagius-Mega').abilities[0], 'Void Craft');
 	});
 
 	it('Exalt exposes Defiant and Sharpness without full Inner Focus or old STAB', () => {
@@ -119,7 +119,11 @@ describe('Approved ability followups', () => {
 		assert(p.hasAbility('sharpness'));
 		assert(!p.hasAbility('innerfocus'));
 
-		assert(!p.getAbility().onModifyMove);
+		const attack = b.dex.getActiveMove('tackle');
+		b.runEvent('ModifyMove', p, t, attack, attack);
+		assert.equal(attack.ignoreAbility, true);
+		assert(!attack.forceSTAB);
+		assert(p.hasAbility('moldbreaker'));
 		assert(!p.hasAbility('slushrush'));
 		assert(!p.hasAbility('swiftswim'));
 

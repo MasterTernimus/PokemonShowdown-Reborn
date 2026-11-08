@@ -1,16 +1,37 @@
 'use strict';
 const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim');let battle;
 const mon=(species='Mew',ability='No Ability')=>({species,ability,moves:['splash','aurasphere','psychic','miracleeye']});
-function setup(species='Lucario',ability='No Ability',foe='Mew',foeAbility='No Ability'){battle=common.createBattle({gameType:'doubles'},[[mon(species,ability),mon(),mon()],[mon(foe,foeAbility),mon(),mon()]]);battle.field.terrain='';battle.randomizer=n=>n;return[battle.p1.active[0],battle.p2.active[0]];}
+function setup(species = 'Mew', ability = (species === 'Mew' ? 'Aura Sight' : 'No Ability'), foe = 'Mew', foeAbility = 'No Ability') {
+	battle = common.createBattle({ gameType: 'doubles' }, [[mon(species, ability), mon(), mon()], [mon(foe, foeAbility), mon(), mon()]]);
+	battle.field.terrain = '';
+	battle.randomizer = n => n;
+	return [battle.p1.active[0], battle.p2.active[0]];
+}
 function hit(p,q,id,extra={}){const m=Object.assign(Dex.getActiveMove(id),{willCrit:false},extra);battle.actions.useMove(m,p,{target:q});return battle.activeMove;}
 function damage(p,q,id='psychic'){return battle.actions.getDamage(p,q,Object.assign(Dex.getActiveMove(id),{willCrit:false}));}
 describe('Approved Aura Sight and Revealing Gaze',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- it('changes only base Lucario, preserving all selected slots and Mega passives',()=>{assert.deepEqual(Dex.species.get('lucario').passives,['aurasight']);assert.deepEqual(Dex.species.get('lucario').abilities,{0:"Mind's Eye",1:'Sworn Duty',H:'Armorize'});for(const p of Dex.species.all().filter(p=>p.baseSpecies==='Lucario'&&p.id!=='lucario'))assert(!p.passives.includes('aurasight'),p.id);});
+	it("retains Lucario's newer Mind's Eye passive and selected slots without assigning legacy Aura Sight", () => {
+		assert.deepEqual(Dex.species.get('lucario').passives, ['mindseye']);
+		assert.deepEqual(Dex.species.get('lucario').abilities, { 0: 'Carry On', 1: 'Sworn Duty', H: 'Armorize' });
+		for (const p of Dex.species.all().filter(p => p.baseSpecies === 'Lucario' && p.id !== 'lucario'))assert(!p.passives.includes('aurasight'), p.id);
+	});
  for(const[atk,spa,boost,category]of [[200,100,{},'Physical'],[100,200,{},'Special'],[100,100,{},'Special'],[200,100,{spa:3},'Special']])it('Aura Sphere staged category '+[atk,spa,JSON.stringify(boost)],()=>{const[p,q]=setup();p.storedStats.atk=atk;p.storedStats.spa=spa;Object.assign(p.boosts,boost);const m=hit(p,q,'aurasphere');assert.equal(m.category,category);assert.equal(m.basePower,80);assert.equal(m.accuracy,true);assert(m.flags.bypasssub);assert.equal(m.overrideDefensiveStat,undefined);});
  it('Aura Sphere bypasses Substitute but preserves it',()=>{const[p,q]=setup();q.addVolatile('substitute');const sub=q.volatiles.substitute.hp,hp=q.hp;hit(p,q,'aurasphere');assert(q.hp<hp);assert.equal(q.volatiles.substitute.hp,sub);});
  for(const kind of ['Protect','Ghost','Bulletproof'])it('Aura Sight respects '+kind,()=>{const[p,q]=setup();if(kind==='Protect')q.addVolatile('protect');if(kind==='Ghost')q.setType('Ghost');if(kind==='Bulletproof')q.setAbility('Bulletproof');const hp=q.hp;hit(p,q,'aurasphere');assert.equal(q.hp,hp);});
- it('Aura Sight survives selected suppression and does not apply to other moves',()=>{const[p,q]=setup();p.addVolatile('gastroacid');q.addVolatile('substitute');const hp=q.hp;hit(p,q,'aurasphere');assert(q.hp<hp);const m=hit(p,q,'waterpulse');assert(!m.flags.bypasssub);});
+	it('copied Aura Sight is suppressed and does not apply to other moves', () => {
+		const [p, q] = setup();
+		p.addVolatile('gastroacid');
+		q.addVolatile('substitute');
+		const hp = q.hp;
+		hit(p, q, 'aurasphere');
+		assert.equal(q.hp, hp);
+		p.removeVolatile('gastroacid');
+		hit(p, q, 'aurasphere');
+		assert(q.hp < hp);
+		const m = hit(p, q, 'waterpulse');
+		assert(!m.flags.bypasssub);
+	});
  for(const species of ['Alakazam','Alakazam-Mega'])it(species+' marks only opposite foe and spends no PP',()=>{const[p,q]=setup(species);assert.deepEqual(p.getPassives(),['revealinggaze']);assert(q.volatiles.miracleeye);assert(!q.side.active[1].volatiles.miracleeye);assert(p.volatiles.ghostresistance);for(const slot of p.moveSlots)assert.equal(slot.pp,slot.maxpp);const n=battle.log.filter(x=>x.includes('|Miracle Eye|')).length;p.setAbility('Magic Guard');assert.equal(battle.log.filter(x=>x.includes('|Miracle Eye|')).length,n);});
  for(const field of ['psychicterrain','fairytaleterrain','holyterrain'])it('entry Miracle Eye retains +2 SpA on '+field,()=>{const[p,q]=setup('Alakazam');q.removeVolatile('miracleeye');p.boosts.spa=0;battle.field.terrain=field;battle.runEvent('SwitchIn',p);assert.equal(p.boosts.spa,2);assert(p.volatiles.ghostresistance);});
  it('ordinary Miracle Eye halves incoming Ghost damage',()=>{const[p,q]=setup('Alakazam');const guarded=damage(q,p,'shadowball');p.removeVolatile('ghostresistance');const normal=damage(q,p,'shadowball');assert(Math.abs(guarded*2-normal)<=1);});

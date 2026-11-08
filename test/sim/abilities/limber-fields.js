@@ -12,7 +12,22 @@ describe('Limber composition and Raging Thicket field behavior', () => {
 		]); battle.makeChoices('team 1', 'team 1'); battle.randomChance = () => false;
 		return [battle.p1.active[0], battle.p2.active[0]];
 	}
-	const fields = ['watersurfaceterrain', 'murkwatersurfaceterrain', 'newworldterrain', 'coldeclipseterrain', 'icyterrain', 'snowyterrain', 'underwaterterrain', 'midnightzoneterrain'];
+	const fields = ['watersurfaceterrain', 'murkwatersurfaceterrain', 'newworldterrain', 'icyterrain', 'snowyterrain', 'underwaterterrain', 'midnightzoneterrain'];
+	for (const ability of ['Raging Thicket', 'Limber', 'Kick Fiend', 'Unchecked Assault']) {
+		it(ability + ' has no generic Cold Eclipse Speed penalty, even while suppressed', () => {
+			const [p] = setup(ability), normal = p.getStat('spe');
+			battle.field.changeTerrain('coldeclipseterrain', p); assert.equal(p.getStat('spe'), normal);
+			p.addVolatile('gastroacid'); assert.equal(p.getStat('spe'), normal);
+		});
+	}
+	it('native Kick Fiend protects Hitmonlee from Snowy Field even under selected-ability suppression', () => {
+		battle = common.createBattle([[{ species: 'Hitmonlee', ability: 'No Ability', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
+		const p = battle.p1.active[0], normal = p.getStat('spe');
+		assert(p.getPassives().includes('kickfiend'));
+		p.addVolatile('gastroacid'); battle.field.setTerrain('snowyterrain', p);
+		assert.equal(p.getStat('spe'), normal);
+	});
 	for (const field of fields) it('Raging Thicket retains the ordinary ' + field + ' Speed penalty', () => {
 		const [p] = setup('Raging Thicket'), normal = p.getStat('spe');
 		battle.field.changeTerrain(field, p); assert(!p.hasAbility('limber')); assert(p.getStat('spe') < normal);

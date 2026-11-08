@@ -21,7 +21,7 @@ describe('Approved activation-only Illusion reveal', () => {
 		foe.ability = 'overgrow';
 		foe.abilityState = battle.initEffectState({ id: 'overgrow', target: foe });
 	}
-	const ids = ['keeneye', 'illuminate', 'astralwatcher', 'terragift', 'heavyartillery', 'blazingtempo', 'abysslure', 'astralcore', 'moonlightvigil', 'triplethreat'];
+	const ids = ['keeneye', 'illuminate', 'astralwatcher', 'terragift', 'heavyartillery', 'abysslure', 'astralcore', 'moonlightvigil', 'triplethreat'];
 	for (const id of ids) it(id + ' reveals both itemless foes once and clears copied abilities without revealing allies', () => {
 		const p = setup(), ally = battle.p1.active[1];
 		for (const foe of p.foes())disguise(foe);
@@ -40,9 +40,9 @@ describe('Approved activation-only Illusion reveal', () => {
 		battle.singleEvent('Residual', p.getAbility(), p.abilityState, p);
 		assert(p.foes().every(foe => foe.illusion), 'not a continuous aura');
 	});
-	it('Storm Sovereign no longer reveals Illusion after Keen Eye is replaced by Updraft', () => {
+	for (const ability of ['Storm Sovereign', 'Blazing Tempo']) it(`${ability} no longer reveals Illusion after Keen Eye is replaced`, () => {
 		const p = setup(); for (const foe of p.foes()) disguise(foe);
-		p.setAbility('Storm Sovereign');
+		p.setAbility(ability);
 		assert(p.foes().every(foe => foe.illusion && foe.volatiles.illusioncopy));
 	});
 	it('respects suppression, then reveals on a later real ability activation and reentry', () => {

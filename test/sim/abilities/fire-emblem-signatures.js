@@ -2,7 +2,7 @@
 const assert=require('assert').strict,common=require('../../common');const{Dex,TeamValidator}=require('../../../dist/sim');let battle;
 function setup(species,ability,foeAbility='No Ability',doubles=false){const mon=(s,a)=>({species:s,ability:a,moves:['tackle','slash','surf','rockslide']});battle=common.createBattle(doubles?{gameType:'doubles'}:{formatid:'gen9nofieldsinglesgame'},[[mon(species,ability),...(doubles?[mon('Mew','No Ability')]:[])],[mon('Mew',foeAbility),mon('Mew','No Ability')]]);if(battle.requestState==='teampreview')battle.makeChoices(doubles?'team 12':'team 1','team 12');for(const s of battle.sides)for(const p of s.active)p.hp=p.maxhp=p.baseMaxhp=5000;battle.randomizer=n=>n;return[battle.p1.active[0],battle.p2.active[0]];}
 function move(p,q,id='tackle',props={}){const m=Object.assign(Dex.getActiveMove(id),{accuracy:true,willCrit:false},props);battle.actions.runMove(m,p,p.getLocOf(q));return battle.activeMove;}
-function finishOrder(marker){const hits=battle.log.map((l,i)=>l.startsWith('|-damage|p2')?i:-1).filter(i=>i>=0),trigger=battle.log.findIndex(l=>l.includes(marker));assert(hits.length&&trigger>Math.max(...hits),battle.log.join('\n'));}
+
 describe('Approved Fire Emblem signatures',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  it('has exactly the approved slots with recorded later revisions and unchanged types and stats',()=>{const slots={tinkaton:{1:'Apocalyptic Flame'},gallade:{S:'Ruptured Heaven'},skarmory:{H:'Burning Quake'},corviknight:{1:'Skywarden',H:'Steelwing Escort',S:'Burning Quake'},dusknoir:{H:'Soul Reaver'},overqwil:{1:'Swift Venom'},talonflame:{S:'Burning Quake'}};for(let old of require('../../../artifacts/fire-emblem/before.json')){old=require('./passive-approval-overlays').snapshot(old);const s=Dex.species.get(old.id);assert.deepEqual(s.abilities,{...old.abilities,...slots[old.id]},old.id);assert.deepEqual(s.passives,({golisopod:['toughclaws'],overqwil:['aftermath'],beartic:['thickfat'],corviknight:['mirrorarmor'],dragonitemega:['multiscale']}[old.id]||old.passives),old.id);assert.deepEqual(s.baseStats,old.stats);assert.deepEqual(s.types,old.types);}});
@@ -66,16 +66,55 @@ describe('Approved Fire Emblem signatures',()=>{
   p.addVolatile('gastroacid',q);move(p,q);assert(!q.volatiles.apocalypticflame);
  });
  for(const suppressed of [false,true])it('Ruptured Heaven only removes slicing contact and applies Sharpness '+suppressed,()=>{const[p,q]=setup('Gallade','Ruptured Heaven','Iron Barbs');if(suppressed)p.addVolatile('gastroacid',q);const hp=p.hp,m=move(p,q,'slash');assert.equal(!!m.flags.contact,suppressed);assert.equal(p.hp===hp,!suppressed);assert.equal(battle.runEvent('BasePower',p,q,m,100),suppressed?100:150);const before=p.hp,n=move(p,q,'tackle');assert(n.flags.contact);assert(p.hp<before);assert(!p.hasAbility('longreach'));});
- for(const species of ['Skarmory','Corviknight','Talonflame'])for(const suppressed of [false,true])it(species+' Burning Quake critical ratio and completed critical Speed '+suppressed,()=>{const[p,q]=setup(species,'Burning Quake');if(suppressed)p.addVolatile('gastroacid',q);assert.equal(battle.runEvent('ModifyCritRatio',p,q,Dex.getActiveMove('tackle'),1),suppressed?1:2);move(p,q,'tackle',{willCrit:true});assert.equal(p.boosts.spe,suppressed?0:1);assert.equal(p.boosts.evasion,0);if(!suppressed)finishOrder('|-boost|');});
- it('Burning Quake multi-hit, spread and repeated moves grant at most one boost this turn',()=>{const[p,q]=setup('Corviknight','Burning Quake','No Ability',true);move(p,q,'rockslide',{willCrit:true,multihit:3});assert.equal(p.boosts.spe,1);finishOrder('|-boost|');p.setAbility('No Ability');p.setAbility('Burning Quake');move(p,q,'tackle',{willCrit:true});assert.equal(p.boosts.spe,1);battle.turn++;move(p,q,'tackle',{willCrit:true});assert.equal(p.boosts.spe,2);});
- for(const scenario of ['noncrit','substitute','ally','selfKO','targetKO'])it('Burning Quake handles '+scenario,()=>{const[p,q]=setup('Skarmory','Burning Quake','No Ability',scenario==='ally');const target=scenario==='ally'?battle.p1.active[1]:q;if(scenario==='substitute'){q.addVolatile('substitute');q.volatiles.substitute.hp=4000;}if(scenario==='selfKO')p.hp=1;if(scenario==='targetKO')q.hp=1;move(p,target,scenario==='selfKO'?'doubleedge':'tackle',{willCrit:scenario!=='noncrit'});assert.equal(p.boosts.spe,scenario==='targetKO'?1:0);});
+	for (const species of ['Skarmory', 'Corviknight', 'Talonflame']) for (const suppressed of [false, true])it(species + ' Burning Quake critical ratio without Speed boosts ' + suppressed, () => {
+		const [p, q] = setup(species, 'Burning Quake');
+		if (suppressed)p.addVolatile('gastroacid', q);
+		assert.equal(battle.runEvent('ModifyCritRatio', p, q, Dex.getActiveMove('tackle'), 1), suppressed ? 1 : 2);
+		move(p, q, 'tackle', { willCrit: true });
+		assert.equal(p.boosts.spe, 0);
+		assert.equal(p.boosts.evasion, 0);
+	});
+	it('Burning Quake multi-hit, spread and repeated moves never grant Speed boosts', () => {
+		const [p, q] = setup('Corviknight', 'Burning Quake', 'No Ability', true);
+		move(p, q, 'rockslide', { willCrit: true, multihit: 3 });
+		assert.equal(p.boosts.spe, 0);
+		p.setAbility('No Ability');
+		p.setAbility('Burning Quake');
+		move(p, q, 'tackle', { willCrit: true });
+		assert.equal(p.boosts.spe, 0);
+		battle.turn++;
+		move(p, q, 'tackle', { willCrit: true });
+		assert.equal(p.boosts.spe, 0);
+	});
+	for (const scenario of ['noncrit', 'substitute', 'ally', 'selfKO', 'targetKO'])it('Burning Quake handles ' + scenario, () => {
+		const [p, q] = setup('Skarmory', 'Burning Quake', 'No Ability', scenario === 'ally');
+		const target = scenario === 'ally' ? battle.p1.active[1] : q;
+		if (scenario === 'substitute') {
+			q.addVolatile('substitute');
+			q.volatiles.substitute.hp = 4000;
+		}
+		if (scenario === 'selfKO')p.hp = 1;
+		if (scenario === 'targetKO')q.hp = 1;
+		move(p, target, scenario === 'selfKO' ? 'doubleedge' : 'tackle', { willCrit: scenario !== 'noncrit' });
+		assert.equal(p.boosts.spe, 0);
+	});
  it('Burning Quake never adds a faster-than-target damage multiplier',()=>{const[p,q]=setup('Skarmory','Burning Quake');p.boosts.spe=6;assert.equal(battle.runEvent('ModifyDamage',p,q,Dex.getActiveMove('tackle'),100),100);});
 });
 
 describe('Retained recipient passives function under signature suppression',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  it('Tinkaton Sticky Hold prevents item removal',()=>{const[p,q]=setup('Tinkaton','Apocalyptic Flame');p.addVolatile('gastroacid',q);p.setItem('Leftovers');move(q,p,'knockoff');assert.equal(p.item,'leftovers');});
- it('Skarmory Big Pecks blocks foe Defense drops',()=>{const[p,q]=setup('Skarmory','Burning Quake');p.addVolatile('gastroacid',q);battle.boost({def:-1},p,q,Dex.moves.get('leer'));assert.equal(p.boosts.def,0);});
+	it('Skarmory Thorn-Tempered blocks Rough Skin under suppression but permits Defense drops', () => {
+		const [p, q] = setup('Skarmory', 'Burning Quake');
+		p.addVolatile('gastroacid', q);
+		assert.deepEqual(p.getPassives(), ['thorntempered']);
+		battle.boost({ def: -1 }, p, q, Dex.moves.get('leer'));
+		assert.equal(p.boosts.def, -1);
+		q.setAbility('Rough Skin');
+		const hp = p.hp;
+		move(p, q, 'tackle');
+		assert.equal(p.hp, hp);
+	});
  it('Corviknight Mirror Armor reflects opposing drops under suppression',()=>{const[p,q]=setup('Corviknight','Burning Quake');p.addVolatile('gastroacid',q);battle.boost({atk:-1},p,q,Dex.moves.get('growl'));assert.equal(p.boosts.atk,0);assert.equal(q.boosts.atk,-1);});
  it('Talonflame Gale Wings still grants Flying priority under suppression',()=>{const[p,q]=setup('Talonflame','Burning Quake');p.addVolatile('gastroacid',q);assert.deepEqual(p.getPassives(),['galewings']);assert.equal(battle.runEvent('ModifyPriority',p,q,Dex.getActiveMove('bravebird'),0),1);});
  it('Gallade Steadfast still boosts Speed on flinching',()=>{const[p,q]=setup('Gallade','Ruptured Heaven');p.addVolatile('gastroacid',q);battle.runEvent('Flinch',p);assert.equal(p.boosts.spe,1);});

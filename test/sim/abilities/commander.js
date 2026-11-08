@@ -116,7 +116,9 @@ describe('Commander', function () {
 
 		assert.statStage(tatsugiri, 'atk', -1);
 		assert.holdsItem(tatsugiri);
-		assert.statStage(dondozo, 'atk', 1);
+		// Dondozo's native Own Tempo blocks Intimidate; Commander still gives +2.
+		assert(dondozo.hasAbilityOrPassive('owntempo'));
+		assert.statStage(dondozo, 'atk', 2);
 		assert.holdsItem(dondozo);
 		assert.equal(battle.requestState, 'move', 'It should not have switched out on Eject Pack');
 
@@ -153,7 +155,7 @@ describe('Commander', function () {
 
 	it(`should allow one Tatsugiri to occupy multiple Dondozo`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'wynaut', ability: 'noguard', moves: ['sheercold']},
+			{ species: 'wynaut', ability: 'noguard', moves: ['nightshade'] },
 			{species: 'shuckle', moves: ['sleeptalk']},
 		], [
 			{species: 'tatsugiri', ability: 'commander', moves: ['sleeptalk']},
@@ -161,7 +163,11 @@ describe('Commander', function () {
 			{species: 'dondozo', moves: ['sleeptalk']},
 		]]);
 
-		battle.makeChoices('move sheercold 2, move sleeptalk', 'auto');
+		const firstDondozo = battle.p2.active[1];
+		firstDondozo.hp = 1;
+		battle.makeChoices('move nightshade 2, move sleeptalk', 'auto');
+		assert(firstDondozo.fainted);
+		assert.equal(battle.requestState, 'switch');
 		battle.makeChoices('', 'switch 3');
 
 		const secondDondozo = battle.p2.active[1];

@@ -43,7 +43,7 @@ describe('Target Resolution', function () {
 			assert(battle.log.includes('|-fail|p1a: Wailord'));
 		});
 
-		it(`should support RedirectTarget event for a fainted foe and type 'any' `, function () {
+		common.itGen(5, `should support RedirectTarget event for a fainted foe and type 'any' `, () => {
 			battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 				{species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['waterpulse']}, // Water Pulse over Water Gun due to targeting in triples
 				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
@@ -90,7 +90,7 @@ describe('Target Resolution', function () {
 			assert.statStage(redirector, 'spa', 1);
 		});
 
-		it(`should not redirect non-pulse/flying moves in Triples if the Pokemon is out of range`, function () {
+		common.itGen(6, `should not redirect non-pulse/flying moves in Triples if the Pokemon is out of range`, () => {
 			battle = common.gen(6).createBattle({gameType: 'triples'}, [[
 				{species: 'Shuckle', moves: ['watergun']},
 				{species: 'Magikarp', moves: ['swordsdance']},
@@ -293,37 +293,45 @@ describe('Target Resolution', function () {
 		});
 	});
 
-	it('should not force charge moves called by another move to target an ally after Ally Switch', function () {
+	it('keeps a copied charge move aimed at foes while its ally pivots', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'purrloin', ability: 'no guard', moves: ['copycat', 'sleeptalk']},
-			{species: 'wynaut', moves: ['allyswitch', 'fly', 'skullbash']},
+			{ species: 'purrloin', ability: 'noguard', moves: ['copycat', 'sleeptalk'] },
+			{ species: 'wynaut', moves: ['allyswitch', 'fly'] },
+			{ species: 'blissey', moves: ['sleeptalk'] },
 		], [
 			{species: 'aron', moves: ['sleeptalk']},
 			{species: 'lairon', moves: ['sleeptalk']},
 		]]);
-
+		const [copier, ally] = battle.p1.active;
 		battle.makeChoices('move sleeptalk, move fly 1', 'auto');
-		battle.makeChoices();
-		battle.makeChoices();
-		battle.makeChoices('move skullbash 1, move sleeptalk', 'auto');
-		battle.makeChoices();
-		battle.makeChoices();
-		// ally switch was used twice, so wynaut will be back where it started
-		assert.fullHP(battle.p1.active[1]);
+		battle.makeChoices('move copycat, move fly 1', 'auto');
+		assert(copier.volatiles.twoturnmove);
+		battle.makeChoices('move fly 1, move allyswitch', 'auto');
+		assert.fullHP(copier);
+		assert.fullHP(ally);
+		assert.equal(battle.requestState, 'switch');
+		battle.makeChoices('pass, switch 3');
+		assert(!copier.volatiles.twoturnmove);
+		assert.equal(battle.p1.active[0], copier);
+		assert.equal(battle.p1.active[1].species.name, 'Blissey');
+		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`Ally Switch should cause single-target moves to fail if targeting an ally`, function () {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'purrloin', moves: ['thunder', 'ironhead']},
-			{species: 'wynaut', moves: ['allyswitch']},
+	it('Ally Switch cannot swap active positions when no replacement is available', () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'purrloin', moves: ['ironhead'] },
+			{ species: 'wynaut', ability: 'innerfocus', moves: ['allyswitch'] },
 		], [
 			{species: 'swablu', moves: ['sleeptalk']},
 			{species: 'swablu', moves: ['sleeptalk']},
 		]]);
-
+		const [attacker, ally] = battle.p1.active;
 		battle.makeChoices('move ironhead -2, move allyswitch', 'auto');
-		battle.makeChoices('move allyswitch, move thunder -1', 'auto');
-		assert.fullHP(battle.p1.active[0]);
+		assert.equal(battle.p1.active[0], attacker);
+		assert.equal(battle.p1.active[1], ally);
+		assert.fullHP(attacker);
+		assert.false.fullHP(ally);
+		assert(battle.log.some(line => line.startsWith('|-fail|p1b: Wynaut')));
 	});
 
 	it(`charge moves like Phantom Force should target slots turn 1 and Pokemon turn 2`, function () {
