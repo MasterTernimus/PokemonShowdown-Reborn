@@ -2919,7 +2919,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			meteormash: ["9L1"],
 			mimic: ["9M", "7V", "3T"],
 			mudslap: ["9M", "7V", "4T", "3T"],
-         mysticalpower: ["9M"],
 			nastyplot: ["9L45", "8M", "8L1"],
 			naturalgift: ["4M"],
 			nuzzle: ["9L11", "8L1", "7L29", "7S47", "6L23", "6S36", "6S38"],

@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "6b7a5999a1762a7b1f7fef25c24d9183d418608a712a150cdb49707d780c59c1",
-  "packageManifestSHA256": "a2589c1e44597c93256f897f8c54ba6105075fa8368537016002b38aca9bf881",
-  "mechanicsSHA256": "d8694e06f010b65c06d85dacf37400cd193c28b942759a767d0cb2504a801e18",
+  "packageEngineRevision": "987d2aab8152fb866d4440805343fa230fe1d2fcab112270d73caed7dbff2d04",
+  "packageManifestSHA256": "81174b9f73e32109cc0fa11c02029f60c8ca05eb979a0517e64d800c74b18bca",
+  "mechanicsSHA256": "92466db2e35b811980d6400f22757ff59c9774306de8d5e3e336ba235b17b308",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -375,7 +375,7 @@
     },
     {
       "file": "dist/data/learnsets.js",
-      "sha256": "d366c433164457c60efb7089aa6c32cd388cc274c74f53fa80aa09d2fbfdf50f"
+      "sha256": "f96c5296222149a61e14b9f13d84122c80a1e3a1cd9d93da127557ec9fc574da"
     },
     {
       "file": "dist/data/legacy-gen8/bss-factory-sets.json",
