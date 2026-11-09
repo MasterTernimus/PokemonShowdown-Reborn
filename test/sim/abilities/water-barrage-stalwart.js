@@ -28,8 +28,8 @@ describe('Water Barrage owns one full Stalwart component', () => {
 			}
 			for (const id of ['selfsufficient', 'proficient', 'moldbreaker', 'shellarmor'])assert(!p.hasAbility(id), id); if (species === 'Blastoise-Mega')assert(p.getPassives().includes('proficient'));
 		});
-		it(species + '/' + ability + ' advances Water chip once per residual and suppression stops it', () => {
-			const [p, q] = setup(species, ability); p.hp = 800; for (const damage of [100, 200, 300, 100]) { const hp = q.hp; battle.singleEvent('Residual', p.getAbility(), p.abilityState, p); assert.equal(hp - q.hp, damage); assert.equal(p.hp, 800); }
+		it(species + '/' + ability + ' has no chip across consecutive residuals', () => {
+			const [p, q] = setup(species, ability); p.hp = 800; for (const damage of [0, 0, 0, 0]) { const hp = q.hp; battle.singleEvent('Residual', p.getAbility(), p.abilityState, p); assert.equal(hp - q.hp, damage); assert.equal(p.hp, 800); }
 			const hp = q.hp, stage = p.abilityState.waterBarrageStage; p.addVolatile('gastroacid'); battle.singleEvent('Residual', p.getAbility(), p.abilityState, p); assert.equal(q.hp, hp); assert.equal(p.abilityState.waterBarrageStage, stage);
 		});
 		it(species + '/' + ability + ' bypasses Follow Me without duplicating attacks', () => {
@@ -37,8 +37,8 @@ describe('Water Barrage owns one full Stalwart component', () => {
 			p.addVolatile('gastroacid'); battle.actions.useMove(Object.assign(Dex.getActiveMove('watergun'), { accuracy: true, damage: 100 }), p, { target: q }); assert.equal(q.hp, 1500); assert.equal(redirect.hp, 1500);
 		});
 	}
-	it('chip keeps Water immunity and allied exemptions', () => {
-		const [p, q] = setup('Blastoise', 'Water Barrage', true), ally = battle.p1.active[1]; q.setAbility('Water Absorb'); battle.singleEvent('Residual', p.getAbility(), p.abilityState, p); assert.equal(q.hp, 1600); assert.equal(ally.hp, 1600); assert.equal(battle.p2.active[1].hp, 1500);
+	it('has no residual damage to foes or allies', () => {
+		const [p, q] = setup('Blastoise', 'Water Barrage', true), ally = battle.p1.active[1]; q.setAbility('Water Absorb'); battle.singleEvent('Residual', p.getAbility(), p.abilityState, p); assert.equal(q.hp, 1600); assert.equal(ally.hp, 1600); assert.equal(battle.p2.active[1].hp, 1600);
 	});
 	it('ordinary fields grant no entry boost and status/ineligible moves gain no extra pair', () => {
 		const [p, q] = setup(); battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(p.boosts.spa, 0); for (const id of ['splash', 'tackle', 'bulletseed']) { const m = Dex.getActiveMove(id), old = m.multihit; battle.runEvent('ModifyMove', p, q, m, m); assert.deepEqual(m.multihit, old); }

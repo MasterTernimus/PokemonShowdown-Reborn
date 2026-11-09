@@ -613,12 +613,12 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Summons sun on entry."
 	},
 	"unboundblaze": {
-		"desc": "Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All.",
-		"shortDesc": "Stronger Dragon/same-type moves; Fire absorption; Water/Ice protection; end-turn Fire damage to foes."
+		"desc": "Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Immune to hail damage. All moves have 1.1x accuracy.",
+		"shortDesc": "Dragon conversion, Magma Armor; all moves have 1.1x accuracy.",
 	},
 	"sunsovereign": {
-		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Summons sun for 8 turns on entry. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Heals 1/16 max HP at turn end.",
-		"shortDesc": "Mold Breaker; 8-turn sun, stronger Dragon moves, healing and Fire chip."
+		"desc": "Summons sun for 8 turns on entry. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Immune to hail damage. All moves have 1.1x accuracy.",
+		"shortDesc": "Eight-turn sun + Blazing Monarch; all moves have 1.1x accuracy.",
 	},
 	"burningspirit": {
 		"desc": "Heals 1/16 max HP each turn. Copies foes' positive stat changes after their move, entry or transformation, and at turn end. Copied changes do not loop between users. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power.",
@@ -709,8 +709,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Mold Breaker; Powder/weather/flinch immunity; accuracy/power 1.3x; status Atk 1.5x; attacks deal 25% less; stage/bypass effects."
 	},
 	"atrocity": {
-		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Heals 1/16 max HP each turn. Damaging moves have a further 1.3x power, plus another 1.3x on Cold Eclipse. Defense and Sp. Def are 1.3x, or 1.5x on Cold Eclipse. While Royal Decree or Empress is active without Neutralization, move power gains another 1.3x and incoming attack damage falls by 30%. Cannot be suppressed.",
-		"shortDesc": "Mold Breaker; stronger attacks and defenses; healing and Fire chip."
+		"desc": "Blazing Monarch + Fire Ward + Tough Claws. All moves have 1.1x accuracy.",
+		"shortDesc": "Blazing Monarch + Fire Ward + Tough Claws; all moves have 1.1x accuracy.",
 	},
 	"wickedsnare": {
 		"desc": "Attacks use double the offensive stat against targets that entered this turn. Contact attackers lose 1 Speed stage. Status moves gain +1 priority. Opposing Dark types block these moves except on Bewitched Woods.",
@@ -781,16 +781,16 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Status priority; attacks and incoming hits curse; cursed foes deal 20% less damage; Curse damage heals it."
 	},
 	"sandsovereign": {
-		"desc": "On entry, it sets Sandstorm for 8 turns. It has Dauntless Shield and Solid Rock. Arenite Wall lasts 5 turns, or 8 turns when extended. Each turn, non-immune foes take Rock damage equal to 1/16 max HP. Only in Free-for-All does Rock type effectiveness scale this chip.",
-		"shortDesc": "8-turn Sand; Rock chip scales by type in FFA."
+		"desc": "Sets or refreshes Sandstorm for 8 turns. Includes Solid Rock. Damaging Rock moves use the better Rock or Ground type-chart matchup while remaining Rock-type; Ground-immune typings do not replace the Rock matchup. Manually used Arenite Wall lasts 8 turns. After a Rock or Dark attack damages opposing HP, removes Reflect and Light Screen from that side.",
+		"shortDesc": "Solid Rock; eight-turn sand; Rock/Ground matchup; Rock/Dark hits break screens.",
 	},
 	"tyrantstream": {
 		"desc": "Recoil and crash moves, Explosion, Self-Destruct and Misty Explosion have 1.2x power; Struggle is excluded. On Chessboard, all moves gain a further 1.2x power. Prevents move recoil except Struggle. Crash and Life Orb damage still apply. On entry, summons sandstorm for 5 turns, or 8 with Smooth Rock. Biting moves have 1.5x power.",
 		"shortDesc": "Summons sandstorm; stronger recoil/crash/explosion and biting moves; no move recoil except Struggle."
 	},
 	"frostsovereign": {
-		"desc": "On entry, it sets Snow through Snow Warning for 8 turns. It has Ice Body and Filter. Manually used Aurora Veil lasts 8 turns. Each turn, non-immune foes take Ice damage equal to 1/16 max HP. Only in Free-for-All does Ice type effectiveness scale this chip.",
-		"shortDesc": "8-turn Snow; Ice chip scales by type in FFA."
+		"desc": "Sets Hail for 8 turns on entry. Includes Ice Body, Filter and Soundproof. Manually used Aurora Veil lasts 8 turns. Once per switch-in, its first Ice attack to damage opposing HP lowers each damaged foe's Speed by 1 stage, once per target. Normal stat-drop protections apply.",
+		"shortDesc": "Ice Body + Filter + Soundproof; eight-turn hail; first Ice attack lowers foe Speed.",
 	},
 	"freezerburn": {
 		"desc": "Doubles Speed in hail, snow or on Icy, Snowy Mountain and Cold Eclipse. Biting moves have 1.5x power. Airborne: immune to Ground attacks, Spikes, Toxic Spikes, Sticky Web and Arena Trap unless grounded. Thousand Arrows can still hit. Eligible Normal moves become Ice with 1.2x power.",
@@ -1067,12 +1067,12 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Status priority; stronger weak moves and secondary chances; switching cures status and heals."
 	},
 	"pollenbloom": {
-		"desc": "Thick Fat + Unaware. Same-type attacks gain 30% power. Fire and Ice attacks use half the attacker's attacking stat; hail causes no damage. Ignores the foe's Defense, Sp. Def and evasion changes when attacking, and their Attack, Defense, Sp. Atk and accuracy changes when defending. Reveals opposing Illusions on entry. At each turn's end, drains 1/16 of each foe's base maximum HP and heals by the HP actually drained. Grass types and Grass-immune foes are unaffected. In Free-for-All only, Grass weaknesses and resistances change the drain amount.",
-		"shortDesc": "Same-type attacks gain 30% power. Each turn, drains 1/16 HP from eligible foes and heals that amount; Grass matchups scale the drain only in FFA."
+		"desc": "Thick Fat + Unaware. Fire and Ice attacks use half the attacker's attacking stat; hail causes no damage. Ignores the foe's Defense, Sp. Def and evasion changes when attacking, and their Attack, Defense, Sp. Atk and accuracy changes when defending. Reveals opposing Illusions on entry. All moves have 1.1x accuracy.",
+		"shortDesc": "Thick Fat, Unaware; all moves have 1.1x accuracy.",
 	},
 	"ancientbloom": {
-		"desc": "Damaging hits have separate 10% chances to inflict sleep, paralysis or poison on the attacker; powder immunity blocks this. If Sleep Clause blocks sleep, a further roll can inflict paralysis or poison instead. Same-type moves have 1.3x power. Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to hail damage. When attacking, ignores the target's Defense, Sp. Def and evasion stages. When defending, ignores the attacker's Attack, Defense, Sp. Atk and accuracy stages. Reveals opposing Illusions on entry. At turn end, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, blocked by Grass immunities; it heals the damage dealt by that chip. Only in Free-for-All does Grass type effectiveness scale this chip.",
-		"shortDesc": "Damaging attackers may sleep, be paralyzed or poisoned; Same-type moves have 1.3x power; Half Fire/Ice attacking stats; immune to hail damage; Ignores opposing combat/accuracy stages; reveals Illusions; field boosts."
+		"desc": "Verdant Monarch supplies Thick Fat and Unaware: Fire and Ice attacks use half the attacking stat; ignores opposing stat stages through local Unaware and reveals Illusions on entry. Friend Guard reduces attack damage to allies by 25%, without protecting the holder. Fairy Tale, New World, Cold Eclipse and Starlight Arena entry grant +1 Defense and Sp. Def; the latter three give 1.5x move power. All moves have 1.1x accuracy.",
+		"shortDesc": "Verdant Monarch + Friend Guard; field bonuses; all moves have 1.1x accuracy.",
 	},
 	"firemane": {
 		"desc": "Damaging moves with effective Fire typing have 1.5x power, whether or not they receive STAB. Non-Fire STAB moves and status moves are not boosted.",
@@ -1085,12 +1085,12 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 	coronafurnace: {"shortDesc":"Flame Body; damaging Fire moves ignore positive defensive stages.","desc":"Full local Flame Body: eligible contact attackers have a 30% burn chance, or 60% on Volcanic Field. On Cold Eclipse, ability activation instead grants +1 Defense and Sp. Def and contact burns are disabled. Damaging moves with effective Fire typing ignore only positive defensive stages. Negative stages, screens, type effectiveness and defensive abilities still apply."},
 
 	"fortressshell": {
-		"desc": "Prevents critical hits and takes 20% less attack damage. Same-type moves have 1.3x power. Eligible slicing, pulse, bullet, horn, drill, and Arrow moves normally hit twice at 60% power, each with its own accuracy check. If an offensive ability power or damage multiplier applies, the first hit retains its full ability boosts and the second uses 15% of original move power without those offensive ability multipliers. Stat multipliers, items, STAB and ordinary weather or field modifiers remain separate. In Free-for-All, the second hit targets another random living foe when possible; Siege Launcher retains its full-power pair. Existing multi-hit moves do not gain an extra pair. At turn end, foes take cycling Water damage of 1/16, 2/16, then 3/16 max HP. Water immunities block it; type effectiveness scales it only in Free-for-All. Allies' moves have 1.3x power, or 1.5x on Haunted, Bewitched Woods, Holy and Psychic fields. Allies take 25% less attack damage; this does not protect the holder. Heals 1/16 max HP each turn. During Electric Aura or on Electric Terrain, Murkwater Surface, Water Surface, Underwater, Midnight Zone, Factory and Short-Circuit, redirects and absorbs Electric moves for +1 Attack and Sp. Atk. Fairy Tale, New World, Cold Eclipse and Starlight Arena give +1 Defense and Sp. Def once per active terrain. New World, Cold Eclipse and Starlight Arena also give 1.5x move power.",
-		"shortDesc": "Critical-hit protection; 20% less damage; paired moves and Water chip; ally support; field Electric absorption."
+		"desc": "Stalwart bypasses redirection and gives +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. Shell Armor prevents critical hits and reduces attack damage by 20%; Fairy Tale and Dragon Den entry give +1 Defense, and opposing stat drops trigger +2 Sp. Def. Guardian Presence boosts allies move power by 1.3x, or 1.5x on Haunted, Bewitched Woods, Holy and Psychic fields, and reduces their attack damage by 25%; neither applies to the holder. During Electric Aura or Electric Terrain, Murkwater Surface, Water Surface, Underwater, Midnight Zone, Factory and Short-Circuit, redirects and absorbs Electric moves for +1 Attack and Sp. Atk. Existing Fairy Tale, New World, Cold Eclipse and Starlight Arena entry/terrain bonuses give +1 Defense and Sp. Def; the latter three retain 1.5x move power. All moves have 1.1x accuracy.",
+		"shortDesc": "Tidal Monarch (without Dual Wield), Shell Armor and Guardian Presence; all moves have 1.1x accuracy.",
 	},
 	"waterbarrage": {
-		"desc": "Same-type moves have 1.3x power. Eligible slicing, pulse, bullet, horn, drill, and Arrow moves normally hit twice at 60% power, each with its own accuracy check. If an offensive ability power or damage multiplier applies, the first hit retains its full ability boosts and the second uses 15% of original move power without those offensive ability multipliers. Stat multipliers, items, STAB and ordinary weather or field modifiers remain separate. In Free-for-All, the second hit targets another random living foe when possible; Siege Launcher retains its full-power pair. Existing multi-hit moves do not gain an extra pair. At turn end, foes take cycling Water damage of 1/16, 2/16, then 3/16 max HP. Water immunities block it; type effectiveness scales it only in Free-for-All.",
-		"shortDesc": "1.3x same-type power; eligible moves hit twice; cycling 1/16–3/16 Water damage to foes each turn."
+		"desc": "Stalwart bypasses redirection and grants +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 60% power, with an independent accuracy check for each hit. A literal Mega Launcher + Tidal Monarch combination instead boosts both eligible pulse/bullet hits by 1.5x: 0.9x each in every battle format. In Free-for-All, both hits still use 60% power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair. All moves have 1.1x accuracy.",
+		"shortDesc": "Dual Wield + Stalwart; all moves have 1.1x accuracy.",
 	},
 	"livinglegend": {
 		"desc": "Flash Fire + Download. Extreme Speed has 1.5x power and +2 critical-hit stages.",
@@ -1277,8 +1277,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Moves bypass Substitute and opposing screens."
 	},
 	"burningcrown": {
-		"desc": "On entry, lowers adjacent foes' Attack by 1. Substitute and Intimidate protections still apply. Other Pokemon cannot lower its stat stages. Gains +1 Attack and Sp. Atk on Volcanic entry. Moves ignore bypassable opposing abilities. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. Takes 20% less attack damage. Moves have a further 1.5x power on New World, Cold Eclipse and Starlight Arena. Faints grant no stat boosts.",
-		"shortDesc": "Lowers foe Attack; prevents foe stat drops; stronger Dragon moves; heals each turn; 20% less attack damage."
+		"desc": "On entry, lowers adjacent foes Attack by 1 under normal Intimidate rules. Blazing Monarch converts eligible Normal moves to Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze; incoming Water and Ice attacks use half the offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. Dragon's Den, Volcanic and Infernal Eclipse entry give +1 Defense and Sp. Def. Levitate grants normal airborne Ground and grounded-hazard protection. Has one 20% attack-damage reduction. New World, Cold Eclipse and Starlight Arena retain 1.5x move power. All moves have 1.1x accuracy.",
+		"shortDesc": "Intimidate + Blazing Monarch + Levitate; all moves have 1.1x accuracy.",
 	},
 	"innerfocus": {
 		"desc": "Prevents flinching and Intimidate's Attack drop.",
@@ -1870,12 +1870,12 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Double Speed in rain and water fields; Absorbs Water; rain/water fields heal; Fire, sun and Desert hurt; Opposing attacks heal 1/16 once per use."
 	},
 	"toxicbloom": {
-		"desc": "Same-type moves have 1.3x power. Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to hail damage. When attacking, ignores the target's Defense, Sp. Def and evasion stages. When defending, ignores the attacker's Attack, Defense, Sp. Atk and accuracy stages. Reveals opposing Illusions on entry. At turn end, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, blocked by Grass immunities; it heals the damage dealt by that chip. Only in Free-for-All does Grass type effectiveness scale this chip. Heals 1/16 max HP each turn. Poison-type attacks restore 1/4 of actual opposing HP damage, using normal drain rounding and Heal Block, Liquid Ooze and Big Root interactions. No added drain from Substitute-only damage, misses, Protect, immunity or residual poison. Moves that already drain keep their native drain without an extra heal.",
-		"shortDesc": "Stronger same-type moves; Fire/Ice protection; ignores foe stat stages; Grass chip/healing; Poison drain."
+		"desc": "Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to hail damage. Ignores target Defense/Sp. Def/evasion stages when attacking, and attacker Attack/Defense/Sp. Atk/accuracy stages when defending. Reveals opposing Illusions on entry. All moves have 1.1x accuracy.",
+		"shortDesc": "Verdant Monarch; all moves have 1.1x accuracy.",
 	},
 	"siegelauncher": {
-		"desc": "Same-type moves have 1.3x power. Eligible slicing, pulse, bullet, horn, drill, and Arrow moves normally hit twice at 60% power, each with its own accuracy check. If an offensive ability power or damage multiplier applies, the first hit retains its full ability boosts and the second uses 15% of original move power without those offensive ability multipliers. Stat multipliers, items, STAB and ordinary weather or field modifiers remain separate. In Free-for-All, the second hit targets another random living foe when possible; Siege Launcher retains its full-power pair. Existing multi-hit moves do not gain an extra pair. Pulse and bullet moves have 1.5x power; the offensive ability follow-up rule applies. Moves ignore redirection. Heals 1/16 max HP each turn. Foes take cycling Water damage of 1/16, 2/16, then 3/16 max HP; Water immunities block it, and type effectiveness scales it only in Free-for-All.",
-		"shortDesc": "Stronger pulse/bullet moves; eligible moves hit twice; ignores redirection; heals and damages foes each turn."
+		"desc": "Mega Launcher gives pulse and bullet moves 1.5x power. Tidal Monarch supplies exactly one eligible Dual Wield pair, each hit at 0.6x power outside Free-for-All: pulse/bullet pairs therefore use 0.9x power per hit before STAB and passives. In Free-for-All both hits use full power, with the second-target selection. Existing multi-hit, charging, delayed, Z/Max and ineligible moves gain no extra pair. Tidal Monarch supplies Stalwart exactly once: redirection bypass and +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. All moves have 1.1x accuracy.",
+		"shortDesc": "Mega Launcher + Stalwart + Tidal Monarch; all moves have 1.1x accuracy.",
 	},
 	"sheerforce": {
 		"desc": "Its attacks with secondary effects have their power multiplied by 1.3, but the secondary effects are removed. If a secondary effect was removed, it also removes the user's Life Orb recoil and Shell Bell recovery, and prevents the target's Anger Shell, Berserk, Color Change, Emergency Exit, Pickpocket, Wimp Out, Red Card, Eject Button, Kee Berry, and Maranga Berry from activating.",
@@ -2026,8 +2026,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Summons rain on entry; Bites have 1.5x power; +1 Speed after each full active turn."
 	},
 	"rainsovereign": {
-		"desc": "On entry, it sets Rain for 8 turns. Its Electric-, Water-, and Flying-type moves receive STAB. Each turn, non-immune foes take Water damage equal to 1/16 max HP. Only in Free-for-All does Water type effectiveness scale this chip.",
-		"shortDesc": "8-turn Rain; Electric/Water/Flying STAB; Water chip scales by type in FFA."
+		"desc": "Sets Rain for 8 turns on entry. Electric, Water and Flying moves receive STAB. Once per turn, after one of those moves damages opposing HP, heals the living active ally with the lowest HP percentage by 1/16 max HP. Heals itself when no living active ally exists.",
+		"shortDesc": "Eight-turn Rain; Electric/Water/Flying STAB; matching hits heal an ally once per turn.",
 	},
 	"toxicrenewal": {
 		"desc": "Same-type moves use a 2x STAB multiplier. Switching out heals 1/3 max HP. Contact hits have a 30% chance to poison the target. Shield Dust and Covert Cloak block this effect.",
@@ -3357,12 +3357,12 @@ AbilityDescriptionOverrides.voidguile = {"shortDesc":"Combines the listed abilit
 // Selected-package descriptions exclude effects now supplied by species passives.
 Object.assign(AbilityDescriptionOverrides, {
 	"toxicbloom": {
-		"desc": "Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to hail damage. When attacking, ignores the target's Defense, Sp. Def and evasion stages. When defending, ignores the attacker's Attack, Defense, Sp. Atk and accuracy stages. Reveals opposing Illusions on entry. At turn end, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, blocked by Grass immunities; it heals the damage dealt by that chip. Only in Free-for-All does Grass type effectiveness scale this chip. Heals 1/16 max HP each turn. Poison-type attacks restore 1/4 of actual opposing HP damage, using normal drain rounding and Heal Block, Liquid Ooze and Big Root interactions. No added drain from Substitute-only damage, misses, Protect, immunity or residual poison. Moves that already drain keep their native drain without an extra heal.",
-		"shortDesc": "Fire/Ice protection; ignores foe stat stages; Grass chip/healing; Poison drain."
+		"desc": "Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to hail damage. Ignores target Defense/Sp. Def/evasion stages when attacking, and attacker Attack/Defense/Sp. Atk/accuracy stages when defending. Reveals opposing Illusions on entry. All moves have 1.1x accuracy.",
+		"shortDesc": "Verdant Monarch; all moves have 1.1x accuracy.",
 	},
 	"ancientbloom": {
-		"desc": "Damaging hits have separate 10% chances to inflict sleep, paralysis or poison on the attacker; powder immunity blocks this. If Sleep Clause blocks sleep, a further roll can inflict paralysis or poison instead. Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to hail damage. When attacking, ignores the target's Defense, Sp. Def and evasion stages. When defending, ignores the attacker's Attack, Defense, Sp. Atk and accuracy stages. Reveals opposing Illusions on entry. At turn end, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, blocked by Grass immunities; it heals the damage dealt by that chip. Only in Free-for-All does Grass type effectiveness scale this chip.",
-		"shortDesc": "End-turn Grass damage to foes restores its HP."
+		"desc": "Verdant Monarch supplies Thick Fat and Unaware: Fire and Ice attacks use half the attacking stat; ignores opposing stat stages through local Unaware and reveals Illusions on entry. Friend Guard reduces attack damage to allies by 25%, without protecting the holder. Fairy Tale, New World, Cold Eclipse and Starlight Arena entry grant +1 Defense and Sp. Def; the latter three give 1.5x move power. All moves have 1.1x accuracy.",
+		"shortDesc": "Verdant Monarch + Friend Guard; field bonuses; all moves have 1.1x accuracy.",
 	},
 	"bloomingsun": {
 		"desc": "Its moves are used as if the effects of Sunny Day were active. Healing received by it and its allies is multiplied by 1.3. At turn end, it has a 50% chance to cure each adjacent ally's status condition. Switching out cures major status and heals 1/8 max HP only if a status was cured. Bewitched Woods cures status at turn end without this heal.",
@@ -3393,16 +3393,16 @@ Object.assign(AbilityDescriptionOverrides, {
 		"shortDesc": "Sets Forest and Grassy Aura for 5 turns, or 8 with Amplifield Rock."
 	},
 	"atrocity": {
-		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Heals 1/16 max HP each turn. Damaging moves have a further 1.3x power, plus another 1.3x on Cold Eclipse. Defense and Sp. Def are 1.3x, or 1.5x on Cold Eclipse. While Royal Decree or Empress is active without Neutralization, move power gains another 1.3x and incoming attack damage falls by 30%. Cannot be suppressed.",
-		"shortDesc": "Stronger attacks and defenses; ignores bypassable abilities; heals 1/16 HP each turn."
+		"desc": "Blazing Monarch + Fire Ward + Tough Claws. All moves have 1.1x accuracy.",
+		"shortDesc": "Blazing Monarch + Fire Ward + Tough Claws; all moves have 1.1x accuracy.",
 	},
 	"sunsovereign": {
-		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Summons sun for 8 turns on entry. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Heals 1/16 max HP at turn end.",
-		"shortDesc": "Summons 8-turn sunlight on entry."
+		"desc": "Summons sun for 8 turns on entry. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Immune to hail damage. All moves have 1.1x accuracy.",
+		"shortDesc": "Eight-turn sun + Blazing Monarch; all moves have 1.1x accuracy.",
 	},
 	"burningcrown": {
-		"desc": "On entry, lowers adjacent foes' Attack by 1. Substitute and Intimidate protections still apply. Other Pokemon cannot lower its stat stages. Gains +1 Attack and Sp. Atk on Volcanic entry. Moves ignore bypassable opposing abilities. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. Takes 20% less attack damage. Moves have a further 1.5x power on New World, Cold Eclipse and Starlight Arena. Faints grant no stat boosts.",
-		"shortDesc": "Takes 20% less attack damage."
+		"desc": "On entry, lowers adjacent foes Attack by 1 under normal Intimidate rules. Blazing Monarch converts eligible Normal moves to Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze; incoming Water and Ice attacks use half the offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. Dragon's Den, Volcanic and Infernal Eclipse entry give +1 Defense and Sp. Def. Levitate grants normal airborne Ground and grounded-hazard protection. Has one 20% attack-damage reduction. New World, Cold Eclipse and Starlight Arena retain 1.5x move power. All moves have 1.1x accuracy.",
+		"shortDesc": "Intimidate + Blazing Monarch + Levitate; all moves have 1.1x accuracy.",
 	},
 
 	"blazingtempo": {
@@ -3430,12 +3430,12 @@ Object.assign(AbilityDescriptionOverrides, {
 		"shortDesc": "1.4x kicks; moves by/against it always hit; changes type before moves."
 	},
 	"siegelauncher": {
-		"desc": "Eligible slicing, pulse, bullet, horn, drill, and Arrow moves normally hit twice at 60% power, each with its own accuracy check. If an offensive ability power or damage multiplier applies, the first hit retains its full ability boosts and the second uses 15% of original move power without those offensive ability multipliers. Stat multipliers, items, STAB and ordinary weather or field modifiers remain separate. In Free-for-All, the second hit targets another random living foe when possible; Siege Launcher retains its full-power pair. Existing multi-hit moves do not gain an extra pair. Pulse and bullet moves have 1.5x power; the offensive ability follow-up rule applies. Moves ignore redirection. Heals 1/16 max HP each turn. Foes take cycling Water damage of 1/16, 2/16, then 3/16 max HP; Water immunities block it, and type effectiveness scales it only in Free-for-All.",
-		"shortDesc": "Stronger pulse/bullet moves; eligible moves hit twice; heals and damages foes each turn."
+		"desc": "Mega Launcher gives pulse and bullet moves 1.5x power. Tidal Monarch supplies exactly one eligible Dual Wield pair, each hit at 0.6x power outside Free-for-All: pulse/bullet pairs therefore use 0.9x power per hit before STAB and passives. In Free-for-All both hits use full power, with the second-target selection. Existing multi-hit, charging, delayed, Z/Max and ineligible moves gain no extra pair. Tidal Monarch supplies Stalwart exactly once: redirection bypass and +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. All moves have 1.1x accuracy.",
+		"shortDesc": "Mega Launcher + Stalwart + Tidal Monarch; all moves have 1.1x accuracy.",
 	},
 	"fortressshell": {
-		"desc": "Prevents critical hits and takes 20% less attack damage. Eligible slicing, pulse, bullet, horn, drill, and Arrow moves normally hit twice at 60% power, each with its own accuracy check. If an offensive ability power or damage multiplier applies, the first hit retains its full ability boosts and the second uses 15% of original move power without those offensive ability multipliers. Stat multipliers, items, STAB and ordinary weather or field modifiers remain separate. In Free-for-All, the second hit targets another random living foe when possible; Siege Launcher retains its full-power pair. Existing multi-hit moves do not gain an extra pair. At turn end, foes take cycling Water damage of 1/16, 2/16, then 3/16 max HP. Water immunities block it; type effectiveness scales it only in Free-for-All. Allies' moves have 1.3x power, or 1.5x on Haunted, Bewitched Woods, Holy and Psychic fields. Allies take 25% less attack damage; this does not protect the holder. Heals 1/16 max HP each turn. During Electric Aura or on Electric Terrain, Murkwater Surface, Water Surface, Underwater, Midnight Zone, Factory and Short-Circuit, redirects and absorbs Electric moves for +1 Attack and Sp. Atk. Fairy Tale, New World, Cold Eclipse and Starlight Arena give +1 Defense and Sp. Def once per active terrain. New World, Cold Eclipse and Starlight Arena also give 1.5x move power.",
-		"shortDesc": "Critical-hit protection; 20% less damage; paired moves and Water chip; ally support; field Electric absorption."
+		"desc": "Stalwart bypasses redirection and gives +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. Shell Armor prevents critical hits and reduces attack damage by 20%; Fairy Tale and Dragon Den entry give +1 Defense, and opposing stat drops trigger +2 Sp. Def. Guardian Presence boosts allies move power by 1.3x, or 1.5x on Haunted, Bewitched Woods, Holy and Psychic fields, and reduces their attack damage by 25%; neither applies to the holder. During Electric Aura or Electric Terrain, Murkwater Surface, Water Surface, Underwater, Midnight Zone, Factory and Short-Circuit, redirects and absorbs Electric moves for +1 Attack and Sp. Atk. Existing Fairy Tale, New World, Cold Eclipse and Starlight Arena entry/terrain bonuses give +1 Defense and Sp. Def; the latter three retain 1.5x move power. All moves have 1.1x accuracy.",
+		"shortDesc": "Tidal Monarch (without Dual Wield), Shell Armor and Guardian Presence; all moves have 1.1x accuracy.",
 	},
 	"draconicforce": {
 		"desc": "Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Biting moves have 1.5x power. Moves ignore bypassable opposing abilities.",
@@ -4066,7 +4066,12 @@ AbilityDescriptionOverrides.silentflight = { "shortDesc": "Levitate; immune to e
 AbilityDescriptionOverrides.toxicsink = { shortDesc: 'Redirects and absorbs Poison moves; absorption raises Sp. Atk by 1.', desc: 'Absorbs other Pokemon Poison-type moves instead of being hit, raising Special Attack by 1 stage. Redirects eligible single-target Poison moves within range to itself. Spread moves are not redirected, but their Poison hits are absorbed for this holder. Uses normal ability suppression and bypass rules.' };
 AbilityDescriptionOverrides.toxicbloom = { ...AbilityDescriptionOverrides.toxicbloom, shortDesc: AbilityDescriptionOverrides.toxicbloom.shortDesc + ' Toxic Sink.', desc: AbilityDescriptionOverrides.toxicbloom.desc + ' Toxic Sink redirects eligible single-target Poison moves and absorbs other Pokemon Poison moves, raising Special Attack by 1 stage per absorption.' };
 
-AbilityDescriptionOverrides.siegelauncher = { ...AbilityDescriptionOverrides.siegelauncher, shortDesc: 'Mega Launcher + Water Barrage + Overcoat.', desc: AbilityDescriptionOverrides.siegelauncher.desc + ' Overcoat prevents powder moves, Rage Powder redirection, Effect Spore, sandstorm damage and hail damage.' };
+AbilityDescriptionOverrides.siegelauncher = {
+	...AbilityDescriptionOverrides.siegelauncher,
+	shortDesc: 'Mega Launcher + Tidal Monarch + Overcoat.',
+	desc: AbilityDescriptionOverrides.siegelauncher.desc +
+		' Overcoat prevents powder moves, Rage Powder redirection, Effect Spore, sandstorm damage and hail damage.',
+};
 
 import { applyWarningDescriptions } from './warning-descriptions';
 applyWarningDescriptions(AbilityDescriptionOverrides);
@@ -4118,8 +4123,10 @@ Object.assign(AbilityDescriptionOverrides, {
 AbilityDescriptionOverrides.glacialprime = {"shortDesc":"Slush Rush + Refrigerate.","desc":"Full local Slush Rush and Refrigerate. Doubles Speed in hail, snow or on Icy, Snowy Mountain and Cold Eclipse. Eligible Normal moves become Ice with 1.2x power, or 1.5x on Icy/Snowy Mountain. Excludes moves with their own type-setting effect, damaging Z-Moves and Terastallized Tera Blast."};
 
 Object.assign(AbilityDescriptionOverrides, {
-	atrocity: {shortDesc: 'Unbound Blaze + Fire Ward', desc: 'Unbound Blaze + Fire Ward'},
-	fireward: {shortDesc: 'Defense and Sp. Def 1.3x; 1.5x on Cold Eclipse or Dragon’s Den.', desc: 'Defense and Sp. Def are multiplied by 1.3, or 1.5 on Cold Eclipse or Dragon’s Den.'},
+	atrocity: { shortDesc: "Blazing Monarch + Fire Ward + Tough Claws; all moves have 1.1x accuracy.",
+		desc: "Blazing Monarch + Fire Ward + Tough Claws. All moves have 1.1x accuracy." },
+	fireward: { shortDesc: 'Defense and Sp. Def 1.3x; 1.5x on Cold Eclipse or Dragon’s Den.',
+		desc: 'Defense and Sp. Def are multiplied by 1.3, or 1.5 on Dragon’s Den.' },
 	naturalcure: {shortDesc: 'On switching out, cures status and heals 1/8 max HP if cured.', desc: 'On switching out, cures its major status and heals 1/8 max HP if it had a status to cure. Bewitched Woods also cures its status at turn end.'},
 });
 

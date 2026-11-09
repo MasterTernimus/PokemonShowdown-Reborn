@@ -2355,7 +2355,7 @@ export class Pokemon {
 		const abilityAliases = AbilityComponents;
 		const excluded = this.getAbilityComponentExclusions();
 		const abilityids = (Array.isArray(ability) ? ability.map(toID) : [toID(ability)])
-			.map(id => id === 'duskego' ? 'duskdrive' : id);
+			.map(id => this.battle.dex.abilities.get(id).id);
 		const memoryComponents: string[] = this.ability === 'rkssystem' ?
 			(this.getAbility() as RKSSystemAbility).memoryAbilities.call(this.battle, this) : [];
 		// Identity lookup only: composites still dispatch their own component callbacks.

@@ -674,7 +674,7 @@ AbilityComponents.falsebouquet = ['magician'];
 
 AbilityComponents.eldritchremedy = ["owntempo","curiousmedicine"];
 
-AbilityComponents.infernaldominion = ["intimidate"];
+AbilityComponents.infernaldominion = ["intimidate", "fireward"];
 
 AbilityComponents.hydraulicarmor = ["stamina"];
 
@@ -1038,7 +1038,7 @@ AbilityComponents.coldexpertise = ['oblivious', 'thickfat'];
 AbilityComponents.oldnorth = ['icebody', 'icescales', 'technician'];
 AbilityComponents.glacialprime = ['slushrush', 'refrigerate'];
 
-AbilityComponents.atrocity = ['unboundblaze', 'fireward'];
+AbilityComponents.atrocity = ['unboundblaze', 'fireward', 'toughclaws'];
 
 AbilityComponents.apexpredator = ['windrider', 'toughclaws'];
 

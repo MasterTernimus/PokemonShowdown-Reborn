@@ -242,6 +242,9 @@ export class BattleActions {
 		recordRegiEntry(pokemon);
 		delete pokemon.m.slipstreamUsed;
 		delete pokemon.m.updraftUsed;
+		delete pokemon.m.frostSovereignSpent;
+		delete pokemon.m.frostSovereignMove;
+		delete pokemon.m.frostSovereignTargets;
 		delete pokemon.m.clawsCleanupMove;
 		delete pokemon.m.scorchSweepUsed;
 		delete pokemon.m.falseLiberationUsed;
@@ -1984,10 +1987,10 @@ export class BattleActions {
 		for (const target of targets) {
 			if (target === false) continue;
 			// The approved Yang status bonuses roll once per damaged opponent, not per hit.
-			const yangTargets = (move as ActiveMove & {yangSecondaryTargets?: Set<Pokemon>}).yangSecondaryTargets;
+			const yangTargets = (move as ActiveMove & { yangSecondaryTargets?: Pokemon[] }).yangSecondaryTargets;
 			if (yangTargets && target) {
-				if (target.isAlly(source) || (target.getMoveHitData(move).damage || 0) <= 0 || yangTargets.has(target)) continue;
-				yangTargets.add(target);
+				if (target.isAlly(source) || (target.getMoveHitData(move).damage || 0) <= 0 || yangTargets.includes(target)) continue;
+				yangTargets.push(target);
 			}
 			const secondaries: Dex.SecondaryEffect[] =
 				this.battle.runEvent('ModifySecondaries', target, source, moveData, (target ? adaptiveWeatherSecondaries(this.battle, source, target, adaptiveMoveView(moveData, source, target)) : moveData.secondaries)?.slice() || []);

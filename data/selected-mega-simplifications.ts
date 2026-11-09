@@ -33,7 +33,7 @@ export function composeSelectedAbility(abilities: AbilityDataTable, id: string, 
 export function installSelectedMegaSimplifications(abilities: AbilityDataTable) {
 	installCursedArmament(abilities);
 	const compose = (id: string, parts: string[]) => composeSelectedAbility(abilities, id, parts);
-	// Water Barrage owns Stalwart; dispatch that component exactly once.
+	// Tidal Monarch owns Stalwart; dispatch that component exactly once.
 	compose('siegelauncher', ['megalauncher', 'waterbarrage', 'overcoat']);
 	compose('neurotoxin', ['hydrabond', 'regenerator']);
 	compose('surgeconduit', ['lightningrod', 'rockhead']);

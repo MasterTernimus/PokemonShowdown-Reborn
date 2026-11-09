@@ -15,7 +15,7 @@ function switchBack(p){const idx=p.position+1;const choices=battle.sides.map(s=>
 describe('Six additions to the approved 28-family batch',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
 	it('has exact selected slots, leaves Galar Slowking and Mega/Gmax distributions intact', () => {
-		assert.deepEqual(Dex.species.get('charizardalt').abilities, { 0: 'Unbound Blaze', 1: 'Infernal Dominion', H: 'Solar Power' });
+		assert.deepEqual(Dex.species.get('charizardalt').abilities, { 0: 'Blazing Monarch', 1: 'Infernal Dominion', H: 'Solar Power' });
 		assert.deepEqual(Dex.species.get('rillaboom').abilities, { 0: 'Primal Rhythm', 1: 'Rising Rhythm', H: 'Grassy Surge' });
 		assert.deepEqual(Dex.species.get('sinistchamasterpiece').abilities, Dex.species.get('sinistcha').abilities);
 		assert.deepEqual(Dex.species.get('slowking').abilities, { 0: 'Neutralization', 1: 'Measured Counsel', H: 'Regenerator' });

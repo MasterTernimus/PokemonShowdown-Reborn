@@ -10,7 +10,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	debilitatingvenom: "Withering Touch",
 	dreadfulpresence: "Dishearten",
 	shadowguard: "Void Craft",
-	wildfirecore: "Unbound Blaze",
+	wildfirecore: "Blazing Monarch",
 	hippodownrift: "Hippowdon-Rift",
 	torterreariftshatter: "Torterra-Rift-Shatter",
 	parasectparasitism: "Parasect-Rejuv",
@@ -3057,3 +3057,6 @@ Object.assign(Aliases, {empoleonmega:'Empoleon-Mega-Y', empoleonite:'Empoleonite
 Aliases.oracularchorus = "Oracle's Refrain";
 
 Aliases.worldbreaker = 'Strings of Ruin';
+
+// Stable internal IDs preserve older teams and battle logs.
+Object.assign(Aliases, { verdantmonarch: 'pollenbloom', blazingmonarch: 'unboundblaze', tidalmonarch: 'waterbarrage' });

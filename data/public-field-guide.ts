@@ -244,7 +244,7 @@ ReviewedFieldGuide.flowergarden1 = {
 		"Sun, extreme sun, rain, heavy rain or the Rift-garden flag enables residual growth, guarded against duplicate growth during that residual turn. Burning-garden dousing restores its stored stage minus burning turns, with a minimum of one; Rain Dance, Water Spout and Water Sport also request growth. Other dousing moves are Defog, Gust, Wind Dance, Airstream Assault, Hurricane, Muddy Water, Sand Tomb, Razor Wind, Sludge Wave, Sparkling Aria, Surf, Water Pledge, Hydro Vortex, Tailwind, Twister, Whirlwind, Continental Crush, Supersonic Skystrike and G-Max Wind Rage. Oceanic Operetta is misspelled in this list and does not activate this restoration path.",
 	],
 	"Abilities": [
-		"One growth is triggered per entrant with Drizzle, Drought, Flower Gift, Flower Veil, Orichalcum Pulse, Mega Sol, Searing Petals, Seed Sower, Grassy Surge, Forest Surge, Pollen Bloom, Toxic Bloom or Ancient Bloom. Composite components do not multiply this entry growth.",
+		"One growth is triggered per entrant with Drizzle, Drought, Flower Gift, Flower Veil, Orichalcum Pulse, Mega Sol, Searing Petals, Seed Sower, Grassy Surge, Forest Surge, Verdant Monarch, Toxic Bloom or Ancient Bloom. Composite components do not multiply this entry growth.",
 	],
 	"Battle messages": [
 		"The garden grew a little!",
@@ -265,7 +265,7 @@ ReviewedFieldGuide.flowergarden2 = {
 		"Sun, extreme sun, rain, heavy rain or the Rift-garden flag enables residual growth, guarded against duplicate growth during that residual turn. Burning-garden dousing restores its stored stage minus burning turns, with a minimum of one; Rain Dance, Water Spout and Water Sport also request growth. Other dousing moves are Defog, Gust, Wind Dance, Airstream Assault, Hurricane, Muddy Water, Sand Tomb, Razor Wind, Sludge Wave, Sparkling Aria, Surf, Water Pledge, Hydro Vortex, Tailwind, Twister, Whirlwind, Continental Crush, Supersonic Skystrike and G-Max Wind Rage. Oceanic Operetta is misspelled in this list and does not activate this restoration path.",
 	],
 	"Abilities": [
-		"One growth is triggered per entrant with Drizzle, Drought, Flower Gift, Flower Veil, Orichalcum Pulse, Mega Sol, Searing Petals, Seed Sower, Grassy Surge, Forest Surge, Pollen Bloom, Toxic Bloom or Ancient Bloom. Composite components do not multiply this entry growth.",
+		"One growth is triggered per entrant with Drizzle, Drought, Flower Gift, Flower Veil, Orichalcum Pulse, Mega Sol, Searing Petals, Seed Sower, Grassy Surge, Forest Surge, Verdant Monarch, Toxic Bloom or Ancient Bloom. Composite components do not multiply this entry growth.",
 	],
 	"Battle messages": [
 		"The garden grew a little!",
@@ -288,7 +288,7 @@ ReviewedFieldGuide.flowergarden3 = {
 		"Sun, extreme sun, rain, heavy rain or the Rift-garden flag enables residual growth, guarded against duplicate growth during that residual turn. Burning-garden dousing restores its stored stage minus burning turns, with a minimum of one; Rain Dance, Water Spout and Water Sport also request growth. Other dousing moves are Defog, Gust, Wind Dance, Airstream Assault, Hurricane, Muddy Water, Sand Tomb, Razor Wind, Sludge Wave, Sparkling Aria, Surf, Water Pledge, Hydro Vortex, Tailwind, Twister, Whirlwind, Continental Crush, Supersonic Skystrike and G-Max Wind Rage. Oceanic Operetta is misspelled in this list and does not activate this restoration path.",
 	],
 	"Abilities": [
-		"One growth is triggered per entrant with Drizzle, Drought, Flower Gift, Flower Veil, Orichalcum Pulse, Mega Sol, Searing Petals, Seed Sower, Grassy Surge, Forest Surge, Pollen Bloom, Toxic Bloom or Ancient Bloom. Composite components do not multiply this entry growth.",
+		"One growth is triggered per entrant with Drizzle, Drought, Flower Gift, Flower Veil, Orichalcum Pulse, Mega Sol, Searing Petals, Seed Sower, Grassy Surge, Forest Surge, Verdant Monarch, Toxic Bloom or Ancient Bloom. Composite components do not multiply this entry growth.",
 	],
 	"Battle messages": [
 		"The garden grew a little!",
@@ -312,7 +312,7 @@ ReviewedFieldGuide.flowergarden4 = {
 		"Sun, extreme sun, rain, heavy rain or the Rift-garden flag enables residual growth, guarded against duplicate growth during that residual turn. Burning-garden dousing restores its stored stage minus burning turns, with a minimum of one; Rain Dance, Water Spout and Water Sport also request growth. Other dousing moves are Defog, Gust, Wind Dance, Airstream Assault, Hurricane, Muddy Water, Sand Tomb, Razor Wind, Sludge Wave, Sparkling Aria, Surf, Water Pledge, Hydro Vortex, Tailwind, Twister, Whirlwind, Continental Crush, Supersonic Skystrike and G-Max Wind Rage. Oceanic Operetta is misspelled in this list and does not activate this restoration path.",
 	],
 	"Abilities": [
-		"One growth is triggered per entrant with Drizzle, Drought, Flower Gift, Flower Veil, Orichalcum Pulse, Mega Sol, Searing Petals, Seed Sower, Grassy Surge, Forest Surge, Pollen Bloom, Toxic Bloom or Ancient Bloom. Composite components do not multiply this entry growth.",
+		"One growth is triggered per entrant with Drizzle, Drought, Flower Gift, Flower Veil, Orichalcum Pulse, Mega Sol, Searing Petals, Seed Sower, Grassy Surge, Forest Surge, Verdant Monarch, Toxic Bloom or Ancient Bloom. Composite components do not multiply this entry growth.",
 	],
 	"Battle messages": [
 		"The garden grew a little!",
@@ -337,7 +337,7 @@ ReviewedFieldGuide.flowergarden5 = {
 		"Sun, extreme sun, rain, heavy rain or the Rift-garden flag enables residual growth, guarded against duplicate growth during that residual turn. Burning-garden dousing restores its stored stage minus burning turns, with a minimum of one; Rain Dance, Water Spout and Water Sport also request growth. Other dousing moves are Defog, Gust, Wind Dance, Airstream Assault, Hurricane, Muddy Water, Sand Tomb, Razor Wind, Sludge Wave, Sparkling Aria, Surf, Water Pledge, Hydro Vortex, Tailwind, Twister, Whirlwind, Continental Crush, Supersonic Skystrike and G-Max Wind Rage. Oceanic Operetta is misspelled in this list and does not activate this restoration path.",
 	],
 	"Abilities": [
-		"One growth is triggered per entrant with Drizzle, Drought, Flower Gift, Flower Veil, Orichalcum Pulse, Mega Sol, Searing Petals, Seed Sower, Grassy Surge, Forest Surge, Pollen Bloom, Toxic Bloom or Ancient Bloom. Composite components do not multiply this entry growth.",
+		"One growth is triggered per entrant with Drizzle, Drought, Flower Gift, Flower Veil, Orichalcum Pulse, Mega Sol, Searing Petals, Seed Sower, Grassy Surge, Forest Surge, Verdant Monarch, Toxic Bloom or Ancient Bloom. Composite components do not multiply this entry growth.",
 	],
 	"Battle messages": [
 		"The garden grew a little!",

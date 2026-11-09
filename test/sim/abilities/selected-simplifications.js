@@ -59,16 +59,16 @@ describe('Individually selected Mega simplifications', () => {
 			assert(p.getPassives().includes('proficient')); residual(p); assert.equal(p.hp, 400);
 		});
 	}
-	it('Pollen Bloom chip and its unconfirmed drain remain unchanged', () => {
+	it('Pollen Bloom no longer chips or drains', () => {
 		const [p, q] = setup('Venusaur-Mega', 'Toxic Bloom'); p.hp = 400; residual(p);
-		assert.equal(q.hp, 1500); assert.equal(p.hp, 500);
+		assert.equal(q.hp, 1600); assert.equal(p.hp, 400);
 	});
 	it('Siege Launcher delegates one Dual Wield pair with boosted first hit and unboosted 15% follow-up with its separate Proficient passive', () => {
 		const [p, q] = setup('Blastoise-Mega', 'Siege Launcher'), move = Dex.getActiveMove('darkpulse');
 		battle.runEvent('ModifyMove', p, q, move, move); assert.equal(move.multihit, 2); assert.equal(move.multihitType, 'dualwield');
 		for (const hit of [1, 2]) { move.hit = hit; assert.equal(battle.runEvent('BasePower', p, q, move, 100), hit === 1 ? 150 : 15); }
 		assert.equal(move.tracksTarget, true);
-		p.hp = 400; residual(p); assert.equal(p.hp, 400); assert.equal(q.hp, 1500);
+		p.hp = 400; residual(p); assert.equal(p.hp, 400); assert.equal(q.hp, 1600);
 	});
 	it('Mega Arbok X gets full Shed Skin and selected Regenerator exactly once', () => {
 		const [p] = setup('Arbok-Mega-X', 'Neurotoxin'); p.hp = 400;

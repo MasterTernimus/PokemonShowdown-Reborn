@@ -12,7 +12,7 @@ describe('Approved signature calculator parity', () => {
 		const metadata = calculatorMetadata();
 		assert.deepEqual(metadata.abilityComponents.duskdrive, ['Keen Eye', 'Ultra Ego']);
 		assert.deepEqual(metadata.abilityComponents.twilightinstinct, ['Ultra Instinct', 'Opportunist']);
-		assert(!metadata.abilityComponents.atrocity.includes('Tough Claws'));
+		assert(metadata.abilityComponents.atrocity.includes('Tough Claws'));
 		assert(metadata.abilityComponents.atrocity.includes('Fire Ward'));
 		assert(!metadata.abilityComponents.atrocity.includes('Levitate'));
 		assert.deepEqual(metadata.abilityComponents.cinderscales, ['Flame Body', 'Swarm']);

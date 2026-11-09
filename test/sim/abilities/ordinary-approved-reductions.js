@@ -123,21 +123,30 @@ describe('Approved ordinary species reductions',()=>{
  it('Joyride allows sleep and Yawn, does not cure existing sleep, and retains Fighting boosts',()=>{const[p,q]=setup('Joyride');p.activeTurns=2;assert(p.trySetStatus('slp',q));battle.singleEvent('Update',p.getAbility(),p.abilityState,p);assert.equal(p.status,'slp');p.cureStatus();assert(p.addVolatile('yawn',q));assert.equal(battle.runEvent('ModifyAtk',p,q,Dex.getActiveMove('closecombat'),100),130);assert.equal(battle.runEvent('ModifySpA',p,q,Dex.getActiveMove('aurasphere'),100),130);assert(!p.hasAbility('vitalspirit'));});
  it('Joyride retains Aerilate/Violent Rush and shared Vital Spirit remains unchanged',()=>{const[p,q]=setup('Joyride');p.activeTurns=0;assert.equal(battle.runEvent('ModifySpe',p,null,null,100),150);assert.equal(battle.runEvent('ModifyAtk',p,q,Dex.getActiveMove('tackle'),100),120);const m=Dex.getActiveMove('tackle');battle.runEvent('ModifyType',p,q,m,m);assert.equal(m.type,'Flying');assert.equal(battle.runEvent('BasePower',p,q,m,100),120);p.setAbility('Vital Spirit');assert(!p.trySetStatus('slp',q));assert(!p.addVolatile('yawn',q));});
 
- it('Toxic Bloom loses Poison attack healing but preserves pollen chip/drain',()=>{const[p,q]=setup('Toxic Bloom');p.hp=2000;act(p,q,'sludgebomb',{damage:400});assert.equal(p.hp,2000);const hp=q.hp;residual(p);assert(q.hp<hp);assert(p.hp>2000);});
+	it('Toxic Bloom loses Poison attack healing but no longer chips or drains at turn end', () => {
+		const [p, q] = setup('Toxic Bloom');
+		p.hp = 2000;
+		act(p, q, 'sludgebomb', { damage: 400 });
+		assert.equal(p.hp, 2000);
+		const hp = q.hp;
+		residual(p);
+		assert.equal(q.hp, hp);
+		assert.equal(p.hp, 2000);
+	});
  it('Ancient Bloom loses retaliation while shared Effect Spore remains functional',()=>{const[p,q]=setup('Ancient Bloom');battle.randomChance=()=>true;act(q,p,'tackle',{damage:1});assert.equal(q.status,'');assert(!p.hasAbility('effectspore'));battle.destroy();const[r,t]=setup('Effect Spore');battle.randomChance=()=>true;act(t,r,'tackle',{damage:1});assert(t.status);});
-	it('Atrocity loses only contact multiplication; general power and defenses remain', () => {
+	it('Atrocity includes contact multiplication; general power and defenses remain', () => {
 		const [p, q] = setup('Atrocity');
 		const contact = Object.assign(Dex.getActiveMove('tackle'), { type: 'Bug' }), ranged = Object.assign(Dex.getActiveMove('swift'), { type: 'Bug' });
-		assert.equal(battle.runEvent('BasePower', p, q, contact, 100), 130);
+		assert.equal(battle.runEvent('BasePower', p, q, contact, 100), 169);
 		assert.equal(battle.runEvent('BasePower', p, q, ranged, 100), 130);
 		assert.equal(battle.runEvent('ModifyDef', p, null, null, 100), 130);
 		battle.field.setTerrain('coldeclipseterrain', p);
-		assert.equal(battle.runEvent('BasePower', p, q, contact, 100), 130);
+		assert.equal(battle.runEvent('BasePower', p, q, contact, 100), 169);
 		assert.equal(battle.runEvent('ModifyDef', p, null, null, 100), 130);
-		assert(!p.hasAbility('toughclaws'));
+		assert(p.hasAbility('toughclaws'));
 	});
  it('Sun Sovereign keeps eight-turn sun and Unbound Blaze entry effects without Intimidate',()=>{const[p,q]=setup('Sun Sovereign');assert.equal(q.boosts.atk,0);assert.equal(battle.field.weather,'sunnyday');assert.equal(battle.field.weatherState.duration,8);battle.field.terrain='volcanicterrain';battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.boosts.def,1);assert.equal(p.boosts.spd,1);assert.equal(q.boosts.atk,0);});
-	it('Fortress Shell retains escalating Water chip without routine healing', () => {
+	it('Fortress Shell no longer chips or heals at turn end', () => {
 		const [p, q] = setup('Fortress Shell');
 		p.hp = 2000;
 		const loss = [];
@@ -147,7 +156,7 @@ describe('Approved ordinary species reductions',()=>{
 			loss.push(hp - q.hp);
 			assert.equal(p.hp, 2000);
 		}
-		assert.deepEqual(loss, [300, 600, 900]);
+		assert.deepEqual(loss, [0, 0, 0]);
 	});
  it('Toxic Evolution loses retaliation/confusion/bulk but keeps capped poison healing and Corrosion',()=>{const[p,q]=setup('Toxic Evolution');p.hp=2000;battle.randomChance=()=>true;act(q,p,'tackle',{damage:100});assert.equal(p.hp,1900);assert.equal(q.status,'');assert.equal(incoming(p,q),100);act(p,q,'toxic');assert.equal(q.status,'tox');assert(!q.volatiles.confusion);assert.equal(p.hp,2500);assert.equal(q.boosts.def,-1);act(p,q,'tackle',{damage:100});assert.equal(p.hp,2500);const secondary=[{chance:100,boosts:{def:-1}}];assert.deepEqual(battle.runEvent('ModifySecondaries',p,q,Dex.getActiveMove('tackle'),secondary),[]);p.removeVolatile('toxicevolutionhealed');act(p,q,'tackle',{damage:100});assert.equal(p.hp,3100);});
 });

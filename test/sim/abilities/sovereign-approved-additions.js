@@ -13,9 +13,9 @@ function setup(species, ability, doubles = false) {
 function hit(p, q, id, extra = {}) { const move = Object.assign(Dex.getActiveMove(id), { accuracy: true, willCrit: false }, extra); battle.actions.useMove(move, p, { target: q }); battle.clearActiveMove(); return move; }
 describe('Four approved Sovereign additions', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
-	it('preserves Rain Sovereign and all existing Sand/Frost weather, mitigation and chip callbacks byte-for-byte', () => {
+	it('preserves existing Sovereign weather and mitigation callbacks', () => {
 		const before = require('../../../artifacts/sovereign-before.json');
-		for (const [id, events] of Object.entries({ rainsovereign: Object.keys(before.rainsovereign), sandsovereign: ['onStart', 'onResidual', 'onSourceModifyDamage'], frostsovereign: ['onStart', 'onWeather', 'onDamagingHit', 'onImmunity', 'onResidual', 'onSourceModifyDamage'], sunsovereign: Object.keys(before.sunsovereign).filter(k => k !== 'onStart') })) for (const event of events)assert.equal(Dex.abilities.get(id)[event].toString(), before[id][event], id + '/' + event);
+		for (const [id, events] of Object.entries({ rainsovereign: Object.keys(before.rainsovereign).filter(k => k !== 'onResidual'), sandsovereign: ['onStart', 'onSourceModifyDamage'], frostsovereign: ['onStart', 'onWeather', 'onDamagingHit', 'onImmunity', 'onSourceModifyDamage'], sunsovereign: Object.keys(before.sunsovereign).filter(k => k !== 'onStart') })) for (const event of events)assert.equal(Dex.abilities.get(id)[event].toString(), before[id][event], id + '/' + event);
 	});
 	for (const species of ['Charizard-Mega-Y', 'Mew'])it('Sun Sovereign summons eight-turn sun without Intimidate with ' + species, () => {
 		const [p, q] = setup(species, 'Sun Sovereign', true); const foe = battle.p2.active[1]; q.boosts.atk = foe.boosts.atk = 0; delete p.abilityState.intimidateActivated;
@@ -43,7 +43,7 @@ describe('Four approved Sovereign additions', () => {
 	it('Storm gives the holder one Speed boost when no living adjacent ally remains', () => {
 		const [p, q] = setup('Pidgeot-Mega', 'Storm Sovereign', true); battle.p1.active[1].hp = 0; hit(p, q, 'airslash', { damage: 100 }); assert.equal(p.boosts.spe, 1);
 	});
-	for (const block of ['protect', 'substitute', 'ally', 'suppression'])it('Storm Updraft does not spend its entry allowance on ' + block, () => {
+	for (const block of ['protect', 'ally', 'suppression'])it('Storm Updraft does not spend its entry allowance on ' + block, () => {
 		const [p, q] = setup('Pidgeot-Mega', 'Storm Sovereign', true); if (block === 'protect')q.addVolatile('protect'); if (block === 'substitute') { q.addVolatile('substitute'); q.volatiles.substitute.hp = 1000; } if (block === 'suppression')p.addVolatile('gastroacid');
 		hit(p, block === 'ally' ? battle.p1.active[1] : q, 'airslash', { damage: 100 }); assert(!p.m.updraftUsed);
 	});
@@ -57,16 +57,16 @@ describe('Four approved Sovereign additions', () => {
 		const [p, q] = setup('Tyranitar-Mega', 'Sand Sovereign'); q.setType(types); const move = Dex.getActiveMove('rockslide'); battle.runEvent('ModifyMove', p, q, move, move); assert.equal(move.type, 'Rock');
 		const rock = Dex.getEffectiveness('Rock', q), ground = Dex.getEffectiveness('Ground', q); assert.equal(q.runEffectiveness(move), Dex.getImmunity('Ground', q) ? Math.max(rock, ground) : rock); assert(p.hasAbility('solidrock')); assert(!p.hasAbility('mountainbreaker')); assert(!p.hasAbility('moldbreaker')); assert.deepEqual(p.getPassives(), ['sandstream']);
 	});
-	it('Sand retains eight-turn manual Arenite Wall and one Rock chip tick', () => {
-		const [p, q] = setup('Tyranitar-Mega', 'Sand Sovereign'); assert.equal(battle.field.weatherState.duration, 8); hit(p, p, 'arenitewall'); assert.equal(p.side.sideConditions.arenitewall.duration, 8); const hp = q.hp; battle.singleEvent('Residual', p.getAbility(), p.abilityState, p); assert.equal(hp - q.hp, 250);
+	it('Sand retains eight-turn manual Arenite Wall without Rock chip', () => {
+		const [p, q] = setup('Tyranitar-Mega', 'Sand Sovereign'); assert.equal(battle.field.weatherState.duration, 8); hit(p, p, 'arenitewall'); assert.equal(p.side.sideConditions.arenitewall.duration, 8); const hp = q.hp; battle.singleEvent('Residual', p.getAbility(), p.abilityState, p); assert.equal(hp - q.hp, 0);
 	});
 	for (const blocker of ['normal', 'Gastro Acid', 'Mold Breaker', 'Ability Shield'])it('Frost Soundproof retains normal bypass semantics under ' + blocker, () => {
 		const [p, q] = setup('Abomasnow-Mega', 'Frost Sovereign'); if (blocker === 'Gastro Acid')p.addVolatile('gastroacid'); if (['Mold Breaker', 'Ability Shield'].includes(blocker))q.setAbility('Mold Breaker'); if (blocker === 'Ability Shield')p.setItem('Ability Shield');
 		hit(q, p, 'hypervoice', { damage: 100 }); assert.equal(p.hp, ['Gastro Acid', 'Mold Breaker'].includes(blocker) ? 3900 : 4000); assert(p.getPassives().includes('snowwarning'));
 	});
-	it('Frost retains Ice Body, Filter, eight-turn Aurora Veil and one Ice chip tick', () => {
+	it('Frost retains Ice Body, Filter, eight-turn Aurora Veil without Ice chip', () => {
 		const [p, q] = setup('Abomasnow-Mega', 'Frost Sovereign'); for (const id of ['icebody', 'filter', 'soundproof'])assert(p.hasAbility(id), id); assert.equal(battle.field.weatherState.duration, 8); hit(p, p, 'auroraveil'); assert.equal(p.side.sideConditions.auroraveil.duration, 8);
-		const hp = q.hp; battle.singleEvent('Residual', p.getAbility(), p.abilityState, p); assert.equal(hp - q.hp, 250);
+		const hp = q.hp; battle.singleEvent('Residual', p.getAbility(), p.abilityState, p); assert.equal(hp - q.hp, 0);
 	});
 	it('Rain remains without Berserk and retains its original component registry', () => {
 		const [p] = setup('Drampa-Mega', 'Rain Sovereign'); assert(!p.hasAbility('berserk')); assert.deepEqual(require('../../../dist/data/ability-components').AbilityComponents.rainsovereign, ['drizzle']);

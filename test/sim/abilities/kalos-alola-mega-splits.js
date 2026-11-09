@@ -152,7 +152,7 @@ describe('Approved Kalos Alola nine Mega migrations and Ultra damage removal', (
 		battle.runEvent('Residual', p);
 		assert.equal(p.status, 'par');
 	});
-	it('Drizzle owns rain, selected duration is eight and Water chip remains without rain', () => {
+	it('Drizzle owns rain, selected duration is eight and residual Water chip is removed', () => {
 		const [p, q] = setup('drampamega');
 		assert.equal(battle.field.weather, 'raindance');
 		assert.equal(battle.field.weatherState.duration, 8);
@@ -160,7 +160,7 @@ describe('Approved Kalos Alola nine Mega migrations and Ultra damage removal', (
 		battle.field.clearWeather();
 		const hp = q.hp;
 		battle.runEvent('Residual', p);
-		assert.equal(hp - q.hp, 75);
+		assert.equal(hp - q.hp, 0);
 		for (const id of ['thunderbolt', 'surf', 'airslash']) {
 			const move = Dex.getActiveMove(id);
 			battle.runEvent('ModifyMove', p, q, move, move);

@@ -1,13 +1,19 @@
 import type {MoveDataTable} from '../sim/dex-moves';
 export const YangBonusFields: Record<string, string[]> = {"kaboom":["electric","factory","shortcircuit"],"cactibash":["desert","ashenbeach","forest","grassy"],"corrosivestrike":["corrosive","corrosivemist"],"toxicvial":["corrosive","corrosivemist"],"flutterscales":["forest","flowergarden"],"spiritmend":["shortcircuit","factory","haunted","darkcrystalcavern"],"chistrike":["ashenbeach","holy","bigtop","psychic","rocky"],"gunkrock":["wasteland","murkwatersurface"],"frozenrefractals":["mirrorarena","icy","snowy"],"nomoswish":["grassy","forest","starlightarena"],"queensgambit":["chessboard","psychic"],"darkclasp":["darkcrystalcavern"],"beatdown":["bigtop","rocky"],"infernalrage":["haunted","superheated","burning","volcanic","dragonsden"],"m3g4qu4k3":["glitch"],"winddance":["bigtop","mountain","snowymountain"],"timeblade":["misty","fairytale"],"crestcleave":["desert","fairytale"],"sirensveil":["watersurface","underwater","midnightzone","murkwatersurface","icy"],"sirenswrath":["watersurface","underwater","midnightzone","murkwatersurface","icy"],"rocknroll":["rocky","cave","mountain","crystalcavern","volcanic"],"dragonrend":["dragonsden","mountain","fairytale","volcanic","newworld"],"airstreamassault":["mountain","snowymountain"],"wisteriamaelstrom":["flowergarden"],"deiludicium":["holy"],"nostraswish":["starlightarena","newworld"],"swarmsnare":["forest","flowergarden"]};
 export const YangBonusAuras: Record<string, string[]> = {"kaboom":["electricterrain"],"cactibash":["grassyterrain"],"flutterscales":["grassyterrain"],"nomoswish":["grassyterrain"],"chistrike":["psychicterrain"],"queensgambit":["psychicterrain"],"timeblade":["mistyterrain"],"deiludicium":["rainbowterrain"],"frozenrefractals":["frozenaura"],"sirenswrath":["frozenaura"],"infernalrage":["ashenaura"],"spiritmend":["riftaura"]};
-export type YangMove = ActiveMove & {yang?: {field: string; aura: string; startingHP: number; stage: number; full: boolean; eligible: boolean; seen: Set<Pokemon>; hits: Map<Pokemon, number>; once: boolean; messages: Set<string>}; yangPreserveField?: boolean};
+export type YangMove = ActiveMove & {
+	yang?: {
+		field: string, aura: string, startingHP: number, stage: number, full: boolean, eligible: boolean,
+		seen: Pokemon[], hits: { target: Pokemon, count: number }[], once: boolean, messages: string[],
+	},
+	yangPreserveField?: boolean,
+};
 export function yangField(id: string, field: string) {
  return (YangBonusFields[id] || []).some(name => name === 'flowergarden' ? /^flowergarden[1-5]$/.test(field) : field === name + 'terrain');
 }
 function message(battle: Battle, move: YangMove, text: string) {
- if (move.yang?.messages.has(text)) return;
- move.yang?.messages.add(text);
+	if (move.yang?.messages.includes(text)) return;
+	move.yang?.messages.push(text);
  battle.add('-message', text);
 }
 function unbind(battle: Battle, source: Pokemon, move: YangMove) {
@@ -27,13 +33,22 @@ export function installYangFieldBonuses(moves: MoveDataTable) {
    const move = active as YangMove;
    const field = this.field.terrain, aura = this.field.auraField;
    const full = yangField(id, field);
-   move.yang = {field, aura, startingHP: source.hp, stage: this.field.flowerGardenStage(), full, eligible: full || (YangBonusAuras[id] || []).includes(aura), seen: new Set(), hits: new Map(), once: false, messages: new Set()};
+			move.yang = { field,
+				aura,
+				startingHP: source.hp,
+				stage: this.field.flowerGardenStage(),
+				full,
+				eligible: full || (YangBonusAuras[id] || []).includes(aura),
+				seen: [],
+				hits: [],
+				once: false,
+				messages: [] };
    if (!move.yang.eligible) return result;
    switch (id) {
    case 'kaboom': delete move.recoil; break;
    case 'chistrike': move.ignoreNegativeOffensive = true; break;
    case 'gunkrock':
-    (move as ActiveMove & {yangSecondaryTargets?: Set<Pokemon>}).yangSecondaryTargets = new Set();
+				(move as ActiveMove & { yangSecondaryTargets?: Pokemon[] }).yangSecondaryTargets = [];
     move.secondaries = move.secondaries?.map(s => ({...s, chance: 40}));
     if (move.secondary) move.secondary = {...move.secondary, chance: 40};
     break;
@@ -42,12 +57,12 @@ export function installYangFieldBonuses(moves: MoveDataTable) {
    case 'rocknroll': move.boosts = {def: -2}; break;
    case 'dragonrend': move.ignoreScreens = true; break;
    case 'infernalrage':
-    (move as ActiveMove & {yangSecondaryTargets?: Set<Pokemon>}).yangSecondaryTargets = new Set();
+				(move as ActiveMove & { yangSecondaryTargets?: Pokemon[] }).yangSecondaryTargets = [];
     move.yangPreserveField = full;
     move.secondaries = [...(move.secondaries || []), {chance: 30, onHit(target, source, effect) {
      const attack = effect as YangMove;
-     if (target.isAlly(source) || (target.getMoveHitData(effect).damage || 0) <= 0 || attack.yang?.seen.has(target)) return;
-     attack.yang?.seen.add(target);
+					if (target.isAlly(source) || (target.getMoveHitData(effect).damage || 0) <= 0 || attack.yang?.seen.includes(target)) return;
+					attack.yang?.seen.push(target);
      if (target.trySetStatus('brn', source, effect)) message(this, attack, 'Charlotte’s inferno left a searing brand!');
     }}];
     break;
@@ -64,7 +79,9 @@ export function installYangFieldBonuses(moves: MoveDataTable) {
     if (this.heal(damage / 4, source, target, 'drain')) message(this, move, 'Florinia’s roots reclaimed the scattered strength!');
    }
    if (id === 'beatdown') {
-    const hits = (state.hits.get(target) || 0) + 1; state.hits.set(target, hits);
+				let counter = state.hits.find(entry => entry.target === target);
+				if (!counter) { counter = { target, count: 0 }; state.hits.push(counter); }
+				const hits = ++counter.count;
     if (hits === 3 && !state.once && this.boost({def: 1}, source, source, move)) message(this, move, 'Samson held firm after the final blow!');
     if (hits === 3) state.once = true;
     return result;
@@ -101,8 +118,8 @@ export function installYangFieldBonuses(moves: MoveDataTable) {
  moves.flutterscales.onHit = function (target, source, active) {
   const move = active as YangMove;
   if (!move.yang?.eligible) return (typeof flutter === 'function' ? flutter : () => undefined).call(this, target, source, move);
-  if (target.isAlly(source) || (target.getMoveHitData(move).damage || 0) <= 0 || move.yang.seen.has(target)) return;
-  move.yang.seen.add(target);
+		if (target.isAlly(source) || (target.getMoveHitData(move).damage || 0) <= 0 || move.yang.seen.includes(target)) return;
+		move.yang.seen.push(target);
   const stat = target.getStat('atk', false, true) > target.getStat('spa', false, true) ? 'atk' : 'spa';
   if (this.boost({[stat]: -1}, target, source, move)) message(this, move, 'Shelly’s scales softened the foe’s strongest blows!');
  };
@@ -110,8 +127,8 @@ export function installYangFieldBonuses(moves: MoveDataTable) {
  moves.m3g4qu4k3.onHit = function (target, source, active) {
   const move = active as YangMove;
   if (!move.yang?.eligible) return (typeof quake === 'function' ? quake : () => undefined).call(this, target, source, move);
-  if (target.isAlly(source) || (target.getMoveHitData(move).damage || 0) <= 0 || move.yang.seen.has(target)) return;
-  move.yang.seen.add(target);
+		if (target.isAlly(source) || (target.getMoveHitData(move).damage || 0) <= 0 || move.yang.seen.includes(target)) return;
+		move.yang.seen.push(target);
   const def = target.getStat('def', false, true) >= target.getStat('spd', false, true);
   if (this.boost({def: def ? -2 : -1, spd: def ? -1 : -2}, target, source, move)) message(this, move, 'Terra’s quake broke through the stronger defense!');
  };

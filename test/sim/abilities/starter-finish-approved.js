@@ -6,7 +6,12 @@ const count=id=>battle.log.filter(x=>x.startsWith('|move|')&&x.includes('|'+id+'
 describe('Final approved starter selected abilities',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  it('Cloyster uses approved native Water Absorb, distinct from Gorebyss Pearl Tide',()=>{const[p,q]=setup('Cloyster','Shell Armor');assert.deepEqual(p.getPassives(),['waterabsorb']);p.hp=800;const ally=p.side.active[1];ally.hp=800;use(q,p,'watergun');assert.equal(p.hp,1200);assert.equal(ally.hp,800);assert.equal(Dex.species.get('gorebyss').abilities.H,'Pearl Tide');});
- it('changes only Venusaur selected slot, retaining Overgrow and other choices',()=>{const p=Dex.species.get('venusaur');assert.deepEqual(p.abilities,{0:'Pollen Bloom',1:'Soothing Bouquet',H:'Chlorophyll'});assert.deepEqual(p.passives,['overgrow']);assert.equal(Dex.species.get('venusaurmega').abilities[0],'Virulence');});
+	it('changes only Venusaur selected slot, retaining Overgrow and other choices', () => {
+		const p = Dex.species.get('venusaur');
+		assert.deepEqual(p.abilities, { 0: 'Verdant Monarch', 1: 'Soothing Bouquet', H: 'Chlorophyll' });
+		assert.deepEqual(p.passives, ['overgrow']);
+		assert.equal(Dex.species.get('venusaurmega').abilities[0], 'Virulence');
+	});
  it('retains full Friend Guard and Infiltrator',()=>{const[p,q]=setup();assert.equal(battle.runEvent('ModifyDamage',q,p.side.active[1],Dex.getActiveMove('tackle'),100),75);const move=Dex.getActiveMove('tackle');battle.runEvent('ModifyMove',p,q,move,move);assert(move.infiltrates);});
  it('resets only the highest positive combat stat with deterministic ties and removes Focus Energy',()=>{const[p,q]=setup();q.boosts={atk:3,def:3,spa:2,spd:1,spe:1,accuracy:5,evasion:-6};q.addVolatile('focusenergy');use(p,q,'sweetscent');assert.equal(q.boosts.atk,1);assert.equal(q.boosts.def,3);assert.equal(q.boosts.accuracy,5);assert(!q.volatiles.focusenergy);assert(battle.log.some(x=>x.startsWith('|-end|')&&x.includes('Focus Energy')));assert.equal(count('Giga Drain'),1);});
  for(const ability of ['Defiant','Competitive','Contrary','Simple','Clear Body'])it('limited reset bypasses '+ability+' reactions',()=>{const[p,q]=setup();q.setAbility(ability);q.boosts.evasion=-6;q.boosts.atk=1;use(p,q,'sweetscent');assert.equal(q.boosts.atk,0);assert.equal(q.boosts.spa,0);});

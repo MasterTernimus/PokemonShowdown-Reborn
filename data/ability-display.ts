@@ -206,7 +206,7 @@ const DisplayComponentOverrides: {[id: string]: string[]} = {
  auroraresonance: [],
  blazingmane: ['firemane'],
  pollenbloom: ['thickfat', 'unaware', 'proficient'],
- atrocity: ['unboundblaze', 'fireward'],
+	atrocity: ['unboundblaze', 'fireward', 'toughclaws'],
  unboundblaze: ['dragonize', 'magmaarmor', 'proficient'],
  soulcremation: ['soulsiphon', 'soulpyre', 'malicewell'],
  burningcrown: ['intimidate', 'whitesmoke', 'moldbreaker', 'unboundblaze', 'selfsufficient', 'proficient'],

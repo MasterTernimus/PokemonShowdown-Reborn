@@ -1025,7 +1025,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	atrocity: {
 		"name": "Atrocity",
-		"desc": "Unbound Blaze + Fire Ward",
+		"desc": "Blazing Monarch + Fire Ward",
 		"shortDesc": "Mold Breaker; stronger attacks and defenses; healing and Fire chip."
 	},
 	wickedsnare: {
@@ -3247,13 +3247,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	toxicbloom: {
 		name: "Toxic Bloom",
-		desc: "Pollen Bloom (including Proficient, Thick Fat, Unaware and healing Grass chip) + Self Sufficient, each applied once. Poison-type attacks restore 1/4 of actual opposing HP damage, using normal drain rounding and Heal Block, Liquid Ooze and Big Root interactions. No added drain from Substitute-only damage, misses, Protect, immunity or residual poison. Moves that already drain keep their native drain without an extra heal.",
-		shortDesc: "Pollen Bloom + Self Sufficient; Poison hits drain 25% foe HP damage; no extra native drain.",
+		desc: "Verdant Monarch (including Proficient, Thick Fat, Unaware and healing Grass chip) + Self Sufficient, each applied once. Poison-type attacks restore 1/4 of actual opposing HP damage, using normal drain rounding and Heal Block, Liquid Ooze and Big Root interactions. No added drain from Substitute-only damage, misses, Protect, immunity or residual poison. Moves that already drain keep their native drain without an extra heal.",
+		shortDesc: "Verdant Monarch + Self Sufficient; Poison hits drain 25% foe HP damage; no extra native drain.",
 	},
 	siegelauncher: {
 		name: "Siege Launcher",
-		desc: "This Pokemon has Water Barrage, Mega Launcher, Self Sufficient, and Stalwart's effects. Moves boosted by Mega Launcher are used twice through Dual Wield; the second hit deals 15% of the move's unboosted power.",
-		shortDesc: "Water Barrage + Mega Launcher + Self Sufficient + Stalwart; boosted moves add 15% hit.",
+		desc: "This Pokemon has Tidal Monarch, Mega Launcher, Self Sufficient, and Stalwart's effects. Moves boosted by Mega Launcher are used twice through Dual Wield; the second hit deals 15% of the move's unboosted power.",
+		shortDesc: "Tidal Monarch + Mega Launcher + Self Sufficient + Stalwart; boosted moves add 15% hit.",
 	},
 	calderacore: {
 		name: "Caldera Core",
@@ -3885,13 +3885,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	apexarmor: {"name":"Apex Armor","desc":"Bulletproof + Rough Skin + Stalwart + Self Sufficient. Blocks bullet/pulse moves, reduces attack damage by 20%, damages contact attackers by 1/8 max HP, and ignores redirection. Restores 1/16 max HP each turn and prevents hail and sandstorm damage.","shortDesc":"Bulletproof + Rough Skin + Stalwart + Self Sufficient."},
 	ancientbloom: {
 		name: "Ancient Bloom",
-		desc: "This Pokemon has Effect Spore and Pollen Bloom's effects. Thick Fat applies once through Pollen Bloom: Fire and Ice damage is halved, not quartered. It keeps its field-based Defense, Special Defense, and power boosts.",
-		shortDesc: "Effect Spore + Pollen Bloom; Thick Fat applies once; field boosts.",
+		desc: "This Pokemon has Effect Spore and Verdant Monarch's effects. Thick Fat applies once through Verdant Monarch: Fire and Ice damage is halved, not quartered. It keeps its field-based Defense, Special Defense, and power boosts.",
+		shortDesc: "Effect Spore + Verdant Monarch; Thick Fat applies once; field boosts.",
 	},
 	fortressshell: {
 		name: "Fortress Shell",
-		desc: "This Pokemon has Shell Armor and Water Barrage's effects, plus Power Spot and Friend Guard. During Electric Aura or in Electric Terrain, Murkwater Surface, Water Surface, Underwater, Midnight Zone, Factory, and Short Circuit fields, incoming Electric moves are blocked and redirected to it, raising its Attack and Special Attack by 1. Fairy Tale, New World, Cold Eclipse, and Starlight Arena give it +1 Defense and +1 Special Defense once per active terrain. New World, Cold Eclipse, and Starlight Arena also boost its move power by 1.5x.",
-		shortDesc: "Shell Armor + Water Barrage; field Electric absorption; ally support.",
+		desc: "This Pokemon has Shell Armor and Tidal Monarch's effects, plus Power Spot and Friend Guard. During Electric Aura or in Electric Terrain, Murkwater Surface, Water Surface, Underwater, Midnight Zone, Factory, and Short Circuit fields, incoming Electric moves are blocked and redirected to it, raising its Attack and Special Attack by 1. Fairy Tale, New World, Cold Eclipse, and Starlight Arena give it +1 Defense and +1 Special Defense once per active terrain. New World, Cold Eclipse, and Starlight Arena also boost its move power by 1.5x.",
+		shortDesc: "Shell Armor + Tidal Monarch; field Electric absorption; ally support.",
 	},
 	hydrabond: {
 		name: "Hydra Bond",
@@ -3945,21 +3945,21 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	burningcrown: {
 		name: "Burning Crown",
-		desc: "This Pokemon has Intimidate, White Smoke, Mold Breaker, Unbound Blaze, Self Sufficient, and Proficient. It takes 20% less damage from all damaging attacks. Self Sufficient restores 1/16 base maximum HP at turn end and prevents sandstorm and hail damage. Proficient boosts damaging attacks matching its type by 1.3x. It gains no boosts when a Pokemon faints. Its field bonuses remain active.",
-		shortDesc: "Intimidate + White Smoke + Mold Breaker + Unbound Blaze + Self Sufficient + Proficient; attacks deal 20% less; no KO boost.",
+		desc: "This Pokemon has Intimidate, White Smoke, Mold Breaker, Blazing Monarch, Self Sufficient, and Proficient. It takes 20% less damage from all damaging attacks. Self Sufficient restores 1/16 base maximum HP at turn end and prevents sandstorm and hail damage. Proficient boosts damaging attacks matching its type by 1.3x. It gains no boosts when a Pokemon faints. Its field bonuses remain active.",
+		shortDesc: "Intimidate + White Smoke + Mold Breaker + Blazing Monarch + Self Sufficient + Proficient; attacks deal 20% less; no KO boost.",
 	},
 	pollenbloom: {
-		name: "Pollen Bloom",
+		name: "Verdant Monarch",
 		"desc": "Thick Fat + Unaware. Same-type attacks gain 30% power. Fire and Ice attacks use half the attacker's attacking stat; hail causes no damage. Ignores the foe's Defense, Sp. Def and evasion changes when attacking, and their Attack, Defense, Sp. Atk and accuracy changes when defending. Reveals opposing Illusions on entry. At each turn's end, drains 1/16 of each foe's base maximum HP and heals by the HP actually drained. Grass types and Grass-immune foes are unaffected. In Free-for-All only, Grass weaknesses and resistances change the drain amount.",
 		"shortDesc": "Same-type attacks gain 30% power. Each turn, drains 1/16 HP from eligible foes and heals that amount; Grass matchups scale the drain only in FFA."
 	},
 	waterbarrage: {
-		name: "Water Barrage",
+		name: "Tidal Monarch",
 		desc: "This Pokemon has Dual Wield's effects. At the end of each turn, opposing Pokemon take cycling Water damage of 1/16, 2/16, then 3/16 max HP, blocked by Water immunities. Only in Free-for-All does Water type effectiveness scale this chip.",
 		shortDesc: "Dual Wield; cycling Water chip scales by type in FFA.",
 	},
 	unboundblaze: {
-		name: "Unbound Blaze",
+		name: "Blazing Monarch",
 		desc: "This Pokemon has Dragonize and Magma Armor's effects. It is immune to Hail damage. At the end of each turn, opposing Pokemon take Fire-type damage equal to 1/16 max HP, doubled if burned or if this Pokemon used a Fire- or Dragon-type move this turn. This damage is blocked by Fire immunities. Only in Free-for-All does Fire type effectiveness scale this chip.",
 		shortDesc: "Dragonize + Magma Armor; Fire chip scales by type in FFA.",
 	},

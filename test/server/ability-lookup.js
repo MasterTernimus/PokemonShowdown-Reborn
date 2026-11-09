@@ -23,7 +23,7 @@ describe('Ability descriptions and full command lookup',function () {
   assert(!a.shortDesc.includes('Filter'));assert(!a.desc.includes('Filter'));
 		for (const id of getAbilityDisplayComponents('burningcrown'))assert(getAbilityMechanicsHTML(a,Dex).includes(Dex.abilities.get(id).name));
 		assert(!getAbilityDisplayComponents('burningcrown').includes('proficient'));
-		assert(a.desc.includes('20% attack-damage reduction')); assert(a.desc.includes('1/16')); assert(a.desc.includes('1.2x'));
+		assert(a.desc.includes('20% attack-damage reduction')); assert(a.desc.includes('1.1x accuracy')); assert(a.desc.includes('1.2x'));
  });
  it('renders full Heavy Artillery mechanics, format conditions and component lookup buttons',()=>{
   const a=Dex.abilities.get('heavyartillery'),html=getAbilityMechanicsHTML(a,Dex);

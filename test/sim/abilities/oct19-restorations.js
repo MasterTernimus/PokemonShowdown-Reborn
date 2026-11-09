@@ -43,16 +43,16 @@ describe('October 19 approved restorations',()=>{
 		assert.equal(battle.runEvent('BasePower', p, q, move, 100), 100); assert(p.hasAbility('earlybird'));
 	});
  it('Marsh Hide combines Water absorption with defensive Poison Point',()=>{const[p,q]=setup('Seismitoad','Marsh Hide');p.hp=2000;battle.actions.runMove('watergun',q,q.getLocOf(p));assert.equal(p.hp,3200);battle.randomChance=()=>true;battle.clearActiveMove();battle.actions.runMove('tackle',q,q.getLocOf(p));assert.equal(q.status,'psn');assert(p.hasAbility('waterabsorb'));assert(p.hasAbility('poisonpoint'));assert.deepEqual(p.getPassives(),['mirechorus']);});
-	it('Ancient Bloom drains once without the removed Self-Sufficient healing', () => {
+	it('Ancient Bloom no longer drains or heals at turn end', () => {
 		const [p, q] = setup('Mew', 'Ancient Bloom'); p.hp = 2000; battle.singleEvent('Residual', p.getAbility(), p.abilityState, p);
-		assert.equal(q.hp, 4500); assert.equal(p.hp, 2300); for (const id of ['pollenbloom', 'friendguard'])assert(p.hasAbility(id), id);
+		assert.equal(q.hp, 4800); assert.equal(p.hp, 2000); for (const id of ['pollenbloom', 'friendguard'])assert(p.hasAbility(id), id);
 		assert(!p.hasAbility('selfsufficient')); assert(!p.hasAbility('effectspore'));
 	});
  it('Ancient Bloom Friend Guard protects allies but not itself',()=>{const[p,q]=setup('Mew','Ancient Bloom',true);const ally=battle.p1.active[1],m=Dex.getActiveMove('tackle');assert.equal(battle.runEvent('ModifyDamage',q,ally,m,100),75);assert.equal(battle.runEvent('ModifyDamage',q,p,m,100),100);});
  for (const ability of ['Cactus Chorus','Sand Rush','Water Absorb']) it('Cactus Chorus passive deduplicates selected '+ability,()=>{const[p,q]=setup('Maractus',ability);battle.field.setWeather('sandstorm');assert.equal(battle.runEvent('ModifySpe',p,null,null,100),200);p.hp=2000;battle.actions.runMove('watergun',q,q.getLocOf(p));assert.equal(p.hp,3200);p.setAbility('Cactus Chorus');assert.equal(battle.runEvent('ModifySpe',p,null,null,100),200);p.hp=2000;battle.clearActiveMove();battle.actions.runMove('watergun',q,q.getLocOf(p));assert.equal(p.hp,3200);});
  it('shared Sand Rush and Water Absorb work normally without Cactus Chorus',()=>{const[p,q]=setup('Mew','Sand Rush');battle.field.setWeather('sandstorm');assert.equal(battle.runEvent('ModifySpe',p,null,null,100),200);p.setAbility('Water Absorb');p.hp=2000;battle.actions.runMove('watergun',q,q.getLocOf(p));assert.equal(p.hp,3200);});
  it('Fortress Shell removes Dual Wield only from its effective package',()=>{const[p,q]=setup('Mew','Fortress Shell');const m=Dex.getActiveMove('waterpulse');battle.runEvent('ModifyMove',p,q,m,m);assert(!m.multihit);assert(m.tracksTarget);assert(!p.hasAbility('dualwield'));assert.equal(battle.runEvent('BasePower',p,q,m,100),100);p.setAbility('Water Barrage');const n=Dex.getActiveMove('waterpulse');battle.runEvent('ModifyMove',p,q,n,n);assert.equal(n.multihit,2);assert(p.hasAbility('dualwield'));});
-	it('Fortress Shell preserves cycling chip without removed residual healing', () => {
+	it('Fortress Shell has no chip or residual healing', () => {
 		const [p, q] = setup('Mew', 'Fortress Shell');
 		p.hp = 1000;
 		const losses = [];
@@ -61,7 +61,7 @@ describe('October 19 approved restorations',()=>{
 			battle.singleEvent('Residual', p.getAbility(), p.abilityState, p);
 			losses.push(hp - q.hp);
 		}
-		assert.deepEqual(losses, [300, 600, 900]);
+		assert.deepEqual(losses, [0, 0, 0]);
 		assert.equal(p.hp, 1000);
 		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('tackle'), 100), 80);
 	});

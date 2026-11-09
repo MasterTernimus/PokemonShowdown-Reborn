@@ -5315,6 +5315,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// Nested composite calls must not apply Proficient twice.
 			if (this.effect.id === 'atrocity') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, source, target, move);
 			if (move.category === 'Status') return;
+			this.dex.abilities.get('toughclaws').onBasePower?.call(this, basePower, source, target, move);
 			let modifier = 1.3;
 			if (move.typeChangerBoosted === this.effect) {
 				modifier *= this.field.isTerrain(['dragonsdenterrain', 'fairytaleterrain']) ? 1.5 : 1.2;
@@ -5829,11 +5830,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyDamage(damage, source, target, move) {
 			return this.dex.abilities.get('solidrock').onSourceModifyDamage?.call(this, damage, source, target, move);
 		},
-		onResidual(pokemon) {
-			for (const target of pokemon.foes()) {
-				if (!target || target.fainted || isImmuneToAbilityChip(target, 'Rock')) continue;
-				this.damage(abilityChipDamage(this, target, 'Rock'), target, pokemon);
-			}
+		onSourceDamagingHit(damage, target, source, move) {
+			if (damage <= 0 || target.isAlly(source) || !this.movehasType(move, ['Rock', 'Dark'])) return;
+			target.side.removeSideCondition('reflect');
+			target.side.removeSideCondition('lightscreen');
 		},
 		flags: { breakable: 1 },
 		name: "Sand Sovereign",
@@ -5870,10 +5870,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyDamage(damage, source, target, move) { return this.dex.abilities.get('filter').onSourceModifyDamage?.call(this, damage, source, target, move); },
 		onResidual(pokemon) {
 			this.dex.abilities.get('icebody').onResidual?.call(this, pokemon);
-			for (const target of pokemon.foes()) {
-				if (!target || target.fainted || isImmuneToAbilityChip(target, 'Ice')) continue;
-				this.damage(abilityChipDamage(this, target, 'Ice'), target, pokemon);
-			}
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (damage <= 0 || target.isAlly(source) || !this.movehasType(move, 'Ice')) return;
+			// Remember the active move: spread targets qualify together, repeat hits do not.
+			const state = source.m;
+			if (state.frostSovereignSpent && state.frostSovereignMove !== move) return;
+			if (state.frostSovereignTargets?.includes(target)) return;
+			state.frostSovereignSpent = true;
+			state.frostSovereignMove = move;
+			(state.frostSovereignTargets ||= []).push(target);
+			this.boost({ spe: -1 }, target, source, this.effect);
 		},
 		flags: { breakable: 1 },
 		name: "Frost Sovereign",
@@ -8339,6 +8346,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10024,
 	},
 	pollenbloom: {
+		id: 'pollenbloom' as ID,
 
 
 		onStart(pokemon) {
@@ -8358,19 +8366,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifySpA(atk, attacker, defender, move) {
 			return this.dex.abilities.get('thickfat').onSourceModifySpA?.call(this, atk, attacker, defender, move);
 		},
-		onResidualOrder: 5,
-		onResidualSubOrder: 3,
-		onResidual(pokemon) {
-			for (const target of this.getAllActive()) {
-				if (!target || target.fainted || target === pokemon || target.isAlly(pokemon) ||
-					isImmuneToAbilityChip(target, 'Grass')) continue;
-				const damage = abilityChipDamage(this, target, 'Grass');
-				const dealt = this.damage(damage, target, pokemon);
-				if (dealt) this.heal(dealt, pokemon, pokemon);
-			}
-		},
 		flags: { breakable: 1 },
-		name: "Pollen Bloom",
+		name: "Verdant Monarch",
 		rating: 4,
 		num: 10137,
 	},
@@ -8440,7 +8437,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onModifyMove(move, source, target) {
-			// Preserve Fortress Shell's existing partial Water Barrage package.
+			// Preserve Fortress Shell's existing partial Tidal Monarch package.
 			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source, target);
 		},
 		onAnyRedirectTarget(target, source, source2, move) {
@@ -8476,6 +8473,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10025,
 	},
 	waterbarrage: {
+		id: 'waterbarrage' as ID,
 		onStart(pokemon) {
 			this.dex.abilities.get('stalwart').onStart?.call(this, pokemon);
 		},
@@ -8491,18 +8489,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source, target);
 			this.dex.abilities.get('stalwart').onModifyMove?.call(this, move, source, target);
 		},
-		onResidual(pokemon) {
-			const stage = ((pokemon.abilityState.waterBarrageStage || 0) % 3) + 1;
-			pokemon.abilityState.waterBarrageStage = stage;
-			for (const target of this.getAllActive()) {
-				if (!target || target.fainted || target === pokemon || target.isAlly(pokemon) ||
-					isImmuneToAbilityChip(target, 'Water')) continue;
-				const damage = abilityChipDamage(this, target, 'Water', stage);
-				this.damage(damage, target, pokemon);
-			}
-		},
 		flags: { breakable: 1 },
-		name: "Water Barrage",
+		name: "Tidal Monarch",
 		rating: 4,
 		num: 10138,
 	},
@@ -10473,6 +10461,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10023,
 	},
 	unboundblaze: {
+		id: 'unboundblaze' as ID,
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 			return this.dex.abilities.get('magmaarmor').onImmunity?.call(this, type, pokemon);
@@ -10497,9 +10486,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
-		onAfterMove(source, target, move) {
-			if (this.movehasType(move, ['Fire', 'Dragon'])) source.abilityState.wildFireUsedFire = this.turn;
-		},
 		onTryHit(target, source, move) {
 			return this.dex.abilities.getHandler('magmaarmor', 'onTryHit')?.call(this, target, source, move);
 		},
@@ -10511,17 +10497,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifySpA(spa, attacker, defender, move) {
 			return this.dex.abilities.get('magmaarmor').onSourceModifySpA?.call(this, spa, attacker, defender, move);
 		},
-		onResidual(pokemon) {
-			for (const target of this.getAllActive()) {
-				if (!target || target.fainted || target === pokemon || target.isAlly(pokemon) ||
-					isImmuneToAbilityChip(target, 'Fire')) continue;
-				const multiplier = target.status === 'brn' || pokemon.abilityState.wildFireUsedFire === this.turn ? 2 : 1;
-				const damage = abilityChipDamage(this, target, 'Fire', multiplier);
-				this.damage(damage, target, pokemon);
-			}
-		},
 		flags: { breakable: 1 },
-		name: "Unbound Blaze",
+		name: "Blazing Monarch",
 		rating: 4,
 		num: 10139,
 	},
@@ -17416,11 +17393,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move) {
 			if (['Electric', 'Water', 'Flying'].includes(move.type)) move.forceSTAB = true;
 		},
-		onResidual(pokemon) {
-			for (const target of pokemon.foes()) {
-				if (!target || target.fainted || isImmuneToAbilityChip(target, 'Water')) continue;
-				this.damage(abilityChipDamage(this, target, 'Water'), target, pokemon);
-			}
+		onSourceDamagingHit(damage, target, source, move) {
+			if (damage <= 0 || target.isAlly(source) || !source.hp || !source.isActive ||
+				!this.movehasType(move, ['Water', 'Electric', 'Flying']) || source.m.rainSovereignHealTurn === this.turn) return;
+			source.m.rainSovereignHealTurn = this.turn;
+			const allies = source.allies().filter(p => p.hp && p.isActive).sort((a, b) => a.hp / a.maxhp - b.hp / b.maxhp);
+			const recipient = allies[0] || source;
+			this.heal(recipient.baseMaxhp / 16, recipient, source, this.effect);
 		},
 		flags: {},
 		name: "Rain Sovereign",
@@ -18556,12 +18535,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.field.setWeather('deltastream', pokemon, this.dex.abilities.get('stormsovereign'));
 			if (this.field.isWeather('deltastream')) this.field.weatherState.duration = 8;
 			this.dex.abilities.get('keeneye').onStart?.call(this, pokemon);
-		},
-		onResidual(pokemon) {
-			for (const target of pokemon.foes()) {
-				if (!target || target.fainted || isImmuneToAbilityChip(target, 'Flying')) continue;
-				this.damage(abilityChipDamage(this, target, 'Flying'), target, pokemon);
-			}
 		},
 		flags: { breakable: 1 },
 		name: "Storm Sovereign",
@@ -21707,3 +21680,16 @@ composeSelectedAbility(Abilities, 'cosmicanalysis', ['analytic', 'download'], tr
 
 import { installGalarRising } from './galar-rising';
 installGalarRising(Abilities);
+
+// One accuracy modifier per selected package, including inherited starter effects.
+// ModifyAccuracy also runs separately for each independent Dual Wield hit.
+for (const id of [
+	'pollenbloom', 'toxicbloom', 'ancientbloom',
+	'unboundblaze', 'atrocity', 'sunsovereign', 'burningcrown',
+	'waterbarrage', 'siegelauncher', 'fortressshell',
+] as const) {
+	Abilities[id].onSourceModifyAccuracyPriority = -1;
+	Abilities[id].onSourceModifyAccuracy = function (accuracy) {
+		if (typeof accuracy === 'number') return this.chainModify(1.1);
+	};
+}

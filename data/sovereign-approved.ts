@@ -32,6 +32,7 @@ export function installApprovedSovereigns(abilities: AbilityDataTable) {
 	abilities.stormsovereign.onModifyMove = function (move, pokemon, target) {
 		this.dex.abilities.get('updraft').onModifyMove?.call(this, move, pokemon, target);
 		if (!pokemon.getPassives().includes('noguard')) move.accuracy = true;
+		if (move.type === 'Flying' && move.category !== 'Status') move.flags['bypasssub'] = 1;
 	};
 	abilities.stormsovereign.onSourceDamagingHit = function (damage, target, source, move) {
 		return this.dex.abilities.get('updraft').onSourceDamagingHit?.call(this, damage, target, source, move);

@@ -487,7 +487,123 @@ Object.assign(SharedPassiveComponentAdditions, {
 });
 
 // Approved Mega selected/passive separation, used by client and calculator context.
-Object.assign(SharedPassiveAbilityDescriptions, { "slowclamp": { "passive": "shellarmor", "desc": "Full local Own Tempo and Analytic. Shell Armor is supplied by the species passive.", "shortDesc": "Full local Own Tempo and Analytic." }, "crueltag": { "passive": "shadowtag", "desc": "Infiltrator and Bad Dreams. This selected package is retained pending approval of its replacement.", "shortDesc": "Infiltrator and Bad Dreams." }, "joyride": { "passive": "aerilate", "desc": "Violent Rush and Vital Spirit. Aerilate is supplied by the species passive.", "shortDesc": "Violent Rush and Vital Spirit." }, "stormsovereign": { "passive": "noguard", "desc": "Summons replaceable Strong Winds for 8 turns on entry. Keen Eye prevents opposing accuracy drops, ignores evasion boosts and reveals opposing Illusions; Mirror Arena entry grants +1 accuracy and Laser Focus. No Guard is supplied by the species passive, affecting both incoming and outgoing moves. This holder does not gain Gale Wings priority.", "shortDesc": "8-turn Strong Winds and Keen Eye." }, "lunarorbit": { "passive": "magicbounce", "desc": "Magic Guard, Serene Grace and Triage. Creates Gravity on entry.", "shortDesc": "Magic Guard, Serene Grace and Triage." }, "astralcore": { "passive": "purepower", "desc": "Natural Cure and Illuminate.", "shortDesc": "Natural Cure and Illuminate." }, "woolyconductor": { "passive": "moldbreaker", "desc": "Fluffy. Once per turn, an opposing contact attacker that deals HP damage loses 1 Speed.", "shortDesc": "Fluffy." }, "relentlesslink": { "passive": "skilllink", "desc": "Mold Breaker and Power Drill.", "shortDesc": "Mold Breaker and Power Drill." }, "sandsovereign": { "passive": "sandstream", "desc": "Dauntless Shield, Solid Rock and opposing Rock chip damage each turn. Extends its entry sandstorm to eight turns. Sand Stream is supplied by the species passive.", "shortDesc": "Dauntless Shield, Solid Rock and opposing Rock chip damage each turn." }, "ironvise": { "passive": "intimidate", "desc": "Contact moves have 1.3x power. Once per switch-in, the first opposing direct hit deals 25% less damage and lowers the attacker's Attack by 1 stage. Multi-hit moves spend this protection on the first hit.", "shortDesc": "Tough Claws + Decoy Pincers." }, "voidvoice": { "passive": "pixilate", "desc": "Queenly Majesty and Dream Sickness, retaining its protective and stat-control effects.", "shortDesc": "Queenly Majesty and Dream Sickness, retaining its protective and stat-control effects." }, "mirrorgreed": { "passive": "magicbounce", "desc": "Analytic and Filter.", "shortDesc": "Analytic and Filter." }, "dreadmaw": { "passive": "hugepower", "desc": "Frisk, Invigorate and Strong Jaw. Huge Power is supplied by the species passive; its Attack multiplier applies once.", "shortDesc": "Frisk, Invigorate and Strong Jaw." }, "heavenlychorus": { "passive": "pixilate", "desc": "Cloud Nine, Fluffy and Natural Cure, including its local field recovery.", "shortDesc": "Cloud Nine, Fluffy and Natural Cure, including its local field recovery." }, "cursedmarionette": { "passive": "prankster", "desc": "Frisk. Has its curses, curse healing, Haunted Terrain effects and protection against cursed foes. Prankster is supplied by the species passive.", "shortDesc": "Frisk." }, "doomwarning": { "passive": "magicbounce", "desc": "Magic Guard and Anticipation. On fainting, has its delayed Doom Desire against opposing slots.", "shortDesc": "Magic Guard and Anticipation." }, "freezerburn": { "passive": "refrigerate", "desc": "Slush Rush, Strong Jaw and Levitate. Refrigerate is supplied by the species passive, including its field-dependent power boost.", "shortDesc": "Slush Rush, Strong Jaw and Levitate." }, "coldlogic": { "passive": "toughclaws", "desc": "Aftermath, full Forewarn and opposing accuracy-drop immunity. Tough Claws is supplied by the species passive.", "shortDesc": "Aftermath, Forewarn and opposing accuracy-drop immunity." }, "uncheckedassault": { "passive": "scrappy", "desc": "Striker, Opportunist and Limber. Has confusion prevention and cure. Scrappy is supplied by the species passive.", "shortDesc": "Striker, Opportunist and Limber." }, "aurainstinct": { "passive": "adaptability", "desc": "Dual Wield and Second Wind.", "shortDesc": "Dual Wield and Second Wind." }, "frostsovereign": { "passive": "snowwarning", "desc": "Ice Body and Filter; has opposing Ice chip damage each turn and its eight-turn entry hail. Snow Warning is supplied by the species passive.", "shortDesc": "Ice Body and Filter; has opposing Ice chip damage each turn and its eight-turn entry hail." }, "sacrededge": { "passive": "sharpness", "desc": "Dual Wield and entry healing for adjacent allies, including the Fairy Tale bonus.", "shortDesc": "Dual Wield and entry healing for adjacent allies, including the Fairy Tale bonus." }, "divineintervention": { "passive": "invigorate", "desc": "Vital Signs emergency treatment, Triage, Regenerator and Friend Guard. The emergency treatment allowance remains once per recipient per battle.", "shortDesc": "Vital Signs emergency treatment, Triage, Regenerator and Friend Guard." } });
+Object.assign(SharedPassiveAbilityDescriptions, {
+	"slowclamp": {
+		"passive": "shellarmor",
+		"desc": "Full local Own Tempo and Analytic. Shell Armor is supplied by the species passive.",
+		"shortDesc": "Full local Own Tempo and Analytic.",
+	},
+	"crueltag": {
+		"passive": "shadowtag",
+		"desc": "Infiltrator and Bad Dreams. This selected package is retained pending approval of its replacement.",
+		"shortDesc": "Infiltrator and Bad Dreams.",
+	},
+	"joyride": {
+		"passive": "aerilate",
+		"desc": "Violent Rush and Vital Spirit. Aerilate is supplied by the species passive.",
+		"shortDesc": "Violent Rush and Vital Spirit.",
+	},
+	"stormsovereign": {
+		"passive": "noguard",
+		"desc": "Summons replaceable Strong Winds for 8 turns on entry. Keen Eye prevents opposing accuracy drops, ignores evasion boosts and reveals opposing Illusions; Mirror Arena entry grants +1 accuracy and Laser Focus. No Guard is supplied by the species passive, affecting both incoming and outgoing moves. This holder does not gain Gale Wings priority.",
+		"shortDesc": "8-turn Strong Winds and Keen Eye.",
+	},
+	"lunarorbit": {
+		"passive": "magicbounce",
+		"desc": "Magic Guard, Serene Grace and Triage. Creates Gravity on entry.",
+		"shortDesc": "Magic Guard, Serene Grace and Triage.",
+	},
+	"astralcore": {
+		"passive": "purepower",
+		"desc": "Natural Cure and Illuminate.",
+		"shortDesc": "Natural Cure and Illuminate.",
+	},
+	"woolyconductor": {
+		"passive": "moldbreaker",
+		"desc": "Fluffy. Once per turn, an opposing contact attacker that deals HP damage loses 1 Speed.",
+		"shortDesc": "Fluffy.",
+	},
+	"relentlesslink": {
+		"passive": "skilllink",
+		"desc": "Mold Breaker and Power Drill.",
+		"shortDesc": "Mold Breaker and Power Drill.",
+	},
+	"sandsovereign": {
+		"passive": "sandstream",
+		"desc": "Sets or refreshes Sandstorm for 8 turns. Includes Solid Rock. Damaging Rock moves use the better Rock or Ground type-chart matchup while remaining Rock-type; Ground-immune typings do not replace the Rock matchup. Manually used Arenite Wall lasts 8 turns. After a Rock or Dark attack damages opposing HP, removes Reflect and Light Screen from that side.",
+		"shortDesc": "Solid Rock; eight-turn sand; Rock/Ground matchup; Rock/Dark hits break screens.",
+	},
+	"ironvise": {
+		"passive": "intimidate",
+		"desc": "Contact moves have 1.3x power. Once per switch-in, the first opposing direct hit deals 25% less damage and lowers the attacker's Attack by 1 stage. Multi-hit moves spend this protection on the first hit.",
+		"shortDesc": "Tough Claws + Decoy Pincers.",
+	},
+	"voidvoice": {
+		"passive": "pixilate",
+		"desc": "Queenly Majesty and Dream Sickness, retaining its protective and stat-control effects.",
+		"shortDesc": "Queenly Majesty and Dream Sickness, retaining its protective and stat-control effects.",
+	},
+	"mirrorgreed": {
+		"passive": "magicbounce",
+		"desc": "Analytic and Filter.",
+		"shortDesc": "Analytic and Filter.",
+	},
+	"dreadmaw": {
+		"passive": "hugepower",
+		"desc": "Frisk, Invigorate and Strong Jaw. Huge Power is supplied by the species passive; its Attack multiplier applies once.",
+		"shortDesc": "Frisk, Invigorate and Strong Jaw.",
+	},
+	"heavenlychorus": {
+		"passive": "pixilate",
+		"desc": "Cloud Nine, Fluffy and Natural Cure, including its local field recovery.",
+		"shortDesc": "Cloud Nine, Fluffy and Natural Cure, including its local field recovery.",
+	},
+	"cursedmarionette": {
+		"passive": "prankster",
+		"desc": "Frisk. Has its curses, curse healing, Haunted Terrain effects and protection against cursed foes. Prankster is supplied by the species passive.",
+		"shortDesc": "Frisk.",
+	},
+	"doomwarning": {
+		"passive": "magicbounce",
+		"desc": "Magic Guard and Anticipation. On fainting, has its delayed Doom Desire against opposing slots.",
+		"shortDesc": "Magic Guard and Anticipation.",
+	},
+	"freezerburn": {
+		"passive": "refrigerate",
+		"desc": "Slush Rush, Strong Jaw and Levitate. Refrigerate is supplied by the species passive, including its field-dependent power boost.",
+		"shortDesc": "Slush Rush, Strong Jaw and Levitate.",
+	},
+	"coldlogic": {
+		"passive": "toughclaws",
+		"desc": "Aftermath, full Forewarn and opposing accuracy-drop immunity. Tough Claws is supplied by the species passive.",
+		"shortDesc": "Aftermath, Forewarn and opposing accuracy-drop immunity.",
+	},
+	"uncheckedassault": {
+		"passive": "scrappy",
+		"desc": "Striker, Opportunist and Limber. Has confusion prevention and cure. Scrappy is supplied by the species passive.",
+		"shortDesc": "Striker, Opportunist and Limber.",
+	},
+	"aurainstinct": {
+		"passive": "adaptability",
+		"desc": "Dual Wield and Second Wind.",
+		"shortDesc": "Dual Wield and Second Wind.",
+	},
+	"frostsovereign": {
+		"passive": "snowwarning",
+		"desc": "Sets Hail for 8 turns on entry. Includes Ice Body, Filter and Soundproof. Manually used Aurora Veil lasts 8 turns. Once per switch-in, its first Ice attack to damage opposing HP lowers each damaged foe's Speed by 1 stage, once per target. Normal stat-drop protections apply.",
+		"shortDesc": "Ice Body + Filter + Soundproof; eight-turn hail; first Ice attack lowers foe Speed.",
+	},
+	"sacrededge": {
+		"passive": "sharpness",
+		"desc": "Dual Wield and entry healing for adjacent allies, including the Fairy Tale bonus.",
+		"shortDesc": "Dual Wield and entry healing for adjacent allies, including the Fairy Tale bonus.",
+	},
+	"divineintervention": {
+		"passive": "invigorate",
+		"desc": "Vital Signs emergency treatment, Triage, Regenerator and Friend Guard. The emergency treatment allowance remains once per recipient per battle.",
+		"shortDesc": "Vital Signs emergency treatment, Triage, Regenerator and Friend Guard.",
+	},
+});
 
 
 // Approved Kanto Mega recipients: keep shared packages intact on other species.
@@ -576,7 +692,9 @@ Object.assign(SharedPassiveAbilityDescriptions, {
  echosense: {passive: 'frisk', shortDesc: 'Echo Fiend, Telepathy and Infiltrator.', desc: "Has full Echo Fiend, Telepathy and Infiltrator with their suppression rules and field effects."},
  corrosiveburn: {passive: 'oblivious', shortDesc: 'Corrosion and Venom Ignition.', desc: "Full local Corrosion and Venom Ignition: Fire attacks deal 1.2x damage against poisoned targets without consuming poison."},
 	aquashell: { passive: 'toughclaws', shortDesc: "Heatproof + Frisk.", desc: "Full local Heatproof and Frisk. Incoming Fire attacks use half the attacker’s Attack or Special Attack; burn damage is halved. On activation, reveals opposing active Illusions and held items; each opposing item holder independently has a 30% chance of five-turn Embargo." },
- rainsovereign: {passive: 'drizzle', shortDesc: 'Extends entry rain to 8 turns; Electric/Water/Flying STAB and opposing Water chip.', desc: "Rain Sovereign extends that rain to eight turns and has Electric, Water and Flying STAB plus opposing Water chip each turn, regardless of weather. Existing immunities and Free-for-All type scaling remain."},
+	rainsovereign: { passive: 'drizzle',
+		shortDesc: "Eight-turn Rain; Electric/Water/Flying STAB; matching hits heal an ally once per turn.",
+		desc: "Sets Rain for 8 turns on entry. Electric, Water and Flying moves receive STAB. Once per turn, after one of those moves damages opposing HP, heals the living active ally with the lowest HP percentage by 1/16 max HP. Heals itself when no living active ally exists." },
 });
 Object.assign(SharedPassiveComponents, {
  verdantsanctuary: ['grassysurge'], bogbody: ['levitate'], mastercourse: ['contrary'],
@@ -699,7 +817,7 @@ SharedPassiveComponents.doomwarning = ['magicbounce'];
 delete SharedPassiveComponentAdditions.doomwarning;
 delete SharedPassiveAbilityDescriptions.doomwarning;
 
-// Full Water Barrage now contributes Stalwart to Fortress Shell; Dual Wield stays excluded.
+// Full Tidal Monarch now contributes Stalwart to Fortress Shell; Dual Wield stays excluded.
 AbilityComponentExclusions.fortressshell = AbilityComponentExclusions.fortressshell.filter(id => id !== 'stalwart');
 
 // The approved Marionette rework has Prankster only in its native passive slot.

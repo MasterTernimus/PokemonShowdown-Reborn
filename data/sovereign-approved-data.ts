@@ -4,24 +4,24 @@ const updraft = "Full Updraft: Full Competitive: opposing stat drops raise Speci
 export const SovereignDescriptions: { [id: string]: { shortDesc: string, desc: string } } = {
 	updraft: {shortDesc: "Competitive; Flying ignores evasion; one ally Speed boost per entry.", desc: updraft},
 	sunsovereign: {
-		shortDesc: 'Drought, eight-turn sun, Unbound Blaze and Intimidate.',
+		shortDesc: "Eight-turn sun + Blazing Monarch; all moves have 1.1x accuracy.",
 		desc: SelectedAbilityDescriptions.sunsovereign.desc +
 			"Full local Intimidate lowers adjacent foes' Attack by 1 on entry, respecting Substitute and normal Intimidate protections.",
 	},
 	stormsovereign: {
-		shortDesc: 'Updraft (Competitive), eight-turn Strong Winds and opposing Flying chip.',
-		desc: 'Summons replaceable Strong Winds for 8 turns on entry. Each turn, non-immune foes take Flying damage equal to 1/16 base maximum HP; type effectiveness scales this chip only in Free-for-All. Flying-type foes are immune.' + updraft + "Mega Pidgeot receives No Guard from its species passive and has no Gale Wings priority. Other holders retain their existing full-HP Flying priority and never-miss effect when no No Guard passive is present.",
+		shortDesc: 'Updraft (Competitive); eight-turn Strong Winds; Flying attacks bypass Substitute.',
+		desc: 'Summons replaceable Strong Winds for 8 turns on entry. Damaging Flying moves bypass Substitute. ' + updraft + "Mega Pidgeot receives No Guard from its species passive and has no Gale Wings priority. Other holders retain their existing full-HP Flying priority and never-miss effect when no No Guard passive is present.",
 	},
 	sandsovereign: {
-		shortDesc: 'Solid Rock; better Rock/Ground matchup; eight-turn sand and Rock chip.',
-		desc: "Sets or refreshes Sandstorm to 8 turns on entry. Full local Solid Rock. Its retained matchup effect keeps damaging Rock moves Rock-type with normal Rock STAB, but uses the better overall Rock or Ground type-chart matchup; Ground-immune typings do not replace the Rock matchup. Manually used Arenite Wall lasts 8 turns. Each turn, non-immune foes take Rock damage equal to 1/16 max HP; type effectiveness scales this chip only in Free-for-All.",
+		shortDesc: "Solid Rock; eight-turn sand; Rock/Ground matchup; Rock/Dark hits break screens.",
+		desc: "Sets or refreshes Sandstorm for 8 turns. Includes Solid Rock. Damaging Rock moves use the better Rock or Ground type-chart matchup while remaining Rock-type; Ground-immune typings do not replace the Rock matchup. Manually used Arenite Wall lasts 8 turns. After a Rock or Dark attack damages opposing HP, removes Reflect and Light Screen from that side.",
 	},
 	frostsovereign: {
-		shortDesc: 'Ice Body + Filter + Soundproof; eight-turn snow and Ice chip.',
-		desc: "Sets or refreshes Snow Warning weather to 8 turns on entry. Full local Ice Body and Filter, and gains full Soundproof immunity to other Pokemon's sound moves. Manually used Aurora Veil lasts 8 turns. Each turn, non-immune foes take Ice damage equal to 1/16 max HP; type effectiveness scales this chip only in Free-for-All.",
+		shortDesc: "Ice Body + Filter + Soundproof; eight-turn hail; first Ice attack lowers foe Speed.",
+		desc: "Sets Hail for 8 turns on entry. Includes Ice Body, Filter and Soundproof. Manually used Aurora Veil lasts 8 turns. Once per switch-in, its first Ice attack to damage opposing HP lowers each damaged foe's Speed by 1 stage, once per target. Normal stat-drop protections apply.",
 	},
 };
 export const NativeStormDescription = {
-	passive: 'noguard', shortDesc: 'Updraft (Competitive), eight-turn Strong Winds and opposing Flying chip.',
-	desc: 'Summons replaceable Strong Winds for 8 turns on entry. Each turn, non-immune foes take Flying damage equal to 1/16 base maximum HP; type effectiveness scales this chip only in Free-for-All. Flying-type foes are immune.' + updraft + "",
+	passive: 'noguard', shortDesc: 'Updraft (Competitive); eight-turn Strong Winds; Flying attacks bypass Substitute.',
+	desc: 'Summons replaceable Strong Winds for 8 turns on entry. Damaging Flying moves bypass Substitute. ' + updraft + "",
 };

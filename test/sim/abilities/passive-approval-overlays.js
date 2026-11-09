@@ -284,3 +284,6 @@ exports.passives = expected => {
 	delete expected.empoleonmega; // Replaced by the explicitly approved X and Y forms.
 	return expected;
 };
+
+// Approved starter display names retain their original mechanics IDs.
+{ const previous = exports.abilities; const names = { 'Pollen Bloom': 'Verdant Monarch', 'Water Barrage': 'Tidal Monarch', 'Unbound Blaze': 'Blazing Monarch' }; exports.abilities = (id, original) => Object.fromEntries(Object.entries(previous(id, original)).map(([slot, name]) => [slot, names[name] || name])); }

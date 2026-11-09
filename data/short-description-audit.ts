@@ -34,7 +34,7 @@ export const ShortDescriptionAudit: Record<string,string> = {
   "imperialmandate": "At 50%+ HP: 2x power, or +1 Def/SpD on listed fields. Below 50%: 2x Speed, plus 1.5x power on those fields.",
   "toxicevolution": "Corrosion + Shield Dust; poison retaliation/confusion; 20% less damage; poison infliction or poisoned-foe HP hits heal 1/8 HP once per turn.",
   "spiralevolution": "Mold Breaker + Adaptability + Dual Wield; half-power Protect bypass; acts first in Trick Room; 20% less damage; double Twineedle power.",
-  "atrocity": "Unbound Blaze + Fire Ward; 1.3x power and defenses, stronger on Cold Eclipse; Royal Decree/Empress bonuses; unsuppressible.",
+	"atrocity": "Blazing Monarch + Fire Ward; 1.3x power and defenses, stronger on Cold Eclipse; Royal Decree/Empress bonuses; unsuppressible.",
   "gulpmissile": "Surf/Dive loads a projectile; when hit, deals 1/4 attacker HP plus -1 Defense or paralysis. Field variants apply.",
   "revealinggaze": "Entry uses Miracle Eye; Psychic attacks ignore marked foes’ positive Sp. Def. Miracle Eye grants its usual protection/field bonuses.",
   "tirelessmuscle": "Inner Focus; heals 1/16 HP at turn end after surviving opposing attack HP damage."

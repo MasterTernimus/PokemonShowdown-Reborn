@@ -1575,7 +1575,7 @@ export const ReviewedReferenceDetails = {
 				"Fairy Tale and Cold Eclipse multiply both offensive stats by 2; New World, Starlight Arena and Bewitched Woods use 1.5× instead. Its separate 1.5× offensive-stat bonus for Grass attacks stacks with this. On fainting, it attempts to establish Bewitched Woods for five turns; a blocked field change does not set that duration.",
 			],
 			"ancientbloom": [
-				"On Fairy Tale, New World, Cold Eclipse or Starlight Arena entry, gains +1 Defense and Special Defense. New World, Cold Eclipse and Starlight Arena also multiply its move power by 1.5. Its Pollen Bloom, Self-Sufficient and Friend Guard components continue independently.",
+				"On Fairy Tale, New World, Cold Eclipse or Starlight Arena entry, gains +1 Defense and Special Defense. New World, Cold Eclipse and Starlight Arena also multiply its move power by 1.5. Its Verdant Monarch, Self-Sufficient and Friend Guard components continue independently.",
 			],
 			"armorize": [
 				"Eligible Normal moves become Steel. The conversion bonus is 1.5× on Factory, Short-Circuit, Fairy Tale, Dragon’s Den, Starlight Arena, New World and Holy, instead of 1.2×. Cold Eclipse grants hail immunity but does not increase that conversion bonus. Variable-type moves retain their normal conversion exclusions.",
@@ -1755,7 +1755,7 @@ export const ReviewedReferenceDetails = {
 				"Fairy Tale and Cold Eclipse multiply both offensive stats by 2; New World, Starlight Arena and Bewitched Woods use 1.5× instead. Its separate 1.5× offensive-stat bonus for Grass attacks stacks with this. On fainting, it attempts to establish Bewitched Woods for five turns; a blocked field change does not set that duration.",
 			],
 			"ancientbloom": [
-				"On Fairy Tale, New World, Cold Eclipse or Starlight Arena entry, gains +1 Defense and Special Defense. New World, Cold Eclipse and Starlight Arena also multiply its move power by 1.5. Its Pollen Bloom, Self-Sufficient and Friend Guard components continue independently.",
+				"On Fairy Tale, New World, Cold Eclipse or Starlight Arena entry, gains +1 Defense and Special Defense. New World, Cold Eclipse and Starlight Arena also multiply its move power by 1.5. Its Verdant Monarch, Self-Sufficient and Friend Guard components continue independently.",
 			],
 			"armorize": [
 				"Eligible Normal moves become Steel. The conversion bonus is 1.5× on Factory, Short-Circuit, Fairy Tale, Dragon’s Den, Starlight Arena, New World and Holy, instead of 1.2×. Cold Eclipse grants hail immunity but does not increase that conversion bonus. Variable-type moves retain their normal conversion exclusions.",
@@ -1818,7 +1818,7 @@ export const ReviewedReferenceDetails = {
 				"On Fairy Tale, Chessboard, New World, Starlight Arena and Cold Eclipse, half HP or more grants one tracked Defense and Special Defense stage instead of its ordinary 2× attack power. Below half HP, those granted stages are removed and it receives 1.5× attack power plus double Speed. Leaving the favored fields removes the tracked defenses. “fortifies its defenses” announces the high-HP field mode; “quickens its command” announces low-HP mode; “empowers its attacks” announces ordinary high-HP mode.",
 			],
 			"burningcrown": [
-				"New World, Cold Eclipse and Starlight Arena grant 1.5× move power. Its Unbound Blaze component additionally gives +1 Defense/Special Defense on Infernal Eclipse, Volcanic or Dragon’s Den entry; Dragon’s Den and Infernal Eclipse block Fire attacks, and Dragon’s Den/Fairy Tale improve the Normal-to-Dragon conversion bonus to 1.5×. Cold Eclipse allows new frostbite through the Magma Armor component.",
+				"New World, Cold Eclipse and Starlight Arena grant 1.5× move power. Its Blazing Monarch component additionally gives +1 Defense/Special Defense on Infernal Eclipse, Volcanic or Dragon’s Den entry; Dragon’s Den and Infernal Eclipse block Fire attacks, and Dragon’s Den/Fairy Tale improve the Normal-to-Dragon conversion bonus to 1.5×. Cold Eclipse allows new frostbite through the Magma Armor component.",
 			],
 			"royaldecree": [
 				"On entry, resets stat stages and screens unless Neutralization blocks the effect; Safeguard protects its side from that reset. Fairy Tale, Chess Board, New World and Starlight Arena additionally raise Defense or Special Defense according to opposing offensive stats: two stages in singles, one otherwise. Chess Board also multiplies both defenses by 1.5 while Neutralization is absent. The reset preserves field-supported positive defenses for Relic Armor/Defeatist on Desert, Fairy Tale, Cave, Crystal Cavern, New World and Volcanic Summit; Magician Special Attack on Fairy Tale, Bewitched Woods, Haunted, Misty and New World; Stalwart Special Attack on New World, Starlight, Fairy Tale and Chess Board. Mirror Arena’s existing Mirror Armor/Iron Dominion evasion boosts survive the reset, but their new evasion boosts are not allowed by the current ongoing exception. The prevention message appears when a stat change is actually blocked.",
@@ -1893,7 +1893,7 @@ export const ReviewedReferenceDetails = {
 				"Fairy Tale and Cold Eclipse multiply both offensive stats by 2; New World, Starlight Arena and Bewitched Woods use 1.5× instead. Its separate 1.5× offensive-stat bonus for Grass attacks stacks with this. On fainting, it attempts to establish Bewitched Woods for five turns; a blocked field change does not set that duration.",
 			],
 			"ancientbloom": [
-				"On Fairy Tale, New World, Cold Eclipse or Starlight Arena entry, gains +1 Defense and Special Defense. New World, Cold Eclipse and Starlight Arena also multiply its move power by 1.5. Its Pollen Bloom, Self-Sufficient and Friend Guard components continue independently.",
+				"On Fairy Tale, New World, Cold Eclipse or Starlight Arena entry, gains +1 Defense and Special Defense. New World, Cold Eclipse and Starlight Arena also multiply its move power by 1.5. Its Verdant Monarch, Self-Sufficient and Friend Guard components continue independently.",
 			],
 			"armorize": [
 				"Eligible Normal moves become Steel. The conversion bonus is 1.5× on Factory, Short-Circuit, Fairy Tale, Dragon’s Den, Starlight Arena, New World and Holy, instead of 1.2×. Cold Eclipse grants hail immunity but does not increase that conversion bonus. Variable-type moves retain their normal conversion exclusions.",
@@ -1941,7 +1941,7 @@ export const ReviewedReferenceDetails = {
 				"On Fairy Tale, Chessboard, New World, Starlight Arena and Cold Eclipse, half HP or more grants one tracked Defense and Special Defense stage instead of its ordinary 2× attack power. Below half HP, those granted stages are removed and it receives 1.5× attack power plus double Speed. Leaving the favored fields removes the tracked defenses. “fortifies its defenses” announces the high-HP field mode; “quickens its command” announces low-HP mode; “empowers its attacks” announces ordinary high-HP mode.",
 			],
 			"burningcrown": [
-				"New World, Cold Eclipse and Starlight Arena grant 1.5× move power. Its Unbound Blaze component additionally gives +1 Defense/Special Defense on Infernal Eclipse, Volcanic or Dragon’s Den entry; Dragon’s Den and Infernal Eclipse block Fire attacks, and Dragon’s Den/Fairy Tale improve the Normal-to-Dragon conversion bonus to 1.5×. Cold Eclipse allows new frostbite through the Magma Armor component.",
+				"New World, Cold Eclipse and Starlight Arena grant 1.5× move power. Its Blazing Monarch component additionally gives +1 Defense/Special Defense on Infernal Eclipse, Volcanic or Dragon’s Den entry; Dragon’s Den and Infernal Eclipse block Fire attacks, and Dragon’s Den/Fairy Tale improve the Normal-to-Dragon conversion bonus to 1.5×. Cold Eclipse allows new frostbite through the Magma Armor component.",
 			],
 			"royaldecree": [
 				"On entry, resets stat stages and screens unless Neutralization blocks the effect; Safeguard protects its side from that reset. Fairy Tale, Chess Board, New World and Starlight Arena additionally raise Defense or Special Defense according to opposing offensive stats: two stages in singles, one otherwise. Chess Board also multiplies both defenses by 1.5 while Neutralization is absent. The reset preserves field-supported positive defenses for Relic Armor/Defeatist on Desert, Fairy Tale, Cave, Crystal Cavern, New World and Volcanic Summit; Magician Special Attack on Fairy Tale, Bewitched Woods, Haunted, Misty and New World; Stalwart Special Attack on New World, Starlight, Fairy Tale and Chess Board. Mirror Arena’s existing Mirror Armor/Iron Dominion evasion boosts survive the reset, but their new evasion boosts are not allowed by the current ongoing exception. The prevention message appears when a stat change is actually blocked.",
