@@ -14,7 +14,7 @@ function check(fn) {
 	}
 }
 describe('Silent Flight', () => {
-	it('only replaces regular Decidueye slot and exposes Levitate', () => { assert.deepEqual(Dex.species.get('decidueye').abilities, { 0: 'Fallen Star', 1: 'Silent Flight', H: 'Canopy Archer' }); assert.equal(Dex.species.get('decidueyehisui').abilities.H, 'Canopy Archer'); });
+	it('only replaces regular Decidueye slot and exposes Levitate', () => { assert.deepEqual(Dex.species.get('decidueye').abilities, { 0: 'Fallen Star', 1: 'Silent Flight', H: 'Canopy Performer' }); assert.equal(Dex.species.get('decidueyehisui').abilities.H, 'Canopy Performer'); });
 	for (const id of ['stealthrock', 'spikes', 'toxicspikes', 'stickyweb', 'gmaxsteelsurge'])it('blocks ' + id + ' even grounded', () => check((b, p, q) => {
 		q.setItem('ironball');
 		q.side.addSideCondition(id, p);

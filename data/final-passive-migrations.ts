@@ -1,13 +1,15 @@
 import type {AbilityDataTable} from '../sim/dex-abilities';
 
 export const FinalPassiveMigrations: {[id: string]: string[]} = {
- kingambit: ['supremeoverlord'],
+	kingambit: ['supremeoverlord'], dhelmise: ['steelworker'],
  ursaluna: ['thickfat'], ursalunabloodmoon: ['mindseye'], archaludon: ['stalwart'], rhydon: ['lightningrod'],
  tsareena: ['queenlymajesty'], tsareenaalt: ['queenlymajesty'],
  porygon2: ['download'], porygonz: ['download'], medicham: ['purepower'],
 };
 export const FinalPassiveSlotChanges: {[id: string]: {[slot: string]: string}} = {
- rhydon: {0: 'Grand Strategy', 1: 'Lightning Rod', H: 'Brute Force'}, ursalunabloodmoon: {0: 'Bloodmoon Gaze'}, porygonz: {1: 'Error Handler'}, medicham: {0: 'Still Mind'},
+	rhydon: { 0: 'Grand Strategy',
+		1: 'Lightning Rod',
+		H: 'Brute Force' }, ursalunabloodmoon: { 0: 'Bloodmoon Gaze' }, porygonz: { 1: 'Adaptability' }, medicham: { 0: 'Still Mind' },
 };
 export const FinalPassiveComponents: {[id: string]: string[]} = {
  bloodmoongaze: ['infiltrator', 'competitive'], errorhandler: ['aromaveil', 'infiltrator'],

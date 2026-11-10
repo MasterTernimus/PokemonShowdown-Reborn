@@ -10034,7 +10034,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Porygon-Z",
 		types: ["Normal"],
 		gender: "N",
-		baseStats: { hp: 85, atk: 80, def: 80, spa: 150, spd: 85, spe: 90 },
+		baseStats: { hp: 95, atk: 80, def: 80, spa: 140, spd: 85, spe: 90 },
 		abilities: { 0: "Defragment", 1: "Download", H: "Memory Leak" },
 		heightm: 0.9,
 		weightkg: 34,
@@ -24881,6 +24881,17 @@ Pokedex.cinderacegmax.abilities = { 0: 'Grand Striker' };
 Pokedex.rillaboomgmax.abilities = { 0: 'Grand Rhythm' };
 Pokedex.inteleongmax.abilities = { 0: 'Grand Marksman' };
 
+import {NovemberRosterSlots, NovemberAbilityNames} from './november-roster';
+for (const [id, slots] of Object.entries(NovemberRosterSlots)) Object.assign(Pokedex[id as ID].abilities!, slots);
+Pokedex.eeveestarter.baseStats!.hp = 100;
+for (const species of Object.values(Pokedex)) {
+ if (!species.abilities) continue;
+ for (const slot of Object.keys(species.abilities)) {
+  const name = (species.abilities as any)[slot];
+  const id = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (NovemberAbilityNames[id]) (species.abilities as any)[slot] = NovemberAbilityNames[id];
+ }
+}
 // Synchronize after every base-form override.
 for (const [skinId, counterpartId] of Object.entries(CosmeticBattleCounterparts)) {
 	const skin = Pokedex[skinId as ID] as import('../sim/dex-species').SpeciesData;

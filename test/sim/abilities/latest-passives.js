@@ -26,14 +26,14 @@ describe('Latest explicit passive approvals and redesigned abilities', () => {
 		battle?.destroy();
 		battle = null;
 	});
-	it('matches the reviewed 952-holder registry and all selected slots', () => {
+	it('matches the reviewed 963-holder registry and all selected slots', () => {
 		const expected = { ...approved.previousPassives };
 		for (const [passive, ids] of Object.entries(approved.groups))
 			for (const id of ids)
 				expected[id] = [passive];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(require('../../../dist/data/species-passives').SpeciesPassives, expected);
-		assert.equal(Object.keys(expected).length, 952);
+		assert.equal(Object.keys(expected).length, 963);
 		for (const [id, slot, , name] of approved.slots)
 			assert.equal(Dex.species.get(id).abilities[slot], require('./passive-approval-overlays').abilities(id, { [slot]: name })[slot], id);
 		for (const [id, abilities] of Object.entries(approved.priorAbilities)) {

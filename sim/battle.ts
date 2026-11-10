@@ -3011,7 +3011,7 @@ export class Battle {
 				if (pokemon.formeRegression && !pokemon.transformed) {
 					// before clearing volatiles
 					pokemon.baseSpecies = this.dex.species.get(pokemon.set.species || pokemon.set.name);
-					pokemon.baseAbility = toID(pokemon.set.ability);
+					pokemon.baseAbility = this.dex.abilities.get(pokemon.set.ability).id;
 				}
 				(pokemon as any).wasGimmickOnFaint = !!(
 					pokemon.species.isMega || pokemon.species.forme?.includes('Mega') ||
@@ -3235,9 +3235,9 @@ export class Battle {
 				action.pokemon.formeChange(species, null, true);
 				const gmaxSpecies = this.dex.species.get(species);
 				const gmaxAbility = gmaxSpecies.abilities['0'];
-				if (gmaxAbility && action.pokemon.ability !== toID(gmaxAbility)) {
+				if (gmaxAbility && action.pokemon.ability !== this.dex.abilities.get(gmaxAbility).id) {
 					action.pokemon.setAbility(gmaxAbility, null, null, true);
-					action.pokemon.baseAbility = toID(gmaxAbility);
+					action.pokemon.baseAbility = this.dex.abilities.get(gmaxAbility).id;
 				}
 				const gmaxClearedVolatiles = [
 					'aquaring', 'attract', 'confusion', 'curse', 'disable', 'embargo', 'encore',

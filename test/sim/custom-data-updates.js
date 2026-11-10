@@ -67,9 +67,9 @@ describe('Custom battle data updates', function () {
 		}
 	});
 
-	it('should give Meowscarada False Bouquet, Protean, and Perfect Illusion', () => {
+	it('should give Meowscarada Masquerade Bloom, Protean, and Perfect Illusion', () => {
 		assert.deepEqual(Dex.species.get('Meowscarada').abilities, {
-			0: 'False Bouquet', 1: 'Protean', H: 'Perfect Illusion',
+			0: 'Masquerade Bloom', 1: 'Protean', H: 'Perfect Illusion',
 		});
 
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[

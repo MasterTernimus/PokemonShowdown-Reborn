@@ -368,6 +368,14 @@ export class Pokemon {
 		if (!this.baseSpecies.exists) {
 			throw new Error(`Unidentified species: ${this.baseSpecies.name}`);
 		}
+		// Ability-driven Rejuv forms begin with ordinary stats, types and preview details.
+		const regional = Object.values(ABILITY_REGIONAL_FORMS).find(forms => forms[1] === this.baseSpecies.id);
+		if (regional) {
+			set.ability ||= this.baseSpecies.abilities[0];
+			if (set.name === set.species) set.name = '';
+			this.baseSpecies = this.battle.dex.species.get(regional[0]);
+			set.species = this.baseSpecies.name;
+		}
 		if (this.baseSpecies.requiredItem === 'Anomaly Core' && toID(set.item) !== 'anomalycore') {
 			const baseSpecies = this.battle.dex.species.get(this.baseSpecies.changesFrom || this.baseSpecies.baseSpecies);
 			if (baseSpecies.exists) {
@@ -605,7 +613,6 @@ export class Pokemon {
 			name = 'Delibird-EvilSanta';
 		}
 		if (['Greninja-Bond', 'Rockruff-Dusk'].includes(name)) name = this.species.baseSpecies;
-		if (this.species.baseSpecies === 'Bronzong' && toID(this.set.ability) === 'reflector') name = 'Bronzong-Rejuv';
 		if (!level) level = this.level;
 		return name + (level === 100 ? '' : `, L${level}`) +
 			(this.gender === '' ? '' : `, ${this.gender}`) + (this.set.shiny ? ', shiny' : '');
@@ -975,19 +982,34 @@ export class Pokemon {
 		return false;
 	}
 
-	/** Actual suppression locks an ability-driven regional form out until switching. */
+	/** Keep ability-driven regional typing aligned with the active ability. */
 	revertSuppressedRegionalForm() {
-		if (!this.isActive || !this.hp || this.transformed || !this.ignoringAbility()) return false;
+		if (!this.isActive || !this.hp || this.transformed) return false;
 		const forms = ABILITY_REGIONAL_FORMS[this.ability];
-		if (!forms || !forms.includes(this.species.id)) return false;
-		const wasSuppressed = this.m.regionalFormSuppressed;
-		this.m.regionalFormSuppressed = true;
-		// Reflector advertises its regional artwork in preview, even before it can activate.
-		if (this.species.id === forms[1] || (!wasSuppressed && this.ability === 'reflector')) {
-			this.formeChange(forms[0], this.battle.dex.conditions.get('gastroacid'), false);
+		const current = Object.values(ABILITY_REGIONAL_FORMS).find(pair => pair[1] === this.species.id);
+		if (!forms || !forms.includes(this.species.id)) {
+			if (!current) return false;
+			this.baseSpecies = this.battle.dex.species.get(current[0]);
+			this.formeChange(current[0], null, false);
 			this.updateMaxHp(true);
+			delete this.m.regionalFormSuppressed;
+			return true;
 		}
-		return true;
+		if (this.ignoringAbility()) {
+			this.m.regionalFormSuppressed = true;
+			if (this.species.id === forms[1]) {
+				this.formeChange(forms[0], this.battle.dex.conditions.get('gastroacid'), false);
+				this.updateMaxHp(true);
+			}
+			return true;
+		}
+		if (this.m.regionalFormSuppressed) {
+			delete this.m.regionalFormSuppressed;
+			this.formeChange(forms[1], this.getAbility(), false);
+			this.updateMaxHp(true);
+			return true;
+		}
+		return false;
 	}
 
 	ignoringItem(isFling = false) {
@@ -1229,20 +1251,16 @@ export class Pokemon {
 				actualTarget = 'normal';
 			}
 			const maxMove = this.battle.actions.getMaxMove(move, this);
-			if (maxMove) {
-				if (maxMove?.name !== this.canGigantamax) {
-					const disabled = protectMove || !regularMoves[index] || !!regularMoves[index].disabled;
-					result.maxMoves.push({ move: move.id, target: actualTarget, disabled });
-					atLeastOne = atLeastOne || !disabled;
-					continue;
-				}
-				if (this.maxMoveDisabled(move)) {
-					result.maxMoves.push({ move: maxMove.id, target: maxMove.target, disabled: true });
-				} else {
-					result.maxMoves.push({ move: maxMove.id, target: maxMove.target });
-					atLeastOne = true;
-				}
+			// Keep one entry per original slot, including typeless moves with no Max form.
+			if (!maxMove || maxMove.name !== this.canGigantamax) {
+				const disabled = protectMove || !regularMoves[index] || !!regularMoves[index].disabled;
+				result.maxMoves.push({move: move.id, target: actualTarget, disabled});
+				atLeastOne = atLeastOne || !disabled;
+				continue;
 			}
+			const disabled = this.maxMoveDisabled(move);
+			result.maxMoves.push({move: maxMove.id, target: maxMove.target, ...(disabled ? {disabled: true} : {})});
+			atLeastOne = atLeastOne || !disabled;
 		}
 		if (!atLeastOne) return;
 		if (this.canGigantamax && this.canDynamax) result.gigantamax = this.canGigantamax;
@@ -1766,7 +1784,7 @@ export class Pokemon {
 			// Ogerpon's forme change doesn't override permanent abilities
 			if (source || !this.getAbility().flags['cantsuppress']) this.setAbility(ability, null, null, true);
 			// However, its ability does reset upon switching out
-			this.baseAbility = toID(ability);
+			this.baseAbility = this.battle.dex.abilities.get(ability).id;
 		}
 		if (this.terastallized) {
 			this.knownType = true;
@@ -2309,6 +2327,7 @@ export class Pokemon {
 			(!isTransform || oldAbility.id !== ability.id || this.battle.gen <= 4)) {
 			this.battle.singleEvent('Start', ability, this.abilityState, this, source);
 		}
+		this.revertSuppressedRegionalForm();
 		this.updateAbilityAppearance();
 		return oldAbility.id;
 	}

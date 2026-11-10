@@ -162,17 +162,17 @@ const beforeOct19Abilities=exports.abilities,beforeOct19Current=exports.current;
 exports.abilities=(id,fallback)=>({...beforeOct19Abilities(id,fallback),...oct19.abilities[id]});
 exports.current=(id,fallback)=>oct19.passives[id]||beforeOct19Current(id,fallback);
 
-// Explicit October 22 approvals: regular Decidueye Silent Flight; Hisuian Canopy Archer.
+// Explicit October 22 approvals: regular Decidueye Silent Flight; Hisuian Canopy Performer.
 const beforeDecidueyeSlots = exports.abilities;
-exports.abilities = (id, fallback) => ({ ...beforeDecidueyeSlots(id, fallback), ...({ decidueye: { 1: 'Silent Flight' }, decidueyehisui: { H: 'Canopy Archer' } }[id] || {}) });
+exports.abilities = (id, fallback) => ({ ...beforeDecidueyeSlots(id, fallback), ...({ decidueye: { 1: 'Silent Flight' }, decidueyehisui: { H: 'Canopy Performer' } }[id] || {}) });
 
 const beforeVileplumeEffectSpore = exports.current; exports.current = (id, fallback) => id === 'vileplume' ? ['effectspore'] : beforeVileplumeEffectSpore(id, fallback);
 
 // Reviewed cosmetic equivalence and the explicit Klefki passive/slot request.
 const beforeCosmeticSlots = exports.abilities;
 const cosmeticSlots = {
-	decidueyealt: { 1: 'Silent Flight', H: 'Canopy Archer' },
-	decidueyehisuialt: { H: 'Canopy Archer' },
+	decidueyealt: { 1: 'Silent Flight', H: 'Canopy Performer' },
+	decidueyehisuialt: { H: 'Canopy Performer' },
 	emboaralt: { 0: 'Controlled Fury' }, emboarreborn: { 0: 'Controlled Fury' }, grimmsnarlazzy: { 0: 'Guts' },
 	galladeazzy: { S: 'Ruptured Heaven' }, klefki: { 0: 'Adhesive Armor' },
 };
@@ -219,7 +219,7 @@ exports.current=(id,fallback)=>id==='politoed'?['oraclesrefrain']:beforeOracular
 exports.passives=expected=>Object.assign(beforeOracular.passives(expected),{politoed:['oraclesrefrain']});
 
 const beforeEmpoleonSplit={abilities:exports.abilities,current:exports.current,passives:exports.passives};
-exports.abilities=(id,fallback)=>({...beforeEmpoleonSplit.abilities(id,fallback),...(id==='empoleon'?{1:'Imperial Edge'}:{})});
+exports.abilities=(id,fallback)=>({...beforeEmpoleonSplit.abilities(id,fallback),...(id==='empoleon'?{1:'Imperial Legacy'}:{})});
 exports.current=(id,fallback)=>['empoleonmegax','empoleonmegay'].includes(id)?['proficient']:beforeEmpoleonSplit.current(id,fallback);
 exports.passives=expected=>Object.assign(beforeEmpoleonSplit.passives(expected),{empoleonmegax:['proficient'],empoleonmegay:['proficient']});
 
@@ -287,3 +287,12 @@ exports.passives = expected => {
 
 // Approved starter display names retain their original mechanics IDs.
 { const previous = exports.abilities; const names = { 'Pollen Bloom': 'Verdant Monarch', 'Water Barrage': 'Tidal Monarch', 'Unbound Blaze': 'Blazing Monarch' }; exports.abilities = (id, original) => Object.fromEntries(Object.entries(previous(id, original)).map(([slot, name]) => [slot, names[name] || name])); }
+
+{
+ const reviewed=require('./november-10-roster-expectations.json');
+ const prior={current:exports.current,passives:exports.passives,abilities:exports.abilities,stats:exports.stats};
+ exports.current=(id,fallback)=>reviewed.passives[id]||prior.current(id,fallback);
+ exports.passives=expected=>Object.assign(prior.passives(expected),reviewed.passives);
+ exports.abilities=(id,fallback)=>Object.fromEntries(Object.entries({...prior.abilities(id,fallback),...reviewed.slots[id]}).map(([slot,name])=>[slot,reviewed.names[name]||name]));
+ exports.stats=(id,fallback)=>({...prior.stats(id,fallback),...reviewed.stats[id]});
+}

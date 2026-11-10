@@ -3,13 +3,13 @@ const assert=require('../../assert'),common=require('../../common');
 let battle;
 describe('Gardevoir-Void and Void Voice',function(){
  afterEach(()=>battle?.destroy());
- it('uses normal Gardevoir mechanics and Mega Evolves with Dream Sickness in Void Voice',function(){
+ it('uses normal Gardevoir mechanics and Mega Evolves with Dream Guardian in Void Voice',function(){
   battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Gardevoir-Void',ability:'Void Veil',item:'Gardevoirite',moves:['splash']}],[{species:'Mew',ability:'Synchronize',moves:['splash']}]]);
   battle.makeChoices('team 1','team 1');
   const mon=battle.p1.active[0],foe=battle.p2.active[0];
   assert.equal(mon.species.name,'Gardevoir-Void');
   assert.deepEqual(mon.species.baseStats,battle.dex.species.get('Gardevoir').baseStats);
-  assert.deepEqual(mon.species.abilities,{0:'Trace',1:'Dream Sickness',H:'Void Veil'});
+  assert.deepEqual(mon.species.abilities,{0:'Trace',1:'Dream Guardian',H:'Void Veil'});
   assert.equal(mon.canMegaEvo,'Gardevoir-Mega-Alt');
   battle.makeChoices('move splash mega','move splash');
   assert.equal(mon.ability,'voidvoice');assert(mon.hasAbility('dreamsickness'));

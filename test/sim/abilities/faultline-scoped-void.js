@@ -10,7 +10,7 @@ describe('Garchomp Void Wrath and scoped Gardevoir Void Veil',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
 	it('keeps current Garchomp and Gardevoir slots with Battle Bond in event S', () => {
 		assert.deepEqual(Dex.species.get('garchomp').abilities, { 0: 'Grounded Instinct', 1: 'Supreme Overlord', H: 'Void Wrath', S: 'Battle Bond' });
-		assert.deepEqual(Dex.species.get('gardevoir').abilities, { 0: 'Trace', 1: 'Dream Sickness', H: 'Void Veil' });
+		assert.deepEqual(Dex.species.get('gardevoir').abilities, { 0: 'Trace', 1: 'Dream Guardian', H: 'Void Veil' });
 		assert.deepEqual(Dex.species.all().filter(s => Object.values(s.abilities).includes('Void Veil')).map(s => s.name), ['Gardevoir', 'Iron Valiant']);
 	});
  for(const mode of ['singles','doubles','ffa'])it('Sand Tomb never adds hazards in '+mode,()=>{const[p,t]=start('Garchomp','Void Wrath',mode);hit(p,t);assert(t.volatiles.partiallytrapped);assert(!t.side.sideConditions.spikes);assert(!p.volatiles.faultlinespent);});

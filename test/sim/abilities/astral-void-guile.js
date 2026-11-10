@@ -1,5 +1,5 @@
 'use strict';const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim');
-describe('Astral Witchcraft Serene Grace replacement', () => {
+describe('Aegis Flame Serene Grace replacement', () => {
 	let battle;
 	afterEach(() => {
 		battle?.destroy();
@@ -7,7 +7,7 @@ describe('Astral Witchcraft Serene Grace replacement', () => {
 	});
 	function setup() {
 		const m = { species: 'Mew', ability: 'No Ability', moves: ['splash', 'tackle', 'thunderwave', 'spikes', 'earthquake'] };
-		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[{ ...m, species: 'Delphox-Mega', ability: 'Astral Witchcraft' }, m], [m, m]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[{ ...m, species: 'Delphox-Mega', ability: 'Aegis Flame' }, m], [m, m]]);
 		battle.makeChoices('team 12', 'team 12');
 		for (const s of battle.sides) for (const p of s.pokemon)p.hp = p.maxhp = p.baseMaxhp = 4800;
 		return [battle.p1.active[0], battle.p2.active[0]];
@@ -17,7 +17,7 @@ describe('Astral Witchcraft Serene Grace replacement', () => {
 		for (const id of ['levitate', 'magicguard', 'serenegrace'])assert(p.hasAbility(id));
 		for (const id of ['magicbounce', 'voidguile', 'magician', 'infiltrator']) assert(!p.hasAbility(id));
 		assert.deepEqual(p.getPassives(), ['proficient']);
-		assert.deepEqual(Dex.species.all().filter(s => Object.values(s.abilities).includes('Astral Witchcraft')).map(s => s.id), ['delphoxmega']);
+		assert.deepEqual(Dex.species.all().filter(s => Object.values(s.abilities).includes('Aegis Flame')).map(s => s.id), ['delphoxmega']);
 	});
 it('does not reflect direct status or hazards',()=>{const[p,q]=setup();battle.actions.runMove('thunderwave',q,q.getLocOf(p));assert.equal(p.status,'par');assert.equal(q.status,'');battle.actions.runMove('spikes',q,q.getLocOf(p));assert(p.side.sideConditions.spikes);assert(!q.side.sideConditions.spikes);});
 	it('respects Substitute and does not steal items', () => {

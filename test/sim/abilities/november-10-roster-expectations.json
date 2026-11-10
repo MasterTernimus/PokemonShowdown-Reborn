@@ -1,0 +1,234 @@
+{
+  "passives": {
+    "dodrio": [
+      "triplethreat"
+    ],
+    "scizor": [
+      "lightweightswarm"
+    ],
+    "aggronmega": [
+      "filter"
+    ],
+    "bronzong": [
+      "heatproof"
+    ],
+    "bronzongrejuv": [
+      "heatproof"
+    ],
+    "toxicroakdeso": [
+      "anticipation"
+    ],
+    "lumineon": [
+      "swiftswim"
+    ],
+    "tangrowth": [
+      "regenerator"
+    ],
+    "froslassaevian": [
+      "levitate"
+    ],
+    "stoutland": [
+      "sandrush"
+    ],
+    "excadrill": [
+      "toughclaws"
+    ],
+    "volcaronaaevian": [
+      "shielddust"
+    ],
+    "hatterene": [
+      "magicbounce"
+    ],
+    "hatterenegmax": [
+      "healingmirror"
+    ],
+    "gholdengo": [
+      "goodasgold"
+    ],
+    "ludicolo": [
+      "raindish"
+    ],
+    "shiftry": [
+      "keeneye"
+    ],
+    "dusknoir": [
+      "pressure"
+    ],
+    "froslassaevianmega": [
+      "waterveil"
+    ],
+    "ursaluna": [
+      "unnerve"
+    ],
+    "nihilego": [
+      "beastboost"
+    ],
+    "buzzwole": [
+      "beastboost"
+    ],
+    "pheromosa": [
+      "beastboost"
+    ],
+    "xurkitree": [
+      "beastboost"
+    ],
+    "celesteela": [
+      "beastboost"
+    ],
+    "kartana": [
+      "beastboost"
+    ],
+    "guzzlord": [
+      "beastboost"
+    ],
+    "poipole": [
+      "beastboost"
+    ],
+    "naganadel": [
+      "beastboost"
+    ],
+    "stakataka": [
+      "beastboost"
+    ],
+    "blacephalon": [
+      "beastboost"
+    ],
+    "lumineonalt": [
+      "swiftswim"
+    ],
+    "dhelmise": [
+      "steelworker"
+    ]
+  },
+  "slots": {
+    "dodrio": {
+      "0": "Hydra Bond"
+    },
+    "tangrowth": {
+      "1": "Stamina"
+    },
+    "stoutland": {
+      "0": "Loyal Guard",
+      "1": "Sworn Duty"
+    },
+    "ludicolo": {
+      "H": "Rain Rhythm"
+    },
+    "shiftry": {
+      "H": "Gale Fan"
+    },
+    "dusknoir": {
+      "1": "Frisk"
+    },
+    "delphox": {
+      "0": "Guardian Flame"
+    },
+    "hatterene": {
+      "H": "Healer"
+    },
+    "gholdengo": {
+      "0": "Own Tempo",
+      "1": "Pickup",
+      "H": "Sticky Hold"
+    },
+    "nihilego": {
+      "0": "Levitate",
+      "1": "Liquid Ooze",
+      "H": "Nerve Parasite"
+    },
+    "buzzwole": {
+      "0": "Iron Fist",
+      "1": "Guts",
+      "H": "Siphon Muscle"
+    },
+    "pheromosa": {
+      "0": "Limber",
+      "1": "Quick Feet",
+      "H": "Immaculate Form"
+    },
+    "xurkitree": {
+      "0": "Motor Drive",
+      "1": "Illuminate",
+      "H": "Live Circuit"
+    },
+    "celesteela": {
+      "0": "Heavy Metal",
+      "1": "Heatproof",
+      "H": "Launch Chamber"
+    },
+    "kartana": {
+      "0": "Sharpness",
+      "1": "Hyper Cutter",
+      "H": "Paper Aegis"
+    },
+    "guzzlord": {
+      "0": "Gluttony",
+      "1": "Strong Jaw",
+      "H": "Endless Gullet"
+    },
+    "poipole": {
+      "0": "Prankster",
+      "1": "Poison Point",
+      "H": "Toxic Canvas"
+    },
+    "naganadel": {
+      "0": "Sniper",
+      "1": "Infiltrator",
+      "H": "Queen Venom"
+    },
+    "stakataka": {
+      "0": "Sturdy",
+      "1": "Clear Body",
+      "H": "Living Rampart"
+    },
+    "blacephalon": {
+      "0": "Aftermath",
+      "1": "Flash Fire",
+      "H": "Last Firework"
+    },
+    "porygonz": {
+      "1": "Adaptability"
+    }
+  },
+  "names": {
+    "Burning Crown": "Blazing Crown",
+    "Terra Gift": "Terra Legacy",
+    "Burning Rage": "Inferno Legacy",
+    "Imperial Edge": "Imperial Legacy",
+    "Knight's Reprisal": "Guardian Shield",
+    "Liquid Arsenal": "Guardian Tide",
+    "Wrath Shield": "Aegis Shield",
+    "Astral Witchcraft": "Aegis Flame",
+    "Shadow Current": "Aegis Tide",
+    "Canopy Archer": "Canopy Performer",
+    "Ringmaster": "Ring Performer",
+    "Tidal Voice": "Tidal Performer",
+    "False Bouquet": "Masquerade Bloom",
+    "Funeral Choir": "Masquerade Choir",
+    "Festival Step": "Masquerade Step",
+    "Root Renewal": "Root Entanglement",
+    "Primal Ego": "Terra Ascendant",
+    "Terra Resolve": "Terra Eternal",
+    "Burning Spirit": "Inferno Ascendant",
+    "Monarch of Ice": "Imperial Ascendant",
+    "Emperor's Resolve": "Imperial Eternal",
+    "Rain Rhythm": "Rain Revel",
+    "Gale Fan": "Gale Revel",
+    "Dream Sickness": "Dream Guardian",
+    "Knight's Guard": "Blade Guardian",
+    "Vanguard": "Solar Vanguard",
+    "Sun Charm": "Solar Enchanter"
+  },
+  "stats": {
+    "eeveestarter": {
+      "hp": 100
+    },
+    "eeveestarteralt": {
+      "hp": 100
+    },
+    "porygonz": {
+      "hp": 95,
+      "spa": 140
+    }
+  }
+}

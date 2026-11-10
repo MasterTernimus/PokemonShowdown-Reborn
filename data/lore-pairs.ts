@@ -4,7 +4,7 @@ import { composeSelectedAbility } from './selected-mega-simplifications';
 
 export const LoreComponents: { [id: string]: string[] } = {
 	dunecaller: ['sandstream'], miragedrift: ['overcoat'], dunehunter: ['innerfocus'],
-	breakingnews: ['forewarn'], blackwateranchor: ['steelworker'], blackwatervenom: [],
+	breakingnews: ['forewarn'], blackwateranchor: [], blackwatervenom: [],
 	rememberedstep: [], rememberedflame: ['flashfire', 'download'], stormmemory: [], jetstreamballet: ['windrider'],
 };
 
@@ -22,8 +22,8 @@ export const LoreDescriptions: Record<string, { name: string, shortDesc: string,
 		shortDesc: 'Forewarn; exposes status users so it and adjacent allies bypass their defensive boosts.',
 		desc: 'Forewarn: scans each foe on entry and every opposing switch-in, reveals a strongest attack and removes Illusion. Takes 20% less move damage, or 25% less from the latest warned attack; these reductions do not stack. Successful reveals on Psychic Terrain grant +2 Sp. Atk. Successful opposing status moves expose their user through the following turn. The reporter and adjacent allies ignore exposed foes\' positive defensive stages. An exposed foe switching out clears its mark; leaving ends that reporter\'s marks.' },
 	blackwateranchor: { name: 'Blackwater Anchor',
-		shortDesc: 'Steelworker; Grass/Steel hits slow foes. Anchor Shot drains; water fields share poisoned-foe drain.',
-		desc: 'Full Steelworker, including Steel STAB, its attacking-stat boost and field effects. Grass/Steel hits lower each foe\'s Speed by 1, once per turn. Anchor Shot tethers one trapped foe, draining 1/16 max HP per turn and healing the user by actual damage dealt. On Water Surface or Underwater, draining a poisoned tethered foe also heals adjacent allies by that amount. Either participant leaving ends the tether; escape, suppression, damage immunity and healing restrictions apply.' },
+		shortDesc: 'Steel/Ghost hits heal 1/16 HP once per turn and prevent forced switching that turn.',
+		desc: 'After a damaging Steel or Ghost move hits a foe, heals 1/16 maximum HP once per turn and prevents the user from being forced out for the rest of that turn.' },
 	blackwatervenom: { name: 'Blackwater Venom',
 		shortDesc: 'Poison hits poison slowed foes; Dragon gains 25% vs poison. Ignores water-field Speed penalties.',
 		desc: 'Damaging Poison hits poison foes with negative Speed stages, respecting status protections. Dragon attacks gain 25% power against poisoned or badly poisoned foes. Ignores the Speed penalties of Water Surface and Underwater.' },
@@ -71,6 +71,12 @@ function clearReports(this: Battle, reporter: Pokemon) {
 }
 
 export const LoreConditions: ConditionDataTable = {
+	blackwateranchorguard: {
+		name: 'blackwateranchorguard', duration: 1, noCopy: true,
+		onDragOut(pokemon) {
+			if (pokemon.hasAbility('blackwateranchor')) return false;
+		},
+	},
 	loreslowmemory: { name: 'Lore slow memory', noCopy: true },
 	gossipexposed: {
 		name: 'Gossip Exposed', duration: 2, noCopy: true,
@@ -148,7 +154,12 @@ export function installLorePairs(abilities: AbilityDataTable) {
 	abilities.breakingnews.onSwitchOut = clearReports;
 	abilities.breakingnews.onEnd = clearReports;
 	abilities.blackwateranchor.onSourceDamagingHit = function (damage, target, source, move) {
-		if (this.movehasType(move, 'Grass') || this.movehasType(move, 'Steel')) slowFoe(this, damage, target, source);
+		if (damage <= 0 || !source.hp || source.isAlly(target) ||
+			!(this.movehasType(move, 'Steel') || this.movehasType(move, 'Ghost'))) return;
+		source.addVolatile('blackwateranchorguard', source, this.effect);
+		if (source.m.blackwaterAnchorHealTurn === this.turn) return;
+		source.m.blackwaterAnchorHealTurn = this.turn;
+		this.heal(source.baseMaxhp / 16, source, source, this.effect);
 	};
 	abilities.blackwatervenom.onSourceDamagingHit = function (damage, target, source, move) {
 		if (damage > 0 && target.hp && !source.isAlly(target) && target.boosts.spe < 0 && this.movehasType(move, 'Poison')) {

@@ -6,13 +6,13 @@ const common = require('../../common');
 let battle;
 function start(foeAbility = 'No Ability') {
 	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'},
-		[[{species: 'Mew', ability: 'Shadow Current', moves: ['earthquake', 'watergun', 'tackle']}],
+		[[{species: 'Mew', ability: 'Aegis Tide', moves: ['earthquake', 'watergun', 'tackle']}],
 			[{species: 'Mew', ability: foeAbility, moves: ['splash']}]]);
 	battle.makeChoices('team 1', 'team 1');
 	return [battle.p1.active[0], battle.p2.active[0]];
 }
 
-describe('Shadow Current Mold Breaker component', () => {
+describe('Aegis Tide Mold Breaker component', () => {
 	afterEach(() => {
 		battle?.destroy();
 		battle = null;
@@ -31,7 +31,7 @@ describe('Shadow Current Mold Breaker component', () => {
 	it('does not expose Mold Breaker while retaining its other components', () => {
 		const [user, target] = start();
 		for (const component of ['protean', 'technician', 'anticipation']) {
-			assert(user.hasAbility(component), `Shadow Current should include ${component}`);
+			assert(user.hasAbility(component), `Aegis Tide should include ${component}`);
 		}
 		const move = battle.dex.getActiveMove('watergun');
 		battle.singleEvent('ModifyMove', user.getAbility(), user.abilityState, move, user, target);

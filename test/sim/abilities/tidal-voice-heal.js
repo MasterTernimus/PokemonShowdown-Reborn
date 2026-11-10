@@ -1,13 +1,13 @@
 'use strict';
 const assert = require('assert').strict, common = require('../../common');
 const { calculateScenario } = require('../../../dist/sim/custom-calculator');
-describe('Tidal Voice removed ally-healing regression', () => {
+describe('Tidal Performer removed ally-healing regression', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
 	function setup(doubles = true) {
 		const set = ability => ({ species: 'Mew', ability, moves: ['sparklingaria', 'hypervoice', 'splash'] });
 		battle = common.createBattle({ formatid: doubles ? 'gen9nofielddoublesbattle' : 'gen9nofieldsinglesgame' }, [
-			[set('Tidal Voice'), set('No Ability'), set('No Ability')], [set('No Ability'), set('No Ability')],
+			[set('Tidal Performer'), set('No Ability'), set('No Ability')], [set('No Ability'), set('No Ability')],
 		]); battle.makeChoices('team 123', 'team 12'); battle.randomChance = () => false;
 		for (const mon of battle.getAllActive()) mon.hp = Math.floor(mon.maxhp / 2);
 		battle.p1.pokemon[2].hp = Math.floor(battle.p1.pokemon[2].maxhp / 2);
@@ -21,7 +21,7 @@ describe('Tidal Voice removed ally-healing regression', () => {
 		const [p, ally] = setup(), hp = ally.hp, own = p.hp, bench = battle.p1.pokemon[2].hp;
 		use(p, 'sparklingaria', { multihit: 3 }); assert.equal(ally.hp - hp, 0);
 		assert.equal(p.hp, own); assert.equal(battle.p1.pokemon[2].hp, bench);
-		assert(!battle.log.some(x => x.includes('|-heal|') && x.includes('Tidal Voice')));
+		assert(!battle.log.some(x => x.includes('|-heal|') && x.includes('Tidal Performer')));
 	});
 	for (const kind of ['miss', 'protect', 'immune']) it('does not heal when an executed Aria is avoided by ' + kind, () => {
 		const [p, ally] = setup(), hp = ally.hp;
@@ -45,7 +45,7 @@ describe('Tidal Voice removed ally-healing regression', () => {
 		use(p);
 		assert.equal(ally.hp, ally.maxhp - 1);
 	});
-	it('does not heal in singles, with other sounds, or while Tidal Voice is suppressed', () => {
+	it('does not heal in singles, with other sounds, or while Tidal Performer is suppressed', () => {
 		const [p, ally] = setup(), hp = ally.hp; use(p, 'hypervoice'); assert.equal(ally.hp, hp);
 		p.addVolatile('gastroacid');
 		ally.addVolatile('protect');
@@ -69,10 +69,10 @@ describe('Tidal Voice removed ally-healing regression', () => {
 	});
 	it('calculator reports ally healing from the real move execution', () => {
 		const input = { format: 'gen9nofielddoublesbattle', move: 'Sparkling Aria', samples: 8, seed: 42,
-			actors: [{ species: 'Mew', ability: 'Tidal Voice' }, { species: 'Mew', ability: 'No Ability' },
+			actors: [{ species: 'Mew', ability: 'Tidal Performer' }, { species: 'Mew', ability: 'No Ability' },
 				{ species: 'Mew', ability: 'No Ability', hpPercent: 50 }, { species: 'Mew', ability: 'No Ability' }] };
 		const result = calculateScenario(input); assert.equal(result.results[2].max, 0);
 		assert.equal(result.results[2].maxNetLoss, 0);
-		assert(!result.exampleLog.some(x => x.includes('|-heal|p1b:') && x.includes('Tidal Voice')));
+		assert(!result.exampleLog.some(x => x.includes('|-heal|p1b:') && x.includes('Tidal Performer')));
 	});
 });

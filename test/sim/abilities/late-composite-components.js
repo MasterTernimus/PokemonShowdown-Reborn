@@ -49,24 +49,24 @@ describe('Late composite components preserve full local behavior', () => {
   assert.equal(modify(p, q, 'hypnosis').accuracy, 60);
   q.addVolatile('substitute'); battle.actions.useMove('hypnosis', p, {target: q}); assert.equal(q.status, '');
  });
- it('Iron Mountain blocks opponent Attack drops without blocking self drops', () => {
+ it('Iron Mountain permits Attack drops after replacing Hyper Cutter with Stamina', () => {
   const [p, q] = setup('Iron Mountain');
-  battle.boost({atk: -1}, p, q, Dex.getActiveMove('growl')); assert.equal(p.boosts.atk, 0);
-  battle.boost({atk: -1}, p, p, Dex.getActiveMove('superpower')); assert.equal(p.boosts.atk, -1);
+  battle.boost({atk: -1}, p, q, Dex.getActiveMove('growl')); assert.equal(p.boosts.atk, -1);
+  battle.boost({atk: -1}, p, p, Dex.getActiveMove('superpower')); assert.equal(p.boosts.atk, -2);
  });
  it('opposing Mold Breaker bypasses Iron Mountain Hyper Cutter', () => {
   const [p, q] = setup('Iron Mountain', 'Mold Breaker');
   battle.actions.useMove('growl', q, {target: p});
   assert.equal(p.boosts.atk, -1);
  });
-	it('Iron Mountain preserves Brute Force without the removed defense/heal', () => {
+	it('Iron Mountain preserves Brute Force and receives the selected Stamina boosts', () => {
   const [p, q] = setup('Iron Mountain', 'Water Absorb');
   assert(!modify(p, q, 'watergun').ignoreAbility);
   const hp = q.hp; battle.actions.useMove('watergun', p, {target: q}); assert.equal(q.hp, hp);
   p.hp = p.maxhp = p.baseMaxhp = 1600; p.hp = 1000;
   const hit = () => battle.actions.useMove(Object.assign(Dex.getActiveMove('tackle'), {damage: 100, willCrit: false}), q, {target: p});
-		hit(); assert.equal(p.boosts.def, 0); assert.equal(p.hp, 900);
-		hit(); assert.equal(p.boosts.def, 0); assert.equal(p.hp, 800);
+		hit(); assert.equal(p.boosts.def, 1); assert.equal(p.hp, 1000);
+		hit(); assert.equal(p.boosts.def, 1); assert.equal(p.hp, 1000);
 		const recoil = Dex.getActiveMove('doubleedge');
 		assert.equal(battle.runEvent('BasePower', p, q, recoil, 1000), 1200);
  });

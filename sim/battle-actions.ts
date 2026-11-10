@@ -228,6 +228,10 @@ export class BattleActions {
 			pokemon.details = pokemon.getUpdatedDetails();
 		}
 		// Reset only on an actual entry, never on ability Start/resumption or transfer.
+		delete pokemon.m.paperAegisSpent;
+		delete pokemon.m.toxicCanvasSpent;
+		delete pokemon.m.galeFanSpent;
+		delete pokemon.m.performerAccuracySpent;
 		delete pokemon.m.controlledFurySpent;
 		delete pokemon.m.beatdownMissSpent;
 		pokemon.isActive = true;

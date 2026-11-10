@@ -8,6 +8,7 @@
 import type { ObjectReadWriteStream } from '../../lib/streams';
 import { Dex, toID } from '../dex';
 import { PRNG, type PRNGSeed } from '../prng';
+import type {ChoiceRequest} from '../side';
 import { RandomPlayerAI } from './random-player-ai';
 import { type AIOptions, Runner } from './runner';
 
@@ -238,7 +239,9 @@ class TeamGenerator {
 				species: species.name,
 				gender: species.gender,
 				item,
-				ability: this.dex.gen >= 3 ? this.pools.abilities.next() : 'None',
+				// Battle-only forms need their defining ability to appear after entry.
+				ability: this.dex.gen >= 3 ?
+					(species.battleOnly && Object.keys(species.abilities).length === 1 ? species.abilities[0] : this.pools.abilities.next()) : 'None',
 				moves: moves.concat(...this.pools.moves.next(4 - moves.length)),
 				evs: {
 					hp: randomEVs(),
@@ -410,6 +413,16 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 	constructor(playerStream: ObjectReadWriteStream<string>, options: AIOptions, pools: Pools) {
 		super(playerStream, options);
 		this.pools = pools;
+	}
+
+	override receiveLine(line: string) {
+		// Temporary forms retain base details in private switch requests. Track the
+		// actual transformation protocol so their coverage cannot remain pending forever.
+		const parts = line.split('|');
+		if (['-formechange', 'detailschange'].includes(parts[1]) && parts[3]) {
+			this.pools.pokemon.markUsed(toID(parts[3].split(',')[0]));
+		}
+		return super.receiveLine(line);
 	}
 
 	protected override chooseTeamPreview(team: AnyObject[]): string {

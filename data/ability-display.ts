@@ -196,7 +196,7 @@ const AdditionalDisplayComponents: {[id: string]: string[]} = {
 // Burning Crown uses flat damage reduction, not Filter; its other delegates remain active.
 const DisplayComponentOverrides: {[id: string]: string[]} = {
  mourningvessel: [],
- burningrage: ['proficient', 'bruteforce', 'ironfist', 'moldbreaker'],
+ burningrage: ['bruteforce', 'ironfist'],
  // These packages retain custom effects; Includes names only their full components.
  astralwatcher: ['frisk'],
  roughscale: ['roughskin', 'toughclaws'],

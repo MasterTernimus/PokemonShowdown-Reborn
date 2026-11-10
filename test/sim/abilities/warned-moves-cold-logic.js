@@ -9,7 +9,7 @@ function setup(species='Mew',ability='Forewarn',foeAbility='No Ability',move='sh
 function damage(p,q,id='shadowball'){return battle.runEvent('Damage',p,q,battle.dex.getActiveMove(id),1000);}
 describe('Warned move protection and Cold Logic contingency',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- for(const [species,ability] of [['Mew','Forewarn'],['Mew','Anticipation'],['Gardevoir','No Ability'],['Sigilyph','No Ability'],['Mew','Shadow Current']]) {
+ for(const [species,ability] of [['Mew','Forewarn'],['Mew','Anticipation'],['Gardevoir','No Ability'],['Sigilyph','No Ability'],['Mew','Aegis Tide']]) {
   it(species+' '+ability+' learns the warned move only, clears on switching',()=>{
    const[p,q]=setup(species,ability);assert.equal(damage(p,q),750);
    assert.equal(damage(p,q,'tackle'),ability==='Forewarn'||species==='Gardevoir'?800:1000);

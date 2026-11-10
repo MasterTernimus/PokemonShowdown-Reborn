@@ -15,7 +15,7 @@ export function installCramorantGoodraKommo(abilities: AbilityDataTable) {
  abilities.scatterbrain = {...abilities.oblivious, ...abilities.unaware, name: 'Scatterbrain', num: 11506, rating: 4};
  abilities.scalerhythm = {name: 'Scale Rhythm', num: 11507, rating: 3, flags: {},
   onAnyAfterDamageApplied(damage, target, source, move) {
-   if (source !== this.effectState.target || !move || move.effectType !== 'Move' || (move as ActiveMove).category === 'Status' || !(move as ActiveMove).flags.sound || target.isAlly(source) || damage <= 0) return;
+   if (source !== this.effectState.target || !move || move.effectType !== 'Move' || (move as ActiveMove).category === 'Status' || !(move as ActiveMove).flags?.sound || target.isAlly(source) || damage <= 0) return;
    ((this.activeMove as any).scaleRhythmUsers ||= new Set()).add(source);
   },
   onAnyAfterAttackResolved(source, target, move) {

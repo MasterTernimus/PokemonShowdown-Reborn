@@ -33,15 +33,15 @@ describe('Dodrio and Eviolite middle-stage reworks', () => {
   const expected={salamence:[95,135,80,110,80,100],metagross:[80,135,130,95,90,70],dragonite:[91,134,95,100,100,80],tyranitar:[100,134,110,95,100,61],hydreigon:[92,105,90,125,90,98],goodra:[90,100,70,110,150,80],goodrahisui:[80,100,100,110,150,60],garchomp:[108,130,95,80,85,102],kommoo:[75,110,125,100,105,85],dodrio:[90,106,85,50,75,119]};
   for(const[id,stats]of Object.entries(expected)) assert.deepEqual(Object.values(Dex.species.get(id).baseStats),stats,id);
  });
- for(const format of ['singles','doubles','ffa']) it('Dodrio has native Hydra Bond with any selected ability in '+format,()=>{
-  const[p,t]=start(mon('Dodrio','Triple Threat'),mon(),format);
-  assert.deepEqual(p.getPassives(),['hydrabond']);
+ for(const format of ['singles','doubles','ffa']) it('Dodrio has selected Hydra Bond and passive Triple Threat in '+format,()=>{
+  const[p,t]=start(mon('Dodrio','Hydra Bond'),mon(),format);
+  assert.deepEqual(p.getPassives(),['triplethreat']);
   const move=hit(p,t); if(format==='ffa') {
    assert.equal(move.target,'allAdjacentFoes'); assert(move.hydraBondSingleTargetSpread);
    assert(battle.p3.active[0].hp<battle.p3.active[0].maxhp); assert(battle.p4.active[0].hp<battle.p4.active[0].maxhp);
   } else assert.equal(move.multihit,3);
-  p.setAbility('Speed Boost'); assert(p.hasAbilityOrPassive('hydrabond'));
-  p.addVolatile('gastroacid',t); const second=hit(p,t); assert(format==='ffa'?second.hydraBondSingleTargetSpread:second.multihit===3);
+  p.setAbility('Speed Boost'); assert(!p.hasAbilityOrPassive('hydrabond'));
+  p.addVolatile('gastroacid',t); const second=hit(p,t); assert(!second.hydraBondSingleTargetSpread && !second.multihit);
  });
  it('does not double Hydra Bond when copied onto Dodrio, including FFA and Dragon’s Den',()=>{
   const[p,t]=start(mon('Dodrio','Hydra Bond'),mon(),'ffa');

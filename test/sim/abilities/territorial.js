@@ -138,7 +138,7 @@ describe('Territorial approved rework', () => {
 	});
 	it('keeps full components and assigns existing Raging Beast only to ordinary Ursaluna', () => {
 		const [p] = make();
-		for (const id of ['unnerve', 'stamina', 'guarddog']) assert(p.hasAbility(id));
+		for (const id of ['stamina', 'guarddog']) assert(p.hasAbility(id));
 		assert.deepEqual(battle.dex.species.get('ursaluna').abilities, { 0: 'Raging Beast', 1: 'Bulletproof', H: 'Territorial' });
 		assert.deepEqual(battle.dex.species.get('ursalunabloodmoon').abilities, { 0: 'Bloodmoon Gaze', 1: 'Lunar Dread', H: 'Moonlit Hide' });
 		p.setAbility('Raging Beast');

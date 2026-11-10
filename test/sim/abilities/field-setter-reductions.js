@@ -63,11 +63,11 @@ describe('Approved field setter reductions', () => {
   p.getMoveHitData(move).typeMod = 1;
   assert.equal(battle.runEvent('ModifyDamage',foe,p,move,1000),600);
  });
- it('Requiem no longer creates Haunted and Soul Escort still protects the replacement', () => {
+ it('Requiem no longer creates Haunted and Pressure grants no hazard protection', () => {
   const [p, foe] = start(mon('Dusknoir', 'Requiem'));
   p.side.addSideCondition('stealthrock', foe); faint(p); assert.equal(battle.field.terrain,'');
   const reserve = p.side.pokemon.find(x=>!x.isActive && x.hp), hp=reserve.hp; enter(reserve);
-  assert.equal(reserve.hp,hp); assert(p.side.sideConditions.stealthrock);
+  assert(reserve.hp<hp); assert(p.side.sideConditions.stealthrock);
  });
  for(const species of ['Floette-Eternal','Floette-Mega']) it(species + ' heals only its immediate replacement after hazards', () => {
   const [p,foe]=start(mon(species));

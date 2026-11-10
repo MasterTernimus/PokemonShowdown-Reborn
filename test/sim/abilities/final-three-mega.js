@@ -35,7 +35,7 @@ describe('Final approved Predator Aura Precision and Entrenched designs', () => 
 			assert.deepEqual(now.passives, require('./passive-approval-overlays').current(old.id, old.passives), old.id);
 		}
 	});
-	for (const ability of ['Ultra Ego', 'Ultra Instinct', 'Burning Ego', 'Perfect Ego', 'Primal Ego', 'Unleashed Ego']) it('Predator matches active ' + ability + ' once without copying it', () => {
+	for (const ability of ['Ultra Ego', 'Ultra Instinct', 'Burning Ego', 'Perfect Ego', 'Terra Ascendant', 'Unleashed Ego']) it('Predator matches active ' + ability + ' once without copying it', () => {
 		const [p, q] = setup('Staraptor-Mega', 'Predator', ability);
 		q.newlySwitched = true;
 		assert(predatorUltraMatch(battle, p, q));
@@ -115,7 +115,7 @@ describe('Final approved Predator Aura Precision and Entrenched designs', () => 
 		p.setAbility('No Ability');
 		assert.equal(battle.runEvent('Damage', q, p, Dex.getActiveMove('tackle'), 100), 65);
 	});
-	for (const ability of ['Ultra Ego', 'Burning Ego', 'Perfect Ego', 'Primal Ego', 'Unleashed Ego']) it('preserves unrelated defenses after removing Ultra damage bonuses inside ' + ability, () => {
+	for (const ability of ['Ultra Ego', 'Burning Ego', 'Perfect Ego', 'Terra Ascendant', 'Unleashed Ego']) it('preserves unrelated defenses after removing Ultra damage bonuses inside ' + ability, () => {
 		const [p, q] = setup('Mew', 'Predator', ability, true);
 		battle.p1.active[1].setAbility('Royal Decree');
 		const move = Dex.getActiveMove('tackle');

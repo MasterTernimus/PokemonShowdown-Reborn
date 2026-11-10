@@ -21,7 +21,7 @@ describe('Mega Torterra attack cadence', () => {
   battle.actions.useMove(move,source,{target});
  }
  it('X boosts on the first and third incoming attacks even when it attacks between them', () => {
-  const [p,q] = start('Torterra-Mega-X','Primal Ego');
+  const [p,q] = start('Torterra-Mega-X','Terra Ascendant');
   attack(q,p,5);
   assert.deepEqual([p.boosts.atk,p.boosts.spa,p.hp],[1,1,850]);
   attack(p,q,1);
@@ -32,7 +32,7 @@ describe('Mega Torterra attack cadence', () => {
   assert.deepEqual([p.boosts.atk,p.boosts.spa,p.hp],[2,2,before-30+80]);
  });
  it('Y heals once per attack, gains Defense once per turn and reduces attack damage with Solid Rock', () => {
-  const [p,q] = start('Torterra-Mega-Y','Terra Resolve');
+  const [p,q] = start('Torterra-Mega-Y','Terra Eternal');
   attack(q,p,5);
   assert.equal(p.hp,850);
   assert.equal(p.boosts.def,1);

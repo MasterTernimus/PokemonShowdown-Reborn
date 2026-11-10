@@ -54,8 +54,8 @@ describe('Soul Reaver and Alolan Muk approved additions', () => {
   const [p,q]=setup(); for(const id of ['shadowball','toxic','growl']) { const m=Dex.getActiveMove(id); battle.runEvent('ModifyMove',p,q,m,m); assert.equal(m.infiltrates,true); }
  });
  it('preserves Dusknoir other slots, passive and Mega', () => {
-  assert.deepEqual(Dex.species.get('dusknoir').abilities,{0:'Requiem',1:'Pressure',H:'Soul Reaver'});
-		assert.deepEqual(Dex.species.get('dusknoir').passives, ['soulescort']);
+  assert.deepEqual(Dex.species.get('dusknoir').abilities,{0:'Requiem',1:'Frisk',H:'Soul Reaver'});
+		assert.deepEqual(Dex.species.get('dusknoir').passives, ['pressure']);
   assert.deepEqual(Dex.species.get('dusknoirmega').abilities,{0:"Reaper's Grip"});
   assert.equal(Dex.species.get('dusknoiralt').abilities.H,'Soul Reaver');
   assert.deepEqual(Dex.abilities.get('soulreaver').flags,{});

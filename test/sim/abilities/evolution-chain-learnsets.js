@@ -5,6 +5,6 @@ describe('Scizor and Kleavor explicit chain moves', () => {
 	it('preserves distinct ability/passive kits', () => {
 		assert.deepEqual(Dex.species.get('scizor').abilities, { 0: 'Pincer Crush', 1: 'Technician', H: 'Decoy Pincers' });
 		assert.deepEqual(Dex.species.get('kleavor').abilities, { 0: 'Flint Fracture', 1: 'Sheer Force', H: 'Sharpness' });
-		for (const id of ['scizor', 'kleavor'])assert.deepEqual(Dex.species.get(id).passives, ['hypercutter']);
+		for (const id of ['scizor', 'kleavor'])assert.deepEqual(Dex.species.get(id).passives, [id === 'scizor' ? 'lightweightswarm' : 'hypercutter']);
 	});
 });

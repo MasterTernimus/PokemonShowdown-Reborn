@@ -5,7 +5,7 @@ const {Dex} = require('../../../dist/sim');
 const expected = {
 	alakazamrejuv: 'composed',
 	parasectrejuv: 'mycelialbond', poliwrathrejuv: 'innerfocus', politoedrejuv: 'royalremedy',
-	donphanrejuv: 'heatproof', breloomrejuv: 'owntempo', bronzongrejuv: 'clearbody',
+	donphanrejuv: 'heatproof', breloomrejuv: 'owntempo', bronzongrejuv: 'heatproof',
 	drapionrejuv: 'stickyhold', musharnarejuv: 'synchronize', unfezantrejuv: 'rivalry',
 	sigilyphrejuv: 'frisk', galvantularejuv: 'compoundeyes', druddigonrejuv: 'raindish',
 	turtonatorrejuv: 'oblivious', veluzarejuv: 'unnerve',
@@ -26,7 +26,7 @@ describe('Approved Rejuv passives', () => {
 	it('covers every Rejuv form and leaves ordinary forms unchanged', () => {
 		assert.deepEqual(Dex.species.all().filter(s => s.id.endsWith('rejuv')).map(s => s.id).sort(), Object.keys(expected).sort());
 		for (const [id, passive] of Object.entries(expected)) assert.deepEqual(Dex.species.get(id).passives, [passive], id);
-		for (const [id, passive] of Object.entries({ parasect: 'mycelialbond', poliwrath: 'tirelessmuscle', politoed: 'oraclesrefrain', donphan: 'battlearmor', breloom: 'effectspore', bronzong: 'clearbody', drapion: 'poisontouch', musharna: 'owntempo', unfezant: 'rivalry', sigilyph: 'anticipation', galvantula: 'compoundeyes', druddigon: 'roughskin', turtonator: 'aftermath', veluza: 'keeneye' })) {
+		for (const [id, passive] of Object.entries({ parasect: 'mycelialbond', poliwrath: 'tirelessmuscle', politoed: 'oraclesrefrain', donphan: 'battlearmor', breloom: 'effectspore', bronzong: 'heatproof', drapion: 'poisontouch', musharna: 'owntempo', unfezant: 'rivalry', sigilyph: 'anticipation', galvantula: 'compoundeyes', druddigon: 'roughskin', turtonator: 'aftermath', veluza: 'keeneye' })) {
 			assert.deepEqual(Dex.species.get(id).passives, [passive], id);
 		}
 	});
@@ -44,9 +44,9 @@ describe('Approved Rejuv passives', () => {
 		p.hp = 500;
 		battle.makeChoices('switch 2', 'move splash'); assert.equal(p.hp, 500);
 	});
-	it('Royal Remedy heals no more than once when selected Natural Cure overlaps', () => {
+	it('Losing Aevian King removes the Royal Remedy form before switching', () => {
 		const [p, q] = setup(); p.setAbility('Natural Cure'); p.hp = 500; p.setStatus('psn', q);
-		battle.runEvent('SwitchOut', p); assert.equal(p.status, ''); assert.equal(p.hp, 625);
+		battle.runEvent('SwitchOut', p); assert.equal(p.status, ''); assert.equal(p.hp, 500);
 	});
 	it('Royal Remedy rolls Healer once for an adjacent ally, never for enemies', () => {
 		const [p, q] = setup('politoedrejuv', 'doubles'); const ally = battle.p1.active[1];

@@ -110,7 +110,7 @@ function setup() {
 });
 
 describe('Aevian Ascendance regional suppression and calculator', () => {
-	it('reverts on actual suppression and stays reverted until switching', () => {
+	it('reverts while suppressed and restores its ability form when suppression ends', () => {
 		const b = setup();
 		try {
 			const p = b.p1.active[0];
@@ -120,7 +120,7 @@ describe('Aevian Ascendance regional suppression and calculator', () => {
 			assert.deepEqual(p.getTypes(), ['Water', 'Fighting']);
 			p.removeVolatile('gastroacid');
 			b.makeChoices('move 2', 'move 2');
-			assert.equal(p.species.id, 'poliwrath');
+			assert.equal(p.species.id, 'poliwrathrejuv');
 		} finally {
 			b.destroy();
 		}

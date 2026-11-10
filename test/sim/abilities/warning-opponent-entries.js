@@ -11,7 +11,7 @@ describe('Anticipation and Forewarn opponent entry checks', () => {
 		return battle.p1.active[0];
 	}
 	function warnings(name, from = 0) { return battle.log.slice(from).filter(line => (line.includes('ability: ' + name + '|') || line.includes('passive: ' + name + '|'))); }
-	for (const [ability, name] of [['Anticipation', 'Anticipation'], ['Forewarn', 'Forewarn'], ['Shadow Current', 'Anticipation'], ['Cold Logic', 'Forewarn'], ['Silent Reprisal', 'Anticipation']]) {
+	for (const [ability, name] of [['Anticipation', 'Anticipation'], ['Forewarn', 'Forewarn'], ['Aegis Tide', 'Anticipation'], ['Cold Logic', 'Forewarn'], ['Silent Reprisal', 'Anticipation']]) {
 		it(ability + ': singles checks every incoming opponent including repeat entries', () => {
 			start('gen9nofieldsinglesgame', [[mon(ability)], [mon(), mon('No Ability', 'darkpulse')]]);
 			assert.equal(warnings(name).length, 1);

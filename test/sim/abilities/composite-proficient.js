@@ -4,8 +4,8 @@ const common = require('../../common');
 let battle;
 const composites = require('./starter-proficient-ids.json');
 // Later starter reworks moved the generic boost to species passives. These
-// five selected abilities retain an explicit Proficient component.
-const retained = new Set(['verdanthospitality', 'mightyjaw', 'terragift', 'burningrage', 'fallenstar']);
+// four selected abilities retain an explicit Proficient component.
+const retained = new Set(['verdanthospitality', 'mightyjaw', 'terragift', 'fallenstar']);
 function setup(ability) {
 	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
 		[{species: 'Mew', ability, moves: ['psychic', 'splash']}],

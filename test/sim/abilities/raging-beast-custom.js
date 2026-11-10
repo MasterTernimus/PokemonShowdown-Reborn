@@ -74,7 +74,7 @@ describe('Raging Beast and related species updates', () => {
 		const territorial = battle.p1.active[0];
 		const foe = battle.p2.active[0];
 		assert.equal(foe.boosts.atk, 0);
-		assert(territorial.hasAbility('unnerve'));
+		assert(territorial.hasAbilityOrPassive('unnerve')); assert(!territorial.hasAbility('unnerve'));
 		assert(territorial.hasAbility('guarddog'));
 		assert(territorial.hasAbility('stamina'));
 		assert(!territorial.hasAbility('unaware'));

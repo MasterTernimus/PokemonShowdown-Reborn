@@ -53,7 +53,7 @@ export function installPassiveCleanupApproved(abilities: AbilityDataTable) {
 		name: 'Venom Pincer', num: 11440, rating: 4, flags: {},
 		onSourceDamagingHit: abilities.poisontouch.onSourceDamagingHit,
 		onSourceAfterDamageApplied(damage, target, source, move) {
-            if (damage <= 0 || target.isAlly(source) || move.category === 'Status' || source.volatiles.venompincerspent || !this.checkMoveMakesContact(move, target, source)) return;
+            if (!move || move.effectType !== 'Move' || !move.flags || damage <= 0 || target.isAlly(source) || move.category === 'Status' || source.volatiles.venompincerspent || !this.checkMoveMakesContact(move, target, source)) return;
             source.addVolatile('venompincerspent', source, this.effect);
             if (target.hp) this.boost({spe: -1}, target, source, this.effect);
         },

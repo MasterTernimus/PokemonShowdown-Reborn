@@ -11,7 +11,7 @@ describe('Armor damage reductions', () => {
 		if (battle.requestState === 'teampreview') battle.makeChoices('team 12', 'team 12');
 		return [battle.p1.active[0], battle.p2.active[0]];
 	}
-	for (const armor of ['Solid Rock', 'Filter', 'Prism Armor', 'Terra Resolve']) {
+	for (const armor of ['Solid Rock', 'Filter', 'Prism Armor', 'Terra Eternal']) {
 		for (const ally of ['Friend Guard', 'Rivalry']) it(armor + ' takes only the strongest reduction with ' + ally, () => {
 			const [holder, foe] = setup(armor, ally);
 			const move = battle.dex.getActiveMove('tackle');

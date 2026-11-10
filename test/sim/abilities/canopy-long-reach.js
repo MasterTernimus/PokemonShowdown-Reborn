@@ -5,7 +5,7 @@ function setup(ability) {
 	if (b.requestState === 'teampreview')b.makeChoices('team 1', 'team 1');
 	return b;
 }
-describe('Contact-only Long Reach and expanded Canopy Archer', () => {
+describe('Contact-only Long Reach and expanded Canopy Performer', () => {
 	it('Long Reach has only its ordinary move callback', () => {
 		const a = Dex.abilities.get('longreach');
 		assert.deepEqual(Object.keys(a).filter(k => k.startsWith('on') && typeof a[k] === 'function'), ['onModifyMove']);
@@ -27,7 +27,7 @@ describe('Contact-only Long Reach and expanded Canopy Archer', () => {
 		}
 	});
 	it('Canopy retains arrow accuracy and gains Ghost bypass and Intimidate protection', () => {
-		const b = setup('Canopy Archer');
+		const b = setup('Canopy Performer');
 		try {
 			const p = b.p1.active[0], q = b.p2.active[0], m = Dex.getActiveMove('triplearrows');
 			b.runEvent('ModifyMove', p, q, m, m);
@@ -41,7 +41,7 @@ describe('Contact-only Long Reach and expanded Canopy Archer', () => {
 			b.destroy();
 		}
 	});
-	it('only Hisuian selectable Scrappy slot changes', () => { assert.deepEqual(Dex.species.get('decidueyehisui').abilities, { 0: 'Fallen Star', 1: 'Unburden', H: 'Canopy Archer' }); assert.equal(Dex.species.get('decidueye').abilities[1], 'Silent Flight'); });
+	it('only Hisuian selectable Scrappy slot changes', () => { assert.deepEqual(Dex.species.get('decidueyehisui').abilities, { 0: 'Fallen Star', 1: 'Unburden', H: 'Canopy Performer' }); assert.equal(Dex.species.get('decidueye').abilities[1], 'Silent Flight'); });
 });
 describe('Explicit independent Keen Eye component', () => {
 	it('Razor Reach keeps separately declared Keen Eye but not removed Long Reach power or critical bonuses', () => {

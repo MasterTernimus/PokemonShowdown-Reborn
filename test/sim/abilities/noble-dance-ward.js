@@ -14,8 +14,8 @@ function setup(species, doubles = false) {
 describe('Noble Dance after the approved ward removal', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	it('keeps the approved Ludicolo Rain Dish slot', () => {
-		assert.deepEqual(Dex.species.get('ludicolo').abilities, { 0: 'Swift Swim', 1: 'Liquid Voice', H: 'Rain Dish' });
-		assert.deepEqual(Dex.species.get('ludicolo').passives, ['owntempo']);
+		assert.deepEqual(Dex.species.get('ludicolo').abilities, { 0: 'Swift Swim', 1: 'Liquid Voice', H: 'Rain Revel' });
+		assert.deepEqual(Dex.species.get('ludicolo').passives, ['raindish']);
 	});
 	for (const species of ['Lilligant', 'Lilligant-Hisui']) {
 		it(species + ' retains direct dance boosts without granting damage protection', () => {

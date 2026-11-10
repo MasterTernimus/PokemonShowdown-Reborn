@@ -5,7 +5,7 @@ const common = require('../common');
 const {Dex} = require('../../dist/sim');
 const {TeamValidator} = require('../../dist/sim/team-validator');
 
-describe('Torterra-Mega-X and Primal Ego', () => {
+describe('Torterra-Mega-X and Terra Ascendant', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
 
@@ -14,7 +14,7 @@ describe('Torterra-Mega-X and Primal Ego', () => {
 		assert.deepEqual(mega.types, ['Grass', 'Ground']);
 		assert.deepEqual(mega.baseStats, {hp: 95, atk: 129, def: 130, spa: 90, spd: 105, spe: 86});
 		assert.equal(mega.bst, 635);
-		assert.equal(mega.abilities[0], 'Primal Ego');
+		assert.equal(mega.abilities[0], 'Terra Ascendant');
 		assert.equal(mega.requiredItem, 'Torterranite');
 		assert.equal(Dex.items.get('Torterranite').megaStone.Torterra, mega.name);
 		for (const move of ['powergem', 'ancientpower', 'rockwrecker']) {

@@ -23,7 +23,7 @@ describe('Suppressed ability-driven Rejuv forms', () => {
 		return battle.p1.active[0];
 	}
 	for (const [species, ability] of forms) {
-		it(`${species}: Gastro Acid reverts stats/types and locks the form until switching`, () => {
+		it(`${species}: Gastro Acid reverts stats/types; recovery restores the active form`, () => {
 			const p = start(species, ability);
 			assert.equal(p.species.name, species + '-Rejuv');
 			battle.random = () => 0;
@@ -33,31 +33,29 @@ describe('Suppressed ability-driven Rejuv forms', () => {
 			assert.deepEqual(p.getTypes(), battle.dex.species.get(species).types);
 			assert.equal(p.storedStats.atk, battle.spreadModify(p.species.baseStats, p.set).atk);
 			p.removeVolatile('gastroacid');
-			battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
-			assert.equal(p.species.name, species);
+			battle.eachEvent('Update');
+			assert.equal(p.species.name, species + '-Rejuv');
 			battle.makeChoices('switch 2', 'move splash');
 			battle.makeChoices('switch 2', 'move splash');
 			assert.equal(p.species.name, species + '-Rejuv');
 			assert(!p.m.regionalFormSuppressed);
 		});
-		it(`${species}: Neutralizing Gas ending does not restore the form before a switch`, () => {
+		it(`${species}: Neutralizing Gas ending restores the active form`, () => {
 			const p = start(species, ability);
 			battle.makeChoices('move splash', 'switch 2');
 			assert.equal(p.species.name, species);
 			battle.makeChoices('move splash', 'switch 2');
-			assert.equal(p.species.name, species);
+			assert.equal(p.species.name, species + '-Rejuv');
 			battle.makeChoices('switch 2', 'move splash');
 			battle.makeChoices('switch 2', 'move splash');
 			assert.equal(p.species.name, species + '-Rejuv');
 		});
-		it(`${species}: entering under Gas stays normal after Gas leaves`, () => {
+		it(`${species}: entering under Gas stays normal until Gas leaves`, () => {
 			const p = start(species, ability, '', true);
 			assert.equal(p.species.name, species);
-			if (species === 'Bronzong') {
-				assert(battle.log.some(line => line.startsWith('|-formechange|p1a: Bronzong|Bronzong|')));
-			}
+
 			battle.makeChoices('move splash', 'switch 2');
-			assert.equal(p.species.name, species);
+			assert.equal(p.species.name, species + '-Rejuv');
 		});
 	}
 	it('Ability Shield prevents suppression and preserves the regional form', () => {

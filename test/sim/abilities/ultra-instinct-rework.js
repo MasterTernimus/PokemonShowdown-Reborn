@@ -12,9 +12,9 @@ function setup(ability = 'Ultra Instinct', field = '', doubles = false, species 
 }
 function hit(p, q, extra = {}) { const m = Object.assign(Dex.getActiveMove('tackle'), { accuracy: true, willCrit: false, damage: 100 }, extra); battle.actions.useMove(m, p, { target: q }); battle.clearActiveMove(); return m; }
 function power(p, q) { return battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 100); }
-describe('Approved Ultra Instinct and Burning Spirit rework', () => {
+describe('Approved Ultra Instinct and Inferno Ascendant rework', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
-	for (const ability of ['Ultra Instinct', 'Burning Spirit']) it(ability + ' announces a rivalry once per actual encounter', () => {
+	for (const ability of ['Ultra Instinct', 'Inferno Ascendant']) it(ability + ' announces a rivalry once per actual encounter', () => {
 		const [p, q] = setup(ability); q.setAbility('Burning Ego');
 		const messages = () => battle.log.filter(line => line.startsWith('|-message|') && /Ego flares|Instinct sharpens/.test(line));
 		const update = () => battle.eachEvent('Update');
@@ -37,8 +37,8 @@ describe('Approved Ultra Instinct and Burning Spirit rework', () => {
 		battle.p1.active[1].setAbility('Ultra Ego'); battle.eachEvent('Update'); assert.equal(messages().length, 2);
 	});
 
-	for (const instinct of ['Ultra Instinct', 'Burning Spirit']) {
-		for (const ego of ['Ultra Ego', 'Burning Ego', 'Perfect Ego', 'Unleashed Ego', 'Primal Ego']) {
+	for (const instinct of ['Ultra Instinct', 'Inferno Ascendant']) {
+		for (const ego of ['Ultra Ego', 'Burning Ego', 'Perfect Ego', 'Unleashed Ego', 'Terra Ascendant']) {
 			it(instinct + ' and ' + ego + ' inherit the rivalry without doubling retaliation', () => {
 				const [p, q] = setup(instinct); q.setAbility(ego, null, null, true);
 				hit(q, p, {multihit: 3}); assert.equal(p.hp, 3820);
@@ -98,19 +98,19 @@ describe('Approved Ultra Instinct and Burning Spirit rework', () => {
 	});
 	it('Mega Evolution and copying do not restore an already spent defensive or healing allowance', () => {
 		const [p, q] = setup('Ultra Instinct', '', false, 'Infernape'); hit(q, p); p.hp = 2000; hit(p, q); assert.equal(p.hp, 2250);
-		p.formeChange('Infernape-Mega', null, true); p.hp = 2250; p.maxhp = p.baseMaxhp = 4000; p.setAbility('Burning Spirit'); hit(q, p); assert.equal(p.hp, 2150); hit(p, q); assert.equal(p.hp, 2150);
+		p.formeChange('Infernape-Mega', null, true); p.hp = 2250; p.maxhp = p.baseMaxhp = 4000; p.setAbility('Inferno Ascendant'); hit(q, p); assert.equal(p.hp, 2150); hit(p, q); assert.equal(p.hp, 2150);
 	});
-	for (const ability of ['Ultra Instinct', 'Burning Spirit']) it(ability + ' retains Mold Breaker and Inner Focus without accuracy or evasion entry boosts', () => {
+	for (const ability of ['Ultra Instinct', 'Inferno Ascendant']) it(ability + ' retains Mold Breaker and Inner Focus without accuracy or evasion entry boosts', () => {
 		const [p, q] = setup(ability); const move = Dex.getActiveMove('tackle'); battle.runEvent('ModifyMove', p, q, move, move); assert.equal(move.ignoreAbility, true);
 		assert(!p.addVolatile('flinch', q)); q.setAbility('Intimidate'); assert.equal(p.boosts.atk, 0);
 		battle.field.terrain = 'newworldterrain'; battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(p.boosts.accuracy, 0); assert.equal(p.boosts.evasion, 0);
 	});
-	for (const item of ['', 'Ability Shield']) it('Burning Spirit protects Magma Armor from bypass with ' + (item || 'no item'), () => {
-		const [p, q] = setup('Burning Spirit'); p.setItem(item); q.setAbility('Mold Breaker'); const move = Dex.getActiveMove('watergun'); move.ignoreAbility = true; battle.setActiveMove(move, q, p);
+	for (const item of ['', 'Ability Shield']) it('Inferno Ascendant protects Magma Armor from bypass with ' + (item || 'no item'), () => {
+		const [p, q] = setup('Inferno Ascendant'); p.setItem(item); q.setAbility('Mold Breaker'); const move = Dex.getActiveMove('watergun'); move.ignoreAbility = true; battle.setActiveMove(move, q, p);
 		assert.equal(battle.runEvent('ModifySpA', q, p, move, 100), 50);
 		battle.clearActiveMove(); hit(q, p); assert.equal(p.hp, 3930); // Ultra Instinct itself is not a breakable component.
 	});
-	for (const ability of ['Ultra Instinct', 'Aura Precision', 'Burning Spirit', 'Twilight Instinct']) {
+	for (const ability of ['Ultra Instinct', 'Aura Precision', 'Inferno Ascendant', 'Twilight Instinct']) {
 		for (const attacker of ['Mold Breaker', 'Teravolt', 'Turboblaze', 'Burning Ego']) {
 			it(ability + ' protects components and passives against ' + attacker, () => {
 				const [p, q] = setup(ability); q.setAbility(attacker);
@@ -152,8 +152,8 @@ describe('Approved Ultra Instinct and Burning Spirit rework', () => {
 			assert.equal(!!battle.suppressingAbility(p, Dex.abilities.get('shielddust')), true);
 		});
 	}
-	it('Burning Spirit preserves Magma Armor freeze cure and Dragon Den Fire immunity', () => {
-		const [p, q] = setup('Burning Spirit'); assert.equal(p.trySetStatus('frz', q), false); p.status = 'frz'; battle.singleEvent('Update', p.getAbility(), p.abilityState, p); assert.equal(p.status, '');
+	it('Inferno Ascendant preserves Magma Armor freeze cure and Dragon Den Fire immunity', () => {
+		const [p, q] = setup('Inferno Ascendant'); assert.equal(p.trySetStatus('frz', q), false); p.status = 'frz'; battle.singleEvent('Update', p.getAbility(), p.abilityState, p); assert.equal(p.status, '');
 		battle.field.terrain = 'dragonsdenterrain'; hit(q, p, { type: 'Fire' }); assert.equal(p.hp, 4000);
 	});
 	it('calculator executes the revised defensive reduction and whole-move recovery', () => {
@@ -179,7 +179,7 @@ describe('Approved Ultra Instinct and Burning Spirit rework', () => {
 			assert.equal(p.boosts.spa, stage);
 		}
 	});
-	for (const ability of ['Ultra Instinct', 'Burning Spirit']) {
+	for (const ability of ['Ultra Instinct', 'Inferno Ascendant']) {
 		it(ability + ' has target-specific queued/new-entry power, no screen punishment or stale newlySwitched bonus', () => {
 			const [p, q] = setup(ability, '', true), other = battle.p2.active[1]; const original = battle.queue.willMove; battle.queue.willMove = target => target === q ? {} : null;
 			assert.equal(power(p, q), 130); assert.equal(power(p, other), 100); battle.queue.willMove = () => null; q.newlySwitched = true; assert.equal(power(p, q), 100);
@@ -226,20 +226,20 @@ describe('Approved Ultra Instinct and Burning Spirit rework', () => {
 			p.removeVolatile('gastroacid'); hit(q, p); assert.equal(p.hp, 1930); hit(p, q); assert.equal(p.hp, 2180);
 		});
 	}
-	it('Burning Spirit filters only copied accuracy/evasion and preserves ordinary Opportunist and copy-loop protection', () => {
-		const [p, q] = setup('Burning Spirit', '', true), other = battle.p2.active[1]; other.setAbility('Opportunist');
+	it('Inferno Ascendant filters only copied accuracy/evasion and preserves ordinary Opportunist and copy-loop protection', () => {
+		const [p, q] = setup('Inferno Ascendant', '', true), other = battle.p2.active[1]; other.setAbility('Opportunist');
 		battle.boost({ atk: 1, def: 1, spa: 1, spd: 1, spe: 1, accuracy: 1, evasion: 1 }, q, q); battle.runEvent('AfterMove', q, p, Dex.getActiveMove('splash'));
 		for (const stat of ['atk', 'def', 'spa', 'spd', 'spe'])assert.equal(p.boosts[stat], 1); assert.equal(p.boosts.accuracy, 0); assert.equal(p.boosts.evasion, 0); assert.equal(other.boosts.atk, 0);
 		battle.runEvent('AfterMove', q, p, Dex.getActiveMove('splash')); assert.equal(p.boosts.atk, 1);
 		p.setAbility('Opportunist'); battle.boost({ accuracy: 1, evasion: 1 }, q, q); battle.runEvent('AfterMove', q, p, Dex.getActiveMove('splash')); assert.equal(p.boosts.accuracy, 1); assert.equal(p.boosts.evasion, 1);
 	});
 	it('Mega Infernape gains only the revised package and keeps Proficient separate', () => {
-		const [p, q] = setup('Burning Spirit', '', false, 'Infernape-Mega'); assert.deepEqual(p.getPassives(), ['proficient']); for (const id of ['ultrainstinct', 'moldbreaker', 'innerfocus', 'opportunist', 'magmaarmor'])assert(p.hasAbility(id), id);
+		const [p, q] = setup('Inferno Ascendant', '', false, 'Infernape-Mega'); assert.deepEqual(p.getPassives(), ['proficient']); for (const id of ['ultrainstinct', 'moldbreaker', 'innerfocus', 'opportunist', 'magmaarmor'])assert(p.hasAbility(id), id);
 		for (const id of ['selfsufficient', 'proficient', 'flamebody', 'ironfist', 'battlefervor', 'perfectego'])assert(!p.hasAbility(id), id);
 		p.hp = 2000; battle.singleEvent('Residual', p.getAbility(), p.abilityState, p); assert.equal(p.hp, 2000); const move = Dex.getActiveMove('flamethrower'); assert.equal(battle.runEvent('BasePower', p, q, move, 100), 130);
 	});
-	it('Burning Spirit keeps Magma Armor field entry and copies queued boosts once at Mega events', () => {
-		const [p, q] = setup('Burning Spirit', 'infernaleclipseterrain'); p.boosts.def = p.boosts.spd = 0; battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(p.boosts.def, 1); assert.equal(p.boosts.spd, 1); assert.equal(p.boosts.accuracy, 0);
+	it('Inferno Ascendant keeps Magma Armor field entry and copies queued boosts once at Mega events', () => {
+		const [p, q] = setup('Inferno Ascendant', 'infernaleclipseterrain'); p.boosts.def = p.boosts.spd = 0; battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(p.boosts.def, 1); assert.equal(p.boosts.spd, 1); assert.equal(p.boosts.accuracy, 0);
 		battle.boost({ atk: 2, accuracy: 1 }, q, q); battle.runEvent('AfterMega', q); assert.equal(p.boosts.atk, 2); assert.equal(p.boosts.accuracy, 0); battle.runEvent('AfterMega', q); assert.equal(p.boosts.atk, 2);
 	});
 });

@@ -2,18 +2,18 @@
 const assert=require('assert').strict;
 const common=require('../../common');
 let battle;
-function start(ability='Triple Threat') {
+function start(ability='Hydra Bond') {
 	battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Dodrio',ability,moves:['tackle','splash']}],[{species:'Blissey',ability:'No Ability',moves:['splash']}]]);
 	battle.makeChoices('team 1','team 1');return [battle.p1.active[0],battle.p2.active[0]];
 }
 describe('Triple Threat reviewed component replacement', () => {
 	afterEach(()=>{battle?.destroy();battle=null;});
-	it('has Inner Focus, Keen Eye and Early Bird; Hydra Bond is the species passive', () => {
+	it('has Inner Focus, Keen Eye and Early Bird; Triple Threat is the species passive', () => {
 		const [p]=start();const {AbilityComponents}=require('../../../dist/data/ability-components');
 		assert.deepEqual(AbilityComponents.triplethreat, ['innerfocus', 'keeneye', 'earlybird']);
-		for(const id of AbilityComponents.triplethreat)assert(p.hasAbility(id));
-		assert(!p.hasAbility('sniper')); assert(p.hasAbility('innerfocus')); assert.deepEqual(p.getPassives(), ['hydrabond']);
-		assert(Object.values(battle.dex.species.get('Dodrio').abilities).includes('Triple Threat'));
+		for(const id of AbilityComponents.triplethreat)assert(p.hasAbilityOrPassive(id));
+		assert(!p.hasAbility('sniper')); assert(p.hasAbilityOrPassive('innerfocus')); assert.deepEqual(p.getPassives(), ['triplethreat']);
+		assert(Object.values(battle.dex.species.get('Dodrio').abilities).includes('Hydra Bond'));
 	});
 	it('has no Sniper entry accuracy or critical-damage multiplier',()=>{
 		const [p,t]=start();assert.equal(p.boosts.accuracy,0);assert.equal(p.getAbility().onModifyDamage,undefined);
@@ -55,20 +55,20 @@ describe('Triple Threat reviewed component replacement', () => {
 		battle.field.setTerrain('bigtopterrain',p,p.getAbility());battle.singleEvent('Start',p.getAbility(),p.abilityState,p);
 		assert.equal(p.boosts.evasion, 0); assert.equal(p.boosts.accuracy, 0);
 	});
-	it('preserves Keen Eye Mirror Arena entry and the Hydra Bond passive', () => {
-		const [p,t]=start();battle.field.setTerrain('mirrorarenaterrain',p,p.getAbility());battle.singleEvent('Start',p.getAbility(),p.abilityState,p);
+	it('preserves Keen Eye Mirror Arena entry and selected Hydra Bond', () => {
+		const [p,t]=start();battle.field.setTerrain('mirrorarenaterrain',p,p.getAbility());battle.singleEvent('Start',battle.dex.abilities.get('triplethreat'),p.passiveStates.triplethreat,p);
 		assert.equal(p.boosts.accuracy, 1); assert.equal(p.boosts.evasion, 0); assert(p.volatiles.laserfocus);
 		const m = battle.dex.getActiveMove('tackle');
 		battle.runEvent('ModifyMove', p, t, m, m);
 		assert(m.ignoreEvasion);
 		assert.equal(m.multihit, 3);
 	});
-	it('suppression removes Inner Focus while the Hydra Bond passive remains', () => {
+	it('suppression removes Hydra Bond while Triple Threat remains', () => {
 		const [p, t] = start();
 		p.addVolatile('gastroacid', t);
 		assert(!p.hasAbility('innerfocus'));
-		assert(p.addVolatile('flinch', t));
-		assert.deepEqual(p.getPassives(), ['hydrabond']);
+		assert(!p.addVolatile('flinch', t));
+		assert.deepEqual(p.getPassives(), ['triplethreat']);
 	});
 	it('calculator metadata matches the final composition',()=>{
 		const {calculatorMetadata}=require('../../../dist/sim/custom-calculator');
@@ -76,6 +76,6 @@ describe('Triple Threat reviewed component replacement', () => {
 	});
 	it('keeps Dodrio at 525 BST with the final approved Attack and Speed',()=>{
 		const [p]=start();assert.deepEqual(p.species.baseStats,{hp:90,atk:106,def:85,spa:50,spd:75,spe:119});assert.equal(p.species.bst,525);
-		assert.deepEqual(p.species.types, ['Ground', 'Flying']); assert.deepEqual(p.species.abilities, { 0: 'Triple Threat', 1: 'Speed Boost', H: 'Long Stride' });
+		assert.deepEqual(p.species.types, ['Ground', 'Flying']); assert.deepEqual(p.species.abilities, { 0: 'Hydra Bond', 1: 'Speed Boost', H: 'Long Stride' });
 	});
 });

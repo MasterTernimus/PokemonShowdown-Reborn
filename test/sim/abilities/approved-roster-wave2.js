@@ -36,7 +36,7 @@ describe('Approved roster follow-up', () => {
 			['Kingler', '1', 'Hyper Cutter', 'Hyper Cutter'], ['Steelix', '1', 'Iron Lash', 'Whiplash'],
 			['Hariyama', '0', 'Grit Grappler', 'Guts'], ['Krookodile', '1', 'Dread Jaw', 'Moxie'],
 			['Beartic', '1', 'Floe Hunter', 'Slush Rush'], ['Escavalier', 'H', 'Lanceguard', 'Shell Armor'],
-			['Primarina', 'H', 'Tidal Voice', 'Liquid Voice'], ['Vikavolt', '0', 'Hover Cannon', 'Levitate'],
+			['Primarina', 'H', 'Tidal Performer', 'Liquid Voice'], ['Vikavolt', '0', 'Hover Cannon', 'Levitate'],
 			['Vikavolt', 'H', 'Battery', 'Battery'], ['Houndstone', 'H', 'Mourning Coat', 'Fluffy'],
 			['Dondozo', '1', 'Dozing Giant', 'Oblivious'], ['Clodsire', '1', 'Quill Reservoir', 'Water Absorb'],
 		]) {
@@ -48,7 +48,7 @@ describe('Approved roster follow-up', () => {
 		assert(!abilityIncludesComponent('Twin Blades', 'Dual Wield'));
 	});
 	it('boosts already-Water Sparkling Aria exactly 1.2x and spares allies', () => {
-		const [p, ally, foe] = make('Tidal Voice', 'Primarina');
+		const [p, ally, foe] = make('Tidal Performer', 'Primarina');
 		const move = battle.dex.getActiveMove('sparklingaria');
 		assert.equal(battle.runEvent('BasePower', p, foe, move, 100, true), 120);
 		assert.equal(battle.runEvent('BasePower', p, foe, battle.dex.getActiveMove('surf'), 100, true), 100);

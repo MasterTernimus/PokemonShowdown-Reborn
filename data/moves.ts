@@ -493,9 +493,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			chance: 100,
 			onHit(target, source, move) {
 				if (source.isActive && target.addVolatile('trapped', source, move, 'trapper') &&
-					source.hasAbility(['soulanchor', 'blackwateranchor']) && !target.isAlly(source) && target.runStatusImmunity('trapped') && !target.hasItem('shedshell')) {
+					source.hasAbility('soulanchor') && !target.isAlly(source) && target.runStatusImmunity('trapped') && !target.hasItem('shedshell')) {
 					source.removeVolatile('soulanchortether');
-					source.addVolatile('soulanchortether', target, this.dex.abilities.get(source.hasAbility('blackwateranchor') ? 'blackwateranchor' : 'soulanchor'));
+					source.addVolatile('soulanchortether', target, this.dex.abilities.get('soulanchor'));
 				}
 			},
 		},
@@ -21267,8 +21267,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onModifyPriority(priority, source, target, move) {
-			if (!this.activeTarget) return;
-			if (this.dex.getEffectiveness(move.type, this.activeTarget.getTypes()) > 0) {
+			const attack = move || this.effect as ActiveMove;
+			if (!target || !attack.type) return;
+			if (this.dex.getEffectiveness(attack.type, target.getTypes()) > 0) {
 				return priority + 1;
 			}
 		},
@@ -25227,3 +25228,6 @@ Moves.scentedgeyser = ScentedGeyser;
 Moves.splinteredweb = { num: 20051, name: 'Splintered Web', type: 'Bug', category: 'Physical', basePower: 90, accuracy: 100, pp: 10, priority: 0, target: 'normal', flags: { protect: 1, mirror: 1 }, onPrepareHit(target, source, move) { if (target.side.sideConditions.stealthrock) move.willCrit = true; } };
 
 Moves.royalcollision = {...Moves.wavecrash, name:'Royal Collision', num:20090, types:['Water','Ice'], recoil:[1,10], ignoreAbility:true, isNonstandard:'Custom'};
+
+import {installStarterLinkMoves} from './starter-family-links';
+installStarterLinkMoves(Moves);

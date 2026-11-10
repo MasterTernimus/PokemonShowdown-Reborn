@@ -79,7 +79,7 @@ describe('Approved activation-only Illusion reveal', () => {
 		assert.equal(battle.log.slice(from).filter(x => x.startsWith('|-item|')).length, 2);
 		assert(p.foes().every(foe => foe.volatiles.embargo.duration === 5));
 	});
-	it('retains Keen Eye and Illuminate field boosts and Terra Gift healing exactly once', () => {
+	it('retains Keen Eye and Illuminate field boosts and Terra Legacy healing exactly once', () => {
 		const p = setup(), ally = battle.p1.active[1];
 		battle.field.changeTerrain('mirrorarenaterrain', p);
 		p.setAbility('Keen Eye');
@@ -91,7 +91,7 @@ describe('Approved activation-only Illusion reveal', () => {
 		assert.equal(p.boosts.spa, 2);
 		assert(ally.volatiles.spotlight);
 		battle.field.clearTerrain(); ally.hp = 1;
-		p.setAbility('Terra Gift');
+		p.setAbility('Terra Legacy');
 		assert.equal(ally.hp, 1 + Math.floor(ally.baseMaxhp / 4));
 	});
 });

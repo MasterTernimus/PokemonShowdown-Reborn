@@ -48,7 +48,7 @@ describe('Approved eleven-species batch',()=>{
 
 	it('keeps current selectable slots separate from native passives', () => {
 		for (const [id, slot, name] of [['slowkinggalar', '1', 'Own Tempo'], ['charizard', '1', 'Infernal Dominion'], ['blastoise', 'H', 'Hydraulic Armor'], ['gengar', '1', 'Haunting Presence'], ['snorlax', '1', 'Slumbering Giant'], ['lapras', '1', 'Ocean Lullaby'], ['greninja', 'H', 'Shadow Screen'], ['clefable', 'H', 'Void Promise'], ['flygon', '0', 'Mirage Drift'], ['delphox', 'H', 'Void Guile']])assert.equal(Dex.species.get(id).abilities[slot], name);
-		assert.deepEqual(Dex.species.get('greninja').abilities, { 0: 'Liquid Arsenal', 1: 'Protean', H: 'Shadow Screen', S: 'Battle Bond' });
+		assert.deepEqual(Dex.species.get('greninja').abilities, { 0: 'Guardian Tide', 1: 'Protean', H: 'Shadow Screen', S: 'Battle Bond' });
 		assert.equal(Dex.species.get('garchomp').abilities.H, 'Void Wrath');
 		assert.equal(Dex.species.get('greninjaash').abilities[0], 'Shadow Bond');
 	});

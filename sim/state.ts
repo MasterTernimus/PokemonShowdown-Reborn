@@ -334,6 +334,9 @@ export const State = new class {
 				return arr;
 			}
 
+			if (obj instanceof Set) {
+				return {__battleCollection: 'Set', values: [...obj].map(value => this.serializeWithRefs(value, battle))};
+			}
 			if (this.isActiveMove(obj)) return this.serializeActiveMove(obj, battle);
 			if (this.isReferable(obj)) return this.toRef(obj);
 			if (obj.constructor !== Object) {
@@ -356,7 +359,7 @@ export const State = new class {
 		}
 	}
 
-	deserializeWithRefs(obj: unknown, battle: Battle) {
+	deserializeWithRefs(obj: unknown, battle: Battle): any {
 		switch (typeof obj) {
 		case 'undefined':
 		case 'boolean':
@@ -374,6 +377,10 @@ export const State = new class {
 				return arr;
 			}
 
+			const collection = obj as {__battleCollection?: string, values?: unknown[]};
+			if (collection.__battleCollection === 'Set' && Array.isArray(collection.values)) {
+				return new Set(collection.values.map(value => this.deserializeWithRefs(value, battle)));
+			}
 			if (this.isActiveMove(obj)) return this.deserializeActiveMove(obj, battle);
 
 			const o: any = {};

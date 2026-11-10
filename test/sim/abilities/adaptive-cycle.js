@@ -175,7 +175,7 @@ describe('Adaptive Cycle', () => {
 		}
 		setup(); assert(!p.hasAbility('mimicry'));
 	});
-	for (const ability of ['Ultra Ego', 'Burning Ego', 'Primal Ego', 'Perfect Ego']) {
+	for (const ability of ['Ultra Ego', 'Burning Ego', 'Terra Ascendant', 'Perfect Ego']) {
 		it(`negates ${ability}'s interaction callbacks in both directions, leaving other targets unaffected`, () => {
 			setup(); analyzed(); foe.setAbility(ability);
 			const move = Dex.getActiveMove('tackle');

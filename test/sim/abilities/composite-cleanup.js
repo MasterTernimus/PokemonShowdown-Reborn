@@ -35,7 +35,7 @@ describe('Composite ability cleanup', function () {
 		assert(ability.onSourceModifyDamage);
 	});
 
-	it('should give Burning Crown Unbound Blaze while retaining its hidden Filter hook', function () {
+	it('should give Blazing Crown Unbound Blaze while retaining its hidden Filter hook', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const ability = battle.dex.abilities.get('burningcrown');
 		assert(ability.onUpdate);
@@ -57,14 +57,14 @@ describe('Composite ability cleanup', function () {
 		}
 	});
 
-	it('should give Territorial Unnerve, Guard Dog and immediate Stamina hooks', () => {
+	it('should give Territorial Guard Dog and immediate Stamina hooks', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const ability = battle.dex.abilities.get('territorial');
-		assert(ability.onStart);
+		assert.equal(ability.onStart, undefined);
 		assert(ability.onDamagingHit);
 		assert.equal(ability.onAnyAfterMove, undefined);
 		assert.equal(ability.onDamagingHit, battle.dex.abilities.get('stamina').onDamagingHit);
-		assert(ability.onFoeTryEatItem);
+		assert.equal(ability.onFoeTryEatItem, undefined);
 		assert(ability.onDragOut);
 		assert(ability.onTryBoost);
 		assert.equal(ability.onModifyMove, undefined);
@@ -96,7 +96,7 @@ describe('Composite ability cleanup', function () {
 		assert.equal(blastoise.status, 'brn');
 	});
 
-	it('should make Wrath Shield Bulletproof, Stamina and Friend Guard without Self Repair', () => {
+	it('should make Aegis Shield Bulletproof, Stamina and Friend Guard without Self Repair', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const ability = battle.dex.abilities.get('wrathshield');
 		assert.equal(ability.onDamagingHit, battle.dex.abilities.get('stamina').onDamagingHit);
@@ -260,11 +260,11 @@ describe('Composite ability cleanup', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const base = {
 			0: 'Competitive',
-			1: 'Imperial Edge',
+			1: 'Imperial Legacy',
 			H: 'Royal Decree',
 		};
 		assert.deepEqual(battle.dex.species.get('Empoleon').abilities, base);
-		assert.deepEqual(battle.dex.species.get('Empoleon-Mega').abilities, {0: "Emperor's Resolve"});
+		assert.deepEqual(battle.dex.species.get('Empoleon-Mega').abilities, {0: "Imperial Eternal"});
 	});
 
 	it('should give Empress and Imperial Princess native Fighting STAB and suppress only Fairy weakness components', function () {
@@ -362,10 +362,12 @@ describe('Composite ability cleanup', function () {
 		assert.statStage(defragment, 'def', 0);
 		assert.statStage(defragment, 'spd', 1);
 
-		const accuracy = battle.runEvent(
-			'Accuracy', battle.p2.active[0], defragment, battle.dex.moves.get('zapcannon'), 50
-		);
-		assert.equal(accuracy, true, 'Defragment should make its moves unable to miss');
+		const first = battle.dex.getActiveMove('zapcannon');
+		battle.runEvent('ModifyMove', defragment, battle.p2.active[0], first, first);
+		assert.equal(first.accuracy, true);
+		const second = battle.dex.getActiveMove('zapcannon');
+		battle.runEvent('ModifyMove', defragment, battle.p2.active[0], second, second);
+		assert.equal(second.accuracy, 50);
 	});
 
 	it('should keep Phalanx Form untrapped without the removed Steel STAB', function () {
@@ -482,13 +484,13 @@ describe('Composite ability cleanup', function () {
 			0: 'Raging Current',
 		});
 		assert.deepEqual(battle.dex.species.get('Chesnaught-Mega').abilities, {
-			0: 'Wrath Shield',
+			0: 'Aegis Shield',
 		});
 		assert.deepEqual(battle.dex.species.get('Greninja').abilities, {
-			0: 'Liquid Arsenal', 1: 'Protean', H: 'Shadow Screen', S: 'Battle Bond',
+			0: 'Guardian Tide', 1: 'Protean', H: 'Shadow Screen', S: 'Battle Bond',
 		});
 		assert.deepEqual(battle.dex.species.get('Delphox').abilities, {
-			0: 'Sworn Duty', 1: 'Magic Guard', H: 'Void Guile',
+			0: 'Guardian Flame', 1: 'Magic Guard', H: 'Void Guile',
 		});
 	});
 

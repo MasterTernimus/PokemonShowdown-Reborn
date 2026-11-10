@@ -6,6 +6,6 @@ describe('Approved 550/650 roster and passives',()=>{
 		const s = Dex.species.get(id);
 		assert.deepEqual(Object.values(s.baseStats), values);
 		assert.equal(s.bst, id.includes('mega') ? 650 : 550);
-		assert.deepEqual(s.passives, [id.includes('mega') ? 'darkaura' : id.startsWith('mightyena') ? 'rivalry' : id.startsWith('cinccino') ? 'shielddust' : id === 'toxicroak' ? 'anticipation' : 'limber']);
+		assert.deepEqual(s.passives, [id.includes('mega') ? 'darkaura' : id.startsWith('mightyena') ? 'rivalry' : id.startsWith('cinccino') ? 'shielddust' : 'anticipation']);
 	});
 });

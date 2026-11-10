@@ -43,7 +43,7 @@ describe('Approved fourth roster pass', () => {
 		for (const [species, ability, component] of [
 			['Seviper-Mega', 'Sirius', 'Black Viper'], ['Rhyperior', 'Quarry Cannon', 'Mega Launcher'],
 			['Mamoswine', 'Old North', 'Ice Body'], ['Jellicent', 'Water Absorb', 'Water Absorb'],
-			['Incineroar', 'Ringmaster', 'Tough Claws'], ['Mudsdale', 'Unyielding', 'Inner Focus'],
+			['Incineroar', 'Ring Performer', 'Tough Claws'], ['Mudsdale', 'Unyielding', 'Inner Focus'],
 		]) {
 			assert(Object.values(Dex.species.get(species).abilities).includes(ability));
 			assert(abilityIncludesComponent(ability, component));
@@ -274,8 +274,8 @@ describe('Approved fourth roster pass', () => {
 		hit('thundershock', p, foe);
 		assert(p.hp < hp);
 	});
-	it('Ringmaster Taunts each damaged foe and respects Oblivious on subsequent attacks', () => {
-		const [p, , foe, other] = make('Ringmaster');
+	it('Ring Performer Taunts each damaged foe and respects Oblivious on subsequent attacks', () => {
+		const [p, , foe, other] = make('Ring Performer');
 		hit('snarl', p, foe);
 		assert.equal(foe.volatiles.taunt.duration, 2);
 		assert.equal(other.volatiles.taunt.duration, 2);
@@ -350,8 +350,8 @@ describe('Approved fourth roster pass', () => {
 		assert.equal(battle.runEvent('ModifyDamage', foe, p, tackle, 100), 100);
 		assert.equal(battle.runEvent('ModifyCritRatio', p, foe, earth, 1), 1);
 	});
-	it('False Bouquet seeds once per entry, respecting Substitute and Grass immunity', () => {
-		const [p, , foe, other] = make('False Bouquet');
+	it('Masquerade Bloom seeds once per entry, respecting Substitute and Grass immunity', () => {
+		const [p, , foe, other] = make('Masquerade Bloom');
 		foe.addVolatile('substitute', foe);
 		hit('flowertrick', p, foe);
 		assert(!foe.volatiles.leechseed);
@@ -366,8 +366,8 @@ describe('Approved fourth roster pass', () => {
 		hit('flowertrick', p, other);
 		assert(!other.volatiles.leechseed);
 	});
-	it('Funeral Choir makes Ghost damage sound only after a teammate faints', () => {
-		const [p, ally, foe] = make('Funeral Choir');
+	it('Masquerade Choir makes Ghost damage sound only after a teammate faints', () => {
+		const [p, ally, foe] = make('Masquerade Choir');
 		assert(!modify('shadowball', p, foe).flags.sound);
 		ally.faint();
 		battle.faintMessages();
@@ -421,8 +421,8 @@ describe('Approved fourth roster pass', () => {
 		battle.makeChoices('move dracometeor 1, move splash', 'move splash, move splash');
 		assert(p.boosts.spa < 0);
 	});
-	it('Funeral Choir Ghost attacks bypass Substitute and are stopped by Throat Chop', () => {
-		const [p, ally, foe] = make('Funeral Choir');
+	it('Masquerade Choir Ghost attacks bypass Substitute and are stopped by Throat Chop', () => {
+		const [p, ally, foe] = make('Masquerade Choir');
 		ally.faint();
 		battle.faintMessages();
 		foe.setType('Psychic');

@@ -17,7 +17,7 @@ describe('Starter chip replaced by move accuracy', () => {
 	}
 	const abilities = [
 		'Pollen Bloom', 'Virulence', 'Verdant Crown', 'Unbound Blaze', 'Atrocity',
-		'Sun Sovereign', 'Burning Crown', 'Water Barrage', 'Bombardment', 'Tidal Crown',
+		'Sun Sovereign', 'Blazing Crown', 'Water Barrage', 'Bombardment', 'Tidal Crown',
 	];
 	for (const ability of abilities) {
 		it(ability + ' gives exactly 1.1x accuracy to damaging and status moves', () => {

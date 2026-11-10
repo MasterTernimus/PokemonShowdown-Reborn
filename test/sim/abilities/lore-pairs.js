@@ -40,7 +40,7 @@ describe('Lore partnership reworks', () => {
 	it('publishes exact slots, leaves Gardevoir choices intact and preserves passives', () => {
 		for (const [id, slot, ability, passive] of [
 			['flygon', '0', 'Mirage Drift', 'levitate'], ['flygon', 'H', 'Dune Caller', 'levitate'],
-			['krookodile', 'H', 'Dune Hunter', 'controlledfury'], ['dhelmise', '1', 'Blackwater Anchor', 'stickyhold'],
+			['krookodile', 'H', 'Dune Hunter', 'controlledfury'], ['dhelmise', '1', 'Blackwater Anchor', 'steelworker'],
 			['dragalge', '1', 'Blackwater Venom', 'liquidooze'], ['espeon', '1', 'Remembered Step', 'magicbounce'],
 			['arcanine', '0', 'Remembered Flame', 'guarddog'], ['lapras', 'H', 'Storm Memory', 'liquidvoice'],
 			['swanna', '0', 'Jetstream Ballet', 'bigpecks'],
@@ -48,7 +48,7 @@ describe('Lore partnership reworks', () => {
 			assert.equal(Dex.species.get(id).abilities[slot], ability);
 			assert(Dex.species.get(id).passives.includes(passive));
 		}
-		assert.deepEqual(Dex.species.get('gardevoir').abilities, { 0: 'Trace', 1: 'Dream Sickness', H: 'Void Veil' });
+		assert.deepEqual(Dex.species.get('gardevoir').abilities, { 0: 'Trace', 1: 'Dream Guardian', H: 'Void Veil' });
 		assert.deepEqual(Dex.species.get('gardevoir').passives, ['breakingnews']);
 		assert.equal(Dex.species.get('arcaninealt').abilities[0], 'Remembered Flame');
 		assert.equal(Dex.species.get('laprasazzy').abilities.H, 'Storm Memory');
@@ -179,69 +179,48 @@ describe('Lore partnership reworks', () => {
 		hit(foe, cacturne, 'sacredfire');
 		assert(battle.log.some(line => line.startsWith('|-supereffective|p1a: Cacturne')));
 	});
-	it('Blackwater Anchor keeps Steelworker, slows targets and creates the existing tether', () => {
+	it('Blackwater Anchor heals once per turn and anchors only after a successful hit', () => {
 		const [p, t] = start('Dhelmise', 'Blackwater Anchor');
-		assert(p.hasAbility('steelworker')); assert(hit(t, p, 'sludgebomb', { secondaries: [] }).damage > 0);
+		assert(p.hasAbilityOrPassive('steelworker')); assert(!p.hasAbility('steelworker'));
+		p.hp = 2048;
+		assert.notEqual(battle.runEvent('DragOut', p, t), false);
 		hit(p, t, 'anchorshot', { basePower: 1 });
-		assert.equal(t.boosts.spe, -1); assert(p.volatiles.soulanchortether);
-		p.hp = 2048; t.hp = 4096; battle.fieldEvent('Residual');
-		assert.equal(p.hp, 2304); assert.equal(t.hp, 3840);
+		assert.equal(p.hp, 2304); assert.equal(t.boosts.spe, 0); assert(!p.volatiles.soulanchortether);
+		assert.equal(battle.runEvent('DragOut', p, t), false);
+		hit(p, t, 'shadowball', { basePower: 1 }); assert.equal(p.hp, 2304);
+		p.setAbility('No Ability');
+		p.setAbility('Blackwater Anchor');
+		hit(p, t, 'shadowball', {basePower: 1});
+		assert.equal(p.hp, 2304, 'Restoring the ability must not refresh healing in the same turn');
+		battle.fieldEvent('Residual'); freshTurn();
+		assert.notEqual(battle.runEvent('DragOut', p, t), false);
+		hit(p, t, 'shadowball', { basePower: 1 }); assert.equal(p.hp, 2560);
 	});
-	it('Blackwater Anchor retains natural weaknesses and can be poisoned', () => {
+	it('Blackwater Anchor rejects blocked, Substitute and ally hits', () => {
+		const [p, t] = start('Dhelmise', 'Blackwater Anchor', 'doubles'); p.hp = 2048;
+		t.addVolatile('protect'); hit(p, t, 'ironhead'); t.removeVolatile('protect');
+		t.addVolatile('substitute'); hit(p, t, 'ironhead', { basePower: 1 });
+		hit(p, p.allies()[0], 'ironhead', { basePower: 1 });
+		assert.equal(p.hp, 2048); assert(!p.volatiles.blackwateranchorguard);
+	});
+	it('Blackwater Anchor works independently and respects healing and ability suppression', () => {
+		const [p, t] = start('Mew', 'Blackwater Anchor'); p.hp = 2048;
+		assert(!p.hasAbilityOrPassive('steelworker'));
+		p.addVolatile('healblock', t); hit(p, t, 'ironhead'); assert.equal(p.hp, 2048);
+		assert.equal(battle.runEvent('DragOut', p, t), false);
+		p.removeVolatile('healblock'); p.addVolatile('gastroacid', t); freshTurn();
+		hit(p, t, 'ironhead'); assert.equal(p.hp, 2048);
+		assert.notEqual(battle.runEvent('DragOut', p, t), false);
+	});
+	it('Steelworker passive adds each Steel resistance once and survives ability suppression', () => {
 		const [p, t] = start('Dhelmise', 'Blackwater Anchor');
-		assert.equal(p.runEffectiveness(battle.dex.getActiveMove('icebeam')), 1);
+		assert.equal(p.runEffectiveness(battle.dex.getActiveMove('icebeam')), 0);
 		assert.equal(p.runEffectiveness(battle.dex.getActiveMove('ember')), 1);
-		assert.equal(p.runEffectiveness(battle.dex.getActiveMove('darkpulse')), 1);
-		hit(t, p, 'toxic'); assert.equal(p.status, 'tox');
+		assert.equal(p.runEffectiveness(battle.dex.getActiveMove('psychic')), -1);
+		assert.equal(hit(t, p, 'sludgebomb').damage, 0);
 		p.addVolatile('gastroacid', t);
-		assert.equal(p.runEffectiveness(battle.dex.getActiveMove('icebeam')), 1);
-		assert(hit(t, p, 'sludgebomb', { secondaries: [] }).damage > 0);
-	});
-	it('Dhelmise and Dragalge complete their slow, poison and shared-healing sequence', () => {
-		const [p, t] = start('Dhelmise', 'Blackwater Anchor', 'doubles');
-		const ally = p.allies()[0];
-		ally.setAbility('Blackwater Venom'); field('watersurfaceterrain', p);
-		hit(p, t, 'anchorshot', { basePower: 1 });
-		assert.equal(battle.field.terrain, 'underwaterterrain'); assert.equal(t.boosts.spe, -1);
-		hit(ally, t, 'sludgebomb', { secondaries: [] }); assert.equal(t.status, 'psn');
-		p.hp = ally.hp = 2048;
-		battle.singleEvent('Residual', battle.dex.conditions.get('soulanchortether'), p.volatiles.soulanchortether, p);
-		assert.equal(p.hp, 2304); assert.equal(ally.hp, 2304);
-	});
-	for (const terrain of ['watersurfaceterrain', 'underwaterterrain']) it(`shares actual poisoned tether drain on ${terrain}`, () => {
-		const [p, t] = start('Dhelmise', 'Blackwater Anchor', 'doubles');
-		const ally = p.allies()[0];
-		hit(p, t, 'anchorshot', { basePower: 1 }); field(terrain, p);
-		t.trySetStatus('psn', p); p.hp = ally.hp = 2048;
-		const condition = battle.dex.conditions.get('soulanchortether');
-		battle.singleEvent('Residual', condition, p.volatiles.soulanchortether, p);
-		assert.equal(p.hp, 2304); assert.equal(ally.hp, 2304);
-		ally.addVolatile('healblock', t); p.hp = ally.hp = 2048;
-		battle.singleEvent('Residual', condition, p.volatiles.soulanchortether, p);
-		assert.equal(p.hp, 2304); assert.equal(ally.hp, 2048);
-	});
-	it('water-field recovery needs poison and is capped by actual remaining HP', () => {
-		const [p, t] = start('Dhelmise', 'Blackwater Anchor', 'doubles'); const ally = p.allies()[0];
-		hit(p, t, 'anchorshot', { basePower: 1 }); field('underwaterterrain', p);
-		p.hp = ally.hp = 2048; const condition = battle.dex.conditions.get('soulanchortether');
-		battle.singleEvent('Residual', condition, p.volatiles.soulanchortether, p);
-		assert.equal(ally.hp, 2048);
-		t.setStatus('psn', p); t.hp = 7; p.hp = 2048;
-		battle.singleEvent('Residual', condition, p.volatiles.soulanchortether, p);
-		assert.equal(p.hp, 2055); assert.equal(ally.hp, 2055);
-	});
-	it('tethers respect suppression, immunity, escape and leaving', () => {
-		const [p, t] = start('Dhelmise', 'Blackwater Anchor');
-		t.setType('Ghost'); hit(p, t, 'anchorshot', { basePower: 1 }); assert(!p.volatiles.soulanchortether);
-		t.setType('Normal'); t.setItem('shedshell');
-		hit(p, t, 'anchorshot', { basePower: 1 }); assert(!p.volatiles.soulanchortether);
-		t.takeItem(); t.removeVolatile('trapped');
-		hit(p, t, 'anchorshot', { basePower: 1 }); assert(p.volatiles.soulanchortether);
-		p.addVolatile('gastroacid', t); p.hp = 2048; const before = t.hp;
-		battle.fieldEvent('Residual'); assert.equal(p.hp, 2048); assert.equal(t.hp, before);
-		p.removeVolatile('gastroacid'); t.setAbility('Magic Guard');
-		battle.fieldEvent('Residual'); assert.equal(p.hp, 2048);
-		battle.makeChoices('switch 2', 'move splash'); assert(!t.volatiles.trapped);
+		assert.equal(p.runEffectiveness(battle.dex.getActiveMove('icebeam')), 0);
+		assert.equal(hit(t, p, 'sludgebomb').damage, 0);
 	});
 	it('Anchor Shot still sinks Water Surface and Steelworker avoids Underwater penalties', () => {
 		const [p, t] = start('Dhelmise', 'Blackwater Anchor'); const speed = p.getStat('spe');
@@ -373,7 +352,7 @@ describe('Lore partnership reworks', () => {
 				const p = scenario.mons[0];
 				if (species === 'Flygon') assert.equal(scenario.battle.field.weather, 'sandstorm');
 				if (species === 'Gardevoir') assert(p.hasAbilityOrPassive('forewarn'));
-				if (species === 'Dhelmise') assert(p.hasAbility('steelworker'));
+				if (species === 'Dhelmise') assert(p.hasAbilityOrPassive('steelworker'));
 			} finally { scenario.battle.destroy(); }
 		}
 	});

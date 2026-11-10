@@ -15,13 +15,13 @@ function modified(p,q,id='tackle') {const move=battle.dex.getActiveMove(id);batt
 describe('Final approved passive migrations',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  for(const [id,passive,slots] of [
-  ['ursaluna','thickfat',{0:'Raging Beast',1:'Bulletproof',H:'Territorial'}],
+  ['ursaluna','unnerve',{0:'Raging Beast',1:'Bulletproof',H:'Territorial'}],
   ['ursalunabloodmoon','mindseye',{0:'Bloodmoon Gaze',1:'Lunar Dread',H:'Moonlit Hide'}],
   ['archaludon','stalwart',{0:'Stamina',1:'Anchor Bridge',H:'Rail Sight'}],
   ['tsareena','queenlymajesty',{0:'Empress',1:'Supreme Overlord',H:'Imperial Princess'}],
   ['tsareenaalt','queenlymajesty',{0:'Empress',1:'Supreme Overlord',H:'Imperial Princess'}],
   ['porygon2','download',{0:'Trace',1:'Defragment',H:'Memory Leak'}],
-  ['porygonz','download',{0:'Defragment',1:'Error Handler',H:'Memory Leak'}],
+  ['porygonz','download',{0:'Defragment',1:'Adaptability',H:'Memory Leak'}],
   ['medicham','purepower',{0:'Still Mind',1:'Unburden',H:'Limber'}],
  ])it(id+' exact passive and selected slots',()=>{const s=Dex.species.get(id);assert.deepEqual(s.passives,[passive]);for(const [slot,name]of Object.entries(slots))assert.equal(s.abilities[slot],name);});
  it('preserves Mega Medicham passive and selected ability',()=>{assert.deepEqual(Dex.species.get('medichammega').passives,['purepower']);assert.equal(Dex.species.get('medichammega').abilities[0],'Enlightenment');});
@@ -49,7 +49,7 @@ describe('Final approved passive migrations',()=>{
 	});
  it('other Empress users retain Queenly Majesty',()=>{const[p,q]=setup('Mew','Empress','fairytaleterrain');assert.equal(battle.runEvent('ModifyDamage',p,q,battle.dex.getActiveMove('tackle'),100),150);assert(!p.getAbilityComponentExclusions().includes('queenlymajesty'));});
  it('Archaludon passive Stalwart tracks targets while selected ability is suppressed',()=>{const[p,q]=setup('Archaludon','Stamina');p.addVolatile('gastroacid');assert(modified(p,q).tracksTarget);});
- it('Ursaluna passive Thick Fat halves Fire offense under suppression',()=>{const[p,q]=setup('Ursaluna','Bulletproof');p.addVolatile('gastroacid');const m=battle.dex.getActiveMove('flamethrower');assert.equal(battle.runEvent('ModifySpA',q,p,m,100),50);});
+ it('Ursaluna no longer halves Fire offense after moving to Unnerve',()=>{const[p,q]=setup('Ursaluna','Bulletproof');p.addVolatile('gastroacid');const m=battle.dex.getActiveMove('flamethrower');assert.equal(battle.runEvent('ModifySpA',q,p,m,100),100);});
 });
 
 describe('Approved Electrode extra option',()=>{for(const id of ['electrode','electrodehisui'])it(id+' adds Brute Force without replacing existing choices',()=>{const before=require('../../../artifacts/nido-dragonite-before.json').find(s=>s.id===id);const s=Dex.species.get(id);assert.equal(s.abilities.S,'Brute Force');assert.deepEqual(s.passives,['soundproof']);if(before){assert.deepEqual(s.abilities,{...before.abilities,S:'Brute Force'});assert.deepEqual(s.baseStats,before.stats);}});});

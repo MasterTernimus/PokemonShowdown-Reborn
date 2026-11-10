@@ -1389,6 +1389,11 @@ for (const [id, passive] of Object.entries(AevianMinorPassives)) {
 	if (!SpeciesPassives[id]?.length) SpeciesPassives[id] = Object.freeze([passive]);
 	ThematicPassiveIds.add(passive);
 }
+import {NovemberRosterPassives} from './november-roster';
+for (const [id, passives] of Object.entries(NovemberRosterPassives)) {
+ SpeciesPassives[id] = Object.freeze([...passives]);
+ for (const passive of passives) ThematicPassiveIds.add(passive);
+}
 // Synchronize final passives after all base-form revisions.
 for (const [skin, base] of Object.entries(CosmeticBattleCounterparts)) {
  SpeciesPassives[skin] = Object.freeze([...(SpeciesPassives[base] || [])]);

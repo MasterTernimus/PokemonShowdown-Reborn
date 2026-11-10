@@ -16,7 +16,7 @@ interface ForesightMemory {
 }
 
 function directMove(move: ActiveMove) {
-	return move.category !== 'Status' && !move.flags['futuremove'] && !move.callsMove &&
+	return !!move?.flags && move.category !== 'Status' && !move.flags['futuremove'] && !move.callsMove &&
 		!move.sourceEffect && !(move as any).foresightStored && !(move as any).isExternal &&
 		move.id !== 'confused';
 }

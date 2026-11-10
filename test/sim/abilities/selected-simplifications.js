@@ -155,7 +155,7 @@ describe('Individually selected Mega simplifications', () => {
 		assert.equal(p.hp, 500); assert.equal(p.status, 'brn'); battle.runEvent('SwitchOut', p); assert.equal(p.status, 'brn');
 		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('tackle'), 100), 100);
 	});
-	for (const ability of ['No Ability', 'Shadow Current']) it('Water Shuriken and Shadow Current respect Water Absorb: ' + ability, () => {
+	for (const ability of ['No Ability', 'Aegis Tide']) it('Water Shuriken and Aegis Tide respect Water Absorb: ' + ability, () => {
 		const [p, q] = setup('Mew', ability); q.setAbility('Water Absorb');
 		battle.actions.useMove('watershuriken', p, { target: q }); assert.equal(q.hp < 1600, false);
 		const hp = q.hp; battle.actions.useMove('watergun', p, { target: q }); assert.equal(q.hp < hp, false);

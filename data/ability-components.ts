@@ -23,7 +23,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	exalt: ['defiant', 'sharpness', 'moldbreaker'],
 	grandstrategy: ['moldbreaker'],
 	// Brute Force delegates power/recoil callbacks; it does not grant full Reckless/Rock Head field identities.
-	burningrage: ['proficient', 'bruteforce', 'ironfist', 'moldbreaker'],
+	burningrage: ['bruteforce', 'ironfist'],
 	terragift: ['hospitality', 'unaware', 'proficient'],
 	blazingtempo: ['proficient', 'speedboost', 'striker', 'magmaarmor', 'keeneye'],
 	verdantdrake: ['proficient', 'dualwield', 'regenerator', 'lightningrod', 'limber'],
@@ -399,7 +399,8 @@ Object.assign(AbilityComponents, {
 });
 
 export function abilityIncludesComponent(ability: string, component: string, seen = new Set<string>()): boolean {
-	const rawId = ability.toLowerCase().replace(/[^a-z0-9]/g, '');
+	const normalized = ability.toLowerCase().replace(/[^a-z0-9]/g, '');
+	const rawId = Object.entries(NovemberAbilityNames).find(([, name]) => name.toLowerCase().replace(/[^a-z0-9]/g, '') === normalized)?.[0] || normalized;
 	const id = ({duskego: 'duskdrive', bedrockclaw:'duneclaws',rimeclaw:'glacierclaws',dunerunner:'sandrush',frostrunner:'slushrush',mineralgrip:'barbharvest',royalonslaught:'patriarchswrath',royalaegis:'matriarchsvigil',masterptissier:'masterpatissier'} as {[id:string]:string})[rawId] || rawId;
 	const queryID = component.toLowerCase().replace(/[^a-z0-9]/g, '');
 	const query = queryID === 'duskego' ? 'duskdrive' : queryID;
@@ -1156,3 +1157,9 @@ export function unstableEvoComponents(pokemon: { species: { id: string } }): IDE
 	default: return [];
 	}
 }
+
+import { NovemberRosterComponents, NovemberAbilityNames } from './november-roster';
+Object.assign(AbilityComponents, NovemberRosterComponents);
+AbilityComponents.ironmountain = ['stamina', 'bruteforce'];
+
+AbilityComponents.bewitchingmajesty = ['queenlymajesty'];

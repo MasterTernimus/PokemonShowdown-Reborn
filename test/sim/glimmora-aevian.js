@@ -101,13 +101,13 @@ describe('Glimmora-Aevian, Adaptive Core, and Injection', () => {
 		assert.equal(glimmora.boosts.atk, 1, 'Download did not boost Attack');
 		assert.equal(glimmora.boosts.def, 1, 'Defragment did not boost Defense');
 		const first = battle.dex.getActiveMove('injection');
-		battle.singleEvent('ModifyMove', glimmora.getAbility(), glimmora.abilityState, first, glimmora);
+		battle.singleEvent('ModifyMove', glimmora.getAbility(), glimmora.abilityState, first, glimmora, battle.p2.active[0]);
 		assert.equal(first.willCrit, true, 'Download did not grant its first-hit critical');
 		const second = battle.dex.getActiveMove('injection');
-		battle.singleEvent('ModifyMove', glimmora.getAbility(), glimmora.abilityState, second, glimmora);
+		battle.singleEvent('ModifyMove', glimmora.getAbility(), glimmora.abilityState, second, glimmora, battle.p2.active[0]);
 		assert.notEqual(second.willCrit, true, 'Download granted a second critical');
-		assert.equal(battle.singleEvent('AnyAccuracy', glimmora.getAbility(), glimmora.abilityState,
-			battle.p2.active[0], glimmora, second, 50), true);
+		assert.equal(first.accuracy, true);
+		assert.notEqual(second.accuracy, true);
 		glimmora.hp = Math.floor(glimmora.maxhp / 2);
 		const beforeTurn = glimmora.hp;
 		battle.makeChoices('move splash', 'move splash');

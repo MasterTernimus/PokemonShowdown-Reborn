@@ -3060,3 +3060,8 @@ Aliases.worldbreaker = 'Strings of Ruin';
 
 // Stable internal IDs preserve older teams and battle logs.
 Object.assign(Aliases, { verdantmonarch: 'pollenbloom', blazingmonarch: 'unboundblaze', tidalmonarch: 'waterbarrage' });
+
+Aliases.blazingcrown = 'burningcrown';
+
+import {NovemberAbilityNames} from './november-roster';
+for (const [id, name] of Object.entries(NovemberAbilityNames)) Aliases[name.toLowerCase().replace(/[^a-z0-9]/g, '') as ID] = id;

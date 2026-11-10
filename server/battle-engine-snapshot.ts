@@ -46,7 +46,7 @@ export function captureEngineSnapshot(root: string, pinFile: string): EngineSnap
 		[id: string]: string,
 	} = {
 		// Reviewed November wording updates; imported mechanics remain in the engine manifest.
-		'dist/data/ability-descriptions.js': '20684ad5b532b639ac91a89f2accc75693b6b788e0983d6f3151bf8fc1ab5889',
+		'dist/data/ability-descriptions.js': '2c0c462f3eeea9179b6e70d5e78365985acb0db48a85a31f04faefd01842b637',
 		'dist/data/ability-prose-audit.js': '3637d402e2afda6c62a6b768868edef86c4d4be8f541655fa7f5a837a10bed0d',
 		'dist/data/short-description-audit.js': 'f1332256ab5ec6976c7feff7f60794f639750cf7dff41aad8ef3d4c34476ec54',
 	};

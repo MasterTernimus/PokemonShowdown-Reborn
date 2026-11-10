@@ -75,5 +75,5 @@ describe('Mega Scizor Iron Vise rework', () => {
 		b.actions.runMove('tackle', q, q.getLocOf(p));
 		assert.equal(q.boosts.atk, -1);
 	});
-	it('preserves base Scizor kit', () => { assert.deepEqual(Dex.species.get('scizor').abilities, { 0: 'Pincer Crush', 1: 'Technician', H: 'Decoy Pincers' }); assert.deepEqual(Dex.species.get('scizor').passives, ['hypercutter']); });
+	it('preserves base Scizor kit', () => { assert.deepEqual(Dex.species.get('scizor').abilities, { 0: 'Pincer Crush', 1: 'Technician', H: 'Decoy Pincers' }); assert.deepEqual(Dex.species.get('scizor').passives, ['lightweightswarm']); });
 });

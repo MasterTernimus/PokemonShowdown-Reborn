@@ -293,12 +293,12 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Boosts the offense targeting foes' weaker defense; first damaging move crits."
 	},
 	"defragment": {
-		"desc": "On entry, it compares the opposing side's combined Attack and Special Attack. If Attack is higher or tied, its Defense rises; otherwise its Special Defense rises. Its moves cannot miss.",
-		"shortDesc": "Entry defensive boost based on foes' offenses; moves cannot miss."
+		"desc": "On entry, it compares the opposing side's combined Attack and Special Attack. If Attack is higher or tied, its Defense rises; otherwise its Special Defense rises. Its first move aimed at a foe after entry cannot miss.",
+		"shortDesc": "Entry defensive boost based on foes' offenses; first move aimed at a foe cannot miss."
 	},
 	"adaptivecore": {
-		"desc": "On entry, it compares the opposing side's combined Defense and Special Defense. If Defense is lower, its Attack rises; otherwise its Special Attack rises. Its first damaging move after switching in is a critical hit. On entry, it compares the opposing side's combined Attack and Special Attack. If Attack is higher or tied, its Defense rises; otherwise its Special Defense rises. Its moves cannot miss. Heals 1/16 max HP each turn and ignores sandstorm and hail damage. Switching out cures major status and heals 1/8 max HP only if a status was cured. Bewitched Woods cures status at turn end without this extra heal.",
-		"shortDesc": "Boosts the offense targeting foes' weaker defense; first damaging move crits; Entry defensive boost based on foes' offenses; moves cannot miss; Heals 1/16 HP per turn; switching cures status and heals 1/3 HP if cured."
+		"desc": "On entry, it compares the opposing side's combined Defense and Special Defense. If Defense is lower, its Attack rises; otherwise its Special Attack rises. Its first damaging move after switching in is a critical hit. On entry, it compares the opposing side's combined Attack and Special Attack. If Attack is higher or tied, its Defense rises; otherwise its Special Defense rises. Its first move aimed at a foe after entry cannot miss. Heals 1/16 max HP each turn and ignores sandstorm and hail damage. Switching out cures major status and heals 1/8 max HP only if a status was cured. Bewitched Woods cures status at turn end without this extra heal.",
+		"shortDesc": "Boosts the offense targeting foes' weaker defense; first damaging move crits; Entry defensive boost based on foes' offenses; first move aimed at a foe cannot miss; Heals 1/16 HP per turn; switching cures status and heals 1/3 HP if cured."
 	},
 	"aevianglacier": {
 		"desc": "On entry, Turtonator permanently transforms into Turtonator-Rejuv. Summons hail. On Cold Eclipse, damaging attacks disable their user unless already disabled; excludes Max moves, delayed attacks and Struggle. Contact attackers have a 30% chance of frostbite. Heals 1/16 max HP each turn in hail or snow, or on Icy, Snowy Mountain and Cold Eclipse without those weathers; hail on Cold Eclipse heals 1/8 instead. Eligible Normal moves become Ice and have 1.2x power, or 1.5x on Icy and Snowy Mountain. Excludes moves whose type is set by their own effect, damaging Z-Moves and Terastallized Tera Blast. If this Ability is suppressed, its Rejuv form reverts to the normal species until it switches out, even if suppression ends earlier.",
@@ -1914,8 +1914,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "30% contact paralysis; 60% on electric fields."
 	},
 	"steelworker": {
-		"desc": "Steel moves receive STAB and use 1.5x Attack or Sp. Atk (2x on Factory). On Short-Circuit, Steel moves also gain Electric typing.",
-		"shortDesc": "Steel moves gain STAB and use 1.5x Attack or Sp. Atk."
+		"desc": "Gains Steel resistances and Poison-attack immunity. Steel moves receive STAB and use 1.5x Attack or Sp. Atk (2x on Factory). On Short-Circuit, Steel moves also gain Electric typing.",
+		"shortDesc": "Steel defenses; Steel STAB and 1.5x attacking stats."
 	},
 	"stickyhold": {
 		"desc": "Other Pokemon cannot remove its item while it survives. Sticky Barb can still transfer.",
@@ -4300,3 +4300,12 @@ AbilityDescriptionOverrides.calculatedshot = {
 	shortDesc: 'Frisk; Water attacks gain +1 critical-hit stage and maximum damage rolls.',
 	desc: 'Frisk reveals opposing Illusions and items and may Embargo item holders. Damaging Water moves gain +1 critical-hit stage and use the highest normal damage roll.',
 };
+
+import {NovemberRosterDescriptions} from './november-roster';
+Object.assign(AbilityDescriptionOverrides, NovemberRosterDescriptions);
+
+import {UltraBeastDescriptions} from './ultra-beast-lineups';
+Object.assign(AbilityDescriptionOverrides, UltraBeastDescriptions);
+
+import {applyStarterLinkDescriptions} from './starter-family-links';
+applyStarterLinkDescriptions(AbilityDescriptionOverrides);

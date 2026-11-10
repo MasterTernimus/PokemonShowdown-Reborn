@@ -1,7 +1,7 @@
 'use strict';
 const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim');
 let battle;
-function setup(ability='Tidal Voice',species='Primarina',mode='doubles') {
+function setup(ability='Tidal Performer',species='Primarina',mode='doubles') {
  const mon=(s='Mew',a='No Ability')=>({species:s,ability:a,moves:['hypervoice','sparklingaria','splash','scald']});
  battle=common.createBattle({gameType:mode},[[mon(species,ability),mon(),mon()],[mon(),mon(),mon()]]);if(battle.requestState==='teampreview')battle.makeChoices();battle.field.terrain='';
  for(const p of battle.getAllActive())p.hp=p.maxhp=p.baseMaxhp=10000;
@@ -10,7 +10,7 @@ function setup(ability='Tidal Voice',species='Primarina',mode='doubles') {
 function use(p,q,extra={},id='hypervoice'){const m=Object.assign(Dex.getActiveMove(id),{willCrit:false,accuracy:true},extra);battle.actions.useMove(m,p,{target:q});battle.runEvent('AfterMove',p,q,battle.activeMove);return battle.activeMove;}
 describe('Approved Primarina abilities',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- for(const species of ['Primarina','Primarina-Alt'])it(species+' preserves slots and Torrent',()=>{const s=Dex.species.get(species);assert.deepEqual(Object.values(s.abilities),['Encore Aria','Marvel Scale','Tidal Voice']);assert(s.passives.includes('torrent'));});
+ for(const species of ['Primarina','Primarina-Alt'])it(species+' preserves slots and Torrent',()=>{const s=Dex.species.get(species);assert.deepEqual(Object.values(s.abilities),['Encore Aria','Marvel Scale','Tidal Performer']);assert(s.passives.includes('torrent'));});
  it('Encore grants five-turn Safeguard only on genuine entry and preserves longer screens',()=>{const[p,,q]=setup('Encore Aria');assert.equal(p.side.sideConditions.safeguard.duration,5);p.side.sideConditions.safeguard.duration=2;battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.side.sideConditions.safeguard.duration,2);p.addVolatile('gastroacid',q);p.removeVolatile('gastroacid');assert.equal(p.side.sideConditions.safeguard.duration,2);p.side.sideConditions.safeguard.duration=8;battle.singleEvent('SwitchIn',p.getAbility(),p.abilityState,p);assert.equal(p.side.sideConditions.safeguard.duration,8);battle.actions.switchIn(p.side.pokemon[2],0);battle.actions.switchIn(p,0);battle.actions.runSwitch(p);assert(p.side.sideConditions.safeguard.duration>=5);});
  it('Encore retains secondary/self chances and preserves charge without secondary-triggered Safeguard',()=>{const[p,,q]=setup('Encore Aria');p.side.removeSideCondition('safeguard');const m=Object.assign(Dex.getActiveMove('solarbeam'),{secondaries:[{chance:10,boosts:{spd:-1}},{chance:20,self:{boosts:{spa:1}}}]});battle.runEvent('ModifyMove',p,q,m,m);assert.equal(m.secondaries[0].chance,20);assert.equal(m.secondaries[1].chance,40);assert(m.flags.charge);battle.runEvent('AfterSuccessfulSecondary',p,q,m);assert(!p.side.sideConditions.safeguard);});
  for(const field of ['', 'icyterrain'])it('Liquid Voice type/power exactly once '+field,()=>{const[p,,q]=setup();battle.field.terrain=field;const m=Dex.getActiveMove('hypervoice');battle.runEvent('ModifyType',p,q,m,m);assert.equal(m.type,field?'Ice':'Water');m.type='Normal';const direct=battle.runEvent('BasePower',p,q,m,100);assert.equal(direct,120);p.addVolatile('gastroacid',q);const n=Dex.getActiveMove('hypervoice');battle.runEvent('ModifyType',p,q,n,n);assert.equal(n.type,'Normal');});
@@ -62,7 +62,7 @@ describe('Approved Primarina abilities',()=>{
 	});
 });
 
-describe('Tidal Voice team coverage and hit independence', () => {
+describe('Tidal Performer team coverage and hit independence', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	for (const immune of [false, true])it('rolls independently for each spread target; immune=' + immune, () => {
 		const [p,,q] = setup();
@@ -90,10 +90,10 @@ describe('Tidal Voice team coverage and hit independence', () => {
 		use(q, ally, { target: 'normal' });
 		assert.equal(ally.hp === hp, state === 'active');
 	});
-	it('blocks Perish Song for active teammates and copied Tidal Voice users', () => {
+	it('blocks Perish Song for active teammates and copied Tidal Performer users', () => {
 		const [p, ally, q] = setup();
 		p.setAbility('No Ability');
-		ally.setAbility('Tidal Voice');
+		ally.setAbility('Tidal Performer');
 		use(q, p, {}, 'perishsong');
 		assert(!p.volatiles.perishsong);
 		assert(!ally.volatiles.perishsong);
@@ -101,7 +101,7 @@ describe('Tidal Voice team coverage and hit independence', () => {
 	});
 	it('does not duplicate blocks with two providers or an ally Soundproof', () => {
 		const [p, ally, q] = setup();
-		ally.setAbility('Tidal Voice');
+		ally.setAbility('Tidal Performer');
 		const before = battle.log.length;
 		use(q, ally, { target: 'normal' });
 		assert.equal(battle.log.slice(before).filter(x => x.includes('-immune')).length, 1);
@@ -153,9 +153,9 @@ describe('Tidal Voice team coverage and hit independence', () => {
 	});
 });
 
-describe('Tidal Voice calculator parity', () => {
+describe('Tidal Performer calculator parity', () => {
  it('matches direct doubles spread samples with per-hit boosts', () => {
- const c = require('../../../dist/sim/custom-calculator'), input = { format: 'gen9nofielddoublesbattle', move: 'Hyper Voice', samples: 8, seed: 42, actors: [{ species: 'Primarina', ability: 'Tidal Voice' }, ...Array.from({ length: 3 }, () => ({ species: 'Mew', ability: 'No Ability' }))] }, scenario = c.validateScenario(input), loss = [];
+ const c = require('../../../dist/sim/custom-calculator'), input = { format: 'gen9nofielddoublesbattle', move: 'Hyper Voice', samples: 8, seed: 42, actors: [{ species: 'Primarina', ability: 'Tidal Performer' }, ...Array.from({ length: 3 }, () => ({ species: 'Mew', ability: 'No Ability' }))] }, scenario = c.validateScenario(input), loss = [];
 	for (let i = 0;
 		i < 8;
 		i++) {

@@ -22,7 +22,7 @@ describe('Approved thematic species passives',()=>{
 	it('keeps the revised thematic records, cosmetic equivalents and starter records', () => {
 		const ids = Object.values(ThematicPassiveGroups).flat(); assert.equal(ids.length, 78);
   const cosmetics=Object.entries(PassiveCosmeticForms).flatMap(([base,forms])=>forms.map(form=>base+form));assert.equal(cosmetics.length,27);
-		assert.equal(Object.keys(SpeciesPassives).length, 952);
+		assert.equal(Object.keys(SpeciesPassives).length, 963);
 		for (const [passive, group] of Object.entries(ThematicPassiveGroups)) for (const id of group)assert.deepEqual(Dex.species.get(id).passives, expected(id, passive), id);
   for(const id of cosmetics){const s=Dex.species.get(id);assert(s.exists,id);assert.deepEqual(s.passives,SpeciesPassives[id]);const base=Dex.species.get(s.baseSpecies);assert.deepEqual(s.baseStats,base.baseStats);assert.deepEqual(s.types,base.types);assert.deepEqual(s.abilities,base.abilities);}
   for(const[id,passives]of Object.entries(StarterPassives))assert.deepEqual(Dex.species.get(id).passives,passives,id);

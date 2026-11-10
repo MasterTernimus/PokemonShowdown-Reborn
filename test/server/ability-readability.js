@@ -16,8 +16,8 @@ describe('Readable ability summaries', () => {
 	});
 	it('publishes every reviewed summary without losing the detailed rules', () => {
 		// These three packages were revised after the original readability pass.
-		const revised = {
-			bewitchingmajesty: 'Magic Bounce + Queenly Majesty; 5-turn Bewitched Aura. Smite can turn it into Bewitched Woods.',
+		const revised = { territorial: 'Stamina + Guard Dog.',
+			bewitchingmajesty: 'Queenly Majesty; creates Bewitched Aura. Smite can create Bewitched Woods.',
 			reapersgrip: 'Self-Sufficient; 5-turn Haunted Aura on entry; Ghost attacks drain 25%. Ghost KO can create Haunted.',
 			bloodchallenge: 'First foe attack each turn deals 35% less damage. Counter answers either category and heals 25% HP.',
 		};

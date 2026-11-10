@@ -42,7 +42,7 @@ describe('Approved Gmax migrations and selected redesigns', () => {
 	});
 	for (const [species, historicalPassive] of Object.entries(grants)) it(species + ' retains its full passive under suppression and active ability replacement', () => {
 		const [p, q] = setup(species);
-        const passive = ({aegislashgmax:'cursedbody',toxtricitygmax:'feedback',toxtricitylowkeygmax:'feedback'})[species] || historicalPassive;
+        const passive = ({hatterenegmax:'healingmirror',aegislashgmax:'cursedbody',toxtricitygmax:'feedback',toxtricitylowkeygmax:'feedback'})[species] || historicalPassive;
 		assert.deepEqual(p.getPassives(), [passive]);
 		p.setAbility('Run Away'); p.addVolatile('gastroacid');
 		assert(p.hasAbilityOrPassive(passive));

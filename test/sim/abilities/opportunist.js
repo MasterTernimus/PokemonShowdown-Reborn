@@ -45,7 +45,7 @@ describe("Opportunist", () => {
 		battle = common.createBattle([[
 			{species: 'Mew', ability: 'Opportunist', moves: ['calmmind', 'splash']},
 		], [
-			{species: 'Mew', ability: 'Burning Spirit', moves: ['splash']},
+			{species: 'Mew', ability: 'Inferno Ascendant', moves: ['splash']},
 		]]);
 		battle.makeChoices('move calmmind', 'move splash');
 		battle.makeChoices('move splash', 'move splash');

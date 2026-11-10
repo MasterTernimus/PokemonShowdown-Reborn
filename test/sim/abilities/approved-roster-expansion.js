@@ -50,7 +50,7 @@ describe('Approved roster expansion and component search', () => {
 		assert(!abilityIncludesComponent('Decoy Pincers', 'Tough Claws'));
 		assert(abilityIncludesComponent('Broodguard', 'Friend Guard'));
 		assert(!abilityIncludesComponent('Abyss Lure', 'Lightning Rod'));
-		assert(!abilityIncludesComponent('Terra Resolve', 'Rocky Payload'));
+		assert(!abilityIncludesComponent('Terra Eternal', 'Rocky Payload'));
 		assert.deepEqual(Dex.species.get('Dustox').abilities, { 0: 'Night Forager', 1: 'Unaware', H: 'Toxic Cocoon' });
 		assert.deepEqual(Dex.species.get('Dustox').passives, ['rivalry']);
 		assert.deepEqual(Dex.species.get('Beautifly').abilities, { 0: 'Windy Surge', 1: 'Pastel Sanctuary', H: 'Gale Bloom' });
@@ -203,7 +203,7 @@ describe('Approved roster expansion and component search', () => {
 		hit('xscissor', p, foe);
 		assert.equal(foe.hp, before);
 	});
-	it('Tangrowth applies both components and Root Renewal cures an ally while switching out', () => {
+	it('Tangrowth applies both components and Root Entanglement cures an ally while switching out', () => {
 		let [p, , foe] = make('Tangrowth', 'Living Tangle');
 		p.hp -= 80;
 		hit('tackle', foe, p);
@@ -212,13 +212,13 @@ describe('Approved roster expansion and component search', () => {
 		battle.destroy();
 		battle = null;
 		let ally;
-		[p, ally, foe] = make('Tangrowth', 'Root Renewal');
+		[p, ally, foe] = make('Tangrowth', 'Root Entanglement');
 		ally.setStatus('brn');
 		p.hp -= 100;
 		const before = p.hp;
-		event('SwitchOut', p, p);
+		battle.runEvent('SwitchOut', p);
 		assert(p.hp > before);
-		assert.equal(ally.status, '');
+		assert.equal(ally.status, 'brn');
 	});
 	it('Encore Aria grants entry Safeguard; Void Omen wards only one ally drop', () => {
 		let [p, , foe] = make('Primarina', 'Encore Aria', 'Shield Dust');

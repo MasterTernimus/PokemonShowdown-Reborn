@@ -4,7 +4,7 @@ const common = require('../../common');
 describe('Ultra Ego successful pinch consumption', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
-	for (const ability of ['Ultra Ego', 'Burning Ego', 'Primal Ego', 'Perfect Ego'])it(ability + ' retains blocked pinch recovery for the next eligible hit window', () => {
+	for (const ability of ['Ultra Ego', 'Burning Ego', 'Terra Ascendant', 'Perfect Ego'])it(ability + ' retains blocked pinch recovery for the next eligible hit window', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
 			[{ species: 'Mew', ability, moves: ['tackle'] }],
 			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],

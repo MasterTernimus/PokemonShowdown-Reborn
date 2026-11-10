@@ -35,7 +35,7 @@ describe('Exact approved regional passive whitelist', () => {
 		for (const [p, ids] of Object.entries(require('./latest-passives-approved.json').groups)) for (const id of ids) expected[id] = [p];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(SpeciesPassives, expected);
-		assert.equal(Object.keys(SpeciesPassives).length, 952);
+		assert.equal(Object.keys(SpeciesPassives).length, 963);
 	});
 	for (const [p, ids] of Object.entries(before.groups))
 		for (const id of ids)

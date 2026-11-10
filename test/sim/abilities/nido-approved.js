@@ -45,7 +45,7 @@ describe('Approved Nido pair and defensive passive swaps',()=>{afterEach(()=>{ba
 		assert.deepEqual(Dex.species.get('corsolagalar').passives, ['infiltrator']);
 		assert.deepEqual(Dex.species.get('mightyena').passives, ['rivalry']);
 		assert.deepEqual(Dex.species.get('mightyenadeso').passives, ['rivalry']);
-		assert.deepEqual(Dex.species.get('toxicroakdeso').passives, ['limber']);
+		assert.deepEqual(Dex.species.get('toxicroakdeso').passives, ['anticipation']);
 		assert.deepEqual(Dex.species.get('cinccinodeso').passives, ['shielddust']);
 		assert.equal(Dex.species.get('nidoking').abilities.H, "Royal Onslaught");
 		assert.equal(Dex.species.get('nidoqueen').abilities.H, 'Royal Aegis');

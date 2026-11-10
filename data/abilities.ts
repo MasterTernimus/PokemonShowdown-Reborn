@@ -1127,12 +1127,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10289,
 	},
 	gigavolt: {
+		onModifyMove(move, pokemon, target) {
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, pokemon, target);
+		},
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Gigavolt');
 			this.dex.abilities.get('lightningrod').onStart?.call(this, pokemon);
-		},
-		onModifyMove(move, pokemon, target) {
-			return this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, pokemon, target );
 		},
 		onTryHit(target, source, move) {
 			return this.dex.abilities.getHandler('lightningrod', 'onTryHit')?.call(this, target, source, move);
@@ -1362,16 +1362,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	burningrage: {
 		onBasePowerPriority: 23,
 		onBasePower(basePower, source, target, move) {
-			// Nested composite calls must not apply Proficient twice.
-			if (this.effect.id === 'burningrage') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, source, target, move);
 			let result = this.dex.abilities.get('bruteforce').onBasePower?.call(this, basePower, source, target, move);
 			return this.dex.abilities.get('ironfist').onBasePower?.call(this, result ?? basePower, source, target, move);
 		},
 		onDamage(damage, target, source, effect) {
 			return this.dex.abilities.get('bruteforce').onDamage?.call(this, damage, target, source, effect);
-		},
-		onModifyMove(move, pokemon, target) {
-			return this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, pokemon, target );
 		},
 		flags: {},
 		name: "Burning Rage",
@@ -1966,10 +1961,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.dex.abilities.get('defragment').onStart?.call(this, pokemon);
 		},
 		onModifyMove(move, pokemon, target) {
-			return this.dex.abilities.get('download').onModifyMove?.call(this, move, pokemon, target);
-		},
-		onAnyAccuracy(accuracy, target, source, move) {
-			return this.dex.abilities.get('defragment').onAnyAccuracy?.call(this, accuracy, target, source, move);
+			this.dex.abilities.get('download').onModifyMove?.call(this, move, pokemon, target);
+			this.dex.abilities.get('defragment').onModifyMove?.call(this, move, pokemon, target);
 		},
 		flags: { breakable: 1 },
 		name: "Adaptive Core",
@@ -3354,9 +3347,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyModifySpD(spd, target, source, move) {
 			const abilityHolder = this.effectState.target;
+			const tracking = move || this.event;
 			if (target.hasAbility('Beads of Ruin')) return;
-			if (!move.ruinedSpD?.hasAbility('Beads of Ruin')) move.ruinedSpD = abilityHolder;
-			if (move.ruinedSpD !== abilityHolder) return;
+			if (!tracking.ruinedSpD?.hasAbility('Beads of Ruin')) tracking.ruinedSpD = abilityHolder;
+			if (tracking.ruinedSpD !== abilityHolder) return;
 			this.debug('Beads of Ruin SpD drop');
 			if (this.field.isTerrain('newworldterrain'))
 				return this.chainModify(0.66);
@@ -6097,6 +6091,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	defragment: {
 		onStart(pokemon) {
+			this.effectState.defragmentFirstMove = true;
 			let foeAtk = 0;
 			let foeSpA = 0;
 			for (const foe of pokemon.foes()) {
@@ -6114,8 +6109,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.boost({ spd: boostAmount }, pokemon, pokemon);
 			}
 		},
-		onAnyAccuracy(accuracy, target, source, move) {
-			if (source === this.effectState.target) return true;
+		onModifyMove(move, pokemon, target) {
+			if (!this.effectState.defragmentFirstMove || !target || pokemon.isAlly(target)) return;
+			if (['self', 'allySide', 'allyTeam', 'all', 'field'].includes(move.target)) return;
+			move.accuracy = true;
+			this.effectState.defragmentFirstMove = false;
 		},
 		flags: { breakable: 1 },
 		name: "Defragment",
@@ -7008,7 +7006,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onTryBoost(boost, target, source, effect) {
-			if (!source || target === source || !boost || effect.name === 'Iron Dominion') return;
+			if (!source || target === source || !boost || 'reflectedStatDrop' in effect) return;
 			let b: BoostID;
 			for (b in boost) {
 				if (boost[b]! < 0) {
@@ -7018,7 +7016,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					delete boost[b];
 					if (source.hp) {
 						this.add('-ability', target, 'Iron Dominion');
-						this.boost(negativeBoost, source, target, null, true);
+						this.boost(negativeBoost, source, target, Object.assign({}, this.effect, {reflectedStatDrop: true}), true);
 					}
 				}
 			}
@@ -11645,7 +11643,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onTryBoost(boost, target, source, effect) {
 			// Don't bounce self stat changes, or boosts that have already bounced
-			if (!source || target === source || !boost || effect.name === 'Mirror Armor') return;
+			if (!source || target === source || !boost || 'reflectedStatDrop' in effect) return;
 			if (effect.id === 'neutralization') {
 				let showMsg = false;
 				let b: BoostID;
@@ -11667,7 +11665,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					delete boost[b];
 					if (source.hp) {
 						this.add('-ability', target, 'Mirror Armor');
-						this.boost(negativeBoost, source, target, null, true);
+						this.boost(negativeBoost, source, target, Object.assign({}, this.effect, {reflectedStatDrop: true}), true);
 					}
 				}
 			}
@@ -16415,6 +16413,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 243,
 	},
 	steelworker: {
+		onTryHit(target, source, move) {
+			if (move.category !== 'Status' && this.movehasType(move, 'Poison')) {
+				this.add('-immune', target, '[from] ability: Steelworker');
+				return null;
+			}
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			// Effectiveness runs once per defending type; apply the added resistance only once.
+			if (!target || type !== target.getTypes()[0] || target.hasType('Steel')) return;
+			const steelModifier = this.dex.getEffectiveness(move, 'Steel');
+			if (steelModifier < 0) return typeMod + steelModifier;
+		},
 		onModifyAtkPriority: 5,
 		onModifyMove(move) {
 			if (move && this.movehasType(move, 'Steel')) move.forceSTAB = true;
@@ -16887,9 +16897,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyModifyDef(def, target, source, move) {
 			const abilityHolder = this.effectState.target;
+			const tracking = move || this.event;
 			if (target.hasAbility('Sword of Ruin')) return;
-			if (!move.ruinedDef?.hasAbility('Sword of Ruin')) move.ruinedDef = abilityHolder;
-			if (move.ruinedDef !== abilityHolder) return;
+			if (!tracking.ruinedDef?.hasAbility('Sword of Ruin')) tracking.ruinedDef = abilityHolder;
+			if (tracking.ruinedDef !== abilityHolder) return;
 			this.debug('Sword of Ruin Def drop');
 			return this.chainModify(0.75);
 		},
@@ -16942,9 +16953,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyModifyAtk(atk, source, target, move) {
 			const abilityHolder = this.effectState.target;
+			const tracking = move || this.event;
 			if (source.hasAbility('Tablets of Ruin')) return;
-			if (!move.ruinedAtk) move.ruinedAtk = abilityHolder;
-			if (move.ruinedAtk !== abilityHolder) return;
+			if (!tracking.ruinedAtk) tracking.ruinedAtk = abilityHolder;
+			if (tracking.ruinedAtk !== abilityHolder) return;
 			this.debug('Tablets of Ruin Atk drop');
 			if (this.field.isTerrain('newworldterrain'))
 				return this.chainModify(0.66);
@@ -18205,9 +18217,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyModifySpA(spa, source, target, move) {
 			const abilityHolder = this.effectState.target;
+			const tracking = move || this.event;
 			if (source.hasAbility('Vessel of Ruin')) return;
-			if (!move.ruinedSpA) move.ruinedSpA = abilityHolder;
-			if (move.ruinedSpA !== abilityHolder) return;
+			if (!tracking.ruinedSpA) tracking.ruinedSpA = abilityHolder;
+			if (tracking.ruinedSpA !== abilityHolder) return;
 			this.debug('Vessel of Ruin SpA drop');
 			if (this.field.isTerrain('newworldterrain'))
 				return this.chainModify(0.66);
@@ -21692,4 +21705,16 @@ for (const id of [
 	Abilities[id].onSourceModifyAccuracy = function (accuracy) {
 		if (typeof accuracy === 'number') return this.chainModify(1.1);
 	};
+}
+
+import {installNovemberRoster} from './november-roster';
+installNovemberRoster(Abilities);
+
+import {installStarterLinks} from './starter-family-links';
+installStarterLinks(Abilities);
+
+import {AbilityDescriptionOverrides as NovemberFinalDescriptions} from './ability-descriptions';
+import {NovemberAbilityNames} from './november-roster';
+for (const id of [...Object.keys(NovemberAbilityNames), 'guardianflame', 'bewitchingmajesty']) {
+ Object.assign(Abilities[id as ID], NovemberFinalDescriptions[id]);
 }

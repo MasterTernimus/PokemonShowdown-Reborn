@@ -13,19 +13,19 @@ describe('Torterra and Torterra-Mega-Y', () => {
 		const mega = Dex.species.get('Torterra-Mega-Y');
 		assert.deepEqual(base.baseStats, {hp: 95, atk: 109, def: 105, spa: 75, spd: 85, spe: 66});
 		assert.equal(base.bst, 535);
-		assert.deepEqual(base.abilities, {'0': 'Stamina', '1': 'Shell Armor', H: 'Terra Gift'});
+		assert.deepEqual(base.abilities, {'0': 'Stamina', '1': 'Shell Armor', H: 'Terra Legacy'});
 		assert.deepEqual(base.otherFormes, ['Torterra-Mega-X', 'Torterra-Mega-Y', 'Torterra-Rift', 'Torterra-Rift-Shatter']);
 		assert.deepEqual(mega.types, ['Grass', 'Rock']);
 		assert.deepEqual(mega.baseStats, {hp: 95, atk: 105, def: 130, spa: 144, spd: 105, spe: 56});
 		assert.equal(mega.bst, 635);
-		assert.equal(mega.abilities[0], 'Terra Resolve');
+		assert.equal(mega.abilities[0], 'Terra Eternal');
 		assert.equal(mega.requiredItem, 'Torterranite');
 		assert.equal(Dex.items.get('Torterranite').megaStone.Torterra, 'Torterra-Mega-X');
 		assert.equal(Dex.items.get('Torterrite Y').id, 'torterranite');
 		assert.equal(Dex.species.get('Torterra-Reborn').exists, false);
 	});
 
-	it('Mega Evolves with Terra Resolve and the Proficient passive', () => {
+	it('Mega Evolves with Terra Eternal and the Proficient passive', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Torterra', item: 'Torterranite', moves: ['splash', 'energyball', 'rockslide']},
 		], [{species: 'Mew', moves: ['tackle']}]]);
@@ -55,9 +55,9 @@ describe('Torterra and Torterra-Mega-Y', () => {
 		assert.equal(battle.runEvent('SourceModifyDamage', torterra, battle.p2.active[0], incoming, 100), 80);
 	});
 
-	it('removes Solid Rock from Terra Gift', () => {
+	it('removes Solid Rock from Terra Legacy', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Torterra', ability: 'Terra Gift', moves: ['splash']},
+			{species: 'Torterra', ability: 'Terra Legacy', moves: ['splash']},
 		], [{species: 'Mew', moves: ['splash']}]]);
 		battle.makeChoices('team 1', 'team 1');
 		assert(!battle.p1.active[0].hasAbility('solidrock'));

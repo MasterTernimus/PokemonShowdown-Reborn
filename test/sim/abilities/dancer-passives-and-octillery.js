@@ -31,7 +31,7 @@ describe('Approved eleven dancer passives and Anchored Battery extension', () =>
 		for (const [passive, ids] of Object.entries(require('./regional-passives-approved.json').groups)) for (const id of ids) expected[id] = [...(expected[id] || []), passive];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(SpeciesPassives, expected);
-		assert.equal(Object.keys(expected).length, 952);
+		assert.equal(Object.keys(expected).length, 963);
 		for (const old of before.species) {
 			const s = Dex.species.get(old.id);
 			// Own Tempo moved to Ludicolo's passive; Rain Dish fills its former slot.
@@ -61,7 +61,7 @@ describe('Approved eleven dancer passives and Anchored Battery extension', () =>
 		assert.deepEqual(Dex.species.get('quaquaval').passives, ['torrent']);
 		for (const id of ['lotad', 'lombre', 'petilil', 'oddish', 'gloom', 'quaxly', 'quaxwell', 'meloettamega']) assert(!Dex.species.get(id).passives.includes('owntempo'));
 	});
-	for (const id of before.forms.filter(id => !['quaquaval', 'meloetta', 'meloettapirouette'].includes(id))) it(id + ' blocks confusion and Intimidate through suppression and copying only the active ability', () => {
+	for (const id of before.forms.filter(id => !['quaquaval', 'meloetta', 'meloettapirouette', 'ludicolo'].includes(id))) it(id + ' blocks confusion and Intimidate through suppression and copying only the active ability', () => {
 		const [p, t] = setup(id);
 		for (const state of ['normal', 'gastroacid', 'meridianseal', 'gas', 'replacement']) {
 			if (state === 'gas') t.setAbility('Neutralizing Gas'); else if (state === 'replacement') {
@@ -80,7 +80,7 @@ describe('Approved eleven dancer passives and Anchored Battery extension', () =>
 		assert.deepEqual(t.getPassives(), ['synchronize']);
 	});
 	for (const shield of [false, true]) it('Own Tempo respects attack-scoped bypass with Ability Shield = ' + shield, () => {
-		const [p, t] = setup('Ludicolo', 'Pressure', false, 'Mold Breaker');
+		const [p, t] = setup('Lilligant', 'Pressure', false, 'Mold Breaker');
 		p.addVolatile('gastroacid'); if (shield) p.setItem('Ability Shield');
 		use('confuseray', t, p);
 		assert.equal(!!p.volatiles.confusion, !shield);

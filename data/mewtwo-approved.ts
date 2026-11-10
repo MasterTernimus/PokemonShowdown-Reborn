@@ -116,7 +116,7 @@ export function installMewtwo(abilities: AbilityDataTable) {
 			a.ironfist.onBasePower.call(this, power, source, target, move);
 		},
 		onSourceAfterDamageApplied(this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) {
-			if (damage > 0 && move.effectType === 'Move' && move.category !== 'Status' && move.flags.contact && !source.isAlly(target)) {
+			if (damage > 0 && move.effectType === 'Move' && move.category !== 'Status' && move.flags?.contact && !source.isAlly(target)) {
 				this.heal(damage / 3, source, source, this.effect);
 			}
 		},

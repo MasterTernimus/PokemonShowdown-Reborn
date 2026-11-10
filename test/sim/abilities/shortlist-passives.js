@@ -18,19 +18,19 @@ function hit(p, q, id = 'tackle', extra = {}) {
 }
 describe('Approved ordinary-species shortlist', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
-	it('Burning Rage names its actual components without changing its callbacks or passive attribution', () => {
+	it('Inferno Legacy names its actual components without changing its callbacks or passive attribution', () => {
 		const { getAbilityDisplayComponents } = require('../../../dist/data/ability-display');
 		const ability = Dex.abilities.get('burningrage');
-		for (const name of ['Brute Force', 'Reckless', 'Rock Head', 'Iron Fist', 'Mold Breaker', 'Proficient']) assert(ability.desc.includes(name), name);
-		assert.deepEqual(getAbilityDisplayComponents('burningrage', ['blaze'], 'infernape'), ['bruteforce', 'ironfist', 'moldbreaker']);
-		assert.deepEqual(getAbilityDisplayComponents('burningrage', ['ironfist']), ['bruteforce', 'moldbreaker']);
+		for (const name of ['Brute Force', 'Reckless', 'Rock Head', 'Iron Fist']) assert(ability.desc.includes(name), name);
+		assert.deepEqual(getAbilityDisplayComponents('burningrage', ['blaze'], 'infernape'), ['bruteforce', 'ironfist']);
+		assert.deepEqual(getAbilityDisplayComponents('burningrage', ['ironfist']), ['bruteforce']);
 	});
-	it('Burning Rage registers actual top-level components without granting new primitive field identities', () => {
-		const [p] = setup('Infernape', 'Burning Rage');
-		for (const id of ['proficient', 'bruteforce', 'ironfist', 'moldbreaker']) assert(p.hasAbility(id), id);
+	it('Inferno Legacy registers actual top-level components without granting new primitive field identities', () => {
+		const [p] = setup('Infernape', 'Inferno Legacy');
+		for (const id of ['bruteforce', 'ironfist']) assert(p.hasAbility(id), id);
 		for (const id of ['reckless', 'rockhead']) assert(!p.hasAbilityOrPassive(id), id);
 	});
-	it('Burning Rage metadata expansion preserves damage, fields, recoil and ability-bypass outcomes', () => {
+	it('Inferno Legacy metadata expansion preserves damage, fields, recoil and ability-bypass outcomes', () => {
 		const { calculateScenario } = require('../../../dist/sim/custom-calculator');
 		const { AbilityComponents } = require('../../../dist/data/ability-components');
 		const current = AbilityComponents.burningrage;
@@ -39,9 +39,9 @@ describe('Approved ordinary-species shortlist', () => {
 				for (const [move, ability, item] of [['Fire Punch', 'Flash Fire', ''], ['Fire Punch', 'Flash Fire', 'Ability Shield'], ['Flare Blitz', 'No Ability', ''], ['Earthquake', 'Levitate', '']]) {
 					const input = { format: 'gen9nofieldsinglesgame', field, move, samples: 8, seed: 42,
 						actors: Array.from({ length: 4 }, () => ({ species: 'Mew', ability: 'No Ability' })) };
-					input.actors[0] = { species: 'Infernape', ability: 'Burning Rage' };
+					input.actors[0] = { species: 'Infernape', ability: 'Inferno Legacy' };
 					input.actors[1] = { species: 'Mew', ability, item };
-					AbilityComponents.burningrage = ['proficient']; const before = calculateScenario(input);
+					AbilityComponents.burningrage = []; const before = calculateScenario(input);
 					AbilityComponents.burningrage = current; const after = calculateScenario(input);
 					assert.deepEqual(after.results, before.results, field + '/' + move + '/' + item);
 					const events = log => log.filter(line => !line.startsWith('|t:|'));

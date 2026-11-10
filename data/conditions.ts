@@ -673,15 +673,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				holder.removeVolatile('soulanchortether');
 				return;
 			}
-			if (!holder.hasAbility(['soulanchor', 'blackwateranchor'])) return;
-			const coordinated = holder.hasAbility('blackwateranchor');
-			const effect = this.dex.abilities.get(coordinated ? 'blackwateranchor' : 'soulanchor');
+			if (!holder.hasAbility('soulanchor')) return;
+			const effect = this.dex.abilities.get('soulanchor');
 			const damage = this.damage(target.baseMaxhp / 16, target, holder, effect);
 			if (damage) this.heal(damage, holder, target, effect);
-			if (damage && coordinated && ['psn', 'tox'].includes(target.status) &&
-				this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain'])) {
-				for (const ally of holder.adjacentAllies()) this.heal(damage, ally, target, effect);
-			}
 		},
 	},
 	guidinglightguard: {
@@ -2021,3 +2016,6 @@ Conditions.risingmomentum = {
 	name: 'Rising Momentum', noCopy: true,
 	onModifyCritRatio(critRatio) { if (this.effectState.marksman) return critRatio + 1; },
 };
+
+import {StarterLinkConditions} from './starter-family-links';
+Object.assign(Conditions, StarterLinkConditions);

@@ -9,7 +9,7 @@ describe('Aevian passive additions and approved stats', () => {
 		battle = null;
 	});
 	it('fills all empty slots with one approved passive and preserves existing passives', () => {
-		const preserved = { laprasaevian: 'relicarmor', miloticaevian: 'marvelscale', toxtricityaevian: 'feedback', toxtricityaeviangmax: 'feedback', skeledirgeaevian: 'blaze' };
+		const preserved = { froslassaevian: 'levitate', froslassaevianmega: 'waterveil', volcaronaaevian: 'shielddust', laprasaevian: 'relicarmor', miloticaevian: 'marvelscale', toxtricityaevian: 'feedback', toxtricityaeviangmax: 'feedback', skeledirgeaevian: 'blaze' };
 		for (const species of Dex.species.all().filter(s => s.name.includes('Aevian'))) {
 			const expected = preserved[species.id] || AevianMinorPassives[species.id];
 			assert(expected, species.id); assert.deepEqual(species.passives, [expected], species.id);
@@ -42,7 +42,7 @@ describe('Aevian passive additions and approved stats', () => {
 	it('removes Self Repair from Adaptive Core but keeps Download and Defragment', () => {
 		assert.deepEqual(AbilityComponents.adaptivecore, ['download', 'defragment']);
 		const a = Dex.abilities.get('adaptivecore'); for (const hook of ['onResidual', 'onSwitchOut', 'onCheckShow', 'onImmunity'])assert(!a[hook], hook);
-		assert(a.onStart); assert(a.onModifyMove); assert(a.onAnyAccuracy);
+		assert(a.onStart); assert(a.onModifyMove); assert(a.onModifyMove);
 	});
 	for (const [species, ability] of [['Glalie-Aevian', 'No Ability'], ['Glalie-Aevian-Mega', 'Moss Armor']]) it(species + ' uses passive Levitate independently of Moss Armor suppression', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[{ species, ability, moves: ['splash'] }], [{ species: 'Mew', ability: 'No Ability', moves: ['earthquake'] }]]);

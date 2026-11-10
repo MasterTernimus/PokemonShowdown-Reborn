@@ -3975,8 +3975,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	defragment: {
 		name: "Defragment",
-		desc: "On switch-in, this Pokemon compares the opposing side's combined Attack and Special Attack. If Attack is higher or tied, its Defense rises; otherwise its Special Defense rises. This Pokemon's moves cannot miss.",
-		shortDesc: "Entry defensive boost based on foes' offenses; moves cannot miss.",
+		desc: "On switch-in, this Pokemon compares the opposing side's combined Attack and Special Attack. If Attack is higher or tied, its Defense rises; otherwise its Special Defense rises. Its first move aimed at a foe after entry cannot miss.",
+		shortDesc: "Entry defensive boost based on foes' offenses; first move aimed at a foe cannot miss.",
 	},
 	temporalshift: {
 		name: "Temporal Shift",

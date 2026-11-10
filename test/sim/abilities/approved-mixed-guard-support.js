@@ -53,9 +53,9 @@ describe('Approved mixed attacker and guardian abilities', () => {
 		assert.equal(battle.runEvent('BasePower', holder, foe, punch, 100), 130);
 	});
 
-	it("Gallade-Azzy retains the legacy one-attack Knight's Guard interception", () => {
-		const [holder, ally, foe] = doubles('Gallade-Azzy', "Knight's Guard");
-		assert.deepEqual(holder.species.abilities, { 0: 'Dual Wield', 1: "Knight's Guard", H: 'Inner Focus', S: 'Ruptured Heaven' });
+	it("Gallade-Azzy retains the legacy one-attack Blade Guardian interception", () => {
+		const [holder, ally, foe] = doubles('Gallade-Azzy', "Blade Guardian");
+		assert.deepEqual(holder.species.abilities, { 0: 'Dual Wield', 1: "Blade Guardian", H: 'Inner Focus', S: 'Ruptured Heaven' });
 		assert.equal(holder.hasAbility('swornduty'), true);
 		const tackle = battle.dex.getActiveMove('tackle');
 		assert.equal(battle.priorityEvent('RedirectTarget', foe, foe, tackle, ally), holder);
@@ -113,30 +113,30 @@ describe('Approved mixed attacker and guardian abilities', () => {
 		assert(ally.hp > hp);
 	});
 
-	it('Abyss Lure no longer redirects and Terra Resolve no longer includes Rocky Payload', () => {
+	it('Abyss Lure no longer redirects and Terra Eternal no longer includes Rocky Payload', () => {
 		const [holder, ally, foe] = doubles('Lanturn', 'Abyss Lure');
 		assert(!holder.hasAbility('lightningrod'));
 		assert(!holder.hasAbility('stormdrain'));
 		assert.equal(battle.priorityEvent('RedirectTarget', foe, foe,
 			battle.dex.getActiveMove('thunderbolt'), ally), ally);
 		battle.destroy(); battle = null;
-		const [torterra] = doubles('Torterra-Mega-Y', 'Terra Resolve');
+		const [torterra] = doubles('Torterra-Mega-Y', 'Terra Eternal');
 		assert(!torterra.hasAbility('rockypayload'));
 		assert(torterra.hasAbility('stamina'));
-		assert.equal(battle.dex.species.get('Tangrowth').abilities.H, 'Root Renewal');
+		assert.equal(battle.dex.species.get('Tangrowth').abilities.H, 'Root Entanglement');
 		assert.equal(battle.dex.species.get('Luxrayalt').exists, false);
 		assert.equal(battle.dex.species.get('Weavilealt').exists, false);
 	});
 
  for (const species of ['Gallade','Gallade-Azzy']) for(const field of ['', 'fairytaleterrain']) it(species+' Knight Guard includes full Sworn Duty on '+(field||'normal field'),()=>{
-  const[holder,ally]=doubles(species,"Knight's Guard");battle.field.terrain=field;ally.maxhp=ally.baseMaxhp=1200;ally.hp=100;holder.hp=10;
+  const[holder,ally]=doubles(species,"Blade Guardian");battle.field.terrain=field;ally.maxhp=ally.baseMaxhp=1200;ally.hp=100;holder.hp=10;
   battle.singleEvent('Start',holder.getAbility(),holder.abilityState,holder);
   assert.equal(ally.hp,field?500:400);assert.equal(holder.hp,10);assert(holder.hasAbility('swornduty'));
 		assert.equal(!!holder.abilityState.interceptUsed, false);
  });
- it('Knight Guard Sworn Duty respects Heal Block and fainted allies',()=>{const[holder,ally,foe]=doubles('Gallade',"Knight's Guard");ally.hp=100;ally.addVolatile('healblock',foe);battle.singleEvent('Start',holder.getAbility(),holder.abilityState,holder);assert.equal(ally.hp,100);ally.removeVolatile('healblock');ally.hp=0;ally.fainted=true;battle.singleEvent('Start',holder.getAbility(),holder.abilityState,holder);assert.equal(ally.hp,0);});
+ it('Knight Guard Sworn Duty respects Heal Block and fainted allies',()=>{const[holder,ally,foe]=doubles('Gallade',"Blade Guardian");ally.hp=100;ally.addVolatile('healblock',foe);battle.singleEvent('Start',holder.getAbility(),holder.abilityState,holder);assert.equal(ally.hp,100);ally.removeVolatile('healblock');ally.hp=0;ally.fainted=true;battle.singleEvent('Start',holder.getAbility(),holder.abilityState,holder);assert.equal(ally.hp,0);});
 	it('Knight Guard skips its entry-heal component when the same passive supplies it', () => {
-		const [holder, ally] = doubles('Gallade', "Knight's Guard");
+		const [holder, ally] = doubles('Gallade', "Blade Guardian");
 		ally.hp = 100;
 		holder.getPassives = () => ['swornduty'];
 		battle.singleEvent('Start', holder.getAbility(), holder.abilityState, holder);
@@ -144,5 +144,5 @@ describe('Approved mixed attacker and guardian abilities', () => {
 		assert.equal(!!holder.abilityState.interceptUsed, false);
 	});
 
- it('Knight Guard calculator components and unchanged ordinary attack damage',()=>{const {calculatorMetadata,calculateScenario}=require('../../../dist/sim/custom-calculator');assert.deepEqual(calculatorMetadata().abilityComponents.knightsguard,['Sworn Duty']);const scenario={format:'gen9nofieldsinglesgame',move:'Tackle',samples:8,seed:42,actors:Array.from({length:4},()=>({species:'Mew',ability:'No Ability'}))};const base=calculateScenario(scenario).results[1];scenario.actors[0].ability="Knight's Guard";const guard=calculateScenario(scenario).results[1];assert.equal(guard.min,base.min);assert.equal(guard.max,base.max);});
+ it('Knight Guard calculator components and unchanged ordinary attack damage',()=>{const {calculatorMetadata,calculateScenario}=require('../../../dist/sim/custom-calculator');assert.deepEqual(calculatorMetadata().abilityComponents.knightsguard,['Sworn Duty']);const scenario={format:'gen9nofieldsinglesgame',move:'Tackle',samples:8,seed:42,actors:Array.from({length:4},()=>({species:'Mew',ability:'No Ability'}))};const base=calculateScenario(scenario).results[1];scenario.actors[0].ability="Blade Guardian";const guard=calculateScenario(scenario).results[1];assert.equal(guard.min,base.min);assert.equal(guard.max,base.max);});
 });

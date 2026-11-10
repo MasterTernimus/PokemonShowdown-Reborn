@@ -13,9 +13,9 @@ describe('Requiem full local Filter addition',()=>{
 	it('preserves flags, selected slots, passive and Mega ability', () => {
 		const before = require('../../../artifacts/requiem-filter/before.json');
 		assert.deepEqual(Dex.abilities.get('requiem').flags, before.flags);
-		assert.deepEqual(Dex.species.get('dusknoir').abilities, { ...before.dusknoir, H: 'Soul Reaver' });
+		assert.deepEqual(Dex.species.get('dusknoir').abilities, { ...before.dusknoir, 1: 'Frisk', H: 'Soul Reaver' });
 		assert.deepEqual(Dex.species.get('dusknoirmega').abilities, before.mega);
-		assert.deepEqual(Dex.species.get('dusknoir').passives, ['soulescort']);
+		assert.deepEqual(Dex.species.get('dusknoir').passives, ['pressure']);
 		assert.deepEqual(require('../../../dist/data/ability-display').getAbilityDisplayComponents('requiem'), ['cursedbody', 'filter']);
 	});
 });

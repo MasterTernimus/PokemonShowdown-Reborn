@@ -245,14 +245,14 @@ describe('Approved third roster pass', () => {
 		const hp = p.hp; hit('mudslap', p, foe);
 		assert.equal(p.hp, hp);
 	});
-	it('Funeral Choir counts fainted teammates and heals once per turn from sound damage', () => {
-		const [p, ally, foe] = make('Funeral Choir'); ally.faint(); battle.faintMessages();
+	it('Masquerade Choir counts fainted teammates and heals once per turn from sound damage', () => {
+		const [p, ally, foe] = make('Masquerade Choir'); ally.faint(); battle.faintMessages();
 		p.hp -= 100; const hp = p.hp;
 		hit('hypervoice', p, foe); hit('hypervoice', p, foe);
 		assert.equal(p.hp - hp, Math.floor(p.maxhp / 32));
 	});
-	it('Festival Step clears negative boosts only after a landed damaging dance', () => {
-		const [p, , foe] = make('Festival Step');
+	it('Masquerade Step clears negative boosts only after a landed damaging dance', () => {
+		const [p, , foe] = make('Masquerade Step');
 		p.boosts.def = -1; p.boosts.spd = -1; p.boosts.atk = 2;
 		foe.addVolatile('protect', foe); hit('aquastep', p, foe); assert.equal(p.boosts.def, -1);
 		foe.removeVolatile('protect'); hit('aquastep', p, foe);

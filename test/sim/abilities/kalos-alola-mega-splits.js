@@ -167,7 +167,7 @@ describe('Approved Kalos Alola nine Mega migrations and Ultra damage removal', (
 			assert(move.forceSTAB);
 		}
 	});
-	for (const ability of ['Ultra Ego', 'Perfect Ego', 'Burning Ego', 'Primal Ego', 'Unleashed Ego']) it(ability + ' loses authority damage bonuses but keeps reactive boosts and heals', () => {
+	for (const ability of ['Ultra Ego', 'Perfect Ego', 'Burning Ego', 'Terra Ascendant', 'Unleashed Ego']) it(ability + ' loses authority damage bonuses but keeps reactive boosts and heals', () => {
 		const [p, q] = setup('hawluchamega', true);
 		p.setSpecies(Dex.species.get('Mew'));
 		p.setAbility(ability);

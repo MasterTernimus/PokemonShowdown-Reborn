@@ -96,3 +96,8 @@ import {PlainLanguagePassiveDescriptions} from './ability-readability';
 Object.assign(SignaturePassiveDescriptions, PlainLanguagePassiveDescriptions);
 
 SignaturePassiveComponents.shelteringbreeze = ['friendguard', 'windrider'];
+
+// Full components of the newly assigned composite species passives.
+SignaturePassiveComponents.triplethreat = ['innerfocus', 'keeneye', 'earlybird'];
+SignaturePassiveComponents.lightweightswarm = ['lightmetal', 'swarm'];
+SignaturePassiveComponents.healingmirror = ['magicbounce', 'healer'];

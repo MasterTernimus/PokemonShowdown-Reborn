@@ -102714,6 +102714,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	slitherwing: {
 		learnset: {
+			victorydance: ["9M"],
 			acrobatics: ["9M"],
 			aerialace: ["9M"],
 			bodypress: ["9M"],

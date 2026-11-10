@@ -1,15 +1,17 @@
 'use strict';
 const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim');
-describe('Soul Escort slot-scoped hazard protection',()=>{
+describe('Dusknoir passive replacement',()=>{
  let battle;afterEach(()=>{battle?.destroy();battle=null;});
- function setup(doubles=false,count=4,ability='No Ability'){const mon={species:'Mew',ability:'No Ability',moves:['splash','tackle']};const team=[{...mon,species:'Dusknoir',ability},...Array.from({length:count-1},()=>({...mon}))];battle=common.createBattle({formatid:doubles?'gen9nofielddoublesbattle':'gen9nofieldsinglesgame'},[team,[{...mon},{...mon},{...mon}]]);battle.makeChoices('team '+team.map((_,i)=>i+1).join(''),'team 123');for(const side of battle.sides)for(const p of side.pokemon)p.hp=p.maxhp=p.baseMaxhp=4800;return[battle.p1.active[0],battle.p2.active[0]];}
- function hazards(){for(const id of ['spikes','stealthrock','stickyweb','toxicspikes','gmaxsteelsurge'])battle.p1.addSideCondition(id,battle.p2.active[0]);battle.p1.sideConditions.spikes.layers=3;battle.p1.sideConditions.toxicspikes.layers=2;}
- function faint(p,q,residual=false){battle.damage(p.hp*10,p,q,residual?Dex.conditions.get('psn'):Dex.getActiveMove('tackle'));battle.faintMessages();}
- function enter(p,pos){battle.actions.switchIn(p,pos);battle.queue.list=battle.queue.list.filter(a=>a.choice!=='runSwitch');battle.actions.runSwitch(p);}
- for(const residual of [false,true])it('protects the immediate entry after '+(residual?'residual':'direct')+' faint and leaves hazards intact',()=>{const[p,q]=setup();hazards();p.addVolatile('gastroacid');const replacement=battle.p1.pokemon[1];faint(p,q,residual);assert(battle.p1.slotConditions[0].soulescort);enter(replacement,0);assert.equal(replacement.hp,4800);assert.equal(replacement.status,'');assert.equal(replacement.boosts.spe,0);assert(!replacement.m.soulEscortEntry);assert(!battle.p1.slotConditions[0].soulescort);for(const id of ['spikes','stealthrock','stickyweb','toxicspikes','gmaxsteelsurge'])assert(battle.p1.sideConditions[id]);const other=battle.p1.pokemon.find(x=>x.hp&&!x.isActive);enter(other,0);assert(other.hp<4800);enter(replacement,0);assert(replacement.hp<4800);assert.equal(replacement.status,'tox');});
- it('does not cure the replacement existing status',()=>{const[p,q]=setup();hazards();const replacement=battle.p1.pokemon[1];replacement.setStatus('par');faint(p,q);enter(replacement,0);assert.equal(replacement.status,'par');assert.equal(replacement.hp,4800);});
- it('protects only the vacated slot in doubles',()=>{const[p,q]=setup(true);hazards();const first=battle.p1.pokemon[2],second=battle.p1.pokemon[3];faint(p,q);enter(first,1);assert(first.hp<4800);enter(second,0);assert.equal(second.hp,4800);assert.equal(second.status,'');});
- it('does not create a token without a replacement',()=>{const[p,q]=setup(true,2);faint(p,q);assert(!battle.p1.slotConditions[0].soulescort);});
- it('clears an unused doubles token when the last reserve fills another slot',()=>{const[p,q]=setup(true,3);hazards();const ally=battle.p1.active[1],replacement=battle.p1.pokemon[2];faint(p,q);assert(battle.p1.slotConditions[0].soulescort);faint(ally,q);enter(replacement,1);assert(!battle.p1.slotConditions[0].soulescort);});
- it('base Dusknoir gets Soul Escort, Mega keeps Unaware, and Requiem no longer creates a field',()=>{const[p,q]=setup(false,4,'Requiem');assert.deepEqual(p.getPassives(),['soulescort']);assert.deepEqual(Dex.species.get('dusknoirmega').passives,['unaware']);p.faint();battle.faintMessages();assert.equal(battle.field.terrain,'');});
+ it('uses Pressure with Frisk in the freed slot; Mega retains Unaware',()=>{
+  assert.deepEqual(Dex.species.get('dusknoir').passives,['pressure']);
+  assert.equal(Dex.species.get('dusknoir').abilities[1],'Frisk');
+  assert.deepEqual(Dex.species.get('dusknoirmega').passives,['unaware']);
+ });
+ it('fainting no longer gives its replacement hazard immunity or creates Haunted Field',()=>{
+  battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Dusknoir',ability:'Requiem',moves:['splash']},{species:'Mew',ability:'No Ability',moves:['splash']}],[{species:'Mew',ability:'No Ability',moves:['splash']}]]);
+  battle.makeChoices('team 12','team 1');const p=battle.p1.active[0],reserve=battle.p1.pokemon[1];
+  p.side.addSideCondition('stealthrock',battle.p2.active[0]);p.faint();battle.faintMessages();
+  assert(!p.side.slotConditions[0].soulescort);assert.equal(battle.field.terrain,'');
+  const hp=reserve.hp;battle.actions.switchIn(reserve, 0);battle.actions.runSwitch(reserve);assert(reserve.hp<hp);
+ });
 });

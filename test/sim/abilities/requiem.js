@@ -99,7 +99,7 @@ describe("Reaper's Grip", function () {
 		battle?.destroy();
 	});
 
-	it('should omit removed Iron Fist and Pressure effects', function () {
+	it('omits selected Iron Fist and retains the independently assigned Pressure passive', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Dusknoir', ability: 'reapersgrip', moves: ['splash']},
 		], [
@@ -111,11 +111,11 @@ describe("Reaper's Grip", function () {
 		assert(!dusknoir.hasAbility('ironfist'));
 		assert(dusknoir.hasAbility('selfsufficient'));
 		assert(!dusknoir.hasAbility('pressure'));
-		assert.statStage(foe, 'def', 0);
-		assert.statStage(foe, 'spd', 0);
+		assert.statStage(foe, 'def', -1);
+		assert.statStage(foe, 'spd', -1);
 
 		const ppBefore = foe.moveSlots[0].pp;
 		battle.makeChoices('move splash', 'move tackle');
-		assert.equal(foe.moveSlots[0].pp, ppBefore - 1);
+		assert.equal(foe.moveSlots[0].pp, ppBefore - 2);
 	});
 });
