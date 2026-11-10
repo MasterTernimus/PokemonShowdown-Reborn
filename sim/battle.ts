@@ -3670,6 +3670,14 @@ export class Battle {
 	}
 
 	add(...parts: (Part | (() => { side: SideID, secret: string, shared: string }))[]) {
+		// Status mechanics stay real for the owner; public status remains the disguise's.
+		if (['-status', '-curestatus'].includes(String(parts[0])) && parts[1] instanceof Pokemon &&
+			parts[1].illusion && parts[1].m.illusionHealth) {
+			const pokemon = parts[1];
+			this.log.push(`|split|${pokemon.side.id}`, `|${parts.join('|')}`,
+				`|-damage|${pokemon}|${pokemon.getHealth().shared}|[silent]`);
+			return;
+		}
 		// Preserve Dread Wings' original activation before composite-name rewriting.
 		if (parts[0] === '-ability' && this.effectState?.id === 'dreadwings' &&
 			parts[1] instanceof Pokemon && ['Intimidate', 'Unnerve'].includes(String(parts[2]))) {

@@ -16,6 +16,42 @@ function mod(p, t, crit = false) {
 	return battle.runEvent(crit ? 'CriticalHit' : 'ModifyDamage', crit ? p : t, crit ? null : p, m, crit ? undefined : 100);
 }
 describe('Exact Relic Armor species passive migration', () => {
+	for (const species of RelicArmorPassiveForms) {
+		it(species + ' receives only one field-entry bonus with Aurora Current', () => {
+			const mon = (name, ability) => ({species: name, ability, moves: ['splash']});
+			battle = common.createBattle({formatid: 'gen9volcanic'}, [
+				[mon(species, 'Aurora Current'), mon('Mew', 'No Ability')],
+				[mon('Mew', 'No Ability'), mon('Mew', 'No Ability')],
+			]);
+			battle.makeChoices('team 12', 'team 12');
+			const pokemon = battle.p1.active[0];
+			assert.equal(pokemon.boosts.def, 1);
+			assert.equal(pokemon.boosts.spd, 1);
+			battle.makeChoices('switch 2', 'move splash');
+			battle.makeChoices('switch 2', 'move splash');
+			assert.equal(pokemon.boosts.def, 1);
+			assert.equal(pokemon.boosts.spd, 1);
+		});
+	}
+	for (const field of ['desertterrain', 'fairytaleterrain', 'caveterrain', 'crystalcavernterrain',
+		'newworldterrain', 'volcanicterrain', 'holyterrain', 'darkcrystalcavernterrain', 'starlightarenaterrain']) {
+		it(field + ' preserves a single combined entry bonus', () => {
+			const [pokemon] = setup('Aurorus', 'Aurora Current');
+			battle.field.setTerrain(field, pokemon);
+			pokemon.boosts.def = pokemon.boosts.spd = 0;
+			battle.runEvent('SwitchIn', pokemon);
+			assert.equal(pokemon.boosts.def, 1);
+			assert.equal(pokemon.boosts.spd, 1);
+		});
+	}
+	it('retains Aurora Current entry boosts without a Relic Armor passive', () => {
+		const [pokemon] = setup('Mew', 'Aurora Current');
+		assert(battle.field.isWeather('hail'));
+		battle.field.setTerrain('volcanicterrain', pokemon);
+		battle.runEvent('SwitchIn', pokemon);
+		assert.equal(pokemon.boosts.def, 1);
+		assert.equal(pokemon.boosts.spd, 1);
+	});
 	afterEach(() => {
 		battle?.destroy();
 		battle = null;

@@ -1,3 +1,7 @@
+export const RelicArmorEntryFields = [
+	'desertterrain', 'fairytaleterrain', 'caveterrain', 'crystalcavernterrain', 'newworldterrain', 'volcanicterrain',
+];
+
 /** Rock-typing weakness protection uses actual fields, never an Aura equivalent. */
 export const RelicArmorFields = [
 	'rockyterrain', 'fairytaleterrain', 'watersurfaceterrain', 'underwaterterrain',

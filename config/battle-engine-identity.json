@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "a4c13f9c86fa384d4cae273f9c69ec0c1a3b77d828764c6e457f0fbe75944569",
-  "packageManifestSHA256": "3ed281bdd470a9d2e3c9ca8c620ec04b33a31980e1aa51917dbcdd52eb9c405f",
-  "mechanicsSHA256": "aba84e5dd202e8d78224520e9d061db8a4299880d4ff3ba654b7a27ec7be229b",
+  "packageEngineRevision": "4d8d7b74f5f4f3ba1a880def936a39fc5df49ee3974edc2db28888678ecc4529",
+  "packageManifestSHA256": "877b817dc900b00264ac61d6381c9877f1ca09f5eff99dd505e7e155c570acd0",
+  "mechanicsSHA256": "5cd14c501914156468fc9da926efb0a09a98d079730d785985d966d058c6b169",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,7 +11,7 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "619dd0c7b36bd62a694c04896a60e02e13465902fe0e08eceb1d4669bbd0f9a9"
+      "sha256": "333bd6036852de526fe31eeb76872297fb17da317b938af68dd0b4e130cf3767"
     },
     {
       "file": "dist/data/ability-components.js",
@@ -347,7 +347,7 @@
     },
     {
       "file": "dist/data/illusion-split.js",
-      "sha256": "85ee233c83f0655a2495ef07687733f253e6991c3620701cb165726f3b97bf25"
+      "sha256": "24759e78887adec71cd0f97a246923bb155df36132a6392ddd312e2a6ae4e6fb"
     },
     {
       "file": "dist/data/items.js",
@@ -743,7 +743,7 @@
     },
     {
       "file": "dist/data/relic-armor.js",
-      "sha256": "b7c58a236bcf0c6a2a4e10a6bb0fa9e6b9c130ec9e4debb9cc8340d49aedff2f"
+      "sha256": "3246fb3946235dc3a1a6cc994af0d1385b452a59b25d5e675e27717855aacf53"
     },
     {
       "file": "dist/data/ripen-seeds.js",
@@ -1067,7 +1067,7 @@
     },
     {
       "file": "dist/sim/battle-actions.js",
-      "sha256": "9de14d40db40ead96cbf3eb93fa720ea5b76bde2e8883a91102051cceea5d2f7"
+      "sha256": "4c99ef3d8591dd21f7eeaa53be84b31eab23d9084968474e116a6d93b9d0dcc4"
     },
     {
       "file": "dist/sim/battle-queue.js",
@@ -1079,7 +1079,7 @@
     },
     {
       "file": "dist/sim/battle.js",
-      "sha256": "12343d7106ab9b3b55a6fdf624fc6b7f8818cc88071aadd784193cdadb4c26ac"
+      "sha256": "e591a95ce73154799b76ecbfacb377550e62a273abe345ff1ed9c826c8576ba1"
     },
     {
       "file": "dist/sim/beast-hunter.js",
@@ -1167,7 +1167,7 @@
     },
     {
       "file": "dist/sim/pokemon.js",
-      "sha256": "b72d7e58c70c3e7dc76d05caa96d041244c1677a12060cafe7c1ade06a05ec28"
+      "sha256": "1adcd36912f5190e47632b685934075ef027bfe5831fa1c4a411aabc338e63c1"
     },
     {
       "file": "dist/sim/predator.js",
@@ -1262,7 +1262,7 @@
     },
     {
       "file": "dist/data/ability-descriptions.js",
-      "sha256": "2c0c462f3eeea9179b6e70d5e78365985acb0db48a85a31f04faefd01842b637",
+      "sha256": "c7f91ed1edc6044c1f8146488c263574de96eb946c5881424fe4e805abe5e68d",
       "reason": "Reviewed description-only table or license/readme."
     },
     {

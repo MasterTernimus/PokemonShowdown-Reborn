@@ -5,7 +5,7 @@ import {absorbHit} from './absorption';
 import {getRKSSystemMemoryAbilities} from './rks-system-memory';
 import {updateCocoonIndicator} from '../sim/cocoon-indicator';
 import {GrandStrategy} from './grand-strategy';
-import {RelicArmorFields, updateRelicArmorIndicator, clearRelicArmorIndicators} from './relic-armor';
+import {RelicArmorFields, RelicArmorEntryFields, updateRelicArmorIndicator, clearRelicArmorIndicators} from './relic-armor';
 import {accumulationState, accumulationStackReady, installSwalotVespiquen} from './swalot-vespiquen-approved';
 import { checkWarning, checkOmenSight, protectsWarnedMove } from './warned-moves';
 import {applySereneGrace} from './ally-serene-grace';
@@ -5538,6 +5538,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	auroracurrent: {
 		onStart(source) {
 			this.field.setWeather('hail', source, this.dex.abilities.get('auroracurrent'));
+			// Relic Armor supplies this same entry bonus on their shared fields.
+			if (source.hasAbilityOrPassive('relicarmor') && this.field.isTerrain(RelicArmorEntryFields)) return;
 			if (this.field.isTerrain(['holyterrain', 'crystalcavernterrain', 'darkcrystalcavernterrain', 'newworldterrain', 'starlightarenaterrain', 'caveterrain', 'volcanicterrain', 'desertterrain'])) {
 				this.boost({ def: 1, spd: 1 }, source, source, this.effect);
 			}
@@ -8006,7 +8008,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	relicarmor: {
 		onStart(pokemon) {
 			updateRelicArmorIndicator(this, pokemon);
-			if (this.field.isTerrain(['desertterrain', 'fairytaleterrain', 'caveterrain', 'crystalcavernterrain', 'newworldterrain', 'volcanicterrain'])) {
+			if (this.field.isTerrain(RelicArmorEntryFields)) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.dex.abilities.get('relicarmor'));
 			}
 		},

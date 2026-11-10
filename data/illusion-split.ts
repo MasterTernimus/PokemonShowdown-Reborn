@@ -1,11 +1,11 @@
 import type {AbilityDataTable} from '../sim/dex-abilities';
 export const IllusionDescriptions = {
  "illusion": {
-  "desc": "Disguises itself as a teammate without copying mechanical traits. The optional Initial Disguise teammate is used on the holder’s first entry only; if unavailable, normal automatic selection applies. Auto and later entries use the last eligible healthy teammate in battle order. Direct damaging hits and normal reveal effects, including opposing Mind’s Eye, break the disguise. Types, STAB, abilities and passives are not copied.",
+  "desc": "Disguises itself as a teammate, including its displayed HP and status on entry. The disguised HP bar follows damage and healing; the owner sees the real HP and status. The optional Initial Disguise teammate is used on the holder’s first entry only; if unavailable, normal automatic selection applies. Auto and later entries use the last eligible healthy teammate in battle order. Direct damaging hits and normal reveal effects, including opposing Mind’s Eye, break the disguise. Types, STAB, abilities and passives are not copied.",
   "shortDesc": "Teammate disguise only; optional initial teammate, then Auto."
  },
  "perfectillusion": {
-  "desc": "Advanced disguise copies its teammate’s STAB types, eligible selected ability and species passives until revealed. The optional Initial Disguise teammate is used on the holder’s first entry only; if unavailable, normal automatic selection applies. Auto uses the last healthy teammate on first entry, then the best threat-scored healthy teammate when possible. Blacklisted form and copying abilities are not copied. Mirror Arena entry grants +1 evasion; Chessboard grants 1.2x move power while disguised; Cold Eclipse prevents hail damage. Direct damage and reveal effects, including opposing Mind’s Eye, remove the disguise and copied traits.",
+  "desc": "Advanced disguise copies its teammate’s STAB types, eligible selected ability and species passives until revealed. It also copies the teammate’s displayed HP and status on entry; the bar follows damage and healing, while the owner sees the real condition. The optional Initial Disguise teammate is used on the holder’s first entry only; if unavailable, normal automatic selection applies. Auto uses the last healthy teammate on first entry, then the best threat-scored healthy teammate when possible. Blacklisted form and copying abilities are not copied. Mirror Arena entry grants +1 evasion; Chessboard grants 1.2x move power while disguised; Cold Eclipse prevents hail damage. Direct damage and reveal effects, including opposing Mind’s Eye, remove the disguise and copied traits.",
   "shortDesc": "Advanced teammate disguise copies STAB, eligible ability and passives until revealed."
  }
 };

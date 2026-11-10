@@ -2502,16 +2502,25 @@ export class Pokemon {
 	}
 
 	getHealth = (): { side: SideID, secret: string, shared: string } => {
-		// Illusion changes identity, never the holder's HP or status reporting.
 		if (!this.hp) return { side: this.side.id, secret: '0 fnt', shared: '0 fnt' };
 		let secret = `${this.hp}/${this.maxhp}`;
+		let hp = this.hp, maxhp = this.maxhp, status = this.status;
+		const disguise = this.illusion && this.m.illusionHealth;
+		if (disguise) {
+			// Snapshot the teammate on entry; later teammate changes cannot move this bar.
+			// Damage/healing moves the disguise by the holder's actual percentage change.
+			maxhp = disguise.maxhp;
+			hp = Math.max(1, Math.min(maxhp, Math.round(maxhp *
+				(disguise.hp / maxhp + this.hp / this.maxhp - disguise.entryFraction))));
+			status = disguise.status;
+		}
 		let shared;
 		if (this.battle.reportExactHP) {
-			shared = secret;
+			shared = `${hp}/${maxhp}`;
 		} else if (this.battle.reportPercentages || this.battle.gen >= 7) {
 			// HP Percentage Mod mechanics
-			let percentage = Math.ceil(100 * this.hp / this.maxhp);
-			if (percentage === 100 && this.hp < this.maxhp) {
+			let percentage = Math.ceil(100 * hp / maxhp);
+			if (percentage === 100 && hp < maxhp) {
 				percentage = 99;
 			}
 			shared = `${percentage}/100`;
@@ -2522,20 +2531,20 @@ export class Pokemon {
 			 * - [Gen 7] SM uses 99 pixels
 			 * - [Gen 7] USUM uses 86 pixels
 			 * */
-			const pixels = Math.floor(48 * this.hp / this.maxhp) || 1;
+			const pixels = Math.floor(48 * hp / maxhp) || 1;
 			shared = `${pixels}/48`;
 			if (this.battle.gen >= 5) {
 				if (pixels === 9) {
-					shared += this.hp * 5 > this.maxhp ? 'y' : 'r';
+					shared += hp * 5 > maxhp ? 'y' : 'r';
 				} else if (pixels === 24) {
-					shared += this.hp * 2 > this.maxhp ? 'g' : 'y';
+					shared += hp * 2 > maxhp ? 'g' : 'y';
 				}
 			}
 		}
 		if (this.status) {
 			secret += ` ${this.status}`;
-			shared += ` ${this.status}`;
 		}
+		if (status) shared += ` ${status}`;
 		return { side: this.side.id, secret, shared };
 	};
 

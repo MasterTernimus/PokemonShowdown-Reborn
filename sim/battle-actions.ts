@@ -299,6 +299,13 @@ export class BattleActions {
   }
 		takeFarewellGift(pokemon, oldActive, pos);
 		this.battle.runEvent('BeforeSwitchIn', pokemon);
+		delete pokemon.m.illusionHealth;
+		if (pokemon.illusion) {
+			pokemon.m.illusionHealth = {
+				hp: pokemon.illusion.hp, maxhp: pokemon.illusion.maxhp, status: pokemon.illusion.status,
+				entryFraction: pokemon.hp / pokemon.maxhp,
+			};
+		}
 		if (sourceEffect) {
 			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, `[from] ${sourceEffect}`);
 		} else {
