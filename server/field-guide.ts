@@ -10,9 +10,11 @@ import { Auras } from '../data/auras';
 import { FieldNotes } from '../data/field-guide';
 import { ReviewedFieldGuide } from '../data/public-field-guide';
 import { RoomReference } from '../data/room-reference';
-import {FieldCoolingMoves} from '../data/field-cooling';
-import {fieldTransitionRoutes, type FieldTransitionRoute} from './field-guide-transitions';
-import { conciseFieldNotes, FieldTransitionNotes, FieldAbilityComponents, ConciseFieldAbilityNotes } from '../data/field-guide-presentation';
+import { FieldCoolingMoves } from '../data/field-cooling';
+import { fieldTransitionRoutes, type FieldTransitionRoute } from './field-guide-transitions';
+import {
+	conciseFieldNotes, FieldTransitionNotes, FieldAbilityComponents, ConciseFieldAbilityNotes,
+} from '../data/field-guide-presentation';
 const index = JSON.parse(FS('data/field-guide-index.json').readSync());
 export function publicFieldGuide() {
 	const fields = calculatorMetadata().fields.filter(f => f.id).map(field => ({
@@ -44,7 +46,7 @@ export function publicFieldGuide() {
 			'Field effects and move, ability and item interactions.' :
 			'Detailed effects are not available yet.',
 		legacyNotes: ReviewedFieldGuide[field.id] || field.id === 'newworldterrain' ? [] : FieldNotes[field.id] || [],
-		transitions: {incoming: [] as FieldTransitionRoute[], outgoing: [] as FieldTransitionRoute[]},
+		transitions: { incoming: [] as FieldTransitionRoute[], outgoing: [] as FieldTransitionRoute[] },
 		referenceDetails: fieldReferenceDetails(field.id),
 		references: Object.fromEntries(Object.entries(index.fields[field.id] || {}).map(([kind, ids]) => [kind,
 			(ids as string[]).map(id => (kind === 'abilities' ? Dex.abilities : kind === 'moves' ? Dex.moves : Dex.items).get(id).name)])),
@@ -159,8 +161,8 @@ function fieldReferenceDetails(field: string) {
 		if (kind === 'moves' && FieldCoolingMoves[id] && ['dragonsdenterrain', 'volcanicterrain'].includes(field)) {
 			const cooling = field === 'volcanicterrain' || FieldCoolingMoves[id] === 2 ?
 				'One use changes the field to Cave, even on a miss, immunity or Protect.' : id === 'sparklingaria' ?
-				'One use changes the field to Volcanic, even on a miss, immunity or Protect.' :
-				'Adds one cooling step, even on a miss, immunity or Protect. Two steps change Dragon’s Den to Volcanic.';
+					'One use changes the field to Volcanic, even on a miss, immunity or Protect.' :
+					'Adds one cooling step, even on a miss, immunity or Protect. Two steps change Dragon’s Den to Volcanic.';
 			notes = [cooling];
 		}
 		if (!notes && kind === 'items' && FieldSeedNotes[field]?.includes(effect.name)) notes = [FieldSeedNotes[field]];

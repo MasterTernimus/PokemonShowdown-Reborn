@@ -1,5 +1,5 @@
 import { unstableEvoComponents } from './ability-components';
-import {whiteSmokeFieldEntry} from './field-messages';
+import { whiteSmokeFieldEntry } from './field-messages';
 import {fieldDisablesArmorReduction} from './armor-reductions';
 import { markDualWieldScale } from '../sim/dual-wield-power';
 import {absorbHit} from './absorption';

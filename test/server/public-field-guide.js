@@ -178,7 +178,7 @@ describe('Player-facing Field Notes', () => {
 		assert.equal(names.filter(name => name === 'White Smoke').length, 1);
 	});
 	it('lists every shared cooling move with its current field-specific result', () => {
-		const {FieldCoolingMoves} = require('../../dist/data/field-cooling');
+		const { FieldCoolingMoves } = require('../../dist/data/field-cooling');
 		for (const id of ['dragonsdenterrain', 'volcanicterrain']) {
 			const entry = publicFieldGuide().entries.find(e => e.id === id);
 			for (const [move, strength] of Object.entries(FieldCoolingMoves)) {

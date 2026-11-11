@@ -1,10 +1,10 @@
 import {SnowyField} from './snowy-field';
-import {installFieldArrivalMessages} from './field-messages';
+import { installFieldArrivalMessages } from './field-messages';
 import {EclipseTerrains} from './eclipse-fields';
 import { isGroundBoneMove } from './ground-bone-moves';
 import {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';
 import { MidnightZone } from './midnight-zone';
-import {FieldCoolingMoves} from './field-cooling';
+import { FieldCoolingMoves } from './field-cooling';
 export const denCooling = FieldCoolingMoves;
 /* eslint-disable @stylistic/max-len */
 import { type TerrainData } from "../sim/dex-terrains";
