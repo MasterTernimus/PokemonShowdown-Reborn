@@ -70,13 +70,13 @@ describe('Dragon’s Den field revisions', () => {
   holder.setAbility('No Ability');
   assert(battle.field.changeTerrain('caveterrain',holder));
  });
- it('announces cooling progress before the Den becomes Cave', () => {
+ it('announces cooling progress before the Den becomes Volcanic', () => {
 		const [user, foe] = start();
 		user.hp = user.maxhp = foe.hp = foe.maxhp = 10000;
 		battle.makeChoices('move surf', 'move splash');
 		assert.equal(battle.field.terrain, 'dragonsdenterrain');
 		battle.makeChoices('move surf', 'move splash');
-  assert.equal(battle.field.terrain,'caveterrain');
+  assert.equal(battle.field.terrain,'volcanicterrain');
 		assert.equal(battle.log.filter(line => line.includes('lava cooled')).length, 1);
  });
 });

@@ -1,7 +1,7 @@
 /** Display-only audit; callbacks and component metadata remain unchanged. */
 export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:string}> = {
   "smolderingshroud": {
-    "desc": "Prevents opposing stat drops. Gains +1 Attack and Sp. Atk on Volcanic entry. The first foe-caused stat drop it prevents each switch-in also raises its Sp. Atk by one stage.",
+    "desc": "Prevents opposing stat drops. Gains +1 Attack and Sp. Atk on Volcanic or Dragon's Den entry. The first foe-caused stat drop it prevents each switch-in also raises its Sp. Atk by one stage.",
     "shortDesc": "First blocked opposing stat drop each entry raises Sp. Atk by 1."
   },
   "springfur": {
@@ -237,8 +237,8 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
 		"shortDesc": "Updraft (Competitive); eight-turn Strong Winds; Flying attacks bypass Substitute.",
   },
   "whitesmoke": {
-    "desc": "Prevents opposing stat drops. Gains +1 Attack and Sp. Atk on Volcanic entry.",
-    "shortDesc": "Blocks other Pokemon's stat drops; Volcanic entry boosts attacks."
+    "desc": "Prevents opposing stat drops. Gains +1 Attack and Sp. Atk on Volcanic or Dragon's Den entry.",
+    "shortDesc": "Blocks other Pokemon's stat drops; Volcanic/Dragon's Den entry boosts attacks."
   },
   "wimpout": {
     "desc": "When this Pokemon has more than 1/2 its max HP and takes damage bringing it to 1/2 or less of its max HP, it immediately switches out to a chosen ally. This effect applies after all hits from a multi-hit move. This effect is prevented if the move had a secondary effect removed by the Sheer Force Ability. This effect applies to both direct and indirect damage, except Curse and Substitute on use, Belly Drum, Pain Split, and confusion damage.",
@@ -433,7 +433,7 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
     "shortDesc": "First Flying Press damage each entry attempts two-turn Taunt after the hit."
   },
   "constrictingheat": {
-    "desc": "White Smoke prevents other Pokemon from lowering its stats and grants +1 Attack and Sp. Atk on Volcanic entry. Fire Lash damage partially traps a surviving foe as Fire Spin for this turn end and the next. Only one ability trap per holder; a new trapped foe releases the previous one. No stacking with partial traps. Traps end when the holder leaves, loses the ability or Dynamaxes/Gigantamaxes. Normal escape, protection and residual-damage rules apply.",
+    "desc": "White Smoke prevents other Pokemon from lowering its stats and grants +1 Attack and Sp. Atk on Volcanic or Dragon's Den entry. Fire Lash damage partially traps a surviving foe as Fire Spin for this turn end and the next. Only one ability trap per holder; a new trapped foe releases the previous one. No stacking with partial traps. Traps end when the holder leaves, loses the ability or Dynamaxes/Gigantamaxes. Normal escape, protection and residual-damage rules apply.",
     "shortDesc": "Damaging Fire Lash binds one foe for two turns. Switching or Dynamax/Gigantamax ends it."
   },
   "wreckingcrew": {

@@ -1,4 +1,5 @@
 import { unstableEvoComponents } from './ability-components';
+import {whiteSmokeFieldEntry} from './field-messages';
 import {fieldDisablesArmorReduction} from './armor-reductions';
 import { markDualWieldScale } from '../sim/dual-wield-power';
 import {absorbHit} from './absorption';
@@ -464,7 +465,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	smolderingshroud: {
 		onStart(pokemon) {
 			this.effectState.specialAttackRaised = false;
-			if (this.field.isTerrain('volcanicterrain')) this.boost({ atk: 1, spa: 1 }, pokemon, pokemon);
+			whiteSmokeFieldEntry(this, pokemon);
 		},
 		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
@@ -18584,12 +18585,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10128,
 	},
 	whitesmoke: {
-		onStart() {
+		onStart(pokemon) {
 			if (skipPassiveComponent(this, this.effectState.target, 'whitesmoke')) return;
  if (this.effectState.speciesPassive === 'whitesmoke' && this.effectState.target.hasAbility('smolderingshroud')) return;
-			if (this.field.isTerrain('volcanicterrain')) {
-				this.boost({ atk: 1, spa: 1 });
-			}
+			whiteSmokeFieldEntry(this, pokemon);
 		},
 		onTryBoost(boost, target, source, effect) {
 			if (skipPassiveComponent(this, this.effectState.target, 'whitesmoke')) return;

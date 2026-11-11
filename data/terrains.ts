@@ -1,16 +1,11 @@
 import {SnowyField} from './snowy-field';
+import {installFieldArrivalMessages} from './field-messages';
 import {EclipseTerrains} from './eclipse-fields';
 import { isGroundBoneMove } from './ground-bone-moves';
 import {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';
 import { MidnightZone } from './midnight-zone';
-export const denCooling: Readonly<Record<string, number>> = {
-	surf: 1,
-	muddywater: 1,
-	glaciate: 2,
-	hydrovortex: 2,
-	oceanicoperetta: 2,
-	subzeroslammer: 2,
-};
+import {FieldCoolingMoves} from './field-cooling';
+export const denCooling = FieldCoolingMoves;
 /* eslint-disable @stylistic/max-len */
 import { type TerrainData } from "../sim/dex-terrains";
 import { type Battle } from '../sim/battle';
@@ -1131,8 +1126,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 					['lavaplume', 'The lava strengthened the attack!'],
 					['shelltrap', 'The lava strengthened the attack!'],
 					['earthpower', 'The lava strengthened the attack!'],
-					['payday', 'money money money money money mothafucka'],
-					['makeitrain', 'money money money money money mothafucka'],
+					['payday', 'Coins glittered among the dragon\'s hoard!'],
+					['magmadrift', 'The attack rode a surge of molten rock!'],
+					['matrixshot', 'Draconic energy surged through the shot!'],
+					['rockclimb', 'The climb shook loose the dragon\'s hoard!'],
 					['stompingtantrum', 'Wrath of the Dragon!!!'],
 					['diamondstorm', 'Sparkling treasure!'],
 					['makeitrain', 'Sparkling treasure!'],
@@ -1147,7 +1144,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				if (typeof move.totalDamage !== 'number' || move.totalDamage <= 0 || this.field.moveTransitionBlocked(source, move)) return;
+				if (this.field.moveTransitionBlocked(source, move)) return;
+				// Cooling changes the environment even when the attack does not damage its target.
+				if (!denCooling[move.id] && (!move.totalDamage || move.totalDamage <= 0)) return;
 				if (move.id === 'mistball') {
 					if (this.field.changeTerrain('fairytaleterrain', source, move)) this.add('-message', 'Mist Ball transformed the field for 5 turns!');
 					return;
@@ -1162,13 +1161,19 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const cooling = denCooling[move.id] || 0;
 				if (cooling) {
 					if (current + cooling >= 2) {
-						if (this.field.changeTerrain('caveterrain', source, move)) this.add('-message', 'The dragon fire faded as the lava hardened into a cavern!');
+						const destination = cooling >= 2 ? 'caveterrain' : 'volcanicterrain';
+						if (this.field.changeTerrain(destination, source, move)) {
+							this.add('-message', cooling >= 2 ? 'The dragon fire faded as the lava hardened into a cavern!' :
+								'The dragon fire faded, leaving a volcanic field!');
+						}
 					} else {
 						this.field.terrainState.terrainChanges?.set('caveterrain', current + cooling);
 						this.add('-message', 'The lava cooled, but the dragon fire still burns!');
 					}
 				} else if (['dracometeor', 'dragonenergy', 'devastatingdrake'].includes(move.id)) {
-					this.field.terrainState.terrainChanges?.set('caveterrain', Math.max(0, current - (move.id === 'devastatingdrake' ? 2 : 1)));
+					const remaining = Math.max(0, current - (move.id === 'devastatingdrake' ? 2 : 1));
+					this.field.terrainState.terrainChanges?.set('caveterrain', remaining);
+					if (remaining < current) this.add('-message', 'Draconic power rekindled the cooling lava!');
 				}
 			},
 			onFieldStart() {
@@ -1204,6 +1209,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (boost.includes(move.id)) {
+					this.add('-message', 'The factory machinery powered up the attack!');
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (quakemoves.includes(move.id) || (move.id === 'superumdmove' && move.category === 'Physical')) {
@@ -1323,12 +1329,14 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (boosted.includes(move.id)) {
+					this.add('-message', 'The forest stirred with the rhythm of the attack!');
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.isMax && move.type === 'Water') {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (nerfed.includes(move.id)) {
+					this.add('-message', 'The tangled roots broke the force of the flood!');
 					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 					const marshCounter = move.id === 'surf' ? 1 : 2;
 					const currentCounter = this.field.terrainState.terrainChanges?.get('swampterrain') ?? 0;
@@ -2321,7 +2329,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.id === 'rocksmash') {
-					this.add('-message', 'SMASH\'D!');
+					this.add('-message', 'The shattered rocks struck with crushing force!');
 					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (rockymoves.includes(move.id)) {
@@ -3010,7 +3018,14 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				return this.chainModify(modifier);
 			},
-			onAfterMove(target, source, move) {
+			onAfterMove(source, target, move) {
+				if (FieldCoolingMoves[move.id]) {
+					if (this.field.moveTransitionBlocked(source, move)) return;
+					if (this.field.changeTerrain('caveterrain', source, move)) {
+						this.add('-message', 'The lava cooled and hardened into a cavern!');
+					}
+					return;
+				}
 				const moveMessages = new Map<string, string>([
 					['sandtomb', 'The sand snuffed out the flame!'],
 					['scorchingsands', 'The sand snuffed out the flame!'],
@@ -3309,6 +3324,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 };
 
 import {skipClearingField} from './yang-aura-clear';
+installFieldArrivalMessages(Terrains);
 for (const terrain of Object.values(Terrains)) {
  const afterMove = terrain.condition?.onAfterMove;
  if (typeof afterMove !== 'function') continue;

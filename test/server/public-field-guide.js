@@ -42,7 +42,7 @@ describe('Field Guide reference explanations', () => {
 			count++;
 			assert(row.reviewed, row.name);
 			assert(row.fieldEffects.length, row.name);
-		}assert.equal(count, 27);
+		}assert.equal(count, 26); // Mind Freeze's Ice Body effect shares the Ice Body row.
 	});
 	it('distinguishes pending details from checked effects', () => {
 		for (const e of publicFieldGuide().entries) for (const rows of Object.values(e.referenceDetails || {})) for (const row of rows) {
@@ -73,8 +73,8 @@ describe('Eclipse guide sections', () => {
 			assert(development[0].includes(ability));
 			for (const move of moves) assert(development[0].includes(move), move);
 			assert.match(development[1], /remaining turns/);
-			assert.match(development[2], /any user/);
-			assert.match(development[2], /FIELD timer, not the aura timer/);
+			assert.match(development.join(' '), /any user/);
+			assert.match(development.join(' '), /FIELD timer, not the aura timer/);
 			assert.match(development.join(' '), /blocked conversions leave the aura intact/);
 			assert.match(sections.Duration.join(' '), /5 turns, or 8 with Amplifield Rock/);
 		});
@@ -93,13 +93,13 @@ describe('Eclipse guide sections', () => {
 		assert.match(sections.Duration.join(' '), /Rift Opening also creates Rift Aura over another field/);
 		assert.match(entry('rifteclipseterrain').sections['Seeds and other effects'].join(' '), /any user.*Rift Opening.*develops full Rift Eclipse/);
 		assert.match(sections.Transitions.join(' '), /blocked conversions leave the aura intact/);
-		assert.match(sections['Boosts and general effects'].join(' '), /Dark attacks: 1.3x/);
-		assert.match(sections['Boosts and general effects'].join(' '), /Ghost attacks: 1.2x/);
-		assert.match(sections['Boosts and general effects'].join(' '), /Fairy attacks: weakened to 0.75x/);
+		assert.match(sections['Boosts and general effects'].join(' '), /Dark attacks: 1.3×/);
+		assert.match(sections['Boosts and general effects'].join(' '), /Ghost attacks: 1.2×/);
+		assert.match(sections['Boosts and general effects'].join(' '), /Fairy attacks: weakened to 0.75×/);
 		assert.match(sections['Boosts and general effects'].join(' '), /Fairy penalties do not multiply together/);
-		assert.match(sections['Boosts and general effects'].join(' '), /stronger 0.5x on full Rift Eclipse or Infernal Eclipse/);
-		assert.match(entry('rifteclipseterrain').sections['Boosts and general effects'].join(' '), /Fairy attacks: 0.5x/);
-		assert.match(sections['Boosts and general effects'].join(' '), /Spirit Break.*Rift Aura applies its own 0.75x penalty/);
+		assert.match(sections['Boosts and general effects'].join(' '), /stronger 0.5× on full Rift Eclipse or Infernal Eclipse/);
+		assert.match(entry('rifteclipseterrain').sections['Boosts and general effects'].join(' '), /Fairy attacks: 0.5×/);
+		assert.match(sections['Boosts and general effects'].join(' '), /Spirit Break.*Rift Aura applies its own 0.75× penalty/);
 		assert.match(sections['Boosts and general effects'].join(' '), /does not apply.*sleeping damage.*Room and Gravity/);
 		assert.match(sections.Moves.join(' '), /Nature Power calls Dark Pulse/);
 		assert.match(entry('rifteclipseterrain').sections.Abilities.join(' '), /Rift Herald creates full Rift Eclipse.*only on an empty field/);
@@ -162,14 +162,43 @@ describe('Field message trigger explanations', () => {
  });
 
 describe('Player-facing Field Notes', () => {
+	it('includes transitions for every field and component rows without general ability descriptions', () => {
+		const entries = publicFieldGuide().entries.filter(e => e.kind === 'field');
+		for (const entry of entries) {
+			assert(entry.sections.Transitions.length, entry.id);
+			for (const row of entry.referenceDetails.abilities || []) assert.equal(row.generalSummary, '');
+		}
+		const den = entries.find(e => e.id === 'dragonsdenterrain');
+		const names = den.referenceDetails.abilities.map(row => row.name);
+		assert(names.includes('Magma Armor'));
+		assert(names.includes('Dragonize'));
+		assert(!names.includes('Atrocity'));
+		assert(!names.includes('Blazing Monarch'));
+		assert(!names.includes('Unbound Blaze'));
+		assert.equal(names.filter(name => name === 'White Smoke').length, 1);
+	});
+	it('lists every shared cooling move with its current field-specific result', () => {
+		const {FieldCoolingMoves} = require('../../dist/data/field-cooling');
+		for (const id of ['dragonsdenterrain', 'volcanicterrain']) {
+			const entry = publicFieldGuide().entries.find(e => e.id === id);
+			for (const [move, strength] of Object.entries(FieldCoolingMoves)) {
+				const row = entry.referenceDetails.moves.find(r => r.id === move);
+				assert(row, move);
+				assert(entry.sections.Transitions.join(' ').includes(row.name), row.name);
+				assert.match(row.fieldEffects.join(' '), id === 'volcanicterrain' || strength === 2 ? /Cave/ : /Volcanic/);
+			}
+		}
+	});
 	it('keeps programming terms out of all field effects and interaction notes', () => {
 		for (const entry of publicFieldGuide().entries) {
 			const text = [entry.review, ...Object.values(entry.sections).flat(), ...Object.values(entry.referenceDetails || {}).flatMap(rows => rows.flatMap(row => row.fieldEffects))].join(' ');
 			assert(!/\b(handler|callback|helper|implementation|indexed|volatile|code)\b/i.test(text), entry.id);
 		}
 	});
-	it('does not expose Dragon Den cooling recipes in Field Notes', () => {
+	it('explains Dragon Den cooling routes in Field Notes', () => {
 		const sections = publicFieldGuide().entries.find(e => e.id === 'dragonsdenterrain').sections;
-		assert(!/cooling point|Surf|Muddy Water|Sparkling Aria|Glaciate|Hydro Vortex|Oceanic Operetta|Subzero Slammer/.test(Object.values(sections).flat().join(' ')));
+		assert.match(sections.Transitions.join(' '), /Volcanic.*two cooling uses.*Surf.*Muddy Water/);
+		assert.match(sections.Transitions.join(' '), /Cave immediately.*Glaciate.*Hydro Vortex.*Oceanic Operetta.*Subzero Slammer/);
+		assert.match(sections.Transitions.join(' '), /Sparkling Aria/);
 	});
 });

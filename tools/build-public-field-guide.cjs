@@ -34,6 +34,16 @@ for(const kind of ['terrains','abilities','moves','items','conditions']){
  for(const field of fields)if(literals.includes(field.id)&&!index[field.id].moves.includes('naturepower'))index[field.id].moves.push('naturepower');
 }
 // Include imported data helpers, shared simulator rules and format setup in freshness evidence.
+for(const field of ['volcanicterrain','dragonsdenterrain']) for(const ability of ['whitesmoke','smolderingshroud','constrictingheat']) {
+ if(!index[field].abilities.includes(ability)) index[field].abilities.push(ability);
+}
+for(const field of ['volcanicterrain','dragonsdenterrain']) for(const move of Object.keys(require('../dist/data/field-cooling').FieldCoolingMoves)) {
+ if(!index[field].moves.includes(move)) index[field].moves.push(move);
+}
+for(const [id,message] of Object.entries(require('../dist/data/field-messages').FieldArrivalMessages)) {
+ (fieldStartMessages[id]||=[]).push(message);
+}
 for(const dir of ['data','sim','config']) for(const name of fs.readdirSync(dir).filter(n=>n.endsWith('.ts')).sort()){const path=dir+'/'+name;hash.update(path).update(fs.readFileSync(path));}
 hash.update(fs.readFileSync('server/field-guide.ts'));
+hash.update(fs.readFileSync('server/field-guide-transitions.ts'));
 fs.writeFileSync('data/field-guide-index.json',JSON.stringify({fingerprint:hash.digest('hex'),fields:index,fieldStartMessages},null,2)+'\n');console.log('Indexed '+fields.length+' fields; only direct code references, no generated effect claims.');

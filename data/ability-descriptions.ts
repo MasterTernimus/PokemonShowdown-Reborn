@@ -17,7 +17,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Cures its side's active Pokemon on entry; first Ice move sets 5-turn Safeguard."
 	},
 	"smolderingshroud": {
-		"desc": "Other Pokemon cannot lower its stat stages. Gains +1 Attack and Sp. Atk on Volcanic entry. The first foe-caused stat drop it prevents each switch-in also raises its Sp. Atk by one stage.",
+		"desc": "Other Pokemon cannot lower its stat stages. Gains +1 Attack and Sp. Atk on Volcanic or Dragon's Den entry. The first foe-caused stat drop it prevents each switch-in also raises its Sp. Atk by one stage.",
 		"shortDesc": "Prevents foe stat drops; the first blocked drop each entry gives +1 Sp. Atk."
 	},
 	"springfur": {
@@ -2186,8 +2186,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Forewarn + Aftermath; opposing accuracy-drop immunity; noncontact KO retaliation."
 	},
 	"whitesmoke": {
-		"desc": "Other Pokemon cannot lower its stat stages. Gains +1 Attack and Sp. Atk on Volcanic entry.",
-		"shortDesc": "Blocks other Pokemon's stat drops; Volcanic entry boosts attacks."
+		"desc": "Other Pokemon cannot lower its stat stages. Gains +1 Attack and Sp. Atk on Volcanic or Dragon's Den entry.",
+		"shortDesc": "Blocks other Pokemon's stat drops; Volcanic/Dragon's Den entry boosts attacks."
 	},
 	"windpower": {
 		"desc": "Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn.",
@@ -3009,7 +3009,7 @@ AbilityDescriptionOverrides.marshconduit = {
 };
 
 AbilityDescriptionOverrides.constrictingheat = {
-	"desc": "Full White Smoke prevents other Pokemon from lowering its stats and grants +1 Attack and Sp. Atk on Volcanic entry. Fire Lash damage partially traps a surviving foe as Fire Spin for this turn end and the next. Only one ability trap per holder; a new trapped foe releases the previous one. No stacking with partial traps. Traps end when the holder leaves, loses the ability or Dynamaxes/Gigantamaxes. Normal escape, protection and residual-damage rules apply.",
+	"desc": "Full White Smoke prevents other Pokemon from lowering its stats and grants +1 Attack and Sp. Atk on Volcanic or Dragon's Den entry. Fire Lash damage partially traps a surviving foe as Fire Spin for this turn end and the next. Only one ability trap per holder; a new trapped foe releases the previous one. No stacking with partial traps. Traps end when the holder leaves, loses the ability or Dynamaxes/Gigantamaxes. Normal escape, protection and residual-damage rules apply.",
 	"shortDesc": "White Smoke; damaging Fire Lash binds one foe for two turns. Switching or Dynamax/Gigantamax ends it."
 };
 

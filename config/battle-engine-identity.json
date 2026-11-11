@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "4d8d7b74f5f4f3ba1a880def936a39fc5df49ee3974edc2db28888678ecc4529",
-  "packageManifestSHA256": "877b817dc900b00264ac61d6381c9877f1ca09f5eff99dd505e7e155c570acd0",
-  "mechanicsSHA256": "5cd14c501914156468fc9da926efb0a09a98d079730d785985d966d058c6b169",
+  "packageEngineRevision": "ca2455daff109b5ad10809f194e64a5235ba30025da786f1e8669f501551ce08",
+  "packageManifestSHA256": "d33080063d2f9f7caae504bbda48e614c893a1a4cc0f90974df4f733ba837c00",
+  "mechanicsSHA256": "7fe40d70d22cad4120edaa0a1efbcd0d1914e282319d059f59dfc9ac1670a689",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,7 +11,7 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "333bd6036852de526fe31eeb76872297fb17da317b938af68dd0b4e130cf3767"
+      "sha256": "3435071d67ea639e5fbaefa81210348375f426971acbc8c31643be17777410d8"
     },
     {
       "file": "dist/data/ability-components.js",
@@ -167,7 +167,7 @@
     },
     {
       "file": "dist/data/concise-ability-descriptions.js",
-      "sha256": "a06d77e1b1739eb112560ad7ab069b8df34d3a3f08d24f6012308ae004f2491a"
+      "sha256": "3582771af7f24f3c3efbf18f131a793615d65dbc9445861e37321bd1ecd0782e"
     },
     {
       "file": "dist/data/conditions.js",
@@ -238,12 +238,20 @@
       "sha256": "174f702143ca1e1465f07992cf23476295c1f4efbcca69ef413f518bcb16dc02"
     },
     {
+      "file": "dist/data/field-cooling.js",
+      "sha256": "4bb71d9410db8f4b4e0e65d1505940a6ef1fc329a0542a7547052ae67e3f0d9f"
+    },
+    {
       "file": "dist/data/field-guide-groups.js",
       "sha256": "d16e8d4e47688fcaedc563f7a394053ead7542e7febfa31bc4645a96df2afa45"
     },
     {
+      "file": "dist/data/field-guide-presentation.js",
+      "sha256": "49c2387618bb8d56d67a8912d0d5a64b7f300f29c5c731cb13f5e0f0f48a3420"
+    },
+    {
       "file": "dist/data/field-guide-reference-details.js",
-      "sha256": "3ea43b6cff5065f277ad554e5541a7745c42aae6acfccf52ffa4d2ccb1c8eb0d"
+      "sha256": "d45a7dff11be64bb75cb08cb47ff35133daf5e7fef8d96d59cb9d9febc4174ec"
     },
     {
       "file": "dist/data/field-guide-reviewed-reference-data.js",
@@ -255,7 +263,11 @@
     },
     {
       "file": "dist/data/field-message-triggers.js",
-      "sha256": "19335c4e81b7d2dcf0602d23c09bbfa18cdc747a8a468325277f6d3bb98f20e1"
+      "sha256": "f33860e203d861fb7d67a5a1a65e4a7563b3259ece4e6bfed629763b633d887a"
+    },
+    {
+      "file": "dist/data/field-messages.js",
+      "sha256": "e2872c501e470c071eb18046d80ae5131937686d4a8641620d774cbb565c08af"
     },
     {
       "file": "dist/data/field-reference.json",
@@ -639,7 +651,7 @@
     },
     {
       "file": "dist/data/passive-ability-cleanup.js",
-      "sha256": "2fc96a1b0f25d59e7717c7d26c9b6847bd3faa815ab28ffd1291e43540bebc6d"
+      "sha256": "0d980d15720cb06630975383decb8c4cac4a2897973d64740f40f1e669b58dbd"
     },
     {
       "file": "dist/data/passive-cleanup-approved.js",
@@ -687,11 +699,11 @@
     },
     {
       "file": "dist/data/public-field-guide-shared.js",
-      "sha256": "a2c2eb9ce1cb2160a1f84b8bc5f7fb4f9844b7f94afa870b94253677dc7f817e"
+      "sha256": "90b396d7b6bea03fe33d1859c545ba4fa306eed50f5be1c8db5dce5afae94d85"
     },
     {
       "file": "dist/data/public-field-guide.js",
-      "sha256": "58b00995396552fde23098a4716e14eebdc79f6e35bb1feb27db693a6d40a486"
+      "sha256": "1bd6399f0f8037c379cf2bc1f0581963ded1339c4a5be188d7cd7bd88009724d"
     },
     {
       "file": "dist/data/pulse-fixed-moves.js",
@@ -903,11 +915,11 @@
     },
     {
       "file": "dist/data/terrains.js",
-      "sha256": "c45f1b93d9962e8b2890223522fd59c18dc79ea9e50dcf35289bb68a7c1f1f4c"
+      "sha256": "41243c2d42488e67b19e4c9c0f95585ff5c8299ab9ba19f2984a2cae7716e7dd"
     },
     {
       "file": "dist/data/text/abilities.js",
-      "sha256": "3ac955960f56317c215db5bed4ad7d0f54b1f253c22fe16fe67fe8e001993c2d"
+      "sha256": "ff6b0df3ac0814ebb35b942a7f052ea78e646fd3ad6198c2172001d83c018336"
     },
     {
       "file": "dist/data/text/default.js",
@@ -1262,7 +1274,7 @@
     },
     {
       "file": "dist/data/ability-descriptions.js",
-      "sha256": "c7f91ed1edc6044c1f8146488c263574de96eb946c5881424fe4e805abe5e68d",
+      "sha256": "053a0c41dde5b02030811bdfb5bd0d05ebfc66bcabec58593d3081d83212c436",
       "reason": "Reviewed description-only table or license/readme."
     },
     {

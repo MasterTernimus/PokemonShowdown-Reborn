@@ -373,7 +373,7 @@ Object.assign(SharedPassiveAbilityDescriptions, {
   },
   "smolderingshroud": {
     "passive": "whitesmoke",
-    "desc": "The first foe-caused stat-drop event prevented each entry raises Special Attack by 1. Shares White Smoke protection and Volcanic entry boosts with its passive without doubling them.",
+    "desc": "The first foe-caused stat-drop event prevented each entry raises Special Attack by 1. Shares White Smoke protection and Volcanic/Dragon's Den entry boosts with its passive without doubling them.",
     "shortDesc": "First blocked opposing stat drop each entry raises Sp. Atk by 1."
   },
   "silksights": {

@@ -76,15 +76,15 @@ export function appendSharedFieldGuide(sections: { [id: string]: { [section: str
 	for (const [id, entry] of Object.entries(sections)) {
 		const mapping = FieldMoveMappings[id];
 		if (mapping) entry['Shared move and ability mappings'] = [
-			`Camouflage changes its user to ${mapping.camouflage}; Mimicry selects ${mapping.mimicry}; Terrain Pulse becomes ${mapping.pulse}. These are distinct mappings, not a shared type assumption. Type-changing restrictions still apply. An active aura overrides Camouflage, Mimicry and Terrain Pulse with its own type.`,
-			`Nature Power calls ${mapping.nature}. Frozen Aura overrides this with Ice Beam and Ashen Aura with Infernal Parade; other auras do not replace this field lookup.`,
+			`Camouflage: ${mapping.camouflage}. Mimicry: ${mapping.mimicry}. Terrain Pulse: ${mapping.pulse}. An active aura supplies its own type instead.`,
+			`Nature Power: ${mapping.nature}. With Frozen / Ashen / Rift Aura: Ice Beam / Infernal Parade / Dark Pulse instead.`,
 		];
 		if (['electricterrain', 'grassyterrain', 'mistyterrain', 'psychicterrain', 'rainbowterrain'].includes(id)) entry['Shared move and ability mappings'].push('Without an aura, Terrain Pulse doubles its base power here unless the target has adaptive field protection. This power check does not require grounding.');
 		if (FieldSeedNotes[id]) entry['Seeds and other effects'] = [FieldSeedNotes[id], ...(entry['Seeds and other effects'] || []).filter(s => !/^(Elemental|Magical|Synthetic|Telluric) Seed/.test(s)), 'Seed effects require the item to activate and be consumed. Type, status, healing, trapping and stat-change restrictions still apply; a listed attempt is not a guarantee against immunity.'];
 	}
 	sections.coldeclipseterrain.Abilities.push('Mimicry additionally grants one Defense and Special Defense stage when it successfully changes the holder’s type here. Merely rechecking an already matching type does not grant the boost.');
 	sections.crystalcavernterrain['Shared move and ability mappings'] = ['Camouflage, Mimicry and Terrain Pulse select the current crystal element: Fire, Water, Grass or Psychic. Active aura typing overrides that choice. Nature Power calls Power Gem.'];
-	sections.newworldterrain['Shared move and ability mappings'] = ['Camouflage, Mimicry and Terrain Pulse select a random ordinary type unless an aura supplies the type. Nature Power calls Spacial Rend, except for Frozen Aura’s explicit override.'];
+	sections.newworldterrain['Shared move and ability mappings'] = ['Camouflage, Mimicry and Terrain Pulse select a random ordinary type unless an aura supplies the type. Nature Power calls Spacial Rend; Frozen, Ashen and Rift Aura instead call Ice Beam, Infernal Parade and Dark Pulse respectively.'];
 	sections.adriennterrain['Shared move and ability mappings'] = ['Adrienn’s format starts with Misty over Fairy Tale. Shared move and seed effects follow the actual current field, not a separate Adrienn type table.'];
 	for (let n = 2; n <= 5; n++) sections[`flowergarden${n}`]['Seeds and other effects'] = [...(sections[`flowergarden${n}`]['Seeds and other effects'] || []), 'Synthetic Seed’s automatic activation list includes stage 1 only; moving directly into this later stage does not activate it through that list.'];
 }

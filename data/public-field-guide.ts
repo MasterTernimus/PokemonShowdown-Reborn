@@ -813,3 +813,6 @@ ReviewedFieldGuide.snowyterrain = {
 	Transitions: [], Moves: [], Abilities: [], 'Seeds and other effects': [],
 	'Shared rules and limitations': ['Full fields and auras are separate effects. Field locks, move success and ability suppression still apply.'],
 };
+ReviewedFieldGuide.grassyterrain.Transitions.push(
+	'To Snowy for 5 turns: one successful Blizzard, Avalanche or Subzero Slammer, or two successful Powder Snow uses.',
+);

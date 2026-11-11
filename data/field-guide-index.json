@@ -1,5 +1,5 @@
 {
-  "fingerprint": "255ad1a6f4cd104deccf8d2dece897071fd138566defc7b9873490df288f1fe2",
+  "fingerprint": "2214e61c3278ccc7c02b70360419a60c99ed17f4fd9a2883473a80fa3ec4c02f",
   "fields": {
     "flowergarden1": {
       "abilities": [
@@ -139,7 +139,6 @@
       "abilities": [
         "dancer",
         "mimicry",
-        "predator",
         "punkrock",
         "relentlesshunt",
         "tangledfeet"
@@ -200,7 +199,6 @@
         "auroracurrent",
         "eartheater",
         "echofiend",
-        "relicarmor",
         "hyperdrill",
         "mimicry",
         "powerdrill",
@@ -454,7 +452,6 @@
       "abilities": [
         "auroracurrent",
         "echofiend",
-        "relicarmor",
         "mimicry",
         "prismarmor",
         "royaldecree"
@@ -505,7 +502,6 @@
         "duneterror",
         "dryskin",
         "eartheater",
-        "relicarmor",
         "forecast",
         "mimicry",
         "relentlesshunt",
@@ -550,17 +546,20 @@
         "magmaarmor",
         "marvelscale",
         "mimicry",
-        "predator",
         "relentlesshunt",
         "shedskin",
         "shellarmor",
         "thermalexchange",
-        "wellbakedbody"
+        "wellbakedbody",
+        "whitesmoke",
+        "smolderingshroud",
+        "constrictingheat"
       ],
       "moves": [
         "bounce",
         "camouflage",
         "coil",
+        "dragoncheer",
         "dragondance",
         "dragonrush",
         "fly",
@@ -569,7 +568,17 @@
         "stealthrock",
         "terrainpulse",
         "scalyscorn",
-        "naturepower"
+        "naturepower",
+        "surf",
+        "muddywater",
+        "blizzard",
+        "sparklingaria",
+        "waterpledge",
+        "glaciate",
+        "waterspout",
+        "hydrovortex",
+        "oceanicoperetta",
+        "subzeroslammer"
       ],
       "items": [
         "elementalseed",
@@ -634,7 +643,6 @@
         "eternalflower",
         "ange",
         "fairyaura",
-        "relicarmor",
         "auroradomain",
         "ancientbloom",
         "fortressshell",
@@ -652,14 +660,12 @@
         "mirrorarmor",
         "pastelveil",
         "powerofalchemy",
-        "predator",
         "queenlymajesty",
         "relentlesshunt",
         "shellarmor",
         "sinisterblaze",
         "royaldecree",
         "wrathshield",
-        "astralwitchcraft",
         "stalwart",
         "stancechange",
         "steelyspirit",
@@ -714,6 +720,7 @@
         "stickyweb",
         "strengthsap",
         "terrainpulse",
+        "wish",
         "stabbyswarm",
         "naturepower"
       ],
@@ -1002,7 +1009,6 @@
         "duskilate",
         "execution",
         "eternalflower",
-        "relicarmor",
         "ancientbloom",
         "fortressshell",
         "imperialmandate",
@@ -1017,7 +1023,6 @@
         "lunaridol",
         "royaldecree",
         "wrathshield",
-        "astralwitchcraft",
         "stalwart",
         "tabletsofruin",
         "ultraego",
@@ -1044,6 +1049,7 @@
         "takeheart",
         "terrainpulse",
         "trickroom",
+        "wish",
         "wonderroom",
         "naturepower"
       ],
@@ -1091,8 +1097,7 @@
         "mimicry",
         "powerdrill",
         "predator",
-        "relentlesshunt",
-        "rockypayload"
+        "relentlesshunt"
       ],
       "moves": [
         "arenitewall",
@@ -1387,11 +1392,9 @@
     },
     "volcanicterrain": {
       "abilities": [
-        "smolderingshroud",
         "blaze",
         "auroracurrent",
         "echofiend",
-        "relicarmor",
         "flamebody",
         "flareboost",
         "flashfire",
@@ -1406,7 +1409,9 @@
         "steamengine",
         "thermalexchange",
         "wellbakedbody",
-        "whitesmoke"
+        "whitesmoke",
+        "smolderingshroud",
+        "constrictingheat"
       ],
       "moves": [
         "burningjealousy",
@@ -1420,7 +1425,17 @@
         "tarshot",
         "terrainpulse",
         "willowisp",
-        "naturepower"
+        "naturepower",
+        "surf",
+        "muddywater",
+        "blizzard",
+        "sparklingaria",
+        "waterpledge",
+        "glaciate",
+        "waterspout",
+        "hydrovortex",
+        "oceanicoperetta",
+        "subzeroslammer"
       ],
       "items": [
         "elementalseed"
@@ -1614,6 +1629,7 @@
         "naturesmadness",
         "razorwind",
         "terrainpulse",
+        "wish",
         "worryseed",
         "naturepower"
       ],
@@ -1759,6 +1775,66 @@
     ],
     "watersurfaceterrain": [
       "The water's surface is calm."
+    ],
+    "burningterrain": [
+      "Flames race across the battlefield!"
+    ],
+    "coldeclipseterrain": [
+      "An icy eclipse steals the warmth from the battlefield!"
+    ],
+    "rifteclipseterrain": [
+      "Reality fractures beneath the eclipse!"
+    ],
+    "infernaleclipseterrain": [
+      "Infernal flames consume the eclipsed sky!"
+    ],
+    "corrosivemistterrain": [
+      "A choking purple mist rolls over the battlefield!"
+    ],
+    "corrosiveterrain": [
+      "Corrosive sludge eats into the ground!"
+    ],
+    "desertterrain": [
+      "Blistering winds sweep across the dunes!"
+    ],
+    "factoryterrain": [
+      "The machinery roars to life!"
+    ],
+    "fairytaleterrain": [
+      "An ancient tale unfolds across the battlefield!"
+    ],
+    "forestterrain": [
+      "The forest canopy closes overhead!"
+    ],
+    "inverseterrain": [
+      "The rules of nature turn upside down!"
+    ],
+    "mirrorarenaterrain": [
+      "Countless reflections surround the combatants!"
+    ],
+    "rainbowterrain": [
+      "A brilliant rainbow washes the battlefield in color!"
+    ],
+    "rockyterrain": [
+      "Jagged stones rise across the battlefield!"
+    ],
+    "shortcircuitterrain": [
+      "Sparks leap between the broken machines!"
+    ],
+    "snowyterrain": [
+      "A fresh blanket of snow settles over the battlefield!"
+    ],
+    "superheatedterrain": [
+      "The air shimmers with unbearable heat!"
+    ],
+    "swampterrain": [
+      "The ground sinks beneath dark, stagnant water!"
+    ],
+    "volcanicterrain": [
+      "Molten rivers glow beneath a sky of ash!"
+    ],
+    "wastelandterrain": [
+      "Twisted heaps of refuse stretch across the battlefield!"
     ]
   }
 }

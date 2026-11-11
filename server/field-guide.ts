@@ -10,6 +10,9 @@ import { Auras } from '../data/auras';
 import { FieldNotes } from '../data/field-guide';
 import { ReviewedFieldGuide } from '../data/public-field-guide';
 import { RoomReference } from '../data/room-reference';
+import {FieldCoolingMoves} from '../data/field-cooling';
+import {fieldTransitionRoutes, type FieldTransitionRoute} from './field-guide-transitions';
+import { conciseFieldNotes, FieldTransitionNotes, FieldAbilityComponents, ConciseFieldAbilityNotes } from '../data/field-guide-presentation';
 const index = JSON.parse(FS('data/field-guide-index.json').readSync());
 export function publicFieldGuide() {
 	const fields = calculatorMetadata().fields.filter(f => f.id).map(field => ({
@@ -41,6 +44,7 @@ export function publicFieldGuide() {
 			'Field effects and move, ability and item interactions.' :
 			'Detailed effects are not available yet.',
 		legacyNotes: ReviewedFieldGuide[field.id] || field.id === 'newworldterrain' ? [] : FieldNotes[field.id] || [],
+		transitions: {incoming: [] as FieldTransitionRoute[], outgoing: [] as FieldTransitionRoute[]},
 		referenceDetails: fieldReferenceDetails(field.id),
 		references: Object.fromEntries(Object.entries(index.fields[field.id] || {}).map(([kind, ids]) => [kind,
 			(ids as string[]).map(id => (kind === 'abilities' ? Dex.abilities : kind === 'moves' ? Dex.moves : Dex.items).get(id).name)])),
@@ -110,6 +114,22 @@ export function publicFieldGuide() {
 		], ...(id === 'gravity' ? {'Impact moves': [Dex.moves.all().filter(move => move.flags.gravityboost).map(move => move.name).join(', ') + '.']} : {})},
 		legacyNotes: [], references: {}, referenceDetails: {} as ReturnType<typeof fieldReferenceDetails>,
 	}));
+	// Keep all field-specific rules available, with one fact per line and transitions
+	// on every field. Composite aliases remain searchable, not duplicate ability rows.
+	for (const entry of [...fields, ...auras]) {
+		const sections = entry.sections as Record<string, string[]>;
+		if (entry.kind === 'field') {
+			sections.Transitions = FieldTransitionNotes[entry.id] || sections.Transitions || [];
+		}
+		for (const [section, lines] of Object.entries(sections)) {
+			if (section !== 'Battle messages') sections[section] = conciseFieldNotes(lines);
+		}
+	}
+	const routes = fieldTransitionRoutes();
+	for (const field of fields) {
+		field.transitions.incoming = routes.filter(route => route.to === field.id || route.alsoTo?.includes(field.id));
+		field.transitions.outgoing = routes.filter(route => route.from === field.id);
+	}
 	return {
 		fingerprint: index.fingerprint,
 		entries: [
@@ -132,9 +152,17 @@ export function publicFieldGuide() {
 
 function fieldReferenceDetails(field: string) {
 	const sections = ReviewedFieldGuide[field] || {};
-	return Object.fromEntries(Object.entries(index.fields[field] || {}).map(([kind, ids]) => [kind, (ids as string[]).map(id => {
+	return Object.fromEntries(Object.entries(index.fields[field] || {}).map(([kind, ids]) => [kind, [...new Set((ids as string[]).flatMap(id =>
+		kind === 'abilities' ? FieldAbilityComponents[field]?.[id] || [id] : [id]))].map(id => {
 		const effect = (kind === 'abilities' ? Dex.abilities : kind === 'moves' ? Dex.moves : Dex.items).get(id);
-		let notes = CheckedFieldReferences[field]?.[kind]?.[id] || (ReviewedReferenceDetails as Record<string, Record<string, Record<string, string[]>>>)[field]?.[kind]?.[id];
+		let notes = (kind === 'abilities' ? ConciseFieldAbilityNotes[field]?.[id] : undefined) || CheckedFieldReferences[field]?.[kind]?.[id] || (ReviewedReferenceDetails as Record<string, Record<string, Record<string, string[]>>>)[field]?.[kind]?.[id];
+		if (kind === 'moves' && FieldCoolingMoves[id] && ['dragonsdenterrain', 'volcanicterrain'].includes(field)) {
+			const cooling = field === 'volcanicterrain' || FieldCoolingMoves[id] === 2 ?
+				'One use changes the field to Cave, even on a miss, immunity or Protect.' : id === 'sparklingaria' ?
+				'One use changes the field to Volcanic, even on a miss, immunity or Protect.' :
+				'Adds one cooling step, even on a miss, immunity or Protect. Two steps change Dragon’s Den to Volcanic.';
+			notes = [cooling];
+		}
 		if (!notes && kind === 'items' && FieldSeedNotes[field]?.includes(effect.name)) notes = [FieldSeedNotes[field]];
 		const mapping = FieldMoveMappings[field];
 		if (!notes && mapping && kind === 'moves') {
@@ -143,12 +171,15 @@ function fieldReferenceDetails(field: string) {
 			if (id === 'terrainpulse') notes = ['Becomes ' + mapping.pulse + '. An active aura overrides its type. Only Electric, Grassy, Misty, Psychic and Rainbow full fields activate its separate doubled-power check, with no aura and no adaptive protection on the target.'];
 			if (id === 'secretpower' && FieldSecretPowerNotes[field]) notes = [FieldSecretPowerNotes[field]];
 		}
-		if (!notes && mapping && kind === 'abilities' && id === 'mimicry') notes = ['Selects ' + mapping.mimicry + '. An active aura overrides the type; Terastallization and other type-change restrictions apply.'];
+		if (mapping && kind === 'abilities' && id === 'mimicry' && (!notes || !['coldeclipseterrain', 'crystalcavernterrain', 'newworldterrain'].includes(field))) {
+			notes = ['Changes the holder to ' + mapping.mimicry + '. An active aura supplies its own type instead.'];
+			if (field === 'coldeclipseterrain') notes.push('A successful type change also grants +1 Defense and Sp. Def.');
+		}
 		if (!notes) {
 			const sectionNames = kind === 'abilities' ? ['Abilities'] : kind === 'moves' ? ['Moves', 'Transitions'] : ['Seeds and other effects'];
 			notes = [...new Set(sectionNames.flatMap(section => sections[section] || []).filter(text => text.toLowerCase().includes(effect.name.toLowerCase())))];
 		}
-		return { id, name: effect.name, reviewed: !!notes.length, fieldEffects: notes, generalSummary: id === 'voidcrossing' ? '' : effect.shortDesc || '',
+		return { id, name: effect.name, reviewed: !!notes.length, fieldEffects: conciseFieldNotes(notes), generalSummary: '',
 			...(kind === 'moves' ? { moveStats: (() => { const move = Dex.moves.get(id); return { type: move.type, category: move.category, power: move.basePower, accuracy: move.accuracy, pp: move.pp }; })() } : {}) };
 	})]));
 }

@@ -67,8 +67,9 @@ Object.assign(FieldMessageTriggers, {
 		"“The lifeless desert strengthened the attack!” — Bonemerang, Bone Club, Bone Rush or Shadow Bone receives its named 1.5x modifier. Adaptive Cycle rules apply to these field modifiers.",
 	],
 	"dragonsdenterrain": [
+		"“The sparkling song stirred the lava into a volcanic eruption!” — Sparkling Aria changes the field straight to Volcanic.",
 		"“The lava cooled, but the dragon fire still burns!” — the field has begun cooling.",
-		"“The sparkling song stirred the lava into a volcanic eruption!” — the field changes into Volcanic Field.",
+		"“The dragon fire faded, leaving a volcanic field!” — a second ordinary cooling move creates Volcanic Field.",
 		"“The dragon fire faded as the lava hardened into a cavern!” — the field changes into Cave.",
 	],
 	"glitchterrain": [

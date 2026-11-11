@@ -41,7 +41,7 @@ describe('Field Guide checked source facts', () => {
 			const { battle: b, mons: [p, q] } = setup('dragonsdenterrain');
 			try {
 				for (const m of moves)after(b, p, q, m);
-				assert.equal(b.field.terrain, 'caveterrain');
+				assert.equal(b.field.terrain, moves.length === 2 ? 'volcanicterrain' : 'caveterrain');
 			} finally {
 				b.destroy();
 			}

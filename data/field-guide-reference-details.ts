@@ -316,3 +316,19 @@ Object.assign(CheckedFieldReferences.coldeclipseterrain.abilities, {
 });
 
 CheckedFieldReferences.coldeclipseterrain.moves.soak = ['Soak changes its target to Ice on Cold Eclipse instead of Water. Elemental Seed no longer invokes Soak.'];
+
+for (const field of ['volcanicterrain', 'dragonsdenterrain']) {
+	CheckedFieldReferences[field] ||= {};
+	CheckedFieldReferences[field].abilities ||= {};
+	for (const ability of ['whitesmoke', 'smolderingshroud', 'constrictingheat']) {
+		CheckedFieldReferences[field].abilities[ability] = ['On entry, raises Attack and Sp. Atk by one stage.'];
+	}
+}
+CheckedFieldReferences.dragonsdenterrain.moves = {
+	dragoncheer: ['Grants a Dragon-type ally three critical-hit stages. The bonus is determined when the cheer begins.'],
+};
+for (const field of ['forestterrain', 'grassyterrain']) {
+	CheckedFieldReferences[field] ||= {};
+	CheckedFieldReferences[field].moves ||= {};
+	CheckedFieldReferences[field].moves.wish = ['Ordinary Wish restores half the user’s maximum HP. The wish created by Nomos Wish restores at least 5/8 and clears confusion when it successfully heals.'];
+}
