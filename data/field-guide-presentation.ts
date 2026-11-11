@@ -4,7 +4,7 @@ export const FieldTransitionNotes: Record<string, string[]> = {
 		'To Volcanic: two cooling uses in total: Surf, Muddy Water, Blizzard or Water Pledge. The first leaves Dragon’s Den active.',
 		'To Volcanic immediately: Sparkling Aria.',
 		'To Cave immediately: one strong cooling use: Glaciate, Water Spout, Hydro Vortex, Oceanic Operetta or Subzero Slammer.',
-		'To Fairy Tale: Mist Ball (5 turns).',
+		'To Fairy Tale: Mist Ball (5 turns). Infernal Rage, Ice Spinner and Steel Roller cannot end this transition early.',
 		'Cooling counts even on a miss, immunity or Protect. Mist Ball still needs to deal damage. Draco Meteor and Dragon Energy undo one cooling use; Devastating Drake resets cooling.',
 		'Ordinary field setters cannot replace Dragon’s Den.',
 		'After reaching Volcanic, one more cooling use turns it into Cave.',
@@ -46,7 +46,7 @@ export const FieldTransitionNotes: Record<string, string[]> = {
 	glitchterrain: ['Locked: another full field cannot replace Glitch.'],
 	caveterrain: [
 		'To Crystal Cavern: Power Gem or Diamond Storm. To Icy: Blizzard or Subzero Slammer.',
-		'To Dragon’s Den: Devastating Drake, Draco Meteor, Core Enforcer or a Dragon Max move; two uses in total of Dragon Pulse or Dragon Energy also work.',
+		'To Dragon’s Den: Devastating Drake, Draco Meteor, Core Enforcer or a Dragon Max move; two uses in total of Dragon Pulse or Dragon Energy also work. Dragon Rend changes it after damaging an enemy or its Substitute.',
 		'To Volcanic: Blast Burn, Eruption, Inferno Overdrive, Mind Blown, Searing Shot or Burn Up. The explosion deals half max HP to active Pokémon.',
 		'Explosion protection: semi-invulnerability, Protect, Flame Body, Flare Boost, Flash Fire, Heatproof, Magma Armor, Water Bubble, Water Veil or Well-Baked Body.',
 		'Volcanic without the explosion → a Fire Max move; or two uses in total of Magma Drift, Fever Pitch, Heat Wave, Lava Plume, Overheat, Incinerate, Inferno, Flame Burst, Fire Pledge or Sacred Fire.',
@@ -74,7 +74,7 @@ export const FieldTransitionNotes: Record<string, string[]> = {
 		'To Cave: one cooling or strong cooling use: Surf, Muddy Water, Blizzard, Sparkling Aria, Water Pledge, Glaciate, Water Spout, Hydro Vortex, Oceanic Operetta or Subzero Slammer. Misses, immunities and Protect still count.',
 		'To Cave: two uses in total of Sand Tomb, Scorching Sands, Sandsear Storm, Defog, Gust, Wind Dance, Airstream Assault, Hurricane, Razor Wind, Tailwind, Twister, Whirlwind, Water Sport, Sludge Wave or G-Max Wind Rage.',
 		'To Cave: Continental Crush, Supersonic Skystrike or Acid Downpour once; ordinary rain or sandstorm at turn end also works.',
-		'To Dragon’s Den: Dragon Pulse or Dragon Energy twice in total; Devastating Drake, Draco Meteor or Core Enforcer once. This progress is separate from cooling.',
+		'To Dragon’s Den: Dragon Pulse or Dragon Energy twice in total; Devastating Drake, Draco Meteor or Core Enforcer once. Dragon Rend changes it after damaging an enemy or its Substitute. This progress is separate from cooling.',
 	],
 	wastelandterrain: ['No special move or weather transition. Usually expires after 3 turns, or 5 when created by an ability; Amplifield Rock adds 3. A starting field may be permanent.'],
 };
@@ -97,6 +97,30 @@ for (let stage = 1; stage <= 5; stage++) {
 	];
 }
 
+/** Extra conditions only; the route table already lists destinations, moves and use counts. */
+export const FieldTransitionExtraNotes: Record<string, string[]> = Object.fromEntries(
+	Object.keys(FieldTransitionNotes).map(id => [id, []])
+);
+Object.assign(FieldTransitionExtraNotes, {
+	dragonsdenterrain: ['Ordinary field setters cannot replace Dragon’s Den.',
+		'Mist Ball’s Fairy Tale lasts 5 turns; clearing moves cannot end it early.',
+		'After reaching Volcanic, one more cooling use turns it into Cave.'],
+	caveterrain: ['Explosion protection: semi-invulnerability, Protect, Flame Body, Flare Boost, Flash Fire, Heatproof, Magma Armor, Water Bubble, Water Veil or Well-Baked Body.'],
+	icyterrain: ['Revealing Misty scatters Spikes on both sides.'],
+	underwaterterrain: ['Ordinary field setters cannot replace Underwater.'],
+	newworldterrain: ['Ordinary field setters cannot replace New World.'],
+	chessboardterrain: ['Another full field cannot replace Chessboard.'],
+	glitchterrain: ['Another full field cannot replace Glitch.'],
+	adriennterrain: ['While Misty is active, use Misty’s pollution and clearing rules.'],
+	volcanicterrain: ['Progress toward Dragon’s Den is separate from cooling.'],
+	wastelandterrain: ['Usually lasts 3 turns, or 5 when created by an ability. Amplifield Rock adds 3. Starting fields can be permanent.'],
+});
+for (let stage = 1; stage <= 5; stage++) FieldTransitionExtraNotes[`flowergarden${stage}`] = [
+	'Sun and rain include harsh sun and heavy rain. At most one automatic growth per turn.',
+	'A burning garden returns at its saved stage minus turns spent burning, minimum stage 1.',
+	'Rain Dance, Water Spout and Water Sport also grow the garden when they put out its fire.',
+];
+
 /** Only aliases whose field hooks delegate to these components. Unique custom effects stay named. */
 export const FieldAbilityComponents: Record<string, Record<string, string[]>> = {
 	dragonsdenterrain: {
@@ -118,6 +142,10 @@ for (const field of ['icyterrain', 'snowymountainterrain', 'coldeclipseterrain']
 }
 FieldAbilityComponents.factoryterrain.scarecrow = ['steelworker'];
 
+for (const field of ['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain']) {
+	(FieldAbilityComponents[field] ||= {}).hyperdrill = ['powerdrill'];
+}
+
 export const ConciseFieldAbilityNotes: Record<string, Record<string, string[]>> = {
 	dragonsdenterrain: {
 		magmaarmor: ['On entry: +1 Defense and Sp. Def.', 'Immune to incoming Fire moves.'],
@@ -135,6 +163,12 @@ export const ConciseFieldAbilityNotes: Record<string, Record<string, string[]>> 
 	infernaleclipseterrain: { magmaarmor: ['On entry: +1 Defense and Sp. Def.', 'Immune to incoming Fire moves.'] },
 	coldeclipseterrain: { magmaarmor: ['Can receive frostbite; still cures it afterward.'] },
 };
+for (const field of ['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain']) {
+	(ConciseFieldAbilityNotes[field] ||= {}).powerdrill = ['Drill and horn moves: 2× power; bypass Protect.'];
+}
+for (const field of ['caveterrain', 'desertterrain']) {
+	(ConciseFieldAbilityNotes[field] ||= {}).eartheater = ['At turn end: heals 1/16 max HP.'];
+}
 for (const field of [
 	'dragonsdenterrain', 'fairytaleterrain', 'rainbowterrain', 'starlightarenaterrain', 'mistyterrain',
 ]) {
@@ -145,9 +179,9 @@ for (const field of ['burningterrain', 'superheatedterrain', 'dragonsdenterrain'
 	ConciseFieldAbilityNotes[field].wellbakedbody = ['At turn end: +1 Defense.'];
 }
 for (const [power, fields] of [
-	[2, ['rockyterrain', 'fairytaleterrain', 'bigtopterrain', 'dragonsdenterrain',
-		'mountainterrain', 'snowymountainterrain']],
-	[1.5, ['desertterrain', 'forestterrain', 'burningterrain', 'superheatedterrain', 'ashenbeachterrain',
+	[2, ['fairytaleterrain', 'dragonsdenterrain']],
+	[1.5, ['rockyterrain', 'bigtopterrain', 'mountainterrain', 'snowymountainterrain', 'coldeclipseterrain']],
+	[1.3, ['desertterrain', 'forestterrain', 'burningterrain', 'superheatedterrain', 'ashenbeachterrain',
 		'watersurfaceterrain', 'caveterrain', 'starlightarenaterrain', 'newworldterrain']],
 ] as const) {
 	for (const field of fields) (ConciseFieldAbilityNotes[field] ||= {}).relentlesshunt = [`Attacks gain ${power}× power.`];
@@ -180,9 +214,12 @@ export function conciseFieldNotes(lines: readonly string[]): string[] {
 		.replace(/at field residual/g, 'at turn end')
 		.replace(/the status-move clearing branch/g, 'clearing with a status move')
 		.replace(/named ([\d.]+×) (?:power )?bonus/g, '$1 power')
-		.split(/(?<!\bSp|\bAtk|\bDef)\. (?=[A-Z])/)
+		.replace(/, despite older prose calling it Snow/g, '')
+		.split(/(?<!\bSp)\. (?=[A-Z])/)
 		.map(sentence => sentence.trim())
 		.filter(sentence => sentence && !sentence.includes('is misspelled') &&
+			!/^Its ordinary .+ remain\.?$/.test(sentence) &&
+			!/^Healing prevention or full HP can prevent recovery\.?$/.test(sentence) &&
 			!redundantSentences.has(sentence.endsWith('.') ? sentence : sentence + '.'))
 		.map(sentence => /[.!?]$/.test(sentence) ? sentence : sentence + '.')))];
 }

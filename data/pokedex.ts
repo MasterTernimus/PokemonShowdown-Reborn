@@ -9723,7 +9723,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Lumineon",
 		types: ["Water", "Fairy"],
 		baseStats: { hp: 89, atk: 40, def: 86, spa: 104, spd: 90, spe: 91 },
-		abilities: { 0: "Protean", 1: "Storm Drain", H: "Drizzle" },
+		abilities: { 0: "Protean", 1: "Swift Swim", H: "Drizzle" },
 		heightm: 1.2,
 		weightkg: 24,
 		color: "Blue",
@@ -9752,7 +9752,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Reborn",
 		types: ["Water", "Fairy"],
 		baseStats: { hp: 89, atk: 40, def: 86, spa: 104, spd: 90, spe: 91 },
-		abilities: { 0: "Protean", 1: "Storm Drain", H: "Drizzle" },
+		abilities: { 0: "Protean", 1: "Swift Swim", H: "Drizzle" },
 		heightm: 1.2,
 		weightkg: 24,
 		color: "Blue",
@@ -18773,7 +18773,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Centiskorch",
 		types: ["Fire", "Bug"],
 		baseStats: { hp: 100, atk: 115, def: 65, spa: 90, spd: 90, spe: 65 },
-		abilities: { 0: "Flash Fire", 1: "White Smoke", H: "Flame Body" },
+		abilities: { 0: "Coil Up", 1: "White Smoke", H: "Flame Body" },
 		heightm: 3,
 		weightkg: 120,
 		color: "Red",
@@ -24260,7 +24260,6 @@ Pokedex.taurospaldeacombat.abilities!["1"] = "Rousing Feast";
 Pokedex.taurospaldeablaze.abilities!["1"] = "Rousing Feast";
 Pokedex.taurospaldeaaqua.abilities!["1"] = "Rousing Feast";
 Pokedex.hawlucha.abilities!["0"] = "Ringcraft";
-Pokedex.centiskorch.abilities!["1"] = "Constricting Heat";
 
 Pokedex.conkeldurr.abilities![0] = 'Guts';
 Pokedex.conkeldurr.abilities!.H = 'Wrecking Crew';

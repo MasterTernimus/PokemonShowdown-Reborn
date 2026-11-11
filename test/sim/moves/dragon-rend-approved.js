@@ -36,4 +36,25 @@ describe('Approved Dragon Rend replacement',()=>{afterEach(()=>{battle?.destroy(
 		assert.equal(battle.field.terrain, 'dragonsdenterrain'); assert(!q.side.sideConditions.stealthrock);
 		use(p, q); assert(q.side.sideConditions.stealthrock);
 	});
+	for (const field of ['caveterrain', 'volcanicterrain']) {
+		it(`changes starting ${field} to Dragon's Den after damage`, () => {
+			const [p, q] = setup(); battle.field.startTerrain(field);
+			use(p, q);
+			assert.equal(battle.field.terrain, 'dragonsdenterrain');
+			assert.equal(battle.field.terrainState.terrain_type, 'Base');
+			assert(!q.side.sideConditions.stealthrock);
+			assert.equal(battle.field.clearTerrain('mid'), false);
+		});
+		it(`does not change ${field} through Protect or a field lock`, () => {
+			const [p, q] = setup(); battle.field.startTerrain(field);
+			q.addVolatile('protect'); use(p, q); assert.equal(battle.field.terrain, field);
+			q.removeVolatile('protect'); q.setAbility('Neutralization');
+			use(p, q); assert.equal(battle.field.terrain, field);
+		});
+		it(`lists Dragon Rend in the ${field} transition guide`, () => {
+			const { fieldTransitionRoutes } = require('../../../dist/server/field-guide-transitions');
+			assert(fieldTransitionRoutes().some(route => route.from === field &&
+				route.to === 'dragonsdenterrain' && route.trigger === 'Dragon Rend' && route.uses === '1 damaging hit'));
+		});
+	}
 });

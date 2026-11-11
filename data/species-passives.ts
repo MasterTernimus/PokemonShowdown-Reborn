@@ -1394,6 +1394,8 @@ for (const [id, passives] of Object.entries(NovemberRosterPassives)) {
  SpeciesPassives[id] = Object.freeze([...passives]);
  for (const passive of passives) ThematicPassiveIds.add(passive);
 }
+SpeciesPassives.centiskorch = Object.freeze(['flashfire']);
+ThematicPassiveIds.add('flashfire');
 // Synchronize final passives after all base-form revisions.
 for (const [skin, base] of Object.entries(CosmeticBattleCounterparts)) {
  SpeciesPassives[skin] = Object.freeze([...(SpeciesPassives[base] || [])]);

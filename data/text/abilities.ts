@@ -2847,8 +2847,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	seasonalstride: {
 		name: "Seasonal Stride",
-		desc: "Normal moves become this Pokemon's primary type and have 1.2x power. Kicking moves have 1.4x power. It has Chlorophyll and changes forme with weather: Spring in rain, Summer in sun, Autumn in sand, Winter in snow.",
-		shortDesc: "Normal -> primary type 1.2x; kicks 1.4x; Chlorophyll; weather forms.",
+		desc: "Normal moves become this Pokemon's primary type and have 1.5x power. It has Chlorophyll and changes forme with weather: Spring in rain, Summer in sun, Autumn in sand, Winter in snow.",
+		shortDesc: "Normal -> primary type 1.5x; Chlorophyll; weather forms.",
 	},
 	shadowshield: {
 		name: "Shadow Shield",
@@ -4711,6 +4711,7 @@ for (const [id,text] of Object.entries(LostFourDescriptions)) AbilitiesText[id a
 
 import {ConciseAbilityDescriptions} from '../concise-ability-descriptions';
 for (const [id,text] of Object.entries(ConciseAbilityDescriptions)) Object.assign(AbilitiesText[id as ID] ||= {name:id}, text);
+AbilitiesText.coilup.name = 'Coil Up';
 
 AbilitiesText.racingspirit = {name:'Racing Spirit',shortDesc:'Rock Head + Limber.',desc:'Rock Head + Limber: prevents move recoil except Struggle; prevents and cures paralysis and blocks opposing Speed drops. Crash damage, Life Orb and self-inflicted Speed costs still apply.'};
 

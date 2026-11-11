@@ -1,7 +1,7 @@
 import { ReviewedReferenceDetails } from '../data/field-guide-reviewed-reference-data';
 import { FieldMessageTriggers } from '../data/field-message-triggers';
 import { CheckedFieldReferences } from '../data/field-guide-reference-details';
-import { FieldSeedNotes, FieldMoveMappings, FieldSecretPowerNotes } from '../data/public-field-guide-shared';
+import { FieldSeedNotes, FieldMoveMappings, FieldSecretPowerNotes, SharedFieldGuideRules } from '../data/public-field-guide-shared';
 import { fieldGuideGroup, FieldGuideGroupingNotes } from '../data/field-guide-groups';
 import { FS } from '../lib';
 import { Dex } from '../sim/dex';
@@ -13,7 +13,7 @@ import { RoomReference } from '../data/room-reference';
 import { FieldCoolingMoves } from '../data/field-cooling';
 import { fieldTransitionRoutes, type FieldTransitionRoute } from './field-guide-transitions';
 import {
-	conciseFieldNotes, FieldTransitionNotes, FieldAbilityComponents, ConciseFieldAbilityNotes,
+	conciseFieldNotes, FieldTransitionNotes, FieldTransitionExtraNotes, FieldAbilityComponents, ConciseFieldAbilityNotes,
 } from '../data/field-guide-presentation';
 const index = JSON.parse(FS('data/field-guide-index.json').readSync());
 export function publicFieldGuide() {
@@ -46,7 +46,7 @@ export function publicFieldGuide() {
 			'Field effects and move, ability and item interactions.' :
 			'Detailed effects are not available yet.',
 		legacyNotes: ReviewedFieldGuide[field.id] || field.id === 'newworldterrain' ? [] : FieldNotes[field.id] || [],
-		transitions: { incoming: [] as FieldTransitionRoute[], outgoing: [] as FieldTransitionRoute[] },
+		transitions: { incoming: [] as FieldTransitionRoute[], outgoing: [] as FieldTransitionRoute[], notes: [] as string[] },
 		referenceDetails: fieldReferenceDetails(field.id),
 		references: Object.fromEntries(Object.entries(index.fields[field.id] || {}).map(([kind, ids]) => [kind,
 			(ids as string[]).map(id => (kind === 'abilities' ? Dex.abilities : kind === 'moves' ? Dex.moves : Dex.items).get(id).name)])),
@@ -66,7 +66,9 @@ export function publicFieldGuide() {
 				] : []),
 			],
 			Moves: Object.entries(aura.damageMultipliers).map(([id, n]) => `${Dex.moves.get(id).name}: ${n}x power from its named move bonus.`),
-			'Seeds and other effects': [`Mimicry selects ${aura.mimicryType}. An active aura also controls Camouflage and Terrain Pulse typing.`],
+			'Seeds and other effects': [
+				`Mimicry selects ${aura.mimicryType}. An active aura also controls Camouflage and Terrain Pulse typing.`,
+			],
 			Duration: [`Normally ${aura.turns} turns; the source can change this duration. The aura has a separate timer and does not replace the main field.`],
 			'Battle messages': [...new Set(Object.values(aura.moveMessages))].map(message => '"' + message + '" - the named power bonus applies to ' + Object.entries(aura.moveMessages).filter(([, text]) => text === message).map(([id]) => Dex.moves.get(id).name).join(', ') + '. This does not confirm a hit.').concat(['"' + aura.typeMessage + '" - a matching attack receives an aura power modifier. Matching field bonuses can reduce the extra multiplier.', '"' + aura.endMessage + '" - the aura ends or is cleared. This message causes no damage.']),
 		};
@@ -124,16 +126,21 @@ export function publicFieldGuide() {
 			sections.Transitions = FieldTransitionNotes[entry.id] || sections.Transitions || [];
 		}
 		for (const [section, lines] of Object.entries(sections)) {
-			if (section !== 'Battle messages') sections[section] = conciseFieldNotes(lines);
+			sections[section] = section === 'Battle messages' ?
+				lines.map(line => line.replace(/ The [^.]*misspelled[^.]*\./g, '')
+					.replace(/requests Volcanic Summit/g, 'changes the field to Volcanic')) : conciseFieldNotes(lines);
 		}
 	}
 	const routes = fieldTransitionRoutes();
 	for (const field of fields) {
 		field.transitions.incoming = routes.filter(route => route.to === field.id || route.alsoTo?.includes(field.id));
 		field.transitions.outgoing = routes.filter(route => route.from === field.id);
+		field.transitions.notes = conciseFieldNotes(FieldTransitionExtraNotes[field.id] ??
+			(field.sections as Record<string, string[]>).Transitions ?? []);
 	}
 	return {
 		fingerprint: index.fingerprint,
+		sharedRules: conciseFieldNotes(SharedFieldGuideRules),
 		entries: [
 			...fields,
 			...auras,
@@ -181,7 +188,14 @@ function fieldReferenceDetails(field: string) {
 			const sectionNames = kind === 'abilities' ? ['Abilities'] : kind === 'moves' ? ['Moves', 'Transitions'] : ['Seeds and other effects'];
 			notes = [...new Set(sectionNames.flatMap(section => sections[section] || []).filter(text => text.toLowerCase().includes(effect.name.toLowerCase())))];
 		}
-		return { id, name: effect.name, reviewed: !!notes.length, fieldEffects: conciseFieldNotes(notes), generalSummary: '',
-			...(kind === 'moves' ? { moveStats: (() => { const move = Dex.moves.get(id); return { type: move.type, category: move.category, power: move.basePower, accuracy: move.accuracy, pp: move.pp }; })() } : {}) };
+		return {
+			id, name: effect.name, reviewed: !!notes.length, fieldEffects: conciseFieldNotes(notes), generalSummary: '',
+			...(kind === 'moves' ? { moveStats: (() => {
+				const move = Dex.moves.get(id);
+				return {
+					type: move.type, category: move.category, power: move.basePower, accuracy: move.accuracy, pp: move.pp,
+				};
+			})() } : {}),
+		};
 	})]));
 }

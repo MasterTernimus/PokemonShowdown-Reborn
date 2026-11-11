@@ -7173,8 +7173,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10057,
 	},
+	coilup: {
+		name: 'Coil Up', num: 32550, rating: 2, flags: {},
+		onDamagingHit(damage, target, source, move) {
+			if (damage <= 0 || !target.hp || target.isAlly(source) ||
+				!this.checkMoveMakesContact(move, source, target)) return;
+			const entry = target.m.ultraRivalryEntryToken;
+			if (target.m.coilUpEntry === entry) return;
+			target.m.coilUpEntry = entry;
+			this.boost({ def: 1 }, target, target, this.effect);
+		},
+	},
 	heatcoil: {
-		onStart(pokemon) { this.dex.abilities.get('flamebody').onStart?.call(this, pokemon); },
+		onStart(pokemon) {
+			this.dex.abilities.get('flamebody').onStart?.call(this, pokemon);
+			this.dex.abilities.get('magmaarmor').onStart?.call(this, pokemon);
+		},
 		onDamagingHit(damage, target, source, move) {
 			return this.dex.abilities.get('flamebody').onDamagingHit?.call(this, damage, target, source, move);
 		},
@@ -7182,7 +7196,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.dex.abilities.get('speedboost').onResidual?.call(this, pokemon);
 		},
 		onUpdate(pokemon) { return this.dex.abilities.get('magmaarmor').onUpdate?.call(this, pokemon); },
+		onTryHit(target, source, move) { return this.dex.abilities.getHandler('magmaarmor', 'onTryHit')?.call(this, target, source, move); },
+		onImmunity(type, pokemon) { return this.dex.abilities.get('magmaarmor').onImmunity?.call(this, type, pokemon); },
+		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) { return this.dex.abilities.get('magmaarmor').onSourceModifyAtk?.call(this, atk, attacker, defender, move); },
+		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(spa, attacker, defender, move) { return this.dex.abilities.get('magmaarmor').onSourceModifySpA?.call(this, spa, attacker, defender, move); },
 		flags: { breakable: 1 },
 		name: "Heat Coil",
@@ -14251,10 +14269,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			if (skipPassiveComponent(this, pokemon, 'seasonalstride')) return;
-			let modifier = 1;
-			if (move.typeChangerBoosted === this.effect) modifier *= 1.2;
-			if (move.flags['kick']) modifier *= 1.4;
-			if (modifier !== 1) return this.chainModify(modifier);
+			if (move.typeChangerBoosted === this.effect) return this.chainModify(1.5);
 		},
 		onModifySpe(spe, pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {

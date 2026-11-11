@@ -5,7 +5,7 @@ import { composeSelectedAbility } from './selected-mega-simplifications';
 export const NovemberRosterPassives: { [id: string]: string[] } = {
 	dodrio: ['triplethreat'], scizor: ['lightweightswarm'], aggronmega: ['filter'],
 	bronzong: ['heatproof'], bronzongrejuv: ['heatproof'], toxicroakdeso: ['anticipation'],
-	lumineon: ['swiftswim'], tangrowth: ['regenerator'], froslassaevian: ['levitate'],
+	lumineon: ['stormdrain'], tangrowth: ['regenerator'], froslassaevian: ['levitate'],
 	stoutland: ['sandrush'], excadrill: ['toughclaws'], volcaronaaevian: ['shielddust'],
 	hatterene: ['magicbounce'], hatterenegmax: ['healingmirror'], gholdengo: ['goodasgold'],
 	ludicolo: ['raindish'], shiftry: ['keeneye'], dusknoir: ['pressure'],

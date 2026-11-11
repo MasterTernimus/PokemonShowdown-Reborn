@@ -17,7 +17,7 @@ describe('Approved Nido pair and defensive passive swaps',()=>{afterEach(()=>{ba
    mightyenadeso:{hp:90,atk:115,def:80,spa:75,spd:80,spe:110},
    toxicroak:{hp:83,atk:121,def:70,spa:111,spd:70,spe:95},
    toxicroakdeso:{hp:83,atk:121,def:70,spa:111,spd:70,spe:95},
-   cinccinodeso:{hp:75,atk:110,def:90,spa:60,spd:90,spe:125},
+			cinccinodeso: { hp: 75, atk: 110, def: 85, spa: 70, spd: 85, spe: 125 },
   };
   const approvedPassives={
    clefable:['magicguard'],rapidashgalar:['guidinggallop'],

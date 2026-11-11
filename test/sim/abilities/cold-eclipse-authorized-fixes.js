@@ -42,7 +42,7 @@ describe('Authorized Cold Eclipse corrections', () => {
 		battle.field.clearTerrain(); entry(p); assert.equal(q.boosts.def, 0); assert.equal(other.boosts.def, -3); q.removeVolatile('substitute'); entry(p); assert.equal(q.boosts.def, 0);
 		battle.field.setTerrain('coldeclipseterrain', p); entry(p); assert.equal(q.boosts.def, -2); assert.equal(other.boosts.def, -5);
 	});
-	for (const [field, power, limit] of [['', 100, 60], ['coldeclipseterrain', 150, 80], ['fairytaleterrain', 150, 60], ['forestterrain', 130, 60]])it('Relentless Hunt applies one power/priority benefit on ' + (field || 'ordinary field'), () => {
+	for (const [field, power, limit] of [['', 100, 60], ['coldeclipseterrain', 150, 80], ['fairytaleterrain', 200, 60], ['dragonsdenterrain', 200, 60], ['forestterrain', 130, 60]])it('Relentless Hunt applies one power/priority benefit on ' + (field || 'ordinary field'), () => {
 		const [p, q] = setup(field); p.setAbility('Relentless Hunt');
 		for (const bp of [40, 60, 61, 80, 81, 100]) { const move = Object.assign(Dex.getActiveMove('tackle'), { basePower: bp }); assert.equal(battle.runEvent('BasePower', p, q, move, 100), power); assert.equal(battle.runEvent('ModifyPriority', p, q, move, 0), bp <= limit ? 1 : 0); }
 		if (field === 'coldeclipseterrain') { p.addVolatile('gastroacid'); const move = Dex.getActiveMove('tackle'); assert.equal(battle.runEvent('BasePower', p, q, move, 100), 100); assert.equal(battle.runEvent('ModifyPriority', p, q, move, 0), 0); }

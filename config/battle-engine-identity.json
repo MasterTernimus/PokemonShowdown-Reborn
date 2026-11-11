@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "ca2455daff109b5ad10809f194e64a5235ba30025da786f1e8669f501551ce08",
-  "packageManifestSHA256": "d33080063d2f9f7caae504bbda48e614c893a1a4cc0f90974df4f733ba837c00",
-  "mechanicsSHA256": "7fe40d70d22cad4120edaa0a1efbcd0d1914e282319d059f59dfc9ac1670a689",
+  "packageEngineRevision": "9769293efccc879040c40a443a0bbb6d2666011df30cceff2dfc3faf59893f3a",
+  "packageManifestSHA256": "682d39b5519c4fd3c26660be4f6492671e133fb58313008fb6e8bfceffd07627",
+  "mechanicsSHA256": "7c411cd375348d80b6a13a931409266e185273e8ed1c7277a201f7cafb3d9f74",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,7 +11,7 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "3435071d67ea639e5fbaefa81210348375f426971acbc8c31643be17777410d8"
+      "sha256": "52b0bfe0adebe3d7b68f9c82eb7962ba67003250f72e7aad6f9579fe945e585b"
     },
     {
       "file": "dist/data/ability-components.js",
@@ -19,11 +19,11 @@
     },
     {
       "file": "dist/data/ability-display-summaries.js",
-      "sha256": "5e0a8ea9c97ee2678ae1229fc8e27d73ef6d0235bf6191ed6a062c368f50e7d2"
+      "sha256": "342cd2a85247ecc9e665245e31459f3ad5e4728a219dc85aac783ebf8bfaf1da"
     },
     {
       "file": "dist/data/ability-display.js",
-      "sha256": "20ef92ddff2f08c147b8a9ab2b47e40579196dbf63fa031216a6656a863adc63"
+      "sha256": "ea7d25c5b0eb92c48aa689b73a921f78b0e5912775e8414cbe89cda2be676113"
     },
     {
       "file": "dist/data/ability-readability.js",
@@ -107,7 +107,7 @@
     },
     {
       "file": "dist/data/audit-reworks-approved.js",
-      "sha256": "3765b8bd0f3c55add3e750527cc0221a4f59cd783b91cf2c528dc20859078401"
+      "sha256": "6046b2b02508250f888c55c264e79d970c4553a3e3797f526bb5f98fb23204e1"
     },
     {
       "file": "dist/data/aura-gaze-approved.js",
@@ -167,7 +167,7 @@
     },
     {
       "file": "dist/data/concise-ability-descriptions.js",
-      "sha256": "3582771af7f24f3c3efbf18f131a793615d65dbc9445861e37321bd1ecd0782e"
+      "sha256": "49e3c6de95f45e2680f2e5d929c1581218c9d4e00f3b041fc9db96101b79ee3d"
     },
     {
       "file": "dist/data/conditions.js",
@@ -175,7 +175,7 @@
     },
     {
       "file": "dist/data/cosmetic-counterparts.js",
-      "sha256": "d71950596a0fb56987d3b8b2a882507b46ffb98555541ed3d49c8d815a041a6a"
+      "sha256": "fd067ca3249dff298d6f1ff9ae5bd65e8ec25d8575db660a544a8c754041758e"
     },
     {
       "file": "dist/data/cramorant-goodra-kommo-approved.js",
@@ -247,7 +247,7 @@
     },
     {
       "file": "dist/data/field-guide-presentation.js",
-      "sha256": "49c2387618bb8d56d67a8912d0d5a64b7f300f29c5c731cb13f5e0f0f48a3420"
+      "sha256": "3caf8f5483b5fb175abbc886535539c22bb39c6f60f0524a32c9a812beff9c78"
     },
     {
       "file": "dist/data/field-guide-reference-details.js",
@@ -635,7 +635,7 @@
     },
     {
       "file": "dist/data/november-roster.js",
-      "sha256": "16077886a895c3dd1251948a8602afad1f9f3729e095306ba30cf21f3d43017c"
+      "sha256": "cb427fe6e6af00fa5c5884374ca4c4956db52395f17d0cda501c614a5c73c2d6"
     },
     {
       "file": "dist/data/open-cage.js",
@@ -667,7 +667,7 @@
     },
     {
       "file": "dist/data/pokedex.js",
-      "sha256": "a6e2a1d8fe591c7b77342466adb75e9ed0308d890cbfccc32d581ad5421351b9"
+      "sha256": "67609354b7d652733a990188510524eeae92a2dd9f1f4a268079746bf21cc1e3"
     },
     {
       "file": "dist/data/pokemongo.js",
@@ -699,7 +699,7 @@
     },
     {
       "file": "dist/data/public-field-guide-shared.js",
-      "sha256": "90b396d7b6bea03fe33d1859c545ba4fa306eed50f5be1c8db5dce5afae94d85"
+      "sha256": "4e039381b8d98e7050be4abd8ccecc79d9b3f4d87b9796f1ae69d54ae9c4c635"
     },
     {
       "file": "dist/data/public-field-guide.js",
@@ -711,7 +711,7 @@
     },
     {
       "file": "dist/data/queued-abilities-approved.js",
-      "sha256": "a67f8228fd28f3b3721cf2913ce68996dc8500db18127dc87135097b7da0338a"
+      "sha256": "66bb448e429ae6871b56ad0630519449eef589b072b2b7503d62752567ff8934"
     },
     {
       "file": "dist/data/raging-crowns-approved.js",
@@ -871,7 +871,7 @@
     },
     {
       "file": "dist/data/species-passives.js",
-      "sha256": "306003c7dbcdd3ebdfc29517296a6d9f8ff52a30e83e562044049f1f3f0e099b"
+      "sha256": "418fc2068bdd9739abff54b366cef95151b9a8375813d004a482ad4f002dfebc"
     },
     {
       "file": "dist/data/stance-disguise-aggron.js",
@@ -919,7 +919,7 @@
     },
     {
       "file": "dist/data/text/abilities.js",
-      "sha256": "ff6b0df3ac0814ebb35b942a7f052ea78e646fd3ad6198c2172001d83c018336"
+      "sha256": "b08edbe53e4bedde94b6adfee221ff53a552cdb821826c2830657f425b3bd2e0"
     },
     {
       "file": "dist/data/text/default.js",
@@ -931,7 +931,7 @@
     },
     {
       "file": "dist/data/text/moves.js",
-      "sha256": "1325a9c631fa1446c437d56fd44155778213eee9bac5fafb28805d5938721a38"
+      "sha256": "8ecb904fef225f1321d0116fe7574f6e683c54e089eba848289a86fa3d83caf3"
     },
     {
       "file": "dist/data/text/pokedex.js",
@@ -1003,7 +1003,7 @@
     },
     {
       "file": "dist/data/yang-signature-moves-a.js",
-      "sha256": "6405cecfaeab318a51028d45211b936ced9704b2896a587cb1e8de07e580ba46"
+      "sha256": "d3cfd03d078efa9403fe2129e61b2dfb48827e541d739e0d37d1b229ddada2f4"
     },
     {
       "file": "dist/data/yang-signature-moves-b.js",
@@ -1091,7 +1091,7 @@
     },
     {
       "file": "dist/sim/battle.js",
-      "sha256": "e591a95ce73154799b76ecbfacb377550e62a273abe345ff1ed9c826c8576ba1"
+      "sha256": "6165a51a981595e6ab72194a89c04ea1f8e62c24d4d34452212b4fe6df6209d4"
     },
     {
       "file": "dist/sim/beast-hunter.js",
@@ -1163,7 +1163,7 @@
     },
     {
       "file": "dist/sim/field.js",
-      "sha256": "f3022dfcde0bcacbe7397ce243c15806eb2189961bec5f17ee199b72fe5c5128"
+      "sha256": "57020ad3a75563137a71672a137c545982503155cbad2c650c9b839d7a2c3f5e"
     },
     {
       "file": "dist/sim/finisher-cost.js",
@@ -1274,7 +1274,7 @@
     },
     {
       "file": "dist/data/ability-descriptions.js",
-      "sha256": "053a0c41dde5b02030811bdfb5bd0d05ebfc66bcabec58593d3081d83212c436",
+      "sha256": "52a4638b6f3aaeb7436438d5dbddb98bbe5f894d5ac1a83c8c6cf4366b8fff7f",
       "reason": "Reviewed description-only table or license/readme."
     },
     {

@@ -240,7 +240,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"seablessing": "1.5x Def/SpD; entry heals self/allies 1/4.",
 	"schooling": "Changes form with HP and water fields; its School form gains the listed components.",
 	"seviischooling": "Changes Wishiwashi to Sevii form; School: Hydra Bond + Self Repair + Mold Breaker.",
-	"seasonalstride": "Normal -> primary type 1.2x; kicks 1.4x; weather forms.",
+	"seasonalstride": "Normal -> primary type 1.5x; sun Speed 2x; weather forms.",
 	"voidcraft": "20% less attack damage (40% if super effective); no sleep/stat drops; recurring Ghost Future Sight.",
 	"voidhex": "Direct damaging hits trap surviving foes through the next turn; further hits refresh the trap.",
 	"blademastery": "At 1/4 max HP or less, slicing moves gain +1 priority.",

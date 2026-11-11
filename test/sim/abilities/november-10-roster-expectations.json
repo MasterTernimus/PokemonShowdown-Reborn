@@ -19,7 +19,7 @@
       "anticipation"
     ],
     "lumineon": [
-      "swiftswim"
+      "stormdrain"
     ],
     "tangrowth": [
       "regenerator"
@@ -94,10 +94,13 @@
       "beastboost"
     ],
     "lumineonalt": [
-      "swiftswim"
+      "stormdrain"
     ],
     "dhelmise": [
       "steelworker"
+    ],
+    "centiskorch": [
+      "flashfire"
     ]
   },
   "slots": {
@@ -188,6 +191,26 @@
     },
     "porygonz": {
       "1": "Adaptability"
+    },
+    "centiskorch": {
+      "0": "Coil Up",
+      "1": "White Smoke",
+      "H": "Flame Body"
+    },
+    "lumineon": {
+      "0": "Protean",
+      "1": "Swift Swim",
+      "H": "Drizzle"
+    },
+    "lumineonalt": {
+      "0": "Protean",
+      "1": "Swift Swim",
+      "H": "Drizzle"
+    },
+    "cinccinodeso": {
+      "0": "Plush Whiplash",
+      "1": "Skill Link",
+      "H": "Silken Salvo"
     }
   },
   "names": {
@@ -229,6 +252,14 @@
     "porygonz": {
       "hp": 95,
       "spa": 140
+    },
+    "cinccinodeso": {
+      "hp": 75,
+      "atk": 110,
+      "def": 85,
+      "spa": 70,
+      "spd": 85,
+      "spe": 125
     }
   }
 }

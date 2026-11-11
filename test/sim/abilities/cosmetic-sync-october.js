@@ -19,7 +19,7 @@ describe('Approved cosmetic counterpart synchronization',()=>{
  });
  it('preserves deliberately different regional and custom gameplay forms',()=>{
   for(const [a,b]of [['laprasaevian','lapras'],['palossandfiery','palossand'],['florgesreborn','florges'],['toxtricityaevian','toxtricity'],['scolipedemega','scolipede']])assert.notDeepEqual(Dex.species.get(a).types,Dex.species.get(b).types);
-  assert.notDeepEqual(Dex.species.get('cinccinodeso').abilities,Dex.species.get('cinccino').abilities);
+		assert.deepEqual(Dex.species.get('cinccinodeso').abilities, Dex.species.get('cinccino').abilities);
  });
  it('preserves Grimmsnarl-Azzy Gmax and Scolipede-Azzy Mega routes',()=>{
   const battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Grimmsnarl-Azzy',ability:'Prankster',moves:['splash']}],[{species:'Scolipede-Azzy',ability:'Speed Boost',item:'Scolipite',moves:['splash']}]]);

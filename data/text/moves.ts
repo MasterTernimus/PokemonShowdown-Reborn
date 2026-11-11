@@ -5390,8 +5390,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	revivalblessing: {
 		name: "Revival Blessing",
-		desc: "A fainted party member is selected and revived with 1/2 its max HP, rounded down. Fails if there are no fainted party members.",
-		shortDesc: "Revives a fainted Pokemon to 50% HP.",
+		desc: "Revives a fainted party member with half its max HP, rounded down. Keeps its Mega, Gmax or Battle Bond form. Fails if no party member has fainted.",
+		shortDesc: "Revives an ally to 50% HP; keeps Mega/Gmax/Battle Bond form.",
 
 		heal: "  [POKEMON] was revived and is ready to fight again!",
 	},

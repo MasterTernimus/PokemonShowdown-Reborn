@@ -1,5 +1,8 @@
 /** Cosmetic skins only; distinct regional and custom gameplay forms stay separate. */
 export const CosmeticBattleCounterparts: Readonly<Record<string, string>> = {
+	"mightyenadeso": "mightyena",
+	"toxicroakdeso": "toxicroak",
+	"cinccinodeso": "cinccino",
   "ninetalesalt": "ninetales",
   "lumineonalt": "lumineon",
   "cacturnealt": "cacturne",

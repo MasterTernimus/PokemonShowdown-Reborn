@@ -101,8 +101,12 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
 		"shortDesc": "Solid Rock; eight-turn sand; Rock/Ground matchup; Rock/Dark hits break screens.",
   },
   "heatcoil": {
-		"desc": "Speed Boost and Long Reach. Long Reach removes contact. Has the current modified Magma Armor package: cures freeze, and incoming Water/Ice attacks use half the offensive stat.",
-    "shortDesc": "Speed Boost + Long Reach; modified Magma Armor; Flame Body passive is separate."
+		"desc": "Speed Boost, Long Reach and Magma Armor. Gains Speed each full turn and attacks without contact. Prevents and cures freeze; halves incoming Water/Ice attack power. On entry in Dragon’s Den, Volcanic or Infernal Eclipse, gains +1 Defense and Sp. Def. Immune to Fire moves in Dragon’s Den and Infernal Eclipse. Cold Eclipse allows frostbite, which is then cured.",
+		"shortDesc": "Speed Boost + Long Reach + Magma Armor.",
+	},
+	"coilup": {
+		"desc": "After surviving an opposing contact hit that damages its HP, raises Defense by 1. Once per switch-in.",
+		"shortDesc": "Surviving an opposing contact hit gives +1 Defense, once per entry.",
   },
   "sweetsanctuary": {
     "desc": "Ripen doubles HP restored and stat boosts from Berries, and doubles resistance Berries' damage reduction. When Decorate actually raises at least one stat, heals that target by 1/4 of its current max HP once after the move. Failed or blocked Decorate, or no actual positive boost, grants no healing. Normal healing restrictions apply. Ripen does not multiply this healing.",

@@ -249,7 +249,7 @@ export function getAbilityDisplayComponents(id: string, passives: readonly strin
 	if (id === 'venomarmor' && (!species || species === 'zangoose')) return ['dualwield', 'runaway'];
 	const excluded = getAbilityComponentExclusions(id, passives, species);
 	const parts = Array.from(new Set([...directDisplayComponents(id), ...getAbilityComponentAdditions(id, passives)].map(canonicalAbilityDisplayID)))
-		.filter(part => !passives.includes(part) && !excluded.includes(part) && !(id === 'heatcoil' && part === 'magmaarmor'));
+		.filter(part => !passives.includes(part) && !excluded.includes(part));
 	// A component already included by another named package needs no second display entry.
 	return parts.filter((part, index) => part !== 'proficient' && !parts.some((other, otherIndex) => other !== part &&
 		getAbilityDisplayClosure(other).has(part) && (!getAbilityDisplayClosure(part).has(other) || otherIndex < index)));

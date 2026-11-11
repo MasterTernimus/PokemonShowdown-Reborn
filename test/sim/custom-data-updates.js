@@ -419,6 +419,9 @@ describe('Custom battle data updates', function () {
 			battle.makeChoices('team 1', 'team 1');
 			const zMoves = battle.actions.canZMove(battle.p1.active[0]);
 			assert(zMoves?.some(option => option?.move === zMove), `${species} should be offered ${zMove}`);
+			battle.makeChoices('move 1 zmove', 'move splash');
+			assert(battle.log.some(line => line.startsWith('|move|') && line.includes(`|${zMove}|`)),
+				`${species} should execute ${zMove}`);
 			battle.destroy();
 			battle = null;
 		}

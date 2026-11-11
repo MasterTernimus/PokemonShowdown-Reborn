@@ -3008,7 +3008,11 @@ export class Battle {
 				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
-				if (pokemon.formeRegression && !pokemon.transformed) {
+				// These permanent transformations survive fainting so revival restores the same form.
+				// Use the real baseSpecies, never a temporary Transform or Illusion disguise.
+				const retainedForm = /Mega|Gmax|Battle-Bond/.test(pokemon.baseSpecies.forme) ||
+					pokemon.baseSpecies.id === 'greninjaash';
+				if (pokemon.formeRegression && !pokemon.transformed && !retainedForm) {
 					// before clearing volatiles
 					pokemon.baseSpecies = this.dex.species.get(pokemon.set.species || pokemon.set.name);
 					pokemon.baseAbility = this.dex.abilities.get(pokemon.set.ability).id;

@@ -115,7 +115,7 @@ const reviewedStats = {
  kingdra: [85,105,90,105,90,95],
  mightyena: [90,115,80,75,80,110], mightyenadeso: [90,115,80,75,80,110], mightyenagrim: [90,115,80,75,80,110],
  mightyenamega: [90,140,105,85,100,130],
- cinccinodeso: [75,110,90,60,90,125], toxicroak: [83,121,70,111,70,95], toxicroakdeso: [83,121,70,111,70,95],
+	cinccinodeso: [75, 110, 85, 70, 85, 125], toxicroak: [83, 121, 70, 111, 70, 95], toxicroakdeso: [83, 121, 70, 111, 70, 95],
  sevipermega: [75,140,120,90,120,65], staraptor: [85,120,80,50,70,105], staraptormega: [85,140,110,60,100,115],
 };
 exports.stats = (id, fallback) => reviewedStats[id] ? Object.fromEntries(['hp','atk','def','spa','spd','spe'].map((key,i)=>[key,reviewedStats[id][i]])) : fallback;

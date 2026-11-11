@@ -801,7 +801,7 @@ export class Field {
 			this.terrainState = prevTerrainState;
 			return false;
 		}
-		if (prevTerrainState.terrain_type === 'Temp') {
+		if (prevTerrainState.terrain_type === 'Temp' && !prevTerrainState.baseFieldTransition) {
 			this.terrainStack.shift();
 		}
 		this.terrainStack.unshift(this.terrainState);
@@ -876,6 +876,8 @@ export class Field {
 			id: status.id,
 			terrainChanges: new Map<string, number>(),
 			terrain_type: prevTerrainState.terrain_type,
+			// Natural transitions keep their base-field identity even when timed (Mist Ball).
+			baseFieldTransition: prevTerrainState.terrain_type === 'Base' || !!prevTerrainState.baseFieldTransition,
 			origin: sourceEffect,
 			duration: prevTerrainState.zMoveExpired ? 1 : (prevTerrainState.duration === undefined ? undefined : prevTerrainState.duration + riftGrowthTurns),
 			durationUpdatedTurn: prevTerrainState.durationUpdatedTurn ?? this.battle.turn - 1,
@@ -945,6 +947,8 @@ export class Field {
 
 	clearTerrain(power: string | null = null) {
 		if (power === 'mid' && this.auraField && !this.terrainState.purifiedEclipse) return this.clearAura();
+		if ((power === 'mid' || power === 'move' || power === 'terraform') &&
+			(this.terrainState.terrain_type === 'Base' || this.terrainState.baseFieldTransition)) return false;
 		if (this.tyrantMaintainsDen()) {
 			if (this.terrainState.duration === 0) this.setTerrainDuration(1, false);
 			return false;

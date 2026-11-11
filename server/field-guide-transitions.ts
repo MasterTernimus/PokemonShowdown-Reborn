@@ -42,6 +42,8 @@ export function fieldTransitionRoutes(): FieldTransitionRoute[] {
 	for (const field of ['caveterrain', 'volcanicterrain']) {
 		add(field, 'dragonsdenterrain', 'Dragon Pulse, Dragon Energy', '2 uses total');
 		add(field, 'dragonsdenterrain', 'Devastating Drake, Draco Meteor, Core Enforcer');
+		add(field, 'dragonsdenterrain', 'Dragon Rend', '1 damaging hit',
+			'Damage to an enemy or its Substitute counts. Field locks still apply.');
 	}
 	add('caveterrain', 'dragonsdenterrain', 'Dragon-type Max move');
 	add('caveterrain', 'crystalcavernterrain', 'Power Gem, Diamond Storm');

@@ -23,7 +23,7 @@ describe('Custom alts and Haunted field rules', function () {
 			assert.equal(alt.baseSpecies, baseName);
 			assert.equal(alt.forme, 'Deso');
 			assert.deepEqual(alt.types, base.types);
-			assert.deepEqual(alt.abilities, baseName === 'Cinccino' ? { ...base.abilities, 0: 'Pixilate' } : base.abilities);
+			assert.deepEqual(alt.abilities, base.abilities);
 		}
 		assert.equal(battle.dex.species.get('Mightyena-Alt').name, 'Mightyena-Deso');
 		assert.equal(battle.dex.species.get('Toxicroak-Alt').name, 'Toxicroak-Deso');

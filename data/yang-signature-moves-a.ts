@@ -40,7 +40,7 @@ function finishInfernalField(this: Battle, source: Pokemon, move: ActiveMove) {
  if (this.field.isTerrain('burningterrain') && this.field.terrainState.zMoveTerrain) return;
  // Use ordinary replacement eligibility before the native clear path (which also checks Neutralization).
  if (!this.field.canSetTerrain('', source, move) || this.field.isTerrain(['chessboardterrain', 'glitchterrain'])) return;
- this.field.clearTerrain();
+	this.field.clearTerrain('move');
 }
 export const YangSignatureMovesA: MoveDataTable = {
  kaboom: {
@@ -108,7 +108,7 @@ const descriptions: {[id:string]:[string,string]} = {
  queensgambit:['Radomus','Uses the higher current Attack or Sp. Atk and corresponding defense; ties use Special. Lowers the user’s Defense and Sp. Def by 1 afterward.'],
  darkclasp:['Luna','Uses the user’s Sp. Def instead of Sp. Atk against the target’s Sp. Def.'],
  beatdown:['Samson',"Hits up to three times with a separate 95% accuracy check per hit, stopping on a miss. The first accuracy miss each switch-in raises the user's Attack by 2, even after earlier hits; the opportunity is spent even at the Attack cap. Only the first hit can Taunt, for 4 turns, if it damages the target directly. Protect, immunity and no target grant no boost. Blunder Policy can activate on a later miss unless the target is semi-invulnerable. Z-Move power: 160."],
- infernalrage:['Charlotte','Hits opposing Pokemon and applies Torment to damaged targets. Clears a replaceable field after a hit, respecting field locks.'],
+	infernalrage: ['Charlotte', 'Hits opposing Pokemon and applies Torment to damaged targets. Clears an Aura or separately placed field after a hit, respecting field locks. Natural field transitions stay in place.'],
 };
 for (const [id, [credit, summary]] of Object.entries(descriptions)) {
  YangSignatureDescriptionsA[id] = signatureMoveText(id, credit, summary);

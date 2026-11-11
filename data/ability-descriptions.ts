@@ -1645,8 +1645,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Double secondary-effect chances; no charging turns."
 	},
 	"seasonalstride": {
-		"desc": "Normal moves become its primary type and have 1.2x power. Kicking moves have 1.4x power. It has Chlorophyll and changes forme with weather: Spring in rain, Summer in sun, Autumn in sand, Winter in snow.",
-		"shortDesc": "Normal -> primary type 1.2x; kicks 1.4x; weather forms."
+		"desc": "Normal moves become its primary type and have 1.5x power. It has Chlorophyll and changes forme with weather: Spring in rain, Summer in sun, Autumn in sand, Winter in snow.",
+		"shortDesc": "Normal -> primary type 1.5x; weather forms.",
 	},
 	"shadowshield": {
 		"desc": "Takes 0.8x attack damage at any HP; super-effective attacks deal a further 0.75x damage (0.6x total). Ability-ignoring moves cannot bypass these reductions, but suppression disables them. Immune to hail damage on Cold Eclipse.",

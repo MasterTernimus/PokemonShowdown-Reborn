@@ -143,8 +143,8 @@ describe('Approved Gmax migrations and selected redesigns', () => {
 			battle.destroy(); battle = null;
 		}
 	});
-	it('Infernal Eclipse grants one native Flame Body boost plus Furnace Engine entry defenses', () => {
-		for (const [species, expected] of [['Coalossal-Gmax', 2], ['Centiskorch-Gmax', 1]]) {
+	it('Infernal Eclipse grants native Flame Body and the selected package entry defenses once each', () => {
+		for (const [species, expected] of [['Coalossal-Gmax', 2], ['Centiskorch-Gmax', 2]]) {
 			const [p] = setup('Mew'); battle.field.terrain = 'infernaleclipseterrain';
 			p.formeChange(species, null, true); assert.equal(p.boosts.def, expected, species); assert.equal(p.boosts.spd, expected, species);
 			battle.destroy(); battle = null;
