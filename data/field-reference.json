@@ -5670,6 +5670,7 @@
         "Hidden Power Rock",
         "Horn Attack",
         "Horn Drill",
+        "Judgment",
         "Max Rockfall",
         "Meteor Beam",
         "Mighty Cleave",
@@ -5699,12 +5700,15 @@
       "power ×1.3": [
         "Aurora Beam",
         "Bloom Doom",
+        "Dark Pulse",
         "Dazzling Gleam",
         "Doom Desire",
         "Flash Cannon",
+        "Light That Burns the Sky",
         "Luster Purge",
         "Mirror Shot",
         "Moongeist Beam",
+        "Night Daze",
         "Photon Geyser",
         "Plasma Fists",
         "Mirror Beam",
@@ -5758,6 +5762,11 @@
         "Grass Pledge",
         "Magnitude",
         "Water Pledge"
+      ],
+      "no modifier (sunlight)": [
+        "Dark Pulse",
+        "Light That Burns the Sky",
+        "Night Daze"
       ],
       "stat changes: +2 Speed, +1 Attack, +1 Sp. Atk": [
         "Rock Polish"
@@ -5848,9 +5857,6 @@
       ],
       "becomes Physical OR no modifier [field cycle/history may vary]": [
         "Super U.M.D. Move"
-      ],
-      "heal: 66%": [
-        "Spirit Mend"
       ],
       "dual typing: Water / Ice": [
         "Royal Collision"
@@ -6132,7 +6138,6 @@
         "Aurora Beam",
         "Deluge",
         "Avalanche",
-        "Blizzard",
         "Bouncy Bubble",
         "Brine",
         "Bubble",
@@ -6192,7 +6197,6 @@
         "Water Gun",
         "Water Pulse",
         "Water Shuriken",
-        "Water Spout",
         "Wave Crash",
         "Whirlpool",
         "Cold Truth",
@@ -6288,6 +6292,11 @@
         "Beast Hunter",
         "Drake Fang"
       ],
+      "power ×0.5 OR power ×0.65 [field cycle/history may vary]": [
+        "Blizzard",
+        "Muddy Water",
+        "Surf"
+      ],
       "stat changes: +2 Attack, +2 Defense, +2 accuracy": [
         "Coil"
       ],
@@ -6316,7 +6325,9 @@
         "Glaciate",
         "Hydro Vortex",
         "Oceanic Operetta",
-        "Subzero Slammer"
+        "Sparkling Aria",
+        "Subzero Slammer",
+        "Water Spout"
       ],
       "no modifier OR power ×1.3 [field cycle/history may vary]": [
         "Grass Pledge"
@@ -6329,12 +6340,6 @@
       ],
       "power ×2.6": [
         "Mist Ball"
-      ],
-      "power ×0.5 OR power ×0.65 [field cycle/history may vary]": [
-        "Muddy Water",
-        "Sparkling Aria",
-        "Surf",
-        "Water Pledge"
       ],
       "stat changes: -2 Attack, -2 Sp. Atk": [
         "Noble Roar"
@@ -6358,6 +6363,9 @@
       ],
       "power ×1.5; type becomes Dragon": [
         "Terrain Pulse"
+      ],
+      "power ×0.5 OR power ×0.845 OR power ×0.65 [field cycle/history may vary]": [
+        "Water Pledge"
       ],
       "becomes Physical OR no modifier [field cycle/history may vary]": [
         "Super U.M.D. Move"
@@ -8829,9 +8837,6 @@
       "becomes Physical OR no modifier [field cycle/history may vary]": [
         "Super U.M.D. Move"
       ],
-      "heal: 66%": [
-        "Spirit Mend"
-      ],
       "power ×4": [
         "Nostras Wish"
       ],
@@ -9553,9 +9558,6 @@
       "power ×1.5; becomes Physical OR power ×1.95 [field cycle/history may vary]": [
         "Super U.M.D. Move"
       ],
-      "heal: 66%": [
-        "Spirit Mend"
-      ],
       "dual typing: Water / Ice": [
         "Royal Collision"
       ]
@@ -9802,6 +9804,7 @@
         "Metal Claw",
         "Meteor Mash",
         "Mud Bomb",
+        "Mud Barrage",
         "Mud Shot",
         "Sand Tomb",
         "Smart Strike",
@@ -14808,11 +14811,15 @@
       "power ×1.5; dual typing: Ground / Electric": [
         "Thousand Arrows"
       ],
-      "power ×2.25; recoil: none": [
-        "Volt Tackle"
+      "power ×1.5; recoil: none": [
+        "Volt Tackle",
+        "Wild Charge",
+        "KABOOM!!"
       ],
-      "power ×1.5; recoil: none (user airborne)": [
-        "Volt Tackle"
+      "recoil: none (user airborne)": [
+        "Volt Tackle",
+        "Wild Charge",
+        "KABOOM!!"
       ],
       "power ×2.25; dual typing: Electric / Electric; cannot miss": [
         "Wildbolt Storm"
@@ -14822,14 +14829,6 @@
       ],
       "power ×2.25; dual typing: Electric / Electric (rain)": [
         "Wildbolt Storm"
-      ],
-      "power ×1.5; recoil: none": [
-        "Wild Charge",
-        "KABOOM!!"
-      ],
-      "recoil: none (user airborne)": [
-        "Wild Charge",
-        "KABOOM!!"
       ],
       "becomes Physical OR no modifier [field cycle/history may vary]": [
         "Super U.M.D. Move"

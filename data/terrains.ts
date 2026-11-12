@@ -359,13 +359,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const terrainEndMoves = ['defog', 'gust', 'winddance', 'airstreamassault', 'hurricane', 'muddywater', 'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'watersport', 'waterspout', 'hydrovortex', 'tailwind', 'twister', 'whirlwind', 'oceanicoperetta', 'continentalcrush', 'supersonicskystrike', 'gmaxwindrage'];
 				if (this.field.terrainState.gardenBurnStage) return;
 				if (terrainEndMoves.includes(move.id)) {
-					if (this.field.terrainState.prevTerrain) {
-						this.field.changeTerrain(this.field.terrainState.prevTerrain);
-						return;
-					} else {
-						this.field.clearTerrain();
-						return;
-					}
+					this.field.restorePreviousTerrain(this.field.terrainState.prevTerrain || '');
 				}
 			},
 			onResidual(pokemon) {
@@ -394,11 +388,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 						if (this.field.isWeather('raindance')) this.field.douseFlowerGarden();
 						return;
 					}
-					if (this.field.terrainState.prevTerrain) {
-						this.field.changeTerrain(this.field.terrainState.prevTerrain);
-					} else {
-						this.field.clearTerrain();
-					}
+					this.field.restorePreviousTerrain(this.field.terrainState.prevTerrain || '');
 				}
 			},
 			onFieldStart() {
@@ -833,7 +823,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			effectType: "Terrain",
 			duration: 9999,
 			onModifyMove(move) {
-				const crystalBoost = ['judgement', 'multiattack', 'rockclimb', 'strength', 'prismaticlaser'];
+				const crystalBoost = ['judgment', 'multiattack', 'rockclimb', 'strength', 'prismaticlaser'];
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
 				if (move.category !== 'Status' && (move.type === 'Rock' || crystalBoost.includes(move.id))) {
 					move.types = ['Rock', counter[this.CrystalCavernCounter]];
@@ -843,7 +833,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePower(basePower, source, target, move) {
 				// I hate this
 				let modifier = 1;
-				const crystalBoost = ['judgement', 'multiattack', 'rockclimb', 'strength', 'prismaticlaser'];
+				const crystalBoost = ['judgment', 'multiattack', 'rockclimb', 'strength', 'prismaticlaser'];
 				const boost = ['ancientpower', 'diamondstorm', 'powergem', 'rocksmash', 'rocktomb'];
 				const weakboost = ['aurorabeam', 'doomdesire', 'dazzlinggleam', 'flashcannon', 'mirrorbeam', 'lusterpurge', 'mirrorshot', 'moongeistbeam', 'photongeyser', 'signalbeam', 'technoblast', 'menacingmoonrazemaelstorm'];
 				const terrainbreak = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
@@ -870,7 +860,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (terrainbreak.includes(move.id) && (this.field.terrainState.terrainChanges?.get('caveterrain') === 1 || move.id === 'tectonicrage')) {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
-				if (dark.includes('move.id') && this.field.weather !== 'sunnyday') {
+				if (dark.includes(move.id) && this.field.weather !== 'sunnyday') {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				return this.chainModify(modifier);
@@ -882,11 +872,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 				} else {
 					return;
 				}
-				const crystalBoost = ['judgement', 'multiattack', 'rockclimb', 'strength', 'prismaticlaser'];
+				const crystalBoost = ['judgment', 'multiattack', 'rockclimb', 'strength', 'prismaticlaser'];
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
 				if (move.category !== 'Status' && (move.type === 'Rock' || crystalBoost.includes(move.id))) {
 					this.CrystalCavernCounter++;
 					this.CrystalCavernCounter %= 4;
+					this.add('-fieldactivate', 'Crystal Cavern Terrain', '[crystal] ' + counter[this.CrystalCavernCounter]);
 					move.types = [move.type, counter[this.CrystalCavernCounter]];
 				}
 			},
@@ -896,7 +887,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (terrainbreak.includes(move.id)) {
 					if (this.field.terrainState.terrainChanges?.get('caveterrain') === 1 || move.id === 'tectonicrage') {
 						this.add('-message', 'The crystals were shattered!');
-						this.field.changeTerrain('caveterrain', source, move);
+						this.field.restorePreviousTerrain('caveterrain', source, move);
 						return;
 					} else {
 						this.add('-message', 'The crystals were broken up...');
@@ -913,12 +904,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const source = this.field.terrainState.origin;
 				if (source?.id) {
 					if (source.id === 'sunnyday' && this.field.weather !== 'sunnyday') {
-						this.field.changeTerrain('darkcrystalcavernterrain');
+						this.field.restorePreviousTerrain('darkcrystalcavernterrain', null, this.field.getWeather());
 					}
 				}
 			},
 			onFieldStart() {
-				this.add('-fieldstart', 'Crystal Cavern Terrain');
+				this.add('-fieldstart', 'Crystal Cavern Terrain', '[crystal] ' + ['Fire', 'Water', 'Grass', 'Psychic'][this.CrystalCavernCounter]);
 				this.add('-message', 'The cave is littered with crystals.');
 			},
 			onFieldEnd() {
@@ -973,7 +964,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (terrainbreak.includes(move.id)) {
 					if (this.field.terrainState.terrainChanges?.get('caveterrain') === 1) {
 						this.add('-message', 'The dark crystals were shattered!');
-						this.field.changeTerrain('caveterrain', source, move);
+						this.field.restorePreviousTerrain('caveterrain', source, move);
 						return;
 					} else {
 						this.add('-message', 'The dark crystals are starting to crack...');
@@ -1717,7 +1708,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				const underlyingTerrain = this.field.terrainState.underlyingTerrain ||
-					this.field.terrainStack[1]?.id || this.field.terrainState.prevTerrain;
+					this.field.terrainState.prevTerrain || this.field.terrainStack[1]?.id;
 				if ((move.id !== 'magmadrift' || !this.field.moveTransitionBlocked(source, move)) && (igniteMoves.includes(move.id) || (underlyingTerrain && quakeMoves.includes(move.id)) || (move.isMax && move.type === 'Fire'))) {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
@@ -1731,12 +1722,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const hotWaterMoves = ['scald', 'steameruption', 'hydrosteam'];
 				const currentCount = this.field.terrainState.terrainChanges?.get('icyHotWater') ?? this.field.terrainState.terrainChanges?.get('previousTerrain') ?? 0;
 				const stackedUnderlyingTerrain = this.field.terrainStack[1]?.id;
-				const underlyingTerrain = this.field.terrainState.underlyingTerrain || stackedUnderlyingTerrain || this.field.terrainState.prevTerrain;
+				const underlyingTerrain = this.field.terrainState.underlyingTerrain || this.field.terrainState.prevTerrain || stackedUnderlyingTerrain;
 				const restoreTerrain = (fallback: IDEntry) => {
 					if (underlyingTerrain === 'mistyterrain') {
 						for (const side of this.sides) side.addSideCondition('spikes', source);
 					}
-					if (stackedUnderlyingTerrain) {
+					if (stackedUnderlyingTerrain && stackedUnderlyingTerrain === underlyingTerrain) {
 						this.field.clearTerrain();
 					} else if (underlyingTerrain) {
 						this.field.changeTerrain(underlyingTerrain, source, move);
@@ -2488,8 +2479,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.field.terrainState.sunnyday = 0;
 				}
 				if (this.field.terrainState?.sunnyday === 2) {
-					this.add('-message', 'The mountain was covered in snow!');
-					this.field.changeTerrain('snowymountainterrain');
+					this.add('-message', 'The snow melted away!');
+					this.field.changeTerrain('mountainterrain');
 				}
 			},
 			onFieldStart() {
@@ -2730,11 +2721,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.field.terrainState.terrainChanges?.set('revertTerrain', currentCounter + revertCounter);
 					if (currentCounter + revertCounter >= 3) {
 						this.add('-message', 'The swamp tried up!');
-						if (this.field.terrainState?.prevTerrain) {
-							this.field.changeTerrain(this.field.terrainState.prevTerrain);
-						} else {
-							this.field.clearTerrain();
-						}
+						this.field.restorePreviousTerrain(this.field.terrainState.prevTerrain || '');
 					} else {
 						this.add('-message', 'The swamp is drying up...');
 					}
@@ -2774,11 +2761,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					const revertCounter = this.field.weather === 'sunnyday' ? 1 : 3;
 					this.field.terrainState.terrainChanges?.set('revertTerrain', currentCounter + revertCounter);
 					if (currentCounter + revertCounter >= 3) {
-						if (this.field.terrainState?.prevTerrain) {
-							this.field.changeTerrain(this.field.terrainState.prevTerrain);
-						} else {
-							this.field.clearTerrain();
-						}
+						this.field.restorePreviousTerrain(this.field.terrainState.prevTerrain || '');
 					}
 				}
 			},

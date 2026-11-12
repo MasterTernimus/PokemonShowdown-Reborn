@@ -66,7 +66,7 @@ describe('Revised composite Mold Breaker ownership', () => {
 	}
 	for (const name of ['Atrocity', 'Sun Sovereign'])it(name + ' retains field entry without retired healing', () => {
 		const[p,t]=start('No Ability',name);if(name==='Sun Sovereign'){assert.equal(battle.field.weather,'sunnyday');assert.equal(battle.field.weatherState.duration,8);}
-		assert.equal(battle.runEvent('BasePower', p, t, battle.dex.getActiveMove('psychic'), 1000), name === 'Atrocity' ? 1300 : 1000);
+		assert.equal(battle.runEvent('BasePower', p, t, battle.dex.getActiveMove('psychic'), 1000), 1000);
 		battle.field.setTerrain('dragonsdenterrain',p,p.getAbility());battle.singleEvent('Start',p.getAbility(),p.abilityState,p);
 		assert.equal(p.boosts.def,1);assert.equal(p.boosts.spd,1);
 		p.hp = 100; battle.singleEvent('Residual', p.getAbility(), p.abilityState, p); assert.equal(p.hp, 100);

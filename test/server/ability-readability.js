@@ -55,4 +55,31 @@ describe('Readable ability summaries', () => {
 			assert.match(Dex.abilities.get(id).desc, /same move twice in a row/, id);
 		}
 	});
+	it('keeps battle, reference and exported descriptions consistent', () => {
+		for (const [id, text] of Object.entries(PlainLanguageAbilityDescriptions)) {
+			for (const published of [Dex.abilities.get(id), AbilityDescriptionOverrides[id], AbilitiesText[id]]) {
+				assert.equal(published.desc, text.desc, id);
+				assert.equal(published.shortDesc, text.shortDesc, id);
+			}
+			assert.equal(AbilityDisplaySummaries[id], text.shortDesc, id);
+		}
+		for (const [id, text] of Object.entries(PlainLanguagePassiveDescriptions)) {
+			assert.deepEqual(SignaturePassiveDescriptions[id], text, id);
+			assert(text.shortDesc.length <= 100, id);
+		}
+	});
+	it('explains grounding and Torment without adding selectable components to species passives', () => {
+		const undertow = SignaturePassiveDescriptions.undertow;
+		assert.match(undertow.shortDesc, /Smack Down/);
+		assert.match(undertow.desc, /damage a foe directly/);
+		assert.match(undertow.desc, /Substitute and Water immunities/);
+		assert(!/Water Absorb/.test(undertow.desc));
+		assert.match(Dex.abilities.get('undertow').desc, /Water Absorb/);
+		assert(!/50% power/.test(SignaturePassiveDescriptions.lockjaw.desc));
+		assert.match(Dex.abilities.get('lockjaw').desc, /50% power/);
+		assert(!/Thick Fat/.test(SignaturePassiveDescriptions.palmmastery.desc));
+		for (const id of ['lockinggrip', 'lockjaw', 'disorientingmind', 'falseliberation']) {
+			assert.match(Dex.abilities.get(id).desc, /same move twice in a row/, id);
+		}
+	});
 });

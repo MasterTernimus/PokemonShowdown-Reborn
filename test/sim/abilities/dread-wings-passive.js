@@ -12,7 +12,7 @@ describe('Hydreigon Hydra Flight and legacy Dread Wings', () => {
 	it('keeps legacy Dread Wings components and the current Hydreigon lineups', () => {
   const{AbilityComponents}=require('../../../dist/data/ability-components');assert.deepEqual(AbilityComponents.dreadwings,['intimidate','unnerve']);
 		assert.deepEqual(Object.values(Dex.species.get('hydreigon').abilities), ['Dark Aura', 'Strings of Ruin', 'False Liberation']); assert.deepEqual(Dex.species.get('hydreigon').passives, ['hydraflight']);
-		for (const s of Dex.species.all().filter(s => s.id.startsWith('hydreigon') && s.id !== 'hydreigon'))assert.deepEqual(s.passives, s.id === 'hydreigonmega' ? ['abyssalrebirth'] : [], s.id);
+		for (const s of Dex.species.all().filter(s => s.id.startsWith('hydreigon') && s.id !== 'hydreigon'))assert.deepEqual(s.passives, s.id === 'hydreigonmega' ? ['hydraflight'] : [], s.id);
  });
  it('runs Intimidate and full Unnerve once each per entry, without overwriting the selected ability in protocol',()=>{
   const[p,t]=setup();assert.equal(t.boosts.atk,-1);assert.equal(battle.runEvent('TryEatItem',t),false);assert.equal(battle.runEvent('UseItem',t,null,null,Dex.items.get('magicalseed')),false);

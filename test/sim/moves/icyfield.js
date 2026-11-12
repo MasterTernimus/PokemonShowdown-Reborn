@@ -46,6 +46,39 @@ describe('Icy Field interactions', () => {
 		assert(battle.log.includes('|-message|The field is covered in ice.'));
 	});
 
+	for (const breaker of ['earthquake', 'anchorshot', 'heatwave', 'scald']) {
+		for (const olderHistory of [false, true]) it(breaker + ' restores frozen Cave with older history=' + olderHistory, () => {
+			const [source, target] = createBattle();
+			if (olderHistory) battle.field.changeTerrain('dragonsdenterrain', source);
+			battle.field.changeTerrain('caveterrain', source);
+			// A transformed base replaces its top entry but may retain older history.
+			battle.field.terrainState.terrain_type = 'Base';
+			setIcyField(source);
+			assert.equal(battle.field.terrainState.underlyingTerrain, 'caveterrain');
+			applyTerrainMove(breaker, source, target);
+			if (breaker === 'scald') applyTerrainMove(breaker, source, target);
+			assert.equal(battle.field.terrain, 'caveterrain');
+			assert(!battle.log.some(line => line.includes('revealed Dragon')));
+			// Refreezing must remember Cave again, not the old ice or Dragon's Den.
+			setIcyField(source);
+			applyTerrainMove('earthquake', source, target);
+			assert.equal(battle.field.terrain, 'caveterrain');
+		});
+	}
+
+	it('restores Cave through an actual Earthquake after a direct Icy overlay', () => {
+		const [source] = createBattle([
+			[{ species: 'Mew', moves: ['earthquake'] }],
+			[{species: 'Mew', moves: ['splash']}],
+		]);
+		battle.field.changeTerrain('dragonsdenterrain', source);
+		battle.field.changeTerrain('caveterrain', source);
+		assert(battle.field.setTerrain('icyterrain', source));
+		assert.equal(battle.field.terrainState.underlyingTerrain, 'caveterrain');
+		battle.makeChoices('move earthquake', 'move splash');
+		assert.equal(battle.field.terrain, 'caveterrain');
+		assert(battle.log.some(line => line.includes('revealed Cave')));
+	});
 	it('remembers Water Surface under Icy Field and reveals it with a quake', () => {
 		const [source, target] = createBattle();
 		battle.field.changeTerrain('watersurfaceterrain', source);
@@ -60,7 +93,7 @@ describe('Icy Field interactions', () => {
 		it(`Anchor Shot breaks ice and restores ${underlying || 'Water Surface by default'}`, () => {
 			const [source, target] = createBattle([
 				[{species: 'Mew', moves: ['anchorshot']}],
-				[{species: 'Mew', moves: ['splash']}],
+				[{ species: 'Mew', moves: ['splash'] }],
 			]);
 			if (underlying) battle.field.changeTerrain(underlying, source);
 			setIcyField(source);

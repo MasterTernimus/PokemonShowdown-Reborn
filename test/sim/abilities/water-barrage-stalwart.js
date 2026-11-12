@@ -26,7 +26,7 @@ describe('Water Barrage owns one full Stalwart component', () => {
 				battle.gameType = game; const m = Dex.getActiveMove('darkpulse'); battle.runEvent('ModifyMove', p, q, m, m); assert.equal(m.multihit, 2); assert.equal(m.multihitType, 'dualwield'); assert(m.tracksTarget);
 				for (const hit of [1, 2]) { m.hit = hit; assert.equal(battle.runEvent('BasePower', p, q, m, 100), ability === 'Siege Launcher' ? (game === 'freeforall' || hit === 1 ? 150 : 15) : 60); }
 			}
-			for (const id of ['selfsufficient', 'proficient', 'moldbreaker', 'shellarmor'])assert(!p.hasAbility(id), id); if (species === 'Blastoise-Mega')assert(p.getPassives().includes('proficient'));
+			for (const id of ['selfsufficient', 'proficient', 'moldbreaker'])assert(!p.hasAbility(id), id); assert.equal(p.hasAbility('shellarmor'), ability === 'Siege Launcher'); if (species === 'Blastoise-Mega')assert(p.getPassives().includes('proficient'));
 		});
 		it(species + '/' + ability + ' has no chip across consecutive residuals', () => {
 			const [p, q] = setup(species, ability); p.hp = 800; for (const damage of [0, 0, 0, 0]) { const hp = q.hp; battle.singleEvent('Residual', p.getAbility(), p.abilityState, p); assert.equal(hp - q.hp, damage); assert.equal(p.hp, 800); }

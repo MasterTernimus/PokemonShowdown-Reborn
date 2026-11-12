@@ -1182,7 +1182,7 @@ for(const id of ['sandslash','sandslashreborn','sandslashalola'])SpeciesPassives
 for(const [id,passive]of Object.entries(EeveeCloysterPassives)){SpeciesPassives[id]=Object.freeze([passive]);ThematicPassiveIds.add(passive);}
 for(const[id,passive]of Object.entries(StanceDisguisePassives)){SpeciesPassives[id]=Object.freeze([passive]);ThematicPassiveIds.add(passive);}
 SpeciesPassives.hydreigon=Object.freeze(['hydraflight']);ThematicPassiveIds.add('hydraflight');
-SpeciesPassives.hydreigonmega = Object.freeze(['abyssalrebirth']);
+SpeciesPassives.hydreigonmega = Object.freeze(['hydraflight']);
 ThematicPassiveIds.add('abyssalrebirth');
 for(const id of ['meloetta','meloettapirouette','meloettaencore'])SpeciesPassives[id]=Object.freeze(['serenegrace']);
 ThematicPassiveIds.add('serenegrace');
@@ -1400,5 +1400,7 @@ ThematicPassiveIds.add('flashfire');
 for (const [skin, base] of Object.entries(CosmeticBattleCounterparts)) {
  SpeciesPassives[skin] = Object.freeze([...(SpeciesPassives[base] || [])]);
 }
+SpeciesPassives.froslassaevianmega = Object.freeze(['hydration']);
+ThematicPassiveIds.add('hydration');
 Object.freeze(SpeciesPassives);
 

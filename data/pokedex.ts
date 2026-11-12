@@ -23734,7 +23734,7 @@ const latestSpeciesUpdates: {[id: string]: any} = {
 		abilities: {0: "Technician", 1: "Poison Heal", H: "Guts", S: "Aevian Spark"},
 	},
 	azumarill: {
-		baseStats: {hp: 100, atk: 70, def: 115, spa: 100, spd: 115, spe: 60},
+		baseStats: { hp: 100, atk: 60, def: 105, spa: 90, spd: 105, spe: 60 },
 		abilities: {0: "Huge Power", 1: "Sap Sipper", H: "Mold Breaker"},
 	},
 	pikachu: {

@@ -10,10 +10,10 @@ describe('Interaction sandbox engine outcomes', () => {
 			assert(o.log.some(l => l.includes('boost')));
 		}
 	});
-	it('Bombardment keeps Overcoat powder protection', () => {
+	it('Bombardment no longer has Overcoat powder protection', () => {
 		const r = run('Spore', [{}, { species: 'Blastoise-Mega', ability: 'Bombardment' }]);
-		for (const o of r.actionOutcomes)assert.equal(o.after.actors[1].status, '');
-		assert(r.exampleLog.some(l => l.includes('immune')));
+		for (const o of r.actionOutcomes)assert.equal(o.after.actors[1].status, 'slp');
+		assert(r.exampleLog.some(l => l.includes('|-status|')));
 	});
 	it('Hydra remaining native hits are reported on another living foe', () => { const r = run('Bullet Seed', [{ ability: 'Hydra Bond' }, { hpPercent: 1 }, {}, {}], { format: 'gen9nofielddoublesbattle' }); assert(r.actionOutcomes.some(o => o.after.actors[3].hp < o.before.actors[3].hp)); });
 	it('Strong Winds changes actual special Flying damage', () => { const a = run('Air Slash', []), b = run('Air Slash', [], { weather: 'deltastream' }); assert(b.results[1].max > a.results[1].max); });

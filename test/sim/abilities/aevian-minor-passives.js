@@ -9,7 +9,7 @@ describe('Aevian passive additions and approved stats', () => {
 		battle = null;
 	});
 	it('fills all empty slots with one approved passive and preserves existing passives', () => {
-		const preserved = { froslassaevian: 'levitate', froslassaevianmega: 'waterveil', volcaronaaevian: 'shielddust', laprasaevian: 'relicarmor', miloticaevian: 'marvelscale', toxtricityaevian: 'feedback', toxtricityaeviangmax: 'feedback', skeledirgeaevian: 'blaze' };
+		const preserved = { froslassaevian: 'levitate', froslassaevianmega: 'hydration', volcaronaaevian: 'shielddust', laprasaevian: 'relicarmor', miloticaevian: 'marvelscale', toxtricityaevian: 'feedback', toxtricityaeviangmax: 'feedback', skeledirgeaevian: 'blaze' };
 		for (const species of Dex.species.all().filter(s => s.name.includes('Aevian'))) {
 			const expected = preserved[species.id] || AevianMinorPassives[species.id];
 			assert(expected, species.id); assert.deepEqual(species.passives, [expected], species.id);

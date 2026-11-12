@@ -1104,7 +1104,8 @@ export class Pokemon {
 				return [{
 					move: moveSlot.move,
 					id: moveSlot.id,
-					target: this.volatiles.lockedmove?.move === lockedMove ? 'randomNormal' : undefined,
+					target: lockedMove === 'petaldance' && this.battle.field.isTerrain('flowergarden5') ? 'allAdjacentFoes' :
+					this.volatiles.lockedmove?.move === lockedMove ? 'randomNormal' : undefined,
 				}];
 			}
 			// does this happen?
@@ -1129,6 +1130,9 @@ export class Pokemon {
 			let target = moveSlot.target;
 			if (moveSlot.id === 'decorate' && this.hasAbility('masterpatissier')) target = 'normalOrSelf';
 			switch (moveSlot.id) {
+			case 'petaldance': case 'petalblizzard':
+				if (this.battle.field.isTerrain('flowergarden5')) target = 'allAdjacentFoes';
+				break;
 			case 'followme': case 'ragepowder':
 				target = this.battle.gameType === 'freeforall' ? 'normal' : 'self';
 				break;

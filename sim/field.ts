@@ -209,11 +209,16 @@ export class Field {
 		this.auraState = this.battle.initEffectState({id: 'terrainaura', source, sourceEffect, noTerrainPromotion});
 		this.battle.add('-fieldstart', aura.name, `[aura] ${this.auraTurns}`);
 		this.refreshAuraAbilities();
+		if (this.getPseudoWeather('gravity') && source) {
+			this.promoteAura(source, sourceEffect || this.getPseudoWeather('gravity')!, true);
+		}
 		return true;
 	}
 
-	promoteAura(source: Pokemon, sourceEffect: Effect) {
-		if (!this.auraField || ['frozenaura', 'ashenaura', 'riftaura', 'hauntedaura', 'bewitchedaura'].includes(this.auraField) || this.auraState.noTerrainPromotion) return false;
+	promoteAura(source: Pokemon, sourceEffect: Effect, gravity = false) {
+		if (!this.auraField || this.auraState.noTerrainPromotion ||
+			['frozenaura', 'ashenaura', 'riftaura'].includes(this.auraField) ||
+			(!gravity && ['hauntedaura', 'bewitchedaura'].includes(this.auraField))) return false;
 		// Aura permission does not remove full-field replacement restrictions.
 		if (this.isFlowerGardenBase() || ['chessboardterrain', 'glitchterrain', 'bewitchedwoodsterrain',
 			'newworldterrain', 'underwaterterrain', 'midnightzoneterrain', 'dragonsdenterrain'].includes(this.terrain)) return false;
@@ -221,9 +226,10 @@ export class Field {
 		if (this.auraField === 'electricterrain' && ['factoryterrain', 'shortcircuitterrain'].includes(this.terrain)) return false;
 		if (this.auraField === 'mistyterrain' && this.terrain === 'corrosivemistterrain') return false;
 		const duration = source.hasItem('amplifieldrock') ? 8 : 5;
-		const frozen = this.isAura('frozenaura');
-  const success = this.setFieldOrAura(frozen ? 'coldeclipseterrain' : this.auraField, duration, source, sourceEffect, true);
-  if (success && frozen) this.clearAura();
+		const destination = this.auraField === 'hauntedaura' ? 'hauntedterrain' :
+			this.auraField === 'bewitchedaura' ? 'bewitchedwoodsterrain' : this.auraField;
+		const success = this.setFieldOrAura(destination, duration, source, sourceEffect, true);
+		if (success && this.auraField) this.clearAura();
   return success;
 	}
 
@@ -690,7 +696,7 @@ export class Field {
 			return this.changeTerrain('corrosiveterrain', source, sourceEffect);
 		}
 		if (sourceEffect && ['gravity', 'lunarorbit', 'gravitywell', 'gmaxgravitas'].includes(sourceEffect.id) && this.auraField) {
-			return this.promoteAura(source, sourceEffect);
+			return this.promoteAura(source, sourceEffect, true);
 		}
 		return false;
 	}
@@ -777,7 +783,7 @@ export class Field {
 		if (status.id === 'rainbowterrain' && (sourceEffect?.id === 'raindance' || sourceEffect?.id === 'sunnyday')) {
 			new_terrain_type = "Temp";
 		}
-		this.terrainState.terrainChanges = new Map<string, number>();
+		// Preserve suspended-field counters when placing an overlay.
 		const prevTerrain = this.terrain;
 		const prevTerrainState = this.terrainState;
 		this.terrain = status.id;
@@ -785,6 +791,10 @@ export class Field {
 			id: status.id,
 			terrain_type: new_terrain_type,
 			origin: sourceEffect,
+			...(status.id === 'icyterrain' && prevTerrain ? { underlyingTerrain: prevTerrain } : {}),
+			...(['dragonsdenterrain', 'fairytaleterrain', 'crystalcavernterrain', 'darkcrystalcavernterrain',
+				'burningterrain', 'swampterrain'].includes(status.id) && prevTerrain ?
+				{ previousTerrainState: prevTerrainState } : {}),
 			source,
 			sourceSlot: source.getSlot(),
 			terrainChanges: new Map<string, number>(),
@@ -869,8 +879,8 @@ export class Field {
 		const newGardenStage = /^flowergarden[1-5]$/.test(status.id) ? Number(status.id.slice(-1)) : 0;
 		const riftGrowthTurns = riftGardenTransition && oldGardenStage && newGardenStage ?
 			Math.max(0, newGardenStage - oldGardenStage) : 0;
-		const underlyingTerrain = status.id === 'icyterrain' &&
-			['watersurfaceterrain', 'murkwatersurfaceterrain'].includes(this.terrain) ? this.terrain : undefined;
+		// Preserve the field actually frozen, even when older history remains below it.
+		const underlyingTerrain = status.id === 'icyterrain' ? this.terrain : undefined;
 		this.terrain = status.id;
 		this.terrainState = this.battle.initEffectState({
 			id: status.id,
@@ -879,11 +889,16 @@ export class Field {
 			// Natural transitions keep their base-field identity even when timed (Mist Ball).
 			baseFieldTransition: prevTerrainState.terrain_type === 'Base' || !!prevTerrainState.baseFieldTransition,
 			origin: sourceEffect,
-			duration: prevTerrainState.zMoveExpired ? 1 : (prevTerrainState.duration === undefined ? undefined : prevTerrainState.duration + riftGrowthTurns),
+			duration: prevTerrainState.zMoveExpired ? 1 : (prevTerrainState.duration === undefined ? undefined :
+				prevTerrainState.duration + (!prevTerrainState.permanent && prevTerrainState.duration > 0 &&
+				prevTerrainState.duration < 9999 ? Math.max(1, riftGrowthTurns) : riftGrowthTurns)),
 			durationUpdatedTurn: prevTerrainState.durationUpdatedTurn ?? this.battle.turn - 1,
 			permanent: !prevTerrainState.zMoveExpired && !!prevTerrainState.permanent,
 			turn: this.battle.turn,
 			prevTerrain: prevTerrainState.id,
+			...(['dragonsdenterrain', 'fairytaleterrain', 'crystalcavernterrain', 'darkcrystalcavernterrain',
+				'burningterrain', 'swampterrain'].includes(status.id) && prevTerrain ?
+				{ previousTerrainState: prevTerrainState } : {}),
 			gardenBase,
 			...(riftGardenTransition ? {riftGarden: true} : {}),
 			...(prevTerrainState.purifiedEclipse ? {purifiedEclipse: true} : {}),
@@ -943,6 +958,12 @@ export class Field {
 				this.battle.add('-sideend', side, this.battle.dex.conditions.get(sideCondition).name);
 			}
 		}
+	}
+
+	/** Undo a reversible field replacement; native fields retain their normal fallback. */
+	restorePreviousTerrain(fallback: string, source: Pokemon | null = null, move: Effect | null = null) {
+		if (this.terrainState.previousTerrainState?.id) return this.clearTerrain('restoreprevious');
+		return fallback ? this.changeTerrain(fallback, source, move) : this.clearTerrain();
 	}
 
 	clearTerrain(power: string | null = null) {
@@ -1022,6 +1043,14 @@ export class Field {
 				this.terrainStack.shift();
 			}
 		}
+		// A transformed base can replace its stack entry. Restore the exact saved
+		// state rather than falling through to an older field or a default.
+		const previous = clearedTerrainState.previousTerrainState;
+		if (previous?.id && !clearedTerrainState.zMoveTerrain &&
+			(power === null || power === clearedTerrain || power === 'restoreprevious') &&
+			this.terrainStack[0] !== previous) {
+			this.terrainStack.unshift(previous);
+		}
 		const updateThroughTurn = clearedTerrainState.durationUpdatedTurn === this.battle.turn ?
 			this.battle.turn : this.battle.turn - 1;
 		while (this.terrainStack.length) {
@@ -1044,7 +1073,8 @@ export class Field {
 			this.terrain = this.terrainStack[0].id as ID;
 			this.terrainState = this.terrainStack[0];
 			const current_terrain = this.battle.dex.conditions.get(this.terrain);
-			this.battle.add('-fieldstart', current_terrain.id === 'icyterrain' ? 'Icy Field' : current_terrain.name);
+			this.battle.add('-fieldstart', current_terrain.id === 'icyterrain' ? 'Icy Field' : current_terrain.name,
+				...(this.terrain === 'crystalcavernterrain' ? ['[crystal] ' + ['Fire', 'Water', 'Grass', 'Psychic'][this.battle.CrystalCavernCounter]] : []));
 		} else {
 			this.terrain = '';
 			this.terrainState = this.battle.initEffectState({ id: '', terrainChanges: new Map<string, number>(), prevTerrain: '' });

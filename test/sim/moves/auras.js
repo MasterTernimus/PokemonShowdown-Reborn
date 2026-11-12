@@ -251,23 +251,23 @@ describe('Gravity-source Aura conversion',()=>{
  });
 });
 
-describe('Gravity conversion requires an activation',()=>{
+describe('Gravity automatically converts eligible new Auras', () => {
  afterEach(()=>{battle?.destroy();battle=null;});
- it('leaves an Aura alone under active Gravity until the move is used again',()=>{
+	it('converts an Aura immediately under active Gravity', () => {
   const [p]=setup('rockyterrain');battle.actions.runMove('gravity',p,0,{externalMove:true});
   battle.field.setAura('grassyterrain',5,p,battle.dex.moves.get('grassyterrain'));
-  battle.field.tickAura();assert.equal(battle.field.terrain,'rockyterrain');assert.equal(battle.field.auraField,'grassyterrain');
+		battle.field.tickAura(); assert.equal(battle.field.terrain, 'grassyterrain'); assert.equal(battle.field.auraField, '');
   const remaining=battle.field.pseudoWeather.gravity.duration;
   battle.actions.runMove('gravity',p,0,{externalMove:true});
   assert.equal(battle.field.terrain,'grassyterrain');assert.equal(battle.field.auraField,'');assert.equal(battle.field.terrainState.duration,5);
   assert.equal(battle.field.pseudoWeather.gravity.duration,remaining);
  });
- it('does not passively convert a new Aura while Lunar Orbit remains active',()=>{
+	it('converts a new Aura while Lunar Orbit Gravity remains active', () => {
   const [p]=setup('rockyterrain');p.setAbility('lunarorbit');battle.field.setAura('psychicterrain',5,p,battle.dex.moves.get('psychicterrain'));
   battle.actions.runMove('celebrate',p,0,{externalMove:true});battle.field.tickAura();
-  assert.equal(battle.field.terrain,'rockyterrain');assert.equal(battle.field.auraField,'psychicterrain');
-  battle.singleEvent('Start',p.getAbility(),p.abilityState,p);
   assert.equal(battle.field.terrain,'psychicterrain');assert.equal(battle.field.auraField,'');
+  battle.singleEvent('Start',p.getAbility(),p.abilityState,p);
+		assert.equal(battle.field.terrain, 'psychicterrain'); assert.equal(battle.field.auraField, '');
  });
 });
 

@@ -134,14 +134,14 @@ describe('Approved ordinary species reductions',()=>{
 		assert.equal(p.hp, 2000);
 	});
  it('Ancient Bloom loses retaliation while shared Effect Spore remains functional',()=>{const[p,q]=setup('Ancient Bloom');battle.randomChance=()=>true;act(q,p,'tackle',{damage:1});assert.equal(q.status,'');assert(!p.hasAbility('effectspore'));battle.destroy();const[r,t]=setup('Effect Spore');battle.randomChance=()=>true;act(t,r,'tackle',{damage:1});assert(t.status);});
-	it('Atrocity includes contact multiplication; general power and defenses remain', () => {
+	it('Atrocity includes contact multiplication; no blanket power bonus and retains defenses', () => {
 		const [p, q] = setup('Atrocity');
 		const contact = Object.assign(Dex.getActiveMove('tackle'), { type: 'Bug' }), ranged = Object.assign(Dex.getActiveMove('swift'), { type: 'Bug' });
-		assert.equal(battle.runEvent('BasePower', p, q, contact, 100), 169);
-		assert.equal(battle.runEvent('BasePower', p, q, ranged, 100), 130);
+		assert.equal(battle.runEvent('BasePower', p, q, contact, 100), 130);
+		assert.equal(battle.runEvent('BasePower', p, q, ranged, 100), 100);
 		assert.equal(battle.runEvent('ModifyDef', p, null, null, 100), 130);
 		battle.field.setTerrain('coldeclipseterrain', p);
-		assert.equal(battle.runEvent('BasePower', p, q, contact, 100), 169);
+		assert.equal(battle.runEvent('BasePower', p, q, contact, 100), 130);
 		assert.equal(battle.runEvent('ModifyDef', p, null, null, 100), 130);
 		assert(p.hasAbility('toughclaws'));
 	});

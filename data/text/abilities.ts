@@ -4846,8 +4846,8 @@ for (const [id, name] of Object.entries({"duskdrive":"Dusk Ego","twilightinstinc
 
 AbilitiesText.fireward = {
 	name: 'Fire Ward',
-	desc: 'Defense and Sp. Def are multiplied by 1.3, or 1.5 on Cold Eclipse or Dragon’s Den.',
-	shortDesc: 'Defense and Sp. Def 1.3x; 1.5x on Cold Eclipse or Dragon’s Den.',
+	desc: 'Defense and Sp. Def are multiplied by 1.3.',
+	shortDesc: 'Defense and Sp. Def 1.3x.',
 };
 
 AbilitiesText.carryon = {name: 'Carry On', desc: 'Inner Focus + Healer. Once per battle, adds a fainted ally’s eligible selected ability alongside its own effects; keeps that inheritance across switches while Carry On is selected.', shortDesc: 'Inner Focus + Healer; once per battle adds an ally’s ability.'};

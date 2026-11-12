@@ -73373,6 +73373,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	hydreigon: {
 		learnset: {
+			thrash: ["9M"],
 			roaroftime: [],
 			rage: [],
 			acrobatics: ["9M", "8M", "7M", "6M", "5M"],
