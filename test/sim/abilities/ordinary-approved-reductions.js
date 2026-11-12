@@ -134,16 +134,16 @@ describe('Approved ordinary species reductions',()=>{
 		assert.equal(p.hp, 2000);
 	});
  it('Ancient Bloom loses retaliation while shared Effect Spore remains functional',()=>{const[p,q]=setup('Ancient Bloom');battle.randomChance=()=>true;act(q,p,'tackle',{damage:1});assert.equal(q.status,'');assert(!p.hasAbility('effectspore'));battle.destroy();const[r,t]=setup('Effect Spore');battle.randomChance=()=>true;act(t,r,'tackle',{damage:1});assert(t.status);});
-	it('Atrocity includes contact multiplication; no blanket power bonus and retains defenses', () => {
+	it('Atrocity has no contact or blanket power bonus and retains defenses', () => {
 		const [p, q] = setup('Atrocity');
 		const contact = Object.assign(Dex.getActiveMove('tackle'), { type: 'Bug' }), ranged = Object.assign(Dex.getActiveMove('swift'), { type: 'Bug' });
-		assert.equal(battle.runEvent('BasePower', p, q, contact, 100), 130);
+		assert.equal(battle.runEvent('BasePower', p, q, contact, 100), 100);
 		assert.equal(battle.runEvent('BasePower', p, q, ranged, 100), 100);
 		assert.equal(battle.runEvent('ModifyDef', p, null, null, 100), 130);
 		battle.field.setTerrain('coldeclipseterrain', p);
-		assert.equal(battle.runEvent('BasePower', p, q, contact, 100), 130);
+		assert.equal(battle.runEvent('BasePower', p, q, contact, 100), 100);
 		assert.equal(battle.runEvent('ModifyDef', p, null, null, 100), 130);
-		assert(p.hasAbility('toughclaws'));
+		assert(!p.hasAbility('toughclaws'));
 	});
  it('Sun Sovereign keeps eight-turn sun and Unbound Blaze entry effects without Intimidate',()=>{const[p,q]=setup('Sun Sovereign');assert.equal(q.boosts.atk,0);assert.equal(battle.field.weather,'sunnyday');assert.equal(battle.field.weatherState.duration,8);battle.field.terrain='volcanicterrain';battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.boosts.def,1);assert.equal(p.boosts.spd,1);assert.equal(q.boosts.atk,0);});
 	it('Fortress Shell no longer chips or heals at turn end', () => {

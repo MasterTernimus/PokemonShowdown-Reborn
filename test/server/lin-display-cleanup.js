@@ -20,14 +20,14 @@ describe('Global display-only ability cleanup', () => {
 		assert(count >= 948);
 	});
 	it('Atrocity exposes Unbound Blaze and Fire Ward without removed components', () => {
-		assert.deepEqual(display.getAbilityDisplayComponents('atrocity').map(id => Dex.abilities.get(id).name), ['Blazing Monarch', 'Fire Ward', 'Tough Claws']);
+		assert.deepEqual(display.getAbilityDisplayComponents('atrocity').map(id => Dex.abilities.get(id).name), ['Blazing Monarch', 'Fire Ward']);
 		const ability = Dex.abilities.get('atrocity');
-		assert.equal(ability.desc, 'Blazing Monarch + Fire Ward + Tough Claws. All moves have 1.1x accuracy.');
+		assert.equal(ability.desc, 'Blazing Monarch + Fire Ward. All moves have 1.1x accuracy.');
 		const { AbilityComponents } = require('../../dist/data/ability-components');
-		assert.deepEqual(AbilityComponents.atrocity, ['unboundblaze', 'fireward', 'toughclaws']);
+		assert.deepEqual(AbilityComponents.atrocity, ['unboundblaze', 'fireward']);
 		assert.deepEqual(AbilityComponents.unboundblaze, []);
 		const html = getAbilityMechanicsHTML(ability, Dex);
-		for (const name of ['Blazing Monarch', 'Fire Ward', 'Tough Claws']) assert(html.includes('/dt ' + name + ', gen9'));
+		for (const name of ['Blazing Monarch', 'Fire Ward']) assert(html.includes('/dt ' + name + ', gen9'));
 		for (const name of ['Proficient', 'Dragonize', 'Magma Armor']) assert(!html.includes('/dt ' + name + ','));
 	});
 	it('calculator labels match the canonical server display lists', () => {

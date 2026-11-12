@@ -63,9 +63,9 @@ describe('Starter species passives',()=>{
 		p.setType('Normal');
 		const disguisedPower = event(p, t, 'BasePower', 'tackle');
 		p.illusion = null;
-		assert.equal(event(p, t, 'BasePower', 'tackle'), 169);
-		assert.equal(disguisedPower, 130);
-		// Atrocity's contact boost remains; Proficient depends on the actual passive.
+		assert.equal(event(p, t, 'BasePower', 'tackle'), 130);
+		assert.equal(disguisedPower, 100);
+		// Proficient follows the actual passive; Atrocity adds no contact boost.
   p.formeChange('Charizard',null,true);assert.deepEqual(p.getPassives(),['blaze']);
   assert(!battle.log.some(line=>line.includes('|-ability|')&&line.includes('Proficient')));
  });
