@@ -5,7 +5,7 @@ function use(p,q,id='tripledive',extra={}) {const m=Object.assign(Dex.getActiveM
 describe('Triple Dive and Shadow Force fields',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  for(const start of ['', 'icyterrain','watersurfaceterrain','underwaterterrain'])it('Triple Dive per-hit fields from '+(start||'none'),()=>{const[p,q]=setup(start);const seen=[];const original=battle.actions.getDamage;battle.actions.getDamage=function(s,t,m,...rest){if(m.id==='tripledive')seen.push([m.hit,this.battle.field.terrain,m.basePowerCallback.call(this.battle,s,t,m)]);return original.call(this,s,t,m,...rest);};use(p,q);assert.deepEqual(seen,[[1,start==='icyterrain'?'icyterrain':'watersurfaceterrain',20],[2,start==='icyterrain'?'watersurfaceterrain':'underwaterterrain',40],[3,'underwaterterrain',60]]);assert.equal(battle.field.terrain,'underwaterterrain');});
- for(const item of ['', 'amplifieldrock'])it('new field duration '+item,()=>{const[p,q]=setup('','No Ability',item);use(p,q);assert.equal(battle.field.terrainState.duration,item?8:5);});
+	for (const item of ['', 'amplifieldrock'])it('new field duration ' + item, () => { const [p, q] = setup('', 'No Ability', item); use(p, q); assert.equal(battle.field.terrainState.duration, item ? 9 : 6); });
  for(const failAt of [1,2,3])it('stops field progression when hit '+failAt+' misses',()=>{const[p,q]=setup();let accuracy=0;battle.randomChance=(n,d)=>n===90?++accuracy<failAt:n>=d;use(p,q);assert.equal(battle.field.terrain,['','', 'watersurfaceterrain','underwaterterrain'][failAt]);});
  for(const ability of ['Water Absorb','Storm Drain','Dry Skin'])it(ability+' prevents field generation',()=>{const[p,q]=setup('',ability);use(p,q);assert.equal(battle.field.terrain,'');});
  it('Protect prevents field generation',()=>{const[p,q]=setup();q.addVolatile('protect');use(p,q);assert.equal(battle.field.terrain,'');});
@@ -20,7 +20,7 @@ describe('Triple Dive and Shadow Force fields',()=>{
  for(const field of ['watersurfaceterrain','underwaterterrain'])it('exact 2.25x Water and named power on '+field,()=>{const[p,q]=setup(field);assert.equal(battle.runEvent('BasePower',p,q,Dex.getActiveMove('tripledive'),100),225);});
  it('a second-hit miss leaves the original Icy field intact',()=>{const[p,q]=setup('icyterrain');let n=0;battle.randomChance=(a,b)=>a===90?++n===1:a>=b;use(p,q);assert.equal(battle.field.terrain,'icyterrain');});
  it('Bad Seeds locks Cold Eclipse',()=>{const[p,q]=setup('coldeclipseterrain','Bad Seeds');use(p,q);assert.equal(battle.field.terrain,'coldeclipseterrain');});
- it('preserves existing temporary field duration',()=>{const[p,q]=setup('watersurfaceterrain');battle.field.setTerrainDuration(3);use(p,q);assert.equal(battle.field.terrainState.duration,3);});
+	it('extends an existing temporary field once when it transitions', () => { const [p, q] = setup('watersurfaceterrain'); battle.field.setTerrainDuration(3); use(p, q); assert.equal(battle.field.terrainState.duration, 4); });
  it('Shadow Force miss does not create a field',()=>{const[p,q]=setup();use(p,q,'shadowforce');use(p,q,'shadowforce',{accuracy:0});assert.equal(battle.field.terrain,'');});
  for(const [species,ability] of [['Eiscue','Ice Face'],['Mimikyu','Disguise']])it('Shadow Force blocked by '+ability+' does not create Midnight',()=>{
   const[p,q]=setup('',ability,'',species);q.hp=q.maxhp=q.baseMaxhp=2*q.species.baseStats.hp+141;const hp=q.hp;p.storedStats.atk=200;p.storedStats.spa=100;

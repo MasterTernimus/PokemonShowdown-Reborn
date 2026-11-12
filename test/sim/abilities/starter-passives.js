@@ -33,7 +33,7 @@ describe('Starter species passives',()=>{
   p.addVolatile('gastroacid');assert.equal(event(p,t,'BasePower','tackle'),130);
   assert.equal(event(p,t,'BasePower','splash'),100);p.removeVolatile('gastroacid');p.addVolatile('meridianseal');assert.equal(event(p,t,'BasePower','tackle'),130);p.removeVolatile('meridianseal');t.setAbility('Neutralizing Gas');assert.equal(event(p,t,'BasePower','tackle'),130);t.setAbility('Mold Breaker');p.setAbility('Run Away');assert.equal(event(p,t,'BasePower','tackle'),130);
  });
- for(const [species,ability,move,expected] of [['Venusaur-Mega','Toxic Bloom','tackle',130],['Venusaur-Gmax','Ancient Bloom','tackle',100],['Feraligatr-Gmax','Tidal Jaw','tackle',100],['Feraligatr-Gmax','Tidal Jaw','bite',150],['Charizard-Mega-X','Atrocity','swift',169]])it(species+' '+ability+' preserves independent multipliers',()=>{
+	for (const [species, ability, move, expected] of [['Venusaur-Mega', 'Toxic Bloom', 'tackle', 130], ['Venusaur-Gmax', 'Ancient Bloom', 'tackle', 100], ['Feraligatr-Gmax', 'Tidal Jaw', 'tackle', 100], ['Feraligatr-Gmax', 'Tidal Jaw', 'bite', 150], ['Charizard-Mega-X', 'Atrocity', 'swift', 130]])it(species + ' ' + ability + ' preserves independent multipliers', () => {
   const[p,t]=start(species,ability);p.setType(move==='bite'?'Dark':'Normal');assert.equal(event(p,t,'BasePower',move),expected);
  });
  it('ordinary Unbound Blaze loses Proficient without adding a passive',()=>{
@@ -63,9 +63,9 @@ describe('Starter species passives',()=>{
 		p.setType('Normal');
 		const disguisedPower = event(p, t, 'BasePower', 'tackle');
 		p.illusion = null;
-		assert.equal(event(p, t, 'BasePower', 'tackle'), 220);
-		assert.equal(disguisedPower, 169);
-		// Atrocity's power and contact boosts remain; Proficient depends on the actual passive.
+		assert.equal(event(p, t, 'BasePower', 'tackle'), 169);
+		assert.equal(disguisedPower, 130);
+		// Atrocity's contact boost remains; Proficient depends on the actual passive.
   p.formeChange('Charizard',null,true);assert.deepEqual(p.getPassives(),['blaze']);
   assert(!battle.log.some(line=>line.includes('|-ability|')&&line.includes('Proficient')));
  });

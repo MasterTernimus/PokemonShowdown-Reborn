@@ -1013,7 +1013,7 @@ AbilityComponents.silentflight = ['levitate'];
 AbilityComponents.toxicsink = [];
 AbilityComponents.toxicbloom = [...new Set([...AbilityComponents.toxicbloom, 'toxicsink'])];
 
-AbilityComponents.siegelauncher = ['megalauncher', 'waterbarrage', 'overcoat'];
+AbilityComponents.siegelauncher = ['megalauncher', 'waterbarrage', 'shellarmor'];
 
 AbilityComponents.livinglegend = ['flashfire', 'download'];
 
@@ -1044,7 +1044,7 @@ AbilityComponents.atrocity = ['unboundblaze', 'fireward', 'toughclaws'];
 AbilityComponents.apexpredator = ['windrider', 'toughclaws'];
 
 AbilityComponents.carryon = ['innerfocus', 'healer'];
-AbilityComponents.expiration = ['stringsofruin', 'controlledfury'];
+AbilityComponents.expiration = ['stringsofruin'];
 AbilityComponents.abyssalrebirth = ['hydrabond', 'levitate'];
 AbilityComponents.primevalskull = ['rockhead'];
 AbilityComponents.primevalshield = [];

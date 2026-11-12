@@ -5311,20 +5311,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.effect.id === 'atrocity') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, source, target, move);
 			if (move.category === 'Status') return;
 			this.dex.abilities.get('toughclaws').onBasePower?.call(this, basePower, source, target, move);
-			let modifier = 1.3;
+			let modifier = 1;
 			if (move.typeChangerBoosted === this.effect) {
 				modifier *= this.field.isTerrain(['dragonsdenterrain', 'fairytaleterrain']) ? 1.5 : 1.2;
 			}
-			if (move.id === 'dragonrush') modifier *= 1.5;
-			if (!this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization')) && this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'empress']))) {
-				modifier *= 1.3;
-			}
 			return this.chainModify(modifier);
-		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move && move.category !== 'Status' && !this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization')) && this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'empress']))) {
-				return this.chainModify(0.7);
-			}
 		},
 		onResidual(pokemon) {
 			this.dex.abilities.get('unboundblaze').onResidual?.call(this, pokemon);

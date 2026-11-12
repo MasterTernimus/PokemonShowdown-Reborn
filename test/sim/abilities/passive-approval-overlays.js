@@ -296,3 +296,9 @@ exports.passives = expected => {
  exports.abilities=(id,fallback)=>Object.fromEntries(Object.entries({...prior.abilities(id,fallback),...reviewed.slots[id]}).map(([slot,name])=>[slot,reviewed.names[name]||name]));
  exports.stats=(id,fallback)=>({...prior.stats(id,fallback),...reviewed.stats[id]});
 }
+
+// Latest local release approvals, independent of runtime data.
+{ const prior = { current: exports.current, passives: exports.passives, stats: exports.stats }; const passives = { hydreigonmega: ['hydraflight'], froslassaevianmega: ['hydration'] };
+	exports.current = (id, fallback) => passives[id] || prior.current(id, fallback);
+	exports.passives = expected => Object.assign(prior.passives(expected), passives);
+	exports.stats = (id, fallback) => id === 'azumarill' ? { hp: 100, atk: 60, def: 105, spa: 90, spd: 105, spe: 60 } : prior.stats(id, fallback); }

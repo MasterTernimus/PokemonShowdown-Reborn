@@ -19,7 +19,7 @@ describe('Atrocity with Tough Claws', () => {
 		for (const contact of [false, true]) {
 			const move = Dex.getActiveMove('tackle');
 			move.type = 'Water'; move.flags = contact ? {contact: 1} : {};
-			assert.equal(battle.runEvent('BasePower', p, q, move, 100), contact ? 169 : 130);
+			assert.equal(battle.runEvent('BasePower', p, q, move, 100), contact ? 130 : 100);
 		}
 	});
 });

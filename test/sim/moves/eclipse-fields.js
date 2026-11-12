@@ -52,21 +52,21 @@ describe('Eclipse field rework', () => {
 		assert.equal(battle.field.terrain, 'coldeclipseterrain');
 		assert.equal(battle.field.auraField, 'riftaura');
 	});
-	it('creates Rift Eclipse with its dedicated move and preserves the timer through heat/cooling', () => {
+	it('creates Rift Eclipse with its dedicated move and adds one turn per heat/cooling transition', () => {
 		setup(['riftopening', 'heatwave', 'eruption', 'glaciate']);
 		battle.makeChoices('move riftopening', 'move splash');
 		assert.equal(battle.field.terrain, 'rifteclipseterrain');
 		assert.equal(battle.field.terrainState.duration, 4);
 		battle.makeChoices('move eruption', 'move splash');
 		assert.equal(battle.field.terrain, 'infernaleclipseterrain');
-		assert.equal(battle.field.terrainState.duration, 3);
+		assert.equal(battle.field.terrainState.duration, 4);
 		assert.equal(battle.field.terrainStack.length, 1);
 		battle.makeChoices('move glaciate', 'move splash');
 		assert.equal(battle.field.terrain, 'rifteclipseterrain');
-		assert.equal(battle.field.terrainState.duration, 2);
+		assert.equal(battle.field.terrainState.duration, 4);
 		battle.makeChoices('move glaciate', 'move splash');
 		assert.equal(battle.field.terrain, 'coldeclipseterrain');
-		assert.equal(battle.field.terrainState.duration, 1);
+		assert.equal(battle.field.terrainState.duration, 4);
 	});
 	it('uses Amplifield Rock for Rift Opening', () => {
 		setup(['riftopening'], ['splash'], {item: 'amplifieldrock'});

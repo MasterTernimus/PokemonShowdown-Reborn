@@ -31,7 +31,7 @@ describe('Individually verified unused ability retirement', () => {
 		assert.equal(Dex.species.get('salamence').abilities.H, 'Rightful Exalt');
 		assert.equal(Dex.species.get('salamencemega').abilities[0], 'Exalted Aether');
 		assert.deepEqual(Dex.species.get('hydreigon').passives, ['hydraflight']);
-		assert.deepEqual(Dex.species.get('hydreigonmega').passives, ['abyssalrebirth']);
+		assert.deepEqual(Dex.species.get('hydreigonmega').passives, ['hydraflight']);
 		for (const id of ['precision', 'sovereignarsenal', 'meridianseal', 'dreadwings', 'auraconvergence', 'crescentrend']) {
 			assert(Dex.abilities.get(id).exists, id);
 		}

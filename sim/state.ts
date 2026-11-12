@@ -42,7 +42,7 @@ const BATTLE = new Set([
 	'deserialized', 'queue', 'actions',
 ]);
 const FIELD = new Set(['id', 'battle', 'terrainState', 'terrainStack']);
-const TERRAIN_STATE = new Set(['terrainChanges']);
+const TERRAIN_STATE = new Set(['terrainChanges', 'previousTerrainState']);
 const SIDE = new Set(['battle', 'team', 'pokemon', 'choice', 'activeRequest']);
 const POKEMON = new Set([
 	'side', 'battle', 'set', 'name', 'fullname', 'id',
@@ -172,11 +172,13 @@ export const State = new class {
 
 	serializeField(field: Field): /* Field */ AnyObject {
 		const state = this.serialize(field, FIELD, field.battle);
-		state.terrainStack = field.terrainStack.map(terrain => this.serializeTerrainState(terrain, field.battle));
+		state.terrainStack = field.terrainStack.map(terrain =>
+			this.serializeTerrainState(terrain, field.battle, field.terrainStack));
 		// The active state and its stack entry must remain the same object: timers
 		// and counters are updated through both references during field changes.
 		const activeIndex = field.terrainStack.indexOf(field.terrainState);
-		state.terrainState = activeIndex < 0 ? this.serializeTerrainState(field.terrainState, field.battle) : activeIndex;
+		state.terrainState = activeIndex < 0 ?
+			this.serializeTerrainState(field.terrainState, field.battle, field.terrainStack) : activeIndex;
 		return state;
 	}
 
@@ -186,11 +188,26 @@ export const State = new class {
 			this.deserializeTerrainState(terrain, field.battle));
 		field.terrainState = typeof state.terrainState === 'number' ? field.terrainStack[state.terrainState] :
 			this.deserializeTerrainState(state.terrainState, field.battle);
+		const seen = new Set<EffectState>();
+		const resolve = (terrain: EffectState) => {
+			if (seen.has(terrain)) return;
+			seen.add(terrain);
+			if (typeof terrain.previousTerrainState === 'number') {
+				terrain.previousTerrainState = field.terrainStack[terrain.previousTerrainState];
+			}
+			if (terrain.previousTerrainState) resolve(terrain.previousTerrainState);
+		};
+		for (const terrain of [...field.terrainStack, field.terrainState]) resolve(terrain);
 	}
 
-	serializeTerrainState(terrain: EffectState, battle: Battle): AnyObject {
+	serializeTerrainState(terrain: EffectState, battle: Battle, stack: EffectState[] = []): AnyObject {
 		const state = this.serialize(terrain, TERRAIN_STATE, battle);
 		if (terrain.terrainChanges) state.terrainChanges = Array.from(terrain.terrainChanges.entries());
+		if (terrain.previousTerrainState) {
+			const index = stack.indexOf(terrain.previousTerrainState);
+			state.previousTerrainState = index >= 0 ? index :
+				this.serializeTerrainState(terrain.previousTerrainState, battle, stack);
+		}
 		return state;
 	}
 
@@ -198,6 +215,10 @@ export const State = new class {
 		const terrain = {} as EffectState;
 		this.deserialize(state, terrain, TERRAIN_STATE, battle);
 		if (state.terrainChanges) terrain.terrainChanges = new Map<string, number>(state.terrainChanges);
+		if (state.previousTerrainState !== undefined) {
+			terrain.previousTerrainState = typeof state.previousTerrainState === 'number' ?
+				state.previousTerrainState : this.deserializeTerrainState(state.previousTerrainState, battle);
+		}
 		return terrain;
 	}
 

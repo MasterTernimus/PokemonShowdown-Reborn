@@ -6,7 +6,7 @@ const { Dex } = require('../../../dist/sim');
 const historical = require('./selected-simplifications-approved.json');
 const approved = {...historical, exact: {...historical.exact}, removed: {...historical.removed}};
 // Later approvals replace Ange's selected/passive split and restore Stamina.
-approved.exact.siegelauncher = ['megalauncher', 'waterbarrage', 'overcoat'];
+approved.exact.siegelauncher = ['megalauncher', 'waterbarrage', 'shellarmor'];
 approved.exact.railguncircuit = ['lightningrod'];
 approved.exact.ange = ['fairyaura'];
 approved.removed.ange = ['eternalflower', 'moldbreaker', 'magicguard'];
@@ -28,6 +28,15 @@ function setup(species = 'Mew', ability = 'No Ability', doubles = false) {
 const residual = p => battle.singleEvent('Residual', p.getAbility(), p.abilityState, p);
 describe('Individually selected Mega simplifications', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
+	it('Bombardment blocks critical hits without Overcoat or Bulletproof', () => {
+		const [p, q] = setup('Mew', 'siegelauncher');
+		assert.equal(battle.runEvent('CriticalHit', p, q, Dex.getActiveMove('tackle')), false);
+		assert(p.hasAbility('shellarmor'));
+		assert(!p.hasAbility('overcoat'));
+		assert(!p.hasAbility('bulletproof'));
+		assert.equal(p.getAbility().onWeather, undefined);
+		assert(p.getAbility().shortDesc.includes('Shell Armor'));
+	});
 	it('changes exactly six approved passive records and only renames the Void Craft slot', () => {
 		const changed = [];
 		for (const old of require('./selected-simplifications-before.json')) {

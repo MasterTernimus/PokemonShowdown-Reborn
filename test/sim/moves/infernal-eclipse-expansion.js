@@ -91,7 +91,7 @@ describe('Prepared Eclipse direct swaps', () => {
 		['infernaleclipseterrain', 'frozenaura', 'sheercold', 'coldeclipseterrain', 'badseeds', 'ashenseeds'],
 	]) {
 		for (const ability of ['noability', seed]) {
-			it(`${start} skips Rift with the prepared Aura and ${ability}, retaining the field clock`, () => {
+			it(`${start} skips Rift with the prepared Aura and ${ability}, adding one turn to the field clock`, () => {
 				const [p, q] = setup(start, 3);
 				assert(battle.field.setAura(aura, 7, p, battle.dex.moves.get('splash')));
 				p.setAbility(ability);
@@ -99,7 +99,7 @@ describe('Prepared Eclipse direct swaps', () => {
 				use(p, q, attack);
 				assert.equal(battle.field.terrain, end);
 				assert.equal(battle.field.auraField, '');
-				assert.equal(battle.field.terrainState.duration, 3);
+				assert.equal(battle.field.terrainState.duration, 4);
 				assert.equal(battle.field.terrainStack.length, layers);
 				assert(!battle.log.some(line => line.includes('|-fieldstart|Rift Eclipse')));
 			});

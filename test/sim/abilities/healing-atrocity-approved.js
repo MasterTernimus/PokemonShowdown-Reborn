@@ -2,9 +2,9 @@
 const assert = require('assert').strict;
 const common = require('../../common');
 let battle;
-function start(ability = 'No Ability', moves = ['splash']) {
+function start(ability = 'No Ability', moves = ['splash'], species = 'Mew') {
  battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-  {species:'Mew', ability, item:'Leftovers', moves}, {species:'Mew', ability:'No Ability', moves:['splash']},
+		{ species, ability, item: 'Leftovers', moves }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] },
  ], [{species:'Mew', ability:'No Ability', moves:['splash','knockoff','earthquake']}]]);
  battle.makeChoices('team 12','team 1');
  return [battle.p1.active[0],battle.p2.active[0]];
@@ -62,19 +62,42 @@ describe('Approved healing, PP and Atrocity components', () => {
   const m=battle.dex.getActiveMove('psychic');m.type='Water';m.flags={};
   function power(){return battle.runEvent('BasePower',p,q,m,100);}
   const normal=power();battle.field.setTerrain('coldeclipseterrain',p);
-  assert.equal(power(),normal);assert.equal(normal,130);
+		assert.equal(power(), normal); assert.equal(normal, 100);
+ });
+	it('Atrocity Dragon Rush has only contact and same-type power bonuses', () => {
+		const [p, q] = start('Atrocity', ['splash'], 'Charizard-Mega-X');
+		for (const id of ['dragonrush', 'dragonclaw']) {
+			const move = battle.dex.getActiveMove(id);
+			assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1690);
+  }
+ });
+	for (const ability of ['Royal Decree', 'Empress']) it('Atrocity has no bonus from ' + ability, () => {
+		const [p, q] = start('Atrocity', ['splash'], 'Charizard-Mega-X');
+		q.setAbility(ability);
+		const move = battle.dex.getActiveMove('dragonclaw');
+		assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1690);
+		assert.equal(p.getAbility().onSourceModifyDamage, undefined);
  });
  it('Mold Breaker bypasses the Sticky Hold component',()=>{
   const [p,q]=start('Withering Shell');q.setAbility('moldbreaker');
   battle.makeChoices('move splash','move knockoff');assert.equal(p.item,'');
- });
+	});
 	it('Atrocity includes Tough Claws and keeps the defense modifier single', () => {
   const [p,q]=start('Atrocity');const m=battle.dex.getActiveMove('tackle');m.type='Water';m.flags={contact:1};
-		assert.equal(battle.runEvent('BasePower', p, q, m, 100), 169);
+		assert.equal(battle.runEvent('BasePower', p, q, m, 100), 130);
   for(const terrain of ['', 'coldeclipseterrain','dragonsdenterrain']) {
    if(terrain)battle.field.setTerrain(terrain,p);
 			assert.equal(p.getStat('def'), battle.modify(p.getStat('def', false, true), terrain === 'dragonsdenterrain' ? 1.5 : 1.3));
-  }
- });
+		}
+	});
 
+	it('Infernal Dominion retains the newer published Fire Ward component', () => {
+		const [p] = start('Infernal Dominion');
+		assert(p.hasAbility('fireward'));
+		for (const field of ['', 'dragonsdenterrain', 'coldeclipseterrain']) {
+			if (field)battle.field.changeTerrain(field, p);
+			assert.equal(p.getStat('def'), battle.modify(p.getStat('def', false, true), field === 'dragonsdenterrain' ? 1.5 : 1.3));
+			assert.equal(p.getStat('spd'), battle.modify(p.getStat('spd', false, true), field === 'dragonsdenterrain' ? 1.5 : 1.3));
+		}
+	});
 });

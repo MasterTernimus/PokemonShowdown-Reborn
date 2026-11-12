@@ -1,11 +1,15 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex, TeamValidator} = require('../../../dist/sim');
+const {Dex} = require('../../../dist/sim');
+const { DisabledSpecies } = require('../../../dist/data/disabled-species');
 
-describe('Mega Hydreigon: Expiration and Abyssal Rebirth', () => {
+describe('Mega Hydreigon: Expiration and Hydra Flight', () => {
 	let battle;
-	afterEach(() => { battle?.destroy(); battle = null; });
+	// Exercise retained historical mechanics only. Public availability is tested separately.
+	let wasDisabled;
+	beforeEach(() => { wasDisabled = DisabledSpecies.has('hydreigonmega'); DisabledSpecies.delete('hydreigonmega'); });
+	afterEach(() => { battle?.destroy(); battle = null; if (wasDisabled) DisabledSpecies.add('hydreigonmega'); });
 	const set = (species = 'Mew', ability = 'No Ability', item = '') =>
 		({species, ability, item, moves: ['splash', 'tackle', 'darkpulse', 'outrage', 'gildedhelix', 'earthpower']});
 	function setup(gameType = 'singles', foeAbility = 'No Ability') {
@@ -23,136 +27,33 @@ describe('Mega Hydreigon: Expiration and Abyssal Rebirth', () => {
 		const move = Object.assign(Dex.getActiveMove('tackle'), {damage: 150, accuracy: true, willCrit: false}, patch);
 		battle.actions.runMove(move, source, source.getLocOf(target));
 	}
-	it('caps Fairy effectiveness at neutral after Mega Evolution and preserves resistances', () => {
-		const [p, q] = setup();
-		const damage = type => battle.actions.getDamage(q, p, Object.assign(Dex.getActiveMove('moonblast'), {type, willCrit: false}));
-		for (const types of [['Dark','Dragon'], ['Dragon'], ['Normal']]) {
-			p.setType(types);
-			assert.equal(damage('Fairy'), damage('Flying'));
-		}
-		p.setType('Fire');
-		assert.equal(damage('Fairy'), damage('Ice'));
-	});
-	it('evolves through the real stone route with the approved stats, ability and passive', () => {
+
+	it('uses Hydra Flight and Strings of Ruin without Controlled Fury', () => {
 		const [p] = setup();
-		assert.equal(p.species.name, 'Hydreigon-Mega');
-		assert.deepEqual(p.species.baseStats, {hp: 92, atk: 110, def: 125, spa: 130, spd: 125, spe: 118});
-		assert.equal(p.species.bst, 700);
+		assert.deepEqual(p.getPassives(), ['hydraflight']);
 		assert.equal(p.ability, 'expiration');
-		assert.deepEqual(p.getPassives(), ['abyssalrebirth']);
-		for (const id of ['stringsofruin', 'controlledfury', 'berserk', 'duskilate', 'angerpoint', 'hydrabond', 'levitate']) {
-			assert(p.hasAbilityOrPassive(id), id);
-		}
-		assert.equal(p.isGrounded(), null);
-		const imported = { ...set('Hydreigon', 'Strings of Ruin', 'Hydreigonite'), moves: ['darkpulse', 'earthpower', 'outrage', 'gildedhelix'] };
-		const errors = new TeamValidator('gen9nofieldsinglesgame').validateSet(imported, {}) || [];
-		assert.deepEqual(errors, []);
+		for (const id of ['stringsofruin', 'berserk', 'duskilate', 'hydrabond', 'levitate']) assert(p.hasAbilityOrPassive(id), id);
+		for (const id of ['controlledfury', 'angerpoint', 'abyssalrebirth']) assert(!p.hasAbilityOrPassive(id), id);
+		assert.equal(p.species.bst, 700);
 	});
-	for (const gameType of ['singles', 'doubles', 'freeforall']) {
-		it(`${gameType}: heals once after opposing damage, with independent Berserk and Anger Point boosts`, () => {
-			const [p, q] = setup(gameType);
-			use(q, p);
-			assert.equal(p.hp, 700);
-			assert.equal(p.boosts.atk, 2);
-			assert.equal(p.boosts.spa, 1);
-			assert(p.m.abyssalRebirthSpent);
-			p.hp = 600;
-			use(q, p);
-			assert.equal(p.hp, 450);
-			assert.equal(p.boosts.atk, 3);
-			assert.equal(p.boosts.spa, 2);
-		});
-	}
-	it('waits for all hits, then heals only once', () => {
-		const [p, q] = setup();
-		const seen = [], original = battle.actions.getDamage;
-		battle.actions.getDamage = function (source, target, ...args) {
-			if (target === p) seen.push(p.hp);
-			return original.call(this, source, target, ...args);
-		};
-		use(q, p, {multihit: 3});
-		assert.deepEqual(seen, [600, 450, 300]);
-		assert.equal(p.hp, 400);
-		assert.equal(p.boosts.spa, 1);
-	});
-	it('does not rescue a holder KOed by a later hit', () => {
-		const [p, q] = setup();
-		use(q, p, {multihit: 3, damage: 250});
-		assert.equal(p.hp, 0);
+	for (const mode of ['singles', 'doubles', 'freeforall']) it(mode + ': no healing when crossing half HP', () => {
+		const [p, q] = setup(mode); use(q, p); assert.equal(p.hp, 450);
+		assert.equal(p.boosts.atk, 1); assert.equal(p.boosts.spa, 1);
 		assert(!p.m.abyssalRebirthSpent);
 	});
-	it('triggers at exactly half HP but not when starting at or below half', () => {
-		const [p, q] = setup();
-		p.hp = 500; use(q, p, {damage: 50});
-		assert.equal(p.hp, 450); assert(!p.m.abyssalRebirthSpent);
-		p.hp = 600; use(q, p, {damage: 100});
-		assert.equal(p.hp, 750);
+	it('does not heal after multi-hit damage', () => { const [p, q] = setup(); use(q, p, { multihit: 3 }); assert.equal(p.hp, 150); });
+	it('Fairy damage is neutral and suppression restores the normal weakness', () => {
+		const [p] = setup(); const move = Dex.getActiveMove('moonblast');
+		assert.equal(p.runEffectiveness(move), 0);
+		p.addVolatile('gastroacid'); assert.equal(p.runEffectiveness(move), 2);
 	});
-	it('survives switching and ability/passive restarts without replenishing recovery', () => {
-		const [p, q] = setup(); use(q, p);
-		battle.makeChoices('switch 2', 'move splash');
-		battle.makeChoices('switch 2', 'move splash');
-		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
-		p.hp = 600; use(q, p);
-		assert.equal(p.hp, 450);
+	it('the retired Rebirth package no longer has recovery hooks', () => {
+		const a = Dex.abilities.get('abyssalrebirth');
+		for (const key of ['onAfterDamageApplied', 'onAnyAfterAttackResolved', 'onAfterMoveSecondary']) assert.equal(a[key], undefined);
 	});
-	it('ignores allied damage', () => {
-		const [p] = setup('doubles');
-		use(battle.p1.active[1], p);
-		assert.equal(p.hp, 450); assert(!p.m.abyssalRebirthSpent);
-	});
-	for (const condition of ['brn', 'psn', 'sandstorm', 'stealthrock', 'recoil']) {
-		it(`does not arm from ${condition}`, () => {
-			const [p, q] = setup();
-			battle.damage(150, p, q, Dex.conditions.get(condition));
-			use(q, p, {damage: 10});
-			assert.equal(p.hp, 440); assert(!p.m.abyssalRebirthSpent);
-		});
-	}
-	for (const suppression of ['gastroacid', 'neutralizinggas']) {
-		it(`${suppression} prevents recovery and does not queue a later heal`, () => {
-			const [p, q] = setup('singles', suppression === 'neutralizinggas' ? 'Neutralizing Gas' : 'No Ability');
-			if (suppression === 'gastroacid') p.addVolatile('gastroacid', q);
-			use(q, p);
-			assert.equal(p.hp, 450); assert(!p.m.abyssalRebirthSpent);
-			if (suppression === 'gastroacid') p.removeVolatile('gastroacid');
-			else q.setAbility('No Ability');
-			use(q, p, {damage: 10});
-			assert.equal(p.hp, 440);
-			p.hp = 600; use(q, p);
-			assert.equal(p.hp, 700);
-		});
-	}
-	it('still resolves after a Sheer Force move, without depending on secondary-effect events', () => {
-		const [p, q] = setup('singles', 'Sheer Force');
-		use(q, p, {hasSheerForce: true});
-		assert.equal(p.hp, 700);
-	});
-	it('heals after called attacks even when Sheer Force skips secondary events', () => {
-		const [p, q] = setup('singles', 'Sheer Force');
-		const move = Object.assign(Dex.getActiveMove('tackle'), {damage: 150, accuracy: true, hasSheerForce: true});
-		battle.actions.useMove(move, q, {target: p, sourceEffect: Dex.moves.get('sleeptalk')});
-		assert.equal(p.hp, 700);
-	});
-	it('heals after a delayed attack, after its independent Berserk boost', () => {
-		const [p, q] = setup();
-		const move = Object.assign(Dex.getActiveMove('doomdesire'), {damage: 150, accuracy: true, willCrit: false, onTry: undefined});
-		battle.setActiveMove(move, q, p);
-		battle.actions.trySpreadMoveHit([p], q, move, true);
-		assert.equal(p.hp, 700);
-		assert.equal(p.boosts.spa, 1);
-	});
-	for (const side of ['p3', 'p4']) it(`recognizes ${side} as an opponent in Free-for-All`, () => {
-		const [p] = setup('freeforall');
-		use(battle[side].active[0], p);
-		assert.equal(p.hp, 700);
-	});
-	it('does not arm from Substitute damage or a protected attack', () => {
-		const [p, q] = setup();
-		p.addVolatile('substitute'); p.hp = 600;
-		use(q, p); assert.equal(p.hp, 600); assert(!p.m.abyssalRebirthSpent);
-		p.removeVolatile('substitute'); p.addVolatile('protect');
-		use(q, p); assert.equal(p.hp, 600); assert(!p.m.abyssalRebirthSpent);
+	it('calculator metadata uses Hydra Flight', () => {
+		const s = require('../../../dist/sim/custom-calculator').calculatorMetadata().species.find(s => s.name === 'Hydreigon-Mega');
+		assert.deepEqual(s.passives, ['hydraflight']);
 	});
 	it('retains passive flight and three hits under Gastro Acid, without duplicate copied Hydra Bond', () => {
 		const [p, q] = setup(); p.setAbility('Hydra Bond'); p.addVolatile('gastroacid');
@@ -176,31 +77,5 @@ describe('Mega Hydreigon: Expiration and Abyssal Rebirth', () => {
 		};
 		use(p, q, {damage: undefined, basePower: 20});
 		assert.deepEqual(rolls, [3, 3, 3]); assert.deepEqual(types, ['Dark', 'Dark', 'Dark']);
-	});
-	it('Expiration permits repeated manual rampages without lock or confusion', () => {
-		const [p, q] = setup(); q.hp = q.maxhp = 10000;
-		for (let i = 0; i < 4; i++) {
-			battle.actions.runMove('outrage', p, p.getLocOf(q));
-			assert(!p.volatiles.lockedmove); assert(!p.volatiles.confusion);
-		}
-	});
-	it('Expiration surviving a critical hit maximizes Attack and still heals', () => {
-		const [p, q] = setup();
-		const original = battle.actions.getDamage;
-		battle.actions.getDamage = function (...args) { original.apply(this, args); return 150; };
-		use(q, p, {damage: undefined, willCrit: true});
-		assert.equal(p.boosts.atk, 6); assert.equal(p.hp, 700);
-	});
-	it('exports the same Mega, passive and ability in rules and calculator data', () => {
-		const metadata = require('../../../dist/sim/custom-calculator').calculatorMetadata();
-		const species = metadata.species.find(s => s.name === 'Hydreigon-Mega');
-		assert(species);
-		assert.equal(species.abilities[0], 'Expiration');
-		assert.deepEqual(species.passives, ['abyssalrebirth']);
-		const detail = require('../../../dist/server/rules-encyclopedia').rulesDetail('species', 'Hydreigon-Mega');
-		assert.equal(detail.abilities[0].name, 'Expiration');
-		assert.equal(detail.passives[0].name, 'Abyssal Rebirth');
-		assert(detail.forms.includes('Hydreigon-Mega'));
-		assert(!detail.forms.includes('Hydreigon-Mega-X'));
 	});
 });
