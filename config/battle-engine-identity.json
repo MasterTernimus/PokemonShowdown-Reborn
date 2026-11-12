@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "d61444c990f900fecc249acf28ada556fd6151ffcec7c41fd707bff335017d6f",
-  "packageManifestSHA256": "7e4d9c8f9295f01fbd93aee6e531d7a41b6579bfa76853d90bf4202d3a459943",
-  "mechanicsSHA256": "033a35dbdd920f0c1dc96a1a64109d88cc29810216dafc14add2e5ec6e27cf94",
+  "packageEngineRevision": "993f3acca6ea7a30921d985aef3da9714dad69b9e14aa71c0bd279ec983ef3a9",
+  "packageManifestSHA256": "8ea10f7fd0959f64e5857c9a843f380cfa3a158533ca4ae91ac045355ef8c95e",
+  "mechanicsSHA256": "150da5fa54e4c4eed5eb50bab470b673a82339f9c6505ccc20a23c7d53829feb",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,15 +11,15 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "c39d38584c1a2e3fe50bcf3ec7dd6523df3c88236dc8718d8236a0110cd3580c"
+      "sha256": "6a3431069fd68a2865c63e62e7498a6f6e741990ef24b6d281b30d46a72037d1"
     },
     {
       "file": "dist/data/ability-components.js",
-      "sha256": "8633371dc99f6bf7657c57fb1b46d510f098d25b3e0d676d9becba7f515b310a"
+      "sha256": "fca89f8391347a9103209862c174d9e8f47767db0ff29b081ecf1212a28e13ab"
     },
     {
       "file": "dist/data/ability-display-summaries.js",
-      "sha256": "342cd2a85247ecc9e665245e31459f3ad5e4728a219dc85aac783ebf8bfaf1da"
+      "sha256": "e185361696eb5aefb33c6527fbe49687215d85726da84132cef1bf41d2f7c285"
     },
     {
       "file": "dist/data/ability-display.js",
@@ -67,7 +67,7 @@
     },
     {
       "file": "dist/data/aliases.js",
-      "sha256": "d500dfc743cd4fa2d59500a530d2463b4262df0dfa17745a36e345f1d9915aed"
+      "sha256": "2765873e6da553caf921bc43dcaabe5cd69ed173951602ad6aceeb72e56dd80b"
     },
     {
       "file": "dist/data/ally-serene-grace.js",
@@ -167,7 +167,7 @@
     },
     {
       "file": "dist/data/concise-ability-descriptions.js",
-      "sha256": "e9a0f2fe5045f21bbb3d3d0447745053fcd32f171ddfa700d09fe73765dfd24a"
+      "sha256": "e0c41df34ac042c28686c066268a67633eb4cb1fe134159b8b0f18a4e72f31b7"
     },
     {
       "file": "dist/data/conditions.js",
@@ -368,6 +368,10 @@
     {
       "file": "dist/data/jirachi-approved.js",
       "sha256": "93ccfc138880abe63d93bceaa50147e7eda31872b9b56874ad3bcefed7702e02"
+    },
+    {
+      "file": "dist/data/johto-eruptions.js",
+      "sha256": "8fc104051b4ae4a2047e84a5634eae7fd5e4823ee374d95f0dd3790baef540a7"
     },
     {
       "file": "dist/data/lapras-rework.js",
@@ -667,7 +671,7 @@
     },
     {
       "file": "dist/data/pokedex.js",
-      "sha256": "9de8c52f96211bdd5d6297dfa0d8e691a554d41cc04a606bc05f2eacc6ba5ed0"
+      "sha256": "72b4f5b3a341c081dea3f780021fbe188403d2d7963d86c7c13b6b1d56220d8b"
     },
     {
       "file": "dist/data/pokemongo.js",
@@ -1079,7 +1083,7 @@
     },
     {
       "file": "dist/sim/battle-actions.js",
-      "sha256": "4c99ef3d8591dd21f7eeaa53be84b31eab23d9084968474e116a6d93b9d0dcc4"
+      "sha256": "ec8f5c49e960685d4b97c2883feedd7d06fc1fed8b09ff995e28fe28709a70f6"
     },
     {
       "file": "dist/sim/battle-queue.js",
@@ -1091,7 +1095,7 @@
     },
     {
       "file": "dist/sim/battle.js",
-      "sha256": "6165a51a981595e6ab72194a89c04ea1f8e62c24d4d34452212b4fe6df6209d4"
+      "sha256": "6726441535e8e508deac52c14efdbb4605cd82bbc80f928319b9607ab788f79c"
     },
     {
       "file": "dist/sim/beast-hunter.js",
@@ -1179,7 +1183,7 @@
     },
     {
       "file": "dist/sim/pokemon.js",
-      "sha256": "c774b045e3f4595b0dc5ee606d91d2f5a4811b32b701e1312bea095e73f56913"
+      "sha256": "8f11fc2923ff089af862f55a762973f674050fc3e7ad4ebfa005288d26dba39e"
     },
     {
       "file": "dist/sim/predator.js",
@@ -1203,7 +1207,7 @@
     },
     {
       "file": "dist/sim/species-passives.js",
-      "sha256": "0445ad9daf35647007910383bfe0c8944336c7c628710e07e5dc660e5083a36c"
+      "sha256": "3c0a6d9b4d6ec026ffc23eaf525c9b374e5d0172e651dcae5edb55b99dc06b44"
     },
     {
       "file": "dist/sim/starter-boost-indicators.js",
@@ -1274,7 +1278,7 @@
     },
     {
       "file": "dist/data/ability-descriptions.js",
-      "sha256": "52a4638b6f3aaeb7436438d5dbddb98bbe5f894d5ac1a83c8c6cf4366b8fff7f",
+      "sha256": "8bbe6a0fe6d263c0b0703dd7388079604cc242fac0bb21dae574489a7481157f",
       "reason": "Reviewed description-only table or license/readme."
     },
     {
