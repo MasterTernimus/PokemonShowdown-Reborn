@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "993f3acca6ea7a30921d985aef3da9714dad69b9e14aa71c0bd279ec983ef3a9",
-  "packageManifestSHA256": "8ea10f7fd0959f64e5857c9a843f380cfa3a158533ca4ae91ac045355ef8c95e",
-  "mechanicsSHA256": "150da5fa54e4c4eed5eb50bab470b673a82339f9c6505ccc20a23c7d53829feb",
+  "packageEngineRevision": "fab9115fdd10df26f6233539197f017008f8fdf56054cd2667f796cafb707c2c",
+  "packageManifestSHA256": "dda5cc39729a04d740ed956bdf8cbb1fcc27cb94ab7bf3fb5ffa8656d9f57f14",
+  "mechanicsSHA256": "7e155c9c667ad998ca3f9277f670ee12477fe599e2f8ba1c6f69af9c29939118",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,11 +11,11 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "6a3431069fd68a2865c63e62e7498a6f6e741990ef24b6d281b30d46a72037d1"
+      "sha256": "1a8457eb4cb51ff726fdfcc169761920e86b3a3666530ace3ab2b3a105cb072a"
     },
     {
       "file": "dist/data/ability-components.js",
-      "sha256": "fca89f8391347a9103209862c174d9e8f47767db0ff29b081ecf1212a28e13ab"
+      "sha256": "06975ba9c320894e796adb74df46d07397952efda004639af2f79bef8a34422d"
     },
     {
       "file": "dist/data/ability-display-summaries.js",
@@ -23,7 +23,7 @@
     },
     {
       "file": "dist/data/ability-display.js",
-      "sha256": "ea7d25c5b0eb92c48aa689b73a921f78b0e5912775e8414cbe89cda2be676113"
+      "sha256": "93db3ed980036d9e657f7ad1ee942934ed0618669d1b82a359d4ecebecfb11c9"
     },
     {
       "file": "dist/data/ability-readability.js",
@@ -651,7 +651,7 @@
     },
     {
       "file": "dist/data/ordinary-approved-reductions.js",
-      "sha256": "f2e2f177e71d05603f38c3f6c7178eafcada24a912ae01e550fa05d71f2e1f54"
+      "sha256": "6d69d69e8b1206a0319da57800a5643edc4271aff6a99ee0734f44d125b01e55"
     },
     {
       "file": "dist/data/passive-ability-cleanup.js",
@@ -835,7 +835,7 @@
     },
     {
       "file": "dist/data/selected-mega-simplification-data.js",
-      "sha256": "176f36a6f3bce54f6748b46fbbab95ba6aa0855e56ca7b0a4a31cfabe61d8b81"
+      "sha256": "76dc95dedbed2c1bdd41db8413a37ac8ff8ec3ee8c7ecf64c0442ab6d9076fad"
     },
     {
       "file": "dist/data/selected-mega-simplifications.js",
@@ -1278,7 +1278,7 @@
     },
     {
       "file": "dist/data/ability-descriptions.js",
-      "sha256": "8bbe6a0fe6d263c0b0703dd7388079604cc242fac0bb21dae574489a7481157f",
+      "sha256": "ca89935a8ab95cbaae2171cfa3a5ba711c445ce07b0f7d954478afd4e5a7923f",
       "reason": "Reviewed description-only table or license/readme."
     },
     {

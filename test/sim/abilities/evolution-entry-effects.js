@@ -7,10 +7,10 @@ describe('Ability entry effects on evolution', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); });
 	function setup(species, ability, item = '', field = 'dragonsdenterrain', foeAbility = 'No Ability') {
-		battle = common.createBattle({formatid: 'gen9dragonsden'}, [[
-			{species, ability, item, gigantamax: true, moves: ['splash']},
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
-		], [{species: 'Mew', ability: foeAbility, moves: ['splash'] }]]);
+		battle = common.createBattle({ formatid: 'gen9dragonsden' }, [[
+			{ species, ability, item, gigantamax: true, moves: ['splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+		], [{ species: 'Mew', ability: foeAbility, moves: ['splash'] }]]);
 		battle.makeChoices('team 12', 'team 1');
 		battle.field.terrain = field;
 		return battle.p1.active[0];

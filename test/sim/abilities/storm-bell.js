@@ -4,7 +4,7 @@ const common=require('../../common');
 let battle;
 describe('Mega Bronzong and Storm Bell',function(){
 	afterEach(()=>battle?.destroy());
-	it('Mega Evolves with rain and Levitate, with Mirror Armor boosts on later entry', () => {
+	it('Mega Evolves with rain and Levitate, with Mirror Armor boosts on evolution and later entry', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[{ species: 'Bronzong', item: 'Bronzongite', ability: 'Elevate', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }], [{ species: 'Mew', ability: 'noability', moves: ['splash'] }]]);
 		battle.makeChoices('team 12', 'team 1');
 		const bell=battle.p1.active[0],foe=battle.p2.active[0];
@@ -16,7 +16,7 @@ describe('Mega Bronzong and Storm Bell',function(){
 		assert.deepEqual(bell.species.baseStats,{hp:67,atk:104,def:156,spa:104,spd:156,spe:23});
 		assert(battle.field.isWeather('raindance'));
 		assert.deepEqual(bell.getPassives(), ['mirrorarmor']);
-		assert.statStage(bell, 'def', 0); assert.statStage(bell, 'spd', 0);
+		assert.statStage(bell, 'def', 1); assert.statStage(bell, 'spd', 1);
 		assert.equal(bell.isGrounded(),null);
 		battle.boost({atk:-1},bell,foe,battle.dex.moves.get('growl'));
 		assert.statStage(bell,'atk',0);assert.statStage(foe,'atk',-1);

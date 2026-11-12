@@ -131,7 +131,7 @@ export function installOrdinaryReductions(a: AbilityDataTable) {
 
 export const OrdinaryComponents: {[id: string]: string[]} = {
 	guardianpresence: ['friendguard', 'powerspot'], fortressshell: ['waterbarrage', 'shellarmor', 'guardianpresence'], burningcrown: ['intimidate', 'unboundblaze', 'levitate'],
-	toxicbloom: ['pollenbloom'], ancientbloom: ['pollenbloom', 'friendguard'], atrocity: ['unboundblaze', 'fireward', 'toughclaws'], sunsovereign: ['drought', 'unboundblaze'], toxicevolution: ['corrosion', 'shielddust'],
+	toxicbloom: ['pollenbloom'], ancientbloom: ['pollenbloom', 'friendguard'], atrocity: ['unboundblaze', 'fireward'], sunsovereign: ['drought', 'unboundblaze'], toxicevolution: ['corrosion', 'shielddust'],
  spiralevolution: ['moldbreaker', 'adaptability'], completeparasitism: ['selfrepair'], joyride: ['aerilate', 'violentrush'],
 	toxicsink: [], stillwaters: ['cloudnine', 'unaware'], shattercrust: ['crumblingshell'],
  freshplumage: ['naturalcure'], gemeye: ['magicguard', 'keeneye'], witheringtouch: ['poisontouch', 'corrosion'],
@@ -163,8 +163,8 @@ export const OrdinaryDescriptions: {[id: string]: {shortDesc: string, desc: stri
 		shortDesc: "Verdant Monarch + Friend Guard; field bonuses; all moves have 1.1x accuracy.",
 		desc: "Verdant Monarch supplies Thick Fat and Unaware: Fire and Ice attacks use half the attacking stat; ignores opposing stat stages through local Unaware and reveals Illusions on entry. Friend Guard reduces attack damage to allies by 25%, without protecting the holder. Fairy Tale, New World, Cold Eclipse and Starlight Arena entry grant +1 Defense and Sp. Def; the latter three give 1.5x move power. All moves have 1.1x accuracy.",
 	},
-	atrocity: { shortDesc: "Blazing Monarch + Fire Ward + Tough Claws; all moves have 1.1x accuracy.",
-		desc: "Blazing Monarch + Fire Ward + Tough Claws. All moves have 1.1x accuracy." },
+	atrocity: { shortDesc: "Blazing Monarch + Fire Ward; all moves have 1.1x accuracy.",
+		desc: "Blazing Monarch + Fire Ward. All moves have 1.1x accuracy." },
 	sunsovereign: {
 		"shortDesc": "Eight-turn sun + Blazing Monarch; all moves have 1.1x accuracy.",
 		"desc": "Summons sun for 8 turns on entry. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Immune to hail damage. All moves have 1.1x accuracy.",

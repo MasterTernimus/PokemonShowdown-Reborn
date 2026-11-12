@@ -34,13 +34,13 @@ describe('Monarch names and Sovereign chip replacements', () => {
 		assert(p.hasAbility(name));
 		assert.equal(battle.runEvent('ModifyAccuracy', q, p, Dex.getActiveMove('hypnosis'), 60), 66);
 	});
-	it('adds Tough Claws only to contact damage on Atrocity', () => {
+	it('keeps Atrocity contact damage free of Tough Claws', () => {
 		const [p, q] = setup('Atrocity');
-		assert(AbilityComponents.atrocity.includes('toughclaws'));
-		assert(p.hasAbility('toughclaws'));
+		assert(!AbilityComponents.atrocity.includes('toughclaws'));
+		assert(!p.hasAbility('toughclaws'));
 		for (const contact of [false, true]) {
 			const m = Object.assign(Dex.getActiveMove('tackle'), { type: 'Water', flags: contact ? { contact: 1 } : {} });
-			assert.equal(battle.runEvent('BasePower', p, q, m, 100), contact ? 130 : 100);
+			assert.equal(battle.runEvent('BasePower', p, q, m, 100), 100);
 		}
 	});
 	it('adds Fire Ward to Infernal Dominion while retaining its existing protection', () => {

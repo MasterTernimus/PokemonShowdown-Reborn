@@ -5311,7 +5311,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// Nested composite calls must not apply Proficient twice.
 			if (this.effect.id === 'atrocity') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, source, target, move);
 			if (move.category === 'Status') return;
-			this.dex.abilities.get('toughclaws').onBasePower?.call(this, basePower, source, target, move);
 			let modifier = 1;
 			if (move.typeChangerBoosted === this.effect) {
 				modifier *= this.field.isTerrain(['dragonsdenterrain', 'fairytaleterrain']) ? 1.5 : 1.2;

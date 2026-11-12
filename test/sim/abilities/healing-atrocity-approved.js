@@ -64,27 +64,27 @@ describe('Approved healing, PP and Atrocity components', () => {
   const normal=power();battle.field.setTerrain('coldeclipseterrain',p);
 		assert.equal(power(), normal); assert.equal(normal, 100);
  });
-	it('Atrocity Dragon Rush has only contact and same-type power bonuses', () => {
+	it('Atrocity Dragon Rush keeps only its same-type power bonus', () => {
 		const [p, q] = start('Atrocity', ['splash'], 'Charizard-Mega-X');
 		for (const id of ['dragonrush', 'dragonclaw']) {
 			const move = battle.dex.getActiveMove(id);
-			assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1690);
+			assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1300);
   }
  });
 	for (const ability of ['Royal Decree', 'Empress']) it('Atrocity has no bonus from ' + ability, () => {
 		const [p, q] = start('Atrocity', ['splash'], 'Charizard-Mega-X');
 		q.setAbility(ability);
 		const move = battle.dex.getActiveMove('dragonclaw');
-		assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1690);
+		assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1300);
 		assert.equal(p.getAbility().onSourceModifyDamage, undefined);
  });
  it('Mold Breaker bypasses the Sticky Hold component',()=>{
   const [p,q]=start('Withering Shell');q.setAbility('moldbreaker');
   battle.makeChoices('move splash','move knockoff');assert.equal(p.item,'');
 	});
-	it('Atrocity includes Tough Claws and keeps the defense modifier single', () => {
+	it('Atrocity omits Tough Claws and keeps the defense modifier single', () => {
   const [p,q]=start('Atrocity');const m=battle.dex.getActiveMove('tackle');m.type='Water';m.flags={contact:1};
-		assert.equal(battle.runEvent('BasePower', p, q, m, 100), 130);
+		assert.equal(battle.runEvent('BasePower', p, q, m, 100), 100);
   for(const terrain of ['', 'coldeclipseterrain','dragonsdenterrain']) {
    if(terrain)battle.field.setTerrain(terrain,p);
 			assert.equal(p.getStat('def'), battle.modify(p.getStat('def', false, true), terrain === 'dragonsdenterrain' ? 1.5 : 1.3));

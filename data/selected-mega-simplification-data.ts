@@ -255,8 +255,8 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 		"desc": "Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to hail damage. Ignores target Defense/Sp. Def/evasion stages when attacking, and attacker Attack/Defense/Sp. Atk/accuracy stages when defending. Reveals opposing Illusions on entry. All moves have 1.1x accuracy.",
 	},
 	"atrocity": {
-		"shortDesc": "Blazing Monarch + Fire Ward + Tough Claws; all moves have 1.1x accuracy.",
-		"desc": "Blazing Monarch + Fire Ward + Tough Claws. All moves have 1.1x accuracy.",
+		"shortDesc": "Blazing Monarch + Fire Ward; all moves have 1.1x accuracy.",
+		"desc": "Blazing Monarch + Fire Ward. All moves have 1.1x accuracy.",
 	},
 	"sunsovereign": {
 		"shortDesc": "Eight-turn sun + Blazing Monarch; all moves have 1.1x accuracy.",

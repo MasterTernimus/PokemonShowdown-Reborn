@@ -1039,7 +1039,7 @@ AbilityComponents.coldexpertise = ['oblivious', 'thickfat'];
 AbilityComponents.oldnorth = ['icebody', 'icescales', 'technician'];
 AbilityComponents.glacialprime = ['slushrush', 'refrigerate'];
 
-AbilityComponents.atrocity = ['unboundblaze', 'fireward', 'toughclaws'];
+AbilityComponents.atrocity = ['unboundblaze', 'fireward'];
 
 AbilityComponents.apexpredator = ['windrider', 'toughclaws'];
 

@@ -366,17 +366,17 @@ describe('Approved signature batch', () => {
 		use(target, source, 'tackle', { basePower: 30 });
 		assert.equal(damages[4], damages[0]);
 	});
-	it('Atrocity adds Tough Claws without Levitate and preserves the 654 BST', () => {
+	it('Atrocity omits Tough Claws and Levitate and preserves the 654 BST', () => {
 		const [source, target] = start('Atrocity', 'No Ability', 'Charizard-Mega-X');
 		for (const id of ['charizardmegax', 'charizardmegaxalt']) {
 			assert.deepEqual(Dex.species.get(id).baseStats, { hp: 78, atk: 130, def: 110, spa: 125, spd: 106, spe: 105 });
 			assert.equal(Dex.species.get(id).bst, 654);
 		}
-		assert(!source.hasAbility('levitate')); assert(source.hasAbility('toughclaws')); assert(source.isGrounded());
+		assert(!source.hasAbility('levitate')); assert(!source.hasAbility('toughclaws')); assert(source.isGrounded());
 		assert(source.runImmunity('Ground'));
 		const contact = battle.runEvent('BasePower', source, target, battle.dex.getActiveMove('tackle'), 100);
 		const noncontact = battle.runEvent('BasePower', source, target, battle.dex.getActiveMove('swift'), 100);
-		assert.equal(contact, Math.round(noncontact * 1.3));
+		assert.equal(contact, noncontact);
 		source.addVolatile('magnetrise'); assert(!source.isGrounded());
 	});
 	it('Double Shock uses existing punch consumers and retains its Electric loss', () => {

@@ -709,8 +709,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Mold Breaker; Powder/weather/flinch immunity; accuracy/power 1.3x; status Atk 1.5x; attacks deal 25% less; stage/bypass effects."
 	},
 	"atrocity": {
-		"desc": "Blazing Monarch + Fire Ward + Tough Claws. All moves have 1.1x accuracy.",
-		"shortDesc": "Blazing Monarch + Fire Ward + Tough Claws; all moves have 1.1x accuracy.",
+		"desc": "Blazing Monarch + Fire Ward. All moves have 1.1x accuracy.",
+		"shortDesc": "Blazing Monarch + Fire Ward; all moves have 1.1x accuracy.",
 	},
 	"wickedsnare": {
 		"desc": "Attacks use double the offensive stat against targets that entered this turn. Contact attackers lose 1 Speed stage. Status moves gain +1 priority. Opposing Dark types block these moves except on Bewitched Woods.",
@@ -3393,8 +3393,8 @@ Object.assign(AbilityDescriptionOverrides, {
 		"shortDesc": "Sets Forest and Grassy Aura for 5 turns, or 8 with Amplifield Rock."
 	},
 	"atrocity": {
-		"desc": "Blazing Monarch + Fire Ward + Tough Claws. All moves have 1.1x accuracy.",
-		"shortDesc": "Blazing Monarch + Fire Ward + Tough Claws; all moves have 1.1x accuracy.",
+		"desc": "Blazing Monarch + Fire Ward. All moves have 1.1x accuracy.",
+		"shortDesc": "Blazing Monarch + Fire Ward; all moves have 1.1x accuracy.",
 	},
 	"sunsovereign": {
 		"desc": "Summons sun for 8 turns on entry. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Immune to hail damage. All moves have 1.1x accuracy.",
@@ -4123,8 +4123,8 @@ Object.assign(AbilityDescriptionOverrides, {
 AbilityDescriptionOverrides.glacialprime = {"shortDesc":"Slush Rush + Refrigerate.","desc":"Full local Slush Rush and Refrigerate. Doubles Speed in hail, snow or on Icy, Snowy Mountain and Cold Eclipse. Eligible Normal moves become Ice with 1.2x power, or 1.5x on Icy/Snowy Mountain. Excludes moves with their own type-setting effect, damaging Z-Moves and Terastallized Tera Blast."};
 
 Object.assign(AbilityDescriptionOverrides, {
-	atrocity: { shortDesc: "Blazing Monarch + Fire Ward + Tough Claws; all moves have 1.1x accuracy.",
-		desc: "Blazing Monarch + Fire Ward + Tough Claws. All moves have 1.1x accuracy." },
+	atrocity: { shortDesc: "Blazing Monarch + Fire Ward; all moves have 1.1x accuracy.",
+		desc: "Blazing Monarch + Fire Ward. All moves have 1.1x accuracy." },
 	fireward: { shortDesc: 'Defense and Sp. Def 1.3x; 1.5x on Cold Eclipse or Dragon’s Den.',
 		desc: 'Defense and Sp. Def are multiplied by 1.3, or 1.5 on Dragon’s Den.' },
 	naturalcure: {shortDesc: 'On switching out, cures status and heals 1/8 max HP if cured.', desc: 'On switching out, cures its major status and heals 1/8 max HP if it had a status to cure. Bewitched Woods also cures its status at turn end.'},
