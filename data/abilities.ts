@@ -3377,7 +3377,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	berserk: {
 		onStart(pokemon) {
-			if (this.event.id === 'SwitchIn' && this.field.isTerrain('dragonsdenterrain')) {
+			if ((this.event.id === 'SwitchIn' || this.effectState.startingFromFormeChange) &&
+				this.field.isTerrain('dragonsdenterrain')) {
 				this.boost({spa: 1}, pokemon, pokemon);
 			}
 		},
@@ -21734,3 +21735,6 @@ import {NovemberAbilityNames} from './november-roster';
 for (const id of [...Object.keys(NovemberAbilityNames), 'guardianflame', 'bewitchingmajesty']) {
  Object.assign(Abilities[id as ID], NovemberFinalDescriptions[id]);
 }
+
+import {installJohtoEruptions} from './johto-eruptions';
+installJohtoEruptions(Abilities);

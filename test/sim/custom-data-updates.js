@@ -237,7 +237,7 @@ describe('Custom battle data updates', function () {
 		assert.deepEqual(megaY.types, ['Grass', 'Fire']);
 		assert.deepEqual(megaY.baseStats, {hp: 80, atk: 82, def: 130, spa: 113, spd: 130, spe: 90});
 		assert.equal(megaY.bst, 625);
-		assert.deepEqual(megaY.abilities, {0: 'Blooming Sun'});
+		assert.deepEqual(megaY.abilities, {0: 'Solar Eruption'});
 		assert.equal(megaY.requiredItem, 'Meganiumite');
 		assert.deepEqual(dex.items.get('Meganiumite').megaStone, {Meganium: 'Meganium-Mega'});
 		assert.false(dex.items.get('Meganiumite Y').exists);

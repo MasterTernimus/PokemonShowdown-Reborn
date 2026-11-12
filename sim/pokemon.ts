@@ -1790,7 +1790,8 @@ export class Pokemon {
 			this.knownType = true;
 			this.apparentType = this.terastallized;
 		}
-		startGainedPassives(this, [...previousPassives, 'electricsurge']);
+		startGainedPassives(this, [...previousPassives, 'electricsurge'], undefined,
+			!!isPermanent && (species.isMega || species.forme.includes('Gmax')));
 		return true;
 	}
 
@@ -2325,7 +2326,15 @@ export class Pokemon {
 		}
 		if (ability.id && this.battle.gen > 3 &&
 			(!isTransform || oldAbility.id !== ability.id || this.battle.gen <= 4)) {
-			this.battle.singleEvent('Start', ability, this.abilityState, this, source);
+			// New form abilities receive their entry effects without replaying SwitchIn
+			// (which would also reapply hazards). Copying an ability is not evolution.
+			const state = this.abilityState;
+			state.startingFromFormeChange = isFromFormeChange && !isTransform;
+			try {
+				this.battle.singleEvent('Start', ability, state, this, source);
+			} finally {
+				delete state.startingFromFormeChange;
+			}
 		}
 		this.revertSuppressedRegionalForm();
 		this.updateAbilityAppearance();

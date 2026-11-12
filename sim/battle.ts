@@ -3236,13 +3236,8 @@ export class Battle {
 			if (species && this.useGimmick(action.pokemon, 'Gigantamax')) {
 				const keepsWaterVeilAquaRing = action.pokemon.ability === 'waterveil' &&
 					!!action.pokemon.volatiles['aquaring'];
-				action.pokemon.formeChange(species, null, true);
-				const gmaxSpecies = this.dex.species.get(species);
-				const gmaxAbility = gmaxSpecies.abilities['0'];
-				if (gmaxAbility && action.pokemon.ability !== this.dex.abilities.get(gmaxAbility).id) {
-					action.pokemon.setAbility(gmaxAbility, null, null, true);
-					action.pokemon.baseAbility = this.dex.abilities.get(gmaxAbility).id;
-				}
+				// Clear inherited conditions before the new ability starts: Gastro Acid
+				// must not suppress its one-time entry effects, nor Heal Block its healing.
 				const gmaxClearedVolatiles = [
 					'aquaring', 'attract', 'confusion', 'curse', 'disable', 'embargo', 'encore',
 					'gastroacid', 'healblock', 'leechseed', 'nightmare', 'partiallytrapped',
@@ -3250,6 +3245,13 @@ export class Battle {
 				];
 				for (const volatile of gmaxClearedVolatiles) {
 					if (action.pokemon.volatiles[volatile]) action.pokemon.removeVolatile(volatile);
+				}
+				action.pokemon.formeChange(species, null, true);
+				const gmaxSpecies = this.dex.species.get(species);
+				const gmaxAbility = gmaxSpecies.abilities['0'];
+				if (gmaxAbility && action.pokemon.ability !== this.dex.abilities.get(gmaxAbility).id) {
+					action.pokemon.setAbility(gmaxAbility, null, null, true);
+					action.pokemon.baseAbility = this.dex.abilities.get(gmaxAbility).id;
 				}
 				action.pokemon.addVolatile('dynamax');
 				if (keepsWaterVeilAquaRing) action.pokemon.addVolatile('aquaring');

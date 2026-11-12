@@ -1163,3 +1163,4 @@ Object.assign(AbilityComponents, NovemberRosterComponents);
 AbilityComponents.ironmountain = ['stamina', 'bruteforce'];
 
 AbilityComponents.bewitchingmajesty = ['queenlymajesty'];
+AbilityComponents.solareruption = ['megasol', 'flamebody'];

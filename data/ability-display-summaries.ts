@@ -647,6 +647,7 @@ for (const id of ['voidomen', 'inversion', 'heatcoil', 'ironmountain', 'venombas
 AbilityDisplaySummaries.knightsguard = "Entry heals adjacent allies 1/4 HP (1/3 Fairy Tale); once per entry intercepts an ally attack, takes 25% less and gains +1 Atk if hit.";
 
 for (const id of ['bloomingsun','skywarden','steelwingescort','crescentrend','badseeds','wintersmalice']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+AbilityDisplaySummaries.solareruption = AbilityDescriptionOverrides.solareruption.shortDesc;
 
 AbilityDisplaySummaries.swiftvenom = AbilityDescriptionOverrides.swiftvenom.shortDesc;
 

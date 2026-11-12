@@ -3062,6 +3062,8 @@ Aliases.worldbreaker = 'Strings of Ruin';
 Object.assign(Aliases, { verdantmonarch: 'pollenbloom', blazingmonarch: 'unboundblaze', tidalmonarch: 'waterbarrage' });
 
 Aliases.blazingcrown = 'burningcrown';
+Aliases.verdanteruption = 'bloomingsun';
+Aliases.tidaleruption = 'draconicforce';
 
 import {NovemberAbilityNames} from './november-roster';
 for (const [id, name] of Object.entries(NovemberAbilityNames)) Aliases[name.toLowerCase().replace(/[^a-z0-9]/g, '') as ID] = id;

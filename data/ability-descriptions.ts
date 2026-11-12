@@ -4309,3 +4309,6 @@ Object.assign(AbilityDescriptionOverrides, UltraBeastDescriptions);
 
 import {applyStarterLinkDescriptions} from './starter-family-links';
 applyStarterLinkDescriptions(AbilityDescriptionOverrides);
+
+import {JohtoEruptionDescriptions} from './johto-eruptions';
+Object.assign(AbilityDescriptionOverrides, JohtoEruptionDescriptions);

@@ -856,3 +856,6 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
 
 import { CurrentAbilityDescriptionCleanup } from './current-ability-description-cleanup';
 Object.assign(ConciseAbilityDescriptions, CurrentAbilityDescriptionCleanup);
+
+import {JohtoEruptionDescriptions} from './johto-eruptions';
+Object.assign(ConciseAbilityDescriptions, JohtoEruptionDescriptions);

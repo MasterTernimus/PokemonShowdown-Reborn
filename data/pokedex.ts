@@ -24891,6 +24891,10 @@ for (const species of Object.values(Pokedex)) {
   if (NovemberAbilityNames[id]) (species.abilities as any)[slot] = NovemberAbilityNames[id];
  }
 }
+Pokedex.meganiummega.abilities = {0: 'Verdant Eruption'};
+Pokedex.meganiummegay.abilities = {0: 'Solar Eruption'};
+Pokedex.feraligatrmega.abilities = {0: 'Tidal Eruption'};
+
 // Synchronize after every base-form override.
 for (const [skinId, counterpartId] of Object.entries(CosmeticBattleCounterparts)) {
 	const skin = Pokedex[skinId as ID] as import('../sim/dex-species').SpeciesData;

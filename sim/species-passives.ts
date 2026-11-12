@@ -46,13 +46,15 @@ const migratedEntryPassives = new Set(['supremeoverlord', 'unnerve', 'fairyaura'
 	'eldritchremedy', 'mimecraft', 'saltbastion', 'download', 'hospitality', 'composed',
 	'frisk', 'oblivious', 'waterveil', 'drizzle', 'grassysurge', 'electricsurge', 'thermalexchange', 'flamebody', 'intimidate', 'slowstart',
 	'zerotohero', 'supersweetsyrup', 'swornduty', 'gluttony', 'heavymetal', 'stalwart']);
-/** Entry effects in the approved Kalos/Alola and Paldea migrations run once when acquired. */
-export function startGainedPassives(pokemon: Pokemon, previous: readonly string[], only?: readonly string[]) {
+/** Evolution starts all newly gained passives; other acquisitions retain their approved entry hooks. */
+export function startGainedPassives(
+	pokemon: Pokemon, previous: readonly string[], only?: readonly string[], isEvolution = false
+) {
 	if (!pokemon.isActive) return;
 	if (previous.includes('slowstart') && !pokemon.getPassives().includes('slowstart') && !pokemon.hasAbility('slowstart')) pokemon.removeVolatile('slowstart');
 	for (const id of thematicPassives(pokemon)) {
 		if (only && !only.includes(id)) continue;
-		if (previous.includes(id) || !migratedEntryPassives.has(id)) continue;
+		if (previous.includes(id) || (!isEvolution && !migratedEntryPassives.has(id))) continue;
 		if (id !== 'supremeoverlord') delete pokemon.passiveStates[id];
 		pokemon.battle.singleEvent('SwitchIn', passiveEffect(pokemon.battle, id), passiveState(pokemon, id), pokemon);
 	}

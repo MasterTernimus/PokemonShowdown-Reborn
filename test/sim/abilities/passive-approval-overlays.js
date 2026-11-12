@@ -286,6 +286,12 @@ exports.passives = expected => {
 };
 
 // Approved starter display names retain their original mechanics IDs.
+const beforeJohtoEruptions = exports.abilities;
+exports.abilities = (id, fallback) => {
+	const names = {meganiummega: 'Verdant Eruption', meganiummegay: 'Solar Eruption', feraligatrmega: 'Tidal Eruption'};
+	const slots = beforeJohtoEruptions(id, fallback);
+	return names[id] ? {...slots, 0: names[id]} : slots;
+};
 { const previous = exports.abilities; const names = { 'Pollen Bloom': 'Verdant Monarch', 'Water Barrage': 'Tidal Monarch', 'Unbound Blaze': 'Blazing Monarch' }; exports.abilities = (id, original) => Object.fromEntries(Object.entries(previous(id, original)).map(([slot, name]) => [slot, names[name] || name])); }
 
 {

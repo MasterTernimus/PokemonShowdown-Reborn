@@ -232,6 +232,7 @@ export class BattleActions {
 		delete pokemon.m.toxicCanvasSpent;
 		delete pokemon.m.galeFanSpent;
 		delete pokemon.m.performerAccuracySpent;
+		delete pokemon.m.solarEruptionSpent;
 		delete pokemon.m.controlledFurySpent;
 		delete pokemon.m.beatdownMissSpent;
 		pokemon.isActive = true;
