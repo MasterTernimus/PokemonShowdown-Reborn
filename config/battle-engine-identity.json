@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "3e327e22c36f09fef96c90e51da65a87bf551e64b2a07141c5ee95fa41a1861c",
-  "packageManifestSHA256": "640b2904270b75d524b9c9290abb884ce8e8bcc724e59cafe60194d431b26e04",
-  "mechanicsSHA256": "ad1216bb73347878554dca439feaf3fe2e4f09b40184bce10a774c743b72c20a",
+  "packageEngineRevision": "d61444c990f900fecc249acf28ada556fd6151ffcec7c41fd707bff335017d6f",
+  "packageManifestSHA256": "7e4d9c8f9295f01fbd93aee6e531d7a41b6579bfa76853d90bf4202d3a459943",
+  "mechanicsSHA256": "033a35dbdd920f0c1dc96a1a64109d88cc29810216dafc14add2e5ec6e27cf94",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -259,7 +259,7 @@
     },
     {
       "file": "dist/data/field-guide.js",
-      "sha256": "b5316f783b465fad615283942644a80eca6f4eaf1320e3f1e3e080001b73a81a"
+      "sha256": "26141f0e5f794e45327c8c7a23b97f18e36f772f0bede344a46d36715d30141e"
     },
     {
       "file": "dist/data/field-message-triggers.js",
@@ -703,7 +703,7 @@
     },
     {
       "file": "dist/data/public-field-guide.js",
-      "sha256": "1bd6399f0f8037c379cf2bc1f0581963ded1339c4a5be188d7cd7bd88009724d"
+      "sha256": "d88cc41611cab8f4c795013e4c1ddb2a14d0a754ff266dc53ebed20c510cad37"
     },
     {
       "file": "dist/data/pulse-fixed-moves.js",

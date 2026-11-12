@@ -801,10 +801,10 @@ ReviewedFieldGuide.infernaleclipseterrain = {
 };
 for (const id of ['coldeclipseterrain', 'rifteclipseterrain', 'infernaleclipseterrain']) {
 	ReviewedFieldGuide[id]['Shared rules and limitations'] = [
-		'Changing between Eclipse fields keeps the field\'s remaining turns; it does not start a fresh timer.',
+		'Changing between temporary Eclipse fields adds one turn to the remaining duration; it does not start a fresh timer.',
 		'Only successful moves trigger transitions. Failed, fully blocked or charge-only uses do not count. One move use causes at most one field change.',
 		'Bad Seeds can develop Frozen Aura using Blizzard, Glaciate or Sheer Cold. Ashen Seeds can develop Ashen Aura using Infernal Parade or Eruption. These require the matching active ability on the move user. Any user can develop an existing Rift Aura using Rift Opening, without Rift Herald.',
-		'Ordinary aura development consumes the aura and keeps its remaining turns. The direct Eclipse-to-Eclipse aura combinations listed above instead keep the field timer and do not require the matching ability.',
+		'Ordinary aura development consumes the aura and keeps its remaining turns. The direct Eclipse-to-Eclipse aura combinations listed above instead use the remaining field timer, add one turn if temporary, and do not require the matching ability.',
 		'All transitions respect field locks. A failed or blocked aura conversion leaves the aura intact.',
 	];
 }
