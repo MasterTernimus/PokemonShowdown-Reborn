@@ -2,9 +2,9 @@
 const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim');
 describe('Dusknoir passive replacement',()=>{
  let battle;afterEach(()=>{battle?.destroy();battle=null;});
- it('uses Pressure with Frisk in the freed slot; Mega retains Unaware',()=>{
+ it('uses Pressure with Misaligned Stars in the freed slot; Mega retains Unaware',()=>{
   assert.deepEqual(Dex.species.get('dusknoir').passives,['pressure']);
-  assert.equal(Dex.species.get('dusknoir').abilities[1],'Frisk');
+  assert.equal(Dex.species.get('dusknoir').abilities[1],'Misaligned Stars');
   assert.deepEqual(Dex.species.get('dusknoirmega').passives,['unaware']);
  });
  it('fainting no longer gives its replacement hazard immunity or creates Haunted Field',()=>{

@@ -923,7 +923,32 @@ export const EquivalentPassiveForms: {[id: string]: string} = {
   "gligaralt": "gligar",
   "gliscoralt": "gliscor"
 };
-Object.assign(MegaMigrationPassives, {"slowbromega":["shellarmor"],"gengarmega":["shadowtag"],"pinsirmega":["aerilate"],"pidgeotmega":["noguard"],"clefablemega":["magicbounce"],"starmiemega":["purepower"],"ampharosmega":["moldbreaker"],"heracrossmega":["skilllink"],"tyranitarmega":["sandstream"],"scizormega":["intimidate"],"gardevoirmega":["pixilate"],"sableyemega":["magicbounce"],"mawilemega":["hugepower"],"altariamega":["pixilate"],"banettemega":["prankster"],"absolmega":["magicbounce"],"glaliemega":["refrigerate"],"metagrossmega":["toughclaws"],"salamencemega":["aerilate"],"lopunnymega":["scrappy"],"lucariomega":["adaptability"],"abomasnowmega":["snowwarning"],"gallademega":["sharpness"],"audinomega":["invigorate"]});
+Object.assign(MegaMigrationPassives, {
+	slowbromega: ['shellarmor'],
+	gengarmega: ['shadowtag'],
+	pinsirmega: ['aerilate'],
+	pidgeotmega: ['noguard'],
+	clefablemega: ['magicbounce'],
+	starmiemega: ['purepower'],
+	ampharosmega: ['moldbreaker'],
+	heracrossmega: ['skilllink'],
+	tyranitarmega: ['sandstream'],
+	scizormega: ['intimidate'],
+	gardevoirmega: ['pixilate'],
+	sableyemega: ['magicbounce'],
+	mawilemega: ['hugepower'],
+	altariamega: ['pixilate'],
+	banettemega: ['prankster'],
+	absolmega: ['magicbounce'],
+	glaliemega: ['refrigerate'],
+	metagrossmega: ['toughclaws'],
+	salamencemega: ['aerilate'],
+	lopunnymega: ['scrappy'],
+	lucariomega: ['adaptability'],
+	abomasnowmega: ['snowwarning'],
+	gallademega: ['sharpness'],
+	audinomega: ['friendguard'],
+});
 MegaMigrationPassives.scovillainmega = ['spicyspray'];
 MegaMigrationPassives.eeveestarter = ['adaptability'];
 Object.assign(MegaMigrationPassives, {
@@ -1402,5 +1427,14 @@ for (const [skin, base] of Object.entries(CosmeticBattleCounterparts)) {
 }
 SpeciesPassives.froslassaevianmega = Object.freeze(['hydration']);
 ThematicPassiveIds.add('hydration');
+SpeciesPassives.metagross = Object.freeze(['clearbody']);
+SpeciesPassives.accelgor = Object.freeze(['frameperfect']);
+ThematicPassiveIds.add('clearbody');
+ThematicPassiveIds.add('frameperfect');
+SpeciesPassives.starmie = Object.freeze(['malignantlight']);
+SpeciesPassives.pinsir = Object.freeze(['hypercutter']);
+ThematicPassiveIds.add('malignantlight');
+ThematicPassiveIds.add('hypercutter');
+SpeciesPassives.garchompbattlebond = SpeciesPassives.garchomp;
 Object.freeze(SpeciesPassives);
 

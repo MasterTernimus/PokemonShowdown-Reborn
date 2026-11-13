@@ -10,6 +10,7 @@ import {
 } from './dual-wield-power';
 import {finishRotomEjections} from '../data/rotom-eject';
 import {RipenSeedItems} from '../data/ripen-seeds';
+import {replaceFalseSalvationBoosts} from '../data/jackpot-salvation';
 import {recordFinisherKO} from './finisher-cost';
 import {recordRechargeKO} from './recharge';
 import {passiveEffect, passiveState, thematicPassives} from './species-passives';
@@ -2345,6 +2346,7 @@ export class Battle {
 		boost = this.runEvent('ChangeBoost', target, source, effect, { ...boost });
 		boost = target.getCappedBoost(boost);
 		boost = this.runEvent('TryBoost', target, source, effect, { ...boost });
+		const replacedBoost = replaceFalseSalvationBoosts(this, boost, target, source, effect);
 		let success = null;
 		let boosted = isSecondary;
 		let boostName: BoostID;
@@ -2403,7 +2405,7 @@ export class Battle {
 			if (Object.values(boost).some(x => x > 0)) target.statsRaisedThisTurn = true;
 			if (Object.values(boost).some(x => x < 0)) target.statsLoweredThisTurn = true;
 		}
-		return success;
+		return success || (replacedBoost ? true : null);
 	}
 
 	spreadDamage(
@@ -2716,7 +2718,7 @@ export class Battle {
 		const holder = this.effectState.target;
 		const sideProtection = ['safeguard', 'mist', 'luckychant'].includes(this.effect.id);
 		const defensiveAbility = (this.effect.effectType === 'Ability' || this.effectState.speciesPassive ||
-			this.effect.id === 'warnedmoves') && holder instanceof Pokemon && holder.isAlly(defender);
+			['warnedmoves', 'jackpot'].includes(this.effect.id)) && holder instanceof Pokemon && holder.isAlly(defender);
 		if (!sideProtection && !defensiveAbility && !abilityGuard) return factor;
 		const hit = this.armorHit;
 		const state = hit?.move === move && hit.defender === defender ? hit :
@@ -3830,7 +3832,7 @@ export class Battle {
 
 	showMoveSheets(generation: string, recipient = '') {
   if (this.sides.length !== 2 || ['multi', 'freeforall'].includes(this.gameType) || this.ended) return;
-  const escape = (text: string) => text.replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]!));
+  const escape = (text: string) => text.replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]!));
   let html = '<div class="infobox"><strong>Open Team Sheet — moves only</strong><p>Both players agreed. Original moves; private to the players.</p>';
   for (const side of this.sides) {
    html += '<details open><summary>' + escape(side.name) + '</summary><ul>';

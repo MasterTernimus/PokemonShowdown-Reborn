@@ -7,7 +7,7 @@ describe('Grounded Instinct and base Garchomp Rough Skin',()=>{
 		const s = Dex.species.get('garchomp');
 		assert.deepEqual(s.abilities, { 0: 'Grounded Instinct', 1: 'Supreme Overlord', H: 'Void Wrath', S: 'Battle Bond' });
 		assert.deepEqual(s.passives, ['serratedscales']);
-		for (const [id, ability, passive] of [['garchompmega', 'Dune Carver', 'sharpness'], ['garchompmegaz', 'Relentless Hunt', 'levitate'], ['garchompbattlebond', 'Apex Bond', 'roughskin']]) {
+		for (const [id, ability, passive] of [['garchompmega', 'Dune Carver', 'sharpness'], ['garchompmegaz', 'Relentless Hunt', 'levitate'], ['garchompbattlebond', 'Apex Bond', 'serratedscales']]) {
 			assert.deepEqual(Dex.species.get(id).abilities, { 0: ability });
 			assert.deepEqual(Dex.species.get(id).passives, [passive]);
 		}
@@ -21,7 +21,7 @@ describe('Grounded Instinct and base Garchomp Rough Skin',()=>{
  it('allows Mold Breaker to bypass both defensive components',()=>{const[p,q]=setup('Grounded Instinct','Mold Breaker');p.hp=2400;battle.actions.runMove('earthquake',q,q.getLocOf(p));assert(p.hp<2400);battle.actions.runMove('sandattack',q,q.getLocOf(p));assert.equal(p.boosts.accuracy,-1);});
  it('does not duplicate Rough Skin when selected and has no Poise healing',()=>{const[p,q]=setup('Rough Skin');const hp=q.hp;battle.actions.runMove('tackle',q,q.getLocOf(p));assert.equal(hp-q.hp,600);p.hp=1200;battle.actions.runMove('swordsdance',p,p.getLocOf(p));assert.equal(p.hp,1200);assert(!p.getPassives().includes('championspoise'));});
  it('reveals opposing Illusion on entry',()=>{const[p,q]=setup();q.illusion=q.side.pokemon[1];battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert(!q.illusion);});
-	for (const [form, passive] of [['Garchomp-Mega', 'sharpness'], ['Garchomp-Mega-Z', 'levitate'], ['Garchomp-Battle-Bond', 'roughskin']])it('real form change uses ' + form + ' own package', () => {
+	for (const [form, passive] of [['Garchomp-Mega', 'sharpness'], ['Garchomp-Mega-Z', 'levitate'], ['Garchomp-Battle-Bond', 'serratedscales']])it('real form change uses ' + form + ' own package', () => {
 		const [p] = setup();
 		assert(p.formeChange(form, Dex.abilities.get('battlebond'), true));
 		assert.deepEqual(p.getPassives(), [passive]);

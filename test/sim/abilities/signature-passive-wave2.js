@@ -2,7 +2,7 @@
 'use strict';
 const assert = require('assert').strict, common = require('../../common');
 const { Dex } = require('../../../dist/sim');
-const grants = { vikavolt: 'rechargerelay', jellicent: 'undertow', jellicentazzy: 'undertow', pinsir: 'lockinggrip', hariyama: 'thickfat', drednaw: 'lockjaw', mudsdale: 'stamina', seismitoad: 'mirechorus' };
+const grants = { vikavolt: 'rechargerelay', jellicent: 'undertow', jellicentazzy: 'undertow', pinsir: 'hypercutter', hariyama: 'thickfat', drednaw: 'lockjaw', mudsdale: 'stamina', seismitoad: 'mirechorus' };
 let battle;
 function setup(species, ability = 'No Ability', doubles = false) {
 	const mon = (species = 'Mew', ability = 'No Ability') => ({ species, ability, moves: ['splash', 'voltswitch', 'uturn', 'forcepalm'] });
@@ -40,16 +40,16 @@ describe('Approved custom-only signature passives', () => {
 		const [p, q] = setup('Jellicent'); q.setType('Flying'); if (kind === 'protect')q.addVolatile('protect'); if (kind === 'substitute') { q.addVolatile('substitute'); q.volatiles.substitute.hp = 1000; } if (kind === 'immune')q.setAbility('Water Absorb');
 		hit(p, q, 'watergun', { damage: kind === 'ko' ? 5000 : 100 }); assert(!q.volatiles.smackdown);
 	});
-	for (const ability of ['No Ability', 'Locking Grip', 'Hyper Cutter'])it('Locking Grip spends one allowance across hits and ability replacement with ' + ability, () => {
-		const [p, q] = setup('Pinsir', ability); p.addVolatile('gastroacid'); hit(p, q, 'pinmissile', { multihit: 3, damage: 100 }); assert(q.volatiles.torment); assert(p.volatiles.lockinggripspent);
+	it('Legacy selected Locking Grip spends one allowance across hits and ability replacement', () => {
+		const [p, q] = setup('Mew', 'Locking Grip'); hit(p, q, 'pinmissile', { multihit: 3, damage: 100 }); assert(q.volatiles.torment); assert(p.volatiles.lockinggripspent);
 		q.removeVolatile('torment'); p.removeVolatile('gastroacid'); p.setAbility('No Ability'); p.setAbility('Locking Grip'); hit(p, q, 'bugbite', { damage: 100 }); assert(!q.volatiles.torment);
 		battle.makeChoices('switch 2', 'move 1'); battle.makeChoices('switch 2', 'move 1'); hit(p, q, 'bugbite', { damage: 100 }); assert(q.volatiles.torment);
 	});
 	it('Locking Grip Substitute damage spends the use before later multihits reach HP', () => {
-		const [p, q] = setup('Pinsir'); q.addVolatile('substitute'); q.volatiles.substitute.hp = 100; hit(p, q, 'pinmissile', { multihit: 3, damage: 100 }); assert(p.volatiles.lockinggripspent); assert.equal(q.hp, 3800); assert(!q.volatiles.torment);
+		const [p, q] = setup('Mew', 'Locking Grip'); q.addVolatile('substitute'); q.volatiles.substitute.hp = 100; hit(p, q, 'pinmissile', { multihit: 3, damage: 100 }); assert(p.volatiles.lockinggripspent); assert.equal(q.hp, 3800); assert(!q.volatiles.torment);
 	});
 	for (const kind of ['miss', 'protect'])it('Locking Grip preserves its allowance on ' + kind, () => {
-		const [p, q] = setup('Pinsir'); if (kind === 'protect')q.addVolatile('protect'); hit(p, q, 'bugbite', { accuracy: kind === 'miss' ? 0 : true }); assert(!p.volatiles.lockinggripspent);
+		const [p, q] = setup('Mew', 'Locking Grip'); if (kind === 'protect')q.addVolatile('protect'); hit(p, q, 'bugbite', { accuracy: kind === 'miss' ? 0 : true }); assert(!p.volatiles.lockinggripspent);
 	});
 	for (const ability of ['No Ability', 'Palm Mastery', 'Thick Fat'])it('Hariyama retains native Thick Fat while selected Palm Mastery remains suppressible with ' + ability, () => {
 		const [p, q] = setup('Hariyama', ability); p.addVolatile('gastroacid'); q.setAbility('Shield Dust'); q.setItem('Covert Cloak'); hit(p, q, 'forcepalm', { damage: 100 }); assert.equal(q.status, '');

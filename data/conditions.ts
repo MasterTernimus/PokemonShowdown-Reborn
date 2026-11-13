@@ -3,10 +3,12 @@ import {updatePreparedIndicator} from './grand-strategy';
 import {updateRelicArmorIndicator} from './relic-armor';
 import {protectsWarnedMove} from './warned-moves';
 import {ShelterConditions} from './shelter-audit-reworks';
+import {JackpotConditions} from './jackpot-salvation';
 import {resolveForesight} from './foresight-memory';
 /* eslint-disable @stylistic/max-len */
 import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+	...JackpotConditions,
  activenoguard: {
   name:'Active No Guard', noCopy:true,
   onStart(pokemon) { this.add('-start', pokemon, 'Active No Guard'); },
@@ -2017,5 +2019,5 @@ Conditions.risingmomentum = {
 	onModifyCritRatio(critRatio) { if (this.effectState.marksman) return critRatio + 1; },
 };
 
-import {StarterLinkConditions} from './starter-family-links';
+import { StarterLinkConditions } from './starter-family-links';
 Object.assign(Conditions, StarterLinkConditions);

@@ -101,3 +101,7 @@ SignaturePassiveComponents.shelteringbreeze = ['friendguard', 'windrider'];
 SignaturePassiveComponents.triplethreat = ['innerfocus', 'keeneye', 'earlybird'];
 SignaturePassiveComponents.lightweightswarm = ['lightmetal', 'swarm'];
 SignaturePassiveComponents.healingmirror = ['magicbounce', 'healer'];
+
+SignaturePassiveComponents.frameperfect = ['innerfocus'];
+
+SignaturePassiveComponents.malignantlight = ['illuminate', 'relicbeam'];

@@ -477,6 +477,7 @@ export class BattleActions {
 
 		if (move.beforeMoveCallback) {
 			if (move.beforeMoveCallback.call(this.battle, pokemon, target, move)) {
+				this.battle.runEvent('MoveAborted', pokemon, target, move);
 				this.battle.clearActiveMove(true);
 				pokemon.moveThisTurnResult = false;
 				return;
@@ -488,6 +489,7 @@ export class BattleActions {
 			if (!lockedMove) {
 				if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
 					this.battle.add('cant', pokemon, 'nopp', move);
+					this.battle.runEvent('MoveAborted', pokemon, target, move);
 					this.battle.clearActiveMove(true);
 					pokemon.moveThisTurnResult = false;
 					return;

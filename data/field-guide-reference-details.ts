@@ -67,7 +67,7 @@ CheckedFieldReferences.coldeclipseterrain = {
       "Cold Eclipse disables the 1.5× Sharpness bonus for slicing moves and the separate Steel Wing bonus. Its Mold Breaker, Defiant and flinch protection remain; this does not grant protection from Intimidate."
     ],
     "battlebond": [
-      "Cold Eclipse multiplies damaging move power by 1.3×. This stacks with its independent 1.3× bonus against Royal Decree, Empress or Neutralization. Its KO transformation and recovery rules remain unchanged."
+      "Cold Eclipse multiplies damaging move power by 1.3×. This stacks with its independent 1.3× bonus against Royal Decree, Empress or Neutralization."
     ],
     "darkaura": [
       "On Cold Eclipse, the holder is immune to hail damage. The shared Dark-move power bonus remains 4/3×, or 0.75× under Aura Break; multiple Dark Aura users do not stack."

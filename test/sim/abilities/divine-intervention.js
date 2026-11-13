@@ -23,15 +23,15 @@ describe('Divine Intervention components', () => {
 		const foe = battle.p2.active[0];
 		assert.equal(audino.species.id, 'audinomega');
 		for (const component of [
-			'vitalsigns', 'triage', 'regenerator', 'friendguard',
+			'vitalsigns', 'falsesalvation', 'telepathy', 'regenerator',
 		]) {
 			assert(audino.hasAbility(component), `Missing ${component}`);
 		}
-		assert.deepEqual(audino.getPassives(), ['invigorate']);
+		assert.deepEqual(audino.getPassives(), ['friendguard']);
 		assert(audino.hasAbilityOrPassive('invigorate'));
 		assert.equal(foe.boosts.atk, 0, 'Divine Intervention must not Intimidate');
 		for (const removed of ['swornduty', 'fluffy', 'queensguard', 'contrary', 'shedskin', 'intimidate', 'proficient', 'infiltrator']) assert(!audino.hasAbility(removed), removed);
-		assert.equal(battle.runEvent('ModifyPriority', audino, foe, battle.dex.getActiveMove('recover'), 0), 3);
+		assert.equal(battle.runEvent('ModifyPriority', audino, foe, battle.dex.getActiveMove('recover'), 0), 0);
 		assert.equal(battle.runEvent('ModifyPriority', audino, foe, battle.dex.getActiveMove('tackle'), 0), 0);
 		assert.equal(battle.runEvent('ModifyDamage', foe, audino, battle.dex.getActiveMove('tackle'), 100), 100);
 		assert.equal(battle.runEvent('ModifyDamage', foe, audino, battle.dex.getActiveMove('flamethrower'), 100), 100);

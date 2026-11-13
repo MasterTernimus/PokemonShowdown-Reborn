@@ -469,7 +469,6 @@ SharedPassiveComponents.frostsovereign = [...(SharedPassiveComponents.frostsover
 SharedPassiveComponents.stormsovereign = [...(SharedPassiveComponents.stormsovereign || []), 'galewings'];
 SharedPassiveComponents.ironvise = [...(SharedPassiveComponents.ironvise || []), 'intimidate'];
 SharedPassiveComponents.sacrededge = [...(SharedPassiveComponents.sacrededge || []), 'sharpness'];
-SharedPassiveComponents.divineintervention = [...(SharedPassiveComponents.divineintervention || []), 'invigorate'];
 SharedPassiveComponents.vitalsigns = [...(SharedPassiveComponents.vitalsigns || []), 'invigorate'];
 SharedPassiveComponents.lunarorbit = [...(SharedPassiveComponents.lunarorbit || []), 'magicbounce'];
 SharedPassiveComponents.astralcore = [...(SharedPassiveComponents.astralcore || []), 'purepower'];
@@ -597,11 +596,6 @@ Object.assign(SharedPassiveAbilityDescriptions, {
 		"passive": "sharpness",
 		"desc": "Dual Wield and entry healing for adjacent allies, including the Fairy Tale bonus.",
 		"shortDesc": "Dual Wield and entry healing for adjacent allies, including the Fairy Tale bonus.",
-	},
-	"divineintervention": {
-		"passive": "invigorate",
-		"desc": "Vital Signs emergency treatment, Triage, Regenerator and Friend Guard. The emergency treatment allowance remains once per recipient per battle.",
-		"shortDesc": "Vital Signs emergency treatment, Triage, Regenerator and Friend Guard.",
 	},
 });
 

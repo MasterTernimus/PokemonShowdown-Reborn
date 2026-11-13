@@ -17,7 +17,7 @@ describe('Starmie Cosmic Analysis', () => {
 	it('changes only ordinary Starmie’s lineup', () => {
 		const s = Dex.species.get('starmie');
 		assert.deepEqual(Object.values(s.abilities), ['Cosmic Analysis', 'Natural Cure', 'Victory Star']);
-		assert.deepEqual(s.passives, ['illuminate']);
+		assert.deepEqual(s.passives, ['malignantlight']);
 		assert.deepEqual(Dex.species.get('starmiemega').passives, ['purepower']);
 		assert.equal(Dex.species.get('starmiemega').abilities[0], 'Astral Core');
 		assert.equal(Dex.species.get('staryu').abilities.H, 'Analytic');

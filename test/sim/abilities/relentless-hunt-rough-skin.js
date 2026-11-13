@@ -20,5 +20,5 @@ describe('Mega-Z Relentless Hunt Rough Skin and Levitate passive',()=>{
 			assert.equal(battle.runEvent('BasePower', p, q, m, 100), want);
 		}
 	});
-	it('has only Mega-Z as holder and preserves other forms', () => { assert.deepEqual(Dex.species.all().filter(s => Object.values(s.abilities).includes('Relentless Hunt')).map(s => s.id), ['garchompmegaz']); for (const [id, passive] of [['garchomp', 'serratedscales'], ['garchompmega', 'sharpness'], ['garchompbattlebond', 'roughskin']])assert.deepEqual(Dex.species.get(id).passives, [passive]); });
+	it('has only Mega-Z as holder and preserves other forms', () => { assert.deepEqual(Dex.species.all().filter(s => Object.values(s.abilities).includes('Relentless Hunt')).map(s => s.id), ['garchompmegaz']); for (const [id, passive] of [['garchomp', 'serratedscales'], ['garchompmega', 'sharpness'], ['garchompbattlebond', 'serratedscales']])assert.deepEqual(Dex.species.get(id).passives, [passive]); });
 });

@@ -91,7 +91,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"asoneglastrier": "Combines the listed abilities.",
 	"asonespectrier": "Combines the listed abilities.",
 	"aquashell": "Heatproof + Frisk.",
-	"battlebond": "A KO can trigger a Bond form; no lethal-hit survival.",
+	"battlebond": "A move KO triggers a Bond form; heals 1/16 HP each turn.",
 	"shadowbond": "Water Shuriken hits 3 times at 30 power and always critically hits; 1.3x same-type move power.",
 	"apexbond": "Dual Chop cannot miss and always critically hits.",
 	"sacredbond": "Extreme Speed always critically hits.",
@@ -875,6 +875,10 @@ for (const id of [
 	'voidcommand',
 ]) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 
+for (const id of ['hotstreak', 'falsesalvation', 'divineintervention']) {
+	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+}
+
 AbilityDisplaySummaries.greatmarsh = AbilityDescriptionOverrides.greatmarsh.shortDesc;
 
 for (const id of ['armortail', 'twinfocus']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
@@ -904,3 +908,11 @@ for (const id of [
 	'grandmarksman',
 	'calculatedshot',
 ]) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+
+for (const id of ['convergence', 'misalignedstars', 'frameperfect', 'insight', 'coldlogic']) {
+	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+}
+
+for (const id of ['malignantlight', 'ironmaiden', 'siegegrip', 'astralcore']) {
+	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+}

@@ -95,6 +95,28 @@ describe('Dual Wield actual offensive ability boost family', () => {
 	it('lists every current final-damage ability hook for explicit pure eligibility coverage', () => {
 		for (const ability of Dex.abilities.all()) if (ability.onModifyDamage) assert(DualWieldFinalDamageHooks.has(ability.id), ability.id);
 	});
+	for (const ability of ['Convergence', 'Insight', 'Cold Logic', 'Frame Perfect']) {
+		for (const boosted of [false, true]) it(`${ability} uses the correct Dual Wield split with bonus ${boosted}`, () => {
+			const [p, q] = setup(ability, ['dualwield']);
+			const move = Object.assign(Dex.getActiveMove('sacredsword'), {
+				basePower: 100, flags: { slicing: 1 }, willCrit: false, noDamageVariance: true,
+			});
+			battle.runEvent('ModifyMove', p, q, move, move);
+			move.convergenceAttack = ability !== 'Frame Perfect' && boosted;
+			move.frameMomentum = ability === 'Frame Perfect' && boosted ? 10 : 0;
+			const actual = [1, 2].map(hit => {
+				move.hit = hit;
+				return battle.actions.getDamage(p, q, move, true);
+			});
+			const first = battle.actions.getDamage(p, q, { ...move, multihitType: undefined,
+				hit: 1, basePower: boosted ? 100 : 60 }, true);
+			p.setAbility('No Ability');
+			p.getPassives = () => [];
+			const second = battle.actions.getDamage(p, q, { ...move, multihitType: undefined,
+				hit: 1, basePower: boosted ? 15 : 60 }, true);
+			assert.deepEqual(actual, [first, second]);
+		});
+	}
 	for (const [ability, moveid, qualifyingType] of [
 		['Beast Fang', 'sacredsword', 'Dragon'],
 		['Apocalyptic Flame', 'metalclaw', 'Flying'],

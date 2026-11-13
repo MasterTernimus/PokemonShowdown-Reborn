@@ -44,4 +44,12 @@ describe('Concise Field Notes', () => {
 			assert(!(entry.sections['Battle messages'] || []).some(line => /misspelled|older prose/.test(line)), entry.id);
 		}
 	});
+	it('keeps nested ability field notes focused on their current components', () => {
+		const ability = (field, id) => guide.entries.find(e => e.id === field).referenceDetails.abilities.find(a => a.id === id);
+		const mirror = ability('mirrorarenaterrain', 'illuminate');
+		assert.deepEqual(mirror.fieldEffects, ['On entry: opposing Pokémon lose 1 accuracy stage.']);
+		assert.deepEqual(ability('mirrorarenaterrain', 'keeneye').fieldEffects, ['On entry: +1 accuracy and Laser Focus.']);
+		assert.deepEqual(ability('psychicterrain', 'telepathy').fieldEffects, ['Speed: 2× on Psychic Field or Psychic Aura.']);
+		assert(!JSON.stringify(ability('coldeclipseterrain', 'battlebond')).includes('recovery rules'));
+	});
 });

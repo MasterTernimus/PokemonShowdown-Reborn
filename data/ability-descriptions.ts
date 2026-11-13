@@ -4312,3 +4312,49 @@ applyStarterLinkDescriptions(AbilityDescriptionOverrides);
 
 import {JohtoEruptionDescriptions} from './johto-eruptions';
 Object.assign(AbilityDescriptionOverrides, JohtoEruptionDescriptions);
+
+import { JackpotSalvationDescriptions } from './jackpot-salvation';
+Object.assign(AbilityDescriptionOverrides, JackpotSalvationDescriptions);
+AbilityDescriptionOverrides.divineintervention = {
+	shortDesc: 'Vital Signs + False Salvation (Telepathy) + Regenerator.',
+	desc: AbilityDescriptionOverrides.vitalsigns.desc + ' ' + JackpotSalvationDescriptions.falsesalvation.desc +
+		' ' + AbilityDescriptionOverrides.regenerator.desc,
+};
+
+import { CombatSequenceDescriptions } from './combat-sequences';
+Object.assign(AbilityDescriptionOverrides, CombatSequenceDescriptions);
+for (const [id, part] of [
+	['convergence', 'keeneye'], ['misalignedstars', 'anticipation'], ['frameperfect', 'innerfocus'],
+]) {
+	AbilityDescriptionOverrides[id] = {
+		...AbilityDescriptionOverrides[id],
+		desc: AbilityDescriptionOverrides[part].desc + ' ' + AbilityDescriptionOverrides[id].desc,
+	};
+}
+AbilityDescriptionOverrides.insight = {
+	shortDesc: 'Convergence + Inner Focus; alternating attack categories bypasses that foe’s defensive boosts.',
+	desc: AbilityDescriptionOverrides.insight.desc.replace('Telepathy and Inner Focus.', 'Convergence and Inner Focus.') +
+		' ' + AbilityDescriptionOverrides.convergence.desc,
+};
+AbilityDescriptionOverrides.coldlogic = {
+	shortDesc: 'Forewarn + Aftermath + Convergence; accuracy-drop protection and noncontact KO retaliation.',
+	desc: AbilityDescriptionOverrides.coldlogic.desc + ' ' + AbilityDescriptionOverrides.convergence.desc,
+};
+
+import { LightPinsirDescriptions } from './malignant-light-pinsir';
+Object.assign(AbilityDescriptionOverrides, LightPinsirDescriptions);
+AbilityDescriptionOverrides.relicbeam = {
+	shortDesc: 'Uses Defense for Sp. Atk; beam, pulse and bullet moves gain 50% power.',
+	desc: 'Sp. Atk uses the holder’s Defense and Defense stages instead of Sp. Atk and its stages. Named beam moves, pulse moves and bullet moves gain 50% power. Use /relicbeam to see the complete move list.',
+};
+AbilityDescriptionOverrides.malignantlight.desc =
+	AbilityDescriptionOverrides.illuminate.desc + ' ' + AbilityDescriptionOverrides.relicbeam.desc;
+AbilityDescriptionOverrides.ironmaiden.desc =
+	AbilityDescriptionOverrides.moxie.desc + ' ' + LightPinsirDescriptions.ironmaiden.desc;
+AbilityDescriptionOverrides.siegegrip.desc =
+	AbilityDescriptionOverrides.moldbreaker.desc + ' ' + LightPinsirDescriptions.siegegrip.desc;
+AbilityDescriptionOverrides.astralcore = {
+	shortDesc: 'Pure Power + Natural Cure + Malignant Light.',
+	desc: AbilityDescriptionOverrides.purepower.desc + ' ' + AbilityDescriptionOverrides.naturalcure.desc +
+		' ' + AbilityDescriptionOverrides.malignantlight.desc,
+};

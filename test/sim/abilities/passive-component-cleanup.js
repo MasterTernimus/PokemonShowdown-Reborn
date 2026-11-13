@@ -46,8 +46,8 @@ describe('Passive and selected component separation', () => {
 					continue;
 				}
 				if (['kingler', 'fearow', 'pinsir', 'masquerain', 'swalot', 'vespiquen', 'vileplume'].includes(row.id)) {
-					assert.deepEqual(p.getPassives(), [{ kingler: 'titanpincer', fearow: 'lancepoint', pinsir: 'lockinggrip', masquerain: 'prismskimmer', swalot: 'accumulation', vespiquen: 'royalhive', vileplume: 'effectspore' }[row.id]]);
-					assert(!p.hasAbilityOrPassive(component));
+					assert.deepEqual(p.getPassives(), [{ kingler: 'titanpincer', fearow: 'lancepoint', pinsir: 'hypercutter', masquerain: 'prismskimmer', swalot: 'accumulation', vespiquen: 'royalhive', vileplume: 'effectspore' }[row.id]]);
+					assert.equal(p.hasAbilityOrPassive(component), row.id === 'pinsir' && component === 'hypercutter');
 					continue;
 				}
 				if (row.id === 'dustox') {

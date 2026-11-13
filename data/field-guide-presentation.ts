@@ -147,6 +147,16 @@ for (const field of ['rockyterrain', 'mountainterrain', 'snowymountainterrain', 
 }
 
 export const ConciseFieldAbilityNotes: Record<string, Record<string, string[]>> = {
+	mirrorarenaterrain: {
+		illuminate: ['On entry: opposing Pokémon lose 1 accuracy stage.'],
+		keeneye: ['On entry: +1 accuracy and Laser Focus.'],
+	},
+	starlightarenaterrain: {
+		illuminate: ['On entry: +2 Sp. Atk; puts an adjacent ally in the Spotlight.'],
+	},
+	psychicterrain: {
+		telepathy: ['Speed: 2× on Psychic Field or Psychic Aura.'],
+	},
 	dragonsdenterrain: {
 		magmaarmor: ['On entry: +1 Defense and Sp. Def.', 'Immune to incoming Fire moves.'],
 		dragonize: ['Converted Normal → Dragon moves: 1.5× power instead of 1.2×.'],

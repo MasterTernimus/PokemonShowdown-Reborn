@@ -73,6 +73,7 @@ export const DualWieldFinalDamageHooks = new Set([
 	'pastelveil', 'queenlymajesty', 'rkssystem', 'sniper', 'tintedlens', 'empress', 'prismwings', 'spentforce', 'venomignition',
 	'patientmarksman', 'guidinggallop', 'crushingdepths', 'ruinedsky', 'rivalmalice', 'pastelsanctuary',
 	'beastfang', 'apocalypticflame', 'burningquake',
+	'convergence', 'insight', 'coldlogic', 'frameperfect',
 ]);
 export function dualWieldFinalDamageBoost(
 	battle: Battle, id: string, source: Pokemon, target: Pokemon, move: ActiveMove
@@ -80,6 +81,10 @@ export function dualWieldFinalDamageBoost(
 	const custom = (battle.dex.abilities.get(id) as any).dualWieldDamageBoost;
 	if (typeof custom === 'function') return !!custom.call(battle, source, target, move);
 	switch (id) {
+	case 'convergence': case 'insight': case 'coldlogic':
+		return !!(move as ActiveMove & { convergenceAttack?: boolean }).convergenceAttack;
+	case 'frameperfect':
+		return ((move as ActiveMove & { frameMomentum?: number }).frameMomentum ?? 0) > 0;
 	case 'beastfang':
 		return move.category === 'Physical' && !!(move.flags.bite || move.flags.slicing) && target.hasType('Dragon');
 	case 'apocalypticflame':

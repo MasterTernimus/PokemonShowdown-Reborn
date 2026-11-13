@@ -609,8 +609,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlebond: {
 		name: "Battle Bond",
-		desc: "Eligible Arcanine, Garchomp and Greninja transform after a move KO while another foe remains. Bond forms heal 1/8 base max HP after move KOs. Heals 1/16 base max HP each turn and prevents sandstorm/hail damage. Attack power is 1.3x against Royal Decree, Empress or Neutralization and independently 1.3x on Cold Eclipse. Cannot be suppressed or swapped. No Filter damage reduction or lethal-hit survival.",
-		shortDesc: "A KO can trigger a Bond form; no lethal-hit survival.",
+		desc: "Eligible Arcanine, Garchomp and Greninja transform after a move KO while another foe remains. Heals 1/16 base max HP each turn and prevents sandstorm/hail damage. Attack power is 1.3x against Royal Decree, Empress or Neutralization and independently 1.3x on Cold Eclipse. Cannot be suppressed or swapped. No Filter damage reduction or lethal-hit survival.",
+		shortDesc: "A move KO triggers a Bond form; heals 1/16 HP each turn.",
 	},
 	shadowbond: {
 		name: "Shadow Bond",

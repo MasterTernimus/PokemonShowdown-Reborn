@@ -100,11 +100,11 @@ describe('Approved Audino support rework', () => {
 		assert.equal(battle.p1.active[0], p); assert(p.m.vitalSignsRescued);
 		p.hp = 100; hit(p, battle.p2.active[0]); assert.equal(p.hp, 80); assert.equal(rescueCount(), 1);
 	});
-	it('Mega Evolution preserves a used recipient allowance and installs all four components', () => {
+	it('Mega Evolution preserves a used recipient allowance and installs the replacement component package', () => {
 		const [p, foe] = setup(); p.hp = 100; hit(p, foe); p.setItem('Audinite'); p.canMegaEvo = 'Audino-Mega';
 		assert(battle.actions.runMegaEvo(p)); assert.equal(p.ability, 'divineintervention');
-		for (const id of ['vitalsigns', 'triage', 'regenerator', 'friendguard']) assert(p.hasAbility(id));
-		assert.deepEqual(p.getPassives(), ['invigorate']);
+		for (const id of ['vitalsigns', 'falsesalvation', 'regenerator']) assert(p.hasAbility(id));
+		assert.deepEqual(p.getPassives(), ['friendguard']);
 		assert(p.hasAbilityOrPassive('invigorate'));
 		assert(!p.hasAbility('fluffy')); assert(!p.hasAbility('swornduty'));
 		p.hp = 100; hit(p, foe); assert.equal(p.hp, 80); assert.equal(rescueCount(), 1);
@@ -131,13 +131,13 @@ describe('Approved Audino support rework', () => {
 		const [p, foe, ally] = setup('Run Away', true); ally.hp = 100; p.setAbility('Divine Intervention');
 		assert.equal(ally.hp, 100);
 		for (const move of ['tackle', 'flamethrower', 'firepunch']) assert.equal(battle.runEvent('ModifyDamage', foe, p, battle.dex.getActiveMove(move), 100), 100);
-		assert.equal(battle.runEvent('ModifyDamage', foe, ally, battle.dex.getActiveMove('tackle'), 100), 75);
+		assert.equal(battle.runEvent('ModifyDamage', foe, ally, battle.dex.getActiveMove('tackle'), 100), 100);
 		p.hp = 1; battle.singleEvent('SwitchOut', p.getAbility(), p.abilityState, p); assert.equal(p.hp, 1 + Math.floor(p.maxhp / 3));
 	});
-	it('Divine Intervention provides full Triage including cleansing and draining attacks', () => {
+	it('Divine Intervention no longer grants Triage priority', () => {
 		const [p, foe] = setup('Divine Intervention');
 		for (const id of ['wish', 'healpulse', 'lifedew', 'healingwish', 'rest', 'healbell', 'aromatherapy', 'junglehealing', 'purify', 'refresh', 'drainingkiss', 'drainpunch']) {
-			const move = battle.dex.getActiveMove(id); assert.equal(battle.runEvent('ModifyPriority', p, foe, move, move.priority), move.priority + 3, id);
+			const move = battle.dex.getActiveMove(id); assert.equal(battle.runEvent('ModifyPriority', p, foe, move, move.priority), move.priority, id);
 		}
 		for (const id of ['followme', 'helpinghand', 'trickroom', 'safeguard']) {
 			const move = battle.dex.getActiveMove(id); assert.equal(battle.runEvent('ModifyPriority', p, foe, move, move.priority), move.priority, id);
@@ -156,11 +156,11 @@ describe('Approved Audino support rework', () => {
 	it('descriptions, pruned Includes and calculator metadata match the new package', () => {
 		const {getAbilityDisplayComponents} = require('../../../dist/data/ability-display');
 		assert.deepEqual(getAbilityDisplayComponents('vitalsigns'), ['invigorate']);
-		assert.deepEqual(getAbilityDisplayComponents('divineintervention'), ['vitalsigns', 'triage', 'regenerator', 'friendguard']);
+		assert.deepEqual(getAbilityDisplayComponents('divineintervention'), ['vitalsigns', 'falsesalvation', 'regenerator']);
 		assert.equal(Dex.abilities.get('vitalsigns').shortDesc, 'Heals and cures each teammate once when an attack leaves it at half HP or less.');
 		const metadata = require('../../../dist/sim/custom-calculator').calculatorMetadata();
 		assert.equal(metadata.species.find(s => s.name === 'Audino').abilities[0], 'Vital Signs');
-		assert.deepEqual(metadata.abilityComponents.divineintervention, ['Vital Signs', 'Triage', 'Regenerator', 'Friend Guard']);
+		assert.deepEqual(metadata.abilityComponents.divineintervention, ['Vital Signs', 'False Salvation', 'Regenerator']);
 	});
 	for (const alreadyUsed of [false, true]) {
 		it('Revival Blessing preserves the recipient allowance: previously used=' + alreadyUsed, () => {

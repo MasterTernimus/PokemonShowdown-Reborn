@@ -56,7 +56,7 @@ describe('Approved Mega component/passive splits', () => {
 		assert.equal(battle.runEvent('ModifyAtk', p, q, move, 100), 200);
 		battle.field.terrain = 'psychicterrain';
 		assert.equal(battle.runEvent('ModifyAtk', p, q, move, 100), 100);
-		assert.equal(battle.runEvent('ModifySpA', p, q, move, 100), 200);
+		assert.equal(battle.runEvent('ModifySpA', p, q, move, 100), p.getStat('def', false, true) * 2);
 	});
 	for (const [species, ability, type, field, boost] of [
 		['Gardevoir-Mega', 'Void Voice', 'Fairy', 'mistyterrain', 225],
@@ -104,12 +104,15 @@ describe('Approved Mega component/passive splits', () => {
 		p.hp = 100; p.maxhp = p.baseMaxhp = 1000;
 		assert.equal(battle.heal(100, p, p, Dex.moves.get('recover')), 130);
 		p.addVolatile('gastroacid');
-		assert.equal(battle.heal(100, p, p, Dex.moves.get('recover')), 130);
+		assert.equal(battle.heal(100, p, p, Dex.moves.get('recover')), 100);
 	});
-	it('keeps Invigorate Safeguard at five turns even while the selected package is suppressed', () => {
-		const [p] = setup('Audino-Mega', 'Divine Intervention'); p.addVolatile('gastroacid');
+	it('extends Safeguard only while Divine Intervention is active', () => {
+		const [p] = setup('Audino-Mega', 'Divine Intervention');
 		p.side.addSideCondition('safeguard', p, Dex.moves.get('safeguard'));
 		assert.equal(p.side.sideConditions.safeguard.duration, 5);
+		p.side.removeSideCondition('safeguard'); p.addVolatile('gastroacid');
+		p.side.addSideCondition('safeguard', p, Dex.moves.get('safeguard'));
+		assert.equal(p.side.sideConditions.safeguard.duration, 3);
 	});
 	it('performs one independent adjacent-ally cure roll and no Invigorate self-cure', () => {
 		const [p] = setup('Audino-Mega', 'Divine Intervention', true), ally = battle.p1.active[1];

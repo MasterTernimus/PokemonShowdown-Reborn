@@ -18,7 +18,7 @@ function start(species = 'Lucario-Mega-Z', doubles = false) {
 describe('Corrected Lucario family ability release', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	it('retains all three base choices and isolated Mega passives', () => {
-		assert.deepEqual(Dex.species.get('lucario').abilities, { 0: 'Carry On', 1: 'Sworn Duty', H: 'Armorize' });
+		assert.deepEqual(Dex.species.get('lucario').abilities, { 0: 'Carry On', 1: 'Convergence', H: 'Armorize' });
 		assert.deepEqual(Dex.species.get('lucario').passives, ['mindseye']);
 		assert.deepEqual(Dex.species.get('lucariomega').abilities, { 0: 'Insight' });
 		assert.deepEqual(Dex.species.get('lucariomega').passives, ['adaptability']);
@@ -53,14 +53,18 @@ describe('Corrected Lucario family ability release', () => {
 		assert.equal(p.hp, 900);
 		battle.runEvent('Residual', p); assert.equal(p.hp, 900);
 	});
-	it('gives normal Mega Aura Reading and Telepathy with its Adaptability passive', () => {
+	it('gives normal Mega Convergence and Inner Focus with its Adaptability passive', () => {
 		const [p] = start('Lucario-Mega', true), ally = battle.p1.active[1];
-		assert(!p.hasAbility('ultraego')); assert(p.hasAbility('telepathy')); assert(p.hasAbility('innerfocus'));
+		assert(!p.hasAbility('ultraego'));
+		assert(!p.hasAbility('telepathy'));
+		assert(p.hasAbility('convergence'));
+		assert(p.hasAbility('keeneye'));
+		assert(p.hasAbility('innerfocus'));
 		assert(!p.addVolatile('flinch')); battle.boost({ atk: -1 }, p, battle.p2.active[0], battle.dex.abilities.get('intimidate')); assert.equal(p.boosts.atk, 0);
 		assert(!p.hasAbility('dualwield')); assert(!p.hasAbility('secondwind'));
-		const hp = p.hp; battle.actions.useMove('tackle', ally, { target: p }); assert.equal(p.hp, hp);
+		const hp = p.hp; battle.actions.useMove('tackle', ally, { target: p }); assert(p.hp < hp);
 		const speed = p.getStat('spe'); battle.field.setTerrain('psychicterrain', p);
-		assert.equal(p.getStat('spe'), speed * 2);
+		assert.equal(p.getStat('spe'), speed);
 	});
 	it('reads opposing HP hits by category and opponent', () => {
 		const [p,q] = start('Lucario-Mega', true), other = battle.p2.active[1];

@@ -5,8 +5,8 @@ export const CurrentAbilityDescriptionCleanup = {
 		"shortDesc": "Critical-hit and Competitive effects.",
 	},
 	"battlebond": {
-		"desc": "Eligible Arcanine, Garchomp and Greninja transform after a move KO while another foe remains. Bond forms heal 1/8 base max HP after move KOs. Heals 1/16 base max HP each turn and prevents sandstorm/hail damage. Attack power is 1.3x against Royal Decree, Empress or Neutralization and independently 1.3x on Cold Eclipse. Cannot be suppressed or swapped.",
-		"shortDesc": "A move KO triggers a Bond form; heals each turn and after Bond-form KOs.",
+		"desc": "Eligible Arcanine, Garchomp and Greninja transform after a move KO while another foe remains. Heals 1/16 base max HP each turn and prevents sandstorm/hail damage. Attack power is 1.3x against Royal Decree, Empress or Neutralization and independently 1.3x on Cold Eclipse. Cannot be suppressed or swapped.",
+		"shortDesc": "A move KO triggers a Bond form; heals 1/16 HP each turn.",
 	},
 	"relentlesslink": {
 		"desc": "Multi-hit moves always use their maximum hit count and have 1.5x power. Moves that normally check accuracy per hit check only once. Moves ignore bypassable opposing abilities. Drill and horn moves have 1.5x power, or 2x on Rocky, Mountain, Snowy Mountain, Cave and Volcanic, where they also bypass protection.",

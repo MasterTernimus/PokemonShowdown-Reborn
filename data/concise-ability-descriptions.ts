@@ -859,3 +859,11 @@ Object.assign(ConciseAbilityDescriptions, CurrentAbilityDescriptionCleanup);
 
 import {JohtoEruptionDescriptions} from './johto-eruptions';
 Object.assign(ConciseAbilityDescriptions, JohtoEruptionDescriptions);
+
+import { JackpotSalvationDescriptions } from './jackpot-salvation';
+Object.assign(ConciseAbilityDescriptions, JackpotSalvationDescriptions);
+
+import { CombatSequenceDescriptions } from './combat-sequences';
+Object.assign(ConciseAbilityDescriptions, CombatSequenceDescriptions);
+delete ConciseAbilityDescriptions.insight;
+delete ConciseAbilityDescriptions.coldlogic;

@@ -13,7 +13,7 @@ describe('Approved Aura Sight and Revealing Gaze',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
 	it("retains Lucario's newer Mind's Eye passive and selected slots without assigning legacy Aura Sight", () => {
 		assert.deepEqual(Dex.species.get('lucario').passives, ['mindseye']);
-		assert.deepEqual(Dex.species.get('lucario').abilities, { 0: 'Carry On', 1: 'Sworn Duty', H: 'Armorize' });
+		assert.deepEqual(Dex.species.get('lucario').abilities, { 0: 'Carry On', 1: 'Convergence', H: 'Armorize' });
 		for (const p of Dex.species.all().filter(p => p.baseSpecies === 'Lucario' && p.id !== 'lucario'))assert(!p.passives.includes('aurasight'), p.id);
 	});
  for(const[atk,spa,boost,category]of [[200,100,{},'Physical'],[100,200,{},'Special'],[100,100,{},'Special'],[200,100,{spa:3},'Special']])it('Aura Sphere staged category '+[atk,spa,JSON.stringify(boost)],()=>{const[p,q]=setup();p.storedStats.atk=atk;p.storedStats.spa=spa;Object.assign(p.boosts,boost);const m=hit(p,q,'aurasphere');assert.equal(m.category,category);assert.equal(m.basePower,80);assert.equal(m.accuracy,true);assert(m.flags.bypasssub);assert.equal(m.overrideDefensiveStat,undefined);});

@@ -14,7 +14,6 @@ const holders = [
 	['Camerupt', 'Ashen Seeds', 'eruption', ['soundproof']],
 	['Torkoal', 'Ashen Seeds', 'eruption', ['whitesmoke']],
 	['Hoopa', 'Rift Herald', 'riftopening', []],
-	['Bronzong', 'Rift Herald', 'riftopening', ['heatproof']],
 	['Mismagius', 'Rift Herald', 'riftopening', ['levitate']],
 ];
 const validator = new TeamValidator('gen9nofieldsinglesgame@@@Obtainable Abilities');

@@ -109,7 +109,7 @@ describe('Arcanine Battle Bond', () => {
 		assert(bondDamage >= plainDamage * 0.85 && bondDamage <= plainDamage / 0.85, battle.log.join('\n'));
 	});
 
-	it('heals after a later KO in its Battle Bond form', () => {
+	it('keeps only its regular end-of-turn healing after a later KO', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 			{ species: 'Arcanine', ability: 'Battle Bond', moves: ['flamethrower'] },
 		], [
@@ -125,7 +125,7 @@ describe('Arcanine Battle Bond', () => {
 		const before = arcanine.hp;
 		battle.makeChoices('', 'switch 2');
 		battle.makeChoices('move flamethrower', 'move splash');
-		assert(arcanine.hp > before, battle.log.join('\n'));
+		assert.equal(arcanine.hp, before + Math.floor(arcanine.baseMaxhp / 16), battle.log.join('\n'));
 	});
 
 	for (const [species, move, ability, forme, hits] of [

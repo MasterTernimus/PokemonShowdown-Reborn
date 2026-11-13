@@ -304,7 +304,33 @@ exports.abilities = (id, fallback) => {
 }
 
 // Latest local release approvals, independent of runtime data.
-{ const prior = { current: exports.current, passives: exports.passives, stats: exports.stats }; const passives = { hydreigonmega: ['hydraflight'], froslassaevianmega: ['hydration'] };
+{ const prior = { current: exports.current, passives: exports.passives, stats: exports.stats }; const passives = { audinomega: ['friendguard'], hydreigonmega: ['hydraflight'], froslassaevianmega: ['hydration'] };
 	exports.current = (id, fallback) => passives[id] || prior.current(id, fallback);
 	exports.passives = expected => Object.assign(prior.passives(expected), passives);
 	exports.stats = (id, fallback) => id === 'azumarill' ? { hp: 100, atk: 60, def: 105, spa: 90, spd: 105, spe: 60 } : prior.stats(id, fallback); }
+
+// Approved Hot Streak and False Salvation assignments.
+{
+	const prior = exports.abilities;
+	const slots = { pangoro: { 0: 'Hot Streak' }, musharna: { H: 'False Salvation', S: 'Aevian Dream' } };
+	exports.abilities = (id, fallback) => ({ ...prior(id, fallback), ...slots[id] });
+}
+
+// Approved combat-sequence assignments, independent of runtime data.
+{
+	const prior = { abilities: exports.abilities, current: exports.current, passives: exports.passives };
+	const slots = { lucario: { 1: 'Convergence' }, metagross: { 0: 'Convergence' }, bronzong: { H: 'Misaligned Stars', S: 'Reflector' }, claydol: { 0: 'Misaligned Stars' }, dusknoir: { 1: 'Misaligned Stars' }, mienshao: { 0: 'Frame Perfect' }, ninjask: { 1: 'Frame Perfect' } };
+	const passives = { metagross: ['clearbody'], accelgor: ['frameperfect'] };
+	exports.abilities = (id, fallback) => ({ ...prior.abilities(id, fallback), ...slots[id] });
+	exports.current = (id, fallback) => passives[id] || prior.current(id, fallback);
+	exports.passives = expected => Object.assign(prior.passives(expected), passives);
+}
+
+// Approved Malignant Light and base Pinsir assignments.
+{ const prior = { abilities: exports.abilities, current: exports.current, passives: exports.passives }; const slots = { ampharos: { 0: 'Malignant Light' }, necrozma: { 1: 'Malignant Light' }, pinsir: { 0: 'Siege Grip', 1: 'Iron Maiden' } }; const passives = { starmie: ['malignantlight'], pinsir: ['hypercutter'] };
+	exports.abilities = (id, f) => ({ ...prior.abilities(id, f), ...slots[id] });
+	exports.current = (id, f) => passives[id] || prior.current(id, f);
+	exports.passives = expected => Object.assign(prior.passives(expected), passives); }
+
+// Battle Bond Garchomp shares base Garchomp's approved Serrated Scales passive.
+{ const prior = { current: exports.current, passives: exports.passives }; exports.current = (id, f) => id === 'garchompbattlebond' ? ['serratedscales'] : prior.current(id, f); exports.passives = expected => Object.assign(prior.passives(expected), { garchompbattlebond: ['serratedscales'] }); }

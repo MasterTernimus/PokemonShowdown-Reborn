@@ -11326,7 +11326,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Musharna",
 		types: ["Psychic", "Ground"],
 		baseStats: { hp: 120, atk: 45, def: 95, spa: 110, spd: 105, spe: 25 },
-		abilities: { 0: "Neutralization", 1: "Telepathy", H: "Aevian Dream" },
+		abilities: { 0: "Neutralization", 1: "Telepathy", H: "False Salvation", S: "Aevian Dream" },
 		heightm: 1.1,
 		weightkg: 60.5,
 		color: "Pink",
@@ -14579,7 +14579,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Pangoro",
 		types: ["Fighting", "Dark"],
 		baseStats: { hp: 105, atk: 126, def: 76, spa: 69, spd: 69, spe: 70 },
-		abilities: { 0: "Iron Fist", 1: "Raging Beast", H: "Scrappy" },
+		abilities: { 0: "Hot Streak", 1: "Raging Beast", H: "Scrappy" },
 		heightm: 2.1,
 		weightkg: 136,
 		color: "White",
@@ -24904,3 +24904,18 @@ for (const [skinId, counterpartId] of Object.entries(CosmeticBattleCounterparts)
 	skin.abilities = { ...counterpart.abilities };
 	if (counterpart.canGigantamax) Object.assign(skin, { canGigantamax: counterpart.canGigantamax });
 }
+
+// Approved combat-sequence ability slots.
+Pokedex.lucario.abilities[1] = 'Convergence';
+Pokedex.metagross.abilities![0] = 'Convergence';
+Pokedex.bronzong.abilities!.H = 'Misaligned Stars';
+Pokedex.bronzong.abilities!.S = 'Reflector';
+Pokedex.claydol.abilities![0] = 'Misaligned Stars';
+Pokedex.dusknoir.abilities![1] = 'Misaligned Stars';
+Pokedex.mienshao.abilities![0] = 'Frame Perfect';
+Pokedex.ninjask.abilities![1] = 'Frame Perfect';
+
+Pokedex.ampharos.abilities![0] = 'Malignant Light';
+Pokedex.necrozma.abilities![1] = 'Malignant Light';
+Pokedex.pinsir.abilities![0] = 'Siege Grip';
+Pokedex.pinsir.abilities![1] = 'Iron Maiden';

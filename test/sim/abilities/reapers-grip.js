@@ -9,7 +9,7 @@ describe('Mega Dusknoir and Reaper\'s Grip',function(){
   battle.makeChoices('team 1','team 1');
   const mon=battle.p1.active[0];
   assert.deepEqual(mon.species.baseStats,{hp:65,atk:120,def:135,spa:70,spd:135,spe:45});
-		assert.deepEqual(mon.species.abilities, { 0: 'Requiem', 1: 'Frisk', H: 'Soul Reaver' });
+		assert.deepEqual(mon.species.abilities, { 0: 'Requiem', 1: 'Misaligned Stars', H: 'Soul Reaver' });
   assert.equal(mon.canMegaEvo,'Dusknoir-Mega');
   battle.makeChoices('move splash mega','move splash');
   return mon;

@@ -258,7 +258,9 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	atrocity: ['moldbreaker', 'unboundblaze', 'selfsufficient', 'proficient'],
 	streettyrant: ['intimidate', 'shedskin', 'moldbreaker'],
 	vitalsigns: ['invigorate'],
-	divineintervention: ['vitalsigns', 'triage', 'regenerator', 'friendguard'],
+	divineintervention: ['vitalsigns', 'falsesalvation', 'regenerator'],
+	falsesalvation: ['telepathy'],
+	hotstreak: ['superluck'],
 	voidcraft: ['elevate', 'shadowshield', 'temporalshift', 'insomnia'],
 	requiem: ['cursedbody', 'filter'],
 	reapersgrip: ['unaware', 'darkaura', 'selfsufficient'],
@@ -1164,3 +1166,14 @@ AbilityComponents.ironmountain = ['stamina', 'bruteforce'];
 
 AbilityComponents.bewitchingmajesty = ['queenlymajesty'];
 AbilityComponents.solareruption = ['megasol', 'flamebody'];
+
+AbilityComponents.convergence = ['keeneye'];
+AbilityComponents.misalignedstars = ['anticipation'];
+AbilityComponents.frameperfect = ['innerfocus'];
+AbilityComponents.insight = ['convergence', 'innerfocus'];
+AbilityComponents.coldlogic = [...AbilityComponents.coldlogic, 'convergence'];
+
+AbilityComponents.malignantlight = ['illuminate', 'relicbeam'];
+AbilityComponents.ironmaiden = ['moxie'];
+AbilityComponents.siegegrip = ['moldbreaker'];
+AbilityComponents.astralcore = ['purepower', 'naturalcure', 'malignantlight'];

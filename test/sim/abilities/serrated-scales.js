@@ -5,10 +5,10 @@ function setup(ability = 'No Ability', foeAbility = 'No Ability') {
 	if (b.requestState === 'teampreview')b.makeChoices('team 1', 'team 1');
 	return b;
 }describe('Serrated Scales base Garchomp passive', () => {
-	it('changes only base Garchomp and preserves selectable abilities', () => {
+	it('shares Serrated Scales with Battle Bond and preserves selectable abilities', () => {
 		assert.deepEqual(Dex.species.get('garchomp').passives, ['serratedscales']);
 		assert.deepEqual(Dex.species.get('garchompmega').passives, ['sharpness']);
-		assert.deepEqual(Dex.species.get('garchompbattlebond').passives, ['roughskin']);
+		assert.deepEqual(Dex.species.get('garchompbattlebond').passives, ['serratedscales']);
 		assert.deepEqual(Dex.species.get('garchomp').abilities, { 0: 'Grounded Instinct', 1: 'Supreme Overlord', H: 'Void Wrath', S: 'Battle Bond' });
 	});
 	for (const ability of ['No Ability', 'Rough Skin', 'Serrated Scales'])it('retaliates exactly once per contact hit with selected ' + ability, () => {

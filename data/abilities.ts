@@ -1,3 +1,4 @@
+import {qualifiesForRelicBeam} from './relic-beam';
 import { unstableEvoComponents } from './ability-components';
 import { whiteSmokeFieldEntry } from './field-messages';
 import {fieldDisablesArmorReduction} from './armor-reductions';
@@ -3152,7 +3153,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return;
 			}
 			if (['arcaninebattlebond', 'garchompbattlebond', 'greninjaash'].includes(source.species.id)) {
-				this.heal(source.baseMaxhp / 8, source, source);
 				return;
 			}
 			if (source.bondTriggered) return;
@@ -6530,16 +6530,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	relicbeam: {
 		onModifySpA(spa, pokemon) {
+			if (skipPassiveComponent(this, pokemon, 'relicbeam')) return;
 			return pokemon.getStat('def', false, true);
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, pokemon, target, move) {
-			const beamMoves = [
-				'aurorabeam', 'bubblebeam', 'chargebeam', 'dynamaxcannon', 'eternabeam',
-				'flashcannon', 'fleurcannon', 'icebeam', 'lusterpurge', 'meteorbeam',
-				'moongeistbeam', 'psybeam', 'signalbeam', 'solarbeam', 'steelbeam',
-			];
-			if (beamMoves.includes(move.id) || move.flags['pulse'] || move.flags['bullet']) {
+			if (skipPassiveComponent(this, pokemon, 'relicbeam')) return;
+			if (qualifiesForRelicBeam(move)) {
 				this.debug('Relic Beam boost');
 				return this.chainModify(1.5);
 			}
@@ -21726,5 +21723,14 @@ for (const id of [...Object.keys(NovemberAbilityNames), 'guardianflame', 'bewitc
  Object.assign(Abilities[id as ID], NovemberFinalDescriptions[id]);
 }
 
-import {installJohtoEruptions} from './johto-eruptions';
+import { installJohtoEruptions } from './johto-eruptions';
 installJohtoEruptions(Abilities);
+
+import { installJackpotSalvation } from './jackpot-salvation';
+installJackpotSalvation(Abilities);
+
+import { installCombatSequences } from './combat-sequences';
+installCombatSequences(Abilities, NovemberFinalDescriptions);
+
+import { installLightPinsir } from './malignant-light-pinsir';
+installLightPinsir(Abilities, NovemberFinalDescriptions);
