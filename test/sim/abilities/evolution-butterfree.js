@@ -30,7 +30,7 @@ describe('Approved Evolution packages and Butterfree rewards', () => {
 			const secondaries = [{ chance: 100, status: 'brn' }];
 			assert.deepEqual(battle.runEvent('ModifySecondaries', p, t, m, secondaries), ability === 'Toxic Evolution' ? [] : secondaries);
 			battle.setActiveMove(m, p, t);
-			assert.equal(battle.runEvent('ModifyDamage', p, t, m, 1000), 800);
+			assert.equal(battle.runEvent('ModifyDamage', p, t, m, 1000), 500);
 			battle.clearActiveMove();
 		});
   it(ability+' retains its protection rule',()=>{const[p,t]=start(ability);t.addVolatile('protect',t);hit(p,t,'waterpulse');assert.equal(t.hp<t.maxhp,ability==='Spiral Evolution');});

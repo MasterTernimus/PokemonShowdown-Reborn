@@ -60,7 +60,7 @@ describe('Oracle’s Refrain and requested coverage',()=>{
   const [p,q]=setup('No Ability','freeforall');assert.equal(battle.runEvent('BasePower',q,p,move('boomburst'),100),100);
   battle.actions.useMove(move('boomburst'),p,{target:q});assert(q.hp<q.maxhp);
  });
- for(const [species,moves] of Object.entries({Politoed:['Sparkling Aria','Boomburst','Alluring Voice'],Hitmonchan:['Meteor Mash','Shadow Punch','Surging Strikes','Sucker Punch']})) {
+ for(const [species,moves] of Object.entries({Politoed:['Sparkling Aria','Boomburst','Alluring Voice'],Hitmonchan:['Shadow Punch','Surging Strikes','Sucker Punch']})) {
   for(const name of moves)it(species+' legally learns '+name,()=>{
    const team=Teams.import(species+'\nAbility: '+Dex.species.get(species).abilities[0]+'\n- '+name+'\n\nPikachu\nAbility: Static\n- Protect');
    assert.equal(TeamValidator.get('gen9doublesrockyfield@@@Obtainable Moves').validateTeam(team),null);

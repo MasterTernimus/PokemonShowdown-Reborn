@@ -80,18 +80,18 @@ describe('Ability entry effects on evolution', () => {
 		});
 	}
 	for (const suppressed of [false, true]) {
-		it(`Gmax Centiskorch gains Heat Coil defenses exactly once${suppressed ? ' after clearing Gastro Acid' : ''}`, () => {
+		it(`Gmax Centiskorch gains no removed Magma Armor defenses${suppressed ? ' after clearing Gastro Acid' : ''}`, () => {
 			const p = setup('Centiskorch', 'Coil Up');
 			if (suppressed) assert(p.addVolatile('gastroacid', battle.p2.active[0]));
 			battle.makeChoices('move splash dynamax', 'move splash');
 			assert.equal(p.species.name, 'Centiskorch-Gmax');
 			assert.equal(p.ability, 'heatcoil');
-			assert.equal(p.boosts.def, 1);
-			assert.equal(p.boosts.spd, 1);
+			assert.equal(p.boosts.def, 0);
+			assert.equal(p.boosts.spd, 0);
 			assert(!p.volatiles.gastroacid);
 			battle.makeChoices('move splash', 'move splash');
-			assert.equal(p.boosts.def, 1);
-			assert.equal(p.boosts.spd, 1);
+			assert.equal(p.boosts.def, 0);
+			assert.equal(p.boosts.spd, 0);
 		});
 	}
 	it('Gmax Heat Coil still respects Neutralizing Gas', () => {

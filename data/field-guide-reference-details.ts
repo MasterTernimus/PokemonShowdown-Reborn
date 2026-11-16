@@ -124,7 +124,7 @@ CheckedFieldReferences.coldeclipseterrain = {
       "On entry into Underwater, attempts to change the field to Midnight Zone; targeting the holder there costs two extra PP instead of one. Cold Eclipse entry attempts -2 Defense and Special Defense against each foe, blocked by Substitute and ordinary stat-drop protections. These Cold Eclipse attempts repeat on entry and do not spend the ordinary once-per-opponent-per-user battle allowance."
     ],
     "shadowshield": [
-      "Cold Eclipse adds immunity to hail damage. Its ordinary 20% attack-damage reduction and further 25% reduction of super-effective attacks remain; these do not depend on full HP."
+      "Cold Eclipse adds immunity to hail damage. Shadow Shield halves attack damage at full HP."
     ],
     "sharpness": [
       "Cold Eclipse disables its 1.5× slicing-move power bonus, including its contribution to Dual Wield scaling."
@@ -157,10 +157,10 @@ CheckedFieldReferences.coldeclipseterrain = {
       "Ashen Beach, New World, Starlight Arena and Cold Eclipse add flinch immunity and protection from externally lowered stat stages. Cold Eclipse entry also attempts -1 Speed against foes, blocked by Substitute. Bewitched Woods, Haunted and Holy disable these benefits along with its ordinary power, defensive, berry/seed and retaliation effects; Holy does not grant the listed defensive benefits."
     ],
     "ultraego": [
-      "On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special HP hits after activation additionally grant +1 Defense and Special Defense respectively. A qualifying hit at half HP or less instead heals 1/4 base max HP once per activation; blocked healing does not spend that recovery. Bewitched Woods, Haunted and Holy disable its Ultra Ego effects, including its rivalry with Ultra Instinct."
+      "On Ashen Beach and Fairy Tale, the first qualifying physical and special HP hits after activation additionally grant +1 Defense and Special Defense respectively. A qualifying hit at half HP or less instead heals 1/4 base max HP once per activation; blocked healing does not spend that recovery. Bewitched Woods, Haunted and Holy disable its Ultra Ego effects, including its rivalry with Ultra Instinct."
     ],
     "perfectego": [
-      "On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special HP hits after activation additionally grant +1 Defense and Special Defense respectively. A qualifying hit at half HP or less instead heals 1/4 base max HP once per activation; blocked healing does not spend that recovery. Bewitched Woods, Haunted and Holy disable its Ultra Ego effects, including its rivalry with Ultra Instinct. Its accuracy-bypassing moves continue even on those suppressing fields."
+      "On Ashen Beach and Fairy Tale, the first qualifying physical and special HP hits after activation additionally grant +1 Defense and Special Defense respectively. A qualifying hit at half HP or less instead heals 1/4 base max HP once per activation; blocked healing does not spend that recovery. Bewitched Woods, Haunted and Holy disable its Ultra Ego effects, including its rivalry with Ultra Instinct. Its accuracy-bypassing moves continue even on those suppressing fields."
     ],
     "burningego": [
       "Its Flame Body and Magma Armor components no longer grant Cold Eclipse entry defenses. Contact burns remain disabled and new frostbite is permitted. Its independent Ultra Ego mechanics remain."
@@ -331,4 +331,14 @@ for (const field of ['forestterrain', 'grassyterrain']) {
 	CheckedFieldReferences[field] ||= {};
 	CheckedFieldReferences[field].moves ||= {};
 	CheckedFieldReferences[field].moves.wish = ['Ordinary Wish restores half the user’s maximum HP. The wish created by Nomos Wish restores at least 5/8 and clears confusion when it successfully heals.'];
+}
+import {CharacterMoveProfiles} from './reborn-character-moves';
+
+// Each character move's reviewed field rule is shared with its public description.
+for (const [move, profile] of Object.entries(CharacterMoveProfiles)) {
+	for (const field of profile.fields) {
+		CheckedFieldReferences[field] ||= {};
+		CheckedFieldReferences[field].moves ||= {};
+		CheckedFieldReferences[field].moves[move] = [profile.fieldEffect];
+	}
 }

@@ -4,8 +4,8 @@ import { SharedPassiveAbilityDescriptions } from './passive-ability-cleanup';
 
 export const LightPinsirDescriptions = {
 	malignantlight: {
-		shortDesc: 'Illuminate + Relic Beam: uses Defense for Sp. Atk; beams, pulses and bullets gain 50% power.',
-		desc: 'Illuminate + Relic Beam.',
+		shortDesc: 'Illuminate; special beam, pulse and bullet moves target the lower defense.',
+		desc: 'Special moves in the /relicbeam move list use the target’s lower Defense or Sp. Def. They still use the holder’s Sp. Atk and retain their type, category and other effects. This effect adds no power multiplier.',
 	},
 	ironmaiden: {
 		shortDesc: 'Moxie; opposing contact attackers lose 1/8 max HP once per move.',
@@ -21,7 +21,7 @@ export function installLightPinsir(
 	abilities: AbilityDataTable, descriptions: { [id: string]: { shortDesc: string, desc: string } }
 ) {
 	abilities.malignantlight = { name: 'Malignant Light', num: 32596, rating: 4, flags: {} };
-	composeSelectedAbility(abilities, 'malignantlight', ['illuminate', 'relicbeam'], true);
+	composeSelectedAbility(abilities, 'malignantlight', ['illuminate'], true);
 	// Illuminate is supplied through Malignant Light, not separately a second time.
 	composeSelectedAbility(abilities, 'astralcore', ['purepower', 'naturalcure', 'malignantlight'], true);
 

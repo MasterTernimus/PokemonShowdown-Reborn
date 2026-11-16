@@ -64,8 +64,11 @@ describe('Additional exact Sticky Hold, Soundproof and Suction Cups passives', (
 			for (const k of ['baseStats', 'types', 'weightkg']) assert.deepEqual(s[k], old[k], old.id + '/' + k);
 			const expectedLearnset = {...old.learnset};
 			// The later Corrosive Strike grant includes Alolan Muk as well as ordinary Muk.
-			if (old.id === 'mukalola') expectedLearnset.corrosivestrike = ['9L1'];
-			if (old.id === 'garbodor') expectedLearnset.poisonsweep = ['9L1'];
+			if (old.id === 'mukalola') {
+				expectedLearnset.corrosivestrike = ['9L1'];
+				expectedLearnset.rebelanthem = ['9L1']; // Approved Cain signature.
+			}
+			if (old.id === 'garbodor') { expectedLearnset.poisonsweep = ['9L1']; delete expectedLearnset.meteormash; }
 			if (expectedLearnset.mudslap) {
 				expectedLearnset.mudbarrage = [...new Set([...(expectedLearnset.mudbarrage || []), ...expectedLearnset.mudslap])];
 				delete expectedLearnset.mudslap;

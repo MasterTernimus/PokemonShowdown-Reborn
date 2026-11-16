@@ -1,3 +1,4 @@
+import {November16BalanceDescriptions} from './nov16-balance-descriptions';
 import {installRagingCrowns, RagingCrownComponents, RagingCrownRemovals, RagingCrownDescriptions} from './raging-crowns-approved';
 import {installOrdinaryReductions, OrdinaryComponents, OrdinaryDescriptions, OrdinaryRemovals} from './ordinary-approved-reductions';
 import type {AbilityDataTable} from '../sim/dex-abilities';
@@ -153,8 +154,8 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
 		desc: 'Prevents and cures sleep, blocks Yawn, and gives Dark and Ghost attacks 1.3x power. Its own moves cannot miss.',
 	},
 	caverndrake: {
-		shortDesc: 'Earth Eater + Solid Rock.',
-		desc: 'Absorbs other Pokemon\'s Ground moves, healing 1/4 max HP instead of being hit. Heals 1/16 max HP each turn on Cave and Desert. Takes 20% less attack damage, or 40% less from super-effective attacks.',
+		shortDesc: November16BalanceDescriptions.caverndrake.shortDesc,
+		desc: November16BalanceDescriptions.caverndrake.desc,
 	},
 	plushwhiplash: {
 		shortDesc: 'Whiplash + Technician.',
@@ -165,8 +166,8 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
 		desc: 'Sound-based moves used by its side gain 1.5x power. Its side is protected from allied damaging sound-based moves. Each move uses its normal offensive stat.',
 	},
 	magneticbulwark: {
-		shortDesc: 'Takes 20% less attack damage, or 40% less if super effective.',
-		desc: 'Full local Filter: takes 20% less attack damage, or 40% less from super-effective attacks.',
+		shortDesc: November16BalanceDescriptions.magneticbulwark.shortDesc,
+		desc: November16BalanceDescriptions.magneticbulwark.desc,
 	},
 	cactuschorus: {
 		shortDesc: 'Water Absorb + Sand Rush.',
@@ -225,8 +226,8 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
 		desc: 'Its first successful damaging move each genuine entry ignores positive defensive stat stages and screens. All hits of that move benefit. Misses and Protect preserve the effect; it does not bypass Substitute. Ability changes or restarts do not refresh the spent entry budget.',
 	},
 	purifyingfrost: {
-		shortDesc: 'Cures the active team on entry; first successful Ice move sets Safeguard.',
-		desc: 'On activation, cures status conditions from it and its active allies. Once per genuine switch-in, after its first Ice-type move successfully affects a target, it sets Safeguard on its side for 5 turns. Misses, protection, immunity and failed moves do not trigger or spend it. Ability changes or restarts do not refresh the spent entry budget.',
+		shortDesc: "Status immunity; half Fire damage; first successful Ice move grants 3-turn Safeguard.",
+		desc: "Immune to major status conditions and Yawn. Takes half damage from Fire attacks. Once per switch-in, its first successful Ice move grants 3 turns of Safeguard, preserving any longer Safeguard already active.",
 	},
 };
 

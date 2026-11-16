@@ -7,7 +7,7 @@ describe('Bull Rush on Tauros forms', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); });
 
-	it('gives each form Bull Rush and its requested replacement ability', () => {
+	it('gives each form Intimidate and its requested replacement ability', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		for (const [species, hidden] of [
 			['Tauros', 'Brute Force'],
@@ -16,7 +16,7 @@ describe('Bull Rush on Tauros forms', () => {
 			['Tauros-Paldea-Aqua', 'Thick Fat'],
 		]) {
 			assert.deepEqual(battle.dex.species.get(species).abilities,
-				{ 0: 'Bull Rush', 1: 'Rousing Feast', H: hidden });
+				{ 0: 'Intimidate', 1: 'Rousing Feast', H: hidden });
 		}
 	});
 

@@ -1145,7 +1145,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "allySide", type: "Water", contestType: "Beautiful",
 	},
 	tailsmash: {
-		num: 10415, accuracy: 100, basePower: 100, category: "Physical", name: "Tail Smash", pp: 3,
+		num: 10415, accuracy: 100, basePower: 100, category: "Physical", name: "Tail Smash", pp: 15,
 		priority: 0, flags: {tail: 1, tailmove: 1, contact: 1, protect: 1, mirror: 1},
 		secondary: {chance: 100, boosts: {def: -1}},
 		target: "normal", type: "Rock", isNonstandard: "Custom",
@@ -2030,10 +2030,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onModifyCritRatio(critRatio) {
 			return critRatio + 1;
 		},
-		secondary: {
-			chance: 30,
-			volatileStatus: 'flinch',
-		},
+		secondary: null,
 		target: "normal",
 		type: "Ground",
 		maxMove: { basePower: 130 },
@@ -2042,7 +2039,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	bonerush: {
 		num: 198,
 		accuracy: 95,
-		basePower: 30,
+		basePower: 25,
 		category: "Physical",
 		name: "Bone Rush",
 		pp: 10,
@@ -2052,12 +2049,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onModifyMove(move, pokemon) {
 			if (pokemon.hasItem('thickclub')) move.multihit = this.sample([5, 6]);
 		},
-		secondary: {
-			chance: 10,
-			boosts: {
-				def: -1,
-			},
-		},
+		secondary: null,
 		target: "normal",
 		type: "Ground",
 		zMove: { basePower: 140 },
@@ -11983,10 +11975,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			duration: 2,
 			onSourceInvulnerabilityPriority: 1,
 			onSourceInvulnerability(target, source, move) {
-				if (move && source === this.effectState.target && target === this.effectState.source) return 0;
+				if (move && source === this.effectState.target &&
+					(this.effectState.lockedTargets?.includes(target) ?? target === this.effectState.source)) return 0;
 			},
 			onSourceAccuracy(accuracy, target, source, move) {
-				if (move && source === this.effectState.target && target === this.effectState.source) return true;
+				if (move && source === this.effectState.target &&
+					(this.effectState.lockedTargets?.includes(target) ?? target === this.effectState.source)) return true;
 			},
 		},
 		target: "normal",
@@ -15578,7 +15572,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { tail: 1, contact: 1, protect: 1, mirror: 1, slicing: 1, metronome: 1 },
-		secondary: null,
+		secondary: { chance: 20, status: 'tox' },
 		target: "normal",
 		type: "Poison",
 		contestType: "Clever",
@@ -22596,7 +22590,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				["electricterrain", "Electric"],
 				["factoryterrain", "Steel"],
 				["fairytaleterrain", "Fairy"],
-				["flowergardenterrain", "Grass"],
+				["flowergarden1", "Grass"],
+				["flowergarden2", "Grass"],
+				["flowergarden3", "Grass"],
+				["flowergarden4", "Grass"],
+				["flowergarden5", "Grass"],
 				["forestterrain", "Bug"],
 				["glitchterrain", "???"],
 				["grassyterrain", "Grass"],
@@ -22608,6 +22606,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				["mistyterrain", "Fairy"],
 				["mountainterrain", "Rock"],
 				["murkwatersurfaceterrain", "Poison"],
+				["midnightzoneterrain", "Water"],
 				["newworldterrain", "Random"],
 				["psychicterrain", "Psychic"],
 				["rainbowterrain", "Dragon"],
@@ -24433,9 +24432,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 2,
 			onStart(pokemon, source, sourceEffect) {
+				this.add('-start', pokemon, 'move: Wish', '[slot] heal', '[turns] 2', '[silent]');
 				this.effectState.yangWish = sourceEffect?.id;
 				this.effectState.yangNomos = sourceEffect?.id === 'nomoswish' && (this.field.isTerrain(['grassyterrain','forestterrain','starlightarenaterrain']) || this.field.isAura('grassyterrain'));
-				this.effectState.moonlitPromise = source.hasAbility('voidpromise');
 				this.effectState.lastingPromiseSource = source.hasAbility('lastingpromise') && sourceEffect?.id === 'wish' ? source : null;
 				if (this.field.isTerrain(['mistyterrain', 'rainbowterrain', 'fairytaleterrain', 'holyterrain', 'starlightarenaterrain']) ||
 					(['nomoswish', 'nostraswish'].includes(sourceEffect?.id) &&
@@ -24447,12 +24446,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onResidualOrder: 4,
 			onEnd(target) {
+				if (target) this.add('-end', target, 'move: Wish', '[silent]');
 				if (target && !target.fainted) {
-					if (this.effectState.moonlitPromise) {
-						let changed = false;
-						for (const stat in target.boosts) if (target.boosts[stat as BoostID] < 0) { target.boosts[stat as BoostID] = 0; changed = true; }
-						if (changed) this.add('-clearnegativeboost', target, '[from] ability: Void Promise');
-					}
 					const damage = this.heal(this.effectState.hp, target, target);
 					if (damage) {
 						if (this.effectState.yangNomos && target.removeVolatile('confusion')) this.add('-message', 'Noel’s wish brought a moment of peace!');
@@ -25231,3 +25226,9 @@ Moves.royalcollision = {...Moves.wavecrash, name:'Royal Collision', num:20090, t
 
 import {installStarterLinkMoves} from './starter-family-links';
 installStarterLinkMoves(Moves);
+
+import {CharacterMoves} from './reborn-character-moves';
+Object.assign(Moves, CharacterMoves);
+
+// Preserve Shaymin's exclusive access, including the Sketch route.
+Moves.seedflare.flags.nosketch = 1;

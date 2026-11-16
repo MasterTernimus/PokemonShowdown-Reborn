@@ -7,12 +7,12 @@ describe('Final Void family mechanics and compatibility',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
 	for (const row of require('./void-family-baseline.json'))it(row.old + ' retains one compatible ' + row.name + ' identity and the approved distribution', () => {
   const a=Dex.abilities.get(row.old);assert.equal(a.id,row.id);assert.equal(a.name,row.name);assert.equal(a,Dex.abilities.get(row.name));assert.equal(Dex.abilities.all().filter(x=>x.id===row.id).length,1);assert(!Dex.abilities.all().some(x=>x.id===row.oldid));
-		const replacements = { voidtyrant: ['hydreigon', 'H', 'False Liberation'], voidreprisal: ['conkeldurr', '0', 'Guts'], voiddrift: ['flygon', '0', 'Mirage Drift'] };
+		const replacements = { voidtyrant: ['hydreigon', 'H', 'Mold Breaker'], voidreprisal: ['conkeldurr', '0', 'Guts'], voiddrift: ['flygon', '0', 'Mirage Drift'] };
 		const replacement = replacements[row.id];
-		const expectedHolders = replacement ? [] : row.holders;
+		const expectedHolders = replacement ? [] : row.id === 'voidpromise' ? [['clefable', '0']] : row.holders;
 		if (replacement)assert.equal(Dex.species.get(replacement[0]).abilities[replacement[1]], replacement[2]);
 		assert.deepEqual(Dex.species.all().flatMap(p => Object.entries(p.abilities).filter(([slot, n]) => Dex.abilities.get(n).id === row.id).map(([slot]) => [p.id, slot])), expectedHolders);
-		const { AbilityComponents } = require('../../../dist/data/ability-components'); assert.deepEqual(AbilityComponents[row.id] || [], row.id === 'voidguile' ? [...row.components, 'infiltrator'] : row.id === 'voiddrift' ? row.components.filter(id => id !== 'levitate') : row.id === 'voidomen' ? ['friendguard'] : row.id === 'voidwrath' ? [...row.components, 'infiltrator'] : row.components);
+		const { AbilityComponents } = require('../../../dist/data/ability-components'); assert.deepEqual(AbilityComponents[row.id] || [], row.id === 'voidpromise' ? ['pastelveil', 'mistysurge'] : row.id === 'voidguile' ? [...row.components, 'infiltrator'] : row.id === 'voiddrift' ? row.components.filter(id => id !== 'levitate') : row.id === 'voidomen' ? ['friendguard'] : row.id === 'voidwrath' ? [...row.components, 'infiltrator'] : row.components);
   const team=Teams.import(row.holders[0][0]+'\nAbility: '+row.old+'\n- Tackle');assert.equal(Dex.abilities.get(Teams.unpack(Teams.pack(team))[0].ability).id,row.id);
   const validator=new TeamValidator('gen9nofieldsinglesgame');const old=validator.validateTeam(structuredClone(team));team[0].ability=row.name;assert.deepEqual(validator.validateTeam(structuredClone(team)),old);
   const {getAbilityMechanicsHTML}=require('../../../dist/server/ability-lookup');assert.equal(getAbilityMechanicsHTML(a,Dex),getAbilityMechanicsHTML(Dex.abilities.get(row.name),Dex));

@@ -2666,6 +2666,8 @@ export class Pokemon {
 	 * the Utility Umbrella is active for the Pokemon.
 	 */
 	effectiveWeather(message?: string | boolean) {
+		// Personal sunlight must also exist between actions (form changes and defensive stats).
+		if (this.isActive && this.hasAbility('everlastingbloom') && !this.hasItem('utilityumbrella')) return 'sunnyday' as ID;
 		if (this.hasAbilityOrPassive('solarmimicry') && !this.hasItem('utilityumbrella') && !this.battle.field.suppressingWeather()) return 'sunnyday' as ID;
 		const weather = this.battle.field.effectiveWeather();
 		switch (weather) {

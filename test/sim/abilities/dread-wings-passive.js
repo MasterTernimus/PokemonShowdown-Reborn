@@ -11,7 +11,7 @@ describe('Hydreigon Hydra Flight and legacy Dread Wings', () => {
  after(()=>{const {extractChannelMessages}=require('../../../dist/sim/battle');fs.writeFileSync('artifacts/dread-wings-protocol-fixtures.json',JSON.stringify(fixtures.map(f=>({...f,log:extractChannelMessages(f.log.join('\n'),[0])[0]})),null,2)+'\n');});
 	it('keeps legacy Dread Wings components and the current Hydreigon lineups', () => {
   const{AbilityComponents}=require('../../../dist/data/ability-components');assert.deepEqual(AbilityComponents.dreadwings,['intimidate','unnerve']);
-		assert.deepEqual(Object.values(Dex.species.get('hydreigon').abilities), ['Dark Aura', 'Strings of Ruin', 'False Liberation']); assert.deepEqual(Dex.species.get('hydreigon').passives, ['hydraflight']);
+		assert.deepEqual(Object.values(Dex.species.get('hydreigon').abilities), ['Dark Aura', 'Strings of Ruin', 'Mold Breaker']); assert.deepEqual(Dex.species.get('hydreigon').passives, ['hydraflight']);
 		for (const s of Dex.species.all().filter(s => s.id.startsWith('hydreigon') && s.id !== 'hydreigon'))assert.deepEqual(s.passives, s.id === 'hydreigonmega' ? ['hydraflight'] : [], s.id);
  });
  it('runs Intimidate and full Unnerve once each per entry, without overwriting the selected ability in protocol',()=>{

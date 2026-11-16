@@ -56,7 +56,7 @@ describe('Approved Mega component/passive splits', () => {
 		assert.equal(battle.runEvent('ModifyAtk', p, q, move, 100), 200);
 		battle.field.terrain = 'psychicterrain';
 		assert.equal(battle.runEvent('ModifyAtk', p, q, move, 100), 100);
-		assert.equal(battle.runEvent('ModifySpA', p, q, move, 100), p.getStat('def', false, true) * 2);
+		assert.equal(battle.runEvent('ModifySpA', p, q, move, 100), 200);
 	});
 	for (const [species, ability, type, field, boost] of [
 		['Gardevoir-Mega', 'Void Voice', 'Fairy', 'mistyterrain', 225],

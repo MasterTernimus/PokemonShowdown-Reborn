@@ -1,0 +1,132 @@
+{
+  "_comment": "Explicit local approvals through November 16. Edit this reviewed fixture rather than adding another override layer. No values are generated from runtime Dex.",
+  "slots": {
+    "pangoro": {
+      "0": "Hot Streak"
+    },
+    "musharna": {
+      "H": "False Salvation",
+      "S": "Aevian Dream"
+    },
+    "lucario": {
+      "1": "Convergence"
+    },
+    "metagross": {
+      "0": "Convergence"
+    },
+    "bronzong": {
+      "H": "Misaligned Stars",
+      "S": "Reflector"
+    },
+    "claydol": {
+      "0": "Misaligned Stars"
+    },
+    "dusknoir": {
+      "1": "Misaligned Stars"
+    },
+    "mienshao": {
+      "0": "Frame Perfect"
+    },
+    "ninjask": {
+      "1": "Frame Perfect"
+    },
+    "ampharos": {
+      "0": "Malignant Light"
+    },
+    "necrozma": {
+      "1": "Malignant Light"
+    },
+    "pinsir": {
+      "0": "Siege Grip",
+      "1": "Iron Maiden"
+    },
+    "infernape": {
+      "0": "Opportunist"
+    },
+    "beedrill": {
+      "0": "Swarm"
+    },
+    "clefable": {
+      "0": "Void Promise",
+      "1": "Friend Guard",
+      "H": "Unaware"
+    },
+    "venomoth": {
+      "0": "Prism Wings",
+      "1": "Psychic Surge",
+      "H": "Corrosion"
+    },
+    "gengar": {
+      "H": "Bad Dreams"
+    },
+    "hydreigon": {
+      "H": "Mold Breaker"
+    },
+    "meganium": {
+      "0": "Hospitality",
+      "1": "Bloom Shelter"
+    }
+  },
+  "exactSlots": {
+    "cherrim": {
+      "0": "Chlorophyll",
+      "1": "Everlasting Bloom",
+      "H": "Flower Veil"
+    },
+    "cherrimsunshine": {
+      "0": "Chlorophyll",
+      "1": "Everlasting Bloom",
+      "H": "Flower Veil"
+    }
+  },
+  "passives": {
+    "audinomega": [
+      "friendguard"
+    ],
+    "hydreigonmega": [
+      "hydraflight"
+    ],
+    "froslassaevianmega": [
+      "hydration"
+    ],
+    "metagross": [
+      "clearbody"
+    ],
+    "accelgor": [
+      "frameperfect"
+    ],
+    "starmie": [
+      "malignantlight"
+    ],
+    "pinsir": [
+      "hypercutter"
+    ],
+    "garchomp": [
+      "roughskin"
+    ],
+    "garchompbattlebond": [
+      "roughskin"
+    ],
+    "cherrim": [
+      "flowergift"
+    ],
+    "cherrimsunshine": [
+      "flowergift"
+    ]
+  },
+  "stats": {
+    "azumarill": {
+      "hp": 100,
+      "atk": 60,
+      "def": 105,
+      "spa": 90,
+      "spd": 105,
+      "spe": 60
+    }
+  },
+  "slotRenamesByPrefix": {
+    "tauros": {
+      "Bull Rush": "Intimidate"
+    }
+  }
+}

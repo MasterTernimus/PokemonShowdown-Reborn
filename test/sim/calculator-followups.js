@@ -18,7 +18,7 @@ describe('Approved calculator ability followups', () => {
 				const base = calculateScenario(s).results[1];
 				s.actors[1].ability = 'Shadow Shield';
 				const reduced = calculateScenario(s).results[1];
-				const mult = move === 'Shadow Ball' ? 0.6 : 0.8;
+				const mult = hp === 100 ? 0.5 : 1;
 				assert(Math.abs(reduced.min - base.min * mult) < 2);
 				assert(Math.abs(reduced.max - base.max * mult) < 2);
 			});

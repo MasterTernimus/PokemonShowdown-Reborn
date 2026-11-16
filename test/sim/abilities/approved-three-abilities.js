@@ -128,9 +128,9 @@ describe('Approved Glacial Mass, Unleashed Ego and Moonlit Hide', () => {
 		battle.singleEvent('SourceAfterFaint', p.getAbility(), p.abilityState, foe, p, battle.dex.getActiveMove('tackle'), 1);
 		assert.equal(p.boosts.atk, 1);
 	});
-	it('Moonlit Hide applies 20%/40% reduction at any HP exactly once', () => {
+	it('Moonlit Hide halves damage at full HP exactly once', () => {
 		const [p, foe] = start('Moonlit Hide');
-		for(const hp of [p.maxhp, 30]) {p.hp=hp; assert.equal(damage(p,foe),800); assert.equal(damage(p,foe,'tackle',1),600);}
+		for(const hp of [p.maxhp, 30]) {p.hp=hp; const expected=hp===p.maxhp?500:1000; assert.equal(damage(p,foe),expected); assert.equal(damage(p,foe,'tackle',1),expected);}
 		assert.equal(battle.runEvent('Damage',p,foe,battle.dex.conditions.get('brn'),50),false);
 		assert.equal(battle.runEvent('Damage',p,foe,battle.dex.getActiveMove('tackle'),50),50);
 	});

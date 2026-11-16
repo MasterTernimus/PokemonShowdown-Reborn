@@ -27,10 +27,10 @@ describe('Eight approved simple ability contracts',()=>{
 		assert.equal(battle.field.terrain, 'hauntedterrain');
 		assert.equal(incoming(p, q), 100);
 		assert.equal(incoming(p, q, 1), 100);
-		battle.field.clearTerrain(); assert.equal(incoming(p, q), 80); assert.equal(incoming(p, q, 1), 60);
+		battle.field.clearTerrain(); assert.equal(incoming(p, q), 90); assert.equal(incoming(p, q, 1), 67);
  });
  it('Cavern Drake absorbs Ground and keeps Solid Rock but respects opposing abilities',()=>{
-  const[p,q]=setup('Cavern Drake');p.hp=2000;use(q,p,'earthpower');assert.equal(p.hp,3000);assert.equal(incoming(p,q),80);assert.equal(incoming(p,q,1),60);
+  const[p,q]=setup('Cavern Drake');p.hp=2000;use(q,p,'earthpower');assert.equal(p.hp,3000);assert.equal(incoming(p,q),90);assert.equal(incoming(p,q,1),67);
   q.setAbility('Water Absorb');q.hp=2000;use(p,q,'surf');assert.equal(q.hp,3000);assert(!modify(p,q,'tackle').ignoreAbility);
   p.hp=2000;battle.field.setTerrain('caveterrain',p);battle.singleEvent('Residual',p.getAbility(),p.abilityState,p);assert.equal(p.hp,2250);
  });

@@ -55,6 +55,22 @@ describe('Hot Streak and False Salvation', () => {
 		assert.equal(rolls, 0);
 		attack(p, foe); assert.equal(rolls, 1); assert(p.volatiles.jackpot);
 	});
+	for (const mode of ['ally', 'self-grace', 'suppressed-ally', 'field', 'aura', 'ally-field', 'ally-aura']) {
+		it('doubles Jackpot once with ' + mode, () => {
+			const [p, foe, ally] = start('Hot Streak', true, mode === 'self-grace' ? 'Togekiss' : 'Mew');
+			if (mode.includes('ally')) ally.setAbility('Fortunate Wing');
+			if (mode === 'suppressed-ally') ally.addVolatile('gastroacid');
+			if (mode.includes('field')) battle.field.terrain = 'rainbowterrain';
+			if (mode.includes('aura')) {
+				battle.field.terrain = 'rockyterrain';
+				assert(battle.field.setAura('rainbowterrain', 5, p));
+			}
+			const rolls = [];
+			battle.randomChance = (n, d) => { if (d === 5) rolls.push(n); return false; };
+			attack(p, foe, {multihit: 3, target: 'allAdjacentFoes'}); attack(p, foe);
+			assert.deepEqual(rolls, [mode === 'suppressed-ally' ? 1 : 2]);
+		});
+	}
 	it('starts on a landed attack, cures status and cannot refresh or roll while active', () => {
 		const [p, foe] = start(); p.setStatus('par');
 		let rolls = 0;

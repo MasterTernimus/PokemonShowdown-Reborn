@@ -1,4 +1,9 @@
 export const MovesText: { [id: IDEntry]: MoveText } = {
+	tailsmash: {
+		name: 'Tail Smash',
+		desc: 'Lowers the target’s Defense by 1 stage.',
+		shortDesc: 'Lowers the target’s Defense by 1.',
+	},
  riftopening: {name: 'Rift Opening', shortDesc: 'Creates Rift Aura; another use develops Rift Eclipse.', desc: 'On an empty field without Rift Aura, creates full Rift Eclipse for 5 turns, or 8 with Amplifield Rock. Over another field, creates Rift Aura for the same duration without replacing the base field. If Rift Aura is already active, a successful use instead develops full Rift Eclipse, consuming the Aura and preserving its remaining turns; Rift Herald is not required. Does not refresh an existing full Rift Eclipse. Normal Aura, field and development restrictions apply; blocked development leaves the Aura intact.'},
 	deluge: {
 		name: "Deluge",
@@ -646,8 +651,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bonemerang: {
 		name: "Bonemerang",
-		desc: "Hits twice. This move has a higher critical-hit ratio, and each hit has a 30% chance to make the target flinch. As a Bone move, it hits Flying-type Pokemon and Pokemon with Levitate for neutral damage.",
-		shortDesc: "Hits twice; high critical-hit ratio; each hit has 30% flinch; hits airborne neutrally.",
+		desc: "Hits twice. This move has a higher critical-hit ratio. As a Bone move, it hits Flying-type Pokemon and Pokemon with Levitate for neutral damage.",
+		shortDesc: "Hits twice; high critical-hit ratio; hits airborne neutrally.",
 		gen4: {
 			desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
@@ -660,8 +665,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bonerush: {
 		name: "Bone Rush",
-		desc: "Hits two to six times. Each hit has a 10% chance to lower the target's Defense by 1 stage. If the user holds a Thick Club, this move hits five or six times. As a Bone move, it hits Flying-type Pokemon and Pokemon with Levitate for neutral damage.",
-		shortDesc: "Hits 2-6 times; each hit can lower Defense; Thick Club: 5-6; hits airborne neutrally.",
+		desc: "Hits two to six times. If the user holds a Thick Club, this move hits five or six times. As a Bone move, it hits Flying-type Pokemon and Pokemon with Levitate for neutral damage.",
+		shortDesc: "Hits 2-6 times; Thick Club: 5-6; hits airborne neutrally.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		},
@@ -4840,8 +4845,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	poisontail: {
 		name: "Poison Tail",
-		desc: "Power doubles if the target has a non-volatile status condition, including frostbite. Confusion and other volatile conditions do not count.",
-		shortDesc: "Power doubles if the target has a major status.",
+		desc: "Power doubles if the target has a non-volatile status condition, including frostbite. Confusion and other volatile conditions do not count. Has a 20% chance to badly poison the target.",
+		shortDesc: "20% chance to badly poison. Power doubles against statused targets.",
 	},
 	polarflare: {
 		name: "Polar Flare",
@@ -6971,8 +6976,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	terrainpulse: {
 		name: "Terrain Pulse",
-		desc: "Power doubles if the user is grounded and a terrain is active, and this move's type changes to match. Electric type during Electric Terrain, Grass type during Grassy Terrain, Fairy type during Misty Terrain, and Psychic type during Psychic Terrain.",
-		shortDesc: "User on terrain: power doubles, type varies.",
+		desc: "Type follows the active field or Aura. Electric, Grassy, Misty, Psychic and Rainbow fields double its power. New World gives it a random type; Crystal Cavern follows its crystal cycle.",
+		shortDesc: "Type follows field/Aura; certain fields double power.",
 	},
 	thief: {
 		name: "Thief",
@@ -7878,3 +7883,6 @@ MovesText.scentedgeyser = { name: 'Scented Geyser', shortDesc: 'Incense changes 
 MovesText.splinteredweb = { name: 'Splintered Web', shortDesc: 'Always critical if the target’s side has Stealth Rock.', desc: 'A 90-power Bug physical attack. If Stealth Rock is present on the target’s side when the move executes, it is a guaranteed critical hit unless critical hits are prevented. Otherwise it has the ordinary critical-hit chance. The target need not be grounded or vulnerable to entry hazards.' };
 
 MovesText.royalcollision={name:'Royal Collision',shortDesc:'Water/Ice effectiveness; 10% recoil; ignores abilities.',desc:'Monarch of Ice changes Wave Crash into this attack. Remains a Water move, combines Water and Ice effectiveness, ignores the target\'s ability, and deals 10% of damage dealt as recoil.'};
+
+import {CharacterMoveDescriptions} from '../reborn-character-moves';
+for (const [id, details] of Object.entries(CharacterMoveDescriptions)) MovesText[id as ID] = {...MovesText[id as ID], ...details};

@@ -37,10 +37,10 @@ describe('Yang signature moves 15–27',()=>{
   const[p,q]=setup();battle.field.setWeather('deltastream',p);p.boosts.atk=2;
   const move=use('airstreamassault',p,q);assert.equal(move.category,'Physical');assert.equal(move.accuracy,true);
  });
- it('Nostras setup is 140 BP, 100 accuracy, +1 priority while pending PP remains 10',()=>{
-  const m=Dex.moves.get('nostraswish');assert.equal(m.basePower,140);assert.equal(m.accuracy,100);assert.equal(m.priority,1);assert.equal(m.pp,10);
+ it('Nostras setup is 140 BP, 100 accuracy, normal priority while pending PP remains 10',()=>{
+  const m=Dex.moves.get('nostraswish');assert.equal(m.basePower,140);assert.equal(m.accuracy,100);assert.equal(m.priority,0);assert.equal(m.pp,10);
   const[p,q]=setup();p.storedStats.spe=1;q.storedStats.spe=400;battle.makeChoices('move nostraswish','move splash');
-  const lines=battle.log.filter(x=>x.startsWith('|move|'));assert(lines[0].includes('Nostras Wish'));
+  const lines=battle.log.filter(x=>x.startsWith('|move|'));assert(lines[0].includes('Splash'));
  });
  for(const type of ['Steel','Steel/Dragon','Steel/Fire','Normal'])it('Nostras delayed Steel override and dual typing '+type,()=>{
   const[p,q]=setup();battle.randomizer=n=>n;q.setType(type.split('/'));use('nostraswish',p,q);
@@ -127,6 +127,6 @@ describe('Yang B adversarial timing and native dispatch',()=>{
 
 describe('Nostras Wish setup is not a healing move',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- it('has no heal flag and Triage leaves setup priority at +1',()=>{const[p,q]=setup();const move=Dex.getActiveMove('nostraswish');assert.equal(move.flags.heal,undefined);p.setAbility('Triage');assert.equal(battle.runEvent('ModifyPriority',p,q,move,move.priority),1);});
+ it('has no heal flag and Triage leaves setup priority at 0',()=>{const[p,q]=setup();const move=Dex.getActiveMove('nostraswish');assert.equal(move.flags.heal,undefined);p.setAbility('Triage');assert.equal(battle.runEvent('ModifyPriority',p,q,move,move.priority),0);});
  it('Heal Block allows setup while preventing the later Wish heal, independently of the attack',()=>{const[p,q]=setup();p.hp=500;p.addVolatile('healblock',q);battle.makeChoices('move nostraswish','move splash');const future=q.side.slotConditions[q.position].futuremove;assert(future);assert(p.side.slotConditions[p.position].wish);assert.equal(p.hp,500);p.side.removeSlotCondition(p,'wish');assert.equal(p.hp,500);const hp=q.hp;battle.turn=future.endingTurn+1;battle.singleEvent('Residual',Dex.conditions.get('futuremove'),future,q);assert(q.hp<hp);assert(!q.side.slotConditions[q.position].futuremove);});
 });

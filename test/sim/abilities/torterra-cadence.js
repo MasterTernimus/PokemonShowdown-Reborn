@@ -41,9 +41,9 @@ describe('Mega Torterra attack cadence', () => {
   assert.equal(p.boosts.def,1);
   assert.equal(battle.runEvent('DragOut',p,q,Dex.getActiveMove('roar')),null);
   const move = Dex.getActiveMove('icebeam');
-  assert.equal(battle.runEvent('ModifyDamage',q,p,move,100),80);
+  assert.equal(battle.runEvent('ModifyDamage',q,p,move,100),90);
   p.getMoveHitData(move).typeMod = 1;
-  assert.equal(battle.runEvent('ModifyDamage',q,p,move,100),60);
+  assert.equal(battle.runEvent('ModifyDamage',q,p,move,100),67);
   assert(p.hasAbility('solidrock'));
   assert(p.hasAbility('suctioncups'));
  });

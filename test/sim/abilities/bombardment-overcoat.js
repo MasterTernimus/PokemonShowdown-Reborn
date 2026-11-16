@@ -8,13 +8,13 @@ describe('Bombardment Shell Armor replacement', () => {
 		b = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[{ species: 'Mew', ability: 'Bombardment', moves: ['tackle', 'aurasphere'] }], [{ species: 'Mew', ability: 'Effect Spore', moves: ['spore', 'splash'] }]]);
 		b.makeChoices('team 1', 'team 1');
 		return [b.p1.active[0], b.p2.active[0]];
-	}it('adds Shell Armor while retaining nested Stalwart once', () => {
+	}it('removes Shell Armor while retaining Stalwart once', () => {
 		const [p] = setup();
-		assert(p.hasAbility('shellarmor')); assert(!p.hasAbility('overcoat')); assert(!p.hasAbility('bulletproof'));
+		assert(!p.hasAbility('shellarmor')); assert(!p.hasAbility('overcoat')); assert(!p.hasAbility('bulletproof'));
 		assert(p.hasAbility('stalwart'));
 		assert(p.hasAbility('megalauncher'));
-		assert(p.hasAbility('waterbarrage'));
-		assert.equal(b.runEvent('CriticalHit', p, null, Dex.getActiveMove('tackle')), false);
+		assert(p.hasAbility('dualwield'));
+		assert.equal(b.runEvent('CriticalHit', p, null, Dex.getActiveMove('tackle')), true);
 		b.field.changeTerrain('newworldterrain', p);
 		p.boosts.spa = 0;
 		b.singleEvent('Start', p.getAbility(), p.abilityState, p);
@@ -25,10 +25,11 @@ describe('Bombardment Shell Armor replacement', () => {
 		p.addVolatile('gastroacid'); assert(!p.hasAbility('shellarmor'));
 		assert.notEqual(b.runEvent('CriticalHit', p, q, Dex.getActiveMove('tackle')), false);
 	});
-	it('does not add Shell Armor to Tidal Monarch itself', () => {
+	it('moves Shell Armor to Tidal Monarch in place of Stalwart', () => {
 		const [p] = setup();
 		p.setAbility('Water Barrage');
-		assert(p.hasAbility('stalwart'));
+		assert(!p.hasAbility('stalwart'));
+		assert(p.hasAbility('shellarmor'));
 		assert(!p.hasAbility('overcoat'));
 		assert.deepEqual(Dex.species.get('blastoisemega').passives, ['proficient']);
 	});

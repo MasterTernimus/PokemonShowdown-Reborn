@@ -46,28 +46,51 @@ describe('Malignant Light and Pinsir', () => {
 		for (const id of [...expected, 'aurasphere', 'bulletseed']) assert(qualifiesForRelicBeam(Dex.moves.get(id)), id);
 		assert(!qualifiesForRelicBeam(Dex.moves.get('watergun')));
 	});
-	for (const [ability, species] of [['Relic Beam', 'Mew'], ['Malignant Light', 'Mew'],
-		['Relic Beam', 'Starmie'], ['Malignant Light', 'Starmie'], ['Astral Core', 'Starmie'], ['Astral Core', 'Starmie-Mega']]) {
-		it(`applies beam power once for ${ability} on ${species}`, () => {
+
+	it('preserves Relic Beam itself', () => {
+		const [p, foe] = start('Relic Beam');
+		assert.equal(battle.runEvent('BasePower', p, foe, Dex.getActiveMove('hydropump'), 100), 150);
+		p.boosts.def = 2; p.boosts.spa = -3;
+		assert.equal(p.getStat('spa'), p.getStat('def', false, true));
+	});
+	for (const [ability, species] of [['Malignant Light', 'Mew'], ['No Ability', 'Starmie'],
+		['Malignant Light', 'Starmie'], ['Astral Core', 'Starmie-Mega']]) {
+		it('uses the lower modified defense with no beam multiplier: ' + ability + '/' + species, () => {
 			const [p, foe] = start(ability, species);
 			for (const id of ['hydropump', 'icebeam', 'darkpulse', 'bulletseed']) {
-				assert.equal(battle.runEvent('BasePower', p, foe, Dex.getActiveMove(id), 100), 150, id);
+				assert.equal(battle.runEvent('BasePower', p, foe, Dex.getActiveMove(id), 100), 100, id);
 			}
-			assert.equal(battle.runEvent('BasePower', p, foe, Dex.getActiveMove('watergun'), 100), 100);
-			p.boosts.def = 2; p.boosts.spa = -3;
-			assert.equal(p.getStat('spa'), p.getStat('def', false, true));
+			assert(!p.hasAbility('relicbeam'));
+			p.storedStats.spa = 200; p.storedStats.def = 500;
+			assert.equal(p.getStat('spa'), 200);
+			const damage = (id, extra = {}) => battle.actions.getDamage(p, foe,
+				Object.assign(Dex.getActiveMove(id), {willCrit: false}, extra));
+			for (const field of ['', 'volcanicterrain', 'dragonsdenterrain', 'mirrorarenaterrain', 'starlightarenaterrain', 'psychicterrain']) {
+				battle.field.terrain = field;
+				for (const [def, spd] of [[100, 300], [300, 100]]) {
+					foe.storedStats.def = def; foe.storedStats.spd = spd;
+					const normal = damage('hydropump');
+					assert.equal(normal, damage('hydropump', {overrideDefensiveStat: def < spd ? 'def' : 'spd'}), field);
+					assert.equal(damage('watergun'), damage('watergun', {overrideDefensiveStat: 'spd'}));
+					assert.equal(damage('bulletseed'), damage('bulletseed', {overrideDefensiveStat: 'def'}));
+				}
+			}
 		});
 	}
-	for (const field of ['volcanicterrain', 'dragonsdenterrain', 'mirrorarenaterrain', 'starlightarenaterrain', 'psychicterrain']) {
-		it(`matches Relic Beam damage on ${field}`, () => {
-			const [p, foe] = start('Relic Beam');
-			battle.field.terrain = field;
-			const old = hit(p, foe, 'hydropump');
-			p.setAbility('Malignant Light');
-			const current = hit(p, foe, 'hydropump');
-			assert.equal(current, old);
-		});
-	}
+	it('preserves category and uses defensive stages and items per target', () => {
+		const [p, foe, , other] = start('Malignant Light', 'Mew', true);
+		p.storedStats.spa = 200; foe.storedStats.def = 100; foe.storedStats.spd = 200;
+		other.storedStats.def = 200; other.storedStats.spd = 100;
+		const move = Dex.getActiveMove('dazzlinggleam'); move.willCrit = false;
+		const damage = target => battle.actions.getDamage(p, target, move);
+		const base = damage(foe);
+		assert.equal(damage(other), base);
+		foe.boosts.def = 4; assert(damage(foe) < base);
+		foe.boosts.def = 0; foe.setAbility('Fur Coat'); assert(damage(foe) < base);
+		assert.equal(move.category, 'Special'); assert.equal(move.type, 'Fairy');
+		p.addVolatile('gastroacid'); foe.setAbility('No Ability');
+		assert(damage(foe) < base, 'suppressed ability uses ordinary Sp. Def');
+	});
 	it('does not repeat Illuminate field effects when selected and passive', () => {
 		const [p, foe] = start('Malignant Light', 'Starmie');
 		battle.field.terrain = 'mirrorarenaterrain';
@@ -97,7 +120,7 @@ describe('Malignant Light and Pinsir', () => {
 		const [p] = start('Astral Core', 'Starmie-Mega');
 		assert.equal(p.getStat('atk'), p.getStat('atk', false, true) * 2);
 		battle.field.terrain = 'psychicterrain';
-		assert.equal(p.getStat('spa'), p.getStat('def', false, true) * 2);
+		assert.equal(p.getStat('spa'), p.getStat('spa', false, true) * 2);
 		p.setStatus('par');
 		battle.singleEvent('SwitchOut', p.getAbility(), p.abilityState, p);
 		assert.equal(p.status, '');

@@ -44,7 +44,7 @@ describe('Arbok custom data', function () {
 		assert.equal(Dex.abilities.get('Neurotoxin').name, 'Neurotoxin');
 		assert(!Dex.abilities.get('Neurotoxin').onStart, 'Neurotoxin should not retain Intimidate');
 		const megaY = Dex.species.get('Arbok-Mega-Y');
-		assert.deepEqual(megaY.types, ['Poison', 'Fire']);
+		assert.deepEqual(megaY.types, ['Poison']);
 		assert.deepEqual(megaY.baseStats, {hp: 80, atk: 65, def: 110, spa: 135, spd: 90, spe: 120});
 		assert.equal(megaY.bst, 600);
 		assert.deepEqual(megaY.abilities, {0: 'Pattern Shift'});

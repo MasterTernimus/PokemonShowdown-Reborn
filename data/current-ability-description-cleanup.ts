@@ -1,3 +1,4 @@
+import {November16BalanceDescriptions} from './nov16-balance-descriptions';
 /** Reviewed presentation-only cleanup; no callbacks or components changed. */
 export const CurrentAbilityDescriptionCleanup = {
 	"unovawing": {
@@ -29,8 +30,8 @@ export const CurrentAbilityDescriptionCleanup = {
 		"shortDesc": "Absorbs Electric/Water for 1/4 HP and +1 Attack/Sp. Atk; accuracy protection and field healing.",
 	},
 	"pyrousdominion": {
-		"desc": "Absorbs other Pokemon Ground moves and heals 1/4 maximum HP. Heals 1/16 maximum HP each turn on Cave or Desert. Prevents external accuracy drops and ignores target evasion boosts. Reveals opposing Illusions on entry; Mirror Arena entry grants +1 accuracy and Laser Focus.",
-		"shortDesc": "Earth Eater + Keen Eye.",
+		"desc": November16BalanceDescriptions.pyrousdominion.desc,
+		"shortDesc": November16BalanceDescriptions.pyrousdominion.shortDesc,
 	},
 	"venomarmor": {
 		"shortDesc": "Dual Wield; poisoned holder blocks opposing Attack drops.",

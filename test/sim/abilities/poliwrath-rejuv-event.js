@@ -38,7 +38,7 @@ function setup() {
 			b.destroy();
 		}
 	});
-	it('retains Mind Eye Ghost bypass and extra STAB without restoring removed hit healing', () => {
+	it('retains Mind Eye Ghost bypass without extra STAB without restoring removed hit healing', () => {
 		const b = setup();
 		try {
 			const p = b.p1.active[0], q = b.p2.active[0];
@@ -48,7 +48,7 @@ function setup() {
 			b.actions.useMove('tackle', p, q);
 			assert(q.hp < targethp);
 			assert.equal(p.hp, hp);
-			assert.equal(b.runEvent('ModifySTAB', p, q, Dex.getActiveMove('moonblast'), 1), 1.5);
+			assert.equal(b.runEvent('ModifySTAB', p, q, Dex.getActiveMove('moonblast'), 1), 1);
 		} finally {
 			b.destroy();
 		}

@@ -45,7 +45,7 @@ describe("Opportunist", () => {
 		battle = common.createBattle([[
 			{species: 'Mew', ability: 'Opportunist', moves: ['calmmind', 'splash']},
 		], [
-			{species: 'Mew', ability: 'Inferno Ascendant', moves: ['splash']},
+			{species: 'Mew', ability: 'Twilight Instinct', moves: ['splash']},
 		]]);
 		battle.makeChoices('move calmmind', 'move splash');
 		battle.makeChoices('move splash', 'move splash');
@@ -56,14 +56,14 @@ describe("Opportunist", () => {
 		}
 	});
 
-	it("should copy every positive No Retreat boost through composite abilities", () => {
+	it("base Infernape copies every positive No Retreat boost with Opportunist", () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Infernape', item: 'Infernite', moves: ['sleeptalk']},
+			{species: 'Infernape', ability: 'Opportunist', moves: ['sleeptalk']},
 		], [
 			{species: 'Falinks', moves: ['noretreat']},
 		]]);
 		battle.makeChoices('team 1', 'team 1');
-		battle.makeChoices('move sleeptalk mega', 'move noretreat');
+		battle.makeChoices('move sleeptalk', 'move noretreat');
 		const infernape = battle.p1.active[0];
 		for (const stat of ['atk', 'def', 'spa', 'spd', 'spe']) {
 			assert.statStage(infernape, stat, 1);

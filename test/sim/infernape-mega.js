@@ -21,9 +21,10 @@ describe('Infernape and Infernape-Mega', () => {
 		battle.makeChoices('move splash mega', 'move splash');
 		assert.equal(infernape.species.name, 'Infernape-Mega');
 		assert.equal(infernape.ability, 'burningspirit');
-		for (const component of ['ultrainstinct', 'moldbreaker', 'innerfocus', 'opportunist', 'magmaarmor']) {
+		for (const component of ['ultrainstinct', 'moldbreaker', 'innerfocus', 'magmaarmor']) {
 			assert(infernape.hasAbility(component), component);
 		}
+		assert.equal(infernape.hasAbility('opportunist'), false);
 		assert.equal(infernape.hasAbility('filter'), false);
 		assert.equal(infernape.hasAbility('selfsufficient'), false);
 		assert.equal(infernape.hasAbility('proficient'), false);

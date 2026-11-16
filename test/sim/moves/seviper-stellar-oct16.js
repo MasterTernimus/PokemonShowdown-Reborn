@@ -12,11 +12,12 @@ describe('October 16 explicit Seviper and mystery-type changes',()=>{
 		const m = Dex.moves.get('poisontail');
 		assert.equal(m.drain, undefined);
 		assert.equal(m.basePower, 60);
+		q.cureStatus();
 		assert.equal(m.basePowerCallback.call(battle, p, q, Dex.getActiveMove(m.id)), 60);
 		q.status = 'psn';
 		assert.equal(m.basePowerCallback.call(battle, p, q, Dex.getActiveMove(m.id)), 120);
 		assert.equal(m.critRatio, 1);
-		assert(!m.secondaries?.length);
+		assert.deepEqual(m.secondaries, [{chance: 20, status: 'tox'}]);
 		assert(m.flags.tail && m.flags.slicing);
 		assert(!/heal|restor/i.test(m.desc));
 	});

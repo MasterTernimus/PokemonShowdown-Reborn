@@ -421,9 +421,25 @@ export class Learnset {
 // Current custom movepool removals are scoped to the original queried form.
 // Filter inherited sources without deleting access from unlisted ancestors or regional forms.
 export const Gen9MoveLearnsetExclusions: {[id: string]: readonly string[]} = {
+	hippowdon: ['shoreup'],
+	hippowdonrift: ['shoreup'],
+	nidoking: ['shoreup'],
+	nidoqueen: ['shoreup'],
+	rhyperior: ['shoreup'],
+	rhydon: ['shoreup'],
+	corsola: ['saltcure'],
+	corsolareborn: ['saltcure'],
+	bastiodon: ['saltcure'],
+	kingdra: ['dragonenergy'],
+	flapple: ['dragonenergy'],
+	flapplegmax: ['dragonenergy'],
+	appletun: ['dragonenergy'],
+	appletungmax: ['dragonenergy'],
+	rampardos: ['accelerock'],
 	bronzong: ['recover'],
 	gigalith: ['diamondstorm'],
-	lycanroc: ['thousandarrows'],
+	lycanroc: ['thousandarrows', 'shadowbone'],
+	lycanrocdusk: ['shadowbone'],
 	pidgey: ['sing'],
 	pidgeotto: ['sing'],
 	raichu: ['sing'],
@@ -502,6 +518,11 @@ export const Gen9MoveLearnsetExclusions: {[id: string]: readonly string[]} = {
 	venusaurmega: ["magicpowder"],
 	volcarona: ["blueflare"],
 };
+import {November16MoveRemovals} from '../data/nov16-movepool-removals';
+for (const [id, moves] of Object.entries(November16MoveRemovals)) {
+ Gen9MoveLearnsetExclusions[id] = [...new Set([...(Gen9MoveLearnsetExclusions[id] || []), ...moves])];
+}
+
 
 export class DexSpecies {
 	readonly dex: ModdedDex;

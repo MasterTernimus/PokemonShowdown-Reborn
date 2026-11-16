@@ -8454,7 +8454,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fire", "Fighting"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 77, atk: 104, def: 71, spa: 104, spd: 71, spe: 108 },
-		abilities: { 0: "White Smoke", 1: "Ultra Instinct", H: "Burning Rage" },
+		abilities: { 0: "Opportunist", 1: "Ultra Instinct", H: "Burning Rage" },
 		heightm: 1.2,
 		weightkg: 55,
 		color: "Brown",
@@ -8979,7 +8979,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseForme: "Overcast",
 		types: ["Grass", "Psychic"],
 		baseStats: { hp: 70, atk: 60, def: 70, spa: 87, spd: 78, spe: 85 },
-		abilities: { 0: "Flower Gift", 1: "Solar Bloom", H: "Mega Sol" },
+		abilities: { 0: "Chlorophyll", 1: "Everlasting Bloom", H: "Flower Veil" },
 		heightm: 0.5,
 		weightkg: 9.3,
 		color: "Purple",
@@ -8996,12 +8996,11 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Sunshine",
 		types: ["Grass", "Fairy"],
 		baseStats: { hp: 70, atk: 95, def: 80, spa: 110, spd: 110, spe: 105 },
-		abilities: { 0: "Flower Gift", 1: "Solar Bloom", H: "Mega Sol" },
+		abilities: { 0: "Chlorophyll", 1: "Everlasting Bloom", H: "Flower Veil" },
 		heightm: 0.5,
 		weightkg: 9.3,
 		color: "Pink",
 		eggGroups: ["Fairy", "Grass"],
-		requiredAbility: "Solar Bloom",
 		battleOnly: "Cherrim",
 	},
 	shellos: {
@@ -24919,3 +24918,30 @@ Pokedex.ampharos.abilities![0] = 'Malignant Light';
 Pokedex.necrozma.abilities![1] = 'Malignant Light';
 Pokedex.pinsir.abilities![0] = 'Siege Grip';
 Pokedex.pinsir.abilities![1] = 'Iron Maiden';
+
+// November 16 approved slots and typing; preserve each unrelated form's choices.
+Pokedex.beedrill.abilities![0] = 'Swarm';
+Pokedex.arbokmegay.types = ['Poison'];
+Pokedex.clefable.abilities = {0: 'Void Promise', 1: 'Friend Guard', H: 'Unaware'};
+Pokedex.venomoth.abilities = {0: 'Prism Wings', 1: 'Psychic Surge', H: 'Corrosion'};
+Pokedex.gengar.abilities!.H = 'Bad Dreams';
+Pokedex.hydreigon.abilities!.H = 'Mold Breaker';
+for (const [skin, base] of Object.entries(CosmeticBattleCounterparts)) {
+ if (['beedrill','arbokmegay','clefable','venomoth','gengar','hydreigon'].includes(base)) {
+  Pokedex[skin as ID].abilities = {...Pokedex[base as ID].abilities!};
+  Pokedex[skin as ID].types = [...Pokedex[base as ID].types!];
+ }
+}
+
+Pokedex.meganium.abilities![0] = 'Hospitality';
+Pokedex.meganium.abilities![1] = 'Bloom Shelter';
+for (const [id, species] of Object.entries(Pokedex)) {
+ if (id.startsWith('tauros') && species.abilities) {
+  for (const slot of Object.keys(species.abilities) as (keyof NonNullable<typeof species.abilities>)[]) {
+   if (species.abilities[slot] === 'Bull Rush') species.abilities[slot] = 'Intimidate';
+  }
+ }
+}
+for (const [skin, base] of Object.entries(CosmeticBattleCounterparts)) {
+ if (base === 'meganium' && Pokedex[skin as ID]) Pokedex[skin as ID].abilities = {...Pokedex.meganium.abilities!};
+}

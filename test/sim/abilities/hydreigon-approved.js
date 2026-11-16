@@ -17,7 +17,7 @@
 		return m;
 	}
 	it('has exact base-only lineup and composite passive', () => {
-		assert.deepEqual(Dex.species.get('Hydreigon').abilities, { 0: 'Dark Aura', 1: 'Strings of Ruin', H: 'False Liberation' });
+		assert.deepEqual(Dex.species.get('Hydreigon').abilities, { 0: 'Dark Aura', 1: 'Strings of Ruin', H: 'Mold Breaker' });
 		assert.deepEqual(Dex.species.get('Hydreigon').passives, ['hydraflight']);
 		const [p] = setup();
 		assert(p.hasAbilityOrPassive('hydrabond'));

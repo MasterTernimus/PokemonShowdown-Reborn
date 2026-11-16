@@ -1,3 +1,4 @@
+import {November16BalanceDescriptions} from './nov16-balance-descriptions';
 import { composeSelectedAbility } from './selected-mega-simplifications';
 import type {AbilityDataTable} from '../sim/dex-abilities';
 import {skipPassiveComponent} from './passive-ability-cleanup';
@@ -69,7 +70,6 @@ export function installRagingCrowns(a: AbilityDataTable) {
   name: 'Hellfire Eclipse', num: 10100, rating: 4.5, flags: {},
   onStart(pokemon) {
    a.darkaura.onStart?.call(this, pokemon);
-   a.intimidate.onStart?.call(this, pokemon);
   },
  };
  a.vendetta = {...a.innerfocus, name: 'Vendetta', num: 10160, rating: 3,
@@ -140,9 +140,9 @@ export function installRagingCrowns(a: AbilityDataTable) {
  delete a.relentlesshunt.onImmunity;
  a.pyrousdominion = {
   ...a.eartheater, name: 'Grounded Instinct', num: 11503, rating: 3.5,
-  onStart: a.keeneye.onStart,
-  onTryBoost: a.keeneye.onTryBoost,
-  onModifyMove: a.keeneye.onModifyMove,
+  onUpdate: a.limber.onUpdate,
+  onSetStatus: a.limber.onSetStatus,
+  onTryBoost: a.limber.onTryBoost,
  };
  const voidWrathModifyMove = a.voidwrath.onModifyMove;
  a.voidwrath.onModifyMove = function (move, pokemon, target) {
@@ -199,7 +199,7 @@ export const RagingCrownComponents = {
 	shieldsdown: ['crumblingshell'],
 	mountainbreaker: [], dreadpresence: ['darkaura', 'unnerve'],
  snowpack: ['icebody'],
- hellfireeclipse: ['darkaura', 'agonyflame', 'intimidate'],
+ hellfireeclipse: ['darkaura', 'agonyflame'],
  vendetta: ['innerfocus'],
  frightfulwings: ['intimidate', 'owntempo'],
  venomarmor: ['dualwield'],
@@ -208,7 +208,7 @@ export const RagingCrownComponents = {
  wrathshield: ['bulletproof', 'stamina', 'friendguard', 'proficient'],
  lunardread: ['dishearten', 'insomnia'],
  relentlesshunt: ['roughskin'],
- pyrousdominion: ['eartheater', 'keeneye'],
+ pyrousdominion: ['eartheater', 'limber'],
  voidwrath: ['moldbreaker', 'infiltrator'],
  galvanicspirit: ['vitalspirit'], blastchamber: ['vitalspirit'],
 
@@ -245,7 +245,7 @@ export const RagingCrownDescriptions = {
 	},
  controlledfury: {"shortDesc":"Anger Point; no rampage lock or ending confusion.","desc":"Full local Anger Point: the first damaging hit after entry raises Attack by 1 stage; surviving a critical hit raises Attack to maximum. Outrage, Thrash, Petal Dance and Raging Fury do not lock the user in or cause ending confusion, including repeated manual uses. Acquiring this effect during a rampage clears only that rampage lock without confusion. Existing confusion, Choice locks, Encore and move field effects remain unchanged."},
  cursedmarionette: {shortDesc: "Curses foes; cursed foes deal 20% less damage.", desc: "Its attacks and status moves curse opposing targets, and being hit curses the attacker. Cursed foes deal 0.8x damage to it. Its Curse deals 1/8 max HP. When it faints, opposing Pokemon become cursed and it creates Haunted Field for 5 turns, ignoring Neutralization. Ordinary Ghost Curse costs 1/3 max HP; ability-applied curses do not pay this cost."},
- hellfireeclipse: {shortDesc: 'Dark Aura + Agony Flame + Intimidate.', desc: "On entry, lowers adjacent foes Attack by 1 under normal Intimidate rules. Dark Aura boosts all damaging Dark moves by 4/3, or multiplies them by 0.75 with Aura Break; multiple users do not stack. Immune to hail damage on Cold Eclipse. After a Fire move damages a foe directly, blocks healing for 2 turns and has a 30% chance to burn. Rolls once per damaged foe per move."},
+ hellfireeclipse: {shortDesc: November16BalanceDescriptions.hellfireeclipse.shortDesc, desc: November16BalanceDescriptions.hellfireeclipse.desc},
  vendetta: {shortDesc: 'Inner Focus; once per entry, surviving an opposing hit Taunts its attacker.', desc: "Full Inner Focus prevents flinching and Intimidate Attack drops. Once per entry, surviving an opposing damaging hit that removes HP attempts to Taunt its living attacker under normal Taunt protections. The attempt spends the use even if blocked; Substitute-only damage does not trigger it. Switching resets the use; ability changes do not."},
 
  thorntempered: {shortDesc: 'Ignores Rocky Helmet, Rough Skin and Iron Barbs damage.', desc: 'Prevents damage from Rocky Helmet, Rough Skin and Iron Barbs, including those ability components within composites. Does not block recoil, other contact damage, status or stat effects. Brave Bird recoil still applies.'},
@@ -259,9 +259,9 @@ export const RagingCrownDescriptions = {
 	},
  wrathshield: {shortDesc: 'Bulletproof + Stamina + Friend Guard; 20% less attack damage.', desc: "Immune to bullet, pulse and Mega Launcher-boosted moves; takes 20% less attack damage. Stamina heals 1/16 maximum HP once per opposing HP-damaging attack and raises Defense once per turn on the first such hit. Friend Guard reduces allies attack damage by 25%, not the holder. Entry grants +1 Sp. Def on Cold Eclipse, New World, Starlight Arena or Fairy Tale. Proficient remains separate."},
  lunardread: {shortDesc: 'Dishearten + Insomnia; Dark and Ghost moves have 1.3x power.', desc: "On entry, lowers adjacent foes Sp. Atk by 1 stage, blocked by Substitute and normal stat-drop protection. Prevents and cures sleep and blocks Yawn. Dark and Ghost attacks have 1.3x power."},
- mindseye: {shortDesc: 'Self Sufficient; Normal/Fighting hit Ghost; Fairy/Dark STAB; accuracy protection; hit healing.', desc: "Has Self Sufficient. Normal and Fighting moves can hit Ghost types; gains Fairy and Dark STAB, ignores target evasion boosts, and prevents external accuracy drops. Heals 1/16 maximum HP after its damaging moves hit. No ordinary damage reduction. On Cold Eclipse, has 30% damage reduction, 1/8 hit healing and 1.3x damaging move power."},
+ mindseye: {shortDesc: 'Self Sufficient; Normal/Fighting hit Ghost; accuracy protection; hit healing.', desc: "Has Self Sufficient. Normal and Fighting moves can hit Ghost types; ignores target evasion boosts, and prevents external accuracy drops. Heals 1/16 maximum HP after its damaging moves hit. No ordinary damage reduction. On Cold Eclipse, has 30% damage reduction, 1/8 hit healing and 1.3x damaging move power."},
  relentlesshunt: {shortDesc: 'Rough Skin; low-power moves gain +1 priority; field damage bonuses.', desc: "Contact attackers lose 1/8 of their maximum HP through Rough Skin. Moves with 60 or less Base Power gain +1 priority; Cold Eclipse raises the threshold to 80 without stacking another priority boost. Damaging moves deal 2x damage on Rocky, Fairy Tale, Big Top, Dragon Den, Mountain, Snowy Mountain or Cold Eclipse, applied once; 1.5x on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena or New World."},
- pyrousdominion: {shortDesc: 'Earth Eater + Keen Eye.', desc: 'Absorbs other Pokemon Ground moves and heals 1/4 maximum HP. Heals 1/16 maximum HP each turn on Cave or Desert. Prevents external accuracy drops and ignores target evasion boosts. Reveals opposing Illusions on entry; Mirror Arena entry grants +1 accuracy and Laser Focus. Does not guarantee hits or add Pressure effects. Rough Skin remains a separate species passive.'},
+ pyrousdominion: {shortDesc: November16BalanceDescriptions.pyrousdominion.shortDesc, desc: November16BalanceDescriptions.pyrousdominion.desc},
  voidwrath: {shortDesc: 'Mold Breaker + Infiltrator; Outrage has no rampage lock or confusion.', desc: 'Moves ignore bypassable opposing abilities and bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist. Outrage does not cause a rampage lock or its ending confusion. Other move restrictions, including Choice locks, still apply.'},
  soulescort: {shortDesc: 'On fainting, the immediate replacement ignores hazards for that entry.', desc: 'When this Pokemon faints with an eligible replacement available, its immediate replacement in the same battle slot ignores all entry hazards for that single entry. Hazards remain on the field. Does not cure status, protect another slot, or grant lasting immunity. No protection is stored when no replacement is available.'},
  galvanicspirit: {shortDesc: 'Vital Spirit; special Electric moves have 1.3x power.', desc: "Prevents and cures sleep and blocks Yawn. Fighting attacks use 1.3x Attack or Sp. Atk through full local Vital Spirit. Moves whose actual category is Special and primary type is Electric gain 1.3x power, using ordinary Sp. Atk and Sp. Def. Static remains separate."},

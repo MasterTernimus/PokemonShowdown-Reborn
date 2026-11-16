@@ -1,3 +1,4 @@
+import {November16BalanceDescriptions} from './nov16-balance-descriptions';
 import {SignaturePassiveComponents, SignaturePassiveRemovedComponents, SignaturePassiveDescriptions} from './signature-passive-data';
 export {SignaturePassiveComponents, SignaturePassiveRemovedComponents, SignaturePassiveDescriptions};
 /** Components moved out of exclusive selected packages into existing species passives. */
@@ -285,8 +286,8 @@ Object.assign(SharedPassiveAbilityDescriptions, {
   },
   "mourningsnow": {
     "passive": "cursedbody",
-    "desc": "On entry, it summons Hail for 8 turns, and Aurora Veil used by it lasts 8 turns. During Hail or Snow, it heals 1/16 max HP each turn. Its damaging moves of any type gain an additional 30% chance to inflict frostbite, preserving their effects; this does not require weather. It is immune to Hail damage. When another Pokemon faints, it restores 1/8 max HP, or 1/4 if the faint was caused by an Ice move, Hail, Snow, or Curse. Damaging hits disable the attacker's move when possible.",
-    "shortDesc": "Extended Hail/Veil; frostbite attacks; weather/faint healing; guaranteed eligible Disable."
+    "desc": "On entry, it summons Hail for 8 turns, and Aurora Veil used by it lasts 8 turns. During Hail or Snow, it heals 1/16 max HP each turn. Its damaging moves of any type gain an additional 30% chance to inflict frostbite, preserving their effects; this does not require weather. It is immune to Hail damage. In Free-for-All only, when another Pokemon faints, it restores 1/8 max HP, or 1/4 if the faint was caused by an Ice move, Hail, Snow, or Curse. Damaging hits disable the attacker's move when possible.",
+    "shortDesc": "Extended Hail/Veil; frostbite attacks; weather healing; FFA faint healing; guaranteed eligible Disable."
   }
 });
 
@@ -652,7 +653,7 @@ Object.assign(SharedPassiveComponents, {
 Object.assign(SharedPassiveAbilityDescriptions, {
  predator: {passive: 'contrary', shortDesc: 'Conditional power against newly switched, pending-action and authority foes.', desc: "Has its conditional power and field bonuses."},
  nighthunt: {passive: 'strongjaw', shortDesc: 'Intimidate, Infiltrator, Frisk and Illuminate.', desc: "Has Intimidate, Infiltrator, Frisk and Illuminate with their local effects. Strong Jaw is supplied by the species passive."},
- voidcraft: {passive: 'elevate', shortDesc: "Shadow Shield, Temporal Shift and full Insomnia; has its recurring hex.", desc: "Has Shadow Shield, full Insomnia and its unique Temporal Shift protection and recurring Ghost hex."},
+ voidcraft: {passive: 'elevate', shortDesc: November16BalanceDescriptions.voidcraft.shortDesc, desc: November16BalanceDescriptions.voidcraft.desc},
  stormbell: {passive: 'mirrorarmor', shortDesc: 'Drizzle and full Elevate.', desc: "Has rain on entry and complete Elevate, including Ground immunity and KO boosts. Full local Mirror Armor is supplied by the species passive, including reflection, weather immunity and field bonuses."},
  froststalker: {passive: 'stakeout', shortDesc: 'Sharpness and Refrigerate.', desc: "Full local Sharpness and Refrigerate."},
  reapersgrip: {passive: 'unaware', shortDesc: 'Self Sufficient, Dark Aura and Haunted Terrain reactions.', desc: "Has Self Sufficient, Dark Aura and its unique Haunted Terrain triggers."},
@@ -682,7 +683,7 @@ Object.assign(SharedPassiveAbilityDescriptions, {
  ange: {passive: 'fairyaura', shortDesc: 'Ignores abilities and indirect damage; boosts Grass and Fairy Tale offense; weakens special forms.', desc: "Has ability bypass, indirect-damage immunity, double damage against Pulse forms, Grass power, Fairy Tale offense and accuracy, and Bewitched Woods on fainting. Opposing exact Mega, Gigantamax, Terastallized, Stellar and Ultra Beast forms have 0.7x stats; Rift and Pulse forms are excluded. Fairy Aura is supplied once by the species passive and does not stack with another Fairy Aura."},
  inversion: {passive: 'contrary', shortDesc: 'Sets Inverse Field on entry.', desc: 'Sets Inverse Field on entry. Stat-stage inversion is supplied once by the Contrary species passive, retaining its Z-Power exception.'},
  divinemockery: {passive: 'moldbreaker', shortDesc: 'Hydra Bond and extra Water STAB.', desc: "Full local Hydra Bond and extra Water STAB."},
- perfectego: {passive: 'noguard', shortDesc: 'Ability bypass, combat healing and stat gains.', desc: "Has all Ultra Ego combat healing, offensive and field defensive stat gains, pinch healing, ability bypass and field suppression."},
+ perfectego: {passive: 'noguard', shortDesc: November16BalanceDescriptions.perfectego.shortDesc, desc: November16BalanceDescriptions.perfectego.desc},
  echosense: {passive: 'frisk', shortDesc: 'Echo Fiend, Telepathy and Infiltrator.', desc: "Has full Echo Fiend, Telepathy and Infiltrator with their suppression rules and field effects."},
  corrosiveburn: {passive: 'oblivious', shortDesc: 'Corrosion and Venom Ignition.', desc: "Full local Corrosion and Venom Ignition: Fire attacks deal 1.2x damage against poisoned targets without consuming poison."},
 	aquashell: { passive: 'toughclaws', shortDesc: "Heatproof + Frisk.", desc: "Full local Heatproof and Frisk. Incoming Fire attacks use half the attacker’s Attack or Special Attack; burn damage is halved. On activation, reveals opposing active Illusions and held items; each opposing item holder independently has a 30% chance of five-turn Embargo." },

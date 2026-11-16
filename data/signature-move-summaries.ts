@@ -45,7 +45,7 @@ export const SignatureMoveSummaries: {[id: string]: string} = {
 	airstreamassault: 'Adaptive; clears own hazards.',
 	wisteriamaelstrom: 'Adaptive; hit boosts active Grass/Bug allies\' stronger offense.',
 	deiludicium: 'Cures user\'s major status after a hit.',
-	nostraswish: '+1 priority; delayed Fairy attack in 2 turns; sets Wish.',
+	nostraswish: 'Delayed Fairy attack in 2 turns; sets Wish.',
 	swarmsnare: 'Adaptive; damaging hit binds through next turn.',
 };
 

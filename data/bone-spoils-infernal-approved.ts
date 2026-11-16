@@ -1,3 +1,4 @@
+import {November16BalanceDescriptions} from './nov16-balance-descriptions';
 import type {AbilityDataTable} from '../sim/dex-abilities';
 
 function rewardHit(this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) {
@@ -29,12 +30,6 @@ export function installBoneSpoilsInfernal(a: AbilityDataTable) {
 	}
 	const old = a.infernaldominion;
 	a.infernaldominion = {...old,
-		onModifyDef(def, pokemon, source, move) {
-			return this.dex.abilities.get('fireward').onModifyDef?.call(this, def, pokemon, source, move);
-		},
-		onModifySpD(spd, pokemon, source, move) {
-			return this.dex.abilities.get('fireward').onModifySpD?.call(this, spd, pokemon, source, move);
-		},
 		onDamage(damage, target, source, effect) {
 			if (effect.id === 'stealthrock') {
 				this.add('-message', `${target.name} melted the pointed stones before they could strike!`);
@@ -64,7 +59,7 @@ export const BoneSpoilsInfernalDescriptions = {
 	battlespoils: {name: 'Battle Spoils', shortDesc: 'Contact attacks heal 1/16 max HP once per turn after opposing HP damage.', desc: 'Once per turn after a contact attack damages opposing HP, the living active holder restores 1/16 max HP after the whole attack. No ally or Substitute-only trigger. Normal healing restrictions apply.'},
 	infernaldominion: {
 		name: 'Infernal Dominion',
-		shortDesc: "Intimidate + Fire Ward; Molten Guard; Rock hits capped at neutral; ignores Stealth Rock damage.",
-		desc: "Has Intimidate. Incoming Rock attack effectiveness is capped at neutral, preserving stronger resistance or immunity. Prevents only this holder's Stealth Rock damage without removing the hazard. A direct Fire attack dealing opposing HP damage clears Sandstorm and, once per turn regardless of weather, grants Molten Guard until turn end. The guard blocks the next opposing Rock attack against this holder, including all hits, without shielding other spread targets. Generated attacks do not arm it. Leaving, ability loss and Mega Evolution clear the guard. Fire Ward multiplies Defense and Sp. Def by 1.3, or 1.5 on Dragon's Den.",
+		shortDesc: November16BalanceDescriptions.infernaldominion.shortDesc,
+		desc: November16BalanceDescriptions.infernaldominion.desc,
 	},
 };

@@ -167,7 +167,7 @@ describe('Approved Ultra Instinct and Inferno Ascendant rework', () => {
 		for (const id of ['ultraego', 'burningego', 'opportunist']) {
 			const current = Object.fromEntries(Object.entries(Dex.abilities.get(id)).filter(([,v]) => typeof v === 'function').map(([k, v]) => [k, v.toString()]));
 			const expected = { ...before.abilities[id].callbacks };
-			if (id !== 'opportunist') { delete current.onDamagingHit; delete expected.onDamagingHit; }
+			if (id !== 'opportunist') { delete current.onDamagingHit; delete expected.onDamagingHit; delete current.boostedField; delete expected.boostedField; }
 			assert.deepEqual(current, expected, id);
 		}
 	});
@@ -226,20 +226,24 @@ describe('Approved Ultra Instinct and Inferno Ascendant rework', () => {
 			p.removeVolatile('gastroacid'); hit(q, p); assert.equal(p.hp, 1930); hit(p, q); assert.equal(p.hp, 2180);
 		});
 	}
-	it('Inferno Ascendant filters only copied accuracy/evasion and preserves ordinary Opportunist and copy-loop protection', () => {
-		const [p, q] = setup('Inferno Ascendant', '', true), other = battle.p2.active[1]; other.setAbility('Opportunist');
-		battle.boost({ atk: 1, def: 1, spa: 1, spd: 1, spe: 1, accuracy: 1, evasion: 1 }, q, q); battle.runEvent('AfterMove', q, p, Dex.getActiveMove('splash'));
-		for (const stat of ['atk', 'def', 'spa', 'spd', 'spe'])assert.equal(p.boosts[stat], 1); assert.equal(p.boosts.accuracy, 0); assert.equal(p.boosts.evasion, 0); assert.equal(other.boosts.atk, 0);
-		battle.runEvent('AfterMove', q, p, Dex.getActiveMove('splash')); assert.equal(p.boosts.atk, 1);
-		p.setAbility('Opportunist'); battle.boost({ accuracy: 1, evasion: 1 }, q, q); battle.runEvent('AfterMove', q, p, Dex.getActiveMove('splash')); assert.equal(p.boosts.accuracy, 1); assert.equal(p.boosts.evasion, 1);
+	it('moves Opportunist to base Infernape and removes it from the Mega', () => {
+		assert.equal(Dex.species.get('Infernape').abilities[0], 'Opportunist');
+		const [p, q] = setup('Inferno Ascendant');
+		battle.boost({ atk: 1, def: 1, spa: 1, spd: 1, spe: 1, accuracy: 1, evasion: 1 }, q, q);
+		battle.runEvent('AfterMove', q, p, Dex.getActiveMove('splash'));
+		for (const value of Object.values(p.boosts)) assert.equal(value, 0);
+		p.setAbility('Opportunist');
+		battle.boost({ atk: 1, accuracy: 1 }, q, q);
+		battle.runEvent('AfterMove', q, p, Dex.getActiveMove('splash'));
+		assert.equal(p.boosts.atk, 1); assert.equal(p.boosts.accuracy, 1);
 	});
 	it('Mega Infernape gains only the revised package and keeps Proficient separate', () => {
-		const [p, q] = setup('Inferno Ascendant', '', false, 'Infernape-Mega'); assert.deepEqual(p.getPassives(), ['proficient']); for (const id of ['ultrainstinct', 'moldbreaker', 'innerfocus', 'opportunist', 'magmaarmor'])assert(p.hasAbility(id), id);
-		for (const id of ['selfsufficient', 'proficient', 'flamebody', 'ironfist', 'battlefervor', 'perfectego'])assert(!p.hasAbility(id), id);
+		const [p, q] = setup('Inferno Ascendant', '', false, 'Infernape-Mega'); assert.deepEqual(p.getPassives(), ['proficient']); for (const id of ['ultrainstinct', 'moldbreaker', 'innerfocus', 'magmaarmor'])assert(p.hasAbility(id), id);
+		for (const id of ['opportunist', 'selfsufficient', 'proficient', 'flamebody', 'ironfist', 'battlefervor', 'perfectego'])assert(!p.hasAbility(id), id);
 		p.hp = 2000; battle.singleEvent('Residual', p.getAbility(), p.abilityState, p); assert.equal(p.hp, 2000); const move = Dex.getActiveMove('flamethrower'); assert.equal(battle.runEvent('BasePower', p, q, move, 100), 130);
 	});
-	it('Inferno Ascendant keeps Magma Armor field entry and copies queued boosts once at Mega events', () => {
+	it('Inferno Ascendant keeps Magma Armor field entry without copying queued boosts at Mega events', () => {
 		const [p, q] = setup('Inferno Ascendant', 'infernaleclipseterrain'); p.boosts.def = p.boosts.spd = 0; battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(p.boosts.def, 1); assert.equal(p.boosts.spd, 1); assert.equal(p.boosts.accuracy, 0);
-		battle.boost({ atk: 2, accuracy: 1 }, q, q); battle.runEvent('AfterMega', q); assert.equal(p.boosts.atk, 2); assert.equal(p.boosts.accuracy, 0); battle.runEvent('AfterMega', q); assert.equal(p.boosts.atk, 2);
+		battle.boost({ atk: 2, accuracy: 1 }, q, q); battle.runEvent('AfterMega', q); assert.equal(p.boosts.atk, 0); assert.equal(p.boosts.accuracy, 0); battle.runEvent('AfterMega', q); assert.equal(p.boosts.atk, 0);
 	});
 });

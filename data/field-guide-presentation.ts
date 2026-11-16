@@ -189,8 +189,7 @@ for (const field of ['burningterrain', 'superheatedterrain', 'dragonsdenterrain'
 	ConciseFieldAbilityNotes[field].wellbakedbody = ['At turn end: +1 Defense.'];
 }
 for (const [power, fields] of [
-	[2, ['fairytaleterrain', 'dragonsdenterrain']],
-	[1.5, ['rockyterrain', 'bigtopterrain', 'mountainterrain', 'snowymountainterrain', 'coldeclipseterrain']],
+	[1.5, ['fairytaleterrain', 'dragonsdenterrain', 'rockyterrain', 'bigtopterrain', 'mountainterrain', 'snowymountainterrain', 'coldeclipseterrain']],
 	[1.3, ['desertterrain', 'forestterrain', 'burningterrain', 'superheatedterrain', 'ashenbeachterrain',
 		'watersurfaceterrain', 'caveterrain', 'starlightarenaterrain', 'newworldterrain']],
 ] as const) {

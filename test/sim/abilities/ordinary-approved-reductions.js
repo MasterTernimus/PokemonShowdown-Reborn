@@ -55,7 +55,7 @@ describe('Approved ordinary species reductions',()=>{
  it('Gem Eye no longer reflects status but keeps Magic Guard and Keen Eye',()=>{const[p,q]=setup('Gem Eye');act(q,p,'toxic');assert.equal(p.status,'tox');assert(!battle.log.some(l=>l.includes('Magic Bounce')));const hp=p.hp;battle.damage(100,p,q,Dex.conditions.get('psn'));assert.equal(p.hp,hp);battle.boost({accuracy:-1},p,q);assert.equal(p.boosts.accuracy,0);assert(!p.abilityState.used);});
  it('Withering Touch retains Corrosion drops only on new poison, never extra Attack reduction',()=>{const[p,q]=setup('Withering Touch');q.setType('Steel');assert(q.trySetStatus('psn',p));assert.equal(q.boosts.def,-1);assert.equal(q.boosts.spd,-1);act(p,q,'sludgebomb',{damage:1});assert.equal(q.boosts.atk,0);assert(!q.m.witheringTouchTurn);assert(p.hasAbility('poisontouch'));assert(p.hasAbility('corrosion'));});
  it('Snowpack keeps Ice Body retaliation/recovery without Thick Fat or contact power',()=>{const[p,q]=setup('Snowpack');assert.equal(battle.runEvent('BasePower',p,q,Dex.getActiveMove('tackle'),100),100);assert.equal(battle.runEvent('ModifyAtk',q,p,Dex.getActiveMove('firepunch'),100),100);battle.randomChance=()=>true;act(q,p,'tackle',{damage:1});assert.equal(q.status,'frz');p.hp=1000;battle.field.terrain='icyterrain';residual(p);assert.equal(p.hp,1300);});
- it('Requiem removes Perish marking on damage and status, and no longer heals on foe faint',()=>{const[p,q]=setup('Requiem');p.hp=2000;act(p,q,'tackle',{damage:1});act(q,p,'tackle',{damage:1});act(p,q,'growl');act(q,p,'growl');assert(!q.volatiles.perishsong);assert(!p.volatiles.perishsong);const hp=p.hp;q.faint();battle.faintMessages();assert.equal(p.hp,hp);assert.equal(incoming(p,battle.p2.pokemon[1]),80);});
+ it('Requiem removes Perish marking on damage and status, and no longer heals on foe faint',()=>{const[p,q]=setup('Requiem');p.hp=2000;act(p,q,'tackle',{damage:1});act(q,p,'tackle',{damage:1});act(p,q,'growl');act(q,p,'growl');assert(!q.volatiles.perishsong);assert(!p.volatiles.perishsong);const hp=p.hp;q.faint();battle.faintMessages();assert.equal(p.hp,hp);assert.equal(incoming(p,battle.p2.pokemon[1]),90);});
 	it('Requiem keeps Disable retaliation without setting a field on faint', () => {
 		const [p, q] = setup('Requiem');
 		battle.randomChance = () => true;
@@ -103,8 +103,8 @@ describe('Approved ordinary species reductions',()=>{
 		act(p, q, 'tackle', { damage: 100 });
 		assert(!q.volatiles.curse);
 		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 100), 130);
-		assert.equal(incoming(p, q), 80);
-		assert.equal(incoming(p, q, 1), 60);
+		assert.equal(incoming(p, q), 50);
+		assert.equal(incoming(p, q, 1), 50);
 		p.faint();
 		battle.faintMessages();
 		assert.equal(battle.field.terrain, '');

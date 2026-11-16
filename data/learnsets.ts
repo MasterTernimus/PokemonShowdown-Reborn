@@ -55903,7 +55903,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	rampardos: {
 		learnset: {
-			accelerock: ["9M"],
 			ancientpower: ["9L35", "7L36", "6L36", "5L36", "4T", "4L28"],
 			assurance: ["9L28", "7L24", "6L24", "5L24", "4L24"],
 			attract: ["9M", "7M", "6M", "5M", "4M"],
@@ -84696,6 +84695,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	lycanroc: {
 		learnset: {
+			bonerush: ["9M"],
 			accelerock: ["9L34", "8L1", "7L1"],
 			agility: ["9M", "8M"],
 			assurance: ["9M", "8M"],
@@ -84808,12 +84808,12 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			upperhand: ["9M"],
 			uproar: ["9M"],
 			zenheadbutt: ["9M", "8M", "7T"],
-			shadowbone: ["9M"],
 			arenitewall: ["9M"],
 		},
 	},
 	lycanrocmidnight: {
 		learnset: {
+			shadowbone: ["9M"],
 			accelerock: [],
 			attract: ["8M", "7M"],
 			bite: ["9L20", "8L20", "7L1"],
@@ -84922,7 +84922,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			upperhand: ["9M"],
 			uproar: ["9M", "8M", "7T"],
 			zenheadbutt: ["9M", "8M", "7T"],
-			shadowbone: ["9M"],
 			arenitewall: ["9M"],
 		},
 		eventData: [
@@ -84931,6 +84930,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	lycanrocdusk: {
 		learnset: {
+			bonemerang: ["9M"],
 			accelerock: ["9L1", "8L1", "7L1"],
 			attract: ["8M", "7M"],
 			bite: ["9L20", "8L20", "7L1"],
@@ -85023,7 +85023,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			trailblaze: [],
 			workup: ["8M"],
 			zenheadbutt: ["9M", "8M", "7T"],
-			shadowbone: ["9M"],
 			arenitewall: ["9M"],
 		},
 	},
@@ -113316,3 +113315,33 @@ for (const [cosmetic,base] of [['laprasazzy','lapras'],['lanturnalt','lanturn']]
 // Normalize aliases after every overlay, preserving sources and validator order.
 import {normalizeLearnsetMoves} from './normalize-learnset-moves';
 normalizeLearnsetMoves(Learnsets);
+
+import {CharacterMoveProfiles} from './reborn-character-moves';
+for (const [move, profile] of Object.entries(CharacterMoveProfiles)) {
+ for (const id of profile.users) {
+  Learnsets[id as ID] ||= {learnset: {}};
+  Learnsets[id as ID].learnset![move as ID] = ['9L1'];
+ }
+}
+
+// Seed Flare is exclusive to Shaymin; both its forms share the retained sources.
+for (const [id, entry] of Object.entries(Learnsets)) {
+	if (id !== 'shaymin' && id !== 'shayminsky' && entry.learnset) delete entry.learnset.seedflare;
+}
+for (const id of ['kingdra', 'flapple', 'flapplegmax', 'appletun', 'appletungmax'] as const) {
+	if (Learnsets[id]?.learnset) delete Learnsets[id].learnset!.dragonenergy;
+}
+
+// Final approved recovery/utility removals, after imported and custom additions.
+for (const id of ['hippowdon', 'hippowdonrift', 'nidoking', 'nidoqueen', 'rhyperior', 'rhydon'] as const) {
+	if (Learnsets[id]?.learnset) delete Learnsets[id].learnset!.shoreup;
+}
+for (const id of ['corsola', 'corsolareborn', 'bastiodon'] as const) {
+	if (Learnsets[id]?.learnset) delete Learnsets[id].learnset!.saltcure;
+}
+
+import {November16MoveRemovals} from './nov16-movepool-removals';
+for (const [id, moves] of Object.entries(November16MoveRemovals)) {
+ const learnset = Learnsets[id as ID]?.learnset;
+ if (learnset) for (const move of moves) delete learnset[move as ID];
+}

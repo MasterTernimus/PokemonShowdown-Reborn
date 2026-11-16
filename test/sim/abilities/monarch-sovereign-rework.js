@@ -43,10 +43,10 @@ describe('Monarch names and Sovereign chip replacements', () => {
 			assert.equal(battle.runEvent('BasePower', p, q, m, 100), 100);
 		}
 	});
-	it('adds Fire Ward to Infernal Dominion while retaining its existing protection', () => {
+	it('removes Fire Ward from Infernal Dominion', () => {
 		const [p, q] = setup('Infernal Dominion');
-		assert(p.hasAbility('fireward'));
-		for (const [field, expected] of [['', 130], ['coldeclipseterrain', 130], ['dragonsdenterrain', 150]]) {
+		assert(!p.hasAbility('fireward'));
+		for (const [field, expected] of [['', 100], ['coldeclipseterrain', 100], ['dragonsdenterrain', 100]]) {
 			battle.field.terrain = field;
 			for (const stat of ['ModifyDef', 'ModifySpD']) assert.equal(battle.runEvent(stat, p, q, Dex.getActiveMove('tackle'), 100), expected);
 		}

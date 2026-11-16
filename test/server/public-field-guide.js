@@ -42,7 +42,7 @@ describe('Field Guide reference explanations', () => {
 			count++;
 			assert(row.reviewed, row.name);
 			assert(row.fieldEffects.length, row.name);
-		}assert.equal(count, 26); // Mind Freeze's Ice Body effect shares the Ice Body row.
+		}assert.equal(count, 28); // Includes Solace Pulse and Cold Shoulder; Mind Freeze shares Ice Body's row.
 	});
 	it('distinguishes pending details from checked effects', () => {
 		for (const e of publicFieldGuide().entries) for (const rows of Object.values(e.referenceDetails || {})) for (const row of rows) {

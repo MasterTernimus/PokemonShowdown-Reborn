@@ -13,6 +13,7 @@ import { PULSE_FIXED_MOVES } from '../data/pulse-fixed-moves';
  */
 
 import { Dex, toID } from './dex';
+import {November16MoveRemovals} from '../data/nov16-movepool-removals';
 import { Gen9MoveLearnsetExclusions, type MoveSource } from './dex-species';
 import { Utils } from '../lib/utils';
 import { Tags } from '../data/tags';
@@ -636,7 +637,12 @@ export class TeamValidator {
 		if (!Array.isArray(set.moves)) set.moves = [];
 		// Reborn formats intentionally allow custom movepools without Obtainable
 		// Moves. Enforce this explicit removal even for pasted/packed teams.
-		if (dex.gen >= 9 && (species.baseSpecies === 'Raichu' || ['bronzong', 'gigalith', 'lycanroc'].includes(species.id))) {
+		if (dex.gen >= 9 && species.baseSpecies !== 'Shaymin' && set.moves.some(move => toID(move) === 'seedflare')) {
+			problems.push(`${species.name} can't learn Seed Flare.`);
+		}
+		if (dex.gen >= 9 && (November16MoveRemovals[species.id] || species.baseSpecies === 'Raichu' ||
+			['Hippowdon', 'Nidoking', 'Nidoqueen', 'Rhyperior', 'Rhydon', 'Corsola', 'Bastiodon'].includes(species.baseSpecies) ||
+			['bronzong', 'gigalith', 'lycanroc', 'lycanrocdusk', 'rampardos', 'kingdra', 'flapple', 'flapplegmax', 'appletun', 'appletungmax'].includes(species.id))) {
 			const excluded = Gen9MoveLearnsetExclusions[species.id] || [];
 			for (const move of set.moves) {
 				if (excluded.includes(toID(move))) problems.push(`${species.name} can't learn ${dex.moves.get(move).name}.`);
@@ -2641,6 +2647,9 @@ export class TeamValidator {
 		move = dex.moves.get(move);
 		const moveid = move.id;
 		const baseSpecies = dex.species.get(originalSpecies);
+		if (dex.gen >= 9 && Gen9MoveLearnsetExclusions[baseSpecies.id]?.includes(moveid)) {
+			return `${baseSpecies.name} can't learn ${move.name}.`;
+		}
 		if (dex.gen >= 9 && toID(baseSpecies.baseSpecies) === 'alakazam' && toID(set.ability) === 'aeviandiscipline' && AevianDisciplineMoves.includes(moveid)) return null;
 		if (dex.gen >= 9 && toID(baseSpecies.baseSpecies) === 'politoed' && toID(set.ability) === 'aevianking' && AevianKingMoveSources[moveid]) return null;
 		if (dex.gen >= 9 && toID(baseSpecies.baseSpecies) === 'poliwrath' && toID(set.ability) === 'aevianascendance' && AevianAscendanceMoveSources[moveid]) return null;

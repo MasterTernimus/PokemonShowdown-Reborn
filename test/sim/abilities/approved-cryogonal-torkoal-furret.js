@@ -15,7 +15,7 @@ describe('Approved Cryogonal, Torkoal, and Furret changes', () => {
 		return [battle.p1.active[0], battle.p2.active[0]];
 	}
 
-	it('Purifying Frost cures active allies and starts five-turn Safeguard on the first Ice move', () => {
+	it('Purifying Frost protects itself from status and starts three-turn Safeguard on the first Ice move', () => {
 		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
 			{species: 'Cryogonal', ability: 'Purifying Frost', moves: ['icywind']},
 			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
@@ -32,15 +32,38 @@ describe('Approved Cryogonal, Torkoal, and Furret changes', () => {
 		ally.setStatus('par');
 		battle.singleEvent('Start', holder.getAbility(), holder.abilityState, holder);
 		assert.equal(holder.status, '');
-		assert.equal(ally.status, '');
+		assert.equal(ally.status, 'par');
 		const ice = battle.dex.getActiveMove('icywind');
 		battle.actions.useMove(ice, holder, {target: foe});
-		assert.equal(holder.side.sideConditions.safeguard.duration, 5);
+		assert.equal(holder.side.sideConditions.safeguard.duration, 3);
 		holder.side.sideConditions.safeguard.duration = 2;
 		battle.actions.useMove(ice, holder, {target: foe});
 		assert.equal(holder.side.sideConditions.safeguard.duration, 2);
 	});
 
+	it('Purifying Frost blocks major status and Yawn; suppression restores vulnerability', () => {
+		const [holder, foe] = singles('Mew', 'Purifying Frost');
+		for (const status of ['brn', 'psn', 'tox', 'par', 'slp', 'frz']) {
+			assert(!holder.setStatus(status, foe)); assert.equal(holder.status, '');
+		}
+		assert(!holder.addVolatile('yawn', foe));
+		holder.addVolatile('gastroacid'); assert(holder.setStatus('brn', foe));
+	});
+	for (const category of ['Physical', 'Special']) it('Purifying Frost halves ' + category + ' Fire attacks without reducing Ghost', () => {
+		const [holder, foe] = singles('Mew', 'Purifying Frost'); battle.randomizer = n => n;
+		const move = {...battle.dex.getActiveMove('ember'), category, willCrit: false};
+		const frost = battle.actions.getDamage(foe, holder, move);
+		holder.addVolatile('gastroacid'); const normal = battle.actions.getDamage(foe, holder, move);
+		assert(Math.abs(normal - frost * 2) <= 3);
+		move.type = 'Ghost'; const ghost = battle.actions.getDamage(foe, holder, move);
+		holder.removeVolatile('gastroacid'); assert.equal(battle.actions.getDamage(foe, holder, move), ghost);
+	});
+	it('Purifying Frost preserves a longer existing Safeguard', () => {
+		const [holder, foe] = singles('Mew', 'Purifying Frost');
+		holder.side.addSideCondition('safeguard', holder); holder.side.sideConditions.safeguard.duration = 5;
+		battle.actions.useMove('icebeam', holder, {target: foe});
+		assert.equal(holder.side.sideConditions.safeguard.duration, 5);
+	});
 	it('Smoldering Shroud blocks stat drops and grants Sp. Atk once per switch-in', () => {
 		const [holder, foe] = singles('Torkoal', 'Smoldering Shroud');
 		assert.deepEqual(holder.species.abilities, { 0: 'Drought', 1: 'Smoldering Shroud', H: 'Solid Rock', S: 'Ashen Seeds' });

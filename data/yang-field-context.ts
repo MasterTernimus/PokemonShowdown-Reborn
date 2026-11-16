@@ -180,7 +180,10 @@ export const YangFieldContexts: Record<string, {leader: string, mainField: strin
     "mainField": "Water Surface / Underwater",
     "fields": [
       "watersurfaceterrain",
-      "underwaterterrain"
+      "underwaterterrain",
+      "midnightzoneterrain",
+      "murkwatersurfaceterrain",
+      "icyterrain"
     ],
     "message": "Amaria’s wrath surged through the depths!"
   },

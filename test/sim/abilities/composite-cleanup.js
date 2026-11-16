@@ -26,13 +26,13 @@ describe('Composite ability cleanup', function () {
 		assert(ability.onImmunity);
 	});
 
-	it('should give Fortress Shell Water Barrage while retaining its hidden Friend Guard hook', function () {
+	it('keeps Tidal Crown support without its removed Shell Armor damage hook', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const ability = battle.dex.abilities.get('fortressshell');
 		assert(ability.onModifyMove);
 		assert(ability.onResidual);
 		assert(ability.onAnyModifyDamage);
-		assert(ability.onSourceModifyDamage);
+		assert(!ability.onSourceModifyDamage);
 	});
 
 	it('should give Blazing Crown Unbound Blaze while retaining its hidden Filter hook', function () {
@@ -340,9 +340,9 @@ describe('Composite ability cleanup', function () {
 		const porygon = battle.p1.active[0];
 		assert.statStage(porygon, 'atk', 0);
 		assert.statStage(porygon, 'spa', 1);
-		assert.equal(porygon.passiveStates.download.downloadFirstHit, true);
+		assert(porygon.volatiles.laserfocus);
 		battle.makeChoices('move tackle', 'move splash');
-		assert.equal(porygon.passiveStates.download.downloadFirstHit, false);
+		assert.equal(porygon.m.downloadLaserFocusUsed, true);
 		assert(battle.log.some(line => line.includes('|-crit|')), 'Download should make the first damaging move crit');
 	});
 
@@ -364,10 +364,10 @@ describe('Composite ability cleanup', function () {
 
 		const first = battle.dex.getActiveMove('zapcannon');
 		battle.runEvent('ModifyMove', defragment, battle.p2.active[0], first, first);
-		assert.equal(first.accuracy, true);
+		assert.equal(battle.runEvent('Accuracy', battle.p2.active[0], defragment, first, first.accuracy), true);
 		const second = battle.dex.getActiveMove('zapcannon');
 		battle.runEvent('ModifyMove', defragment, battle.p2.active[0], second, second);
-		assert.equal(second.accuracy, 50);
+		assert.equal(battle.runEvent('Accuracy', battle.p2.active[1], defragment, second, second.accuracy), true);
 	});
 
 	it('should keep Phalanx Form untrapped without the removed Steel STAB', function () {
@@ -442,7 +442,7 @@ describe('Composite ability cleanup', function () {
 		stormcalling: ['drizzle', 'liquidvoice', 'dissonantecho'],
 		aevianglacier: ['snowwarning', 'icebody', 'refrigerate'],
 			aevianbolt: ['stormpower', 'static', 'voltabsorb'],
-			heatcoil: ['speedboost', 'magmaarmor', 'flamebody'],
+			heatcoil: ['speedboost', 'flamebody'],
 			sweetsanctuary: ['stamina'],
 			treasuretitan: ['filter', 'eartheater', 'heavymetal'],
 			wickedsnare: ['intimidate'],

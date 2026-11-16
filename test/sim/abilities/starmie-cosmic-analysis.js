@@ -42,7 +42,7 @@ describe('Starmie Cosmic Analysis', () => {
 		assert.equal(battle.runEvent('BasePower', p, q, move, 100), 100);
 		assert(p.hasAbilityOrPassive('illuminate'));
 	});
-	it('retains local Download’s first damaging move critical hit', () => {
+	it('inherits Download’s once-per-battle Laser Focus', () => {
 		const [p, q] = setup();
 		const modify = name => {
 			const move = Dex.getActiveMove(name);
@@ -50,7 +50,7 @@ describe('Starmie Cosmic Analysis', () => {
 			return move;
 		};
 		assert(!modify('splash').willCrit);
-		assert.equal(modify('psychic').willCrit, true);
+		assert(p.volatiles.laserfocus); assert.equal(battle.runEvent('ModifyCritRatio', p, q, Dex.getActiveMove('psychic'), 1), 5);
 		assert(!modify('psychic').willCrit);
 	});
 });

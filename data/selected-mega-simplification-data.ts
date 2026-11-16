@@ -1,3 +1,4 @@
+import {November16BalanceDescriptions} from './nov16-balance-descriptions';
 /** Individually approved component cuts and exact replacements; unanswered choices are absent. */
 export const SelectedComponentRemovals: { [id: string]: string[] } = {
 	"streettyrant": [
@@ -247,8 +248,8 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 		"desc": "Thick Fat + Unaware. Fire and Ice attacks use half the attacker's attacking stat; hail causes no damage. Ignores the foe's Defense, Sp. Def and evasion changes when attacking, and their Attack, Defense, Sp. Atk and accuracy changes when defending. Reveals opposing Illusions on entry. All moves have 1.1x accuracy.",
 	},
 	"waterbarrage": {
-		"shortDesc": "Dual Wield + Stalwart; all moves have 1.1x accuracy.",
-		"desc": "Stalwart bypasses redirection and grants +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 60% power, with an independent accuracy check for each hit. A literal Mega Launcher + Tidal Monarch combination instead boosts both eligible pulse/bullet hits by 1.5x: 0.9x each in every battle format. In Free-for-All, both hits still use 60% power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair. All moves have 1.1x accuracy.",
+		"shortDesc": November16BalanceDescriptions.waterbarrage.shortDesc,
+		"desc": November16BalanceDescriptions.waterbarrage.desc,
 	},
 	"toxicbloom": {
 		"shortDesc": "Verdant Monarch; all moves have 1.1x accuracy.",
@@ -263,8 +264,8 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 		"desc": "Summons sun for 8 turns on entry. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Immune to hail damage. All moves have 1.1x accuracy.",
 	},
 	"siegelauncher": {
-		"shortDesc": "Mega Launcher + Tidal Monarch + Shell Armor; 1.1x accuracy.",
-		"desc": "Mega Launcher gives pulse and bullet moves 1.5x power. Tidal Monarch supplies exactly one eligible Dual Wield pair, each hit at 0.6x power outside Free-for-All: pulse/bullet pairs therefore use 0.9x power per hit before STAB and passives. In Free-for-All both hits use full power, with the second-target selection. Existing multi-hit, charging, delayed, Z/Max and ineligible moves gain no extra pair. Tidal Monarch supplies Stalwart exactly once: redirection bypass and +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. All moves have 1.1x accuracy. Also has Shell Armor.",
+		"shortDesc": November16BalanceDescriptions.siegelauncher.shortDesc,
+		"desc": November16BalanceDescriptions.siegelauncher.desc,
 	},
 	"toxicevolution": {
 		"shortDesc": "Corrosion, Shield Dust and retained poison recovery/protection.",

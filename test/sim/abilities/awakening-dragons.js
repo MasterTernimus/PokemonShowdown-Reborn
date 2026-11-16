@@ -20,7 +20,7 @@ describe('Approved Awakening dragon abilities', () => {
 		assert.deepEqual(s.passives, ['freeflight']);
 		assert.equal(Dex.species.get('Salamence-Mega').abilities[0], 'Exalted Aether');
 		assert.deepEqual(Dex.species.get('Salamence-Mega').passives, ['aerilate']);
-		assert.equal(Dex.species.get('Hydreigon').abilities.H, 'False Liberation');
+		assert.equal(Dex.species.get('Hydreigon').abilities.H, 'Mold Breaker');
 		assert.equal(Dex.species.get('Hydreigon-Mega').abilities[0], 'Expiration');
 	});
 	it('Rightful Exalt doubles secondary chances once and leaves critical ratios alone', () => {

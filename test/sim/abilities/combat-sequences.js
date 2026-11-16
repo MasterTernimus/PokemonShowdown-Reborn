@@ -52,8 +52,8 @@ describe('Convergence, Misaligned Stars and Frame Perfect', () => {
 		const [p, foe] = start('Convergence');
 		hit(p, foe, order[0]); hit(p, foe, order[1]);
 		assert(p.m.convergence.Physical); assert(p.m.convergence.Special);
-		const move = prepare(p, 'tackle'); assert(move.convergenceAttack); assert(move.ignoreScreens);
-		assert.equal(battle.runEvent('ModifyDamage', p, foe, move, 100), 120);
+		const move = prepare(p, 'tackle'); assert(move.convergenceAttack); assert(move.ignoreScreens); assert(move.ignorePositiveDefensive);
+		assert.equal(battle.runEvent('ModifyDamage', p, foe, move, 100), 150);
 		assert(!p.m.convergence.Physical && !p.m.convergence.Special);
 	});
 	for (const result of ['miss', 'protect', 'immune']) it('spends charges on ' + result + ' and cannot recharge itself', () => {
@@ -75,7 +75,7 @@ describe('Convergence, Misaligned Stars and Frame Perfect', () => {
 		const normal = hit(p, foe);
 		foe.side.addSideCondition('reflect', foe);
 		charged(p); const powered = hit(p, foe);
-		assert(Math.abs(powered - normal * 1.2) <= 2);
+		assert(Math.abs(powered - normal * 1.5) <= 2);
 		assert(!p.m.convergence.Physical && !p.m.convergence.Special);
 		hit(p, foe, 'tackle', { multihit: 3, target: 'allAdjacentFoes' });
 		assert(p.m.convergence.Physical); assert(!p.m.convergence.Special);
@@ -83,11 +83,11 @@ describe('Convergence, Misaligned Stars and Frame Perfect', () => {
 	for (const ability of ['Insight', 'Cold Logic']) it('composes Convergence once in ' + ability, () => {
 		const [p, foe] = start(ability); charged(p);
 		const move = prepare(p, 'watergun');
-		assert.equal(battle.runEvent('ModifyDamage', p, foe, move, 100), 120);
+		assert.equal(battle.runEvent('ModifyDamage', p, foe, move, 100), 150);
 		assert(p.hasAbility('keeneye'));
 		assert(p.hasAbility('convergence'));
 		if (ability === 'Insight') {
-			assert(p.hasAbility('innerfocus')); assert(!p.hasAbility('telepathy'));
+			assert(p.hasAbility('ultrainstinct')); assert(p.hasAbility('innerfocus')); assert(!p.hasAbility('telepathy'));
 		} else {
 			assert(p.hasAbility('forewarn')); assert(p.hasAbility('aftermath'));
 		}
@@ -143,13 +143,13 @@ describe('Convergence, Misaligned Stars and Frame Perfect', () => {
 		other.addVolatile('protect');
 		hit(p, foe, 'tackle', { target: 'allAdjacentFoes' }); assert.equal(p.m.framePerfect.momentum, 4);
 	});
-	it('starts a new sequence before a different attack and clears on status, miss or block', () => {
+	it('keeps momentum through different attacks, misses and blocks; clears on status', () => {
 		const [p, foe] = start('Frame Perfect');
-		hit(p, foe, 'tackle', { multihit: 5 }); hit(p, foe, 'watergun'); assert.equal(p.m.framePerfect.momentum, 1);
+		hit(p, foe, 'tackle', { multihit: 5 }); hit(p, foe, 'watergun'); assert.equal(p.m.framePerfect.momentum, 6);
 		hit(p, foe, 'splash'); assert.equal(p.m.framePerfect.momentum, 0);
-		hit(p, foe); hit(p, foe, 'tackle', { accuracy: 0 }); assert.equal(p.m.framePerfect.momentum, 0);
+		hit(p, foe); hit(p, foe, 'tackle', { accuracy: 0 }); assert.equal(p.m.framePerfect.momentum, 1);
 		hit(p, foe); foe.addVolatile('protect'); hit(p, foe);
-		assert.equal(p.m.framePerfect.momentum, 0);
+		assert.equal(p.m.framePerfect.momentum, 2);
 	});
 	it('clears when unable to act while retaining Inner Focus', () => {
 		const [p, foe] = start('Frame Perfect'); hit(p, foe);
@@ -169,10 +169,20 @@ describe('Convergence, Misaligned Stars and Frame Perfect', () => {
 		const move = prepare(p, 'tackle');
 		assert.equal(battle.runEvent('ModifyDamage', p, foe, move, 100), 142);
 	});
-	for (const ability of ['Convergence', 'Misaligned Stars', 'Frame Perfect']) it('clears ' + ability + ' on switching', () => {
+	for (const ability of ['Misaligned Stars', 'Frame Perfect']) it('clears ' + ability + ' on switching', () => {
 		const [p, foe] = start(ability); hit(p, foe); hit(foe, p);
 		battle.makeChoices('switch 2', 'move splash');
 		assert(!p.m.convergence); assert(!p.m.misalignedStars); assert(!p.m.framePerfect);
+	});
+	for (const ability of ['Convergence', 'Insight', 'Cold Logic']) it(ability + ' keeps partial and full charges through switches', () => {
+		const [p, foe] = start(ability);
+		hit(p, foe, 'tackle');
+		battle.makeChoices('switch 2', 'move splash'); battle.makeChoices('switch 2', 'move splash');
+		assert(p.m.convergence.Physical); assert(!p.m.convergence.Special);
+		hit(p, foe, 'watergun');
+		battle.makeChoices('switch 2', 'move splash'); battle.makeChoices('switch 2', 'move splash');
+		const move = prepare(p, 'tackle'); assert(move.convergenceAttack);
+		assert(!p.m.convergence.Physical && !p.m.convergence.Special);
 	});
 	it('runs passive Frame Perfect once even when it is also selected', () => {
 		const [p, foe] = start('Frame Perfect', false, 'Accelgor');
@@ -195,11 +205,11 @@ describe('Convergence, Misaligned Stars and Frame Perfect', () => {
 		hit(p, foe); hit(p, foe, 'tackle', { beforeMoveCallback() { return true; } });
 		assert.equal(p.m.framePerfect.momentum, 0);
 	});
-	it('preserves Convergence charges when unable to act and Insight keeps its existing defensive-stage read', () => {
+	it('preserves Convergence charges when unable to act without an uncharged defensive-stage bypass', () => {
 		const [p, foe] = start('Insight'); charged(p);
 		p.setStatus('slp'); hit(p, foe); assert(p.m.convergence.Physical && p.m.convergence.Special);
 		p.cureStatus(); p.m.convergence.Physical = p.m.convergence.Special = false;
-		hit(p, foe, 'tackle'); assert.equal(p.abilityState.auraReads[foe.m.ultraRivalryEntryToken], 'Physical');
+		hit(p, foe, 'tackle'); assert(!p.abilityState.auraReads);
 		assert(!p.hasAbility('telepathy'));
 	});
 });

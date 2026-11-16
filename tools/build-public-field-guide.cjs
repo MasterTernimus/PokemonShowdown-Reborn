@@ -33,6 +33,9 @@ for(const kind of ['terrains','abilities','moves','items','conditions']){
  function strings(n){if(ts.isStringLiteral(n))literals.push(n.text);ts.forEachChild(n,strings);}strings(source);
  for(const field of fields)if(literals.includes(field.id)&&!index[field.id].moves.includes('naturepower'))index[field.id].moves.push('naturepower');
 }
+for (const [move, profile] of Object.entries(require('../dist/data/reborn-character-moves').CharacterMoveProfiles)) {
+ for (const field of profile.fields) if (index[field] && !index[field].moves.includes(move)) index[field].moves.push(move);
+}
 // Include imported data helpers, shared simulator rules and format setup in freshness evidence.
 for(const field of ['volcanicterrain','dragonsdenterrain']) for(const ability of ['whitesmoke','smolderingshroud','constrictingheat']) {
  if(!index[field].abilities.includes(ability)) index[field].abilities.push(ability);

@@ -4,11 +4,11 @@ function setup(ability = 'No Ability', foeAbility = 'No Ability') {
 	const b = new Battle({ formatid: 'gen9nofieldsinglesgame', seed: [1, 2, 3, 4], p1: { name: 'A', team: [{ species: 'Garchomp', ability, moves: ['splash'] }] }, p2: { name: 'B', team: [{ species: 'Mew', ability: foeAbility, moves: ['doublehit', 'glare', 'splash'] }] } });
 	if (b.requestState === 'teampreview')b.makeChoices('team 1', 'team 1');
 	return b;
-}describe('Serrated Scales base Garchomp passive', () => {
-	it('shares Serrated Scales with Battle Bond and preserves selectable abilities', () => {
-		assert.deepEqual(Dex.species.get('garchomp').passives, ['serratedscales']);
+}describe('Rough Skin base Garchomp passive and legacy Serrated Scales', () => {
+	it('shares Rough Skin with Battle Bond and preserves selectable abilities', () => {
+		assert.deepEqual(Dex.species.get('garchomp').passives, ['roughskin']);
 		assert.deepEqual(Dex.species.get('garchompmega').passives, ['sharpness']);
-		assert.deepEqual(Dex.species.get('garchompbattlebond').passives, ['serratedscales']);
+		assert.deepEqual(Dex.species.get('garchompbattlebond').passives, ['roughskin']);
 		assert.deepEqual(Dex.species.get('garchomp').abilities, { 0: 'Grounded Instinct', 1: 'Supreme Overlord', H: 'Void Wrath', S: 'Battle Bond' });
 	});
 	for (const ability of ['No Ability', 'Rough Skin', 'Serrated Scales'])it('retaliates exactly once per contact hit with selected ' + ability, () => {
@@ -35,28 +35,28 @@ function setup(ability = 'No Ability', foeAbility = 'No Ability') {
 			b.destroy();
 		}
 	});
-	it('prevents and cures paralysis while the selected ability is suppressed', () => {
+	it('does not grant the retired passive paralysis immunity', () => {
 		const b = setup();
 		try {
 			const p = b.p1.active[0], q = b.p2.active[0];
 			p.addVolatile('gastroacid');
-			assert.equal(p.trySetStatus('par', q, Dex.moves.get('glare')), false);
+			assert.equal(p.trySetStatus('par', q, Dex.moves.get('glare')), true);
 			p.status = 'par';
 			p.statusState = b.initEffectState({ id: 'par', target: p });
 			b.eachEvent('Update');
-			assert.equal(p.status, '');
+			assert.equal(p.status, 'par');
 		} finally {
 			b.destroy();
 		}
 	});
-	it('blocks opposing Speed drops but retains self drops and item slowdowns', () => {
+	it('allows opposing and self Speed drops and item slowdowns', () => {
 		const b = setup();
 		try {
 			const p = b.p1.active[0], q = b.p2.active[0];
 			b.boost({ spe: -1 }, p, q, Dex.moves.get('scaryface'));
-			assert.equal(p.boosts.spe, 0);
-			b.boost({ spe: -1 }, p, p, Dex.moves.get('curse'));
 			assert.equal(p.boosts.spe, -1);
+			b.boost({ spe: -1 }, p, p, Dex.moves.get('curse'));
+			assert.equal(p.boosts.spe, -2);
 			p.boosts.spe = 0;
 			const speed = p.getStat('spe');
 			p.setItem('ironball');
@@ -65,8 +65,8 @@ function setup(ability = 'No Ability', foeAbility = 'No Ability') {
 			b.destroy();
 		}
 	});
-	it('retains field slowdown immunity via the Limber component', () => {
-		const b = setup();
+	it('retains selectable Grounded Instinct field slowdown immunity via Limber', () => {
+		const b = setup('Grounded Instinct');
 		try {
 			const p = b.p1.active[0];
 			assert(p.hasAbilityOrPassive('limber'));
@@ -77,7 +77,7 @@ function setup(ability = 'No Ability', foeAbility = 'No Ability') {
 			b.destroy();
 		}
 	});
-	it('lets ability bypass reach Limber without bypassing Rough Skin', () => {
+	it('Rough Skin still retaliates against ability bypass without passive Limber', () => {
 		const b = setup('No Ability', 'Mold Breaker');
 		try {
 			const p = b.p1.active[0], q = b.p2.active[0];
@@ -88,7 +88,7 @@ function setup(ability = 'No Ability', foeAbility = 'No Ability') {
 			assert(p.trySetStatus('par', q, m));
 			b.clearActiveMove();
 			b.eachEvent('Update');
-			assert.equal(p.status, '');
+			assert.equal(p.status, 'par');
 			const hp = q.hp, hit = Dex.getActiveMove('doublehit');
 			hit.accuracy = true;
 			hit.ignoreAbility = true;
@@ -100,7 +100,7 @@ function setup(ability = 'No Ability', foeAbility = 'No Ability') {
 	});
 });
 
-describe('Serrated Scales calculator parity', () => {
+describe('Rough Skin calculator parity', () => {
 	it('matches contact recoil and target damage across eight simulator samples', () => {
 		const c = require('../../../dist/sim/custom-calculator'), input = { format: 'gen9nofieldsinglesgame', move: 'Double Hit', samples: 8, seed: 42, actors: [{ species: 'Mew', ability: 'No Ability' }, { species: 'Garchomp', ability: 'Void Wrath' }, ...Array.from({ length: 2 }, () => ({ species: 'Mew', ability: 'No Ability' }))] }, scenario = c.validateScenario(input), loss = [[], []];
 		for (let i = 0;
@@ -108,7 +108,7 @@ describe('Serrated Scales calculator parity', () => {
 			i++) {
 			const { battle: b, mons } = c.buildCalculatorBattle(scenario, i);
 			try {
-				assert.deepEqual(mons[1].getPassives(), ['serratedscales']);
+				assert.deepEqual(mons[1].getPassives(), ['roughskin']);
 				const hp = mons.slice(0, 2).map(p => p.hp);
 				b.actions.runMove(scenario.move, mons[0], mons[0].getLocOf(mons[1]));
 				for (let n = 0;

@@ -3067,3 +3067,8 @@ Aliases.tidaleruption = 'draconicforce';
 
 import {NovemberAbilityNames} from './november-roster';
 for (const [id, name] of Object.entries(NovemberAbilityNames)) Aliases[name.toLowerCase().replace(/[^a-z0-9]/g, '') as ID] = id;
+
+// Moon Veil's renamed display preserves the original replay identity.
+Aliases.moonveil = 'voidpromise';
+
+Aliases.bloomshelter = 'verdanthospitality';

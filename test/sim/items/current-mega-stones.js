@@ -26,7 +26,7 @@ describe('Current Hydreigon and Lucario Mega stones', () => {
 		assert(!Dex.species.get('Hydreigon-Mega-X').exists);
 		assert.deepEqual(Dex.species.get('Hydreigon').otherFormes, ['Hydreigon-Mega']);
 		for (const item of Dex.items.all()) assert(!Object.values(item.megaStone || {}).includes('Hydreigon-Mega-X'));
-		assert.equal(Dex.species.get('Hydreigon').abilities.H, 'False Liberation');
+		assert.equal(Dex.species.get('Hydreigon').abilities.H, 'Mold Breaker');
 		assert.equal(Dex.items.get('Lucarionite Z').isNonstandard, 'Custom');
 	});
 });

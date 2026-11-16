@@ -5,7 +5,7 @@ import { SharedPassiveAbilityDescriptions, skipPassiveComponent } from './passiv
 /** Entry identity survives Mega Evolution but changes on a genuine switch-in. */
 function sequence(pokemon: Pokemon, key: string) {
 	const entry = pokemon.m.ultraRivalryEntryToken;
-	if (!pokemon.m[key] || pokemon.m[key].entry !== entry) pokemon.m[key] = { entry };
+	if (!pokemon.m[key] || (key !== 'convergence' && pokemon.m[key].entry !== entry)) pokemon.m[key] = { entry };
 	return pokemon.m[key];
 }
 type SequenceMove = ActiveMove & {
@@ -47,16 +47,16 @@ function frameHit(this: Battle, damage: number, target: Pokemon, source: Pokemon
 
 export const CombatSequenceDescriptions = {
 	convergence: {
-		shortDesc: 'Keen Eye; a physical and special hit charge a 1.2× attack that bypasses resistances and screens.',
-		desc: 'Includes Keen Eye. Land a physical and a special attack in either order to charge the next attack: 1.2× damage, ignoring each type resistance and screens while retaining weaknesses and immunities. Each move grants one charge. The charged attack consumes both charges even on a miss or block and earns no charge. Switching clears charges.',
+		shortDesc: 'Keen Eye; physical + special hits charge a 1.5× attack that pierces resistances, screens and boosts.',
+		desc: 'Includes Keen Eye. Land a physical and a special attack in either order to charge the next attack: 1.5× damage, ignoring positive defensive stages, type resistances and screens. Weaknesses and immunities still apply. Each move grants one charge. The charged attack consumes both charges even on a miss or block and earns no charge. Charges persist through switching.',
 	},
 	misalignedstars: {
 		shortDesc: 'Anticipation; records the first attack survived each entry; blocks its next use on the holder.',
 		desc: 'Includes Anticipation. After surviving the first opposing damaging move that hits it, blocks the next use of that move against it, from any foe. All hits of the original move finish normally. One recorded move and one block per entry; switching resets both.',
 	},
 	frameperfect: {
-		shortDesc: 'Inner Focus; repeated attacks build up to +50% Speed, +30% damage and 10% attack protection.',
-		desc: 'Includes Inner Focus. Each successful opposing hit adds one momentum after the move finishes, up to 10. Each point grants 5% Speed, 3% damage and 1% less attack damage. Multihits count separately; spread targets count once per hit. Speed changes take effect next turn. Changing attacks starts a fresh sequence; status moves, complete misses or blocks, inability to act and switching clear momentum. Stacks normally with Metronome.',
+		shortDesc: 'Inner Focus; any attacks build up to +50% Speed, +30% damage and 10% attack protection.',
+		desc: 'Includes Inner Focus. Each successful opposing hit adds one momentum after the move finishes, up to 10. Each point grants 5% Speed, 3% damage and 1% less attack damage. Multihits count separately; spread targets count once per hit. Speed changes take effect next turn. Changing attacks, misses and blocked attacks preserve momentum. Status moves, inability to attack and switching clear momentum. Stacks normally with Metronome.',
 	},
 };
 
@@ -78,6 +78,7 @@ export function installCombatSequences(
 		state.Physical = state.Special = false;
 		move.convergenceAttack = true;
 		move.ignoreScreens = true;
+		move.ignorePositiveDefensive = true;
 		const previous = move.onEffectiveness;
 		move.onEffectiveness = function (typeMod, defender, type, attack) {
 			const result = previous?.call(this, typeMod, defender, type, attack);
@@ -85,11 +86,10 @@ export function installCombatSequences(
 		};
 	};
 	abilities.convergence.onModifyDamage = function (damage, source, target, move: SequenceMove) {
-		if (move.convergenceAttack) return this.chainModify(1.2);
+		if (move.convergenceAttack) return this.chainModify(1.5);
 	};
 	abilities.convergence.onSourceAfterDamageApplied = gainCharge;
 	abilities.convergence.onSourceAfterSubDamage = gainCharge;
-	abilities.convergence.onSwitchOut = function (pokemon) { delete pokemon.m.convergence; };
 
 	abilities.misalignedstars = {
 		name: 'Misaligned Stars', num: 32594, rating: 4, flags: {}, ...CombatSequenceDescriptions.misalignedstars,
@@ -120,13 +120,13 @@ export function installCombatSequences(
 	abilities.frameperfect.onBeforeMovePriority = 100;
 	abilities.frameperfect.onBeforeMove = function (pokemon, target, move) {
 		if (skipPassiveComponent(this, pokemon, 'frameperfect')) return;
-		const state = frameState(this, pokemon);
-		if (move.category === 'Status' || state.move !== move.id) resetFrame.call(this, pokemon);
+		frameState(this, pokemon);
+		if (move.category === 'Status') resetFrame.call(this, pokemon);
 	};
 	abilities.frameperfect.onModifyMove = function (move: SequenceMove, pokemon) {
 		if (move.framePrepared || skipPassiveComponent(this, pokemon, 'frameperfect')) return;
 		const state = frameState(this, pokemon);
-		if (move.category === 'Status' || state.move !== move.id) resetFrame.call(this, pokemon);
+		if (move.category === 'Status') resetFrame.call(this, pokemon);
 		move.framePrepared = true;
 		move.frameMomentum = state.momentum;
 		state.move = move.id;
@@ -138,7 +138,7 @@ export function installCombatSequences(
 		if (pokemon !== this.effectState.target) return;
 		if (skipPassiveComponent(this, pokemon, 'frameperfect')) return;
 		const state = frameState(this, pokemon);
-		if (move.category === 'Status' || !state.hits?.length) resetFrame.call(this, pokemon);
+		if (move.category === 'Status') resetFrame.call(this, pokemon);
 		else state.momentum = Math.min(10, state.momentum + state.hits.length);
 		state.hits = [];
 	};
@@ -158,9 +158,7 @@ export function installCombatSequences(
 	};
 	abilities.frameperfect.onSwitchOut = function (pokemon) { delete pokemon.m.framePerfect; };
 
-	const insightRead = abilities.insight.onSourceDamagingHit;
-	composeSelectedAbility(abilities, 'insight', ['convergence', 'innerfocus'], true);
-	abilities.insight.onSourceDamagingHit = insightRead;
+	composeSelectedAbility(abilities, 'insight', ['convergence', 'ultrainstinct'], true);
 	// Cold Logic has custom Forewarn/Aftermath behavior; retain every existing callback.
 	const cold = abilities.coldlogic as any;
 	for (const [key, handler] of Object.entries(abilities.convergence)) {

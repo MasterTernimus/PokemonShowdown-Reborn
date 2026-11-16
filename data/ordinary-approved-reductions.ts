@@ -1,3 +1,4 @@
+import {November16BalanceDescriptions} from './nov16-balance-descriptions';
 import type {AbilityDataTable} from '../sim/dex-abilities';
 
 /** Ordinary-species reductions approved after the 85351d freeze. */
@@ -19,8 +20,7 @@ export function installOrdinaryReductions(a: AbilityDataTable) {
  const fortressStart = a.fortressshell.onStart;
  a.fortressshell.onStart = function (pokemon) {
   fortressStart?.call(this, pokemon);
-  this.dex.abilities.get('waterbarrage').onStart?.call(this, pokemon);
-  this.dex.abilities.get('shellarmor').onStart?.call(this, pokemon);
+  this.dex.abilities.get('stalwart').onStart?.call(this, pokemon);
  };
  a.fortressshell.onModifyMove = a.stalwart.onModifyMove;
  a.fortressshell.onBasePower = function () {
@@ -30,7 +30,9 @@ export function installOrdinaryReductions(a: AbilityDataTable) {
   this.dex.abilities.get('waterbarrage').onResidual?.call(this, pokemon);
  };
 	delete a.fortressshell.onImmunity;
- a.fortressshell.onAfterEachBoost = a.shellarmor.onAfterEachBoost;
+ delete a.fortressshell.onAfterEachBoost;
+ delete a.fortressshell.onSourceModifyDamage;
+ delete a.fortressshell.onAnyCriticalHit;
  a.fortressshell.onAllyBasePower = a.guardianpresence.onAllyBasePower;
  a.fortressshell.onAnyModifyDamage = a.guardianpresence.onAnyModifyDamage;
  delete a.burningcrown.onTryBoost;
@@ -170,8 +172,8 @@ export const OrdinaryDescriptions: {[id: string]: {shortDesc: string, desc: stri
 		"desc": "Summons sun for 8 turns on entry. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Immune to hail damage. All moves have 1.1x accuracy.",
 	},
 	fortressshell: {
-		shortDesc: "Tidal Monarch (without Dual Wield), Shell Armor and Guardian Presence; all moves have 1.1x accuracy.",
-		desc: "Stalwart bypasses redirection and gives +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. Shell Armor prevents critical hits and reduces attack damage by 20%; Fairy Tale and Dragon Den entry give +1 Defense, and opposing stat drops trigger +2 Sp. Def. Guardian Presence boosts allies move power by 1.3x, or 1.5x on Haunted, Bewitched Woods, Holy and Psychic fields, and reduces their attack damage by 25%; neither applies to the holder. During Electric Aura or Electric Terrain, Murkwater Surface, Water Surface, Underwater, Midnight Zone, Factory and Short-Circuit, redirects and absorbs Electric moves for +1 Attack and Sp. Atk. Existing Fairy Tale, New World, Cold Eclipse and Starlight Arena entry/terrain bonuses give +1 Defense and Sp. Def; the latter three retain 1.5x move power. All moves have 1.1x accuracy.",
+		shortDesc: November16BalanceDescriptions.fortressshell.shortDesc,
+		desc: November16BalanceDescriptions.fortressshell.desc,
 	},
 toxicevolution: {"shortDesc":"Corrosion + Shield Dust; poison infliction/damage shares one 1/8 heal per turn.","desc":"Full local Corrosion and Shield Dust. Can poison Poison and Steel types; Poison attacks bypass Steel immunity. Newly poisoned foes lose 1 Defense and Sp. Def. Has Wasteland secondary replacement and 1.5x incoming damage on Corrosive/Corrosive Mist. Successfully poisoning a foe with its own move, or dealing attack HP damage to a foe poisoned before that hit, can heal 1/8 base max HP, sharing one activation per turn."},
  spiralevolution: {shortDesc: 'Mold Breaker + Adaptability; double Twineedle power; no extra Dual Wield hits.', desc: "Has Mold Breaker and Adaptability. Twineedle has double power and keeps its native multihit count. Damaging moves retain half-power protection piercing. Normal-priority moves act first in Trick Room without gaining priority. Ignores field Speed penalties and takes 20% less attack damage."},
@@ -190,7 +192,7 @@ toxicevolution: {"shortDesc":"Corrosion + Shield Dust; poison infliction/damage 
 	},
  witheringtouch: {shortDesc: 'Poison Touch + Corrosion.', desc: "Contact hits have a 30% poison chance, blocked by Shield Dust and Covert Cloak. Can poison Poison and Steel types; Poison attacks bypass Steel immunity. Newly poisoned foes lose 1 Defense and Sp. Def. Wasteland has four separate 2.5% frostbite, burn, paralysis and poison secondary chances; incoming damage is 1.5x on Corrosive and Corrosive Mist. No additional Attack drop against already-poisoned foes."},
  snowpack: {shortDesc: 'Thick Fat + Ice Body.', desc: 'Incoming Fire and Ice attacks use half the attacker’s offensive stat. Immune to hail. Contact attackers have a 30% frostbite chance. Heals 1/16 max HP in hail/snow, or on Icy, Snowy Mountain and Cold Eclipse without those weathers; hail on Cold Eclipse heals 1/8. No contact power multiplier.'},
- requiem: {shortDesc: 'Cursed Body retaliation + Filter; creates Haunted Field on fainting.', desc: "Damaging attacks have a 30% chance to be Disabled, guaranteed on Haunted and blocked on Holy; normal Cursed Body exclusions apply. Takes 20% less attack damage, or 40% less from super-effective attacks. On fainting, creates Haunted Field for 5 turns. Existing unsuppressible behavior remains."},
+ requiem: {shortDesc: November16BalanceDescriptions.requiem.shortDesc, desc: November16BalanceDescriptions.requiem.desc},
 	rootediron: {
 		shortDesc: 'Stamina: each opposing HP-damaging attack heals once for 1/16; first hit each turn gives +1 Defense.',
 		desc: " Each opposing attack that damages HP heals once for 1/16 base max HP. The first such hit each turn gives +1 Defense before later multihit strikes.",
@@ -206,7 +208,7 @@ toxicevolution: {"shortDesc":"Corrosion + Shield Dust; poison infliction/damage 
 		desc: "Compatibility name for local Prankster: status moves gain +1 priority; opposing Dark types block them except on Bewitched Woods. Klefki receives Prankster as its species passive; this compatibility name has the same priority effect.",
 	},
  hydraheart: {shortDesc: 'Stamina + Hydra Bond.', desc: "Each opposing attack that damages HP heals once for 1/16 base max HP; the first such hit each turn gives +1 Defense. Full local Hydra Bond has its multihit, Free-for-All and field effects."},
- curseddoll: {shortDesc: 'Contact power 1.3x; incoming damage 0.8x, or 0.6x if super effective.', desc: 'Tough Claws gives contact moves 1.3x power. Local Shadow Shield reduces attack damage to 0.8x at any HP, or 0.6x total for super-effective attacks; ability-ignoring moves cannot bypass it, but suppression disables it. Immune to hail on Cold Eclipse. On fainting, creates Haunted Field for 5 turns. Damaging attacks do not automatically curse foes.'},
+ curseddoll: {shortDesc: November16BalanceDescriptions.curseddoll.shortDesc, desc: November16BalanceDescriptions.curseddoll.desc},
  toxicspines: {shortDesc: 'Physical hits set Toxic Spikes; contact retaliates for 1/6 HP; poison bypass.', desc: "Physical HP hits set one Toxic Spikes layer on the attacker’s side, up to two; allied attackers use the opposing side. Contact attackers lose 1/6 base max HP, without an additional Iron Barbs hit. Can poison Poison and Steel types; Poison attacks bypass Steel immunity. Poisoning does not lower defenses. Wasteland has four separate 2.5% frostbite, burn, paralysis and poison secondary chances; incoming damage remains 1.5x on Corrosive and Corrosive Mist."},
  seafiend: {shortDesc: 'Toxic Debris; Fire resistance, burn/weather protection and Aqua Ring.', desc: "Physical HP hits set Toxic Spikes on the attacker’s side, up to two; contact attackers lose 1/6 base max HP. Incoming Fire attacks use half the attacker’s offensive stat. Prevents and cures burns, ignores sandstorm/hail damage and gains Aqua Ring on entry with its field healing. Aftermath remains separate."},
 };

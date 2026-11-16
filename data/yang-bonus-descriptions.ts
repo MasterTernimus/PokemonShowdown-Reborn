@@ -37,7 +37,7 @@ export function describeYangBonuses(text: Record<string,{desc:string;shortDesc:s
  text.frozenrefractals.shortDesc = 'Damaging hits set Aurora Veil for 3–4 turns.';
  text.spiritmend.shortDesc = 'Heals 1/2 HP; 66% on certain fields. Holy becomes Haunted.';
  text.winddance.shortDesc = 'Adaptive. Hit sets Strong Winds for 4–5 turns; +1 priority in Strong Winds.';
- text.sirenswrath.shortDesc = 'Adaptive; ignores abilities; next opposing attack deals 25–35% less.';
+ text.sirenswrath.shortDesc = "Amaria's move. Adaptive; ignores abilities; next attack taken deals 25–35% less.";
  text.rocknroll.shortDesc = 'Lowers Defense; sets Stealth Rock. Stronger on rocky fields.';
  text.airstreamassault.shortDesc = 'Adaptive; clears own hazards. Mountains: 3-turn Tailwind if absent.';
  text.swarmsnare.shortDesc = 'Adaptive; binds for 2 turns (3 on Forest/Garden); field-based recovery.';

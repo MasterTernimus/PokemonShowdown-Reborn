@@ -119,9 +119,9 @@ describe('Approved Gmax migrations and selected redesigns', () => {
 		q.addVolatile('curse', p, effect === 'curse' ? Dex.moves.get(effect) : Dex.abilities.get(effect)); q.hp = 100;
 		battle.singleEvent('Residual', Dex.conditions.get('curse'), q.volatiles.curse, q); battle.faintMessages(); assert.equal(p.hp, 1000);
 	});
-	it('Afterlife Gate retains full local Shadow Shield at low HP without raw stat inflation', () => {
+	it('Afterlife Gate does not reduce damage with Shadow Shield at low HP without raw stat inflation', () => {
 		const [p, q] = setup('Gengar-Gmax'); p.hp = 1000;
-		for (const [mod, expected] of [[0, 80], [1, 60]]) {
+		for (const [mod, expected] of [[0, 100], [1, 100]]) {
 			const move = Dex.getActiveMove('surf'); p.getMoveHitData(move).typeMod = mod;
 			assert.equal(battle.runEvent('ModifyDamage', q, p, move, 100), expected);
 		}
@@ -144,7 +144,7 @@ describe('Approved Gmax migrations and selected redesigns', () => {
 		}
 	});
 	it('Infernal Eclipse grants native Flame Body and the selected package entry defenses once each', () => {
-		for (const [species, expected] of [['Coalossal-Gmax', 2], ['Centiskorch-Gmax', 2]]) {
+		for (const [species, expected] of [['Coalossal-Gmax', 2], ['Centiskorch-Gmax', 1]]) {
 			const [p] = setup('Mew'); battle.field.terrain = 'infernaleclipseterrain';
 			p.formeChange(species, null, true); assert.equal(p.boosts.def, expected, species); assert.equal(p.boosts.spd, expected, species);
 			battle.destroy(); battle = null;

@@ -52,7 +52,7 @@ describe('Torterra and Torterra-Mega-Y', () => {
 		assert.equal(battle.runEvent('ModifySpA', torterra, battle.p2.active[0], rockMove, 100), 100);
 		assert.equal(battle.runEvent('ModifySpA', torterra, battle.p2.active[0], move, 100), 100);
 		const incoming = battle.dex.getActiveMove('tackle');
-		assert.equal(battle.runEvent('SourceModifyDamage', torterra, battle.p2.active[0], incoming, 100), 80);
+		assert.equal(battle.runEvent('SourceModifyDamage', torterra, battle.p2.active[0], incoming, 100), 90);
 	});
 
 	it('removes Solid Rock from Terra Legacy', () => {

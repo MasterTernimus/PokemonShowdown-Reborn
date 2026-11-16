@@ -13,7 +13,7 @@ export const AuditReworkDescriptions: Record<string, {shortDesc: string; desc: s
 		desc: 'Heals 1/16 max HP each turn and ignores sandstorm/hail damage. Entry creates 5-turn Haunted Aura: all Ghost attacks gain 20% power. Its Ghost attacks heal 25% of opposing HP damage dealt. A direct Ghost KO while it survives and Haunted Aura remains attempts to convert the field to Haunted for 5 turns, consuming the Aura only on success. Respects field locks; cannot extend existing Haunted. Later entries can create the Aura again, but ability restarts cannot. Suppression stops new triggers and holder benefits; an existing Aura persists.',
 	},
  bewitchingmajesty: {shortDesc:'Magic Bounce + Queenly Majesty; 5-turn Bewitched Aura. Smite can turn it into Bewitched Woods.',desc:'Reflects eligible status moves and protects its side from opposing priority moves. Entry creates 5-turn Bewitched Aura: Psychic/Fairy attacks gain 20% power, once even with both types. G-Max Smite damaging a foe already confused before the attack can convert the field into Bewitched Woods for 5 turns if the holder survives. Respects field locks; consumes the Aura only on success and cannot extend an existing matching field. Later entries can create the Aura again; ability restarts cannot. Suppression stops new triggers and protections; an existing Aura persists.'},
-	relentlesshunt: { shortDesc: 'Rough Skin; weak attacks gain priority; field power 1.3x–2x.', desc: 'Rough Skin. Damaging moves up to 60 base power gain +1 priority, or up to 80 on Cold Eclipse. Attacks have 2x power on Dragon’s Den and Fairy Tale; 1.5x on Rocky, Big Top, Mountain, Snowy Mountain and Cold Eclipse; 1.3x on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Each ability bonus applies once.' },
+	relentlesshunt: { shortDesc: 'Rough Skin; weak attacks gain priority; field power 1.3x–1.5x.', desc: 'Rough Skin. Damaging moves up to 60 base power gain +1 priority, or up to 80 on Cold Eclipse. Attacks have 1.5x power on Dragon’s Den, Fairy Tale, Rocky, Big Top, Mountain, Snowy Mountain and Cold Eclipse; 1.3x on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Each ability bonus applies once.' },
 };
 function entry(pokemon: Pokemon, id: string) {
  if (!pokemon.volatiles[id]) pokemon.addVolatile(id);
@@ -76,8 +76,8 @@ export function installAuditReworks(a: AbilityDataTable) {
  a.relentlesshunt.onModifyPriority=function(priority,source,target,move){if(move.category!=='Status'&&move.basePower<=(this.field.isTerrain('coldeclipseterrain')?80:60))return priority+1;};
 	a.relentlesshunt.onBasePower = function (bp, source, target, move) {
 		if (move.category === 'Status') return;
-		if (this.field.isTerrain(['dragonsdenterrain', 'fairytaleterrain'])) return this.chainModify(2);
 		if (this.field.isTerrain([
+			'dragonsdenterrain', 'fairytaleterrain',
 			'rockyterrain', 'bigtopterrain', 'mountainterrain', 'snowymountainterrain', 'coldeclipseterrain',
 		])) return this.chainModify(1.5);
 		if (this.field.isTerrain([

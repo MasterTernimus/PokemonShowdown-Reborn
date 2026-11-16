@@ -24,7 +24,7 @@ describe('Archaludon approved rework', () => {
 		for (const id of ['tackle', 'earthquake']) {
 			const m = battle.dex.getActiveMove(id); m.willCrit = false; p.setAbility('No Ability');
 			const normal = battle.actions.getDamage(t, p, m); p.setAbility('Anchor Bridge');
-			const reduced = battle.actions.getDamage(t, p, m), ratio = id === 'earthquake' ? 0.6 : 0.8;
+			const reduced = battle.actions.getDamage(t, p, m), ratio = id === 'earthquake' ? 0.675 : 0.9;
 			assert(Math.abs(reduced - normal * ratio) <= 2);
 		}
 		hit(t, p, 'tackle', { damage: 10000 }); assert.equal(p.hp, 1); assert(!p.side.sideConditions.lightscreen);

@@ -63,7 +63,7 @@ describe('October 19 approved restorations',()=>{
 		}
 		assert.deepEqual(losses, [0, 0, 0]);
 		assert.equal(p.hp, 1000);
-		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('tackle'), 100), 80);
+		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('tackle'), 100), 100);
 	});
  it('Guardian Presence boosts and guards allies once, never the holder',()=>{const[p,q]=setup('Mew','Guardian Presence',true);const ally=battle.p1.active[1],m=Dex.getActiveMove('tackle');assert.equal(battle.runEvent('ModifyDamage',q,ally,m,100),75);assert.equal(battle.runEvent('ModifyDamage',q,p,m,100),100);assert.equal(battle.runEvent('BasePower',ally,q,m,100),130);assert.equal(battle.runEvent('BasePower',p,q,m,100),100);battle.field.terrain='holyterrain';assert.equal(battle.runEvent('BasePower',ally,q,m,100),150);});
  it('Fortress Shell conditional Electric absorption retains all seven fields and not no-field',()=>{const[p,q]=setup('Mew','Fortress Shell');const m=Dex.getActiveMove('thunderbolt');assert.notEqual(battle.runEvent('TryHit',p,q,m),null);for(const field of ['electricterrain','murkwatersurfaceterrain','watersurfaceterrain','underwaterterrain','midnightzoneterrain','factoryterrain','shortcircuitterrain']){battle.field.terrain=field;p.boosts.atk=0;p.boosts.spa=0;assert.equal(battle.runEvent('TryHit',p,q,m),null,field);assert.equal(p.boosts.atk,1);assert.equal(p.boosts.spa,1);}});

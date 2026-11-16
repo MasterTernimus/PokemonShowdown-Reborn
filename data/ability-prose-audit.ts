@@ -25,8 +25,8 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Moves ignore bypassable opposing abilities."
   },
   "moonveil": {
-    "desc": "It and its allies cannot be poisoned. Gaining this Ability while it or its ally is poisoned cures them. Before an opposing Pokemon uses a Poison-type move, that Pokemon's Attack and Special Attack are lowered by 1 stage. On entry, creates Misty Terrain for 5 turns, or 8 with Amplifield Rock, subject to field and Aura rules.",
-    "shortDesc": "Pastel Veil + Misty Surge."
+    "desc": November16BalanceDescriptions.moonveil.desc,
+    "shortDesc": November16BalanceDescriptions.moonveil.shortDesc
   },
   "kickfiend": {
     "desc": "Kicking moves have 1.4x power. On its first active turn, its Speed is 1.5x and its Attack is 1.2x. Prevents and cures paralysis. Other Pokemon and field effects cannot lower its Speed; self-inflicted costs and item slowdowns still apply. Does not alter Trick Room or prevent removing Speed boosts or Tailwind.",
@@ -177,12 +177,12 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Opposing stat drops give +2 Sp. Atk."
   },
   "terraresolve": {
-    "desc": "Opposing attacks that damage HP heal 1/16 max HP once per move. The first each turn raises Defense by 1. Takes 20% less attack damage, or 40% less from super-effective hits. Prevents forced switching.",
-    "shortDesc": "Stamina + Solid Rock + Suction Cups."
+    "desc": November16BalanceDescriptions.terraresolve.desc,
+    "shortDesc": November16BalanceDescriptions.terraresolve.shortDesc
   },
   "primalego": {
-    "desc": "Ignores target Defense/Sp. Def/evasion stages when attacking, and attacker Attack/Defense/Sp. Atk/accuracy stages when defending. Reveals opposing Illusions on entry. Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first and every other opposing attack that damages HP gives +1 Attack and Sp. Atk. Heals once per incoming attack: 1/16 max HP, then 1/20 until the holder attacks. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field. Against an opposing effective Ultra Instinct (including composites), its attacks ignore its own negative Attack and Sp. Atk stages. Ultra Instinct instead reduces its first HP-damaging move each turn by 40% and ignores positive Attack or Sp. Atk stages for that protected move. Stored stages are unchanged; normal +1 retaliation is unchanged. The rivalry is disabled on Bewitched Woods, Haunted and Holy.",
-    "shortDesc": "Ignores target Defense/Sp. Def/evasion stages when attacking, and attacker Attack/Defense/Sp. Atk/accuracy stages when defending."
+    "desc": November16BalanceDescriptions.primalego.desc,
+    "shortDesc": November16BalanceDescriptions.primalego.shortDesc
   },
   "ragingoverlord": {
 		"desc": "Moves ignore bypassable opposing abilities. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt; if there is no valid target or no damage is dealt, gains +1 Attack instead. Magic Guard prevents this splash damage. Cannot be suppressed. Each fainted ally adds 10% move damage; in Free-for-All, allies count twice. At 2+ fallen allies it gains Infiltrator; 4+, flinch immunity from Inner Focus; 5+, indirect-damage immunity and a one-time +1 Attack and Sp. Atk. Effective fallen count is capped at 5 after Free-for-All doubling, for a maximum 1.5x Supreme Overlord power multiplier.",
@@ -249,8 +249,8 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Fire attacks have 1.5x power; burned special attacks also have 1.5x power."
   },
   "flowergift": {
-    "desc": "If it is a Cherrim and Sunny Day is active, it changes to Sunshine Form and the Attack and Special Defense of it and its allies are multiplied by 1.5. These effects are prevented if the Pokemon is holding a Utility Umbrella.",
-    "shortDesc": "If user is Cherrim and Sunny Day is active, it and allies' Attack and Sp. Def are 1.5x."
+    "desc": "Cherrim becomes Sunshine form in sunlight or Flower Garden stage 1; Bewitched Woods also enables Sunshine form. Cherrim and its active allies gain 1.5x Attack and Sp. Def when their own effective weather is sunlight, or on Flower Garden stage 1. Utility Umbrella blocks weather-based boosts. Everlasting Bloom supplies personal sunlight only to its holder.",
+    "shortDesc": "Sunshine form; 1.5x Attack/Sp. Def in sunlight or Garden stage 1."
   },
   "flowerveil": {
     "desc": "Grass-type Pokemon on its side cannot have their stat stages lowered by other Pokemon or have a non-volatile status condition inflicted on them by other Pokemon.",
@@ -341,16 +341,16 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "If it has no item, it steals the item off a Pokemon it hits."
   },
   "prismscale": {
-    "desc": "Friend Guard reduces attack damage to allies by 25%. Oblivious blocks Attract, Captivate, Taunt, and Intimidate's Attack drop. Swift Swim boosts Speed in rain and supported water fields.",
-    "shortDesc": "Friend Guard reduces attack damage to allies by 25%."
+    "desc": November16BalanceDescriptions.prismscale.desc,
+    "shortDesc": November16BalanceDescriptions.prismscale.shortDesc
   },
   "mimicry": {
     "desc": "Its types change to match the active Terrain when it acquires this Ability, or whenever a Terrain begins. Electric type during Electric Terrain, Grass type during Grassy Terrain, Fairy type during Misty Terrain, and Psychic type during Psychic Terrain. If this Ability is acquired without an active Terrain, or a Terrain ends, its types become the original types for its species.",
     "shortDesc": "Its types change to match the Terrain. Type reverts when Terrain ends."
   },
   "mindseye": {
-    "desc": "It has Self Sufficient, can hit Ghost types with Normal- and Fighting-type moves, gains Fairy- and Dark-type STAB, ignores evasiveness, and cannot have its accuracy lowered. It takes 20% less damage and heals 1/16 after damaging moves hit. Cold Eclipse strengthens these effects.",
-    "shortDesc": "Self Sufficient; Ghost-piercing Normal/Fighting; Fairy/Dark STAB; 20% damage reduction."
+    "desc": "It has Self Sufficient, can hit Ghost types with Normal- and Fighting-type moves, ignores evasiveness, and cannot have its accuracy lowered. It takes 20% less damage and heals 1/16 after damaging moves hit. Cold Eclipse strengthens these effects.",
+    "shortDesc": "Self Sufficient; Ghost-piercing Normal/Fighting; 20% damage reduction."
   },
   "minus": {
     "desc": "Its Electric- and Steel-type moves use 1.3x Attack and Sp. Atk. In Electric Terrain, its Sp. Atk is multiplied by 1.5.",
@@ -577,8 +577,8 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Battle Fervor, Precision and Opportunist, including their field effects, entry behavior, item blocking, damage modifiers and boost-copy timing."
   },
   "burningego": {
-    "desc": "Contact attackers have a 30% burn chance, or 60% on Volcanic. On Infernal Eclipse, Flame Body grants +1 Defense and Sp. Def on entry; Cold Eclipse disables contact burns. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first and every other opposing attack that damages HP gives +1 Attack and Sp. Atk. Heals once per incoming attack: 1/16 max HP, then 1/20 until the holder attacks. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field. On Infernal Eclipse, the two entry effects together give +2 Defense and Sp. Def. Against an opposing effective Ultra Instinct (including composites), its attacks ignore its own negative Attack and Sp. Atk stages. Ultra Instinct instead reduces its first HP-damaging move each turn by 40% and ignores positive Attack or Sp. Atk stages for that protected move. Stored stages are unchanged; normal +1 retaliation is unchanged. The rivalry is disabled on Bewitched Woods, Haunted and Holy.",
-    "shortDesc": "Contact attackers have a 30% burn chance, or 60% on Volcanic."
+    "desc": November16BalanceDescriptions.burningego.desc,
+    "shortDesc": November16BalanceDescriptions.burningego.shortDesc
   },
   "victorystar": {
     "desc": "It and its allies' moves have their accuracy multiplied by 1.1.",
@@ -721,3 +721,6 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Successful status moves targeting an ally heal it by 1/16 max HP, once per turn."
   }
 };
+
+import {November16BalanceDescriptions} from './nov16-balance-descriptions';
+Object.assign(AbilityProseAudit, November16BalanceDescriptions);

@@ -21,7 +21,7 @@ describe('Poison Tail status payoff', () => {
 			assert.equal(move.basePowerCallback.call(battle, p, q, move), status ? 120 : 60);
 		});
 	}
-	it('does not count confusion or retain the old poison/critical effects', () => {
+	it('does not count confusion and retains normal critical chance with added toxic chance', () => {
 		const [p, q] = setup();
 		assert(q.addVolatile('confusion'));
 		const move = Dex.getActiveMove('poisontail');
@@ -29,7 +29,7 @@ describe('Poison Tail status payoff', () => {
 		assert.equal(move.accuracy, 100);
 		assert.equal(move.pp, 15);
 		assert.equal(move.critRatio, 1);
-		assert(!move.secondaries?.length);
+		assert.deepEqual(move.secondaries, [{chance: 20, status: 'tox'}]);
 		for (const flag of ['tail', 'slicing', 'contact', 'protect', 'mirror', 'metronome']) assert(move.flags[flag]);
 	});
 	for (const ability of ['Sharpness', 'Whiplash']) {

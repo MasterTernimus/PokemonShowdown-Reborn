@@ -11,7 +11,7 @@ function signatureMoveText(id: string, credit: string, details: string) {
 }
 
 /** Rejuvenation's supported user-type rule; Fairy/Dark second types defer to the first type. */
-function gildedType(this: Battle, move: ActiveMove, source: Pokemon) {
+export function gildedType(this: Battle, move: ActiveMove, source: Pokemon) {
 	const types = source.getTypes();
 	move.type = types[1] && !['Fairy', 'Dark'].includes(types[1]) ? types[1] : types[0];
 }

@@ -1,3 +1,4 @@
+import {BurningSpiritDescription} from './ultra-instinct-description';
 /** Display-only audit; callbacks and component metadata remain unchanged. */
 export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:string}> = {
   "smolderingshroud": {
@@ -64,10 +65,7 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
 		"desc": "Summons sun for 8 turns on entry. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Immune to hail damage. All moves have 1.1x accuracy.",
 		"shortDesc": "Eight-turn sun + Blazing Monarch; all moves have 1.1x accuracy.",
   },
-  "burningspirit": {
-    "desc": "Mold Breaker + Inner Focus. Attacks have 1.3x power against an opposing target still queued to move or that switched in this turn, except a target with Battle Bond. The first opposing HP-damaging move each turn deals 30% less damage across all hits. Substitute-only damage preserves the allowance. After a whole attack deals opposing HP damage, heals 1/16 max HP once per turn while alive; healing restrictions apply. Multi-hit and spread moves heal only once; a failed heal cannot retry within the same move. On Ashen Beach, New World, Starlight Arena and Cold Eclipse: 35% reduction and 1/8 healing. The turn allowance persists through switches, form/ability changes and Transform. Bewitched Woods, Haunted and Holy disable Ultra Instinct's effects. Against Ultra Ego or its composites, the protected move deals 40% less damage and ignores positive offensive stages. Ultra Ego ignores its own negative Attack or Sp. Atk stages when attacking Ultra Instinct. Has the Predator interaction. Burning Spirit also has full local Magma Armor: Water and Ice attacks use half attacking stats; Dragon's Den and Infernal Eclipse block Fire moves; prevents freeze outside Cold Eclipse and cures freeze; Dragon's Den, Volcanic and Infernal Eclipse entry grant +1 Defense and Sp. Def. Opportunist copies foes' positive Attack, Defense, Sp. Atk, Sp. Def and Speed changes at the normal move, entry, transformation and residual flushes; it does not copy accuracy or evasion. Copied boosts cannot loop, and each queued gain is applied once.",
-    "shortDesc": "Ultra Instinct + Opportunist (five combat stats only) + Magma Armor."
-  },
+  "burningspirit": BurningSpiritDescription,
   "venomarmor": {
     "desc": "Dual Wield and Battle Armor. Metal Claw has two 60%-power hits. Does not automatically poison, heal or grant the former status-based damage boost.",
     "shortDesc": "Dual Wield + Battle Armor."
@@ -101,8 +99,8 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
 		"shortDesc": "Solid Rock; eight-turn sand; Rock/Ground matchup; Rock/Dark hits break screens.",
   },
   "heatcoil": {
-		"desc": "Speed Boost, Long Reach and Magma Armor. Gains Speed each full turn and attacks without contact. Prevents and cures freeze; halves incoming Water/Ice attack power. On entry in Dragon’s Den, Volcanic or Infernal Eclipse, gains +1 Defense and Sp. Def. Immune to Fire moves in Dragon’s Den and Infernal Eclipse. Cold Eclipse allows frostbite, which is then cured.",
-		"shortDesc": "Speed Boost + Long Reach + Magma Armor.",
+		"desc": "Speed Boost raises Speed at the end of each full turn. Long Reach lets its moves attack without contact.",
+		"shortDesc": "Speed Boost + Long Reach.",
 	},
 	"coilup": {
 		"desc": "After surviving an opposing contact hit that damages its HP, raises Defense by 1. Once per switch-in.",
@@ -121,8 +119,8 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
 		"shortDesc": "Thick Fat, Unaware; all moves have 1.1x accuracy.",
   },
   "waterbarrage": {
-		"desc": "Stalwart bypasses redirection and grants +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 60% power, with an independent accuracy check for each hit. A literal Mega Launcher + Tidal Monarch combination instead boosts both eligible pulse/bullet hits by 1.5x: 0.9x each in every battle format. In Free-for-All, both hits still use 60% power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair. All moves have 1.1x accuracy.",
-		"shortDesc": "Dual Wield + Stalwart; all moves have 1.1x accuracy.",
+		"desc": November16BalanceDescriptions.waterbarrage.desc,
+		"shortDesc": November16BalanceDescriptions.waterbarrage.shortDesc,
   },
   "gulpmissile": {
     "desc": "If this Pokemon is a Cramorant, it changes forme when it hits a target with Surf or uses the first turn of Dive successfully. It becomes Gulping Form with an Arrokuda in its mouth if it has more than 1/2 of its max HP remaining, or Gorging Form with a Pikachu in its mouth if it has 1/2 or less of its max HP remaining. If Cramorant gets hit in Gulping or Gorging Form, it spits the Arrokuda or Pikachu at its attacker, even if it has no HP remaining. The projectile deals damage equal to 1/4 of the target's max HP, rounded down; this damage is blocked by the Magic Guard Ability but not by a substitute. An Arrokuda also lowers the target's Defense by 1 stage, and a Pikachu paralyzes the target. Cramorant will return to normal if it spits out a projectile, switches out, or Dynamaxes. Species passive on all three Cramorant forms, replacing Gluttony; works independently of the selected ability and preserves it through loading and discharge. Water Surface/Underwater force Gulping on entry or terrain change; Electric/Factory/Short-Circuit make Surf load Gorging. Underwater projectile damage is quarter target max HP multiplied by ordinary Water effectiveness (zero if Water-immune); other fields keep the ordinary quarter-HP projectile.",
@@ -161,8 +159,8 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
     "shortDesc": "Mega Sol + Flower Veil."
   },
   "requiem": {
-    "desc": "Damaging attacks have a 30% chance to be disabled, guaranteed on Haunted and disabled on Holy Field. Excludes Max moves, delayed attacks and Struggle. Its first direct damaging interaction or successful opponent-targeting status move in either direction applies Perish Song to that foe: when the holder affects a foe or a foe affects the holder. Failed, missed, protected, immune, self, ally and field status moves do not trigger punishment. Status moves do not trigger Cursed Body. The mark clears when the marked foe switches out, not when the holder switches; Perish Song is not refreshed, and an attempted but blocked countdown still spends the mark. Whenever an opposing Pokemon faints, it restores 1/4 max HP. When it faints, it creates Haunted Field for 5 turns. This Ability cannot be suppressed. Filter: takes 20% less attack damage, or 40% less from super-effective attacks. This component follows Requiem's unsuppressible, non-breakable ability behavior.",
-    "shortDesc": "Filter; disables attacks, marks foes to perish, heals on foe faint; creates Haunted."
+    "desc": November16BalanceDescriptions.requiem.desc,
+    "shortDesc": November16BalanceDescriptions.requiem.shortDesc
   },
   "myceliummight": {
     "desc": "This Pokemon's status moves ignore the target's Ability and move last in their priority bracket. Before this Pokemon uses a status move, attacks deal 0.75x damage to it. When it successfully uses a status move, it restores 1/8 of its max HP.",
@@ -209,8 +207,8 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
     "shortDesc": "Contact may burn; surviving the first opposing damaging move each entry gives +1 Sp. Atk, even after Protect."
   },
   "siegelauncher": {
-		"desc": "Mega Launcher gives pulse and bullet moves 1.5x power. Tidal Monarch supplies exactly one eligible Dual Wield pair, each hit at 0.6x power outside Free-for-All: pulse/bullet pairs therefore use 0.9x power per hit before STAB and passives. In Free-for-All both hits use full power, with the second-target selection. Existing multi-hit, charging, delayed, Z/Max and ineligible moves gain no extra pair. Tidal Monarch supplies Stalwart exactly once: redirection bypass and +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. All moves have 1.1x accuracy. Also has Shell Armor.",
-		"shortDesc": "Mega Launcher + Tidal Monarch + Shell Armor; 1.1x accuracy.",
+		"desc": November16BalanceDescriptions.siegelauncher.desc,
+		"shortDesc": November16BalanceDescriptions.siegelauncher.shortDesc,
   },
   "calderacore": {
     "desc": "Drought and Magma Armor. On entry, summons sun for 5 turns, or 8 with Heat Rock. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def.",
@@ -541,8 +539,8 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
     "shortDesc": "Inner Focus; first Psychic damage each entry grants Charge after the move."
   },
   "afterlifegate": {
-    "desc": "Once per turn after a whole special Ghost or Poison attack damages an opposing Pokemon's HP, curses one surviving active foe if it is not already cursed. This ability-sourced Curse deals 1/8 base max HP each turn and costs its user no HP. Once per turn, a foe knocked out by its own attack or its own Afterlife Gate Curse heals it for 1/8 max HP, only while it is alive and active. Other curses and unrelated knockouts do not qualify. Shadow Shield reduces attack damage by 20%, or 40% for super-effective attacks, at any HP; it has its Cold Eclipse hail immunity.",
-    "shortDesc": "Special Ghost/Poison HP hits curse once per turn; own KOs heal; Shadow Shield."
+    "desc": November16BalanceDescriptions.afterlifegate.desc,
+    "shortDesc": November16BalanceDescriptions.afterlifegate.shortDesc
   },
   "unbridledwrath": {
     "desc": "Sheer Force removes eligible secondary effects and gives those moves approximately 1.3x power, once. Rampage moves still lock the user and cause their normal ending confusion. Inner Focus prevents flinching and Intimidate Attack drops.",
@@ -693,8 +691,8 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
     "shortDesc": "Soundproof; successful status stores next Psychic/Fairy attack at 1.3x power."
   },
   "curtaincall": {
-    "desc": "Ice Body and Filter. Ice Body has 30% contact frostbite, hail immunity, 1/16 recovery in hail/snow or qualifying cold fields and 1/8 in hail on Cold Eclipse. Filter multiplies non-super-effective attack damage by 0.8 and super-effective attack damage by 0.6; does not permanently change raw defenses.",
-    "shortDesc": "Ice Body + Filter."
+    "desc": November16BalanceDescriptions.curtaincall.desc,
+    "shortDesc": November16BalanceDescriptions.curtaincall.shortDesc
   },
   "pearlsiphon": {
     "desc": "Competitive. After an attack without drain deals opposing HP damage, restores 1/8 actual damage, capped at 1/8 max HP per turn. Resolves after the whole attack; excludes ally and Substitute-only damage. Ordinary ability-healing restrictions apply.",
@@ -729,8 +727,8 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
     "shortDesc": "First opposing Ice attack: half damage for all hits. Once/entry Swords Dance heals 1/8."
   },
   "pyrousdominion": {
-    "desc": "Pressure, including entry Defense/Sp. Def drops and field interactions. Dragon Rush and Stone Edge have 100% base accuracy; normal accuracy and evasion modifiers still apply.",
-    "shortDesc": "Pressure; Dragon Rush and Stone Edge have 100 base accuracy."
+    "desc": November16BalanceDescriptions.pyrousdominion.desc,
+    "shortDesc": November16BalanceDescriptions.pyrousdominion.shortDesc
   },
   "bottomlessgullet": {
     "desc": "Gluttony and Cheek Pouch: qualifying pinch Berries activate at half HP, and eating a Berry heals 1/3 max HP under normal healing rules.",
@@ -801,8 +799,8 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
     "shortDesc": "Changes type to match each eligible move; Dragon's Den changes the effect; reveals Illusions."
   },
   "primalego": {
-    "desc": "Ignores target Defense/Sp. Def/evasion stages when attacking, and attacker Attack/Defense/Sp. Atk/accuracy stages when defending. Reveals opposing Illusions on entry. Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first and every other opposing attack that damages HP gives +1 Attack and Sp. Atk. Heals once per incoming attack: 1/16 max HP, then 1/20 until the holder attacks. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field. Against an opposing effective Ultra Instinct (including composites), its attacks ignore its own negative Attack and Sp. Atk stages. Ultra Instinct instead reduces its first HP-damaging move each turn by 40% and ignores positive Attack or Sp. Atk stages for that protected move. Stored stages are unchanged; normal +1 retaliation is unchanged. The rivalry is disabled on Bewitched Woods, Haunted and Holy.",
-    "shortDesc": "Combines the listed abilities."
+    "desc": November16BalanceDescriptions.primalego.desc,
+    "shortDesc": November16BalanceDescriptions.primalego.shortDesc
   },
   "ancientbloom": {
 		"desc": "Verdant Monarch supplies Thick Fat and Unaware: Fire and Ice attacks use half the attacking stat; ignores opposing stat stages through local Unaware and reveals Illusions on entry. Friend Guard reduces attack damage to allies by 25%, without protecting the holder. Fairy Tale, New World, Cold Eclipse and Starlight Arena entry grant +1 Defense and Sp. Def; the latter three give 1.5x move power. All moves have 1.1x accuracy.",
@@ -867,3 +865,6 @@ import { CombatSequenceDescriptions } from './combat-sequences';
 Object.assign(ConciseAbilityDescriptions, CombatSequenceDescriptions);
 delete ConciseAbilityDescriptions.insight;
 delete ConciseAbilityDescriptions.coldlogic;
+
+import {November16BalanceDescriptions} from './nov16-balance-descriptions';
+Object.assign(ConciseAbilityDescriptions, November16BalanceDescriptions);

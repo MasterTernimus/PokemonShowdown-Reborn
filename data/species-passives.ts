@@ -792,7 +792,7 @@ export const LatestPassiveGroups = {
   "stickyhold": [
     "tinkaton"
   ],
-  "flowerveil": [
+  "flowergift": [
     "cherrim",
     "cherrimsunshine"
   ],
@@ -1435,6 +1435,11 @@ SpeciesPassives.starmie = Object.freeze(['malignantlight']);
 SpeciesPassives.pinsir = Object.freeze(['hypercutter']);
 ThematicPassiveIds.add('malignantlight');
 ThematicPassiveIds.add('hypercutter');
+SpeciesPassives.garchomp = Object.freeze(['roughskin']);
+ThematicPassiveIds.add('roughskin');
+for (const [skin, base] of Object.entries(CosmeticBattleCounterparts)) {
+ if (base === 'garchomp') SpeciesPassives[skin] = SpeciesPassives.garchomp;
+}
 SpeciesPassives.garchompbattlebond = SpeciesPassives.garchomp;
 Object.freeze(SpeciesPassives);
 

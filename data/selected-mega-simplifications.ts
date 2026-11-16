@@ -33,8 +33,8 @@ export function composeSelectedAbility(abilities: AbilityDataTable, id: string, 
 export function installSelectedMegaSimplifications(abilities: AbilityDataTable) {
 	installCursedArmament(abilities);
 	const compose = (id: string, parts: string[]) => composeSelectedAbility(abilities, id, parts);
-	// Tidal Monarch owns Stalwart; dispatch that component exactly once.
-	compose('siegelauncher', ['megalauncher', 'waterbarrage', 'shellarmor']);
+	// Keep Bombardment independent of Tidal Monarch’s defensive component.
+	compose('siegelauncher', ['megalauncher', 'dualwield', 'stalwart']);
 	compose('neurotoxin', ['hydrabond', 'regenerator']);
 	compose('surgeconduit', ['lightningrod', 'rockhead']);
 	compose('railguncircuit', ['lightningrod']);

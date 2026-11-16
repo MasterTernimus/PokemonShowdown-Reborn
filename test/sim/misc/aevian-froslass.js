@@ -43,14 +43,14 @@ describe('Aevian Froslass', function () {
 		assert.equal(battle.field.weather, 'raindance');
 	});
 
-	it('has every supplied move', function () {
+	it('retains supplied moves except the approved Moonblast removal', function () {
 		const requested = [
 			'absorb', 'afteryou', 'allyswitch', 'aquaring', 'assurance', 'avalanche', 'blizzard', 'bodyslam',
 			'boomburst', 'brickbreak', 'bulletseed', 'chipaway', 'disable', 'dive', 'doubleedge', 'drainpunch',
 			'dynamicpunch', 'echoedvoice', 'energyball', 'facade', 'fling', 'focusblast', 'gigadrain', 'gigaimpact',
 			'grassknot', 'grassyglide', 'grassyterrain', 'gyroball', 'hail', 'headbutt', 'hex', 'hydropump',
 			'hyperbeam', 'hypervoice', 'icebeam', 'icywind', 'ironhead', 'knockoff', 'leafstorm', 'magicalleaf',
-			'magnetrise', 'megakick', 'megapunch', 'moonblast', 'mudshot', 'mudbarrage', 'muddywater', 'naturepower',
+			'magnetrise', 'megakick', 'megapunch', 'mudshot', 'mudbarrage', 'muddywater', 'naturepower',
 			'petaldance', 'powergem', 'psyshock', 'raindance', 'razorleaf', 'return', 'round', 'sandstorm', 'scald',
 			'secretpower', 'seedbomb', 'seismictoss', 'shadowball', 'sleeptalk', 'solarbeam', 'spikes', 'stomp',
 			'strength', 'sunnyday', 'surf', 'swordsdance', 'synthesis', 'tackle', 'uproar', 'waterpulse', 'waterfall',

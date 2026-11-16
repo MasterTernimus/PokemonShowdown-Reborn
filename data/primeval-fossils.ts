@@ -2,8 +2,8 @@ import type {AbilityDataTable} from '../sim/dex-abilities';
 
 export const PrimevalFossilDescriptions = {
 	primevalskull: {
-		shortDesc: 'Once per battle, survives a lethal hit at 1 HP from any HP; Rock Head.',
-		desc: 'Once per battle, a damaging move that would knock this Pokemon out instead leaves it at 1 HP, even if it already has only 1 HP. No chance roll or full-HP requirement. Switching and ability changes do not reset the use. Later hits of a multi-hit move can still knock it out. Suppression prevents activation without consuming the use. Includes Rock Head: prevents ordinary recoil, including Primeval Shield recoil; does not prevent Struggle recoil, crash damage, self-KO costs, weather, status or other indirect damage.',
+		shortDesc: 'Rock Head; physical Rock moves ignore positive Defense stages.',
+		desc: 'Includes Rock Head, preventing recoil damage. Its physical Rock moves ignore the target\'s positive Defense stages.',
 	},
 	primevalshield: {
 		shortDesc: 'Each hit: attacker takes 50% damage as recoil; holder heals 30% of damage received.',
@@ -15,12 +15,10 @@ export function installPrimevalFossils(abilities: AbilityDataTable) {
 	abilities.primevalskull = {
 		name: 'Primeval Skull', num: 11982, rating: 4, flags: {},
 		onDamage(damage, target, source, effect) {
-			const recoil = this.dex.abilities.get('rockhead').onDamage?.call(this, damage, target, source, effect);
-			if (recoil !== undefined) return recoil;
-			if (effect?.effectType !== 'Move' || damage < target.hp || !target.hp || target.m.primevalSkullSpent) return;
-			target.m.primevalSkullSpent = true;
-			this.add('-ability', target, 'Primeval Skull');
-			return target.hp - 1;
+			return this.dex.abilities.get('rockhead').onDamage?.call(this, damage, target, source, effect);
+		},
+		onModifyMove(move) {
+			if (move.category === 'Physical' && this.movehasType(move, 'Rock')) move.ignorePositiveDefensive = true;
 		},
 	};
 	abilities.primevalshield = {

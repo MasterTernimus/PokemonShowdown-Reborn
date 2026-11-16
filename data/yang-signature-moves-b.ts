@@ -195,7 +195,7 @@ export const YangSignatureMovesB: MoveDataTable = {
  },
  nostraswish: {
   num: 10460, name: "Nostras Wish", type: 'Fairy', category: 'Special', basePower: 140, accuracy: 100,
-  pp: 10, priority: 1, target: 'normal', flags: {futuremove: 1},
+  pp: 10, priority: 0, target: 'normal', flags: {futuremove: 1},
   onEffectiveness: nostrasEffectiveness,
   onTry(source, target) {
    const attack = target.side.addSlotCondition(target, 'futuremove', source, this.effect);
@@ -211,7 +211,8 @@ export const YangSignatureMovesB: MoveDataTable = {
        if (damage > 0) announceYangImpact(this, 'nostraswish', move);
       }},
     });
-    this.add('-start', source, "move: Nostras Wish");
+    this.add('-start', source, "move: Nostras Wish", '[of] ' + target, '[slot] attack', '[turns] 2');
+    if (this.field.isTerrain('newworldterrain')) this.add('-message', "In the newborn world, Nostra's wish became a guiding star!");
    }
    const wish = source.side.addSlotCondition(source, 'wish', source, this.effect);
    if (wish) {
@@ -267,7 +268,7 @@ const summaries: {[id: string]: string} = {
  airstreamassault: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). After a hit, clears own-side entry hazards. Bypasses accuracy checks in Strong Winds. Clears fields that existing blowing moves clear.',
  wisteriamaelstrom: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). After a hit, each active allied Grass or Bug Pokemon raises its higher staged offense by 1, once per use (Sp. Atk on ties). Grows Flower Garden by one stage per damaging use, up to stage 5.',
  deiludicium: 'After a hit, cures the user of its status condition. Uses Judgment\'s existing named field boosts without its held-item typing. Rainbow Aura also grants its named 1.5x boost; matching Rainbow Terrain and Aura do not duplicate it.',
- nostraswish: 'At +1 setup priority, schedules a 140-power Fairy attack on the opposing position 2 turns later, and a Wish on the user position at the end of the following turn. Ordinary healing stores half the original caster maximum HP rounded up; native field-enhanced healing is preserved. Misty Aura or Rainbow Aura stores 75% healing at setup. The two slots succeed independently. Setup does not count as a healing move. At impact, it is super effective against Steel only in Starlight Arena or New World. Its attack receives a total 2x field boost in weatherless Starlight Arena and 4x in New World.',
+ nostraswish: 'Schedules a 140-power Fairy attack on the opposing position 2 turns later, and a Wish on the user position at the end of the following turn. Ordinary healing stores half the original caster maximum HP rounded up; native field-enhanced healing is preserved. Misty Aura or Rainbow Aura stores 75% healing at setup. The two slots succeed independently. Setup does not count as a healing move. At impact, it is super effective against Steel only in Starlight Arena or New World. Its attack receives a total 2x field boost in weatherless Starlight Arena and 4x in New World.',
  swarmsnare: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). After damage, binds the target through the following turn using ordinary binding rules.',
 };
 export const YangSignatureDescriptionsB: {[id: string]: {shortDesc: string, desc: string}} = {};

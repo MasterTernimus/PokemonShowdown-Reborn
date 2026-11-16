@@ -29,7 +29,7 @@ describe('Toxic Armor Intimidate-only protection', () => {
 	}
 
 	for (const status of ['', 'psn', 'tox', 'brn']) {
-		for (const ability of ['Intimidate', 'Hellfire Eclipse', 'Street Tyrant']) {
+		for (const ability of ['Intimidate', 'Infernal Dominion', 'Street Tyrant']) {
 			it(`blocks actual ${ability} Intimidate activation with status ${status || 'healthy'}`, () => {
 				const [holder, foe] = setup(status);
 				foe.setAbility(ability, foe, null, true);
@@ -67,7 +67,7 @@ describe('Toxic Armor Intimidate-only protection', () => {
 			assert.deepEqual(holder.boosts, { atk: -1, def: -1, spa: -1, spd: -1, spe: -1, accuracy: -1, evasion: -1 });
 		});
 	}
-	for (const sourceAbility of ['Intimidate', 'Hellfire Eclipse']) {
+	for (const sourceAbility of ['Intimidate', 'Infernal Dominion']) {
 		for (const [ability, item, atk, spa, spe] of [
 			['No Ability', '', -1, 0, 0],
 			['Defiant', '', 1, 0, 0],

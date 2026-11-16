@@ -54,7 +54,7 @@ describe('Revised composite Mold Breaker ownership', () => {
 		it(`${name} does not bypass Protect or unbreakable Shadow Shield`,()=>{
 			const[p,t]=start('Shadow Shield',name);t.addVolatile('protect',t);battle.actions.useMove('watergun',p,{target:t});assert.equal(t.hp,t.maxhp);
 			t.removeVolatile('protect');const move=battle.dex.getActiveMove('watergun');move.ignoreAbility=true;battle.setActiveMove(move,p,t);
-			assert.equal(battle.runEvent('ModifyDamage',p,t,move,1000),800);battle.clearActiveMove();
+			assert.equal(battle.runEvent('ModifyDamage',p,t,move,1000),500);battle.clearActiveMove();
 		});
 	}
 	for (const name of ['Atrocity', 'Sun Sovereign', 'Void Omen']) {

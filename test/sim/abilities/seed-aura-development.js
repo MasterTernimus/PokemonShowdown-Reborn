@@ -37,7 +37,7 @@ describe('Seed holder Aura development',()=>{
   });
   for (const move of moves) it(ability+' develops '+aura+' with '+move+' and preserves remaining turns',()=>{
    const[p,q]=setup('rockyterrain',ability);assert.equal(battle.field.auraField,aura);
-   battle.field.auraTurns=3;use(p,q,move);assert.equal(battle.field.terrain,field);assert.equal(battle.field.auraField,'');assert.equal(battle.field.terrainState.duration,3);
+   battle.field.auraTurns=3;use(p,q,move);assert.equal(battle.field.terrain,'rockyterrain');assert.equal(battle.field.auraState.seedAttacks,1);use(p,q,move);assert.equal(battle.field.terrain,field);assert.equal(battle.field.auraField,'');assert.equal(battle.field.terrainState.duration,3);
   });
   for (const failure of ['protect','miss','suppressed','differentholder','wrongmove','neutralization','pulseblockade']) it(ability+' keeps Aura when '+failure,()=>{
    const[p,q]=setup('rockyterrain',ability);const state=battle.field.auraState;
@@ -47,7 +47,7 @@ describe('Seed holder Aura development',()=>{
    if(['neutralization','pulseblockade'].includes(failure))q.setAbility(failure);
    const previousField=battle.field.terrain;
    use(p,q,failure==='wrongmove'?'tackle':moves[0],failure==='miss'?{accuracy:0}:{});
-   assert.equal(battle.field.terrain,previousField);assert.equal(battle.field.auraField,aura);assert.equal(battle.field.auraState,state);assert.equal(battle.field.auraTurns,5);
+   assert.equal(battle.field.terrain,previousField);assert.equal(battle.field.auraField,aura);assert.equal(battle.field.auraState,state);assert.equal(battle.field.auraTurns,5);assert.equal(battle.field.auraState.seedAttacks || 0,0);
   });
   it(ability+' cannot develop the Aura on a locked Chessboard',()=>{const[p,q]=setup('chessboardterrain',ability);use(p,q,moves[0]);assert.equal(battle.field.terrain,'chessboardterrain');assert.equal(battle.field.auraField,aura);});
   for(const trigger of moves) it(ability+' develops its Aura over Rift with '+trigger+' without replaying the move transition',()=>{
@@ -59,7 +59,7 @@ describe('Seed holder Aura development',()=>{
   });
   it(ability+' can develop an already existing Aura over no field',()=>{
    const[p,q]=setup('','');battle.field.setAura(aura,4,p,Dex.moves.get('splash'));p.setAbility(ability);assert.equal(battle.field.terrain,'');
-   use(p,q,moves[0]);assert.equal(battle.field.terrain,field);assert.equal(battle.field.terrainState.duration,4);assert.equal(battle.field.auraField,'');
+   use(p,q,moves[0]);assert.equal(battle.field.terrain,'');use(p,q,moves[0]);assert.equal(battle.field.terrain,field);assert.equal(battle.field.terrainState.duration,4);assert.equal(battle.field.auraField,'');
   });
   it(ability+' does not allow ordinary Gravity promotion',()=>{const[p]=setup('rockyterrain',ability);assert.equal(battle.field.promoteAura(p,Dex.moves.get('gravity')),false);assert.equal(battle.field.auraField,aura);});
  }
@@ -74,7 +74,7 @@ describe('Seed holder Aura development',()=>{
   battle.field.clearAura();battle.field.setFieldOrAura('infernaleclipseterrain',2,p,Dex.moves.get('splash'),true);battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(battle.field.terrainState.duration,2);
  });
  it('Nature Power actually calls Infernal Parade and its successful called attack develops Ashen Aura',()=>{
-  const[p,q]=setup('rockyterrain','ashenseeds');use(p,q,'naturepower');
+  const[p,q]=setup('rockyterrain','ashenseeds');use(p,q,'naturepower');assert.equal(battle.field.terrain,'rockyterrain');use(p,q,'naturepower');
   assert(battle.log.some(line=>line.includes('|move|p1a: Mew|Infernal Parade|')));
   assert.equal(battle.field.terrain,'infernaleclipseterrain');assert.equal(battle.field.auraField,'');
  });
@@ -110,7 +110,7 @@ describe('Seed holder Aura development',()=>{
  });
  for(const fire of [false,true])it('Ashen development starts full-field residual effects for Fire='+fire,()=>{
   const[p,q]=setup('rockyterrain','ashenseeds');p.setType(fire?'Fire':'Normal');
-  use(p,q,'infernalparade');assert.equal(battle.field.terrain,'infernaleclipseterrain');
+  use(p,q,'infernalparade');assert.equal(battle.field.terrain,'rockyterrain');use(p,q,'infernalparade');assert.equal(battle.field.terrain,'infernaleclipseterrain');
   p.cureStatus();q.cureStatus();const hp=p.hp;use(p,q,'splash');
   battle.makeChoices('move eruption','move splash');
   assert.equal(p.boosts.atk,fire?0:-1);assert.equal(p.boosts.spa,fire?0:-1);

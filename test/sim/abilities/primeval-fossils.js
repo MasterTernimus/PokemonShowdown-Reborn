@@ -32,32 +32,37 @@ describe('Primeval fossil pair', () => {
 			assert.deepEqual(validator.validateSet({...set(ability, species), moves: ['tackle']}, {}) || [], []);
 		}
 	});
-	for (const hp of [1000, 333, 1]) it(`Primeval Skull guarantees one survival from ${hp} HP`, () => {
+	for (const hp of [1000, 333, 1]) it(`Primeval Skull no longer survives a lethal hit from ${hp} HP`, () => {
 		const [p, q] = setup('Primeval Skull'); p.hp = hp;
-		hit(q, p, 1000); assert.equal(p.hp, 1); assert(p.m.primevalSkullSpent);
-		hit(q, p, 1); assert.equal(p.hp, 0);
+		hit(q, p, 1000); assert.equal(p.hp, 0);
 	});
-	it('Skull does not spend survival on nonlethal hits, residual damage or ordinary recoil', () => {
+	it('Skull keeps Rock Head recoil protection', () => {
 		const [p, q] = setup('Primeval Skull');
-		hit(q, p, 100); assert(!p.m.primevalSkullSpent);
-		battle.damage(100, p, q, Dex.conditions.get('brn')); assert.equal(p.hp, 800);
-		hit(p, q, 100, {recoil: [1, 2]}); assert.equal(p.hp, 800); assert(!p.m.primevalSkullSpent);
+		hit(p, q, 100, {recoil: [1, 2]}); assert.equal(p.hp, 1000);
 		assert(p.hasAbility('rockhead'));
 	});
-	it('Skull has no second survival for later hits in the same move', () => {
-		const [p, q] = setup('Primeval Skull'); p.hp = 100;
-		hit(q, p, 100, {multihit: 2}); assert.equal(p.hp, 0);
+	for (const id of ['rockslide', 'powergem', 'tackle']) it(`Skull scopes Defense-stage bypass for ${id}`, () => {
+		const [p, q] = setup('Primeval Skull');
+		battle.randomizer = n => n;
+		const damage = stage => {
+			q.boosts.def = q.boosts.spd = stage;
+			const move = Dex.getActiveMove(id); move.willCrit = false;
+			battle.runEvent('ModifyMove', p, q, move, move);
+			assert.equal(!!move.ignorePositiveDefensive, id === 'rockslide');
+			return battle.actions.getDamage(p, q, move);
+		};
+		const ordinary = damage(0), boosted = damage(3);
+		if (id === 'rockslide') assert.equal(boosted, ordinary);
+		else assert(boosted < ordinary);
+		assert(damage(-2) > ordinary, 'Negative defenses still apply');
 	});
-	it('Skull survival is not reset by switching or ability replacement', () => {
-		const [p, q] = setup('Primeval Skull'); hit(q, p, 1000);
-		battle.makeChoices('switch 2', 'move splash'); battle.makeChoices('switch 2', 'move splash');
-		p.setAbility('No Ability'); p.setAbility('Primeval Skull'); p.hp = 300;
-		hit(q, p, 300); assert.equal(p.hp, 0);
-	});
-	for (const suppression of ['gastroacid', 'neutralizinggas']) it(`Skull is suppressed by ${suppression} without spending its survival`, () => {
+	for (const suppression of ['gastroacid', 'neutralizinggas']) it(`Skull is suppressed by ${suppression}`, () => {
 		const [p, q] = setup('Primeval Skull', suppression === 'neutralizinggas' ? 'Neutralizing Gas' : 'No Ability');
 		if (suppression === 'gastroacid') p.addVolatile('gastroacid', q);
-		hit(q, p, 1000); assert.equal(p.hp, 0); assert(!p.m.primevalSkullSpent);
+		const move = Dex.getActiveMove('rockslide');
+		battle.runEvent('ModifyMove', p, q, move, move);
+		assert(!move.ignorePositiveDefensive);
+		hit(p, q, 100, {recoil: [1, 2]}); assert.equal(p.hp, 950);
 	});
 	for (const category of ['Physical', 'Special']) it(`Shield reflects half and heals 30% of ${category} HP damage without a contact requirement`, () => {
 		const [p, q] = setup('Primeval Shield');

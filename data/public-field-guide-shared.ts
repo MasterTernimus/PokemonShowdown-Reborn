@@ -1,3 +1,4 @@
+import {CharacterMoveProfiles, CharacterMoves} from './reborn-character-moves';
 /** Explicitly reviewed shared mappings. Keep separate from the reference-only index. */
 export const FieldMoveMappings: { [id: string]: { camouflage: string, mimicry: string, pulse: string, nature: string } } = {};
 const mappings = [
@@ -21,9 +22,8 @@ const mappings = [
 for (const [id, type, nature] of mappings) FieldMoveMappings[id + 'terrain'] = { camouflage: type, mimicry: type, pulse: type, nature };
 FieldMoveMappings.forestterrain.mimicry = 'Grass';
 FieldMoveMappings.mirrorarenaterrain.pulse = 'Ice';
-FieldMoveMappings.midnightzoneterrain.pulse = 'Normal';
 for (let stage = 1; stage <= 5; stage++) FieldMoveMappings[`flowergarden${stage}`] = {
-	camouflage: 'Normal', mimicry: 'Grass', pulse: 'Normal', nature: stage === 1 ? 'Growth' : stage === 5 ? 'Petal Blizzard' : 'Tri Attack',
+	camouflage: 'Normal', mimicry: 'Grass', pulse: 'Grass', nature: stage === 1 ? 'Growth' : stage === 5 ? 'Petal Blizzard' : 'Tri Attack',
 };
 
 export const FieldSeedNotes: { [id: string]: string } = {
@@ -122,6 +122,9 @@ export function appendReviewedHazards(sections: { [id: string]: { [section: stri
 		],
 	};
 	for (const [id, rows] of Object.entries(extra)) (sections[id].Moves ||= []).push(...rows);
+	for (const [move, profile] of Object.entries(CharacterMoveProfiles)) {
+		for (const field of profile.fields) if (sections[field]) (sections[field].Moves ||= []).push(`${CharacterMoves[move].name}: ${profile.fieldEffect}`);
+	}
 	for (const entry of Object.values(sections)) entry['Shared rules and limitations'] = SharedFieldGuideRules.slice();
 }
 

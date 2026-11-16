@@ -19,7 +19,7 @@ describe('Moon Veil', function () {
 		]]);
 		battle.makeChoices('team 12', 'team 12');
 		battle.makeChoices('move protect, move protect', 'move toxic 2, move sleeptalk');
-		assert.equal(battle.dex.species.get('clefable').abilities[0], 'Moon Veil');
+		assert.equal(battle.dex.species.get('clefable').abilities[0], 'Void Promise');
 		assert.equal(battle.field.terrain, 'mistyterrain');
 		// Crobat is not protected by Misty Terrain, so this checks Moon Veil's Pastel Veil effect.
 		assert.equal(battle.p1.active[1].setStatus('psn'), false);

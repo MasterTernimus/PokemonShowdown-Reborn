@@ -32,7 +32,7 @@ describe('Mega Garchomp: Dune Carver', () => {
   assert.equal(mega.bst, 700); assert.deepEqual(mega.abilities, {0:'Dune Carver'});
   assert.deepEqual(mega.passives, ['sharpness']); assert.equal(mega.requiredItem, 'Garchompite');
   assert.deepEqual(Dex.species.get('garchomp').baseStats, {hp:108, atk:130, def:95, spa:80, spd:85, spe:102});
-  assert.deepEqual(Dex.species.get('garchomp').passives, ['serratedscales']);
+  assert.deepEqual(Dex.species.get('garchomp').passives, ['roughskin']);
   const z = Dex.species.get('garchompmegaz');
   assert.deepEqual(z.baseStats, {hp:108, atk:130, def:85, spa:141, spd:85, spe:151});
   assert.deepEqual(z.abilities, {0:'Relentless Hunt'}); assert.deepEqual(z.passives, ['levitate']);

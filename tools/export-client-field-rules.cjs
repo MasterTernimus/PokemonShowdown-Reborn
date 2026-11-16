@@ -8,6 +8,7 @@ const {Auras} = require('../dist/data/auras');
 const {FieldNotes} = require('../dist/data/field-guide');
 const {denCooling} = require('../dist/data/terrains');
 const {resolveNaturePowerMove} = require('../dist/data/nature-power');
+const {CharacterMoveProfiles} = require('../dist/data/reborn-character-moves');
 const ts = require('typescript');
 const destination = process.argv[2];
 if (!destination) throw new Error('Usage: node tools/export-client-field-rules.cjs <client-root>');
@@ -47,6 +48,11 @@ const moveRows = [];
 for (const move of Dex.moves.all()) {
 	const entries = [];
 	for (const key of ['onModifyType', 'onModifyMove', 'onModifyPriority', 'onBasePower', 'basePowerCallback']) {
+		const profile = CharacterMoveProfiles[move.id];
+		if (profile && key === 'onBasePower' && profile.fieldEffect === 'Power is 1.2×.') {
+			entries.push(`onBasePower(power, source, target) { if (this.field.isTerrain(${JSON.stringify(profile.fields)})) return this.chainModify(import_adaptive_cycle.adaptiveFieldMultiplier(this, source, target, 1.2)); }`);
+			continue;
+		}
 		if (move.id === 'kaboom' && key === 'onModifyMove') {
 			// The tooltip already selected the staged category; preview the matching self-boost.
 			entries.push("onModifyMove(move) { move.secondary = {chance: 100, self: {boosts: {[move.category === 'Physical' ? 'atk' : 'spa']: 1}}}; move.secondaries = [move.secondary]; if (this.field.isTerrainOrAura('electricterrain')) delete move.recoil; }");

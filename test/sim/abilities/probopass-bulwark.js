@@ -28,7 +28,7 @@ describe('Probopass Filter, Magnetic Flux and Nose Formation', () => {
 		assert(v.validateSet({ ...s, ability: 'Heavy Metal' }));
 		assert(v.validateSet({ ...s, ability: 'Magnetic Bulwark' }));
 	});
- for(const ability of ['Magnet Pull','Magnetic Command','Magnetic Bulwark','Filter'])it('Filter active only when selected: '+ability,()=>{const[p,a,q]=setup({ability});const m=Dex.getActiveMove('watergun');for(const typeMod of [0,1]){p.getMoveHitData(m).typeMod=typeMod;assert.equal(battle.runEvent('ModifyDamage',q,p,m,100),['Magnetic Bulwark','Filter'].includes(ability)?typeMod?60:80:100);}assert.equal(p.isGrounded(),null);p.addVolatile('gastroacid',q);assert.equal(battle.runEvent('ModifyDamage',q,p,m,100),100);assert.equal(p.isGrounded(),null);});
+ for(const ability of ['Magnet Pull','Magnetic Command','Magnetic Bulwark','Filter'])it('Filter active only when selected: '+ability,()=>{const[p,a,q]=setup({ability});const m=Dex.getActiveMove('watergun');for(const typeMod of [0,1]){p.getMoveHitData(m).typeMod=typeMod;assert.equal(battle.runEvent('ModifyDamage',q,p,m,100),['Magnetic Bulwark','Filter'].includes(ability)?typeMod?67:90:100);}assert.equal(p.isGrounded(),null);p.addVolatile('gastroacid',q);assert.equal(battle.runEvent('ModifyDamage',q,p,m,100),100);assert.equal(p.isGrounded(),null);});
 	it('spends normal PP but Filter does not extend Magnetic Flux eligibility', () => {
 		const [p, a] = setup();
 		const slot = p.moveSlots.find(m => m.id === 'magneticflux'), pp = slot.pp;

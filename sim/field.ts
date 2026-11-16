@@ -251,6 +251,15 @@ export class Field {
   // Match ordinary Aura conversion restrictions even where a direct field setter has exceptions.
   if (this.isFlowerGardenBase() || ['chessboardterrain', 'glitchterrain', 'bewitchedwoodsterrain',
    'hauntedterrain', 'newworldterrain', 'underwaterterrain', 'midnightzoneterrain', 'dragonsdenterrain'].includes(this.terrain)) return false;
+  if ((frozen || ashen) && !this.isEclipse()) {
+   if (this.auraState.seedDevelopmentMove === move) return false;
+   this.auraState.seedDevelopmentMove = move;
+   this.auraState.seedAttacks = (this.auraState.seedAttacks || 0) + 1;
+   if (this.auraState.seedAttacks < 2) {
+    this.battle.add('-message', frozen ? 'The Frozen Aura began to develop! (1/2)' : 'The Ashen Aura began to develop! (1/2)');
+    return false;
+   }
+  }
   const aura = this.auraField, duration = this.auraTurns;
   if (!this.setFieldOrAura(frozen ? 'coldeclipseterrain' : ashen ? 'infernaleclipseterrain' : 'rifteclipseterrain', duration, source, move, true)) return false;
   if (this.auraField === aura) this.clearAura();

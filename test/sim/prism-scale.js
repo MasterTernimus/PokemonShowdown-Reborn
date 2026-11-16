@@ -31,11 +31,11 @@ describe('Prism Scale', function () {
 		assert.equal(milotic.getStat('spe'), speed * 2);
 	});
 
-	it('gains Oblivious protection from Intimidate and Taunt', function () {
+	it('no longer blocks Intimidate or Taunt', function () {
 		const [milotic] = setup('intimidate', ['taunt']);
-		assert.equal(milotic.boosts.atk, 0);
+		assert.equal(milotic.boosts.atk, -1);
 		battle.makeChoices('move splash', 'move taunt');
-		assert.false(!!milotic.volatiles.taunt);
+		assert(!!milotic.volatiles.taunt);
 	});
 
 	it('no longer has Dragonize move hooks', function () {

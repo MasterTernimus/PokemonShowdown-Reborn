@@ -445,23 +445,32 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10389,
 	},
 	purifyingfrost: {
-		onStart(pokemon) {
-			for (const ally of pokemon.alliesAndSelf()) {
-				if (ally.status) ally.cureStatus();
+		onSetStatus(status, target, source, effect) {
+			if ((effect as Move)?.status) this.add('-immune', target, '[from] ability: Purifying Frost');
+			return false;
+		},
+		onTryAddVolatile(status, target) {
+			if (status.id === 'yawn') {
+				this.add('-immune', target, '[from] ability: Purifying Frost');
+				return null;
 			}
+		},
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (this.movehasType(move, 'Fire')) return this.chainModify(0.5);
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(spa, attacker, defender, move) {
+			if (this.movehasType(move, 'Fire')) return this.chainModify(0.5);
 		},
 		onAfterMove(source, target, move) {
 			if (source.m.purifyingFrostEntry === source.previouslySwitchedIn || move.type !== 'Ice') return;
+			const existing = source.side.sideConditions.safeguard;
+			if (!existing && !source.side.addSideCondition('safeguard', source, this.dex.getActiveMove('safeguard'))) return;
+			source.side.sideConditions.safeguard.duration = existing ? Math.max(existing.duration || 0, 3) : 3;
 			source.m.purifyingFrostEntry = source.previouslySwitchedIn;
-			if (!source.side.addSideCondition('safeguard', source, this.dex.getActiveMove('safeguard'))) {
-				this.add('-activate', source, 'ability: Purifying Frost');
-			}
-			source.side.sideConditions['safeguard'].duration = 5;
 		},
-		flags: {},
-		name: "Purifying Frost",
-		rating: 4,
-		num: 10428,
+		flags: {breakable: 1}, name: 'Purifying Frost', rating: 4, num: 10428,
 	},
 	smolderingshroud: {
 		onStart(pokemon) {
@@ -4468,7 +4477,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	download: {
 		onStart(pokemon) {
    if (skipPassiveComponent(this, pokemon, 'download')) return;
-			this.effectState.downloadFirstHit = true;
+			if (!pokemon.m.downloadLaserFocusUsed) {
+				pokemon.m.downloadLaserFocusUsed = true;
+				pokemon.addVolatile('laserfocus', pokemon, this.effect);
+			}
 			let totaldef = 0;
 			let totalspd = 0;
 			let boost = 1;
@@ -4503,12 +4515,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			} else if (totalspd) {
 				this.boost({ atk: boost });
 			}
-		},
-		onModifyMove(move, pokemon) {
-   if (skipPassiveComponent(this, pokemon, 'download')) return;
-			if (move.category === 'Status' || !this.effectState.downloadFirstHit) return;
-			move.willCrit = true;
-			this.effectState.downloadFirstHit = false;
 		},
 		flags: {},
 		name: "Download",
@@ -6085,7 +6091,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	defragment: {
 		onStart(pokemon) {
-			this.effectState.defragmentFirstMove = true;
+			if (skipPassiveComponent(this, pokemon, 'defragment')) return;
+			if (!pokemon.m.defragmentLockOnUsed) {
+				const foes = pokemon.foes().filter(foe => foe.hp && !foe.fainted);
+				if (foes.length) {
+					pokemon.m.defragmentLockOnUsed = true;
+					if (pokemon.addVolatile('lockon', foes[0], this.effect)) {
+						pokemon.volatiles['lockon'].lockedTargets = foes;
+						for (const foe of foes) this.add('-activate', pokemon, 'move: Lock-On', `[of] ${foe}`);
+					}
+				}
+			}
 			let foeAtk = 0;
 			let foeSpA = 0;
 			for (const foe of pokemon.foes()) {
@@ -6093,21 +6109,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				foeAtk += foe.getStat('atk', false, true);
 				foeSpA += foe.getStat('spa', false, true);
 			}
-			const strongFields = ['newworldterrain', 'factoryterrain', 'shortcircuitterrain', 'glitchterrain', 'starlightarenaterrain'];
-			const boostAmount = this.field.isTerrain(strongFields) ? 2 : 1;
 			if (this.field.isTerrain(['fairytaleterrain'])) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
 			} else if (foeAtk >= foeSpA) {
-				this.boost({ def: boostAmount }, pokemon, pokemon);
+				this.boost({ def: 1 }, pokemon, pokemon);
 			} else {
-				this.boost({ spd: boostAmount }, pokemon, pokemon);
+				this.boost({ spd: 1 }, pokemon, pokemon);
 			}
-		},
-		onModifyMove(move, pokemon, target) {
-			if (!this.effectState.defragmentFirstMove || !target || pokemon.isAlly(target)) return;
-			if (['self', 'allySide', 'allyTeam', 'all', 'field'].includes(move.target)) return;
-			move.accuracy = true;
-			this.effectState.defragmentFirstMove = false;
 		},
 		flags: { breakable: 1 },
 		name: "Defragment",
@@ -6674,7 +6682,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			pokemon.abilityState.ultraEgoHitTriggered = false;
 		},
 		boostedField() {
-			return this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain', 'fairytaleterrain']);
+			return this.field.isTerrain(['ashenbeachterrain', 'fairytaleterrain']);
 		},
 		healUltraEgo(pokemon, source) {
 			if (isUltraSuppressedTerrain(this)) return;
@@ -6801,6 +6809,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onAnyFaint(target, source, effect) {
+			if (this.gameType !== 'freeforall') return;
 			const pokemon = this.effectState.target;
 			if (!pokemon || pokemon === target || pokemon.fainted) return;
 			const doubled =
@@ -7175,7 +7184,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	heatcoil: {
 		onStart(pokemon) {
 			this.dex.abilities.get('flamebody').onStart?.call(this, pokemon);
-			this.dex.abilities.get('magmaarmor').onStart?.call(this, pokemon);
 		},
 		onDamagingHit(damage, target, source, move) {
 			return this.dex.abilities.get('flamebody').onDamagingHit?.call(this, damage, target, source, move);
@@ -7183,13 +7191,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidual(pokemon) {
 			this.dex.abilities.get('speedboost').onResidual?.call(this, pokemon);
 		},
-		onUpdate(pokemon) { return this.dex.abilities.get('magmaarmor').onUpdate?.call(this, pokemon); },
-		onTryHit(target, source, move) { return this.dex.abilities.getHandler('magmaarmor', 'onTryHit')?.call(this, target, source, move); },
-		onImmunity(type, pokemon) { return this.dex.abilities.get('magmaarmor').onImmunity?.call(this, type, pokemon); },
-		onSourceModifyAtkPriority: 6,
-		onSourceModifyAtk(atk, attacker, defender, move) { return this.dex.abilities.get('magmaarmor').onSourceModifyAtk?.call(this, atk, attacker, defender, move); },
-		onSourceModifySpAPriority: 5,
-		onSourceModifySpA(spa, attacker, defender, move) { return this.dex.abilities.get('magmaarmor').onSourceModifySpA?.call(this, spa, attacker, defender, move); },
 		flags: { breakable: 1 },
 		name: "Heat Coil",
 		rating: 3.5,
@@ -7866,7 +7867,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (fieldDisablesArmorReduction(this.field.terrain, 'filter')) return;
 			if (skipPassiveComponent(this, target, 'filter')) return;
-			let modifier = 0.8;
+			let modifier = 0.9;
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.debug('Filter neutralize');
 				modifier *= 0.75;
@@ -8590,6 +8591,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	flowergift: {
 		onSwitchInPriority: -2,
+		onUpdate(pokemon) {
+			// Re-evaluate personal sunlight after suppression, ability or item changes.
+			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+		},
 		onStart(pokemon) {
 			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 		},
@@ -8621,6 +8626,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAllyModifyAtkPriority: 3,
 		onAllyModifyAtk(atk, pokemon) {
+			if (skipPassiveComponent(this, this.effectState.target, 'flowergift')) return;
 			if (this.effectState.target.baseSpecies.baseSpecies !== 'Cherrim') return;
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather()) || this.field.isTerrain('flowergarden1')) {
 				return this.chainModify(1.5);
@@ -8628,6 +8634,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAllyModifySpDPriority: 4,
 		onAllyModifySpD(spd, pokemon) {
+			if (skipPassiveComponent(this, this.effectState.target, 'flowergift')) return;
 			if (this.effectState.target.baseSpecies.baseSpecies !== 'Cherrim') return;
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather()) || this.field.isTerrain('flowergarden1')) {
 				return this.chainModify(1.5);
@@ -11228,32 +11235,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onAnyModifyDamage(damage, source, target, move) {
 			return this.dex.abilities.get('friendguard').onAnyModifyDamage?.call(this, damage, source, target, move);
 		},
-		onUpdate(pokemon) {
-			if (pokemon.volatiles['attract']) {
-				this.add('-activate', pokemon, 'ability: Prism Scale');
-				pokemon.removeVolatile('attract');
-				this.add('-end', pokemon, 'move: Attract', '[from] ability: Prism Scale');
-			}
-			if (pokemon.volatiles['taunt']) {
-				this.add('-activate', pokemon, 'ability: Prism Scale');
-				pokemon.removeVolatile('taunt');
-			}
-		},
-		onImmunity(type) {
-			if (type === 'attract') return false;
-		},
-		onTryHit(pokemon, target, move) {
-			if (['attract', 'captivate', 'taunt'].includes(move.id)) {
-				this.add('-immune', pokemon, '[from] ability: Prism Scale');
-				return null;
-			}
-		},
-		onTryBoost(boost, target, source, effect) {
-			if (effect.name === 'Intimidate' && boost.atk) {
-				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Prism Scale', `[of] ${target}`);
-			}
-		},
 		onModifySpe(spe, pokemon) {
 			return this.dex.abilities.get('swiftswim').onModifySpe?.call(this, spe, pokemon);
 		},
@@ -11340,6 +11321,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Heavy Artillery",
 		rating: 5,
 		num: 10383,
+	},
+	everlastingbloom: {
+		name: "Everlasting Bloom",
+		num: 32551,
+		rating: 3,
+		flags: {},
+		shortDesc: "Personal sunlight keeps Cherrim in Sunshine form and activates its Flower Gift.",
+		desc: "While active, the user has sunlight for its own weather-dependent effects, keeping Cherrim in Sunshine form and activating its Flower Gift boosts. Actual weather is unchanged; allies need their own qualifying weather or field for Flower Gift. Utility Umbrella blocks personal sunlight, and suppressing this ability ends it.",
+		// Continuous personal weather is implemented in Pokemon.effectiveWeather.
 	},
 	megasol: {
 		onWeatherModifyDamage(damage, attacker, defender, move) {
@@ -11548,9 +11538,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (holder && holder.hp && holder.isActive && !holder.isAlly(target) && target.illusion) {
 				this.singleEvent('End', this.dex.abilities.get('illusion'), target.abilityState, target, holder, 'ability');
 			}
-		},
-		onModifySTAB(stab, source, target, move) {
-			if ((move.type === 'Fairy' || move.type === 'Dark') && !source.hasType(move.type)) return 1.5;
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(0.8);
@@ -14297,8 +14284,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	shadowshield: {
 		onSourceModifyDamage(damage, source, target, move) {
-			// Prism Armor-style damage protection at every HP, without field multipliers.
-			return this.chainModify(target.getMoveHitData(move).typeMod > 0 ? 0.6 : 0.8);
+			if (target.hp >= target.maxhp) return this.chainModify(0.5);
 		},
 		onImmunity(type, pokemon) {
 			if (type === 'hail' && this.field.isTerrain('coldeclipseterrain')) return false;
@@ -15038,7 +15024,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (fieldDisablesArmorReduction(this.field.terrain, 'solidrock')) return;
 			if (skipPassiveComponent(this, this.effectState.target, 'solidrock')) return;
-			let modifier = 0.8;
+			let modifier = 0.9;
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.debug('Solid Rock neutralize');
 				modifier *= 0.75;
@@ -17903,7 +17889,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			pokemon.abilityState.ultraEgoHitTriggered = false;
 		},
 		boostedField() {
-			return this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain', 'fairytaleterrain']);
+			return this.field.isTerrain(['ashenbeachterrain', 'fairytaleterrain']);
 		},
 		healUltraEgo(pokemon, source) {
 			if (isUltraSuppressedTerrain(this)) return;
@@ -18142,7 +18128,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			pokemon.abilityState.ultraEgoHitTriggered = false;
 		},
 		boostedField() {
-			return this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain', 'fairytaleterrain']);
+			return this.field.isTerrain(['ashenbeachterrain', 'fairytaleterrain']);
 		},
 		healUltraEgo(pokemon, source) {
 			if (isUltraSuppressedTerrain(this)) return;
@@ -20020,7 +20006,6 @@ Abilities.oceanlullaby = {
 	name: 'Ocean Lullaby', rating: 4, num: 11252,
 };
 Abilities.shadowscreen = {...Abilities.infiltrator, name: 'Shadow Screen', rating: 4, num: 11253};
-Abilities.voidpromise = {...Abilities.unaware, name: 'Void Promise', rating: 4, num: 11254};
 Abilities.voiddrift = {
 	...Abilities.levitate, ...Abilities.overcoat,
 	onResidualOrder: 5, onResidualSubOrder: 1,
@@ -20814,11 +20799,6 @@ Abilities.voidcommand.onAfterMove = function (source, target, move) {
  source.m.wickedCommandZUsed = true;
  const atk = source.getStat('atk', false, true), spa = source.getStat('spa', false, true);
  this.boost(atk >= spa ? {atk: 1} : {spa: 1}, source, source, this.effect);
-};
-Abilities.voidpromise.onHeal = function (amount, target, source, effect) {
- if (amount > 0 && target === source && effect?.id === 'moonlight') {
-  clearApprovedNegativeStats(this, target, Object.keys(target.boosts) as BoostID[], 'Void Promise');
- }
 };
 Abilities.voidsanctum.onSwitchOut = function (pokemon) {
  const veil = pokemon.side.sideConditions['auroraveil'];
@@ -21734,3 +21714,25 @@ installCombatSequences(Abilities, NovemberFinalDescriptions);
 
 import { installLightPinsir } from './malignant-light-pinsir';
 installLightPinsir(Abilities, NovemberFinalDescriptions);
+
+// The former Moon Veil becomes Void Promise; its old name resolves through an alias.
+Abilities.voidpromise = {...Abilities.moonveil, name: 'Void Promise'};
+delete Abilities.moonveil;
+
+// Explicit November 16 replacements, after all earlier composition installers.
+composeSelectedAbility(Abilities, 'primalego', ['ultraego', 'hospitality']);
+composeSelectedAbility(Abilities, 'verdanthospitality', ['friendguard', 'naturalcure']);
+Abilities.verdanthospitality.id = 'verdanthospitality' as ID;
+Abilities.verdanthospitality.name = 'Bloom Shelter';
+Abilities.waterbarrage.onStart = Abilities.shellarmor.onStart;
+Abilities.waterbarrage.onModifyMove = Abilities.dualwield.onModifyMove;
+Abilities.waterbarrage.onSourceModifyDamage = Abilities.shellarmor.onSourceModifyDamage;
+Abilities.waterbarrage.onCriticalHit = Abilities.shellarmor.onCriticalHit;
+Abilities.waterbarrage.onAfterEachBoost = Abilities.shellarmor.onAfterEachBoost;
+
+// Installers can supply legacy text; apply the approved descriptions after them.
+import {November16BalanceDescriptions} from './nov16-balance-descriptions';
+for (const [id, text] of Object.entries(November16BalanceDescriptions)) {
+	const ability = Abilities[id as ID];
+	if (ability) Object.assign(ability, text);
+}

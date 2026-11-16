@@ -10,7 +10,7 @@ function hit(p,t,id='darkpulse',extra={}){battle.clearActiveMove();const m=battl
 describe('Hydreigon Dread Wings',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
 	it('preserves the approved Hydreigon roster and Tyranitar Dread Presence', () => {
-		assert.deepEqual(Dex.species.get('hydreigon').abilities, { 0: 'Dark Aura', 1: 'Strings of Ruin', H: 'False Liberation' });
+		assert.deepEqual(Dex.species.get('hydreigon').abilities, { 0: 'Dark Aura', 1: 'Strings of Ruin', H: 'Mold Breaker' });
 		assert.equal(Dex.species.get('tyranitar').abilities.H, 'Dread Presence');
 		assert.notEqual(Dex.abilities.get('dreadpresence').onSourceDamagingHit, Dex.abilities.get('dreadwings').onSourceDamagingHit);
 	});

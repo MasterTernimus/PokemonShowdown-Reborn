@@ -215,14 +215,14 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	toxicevolution: ['moldbreaker', 'corrosion', 'dualwield', 'shielddust', 'levitate'],
 	heavenlychorus: ['pixilate', 'cloudnine', 'fluffy'],
 	voidomen: ['friendguard', 'serenegrace', 'moldbreaker'],
-	heatcoil: ['speedboost', 'magmaarmor', 'flamebody'],
+	heatcoil: ['speedboost', 'flamebody'],
 	coldlogic: ['toughclaws', 'aftermath', 'forewarn'],
 	ironwill: ['prismarmor', 'secondwind', 'selfsufficient', 'whiplash'],
 	joyride: ['aerilate', 'violentrush', 'vitalspirit'],
 	hardyskin: ['dryskin', 'vitalspirit', 'moxie'],
 	noseformation: ['elevate'],
 	perfectego: ['ultraego'],
-	prismscale: ['friendguard', 'oblivious', 'swiftswim'],
+	prismscale: ['friendguard', 'swiftswim'],
 	queensguard: ['contrary', 'shedskin', 'intimidate', 'infiltrator', 'proficient'],
 	rainsovereign: ['drizzle'],
 	riotamp: ['galvanize', 'resonanceforce', 'voltabsorb'],
@@ -677,7 +677,7 @@ AbilityComponents.falsebouquet = ['magician'];
 
 AbilityComponents.eldritchremedy = ["owntempo","curiousmedicine"];
 
-AbilityComponents.infernaldominion = ["intimidate", "fireward"];
+AbilityComponents.infernaldominion = ["intimidate"];
 
 AbilityComponents.hydraulicarmor = ["stamina"];
 
@@ -689,7 +689,7 @@ AbilityComponents.oceanlullaby = ["shellarmor"];
 
 AbilityComponents.shadowscreen = ["infiltrator"];
 
-AbilityComponents.voidpromise = ["unaware"];
+
 
 AbilityComponents.voiddrift = ["levitate","overcoat"];
 
@@ -811,7 +811,7 @@ AbilityComponents.stormsovereign = AbilityComponents.stormsovereign.filter(id =>
 AbilityComponents.sandsovereign = AbilityComponents.sandsovereign.filter(id => id !== 'mountainbreaker');
 AbilityComponents.frostsovereign = [...AbilityComponents.frostsovereign, 'soundproof'];
 
-AbilityComponents.burningspirit = ['ultrainstinct', 'opportunist', 'magmaarmor'];
+AbilityComponents.burningspirit = ['ultrainstinct', 'magmaarmor'];
 AbilityComponents.venompincer = ['poisontouch'];
 AbilityComponents.punchfiend = ['keeneye', 'innerfocus', 'unseenfist'];
 
@@ -1170,10 +1170,19 @@ AbilityComponents.solareruption = ['megasol', 'flamebody'];
 AbilityComponents.convergence = ['keeneye'];
 AbilityComponents.misalignedstars = ['anticipation'];
 AbilityComponents.frameperfect = ['innerfocus'];
-AbilityComponents.insight = ['convergence', 'innerfocus'];
+AbilityComponents.insight = ['convergence', 'ultrainstinct'];
 AbilityComponents.coldlogic = [...AbilityComponents.coldlogic, 'convergence'];
 
-AbilityComponents.malignantlight = ['illuminate', 'relicbeam'];
+AbilityComponents.malignantlight = ['illuminate'];
 AbilityComponents.ironmaiden = ['moxie'];
 AbilityComponents.siegegrip = ['moldbreaker'];
 AbilityComponents.astralcore = ['purepower', 'naturalcure', 'malignantlight'];
+
+AbilityComponents.voidpromise = AbilityComponents.moonveil;
+delete AbilityComponents.moonveil;
+
+AbilityComponents.primalego = ['ultraego', 'hospitality'];
+AbilityComponents.verdanthospitality = ['friendguard', 'naturalcure'];
+AbilityComponents.waterbarrage = ['dualwield', 'shellarmor'];
+AbilityComponents.siegelauncher = ['megalauncher', 'dualwield', 'stalwart'];
+AbilityComponents.fortressshell = ['stalwart', 'guardianpresence'];

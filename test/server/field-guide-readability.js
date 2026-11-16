@@ -6,7 +6,7 @@ const { conciseFieldNotes } = require('../../dist/data/field-guide-presentation'
 describe('Concise Field Notes', () => {
 	const guide = publicFieldGuide();
 	it('shows the current Relentless Hunt power for each field tier', () => {
-		for (const [id, power] of [['dragonsdenterrain', 2], ['fairytaleterrain', 2],
+		for (const [id, power] of [['dragonsdenterrain', 1.5], ['fairytaleterrain', 1.5],
 			['rockyterrain', 1.5], ['coldeclipseterrain', 1.5], ['forestterrain', 1.3]]) {
 			const row = guide.entries.find(e => e.id === id).referenceDetails.abilities.find(a => a.id === 'relentlesshunt');
 			assert(row, id);

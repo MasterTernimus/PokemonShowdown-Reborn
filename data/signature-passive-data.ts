@@ -104,4 +104,4 @@ SignaturePassiveComponents.healingmirror = ['magicbounce', 'healer'];
 
 SignaturePassiveComponents.frameperfect = ['innerfocus'];
 
-SignaturePassiveComponents.malignantlight = ['illuminate', 'relicbeam'];
+SignaturePassiveComponents.malignantlight = ['illuminate'];

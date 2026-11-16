@@ -30,8 +30,9 @@ describe('Approved Beedrill and Butterfree support changes', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	it('uses only the approved two base slots and keeps Magic Guard hidden', () => {
 		assert.deepEqual(Dex.species.get('butterfree').abilities, { '0': 'Gentle Scales', '1': 'Tinted Lens', H: 'Magic Guard' });
-		assert.deepEqual(Dex.species.get('beedrill').abilities, { '0': 'Hive Courier', '1': 'Twin Drills', H: 'Sniper' });
-		for (const [name, id] of [['Gentle Scales', 'butterfree'], ['Hive Courier', 'beedrill']]) assert.deepEqual(Dex.species.all().filter(s => Object.values(s.abilities).includes(name)).map(s => s.id), [id]);
+		assert.deepEqual(Dex.species.get('beedrill').abilities, { '0': 'Swarm', '1': 'Twin Drills', H: 'Sniper' });
+		for (const [name, id] of [['Gentle Scales', 'butterfree']]) assert.deepEqual(Dex.species.all().filter(s => Object.values(s.abilities).includes(name)).map(s => s.id), [id]);
+		assert(!Object.values(Dex.species.get('beedrill').abilities).includes('Hive Courier'));
 	});
 	it('Gentle Scales retains Compound Eyes accuracy and Mirror Arena entry bonuses', () => {
 		const [p, t] = setup('Butterfree', 'Gentle Scales');

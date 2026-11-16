@@ -45,7 +45,7 @@ describe('Four approved composite removals',()=>{
  });
  it('War Ship retains ordinary and super-effective Solid Rock reduction',()=>{
   const[p,t]=setup('War Ship','Drednaw-Gmax');
-  for(const [mod,expected]of [[0,80],[1,60]]){const m=battle.dex.getActiveMove('tackle');p.getMoveHitData(m).typeMod=mod;assert.equal(battle.runEvent('ModifyDamage',t,p,m,100),expected);}
+  for(const [mod,expected]of [[0,90],[1,67]]){const m=battle.dex.getActiveMove('tackle');p.getMoveHitData(m).typeMod=mod;assert.equal(battle.runEvent('ModifyDamage',t,p,m,100),expected);}
  });
  it('Void Voice cannot activate stale copy state but retains its three components',()=>{
   const[p,t]=setup('Void Voice','Gardevoir-Mega');

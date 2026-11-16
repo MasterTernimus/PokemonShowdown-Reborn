@@ -1,3 +1,4 @@
+import {November16BalanceDescriptions} from './nov16-balance-descriptions';
 import type {AbilityDataTable} from '../sim/dex-abilities';
 import {composeSelectedAbility} from './selected-mega-simplifications';
 
@@ -58,13 +59,13 @@ export function installFieldSetterReductions(abilities: AbilityDataTable) {
 		this.boost({atk: 1}, holder, holder, this.effect);
 	};
 	Object.assign(abilities.curseddoll, {
-		shortDesc: 'Tough Claws + Shadow Shield; surviving an attack at half HP grants +1 Attack once per battle.',
-		desc: 'Contact moves have 1.3x power. Takes 20% less attack damage, or 40% less from super-effective attacks. This protection cannot be bypassed by ability-ignoring moves, but suppression disables it. Once per battle, surviving an opposing attack at half HP or less grants +1 Attack. Immune to hail on Cold Eclipse.',
+		shortDesc: November16BalanceDescriptions.curseddoll.shortDesc,
+		desc: November16BalanceDescriptions.curseddoll.desc,
 	});
 	delete abilities.requiem.onFaint;
 	Object.assign(abilities.requiem, {
-		shortDesc: 'Cursed Body disabling + Shadow Shield damage reduction.',
-		desc: 'Damaging attacks have a 30% chance to be Disabled, guaranteed on Haunted and blocked on Holy; normal Cursed Body exclusions apply. Takes 20% less attack damage, or 40% less from super-effective attacks. Cannot be suppressed.',
+		shortDesc: November16BalanceDescriptions.requiem.shortDesc,
+		desc: November16BalanceDescriptions.requiem.desc,
 	});
 	abilities.eternalflower.onFaint = function (pokemon) {
 		if (!this.effectState.speciesPassive && pokemon.getPassives().includes('eternalflower')) return;

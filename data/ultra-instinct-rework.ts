@@ -61,7 +61,7 @@ export function installUltraInstinctRework(abilities: AbilityDataTable) {
 	};
 
 	// Compose the complete current components, with breakability checked per component.
-	const parts = ['ultrainstinct', 'opportunist', 'magmaarmor'];
+	const parts = ['ultrainstinct', 'magmaarmor'];
 	const result: any = Object.fromEntries(Object.entries(table.burningspirit).filter(([key]) => !key.startsWith('on')));
 	result.flags = {};
 	const keys = new Set(parts.flatMap(id => Object.keys(table[id]).filter(key => key.startsWith('on'))));
@@ -74,12 +74,7 @@ export function installUltraInstinctRework(abilities: AbilityDataTable) {
 				const component = this.dex.abilities.get(id), callback = (component as any)[key];
 				if (typeof callback !== 'function') continue;
 				if (component.flags.breakable && this.suppressingAbility(this.effectState.target, component)) continue;
-				let callArgs = args;
-				if (id === 'opportunist' && key === 'onFoeAfterEachBoost') {
-					const boosts = { ...args[0] }; delete boosts.accuracy; delete boosts.evasion;
-					callArgs = [boosts, ...args.slice(1)];
-				}
-				const value = callback.apply(this, callArgs);
+				const value = callback.apply(this, args);
 				if (value === false || value === null || value === 0) return value;
 				if (value !== undefined) returned = value;
 			}

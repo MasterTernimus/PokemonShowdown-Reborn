@@ -25,7 +25,7 @@ describe('Centiskorch approved ability packages', () => {
 		assert.deepEqual(Dex.species.get('centiskorch').abilities, { 0: 'Coil Up', 1: 'White Smoke', H: 'Flame Body' });
 		assert.deepEqual(Dex.species.get('centiskorch').passives, ['flashfire']);
 		assert.deepEqual(Dex.species.get('centiskorchgmax').passives, ['flamebody']);
-		assert(getAbilityDisplayComponents('heatcoil', ['flamebody'], 'centiskorchgmax').includes('magmaarmor'));
+		assert(!getAbilityDisplayComponents('heatcoil', ['flamebody'], 'centiskorchgmax').includes('magmaarmor'));
 	});
 	it('Coil Up triggers once across multi-hit and repeated contact moves, and resets on switching', () => {
 		let [p, q] = setup(); hit(p, q, 'doublehit'); assert.equal(p.boosts.def, 1);
@@ -55,29 +55,28 @@ describe('Centiskorch approved ability packages', () => {
 		assert.equal(p.hp, hp); assert(p.volatiles.flashfire);
 	});
 	for (const field of ['dragonsdenterrain', 'volcanicterrain', 'infernaleclipseterrain']) {
-		it(`Heat Coil receives Magma Armor entry defenses in ${field}`, () => {
+		it(`Heat Coil no longer receives Magma Armor entry defenses in ${field}`, () => {
 			const [p] = setup('Mew', 'Heat Coil'); battle.field.terrain = field;
 			const before = { ...p.boosts };
 			battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
-			const boost = field === 'infernaleclipseterrain' ? 2 : 1;
+			// Flame Body independently grants one stage on Infernal Eclipse.
+			const boost = field === 'infernaleclipseterrain' ? 1 : 0;
 			assert.equal(p.boosts.def, before.def + boost); assert.equal(p.boosts.spd, before.spd + boost);
 		});
 	}
-	it('Heat Coil prevents freeze, cures Cold Eclipse frostbite and halves Water/Ice attack power', () => {
-		const [p, q] = setup('Mew', 'Heat Coil'); assert.equal(p.setStatus('frz'), false);
-		battle.field.terrain = 'coldeclipseterrain'; assert(p.setStatus('frz'));
-		battle.singleEvent('Update', p.getAbility(), p.abilityState, p); assert.equal(p.status, '');
-		battle.field.terrain = '';
-		for (const id of ['watergun', 'icebeam']) assert.equal(battle.runEvent('SourceModifySpA', p, q, Dex.getActiveMove(id), 100), 50);
-		for (const id of ['waterfall', 'icepunch']) assert.equal(battle.runEvent('SourceModifyAtk', p, q, Dex.getActiveMove(id), 100), 50);
+	it('Heat Coil no longer prevents or cures frostbite or halves Water/Ice attacking stats', () => {
+		const [p, q] = setup('Mew', 'Heat Coil'); assert(p.setStatus('frz'));
+		battle.field.terrain = 'coldeclipseterrain';
+		battle.singleEvent('Update', p.getAbility(), p.abilityState, p); assert.equal(p.status, 'frz');
+		p.cureStatus(); battle.field.terrain = '';
+		for (const id of ['watergun', 'icebeam']) assert.equal(battle.runEvent('SourceModifySpA', p, q, Dex.getActiveMove(id), 100), 100);
+		for (const id of ['waterfall', 'icepunch']) assert.equal(battle.runEvent('SourceModifyAtk', p, q, Dex.getActiveMove(id), 100), 100);
 	});
-	it('Heat Coil blocks Fire on its supported fields but suppression restores damage', () => {
+	it('Heat Coil no longer blocks Fire on Magma Armor fields', () => {
 		const [p, q] = setup('Centiskorch-Gmax', 'Heat Coil');
 		for (const field of ['dragonsdenterrain', 'infernaleclipseterrain']) {
 			battle.field.terrain = field; const hp = p.hp;
-			hit(p, q, 'ember'); assert.equal(p.hp, hp);
+			hit(p, q, 'ember'); assert(p.hp < hp);
 		}
-		p.addVolatile('gastroacid', q); const hp = p.hp;
-		hit(p, q, 'ember'); assert(p.hp < hp);
 	});
 });

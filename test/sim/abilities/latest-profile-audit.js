@@ -18,7 +18,7 @@ describe('Latest profile ability regressions', () => {
 		assert(battle.field.isWeather('hail'));
 		const hit = battle.dex.getActiveMove('flamethrower');
 		holder.getMoveHitData(hit).typeMod = 1;
-		assert.equal(battle.runEvent('ModifyDamage', fire, holder, hit, 100), 60);
+		assert.equal(battle.runEvent('ModifyDamage', fire, holder, hit, 100), 67);
 		assert.equal(holder.runEffectiveness(battle.dex.getActiveMove('flamethrower')), 1);
 		assert.equal(holder.runEffectiveness(battle.dex.getActiveMove('earthquake')), 1);
 		for (const [attacker, expected] of [[holder, -1], [ally, -1]]) {

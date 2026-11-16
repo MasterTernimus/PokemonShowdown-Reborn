@@ -59,9 +59,9 @@ describe('Approved field setter reductions', () => {
   assert.equal(battle.runEvent('BasePower',p,foe,battle.dex.getActiveMove('tackle'),100,true),130);
   const move = battle.dex.getActiveMove('watergun');
   p.getMoveHitData(move).typeMod = 0;
-  assert.equal(battle.runEvent('ModifyDamage',foe,p,move,1000),800);
+  assert.equal(battle.runEvent('ModifyDamage',foe,p,move,1000),500);
   p.getMoveHitData(move).typeMod = 1;
-  assert.equal(battle.runEvent('ModifyDamage',foe,p,move,1000),600);
+  assert.equal(battle.runEvent('ModifyDamage',foe,p,move,1000),500);
  });
  it('Requiem no longer creates Haunted and Pressure grants no hazard protection', () => {
   const [p, foe] = start(mon('Dusknoir', 'Requiem'));

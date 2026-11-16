@@ -84,7 +84,7 @@ export function replaceFalseSalvationBoosts(
 export const JackpotSalvationDescriptions = {
 	hotstreak: {
 		shortDesc: 'Super Luck; damaging a foe can trigger four turns of Jackpot healing, cleansing and protection.',
-		desc: 'Super Luck raises critical-hit rate by one stage. After damaging a foe, rolls a separate 20% Jackpot chance once per turn. Jackpot cures major status and harmful conditions on activation and at each turn end, and heals 1/4 max HP at each turn end. It reduces attack damage by 20% and lasts four turns including activation. It cannot refresh and ends on switching. Cleanses Attract, confusion, Curse, Void Crossing curse, Disable, Encore, Embargo, Gastro Acid, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment, Yawn, trapping, Octolock, Powder, Tar Shot, Salt Cure and Syrup Bomb. Beneficial effects remain. It does not prevent fainting.',
+		desc: 'Super Luck raises critical-hit rate by one stage. After damaging a foe, rolls a 20% Jackpot chance once per turn, doubled to 40% by Serene Grace (including ally support) or Rainbow Field/Aura. These chance boosts do not stack. Jackpot cures major status and harmful conditions on activation and at each turn end, and heals 1/4 max HP at each turn end. It reduces attack damage by 20% and lasts four turns including activation. It cannot refresh and ends on switching. Cleanses Attract, confusion, Curse, Void Crossing curse, Disable, Encore, Embargo, Gastro Acid, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment, Yawn, trapping, Octolock, Powder, Tar Shot, Salt Cure and Syrup Bomb. Beneficial effects remain. It does not prevent fainting.',
 	},
 	falsesalvation: {
 		shortDesc: 'Telepathy; once per foe each entry, replaces its status-move self boosts with 1/4 HP healing.',
@@ -101,7 +101,9 @@ export function installJackpotSalvation(abilities: AbilityDataTable) {
 		if (move.effectType !== 'Move' || damage <= 0 || !source.hp || source.isAlly(target) || move.category === 'Status' ||
 			source.volatiles.jackpot || source.m.hotStreakRollTurn === this.turn) return;
 		source.m.hotStreakRollTurn = this.turn;
-		if (this.randomChance(1, 5)) source.addVolatile('jackpot', source, this.effect);
+		const grace = (move as ActiveMove & {sereneGraceFactor?: number}).sereneGraceFactor || 1;
+		const boosted = grace > 1 || this.field.isTerrainOrAura('rainbowterrain');
+		if (this.randomChance(boosted ? 2 : 1, 5)) source.addVolatile('jackpot', source, this.effect);
 	};
 	abilities.falsesalvation = {
 		name: 'False Salvation', num: 32592, rating: 4, flags: { breakable: 1 },

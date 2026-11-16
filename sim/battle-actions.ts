@@ -18,6 +18,7 @@ import {predatorUltraMatch} from './predator';
 import {ultraRivalry, ultraGuardAvailable} from './ultra-rivalry';
 import {ringmasterSwitch, ringmasterEntry, resetQueuedEntry, shedDecoyEntry} from '../data/queued-abilities-approved';
 import {guardFixedDamage} from '../data/guard-passives-approved';
+import {qualifiesForRelicBeam} from '../data/relic-beam';
 
 const CHOOSABLE_TARGETS = new Set(['normal', 'normalOrSelf', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
@@ -2482,13 +2483,6 @@ export class BattleActions {
 		if (defender === target && target.species.id === 'kecleon' && adaptiveZHit(target, move)) {
 			ignorePositiveDefensive = true;
 		}
-		if (source.hasAbility('insight') && !source.isAlly(target)) {
-			// Keep the read from the first strike for every hit against this foe in the same move.
-			const previous = source.abilityState.auraReads?.[target.m.ultraRivalryEntryToken];
-			moveHit.auraRead ??= (previous === 'Physical' && move.category === 'Special' && defenseStat === 'spd') ||
-				(previous === 'Special' && move.category === 'Physical' && defenseStat === 'def');
-			if (moveHit.auraRead) ignorePositiveDefensive = true;
-		}
 		if (move.category !== 'Status' && this.battle.movehasType(move, 'Fire') && source.hasAbilityOrPassive('coronafurnace')) ignorePositiveDefensive = true;
 		if (defenseStat === 'def' && this.battle.movehasType(move, 'Rock') && source.hasAbility('keenhunt') && !source.isAlly(target)) ignorePositiveDefensive = true;
 		if (defenseStat === 'def' && move.flags.kick && source.hasAbility('imperialprincess')) ignorePositiveDefensive = true;
@@ -2540,6 +2534,7 @@ export class BattleActions {
 		if (move.category !== 'Status' && !move.overrideDefensivePokemon && (
             (source.hasAbility('liquidarsenal') && this.battle.movehasType(move, 'Water') && !move.overrideDefensiveStat) ||
             (source.hasAbility('psychedominion') && this.battle.movehasType(move, 'Psychic')) ||
+            (move.category === 'Special' && source.hasAbilityOrPassive('malignantlight') && qualifiesForRelicBeam(move)) ||
             (move.id === 'psystrike' && ['mewtwo','mewtwomegax','mewtwomegay'].includes(source.species.id))
         )) {
 			const alternateStat = defenseStat === 'def' ? 'spd' : 'def';

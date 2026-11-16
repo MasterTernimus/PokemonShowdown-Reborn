@@ -17,6 +17,26 @@ function hit(id,p,q,extra={}) {return use(id,p,q,{damage:100,...extra});}
 function wish(p){const state=p.side.slotConditions[p.position].wish;assert(state);battle.singleEvent('End',Dex.conditions.get('wish'),state,p);}
 describe('Approved Yang field and Aura bonuses',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
+ it('retains Amaria’s credit in Siren’s Wrath descriptions', () => {
+  const move = Dex.moves.get('sirenswrath');
+  assert(move.shortDesc.startsWith("Amaria's move."));
+  assert(move.desc.startsWith("Amaria's move."));
+  assert(move.shortDesc.length <= 90);
+ });
+ for (const field of ['watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain', 'murkwatersurfaceterrain', 'icyterrain']) {
+  for (const substitute of [false, true]) it('announces Amaria once for Wrath on ' + field + ', Substitute=' + substitute, () => {
+   const [p,q] = setup(field);
+   if (substitute) q.addVolatile('substitute');
+   hit('sirenswrath', p, q, {multihit: 2});
+   assert.equal(battle.log.filter(line => line === '|-message|Amaria’s wrath surged through the depths!').length, 1);
+  });
+ }
+ for (const outcome of ['offfield', 'protect', 'miss']) it('does not announce Wrath’s field impact for ' + outcome, () => {
+  const [p,q] = setup(outcome === 'offfield' ? 'grassyterrain' : 'watersurfaceterrain');
+  if (outcome === 'protect') q.addVolatile('protect');
+  hit('sirenswrath', p, q, outcome === 'miss' ? {accuracy: 0} : {});
+  assert(!battle.log.includes('|-message|Amaria’s wrath surged through the depths!'));
+ });
  for (const [field, count] of [['bigtopterrain', 1], ['rockyterrain', 0]]) {
   it('announces Samson’s Big Top line ' + count + ' times on ' + field, () => {
    const [p,q] = setup(field);

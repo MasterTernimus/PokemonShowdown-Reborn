@@ -22,7 +22,7 @@ describe('Torterra-Mega-X and Terra Ascendant', () => {
 		}
 	});
 
-	it('offers both Mega choices and activates Ultra Ego, Unaware, and Proficient', () => {
+	it('offers both Mega choices and activates Ultra Ego, Hospitality, and Proficient', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Torterra', item: 'Torterranite', moves: ['splash', 'rockslide', 'energyball']},
 		], [{species: 'Mew', moves: ['tackle']}]]);
@@ -35,9 +35,10 @@ describe('Torterra-Mega-X and Terra Ascendant', () => {
 		assert.equal(torterra.species.name, 'Torterra-Mega-X');
 		assert(torterra.getPassives().includes('proficient'));
 		assert(torterra.hasAbilityOrPassive('proficient'));
-		for (const ability of ['unaware', 'ultraego', 'moldbreaker']) {
+		for (const ability of ['hospitality', 'ultraego']) {
 			assert(torterra.hasAbility(ability), ability);
 		}
+		assert(!torterra.hasAbility('unaware'));
 		assert.equal(torterra.boosts.atk, 1);
 		assert.equal(torterra.boosts.spa, 1);
 		const rockMove = battle.dex.getActiveMove('rockslide');

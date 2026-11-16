@@ -535,7 +535,7 @@ describe('Adaptive Cycle', () => {
    assert.equal(battle.runEvent('ModifyDamage', p, foe, normal, 100), 50);
    battle.makeChoices('move splash', 'move splash');
    assert.equal(battle.runEvent('ModifyDamage', p, foe, normal, 100), 100);
-   assert.equal(battle.runEvent('ModifyDamage', p, foe, fire, 100), 60);
+   assert.equal(battle.runEvent('ModifyDamage', p, foe, fire, 100), 67);
   } finally {battle.dex.abilities.abilityCache.set(ability.id, ability);}
  });
  it('keeps field healing penalties separate from completed weather adaptation', () => {

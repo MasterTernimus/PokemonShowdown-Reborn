@@ -19,9 +19,10 @@ describe('Armor damage reductions', () => {
 			const damage = () => battle.runEvent('ModifyDamage', foe, holder, move, 1000);
 			assert.equal(damage(), 750);
 			holder.getMoveHitData(move).typeMod = 1;
-			assert.equal(damage(), 600);
+			const reduced=armor==='Prism Armor'?600:675;
+			assert.equal(damage(), reduced);
 			holder.side.addSideCondition('reflect', holder);
-			assert(damage() < 600, 'Reflect still works');
+			assert(damage() < reduced, 'Reflect still works');
 			assert.equal(battle.runEvent('CriticalHit', holder, foe, move), false, 'Lucky Chant still prevents critical hits');
 		});
 	}

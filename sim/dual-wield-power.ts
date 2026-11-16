@@ -69,7 +69,7 @@ export function finishDualWieldPower(battle: Battle) {
 
 /** Pure eligibility conditions; actual final-damage callbacks execute once at their normal phase. */
 export const DualWieldFinalDamageHooks = new Set([
-	'moonveil', 'corrosiveburn', 'abysssniper', 'freezerburn', 'voidvoice', 'eternalflower', 'desertspirit', 'neuroforce',
+	'voidpromise', 'corrosiveburn', 'abysssniper', 'freezerburn', 'voidvoice', 'eternalflower', 'desertspirit', 'neuroforce',
 	'pastelveil', 'queenlymajesty', 'rkssystem', 'sniper', 'tintedlens', 'empress', 'prismwings', 'spentforce', 'venomignition',
 	'patientmarksman', 'guidinggallop', 'crushingdepths', 'ruinedsky', 'rivalmalice', 'pastelsanctuary',
 	'beastfang', 'apocalypticflame', 'burningquake',

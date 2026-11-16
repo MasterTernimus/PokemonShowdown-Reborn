@@ -18,8 +18,8 @@ export const RiftHerald: AbilityData = {
 /** Fire counterpart to Bad Seeds; its defensive and spreading effects require the full field. */
 export const AshenSeeds: AbilityData = {
  name: 'Ashen Seeds', num: 12030, rating: 4, flags: {breakable: 1},
- shortDesc: 'Entry: Ashen Aura or Infernal Eclipse. Infernal Parade/Eruption can develop the Aura.',
- desc: "On entry, sets Ashen Aura for 5 turns (8 with Amplifield Rock). On an empty field or Volcanic Field, sets Infernal Eclipse instead.\n\nAshen Aura boosts Fire attacks by 30%. Land Infernal Parade or Eruption to turn the Aura into Infernal Eclipse for its remaining turns. On Cold Eclipse, any Pokémon can trigger this change with Eruption, keeping the field timer.\n\nDuring Infernal Eclipse, the holder takes half damage from weaknesses caused by its Fire typing and keeps the field in place until it expires or the holder leaves or is suppressed. Eligible non-Fire contact attackers inherit Ashen Seeds. Non-Fire holders lose 1 Attack and Sp. Atk each turn.",
+ shortDesc: 'Entry: Ashen Aura/Infernal Eclipse; two qualifying attacks develop its Aura.',
+ desc: "On entry, sets Ashen Aura for 5 turns (8 with Amplifield Rock). On an empty field or Volcanic Field, sets Infernal Eclipse instead.\n\nAshen Aura boosts Fire attacks by 30%. Two successful Infernal Parade or Eruption attacks develop the Aura into Infernal Eclipse for its remaining turns. If an Eclipse field is already active, one qualifying attack is enough. On Cold Eclipse, any Pokémon can trigger this change with Eruption, keeping the field timer.\n\nDuring Infernal Eclipse, the holder takes half damage from weaknesses caused by its Fire typing and keeps the field in place until it expires or the holder leaves or is suppressed. Eligible non-Fire contact attackers inherit Ashen Seeds. Non-Fire holders lose 1 Attack and Sp. Atk each turn.",
  onStart(pokemon) {
   if (pokemon.m.ashenSeedsContact || this.field.isAura('ashenaura') || this.field.isTerrain('infernaleclipseterrain')) return;
   const duration = pokemon.hasItem('amplifieldrock') ? 8 : 5;

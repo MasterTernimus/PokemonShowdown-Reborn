@@ -62,7 +62,7 @@ describe('Native Parental Bond with selected Family Guardian', () => {
 		battle.runEvent('PrepareHit', p, t, ordinary);
 		assert.equal(ordinary.multihit, 2);
 		t.addVolatile('protect',t);battle.actions.useMove('watergun',p,{target:t});assert.equal(t.hp,t.maxhp);t.removeVolatile('protect');
-		const m=battle.dex.getActiveMove('watergun');m.ignoreAbility=true;battle.setActiveMove(m,p,t);assert.equal(battle.runEvent('ModifyDamage',p,t,m,1000),800);battle.clearActiveMove();
+		const m=battle.dex.getActiveMove('watergun');m.ignoreAbility=true;battle.setActiveMove(m,p,t);assert.equal(battle.runEvent('ModifyDamage',p,t,m,1000),500);battle.clearActiveMove();
 	});
 	it('exposes native Parental Bond separately without claiming Mold Breaker', () => {
 		const [p] = start(); assert.equal(battle.log.filter(x => x.startsWith('|-ability|') && x.endsWith('|Mold Breaker')).length, 0);

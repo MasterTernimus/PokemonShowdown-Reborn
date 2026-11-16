@@ -1,3 +1,4 @@
+import {November16BalanceDescriptions} from './nov16-balance-descriptions';
 /** Form-aware text; shared nonrecipient packages retain their original description. */
 export const GmaxPassiveDescriptions = {
 	"gigavolt": {
@@ -22,13 +23,13 @@ export const GmaxPassiveDescriptions = {
 	},
 	"warship": {
 		"passive": "strongjaw",
-		"shortDesc": "Swift Swim and Solid Rock.",
-		"desc": "Doubles Speed in rain or on Water Surface, Murkwater Surface, Underwater and Midnight Zone. Takes 20% less attack damage, or 40% less from super-effective attacks.",
+		"shortDesc": November16BalanceDescriptions.warship.shortDesc,
+		"desc": November16BalanceDescriptions.warship.desc,
 	},
 	"furnaceengine": {
 		"passive": "flamebody",
-		"shortDesc": "Steam Engine, healing, damage reduction and Fire/Rock HP-hit chip.",
-		"desc": "Fire or Water HP hits give +6 Speed. Entry on Burning, Superheated or Volcanic gives +6 Speed; Dragon's Den and Volcanic give +1 Defense and Sp. Def; Cold Eclipse entry uses only passive Flame Body's +1 Defense and Sp. Def. Midnight Zone entry makes it Water-type. Water Surface, Underwater and Volcanic give +1 Speed each turn. Heals 1/16 max HP each turn. Takes 20% less attack damage, or 40% less from super-effective attacks. If it dealt Fire- or Rock-type move damage to opposing HP that turn, at the end of the turn opposing Pokemon take Fire-type damage equal to 1/16 max HP, blocked by Fire immunities. Only in Free-for-All does Fire type effectiveness scale this chip.",
+		"shortDesc": November16BalanceDescriptions.furnaceengine.shortDesc,
+		"desc": November16BalanceDescriptions.furnaceengine.desc,
 	},
 	"sweetdecay": {
 		"passive": "gluttony",
@@ -52,8 +53,8 @@ export const GmaxPassiveDescriptions = {
 	},
 	"heatcoil": {
 		"passive": "flamebody",
-		"shortDesc": "Speed Boost; freeze cure and Water/Ice damage reduction.",
-		"desc": "Gains +1 Speed at the end of each full turn it spends active. Cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat.",
+		"shortDesc": "Speed Boost + Long Reach.",
+		"desc": "Speed Boost raises Speed at the end of each full turn. Long Reach lets its moves attack without contact.",
 	},
 	"wickedsnare": {
   "passive": "prankster",

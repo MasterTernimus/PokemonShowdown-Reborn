@@ -48,7 +48,7 @@ describe('Approved ability followups', () => {
 					const move = b.dex.getActiveMove('tackle');
 					p.getMoveHitData(move).typeMod = mod;
 
-					assert.equal(b.runEvent('ModifyDamage', t, p, move, 100), ['Phantom Fist', 'Surge Conduit'].includes(ability) ? 100 : mod > 0 ? 60 : 80);
+					assert.equal(b.runEvent('ModifyDamage', t, p, move, 100), ['Phantom Fist', 'Surge Conduit'].includes(ability) ? 100 : hp === 1 ? 50 : 100);
 				}
 			});
 	}
@@ -60,7 +60,7 @@ describe('Approved ability followups', () => {
 			const m = b.dex.getActiveMove('tackle');
 			p.getMoveHitData(m).typeMod = 1;
 
-			assert.equal(b.runEvent('ModifyDamage', t, p, m, 100), 60);
+			assert.equal(b.runEvent('ModifyDamage', t, p, m, 100), 50);
 		});
 
 	for (const ability of ['Shadow Shield', 'Voidcraft']) {
@@ -72,7 +72,7 @@ describe('Approved ability followups', () => {
 				p.getMoveHitData(m).typeMod = 1;
 
 				b.setActiveMove(m, t, p);
-				assert.equal(b.runEvent('ModifyDamage', t, p, m, 100), 60);
+				assert.equal(b.runEvent('ModifyDamage', t, p, m, 100), 50);
 			});
 
 		for (const suppression of ['gastroacid', 'gas'])
@@ -86,14 +86,15 @@ describe('Approved ability followups', () => {
 				assert.equal(b.runEvent('ModifyDamage', t, p, m, 100), 100);
 			});
 
-		it(`${ability} reduces every real critical/multi-hit attack and not residual damage`, () => {
+		it(`${ability} reduces only the first hit of a real critical/multi-hit attack at full HP and not residual damage`, () => {
 			const [p, t] = start(ability);
 			const hits = [];
 			b.onEvent('DamagingHit', b.format, d => hits.push(d));
 
 			hit(t, p, 'tackle', { multihit: 3, willCrit: true });
 			assert.equal(hits.length, 3);
-			assert(hits.every(d => d === hits[0]));
+			assert(hits[0] < hits[1]);
+			assert.equal(hits[1], hits[2]);
 
 			const before = p.hp;
 			b.damage(20, p, t, b.dex.conditions.get('sandstorm'));

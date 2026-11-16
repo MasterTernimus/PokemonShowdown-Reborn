@@ -1,5 +1,5 @@
 {
-  "fingerprint": "a42dd68472c39a6874faa5dd00752b437494afd840b60c83d03bd05470205bfe",
+  "fingerprint": "311a1aaa4b487b161e273302b840d70e2f7ae2ec978546411848c38010c4c749",
   "fields": {
     "flowergarden1": {
       "abilities": [
@@ -12,6 +12,7 @@
         "growth",
         "rototiller",
         "secretpower",
+        "terrainpulse",
         "naturepower"
       ],
       "items": [
@@ -24,7 +25,8 @@
         "leafguard"
       ],
       "moves": [
-        "ingrain"
+        "ingrain",
+        "terrainpulse"
       ],
       "items": []
     },
@@ -34,7 +36,8 @@
       ],
       "moves": [
         "floralhealing",
-        "sweetscent"
+        "sweetscent",
+        "terrainpulse"
       ],
       "items": []
     },
@@ -43,7 +46,8 @@
         "chlorophyll"
       ],
       "moves": [
-        "ingrain"
+        "ingrain",
+        "terrainpulse"
       ],
       "items": []
     },
@@ -51,6 +55,7 @@
       "abilities": [],
       "moves": [
         "secretpower",
+        "terrainpulse",
         "naturepower"
       ],
       "items": []
@@ -89,7 +94,8 @@
         "strength",
         "terrainpulse",
         "dustydrift",
-        "naturepower"
+        "naturepower",
+        "steadfaststrike"
       ],
       "items": [
         "shellbell",
@@ -158,7 +164,9 @@
         "terrainpulse",
         "tripleaxel",
         "victorydance",
-        "naturepower"
+        "naturepower",
+        "vanishingact",
+        "rebelanthem"
       ],
       "items": [
         "syntheticseed"
@@ -265,7 +273,6 @@
         "sacrededge",
         "omenedge",
         "perfectforesight",
-        "perfectego",
         "irondominion",
         "duskilate",
         "execution",
@@ -304,9 +311,7 @@
         "sinisterblaze",
         "turboblaze",
         "unnerve",
-        "ultraego",
         "ultrainstinct",
-        "burningego",
         "zenmode",
         "amethystglow"
       ],
@@ -348,7 +353,8 @@
       "moves": [
         "camouflage",
         "terrainpulse",
-        "naturepower"
+        "naturepower",
+        "nullpulse"
       ],
       "items": [
         "magicalseed"
@@ -442,7 +448,8 @@
         "venomdrench",
         "venoshock",
         "ickyinjection",
-        "naturepower"
+        "naturepower",
+        "blacktestament"
       ],
       "items": [
         "telluricseed"
@@ -488,7 +495,8 @@
         "solarblade",
         "synthesis",
         "terrainpulse",
-        "naturepower"
+        "naturepower",
+        "nullpulse"
       ],
       "items": [
         "magicalseed"
@@ -569,6 +577,7 @@
         "terrainpulse",
         "scalyscorn",
         "naturepower",
+        "ancestralwrath",
         "surf",
         "muddywater",
         "blizzard",
@@ -592,7 +601,6 @@
         "aevianspark",
         "auramaster",
         "download",
-        "defragment",
         "electromorphosis",
         "fortressshell",
         "galvanize",
@@ -620,7 +628,8 @@
         "shiftgear",
         "steelbeam",
         "terrainpulse",
-        "naturepower"
+        "naturepower",
+        "logicpulse"
       ],
       "items": [
         "syntheticseed"
@@ -722,7 +731,8 @@
         "terrainpulse",
         "wish",
         "stabbyswarm",
-        "naturepower"
+        "naturepower",
+        "laurellash"
       ],
       "items": [
         "telluricseed"
@@ -731,7 +741,6 @@
     "glitchterrain": {
       "abilities": [
         "download",
-        "defragment",
         "mimicry"
       ],
       "moves": [
@@ -744,7 +753,8 @@
         "rest",
         "terrainpulse",
         "glitchygraphics",
-        "naturepower"
+        "naturepower",
+        "logicpulse"
       ],
       "items": [
         "syntheticseed"
@@ -805,7 +815,6 @@
         "battlefervor",
         "cursedbody",
         "auroracurrent",
-        "perfectego",
         "duskilate",
         "execution",
         "holycow",
@@ -816,9 +825,7 @@
         "perishbody",
         "powerspot",
         "slowstart",
-        "ultraego",
-        "ultrainstinct",
-        "burningego"
+        "ultrainstinct"
       ],
       "moves": [
         "camouflage",
@@ -831,7 +838,8 @@
         "spiritbreak",
         "terrainpulse",
         "wish",
-        "naturepower"
+        "naturepower",
+        "steadfaststrike"
       ],
       "items": [
         "magicalseed"
@@ -866,7 +874,9 @@
         "snipeshot",
         "terrainpulse",
         "tripledive",
-        "naturepower"
+        "naturepower",
+        "solacepulse",
+        "coldshoulder"
       ],
       "items": [
         "elementalseed"
@@ -918,7 +928,8 @@
         "mirrorshot",
         "reflect",
         "terrainpulse",
-        "naturepower"
+        "naturepower",
+        "vanishingact"
       ],
       "items": [
         "syntheticseed"
@@ -944,7 +955,8 @@
         "terrainpulse",
         "thunder",
         "wildboltstorm",
-        "naturepower"
+        "naturepower",
+        "unboundrefrain"
       ],
       "items": [
         "telluricseed"
@@ -1004,8 +1016,6 @@
         "battlefervor",
         "beadsofruin",
         "auroracurrent",
-        "defragment",
-        "perfectego",
         "duskilate",
         "execution",
         "eternalflower",
@@ -1025,9 +1035,7 @@
         "wrathshield",
         "stalwart",
         "tabletsofruin",
-        "ultraego",
         "ultrainstinct",
-        "burningego",
         "vesselofruin",
         "victorystar"
       ],
@@ -1051,7 +1059,8 @@
         "trickroom",
         "wish",
         "wonderroom",
-        "naturepower"
+        "naturepower",
+        "heavenfall"
       ],
       "items": [
         "magicalseed"
@@ -1085,7 +1094,8 @@
         "waterpledge",
         "weatherball",
         "wish",
-        "naturepower"
+        "naturepower",
+        "rebelanthem"
       ],
       "items": [
         "magicalseed"
@@ -1107,7 +1117,9 @@
         "splinteredstormshards",
         "stealthrock",
         "terrainpulse",
-        "naturepower"
+        "naturepower",
+        "solarpledge",
+        "lunarpledge"
       ],
       "items": [
         "telluricseed"
@@ -1116,7 +1128,6 @@
     "shortcircuitterrain": {
       "abilities": [
         "download",
-        "defragment",
         "perfectforesight",
         "duskilate",
         "execution",
@@ -1142,7 +1153,8 @@
         "metalsound",
         "steelbeam",
         "terrainpulse",
-        "naturepower"
+        "naturepower",
+        "shockdoctrine"
       ],
       "items": [
         "syntheticseed"
@@ -1181,7 +1193,10 @@
         "terrainpulse",
         "thunder",
         "wildboltstorm",
-        "naturepower"
+        "naturepower",
+        "unboundrefrain",
+        "solacepulse",
+        "coldshoulder"
       ],
       "items": [
         "telluricseed"
@@ -1202,7 +1217,8 @@
         "grassyterrain",
         "snowscape",
         "terrainpulse",
-        "naturepower"
+        "naturepower",
+        "solacepulse"
       ],
       "items": [
         "elementalseed"
@@ -1212,8 +1228,6 @@
       "abilities": [
         "battlefervor",
         "auroracurrent",
-        "defragment",
-        "perfectego",
         "irondominion",
         "duskilate",
         "execution",
@@ -1235,9 +1249,7 @@
         "royaldecree",
         "wrathshield",
         "stalwart",
-        "ultraego",
         "ultrainstinct",
-        "burningego",
         "victorystar"
       ],
       "moves": [
@@ -1258,7 +1270,9 @@
         "takeheart",
         "terrainpulse",
         "wish",
-        "naturepower"
+        "naturepower",
+        "solarpledge",
+        "lunarpledge"
       ],
       "items": [
         "magicalseed"
@@ -1279,7 +1293,8 @@
         "petaldance",
         "terrainpulse",
         "thrash",
-        "naturepower"
+        "naturepower",
+        "ancestralwrath"
       ],
       "items": [
         "telluricseed"
@@ -1338,6 +1353,7 @@
         "lifedew",
         "phantomforce",
         "shadowforce",
+        "terrainpulse",
         "naturepower"
       ],
       "items": [
@@ -1475,7 +1491,8 @@
         "venomdrench",
         "venoshock",
         "ickyinjection",
-        "naturepower"
+        "naturepower",
+        "blacktestament"
       ],
       "items": [
         "telluricseed"
@@ -1590,7 +1607,8 @@
         "volttackle",
         "wildboltstorm",
         "wildcharge",
-        "naturepower"
+        "naturepower",
+        "shockdoctrine"
       ],
       "items": [
         "boosterenergy",
@@ -1631,7 +1649,8 @@
         "terrainpulse",
         "wish",
         "worryseed",
-        "naturepower"
+        "naturepower",
+        "laurellash"
       ],
       "items": [
         "bigroot",

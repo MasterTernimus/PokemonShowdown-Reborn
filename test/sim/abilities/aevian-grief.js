@@ -5,7 +5,7 @@ const common = require('../../common');
 const {Dex} = require('../../../dist/sim');
 const {TeamValidator} = require('../../../dist/sim/team-validator');
 
-const requestedMoves = `Astonish|Miracle Eye|Hypnosis|Fairy Wind|Tailwind|Whirlwind|Night Shade|Draining Kiss|Lucky Chant|Safeguard|Ominous Wind|Nightmare|Mind Reader|Hex|Dream Eater|Mystical Fire|Cosmic Power|Moonblast|Ancient Power|Curse|Future Sight|Psychic|Psychoshift|Roost|Stored Power|Aerial Ace|Air Slash|Ally Switch|Aura Sphere|Calm Mind|Charge Beam|Dark Pulse|Dazzling Gleam|Defog|Dual Wingbeat|Energy Ball|Fire Spin|Flamethrower|Flash|Fly|Frustration|Giga Impact|Gravity|Guard Swap|Heat Wave|Hyper Beam|Icy Wind|Incinerate|Light Screen|Magic Coat|Magic Room|Misty Explosion|Misty Terrain|Pain Split|Phantom Force|Poltergeist|Power Swap|Reflect|Shadow Ball|Shadow Claw|Shock Wave|Signal Beam|Skill Swap|Solar Beam|Spite|Steel Wing|Thief|Thunder Wave|Trick|Trick Room|Will-O-Wisp|Wonder Room`.split('|').map(name => Dex.toID(name));
+const requestedMoves = `Astonish|Miracle Eye|Hypnosis|Fairy Wind|Tailwind|Whirlwind|Night Shade|Draining Kiss|Lucky Chant|Safeguard|Ominous Wind|Nightmare|Mind Reader|Hex|Dream Eater|Mystical Fire|Cosmic Power|Ancient Power|Curse|Future Sight|Psychic|Psychoshift|Roost|Stored Power|Aerial Ace|Air Slash|Ally Switch|Aura Sphere|Calm Mind|Charge Beam|Dark Pulse|Dazzling Gleam|Defog|Dual Wingbeat|Energy Ball|Fire Spin|Flamethrower|Flash|Fly|Frustration|Giga Impact|Gravity|Guard Swap|Heat Wave|Hyper Beam|Icy Wind|Incinerate|Light Screen|Magic Coat|Magic Room|Misty Explosion|Misty Terrain|Pain Split|Phantom Force|Poltergeist|Power Swap|Reflect|Shadow Ball|Shadow Claw|Shock Wave|Signal Beam|Skill Swap|Solar Beam|Spite|Steel Wing|Thief|Thunder Wave|Trick|Trick Room|Will-O-Wisp|Wonder Room`.split('|').map(name => Dex.toID(name));
 
 let battle;
 describe('Sigilyph-Rejuv and Aevian Grief', () => {
@@ -23,7 +23,7 @@ describe('Sigilyph-Rejuv and Aevian Grief', () => {
 		assert.deepEqual(rejuv.abilities, {0: 'Aevian Grief'});
 		assert.equal(rejuv.requiredAbility, 'Aevian Grief');
 		assert.equal(new Set(requestedMoves).size, requestedMoves.length);
-		assert.equal(requestedMoves.length, 72);
+		assert.equal(requestedMoves.length, 71);
 		for (const species of ['sigilyph', 'sigilyphrejuv']) {
 			const learnset = Dex.species.getLearnsetData(species).learnset;
 			for (const move of requestedMoves) assert(learnset[move]?.length, `${species} lacks ${move}`);
@@ -39,7 +39,7 @@ describe('Sigilyph-Rejuv and Aevian Grief', () => {
 			{species: 'Mew', moves: ['Splash']},
 		];
 		assert.equal(validator.validateTeam(set('Aevian Grief',
-			['Moonblast', 'Shadow Ball', 'Frustration', 'Calm Mind'])), null);
+			['Dazzling Gleam', 'Shadow Ball', 'Frustration', 'Calm Mind'])), null);
 		for (let i = 0; i < requestedMoves.length; i += 4) {
 			const moves = requestedMoves.slice(i, i + 4);
 			assert.equal(validator.validateTeam(set('Aevian Grief', moves)), null, moves.join(', '));

@@ -91,13 +91,13 @@ describe('Approved healing, PP and Atrocity components', () => {
 		}
 	});
 
-	it('Infernal Dominion retains the newer published Fire Ward component', () => {
+	it('Infernal Dominion has no removed Fire Ward component or stat multiplier', () => {
 		const [p] = start('Infernal Dominion');
-		assert(p.hasAbility('fireward'));
+		assert(!p.hasAbility('fireward'));
 		for (const field of ['', 'dragonsdenterrain', 'coldeclipseterrain']) {
 			if (field)battle.field.changeTerrain(field, p);
-			assert.equal(p.getStat('def'), battle.modify(p.getStat('def', false, true), field === 'dragonsdenterrain' ? 1.5 : 1.3));
-			assert.equal(p.getStat('spd'), battle.modify(p.getStat('spd', false, true), field === 'dragonsdenterrain' ? 1.5 : 1.3));
+			assert.equal(p.getStat('def'), battle.modify(p.getStat('def', false, true), 1));
+			assert.equal(p.getStat('spd'), battle.modify(p.getStat('spd', false, true), 1));
 		}
 	});
 });

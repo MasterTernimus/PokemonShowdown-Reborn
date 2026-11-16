@@ -309,9 +309,9 @@ describe('Approved roster follow-up', () => {
 		hit('watergun', foe, p);
 		assert(p.abilityState.charged);
 		foe.addVolatile('protect', foe);
-		hit('poisontail', p, foe); assert(p.abilityState.charged);
+		hit('venoshock', p, foe); assert(p.abilityState.charged);
 		foe.removeVolatile('protect');
-		hit('poisontail', p, foe); assert.equal(foe.status, 'psn'); assert(!p.abilityState.charged);
+		hit('venoshock', p, foe); assert.equal(foe.status, 'psn'); assert(!p.abilityState.charged);
 		foe.cureStatus(); p.setAbility('Raised Quills');
 		hit('splash', p, p);
 		assert(p.abilityState.charged);
