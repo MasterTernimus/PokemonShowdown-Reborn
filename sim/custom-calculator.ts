@@ -353,6 +353,7 @@ export function buildCalculatorBattle(scenario: CalcScenario, sample: number) {
 
 export function calculateScenario(input: unknown, includeActionOutcomes = true) {
 	const scenario = validateScenario(input);
+	const observedMoveTypes = new Set<string>();
 	const outcomes: { damage: number[], moveDamage: number[], critical: boolean[], loss: number[], ko: boolean[], maxhp: number[] }[] = [];
 	let exampleLog: string[] = [];
 	let resolved: unknown;
@@ -411,6 +412,10 @@ export function calculateScenario(input: unknown, includeActionOutcomes = true) 
 				}
 			}
 			battle.actions.runMove(move, attacker, attacker.getLocOf(mons[1]), options);
+			if (scenario.move === 'blacktestament' && !scenario.attackMode && battle.lastMoveLine >= logStart &&
+				battle.activePokemon === attacker && battle.activeMove?.id === 'blacktestament') {
+				observedMoveTypes.add(battle.activeMove.type);
+			}
 			battle.faintMessages();
 			actionOutcomes?.push({ before: beforeState, after: publicState(battle, mons), log: battle.log.slice(logStart).slice(0, 100) });
 			outcomes.push({ damage, moveDamage, critical, loss: mons.map((mon, i) => before[i] - mon.hp), ko: mons.map(mon => !mon.hp), maxhp });
@@ -425,6 +430,7 @@ export function calculateScenario(input: unknown, includeActionOutcomes = true) 
 		['Attacker', 'Defender', 'Attacker ally', 'Defender ally'];
 	return {
 		kind: 'sampled', evaluationMode: scenario.evaluationMode, actionOutcomes, samples: scenario.samples, seed: scenario.seed, format: scenario.format.name,
+		moveType: observedMoveTypes.size === 1 ? [...observedMoveTypes][0] : undefined,
 		move: Dex.moves.get(scenario.move).name, assumptions: incenseBranches ? [...assumptions, 'Luck Incense Scented Geyser: 100 power with 60% probability, 160 power with 40%; each sampled execution rolls once. The displayed sampled range may omit either branch.'] : assumptions, powerDistribution: incenseBranches ? [{ power: 100, probability: 0.6 }, { power: 160, probability: 0.4 }] : undefined, resolved, exampleLog,
 		results: outcomes[0].damage.map((_, i) => {
 			const damage = outcomes.map(o => o.damage[i]);

@@ -45,12 +45,17 @@ for (const terrain of terrains) {
 	rows.push(`{${entries.join(',\n')}}`);
 }
 const moveRows = [];
+// The character move factory creates a separate copy of the same closure per move.
+// Export its declarative fields; a move with a distinct hook follows the ordinary path.
+const characterPowerHook = Dex.moves.get('blacktestament').onBasePower.toString();
 for (const move of Dex.moves.all()) {
 	const entries = [];
 	for (const key of ['onModifyType', 'onModifyMove', 'onModifyPriority', 'onBasePower', 'basePowerCallback']) {
 		const profile = CharacterMoveProfiles[move.id];
-		if (profile && key === 'onBasePower' && profile.fieldEffect === 'Power is 1.2×.') {
-			entries.push(`onBasePower(power, source, target) { if (this.field.isTerrain(${JSON.stringify(profile.fields)})) return this.chainModify(import_adaptive_cycle.adaptiveFieldMultiplier(this, source, target, 1.2)); }`);
+		if (key === 'onBasePower' && profile && move.onBasePower?.toString() === characterPowerHook) {
+			if (profile.powerFields?.length) {
+				entries.push(`onBasePower(power, source, target) { if (this.field.isTerrain(${JSON.stringify(profile.powerFields)})) return this.chainModify(import_adaptive_cycle.adaptiveFieldMultiplier(this, source, target, ${profile.powerMultiplier})); }`);
+			}
 			continue;
 		}
 		if (move.id === 'kaboom' && key === 'onModifyMove') {

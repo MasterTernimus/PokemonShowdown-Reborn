@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "76a8997da8cc0aafb5607339114e6e36115bf85a01aaf0e701f07e66090b8288",
-  "packageManifestSHA256": "17d7b927c552a0c8a8ac315411ec1ff7fc7799cef110331e0bbc0024be435f8f",
-  "mechanicsSHA256": "b31e68677e8d316ebe433382107ecb022a49e10fad600d259e878a3166023db8",
+  "packageEngineRevision": "fb92687d89537971fccebb7b2e91e7b9736be200ae590d0e5cf2bf748d715e3c",
+  "packageManifestSHA256": "d6447a68c83e1a14effe44e2ba8abf5907c3847fcb08da117b8634131e9e037f",
+  "mechanicsSHA256": "845c1a33b02b2f57ddb931cca997ecad9fd2b9d39c32cd89c9aba36f96a8c778",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -259,7 +259,7 @@
     },
     {
       "file": "dist/data/field-guide-reference-details.js",
-      "sha256": "251c46d782d8fab7d78333b9cdb730965d6143138ff4f66259919e0c49fb55ed"
+      "sha256": "25496c7a77f916f33ad6b4272ddc1a9130c4584887858cf1297d31a465e38ac0"
     },
     {
       "file": "dist/data/field-guide-reviewed-reference-data.js",
@@ -635,7 +635,7 @@
     },
     {
       "file": "dist/data/moves.js",
-      "sha256": "427359ed72fe526c30c0ef4f9fbc8654d65c39118637f728b75598c768dbf1a9"
+      "sha256": "9f3aa749629840ff085ff212cb347b7533d077fa08cf8492922458e8db9c7ea1"
     },
     {
       "file": "dist/data/natdex-gen8-gen9-learnsets.js",
@@ -739,7 +739,7 @@
     },
     {
       "file": "dist/data/public-field-guide-shared.js",
-      "sha256": "9ba6c611fb48ef6bf7134ff7e2a8f58e4c02bd7511c7c677ce2c5b8aad0ae333"
+      "sha256": "e6a54d0ace7729290e40e03202c8fded92e03f8dbf0beb0a279ab2ea8b384261"
     },
     {
       "file": "dist/data/public-field-guide.js",
@@ -775,7 +775,7 @@
     },
     {
       "file": "dist/data/reborn-character-moves.js",
-      "sha256": "2034b60bdb39f166b988110fbba92835ef17ca485602d7c98cdaed4c0bf8a8d5"
+      "sha256": "8720fce76d0ae23acca11d7752782eb710dc43118f2be77751c61fa629ad913e"
     },
     {
       "file": "dist/data/regi-approved.js",
@@ -1366,7 +1366,7 @@
   ],
   "excludedOfflineSampler": {
     "file": "dist/sim/custom-calculator.js",
-    "packagedSHA256": "4dd9c891bf7c6334f8a1fa5a2f73c3785d464f12989f35c682764ee4ec8f180a",
+    "packagedSHA256": "90989146683d6a4880e56a9a8d138f9f8e07858b0f8a9ec8e489130d63064eca",
     "reason": "Offline sampler is not a live battle-worker dependency."
   }
 }

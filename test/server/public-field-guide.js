@@ -1,5 +1,18 @@
 'use strict'; const assert = require('assert').strict, { publicFieldGuide } = require('../../dist/server/field-guide'), { calculatorMetadata } = require('../../dist/sim/custom-calculator');
 describe('Public Field Guide', () => {
+	it('lists Black Testament’s power and healing rules only in their respective fields', () => {
+		const fields = publicFieldGuide().entries.filter(entry => entry.kind === 'field');
+		const powerFields = ['dragonsdenterrain', 'newworldterrain', 'shortcircuitterrain', 'starlightarenaterrain'];
+		const healingFields = ['corrosiveterrain', 'wastelandterrain'];
+		for (const entry of fields) {
+			const effect = powerFields.includes(entry.id) ? 'Power is 1.2×.' :
+				healingFields.includes(entry.id) ? 'Healing prevention lasts 3 turns instead of 2.' : null;
+			const rows = entry.sections.Moves?.filter(row => row.startsWith('Black Testament:')) || [];
+			assert.deepEqual(rows, effect ? [`Black Testament: ${effect}`] : [], entry.id);
+			const reference = entry.referenceDetails.moves.find(move => move.id === 'blacktestament');
+			assert.deepEqual(reference?.fieldEffects || [], effect ? [effect] : [], entry.id);
+		}
+	});
 	it('covers every registered field and every separate aura', () => {
 		const g = publicFieldGuide(), m = calculatorMetadata();
 		for (const f of m.fields.filter(f => f.id))assert(g.entries.some(e => e.kind === 'field' && e.id === f.id));

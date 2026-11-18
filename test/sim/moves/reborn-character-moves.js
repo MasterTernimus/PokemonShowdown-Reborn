@@ -61,6 +61,56 @@ describe('Reborn character signature moves', () => {
 			assert.equal(a.type, b.type); p.boosts.atk = 2; a.onModifyMove.call(battle, a, p, q); assert.equal(a.category, 'Physical');
 		}
 	});
+	for (const [field, message] of Object.entries({
+		dragonsdenterrain: 'dragons answered', shortcircuitterrain: 'broken circuit',
+		newworldterrain: 'through the void', starlightarenaterrain: 'stars aligned',
+	})) {
+		it('Black Testament gains 1.2× power and announces its actual type on ' + field, () => {
+			const [p, q] = setup();
+			battle.field.terrain = field;
+			p.setType(['Poison', 'Dark']);
+			const move = Dex.getActiveMove('blacktestament');
+			assert.equal(battle.runEvent('BasePower', p, q, move, 85, true), 102);
+			use('blacktestament', p, q, { multihit: 2 });
+			assert(q.hp < q.maxhp);
+			assert.equal(q.volatiles.healblock.duration, 2);
+			const lines = battle.log.filter(line => line.includes(message));
+			assert.equal(lines.length, 1);
+			assert.match(lines[0], /Poison-type Black Testament/);
+		});
+	}
+	for (const field of ['wastelandterrain', 'corrosiveterrain']) {
+		it('Black Testament extends only a successful new Heal Block on ' + field, () => {
+			const [p, q] = setup();
+			battle.field.terrain = field;
+			q.setType('Normal');
+			const move = Dex.getActiveMove('blacktestament');
+			assert.equal(battle.runEvent('BasePower', p, q, move, 85, true), 85);
+			q.addVolatile('substitute');
+			use('blacktestament', p, q);
+			assert(!q.volatiles.healblock);
+			assert(!battle.log.some(line => line.includes('prolonged the healing ban')));
+			q.removeVolatile('substitute');
+			use('blacktestament', p, q);
+			assert.equal(q.volatiles.healblock.duration, 3);
+			q.volatiles.healblock.duration = 5;
+			use('blacktestament', p, q);
+			assert.equal(q.volatiles.healblock.duration, 5);
+			assert.equal(battle.log.filter(line => line.includes('prolonged the healing ban')).length, 1);
+		});
+	}
+	it('does not announce a field boost against a foe that has fully adapted to it', () => {
+		const [p, q] = setup();
+		battle.field.terrain = 'dragonsdenterrain';
+		q.setAbility('adaptivecycle');
+		const { adaptiveMemory } = require('../../../dist/sim/adaptive-cycle');
+		adaptiveMemory(q).fields.dragonsdenterrain = { stage: 3, turn: battle.turn };
+		use('blacktestament', p, q);
+		assert(q.hp < q.maxhp);
+		assert.equal(q.volatiles.healblock.duration, 2);
+		assert(!battle.log.some(line => line.includes('dragons answered')));
+		assert(battle.log.some(line => line.includes('Psychic-type Black Testament')));
+	});
 	it('Heavenfall has Draco Meteor scale and receives its exact New World boost plus the Dark bonus', () => {
 		const [p, q] = setup(); const raw = Dex.moves.get('heavenfall');
 		assert.equal(raw.basePower, 130); assert.equal(raw.accuracy, 90); assert.equal(raw.pp, 5);

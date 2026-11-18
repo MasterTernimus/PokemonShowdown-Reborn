@@ -332,13 +332,13 @@ for (const field of ['forestterrain', 'grassyterrain']) {
 	CheckedFieldReferences[field].moves ||= {};
 	CheckedFieldReferences[field].moves.wish = ['Ordinary Wish restores half the user’s maximum HP. The wish created by Nomos Wish restores at least 5/8 and clears confusion when it successfully heals.'];
 }
-import {CharacterMoveProfiles} from './reborn-character-moves';
+import {CharacterMoveProfiles, getCharacterMoveFieldEffects} from './reborn-character-moves';
 
 // Each character move's reviewed field rule is shared with its public description.
 for (const [move, profile] of Object.entries(CharacterMoveProfiles)) {
-	for (const field of profile.fields) {
+	for (const [field, effect] of Object.entries(getCharacterMoveFieldEffects(profile))) {
 		CheckedFieldReferences[field] ||= {};
 		CheckedFieldReferences[field].moves ||= {};
-		CheckedFieldReferences[field].moves[move] = [profile.fieldEffect];
+		CheckedFieldReferences[field].moves[move] = [effect];
 	}
 }

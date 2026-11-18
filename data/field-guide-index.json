@@ -1,5 +1,5 @@
 {
-  "fingerprint": "311a1aaa4b487b161e273302b840d70e2f7ae2ec978546411848c38010c4c749",
+  "fingerprint": "1f7fff385afe044cdd92edb0c751fe850dd9f9df2c5b71da23371528da029c68",
   "fields": {
     "flowergarden1": {
       "abilities": [
@@ -577,6 +577,7 @@
         "terrainpulse",
         "scalyscorn",
         "naturepower",
+        "blacktestament",
         "ancestralwrath",
         "surf",
         "muddywater",
@@ -1060,7 +1061,8 @@
         "wish",
         "wonderroom",
         "naturepower",
-        "heavenfall"
+        "heavenfall",
+        "blacktestament"
       ],
       "items": [
         "magicalseed"
@@ -1154,6 +1156,7 @@
         "steelbeam",
         "terrainpulse",
         "naturepower",
+        "blacktestament",
         "shockdoctrine"
       ],
       "items": [
@@ -1271,6 +1274,7 @@
         "terrainpulse",
         "wish",
         "naturepower",
+        "blacktestament",
         "solarpledge",
         "lunarpledge"
       ],

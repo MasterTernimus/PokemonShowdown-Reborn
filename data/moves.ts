@@ -9614,7 +9614,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
-				if (effect?.name === "Psychic Noise") {
+				// Black Testament sets its field-specific duration after applying Heal Block.
+				if (effect?.id === 'blacktestament' || effect?.id === 'psychicnoise') {
 					return 2;
 				}
 				if (source?.hasAbility('persistent')) {

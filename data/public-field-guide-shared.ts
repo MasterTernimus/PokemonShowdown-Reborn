@@ -1,4 +1,4 @@
-import {CharacterMoveProfiles, CharacterMoves} from './reborn-character-moves';
+import {CharacterMoveProfiles, CharacterMoves, getCharacterMoveFieldEffects} from './reborn-character-moves';
 /** Explicitly reviewed shared mappings. Keep separate from the reference-only index. */
 export const FieldMoveMappings: { [id: string]: { camouflage: string, mimicry: string, pulse: string, nature: string } } = {};
 const mappings = [
@@ -123,7 +123,9 @@ export function appendReviewedHazards(sections: { [id: string]: { [section: stri
 	};
 	for (const [id, rows] of Object.entries(extra)) (sections[id].Moves ||= []).push(...rows);
 	for (const [move, profile] of Object.entries(CharacterMoveProfiles)) {
-		for (const field of profile.fields) if (sections[field]) (sections[field].Moves ||= []).push(`${CharacterMoves[move].name}: ${profile.fieldEffect}`);
+		for (const [field, effect] of Object.entries(getCharacterMoveFieldEffects(profile))) {
+			if (sections[field]) (sections[field].Moves ||= []).push(`${CharacterMoves[move].name}: ${effect}`);
+		}
 	}
 	for (const entry of Object.values(sections)) entry['Shared rules and limitations'] = SharedFieldGuideRules.slice();
 }
