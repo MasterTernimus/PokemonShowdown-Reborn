@@ -1,4 +1,5 @@
 import {qualifiesForRelicBeam} from './relic-beam';
+import { isUltraSuppressedTerrain, recordUltraEgoCombat } from '../sim/ultra-rivalry';
 import { unstableEvoComponents } from './ability-components';
 import { whiteSmokeFieldEntry } from './field-messages';
 import {fieldDisablesArmorReduction} from './armor-reductions';
@@ -93,10 +94,6 @@ function applyOpportunistBoosts(battle: Battle) {
 
 function isFightingClauseAbility(pokemon: Pokemon) {
 	return pokemon.hasAbility(['ultraego', 'ultrainstinct', 'battlefervor', 'duskdrive', 'perfectego']);
-}
-
-function isUltraSuppressedTerrain(battle: Battle) {
-	return battle.field.isTerrain(['bewitchedwoodsterrain', 'hauntedterrain', 'holyterrain']);
 }
 
 function setCursedArmamentHauntedField(battle: Battle, pokemon: Pokemon) {
@@ -4959,30 +4956,27 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon);
 		},
 		onModifyMove(move, pokemon, target) {
-			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf', 'spikecannon', 'pinmissile', 'iciclespear', 'rockblast', 'bulletseed', 'scaleshot', 'psychocut', 'ceaselessedge'];
 			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, pokemon, target);
 			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, pokemon, target);
-			if (!arrowMoves.includes(move.id)) return;
+			if (!move.flags.arrow) return;
 			move.tracksTarget = true;
 			move.ignoreAbility = true;
 			if (this.gameType === 'freeforall') {
-				move.target = 'allAdjacentFoes';
+				move.target = 'adjacentFoe';
 				move.multihit = 2;
 				move.multihitType = 'dualwield';
 				move.dualWieldAccuracy = move.accuracy;
 				move.dualWieldFullPower = true;
 				move.accuracy = true;
-				(move as any).fallenStarSpread = true;
-				(move as any).fullDamageSpread = true;
+				move.fallenStarSingleTarget = true;
 			}
 		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, source, target, move) {
 			// Nested composite calls must not apply Proficient twice.
 			if (this.effect.id === 'fallenstar') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, source, target, move);
-			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf', 'spikecannon', 'pinmissile', 'iciclespear', 'rockblast', 'bulletseed', 'scaleshot', 'psychocut', 'ceaselessedge'];
 			let modifier = getDualWieldModifier(move, 1, this);
-			if (!arrowMoves.includes(move.id)) {
+			if (!move.flags.arrow) {
 				if (modifier !== 1) return this.chainModify(modifier);
 				return;
 			}
@@ -4991,20 +4985,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.chainModify(modifier);
 		},
 		onModifyPriority(priority, pokemon, target, move) {
-			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf', 'spikecannon', 'pinmissile', 'iciclespear', 'rockblast', 'bulletseed', 'scaleshot', 'psychocut', 'ceaselessedge'];
-			if (arrowMoves.includes(move.id) && pokemon.hp * 4 <= pokemon.maxhp) return priority + 1;
+			if (move.flags.arrow && pokemon.hp * 4 <= pokemon.maxhp) return priority + 1;
 		},
-		onSourceAfterMoveSecondarySelf(source, target, move) {
-			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf', 'spikecannon', 'pinmissile', 'iciclespear', 'rockblast', 'bulletseed', 'scaleshot', 'psychocut', 'ceaselessedge'];
-			if (arrowMoves.includes(move.id)) source.abilityState.fallenStarGuardTurn = this.turn;
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (move.flags.arrow) source.abilityState.fallenStarGuardTurn = this.turn;
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (target.abilityState.fallenStarGuardTurn === this.turn) return this.chainModify(0.25);
-			if (target.hp <= target.maxhp / 2) return this.chainModify(0.5);
+			if (target.abilityState.fallenStarGuardTurn === this.turn) return this.chainModify(0.75);
+			if (target.hp <= target.maxhp / 2) return this.chainModify(0.8);
 		},
 		onSourceAfterFaint(length, target, source, effect) {
-			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf', 'spikecannon', 'pinmissile', 'iciclespear', 'rockblast', 'bulletseed', 'scaleshot', 'psychocut', 'ceaselessedge'];
-			if (!effect || effect.effectType !== 'Move' || !arrowMoves.includes(effect.id)) return;
+			if (this.gameType === 'freeforall' || !effect || effect.effectType !== 'Move' || !effect.flags.arrow) return;
 			if ((effect as any).fallenStarFollowUp) return;
 			const newMove = this.dex.getActiveMove(effect.id);
 			(newMove as any).fallenStarFollowUp = true;
@@ -6726,6 +6717,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceDamagingHit(damage, target, source, move) {
 			if (isUltraSuppressedTerrain(this)) return;
 			if (!move || move.category === 'Status') return;
+			if (damage > 0 && !source.isAlly(target)) recordUltraEgoCombat(this, source);
 			if (source.abilityState.ultraEgoAttackHealTurn === this.turn) return;
 			source.abilityState.ultraEgoAttackHealTurn = this.turn;
 			(this.dex.abilities.get('ultraego') as any).healUltraEgo.call(this, source, 'attack');
@@ -6737,8 +6729,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const hit = target.getMoveHitData(move);
 			if (hit.ultraEgoTriggered) return;
 			hit.ultraEgoTriggered = true;
-			if (!target.abilityState.skipUltraEgoBoost) this.boost({atk: 1, spa: 1}, target, target);
-			target.abilityState.skipUltraEgoBoost = !target.abilityState.skipUltraEgoBoost;
+			recordUltraEgoCombat(this, target);
 			if (target.abilityState.ultraEgoHitTriggered) {
 				this.heal(target.baseMaxhp / 20, target, target);
 				return;
@@ -6977,24 +6968,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('mirrorarenaterrain')) {
 				this.boost({ evasion: 1 }, pokemon, pokemon, this.dex.abilities.get('irondominion'));
 			}
-			const pressureDrop = this.field.isTerrain('coldeclipseterrain') ? -2 : -1;
-			let pressureActivated = false;
-			for (const target of pokemon.foes()) {
-				if (!pressureAttempt(this, pokemon, target)) continue;
-				if (!pressureActivated) {
-					this.add('-ability', pokemon, 'Iron Dominion', 'boost');
-					pressureActivated = true;
-				}
-				if (target.volatiles['substitute']) {
-					this.add('-immune', target);
-				} else {
-					this.boost({ def: pressureDrop, spd: pressureDrop }, target, pokemon, null, true);
-				}
-			}
+			this.dex.abilities.get('pressure').onStart?.call(this, pokemon);
 		},
 		onDeductPP(target, source) {
-			if (target.isAlly(source)) return;
-			return 1;
+			return this.dex.abilities.get('pressure').onDeductPP?.call(this, target, source);
 		},
 		onFoeTryMove(target, source, move) {
 			if (this.field.isTerrain('starlightarenaterrain')) {
@@ -17938,6 +17915,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceDamagingHit(damage, target, source, move) {
 			if (isUltraSuppressedTerrain(this)) return;
 			if (!move || move.category === 'Status') return;
+			if (damage > 0 && !source.isAlly(target)) recordUltraEgoCombat(this, source);
 			if (source.abilityState.ultraEgoAttackHealTurn === this.turn) return;
 			source.abilityState.ultraEgoAttackHealTurn = this.turn;
 			(this.dex.abilities.get('burningego') as any).healUltraEgo.call(this, source, 'attack');
@@ -17949,8 +17927,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const hit = target.getMoveHitData(move);
 			if (hit.ultraEgoTriggered) return;
 			hit.ultraEgoTriggered = true;
-			if (!target.abilityState.skipUltraEgoBoost) this.boost({atk: 1, spa: 1}, target, target);
-			target.abilityState.skipUltraEgoBoost = !target.abilityState.skipUltraEgoBoost;
+			recordUltraEgoCombat(this, target);
 			if (target.abilityState.ultraEgoHitTriggered) {
 				this.heal(target.baseMaxhp / 20, target, target);
 				return;
@@ -18164,6 +18141,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceDamagingHit(damage, target, source, move) {
 			if (isUltraSuppressedTerrain(this)) return;
 			if (!move || move.category === 'Status') return;
+			if (damage > 0 && !source.isAlly(target)) recordUltraEgoCombat(this, source);
 			if (source.abilityState.ultraEgoAttackHealTurn === this.turn) return;
 			source.abilityState.ultraEgoAttackHealTurn = this.turn;
 			(this.dex.abilities.get('perfectego') as any).healUltraEgo.call(this, source, 'attack');
@@ -18176,8 +18154,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const hit = target.getMoveHitData(move);
 			if (hit.ultraEgoTriggered) return;
 			hit.ultraEgoTriggered = true;
-			if (!target.abilityState.skipUltraEgoBoost) this.boost({atk: 1, spa: 1}, target, target);
-			target.abilityState.skipUltraEgoBoost = !target.abilityState.skipUltraEgoBoost;
+			recordUltraEgoCombat(this, target);
 			if (target.abilityState.ultraEgoHitTriggered) {
 				this.heal(target.baseMaxhp / 20, target, target);
 				return;

@@ -19,8 +19,9 @@ describe('Fallen Star wording and Decidueye learnset cleanup',()=>{
 	});
 	it('states the arrow-only quarter-HP priority rule without redundant or hidden-feature text', () => {
 		const a = Dex.abilities.get('fallenstar');
+		assert(/\+1 priority at 1\/4 (?:max )?HP/.test(a.desc));
+		assert(/arrows? gain priority at 1\/4 (?:max )?HP/i.test(a.shortDesc));
 		for (const text of [a.desc, a.shortDesc]) {
-			assert(/\+1 priority at 1\/4 (?:max )?HP/.test(text));
 			assert(!/Skill Link|crit.*stack|side.*crit/i.test(text));
 		}
 		const m=Dex.moves.get('triplearrows');assert(!/Chi Strike|ally crit|raises the critical|user.s side/i.test(m.desc+' '+m.shortDesc));

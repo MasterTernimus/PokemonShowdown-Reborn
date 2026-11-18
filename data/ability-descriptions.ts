@@ -293,7 +293,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Transforms Veluza into Veluza-Rejuv."
 	},
 	"download": {
-		"desc": "On entry, it compares the opposing side's combined Defense and Special Defense. If Defense is lower, its Attack rises; otherwise its Special Attack rises. Once per battle on entry, gains Laser Focus for two turns.",
+		"desc": "On entry, it compares the opposing side's combined Defense and Special Defense. If Defense is lower, its Attack rises; otherwise its Special Attack rises. Once per battle on entry, gains Laser Focus for its next attack that hits, lasting through the following turn.",
 		"shortDesc": "Boosts the offense targeting foes' weaker defense; Laser Focus once per battle."
 	},
 	"defragment": {
@@ -301,7 +301,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Entry defensive boost based on foes' offenses; two-turn Lock-On once per battle."
 	},
 	"adaptivecore": {
-		"desc": "On entry, it compares the opposing side's combined Defense and Special Defense. If Defense is lower, its Attack rises; otherwise its Special Attack rises. Once per battle on entry, gains Laser Focus for two turns. On entry, it compares the opposing side's combined Attack and Special Attack. If Attack is higher or tied, its Defense rises; otherwise its Special Defense rises. The defensive boost is +1; Fairy Tale raises both defenses by 1. Once per battle on entry, locks onto all active foes for two turns. Heals 1/16 max HP each turn and ignores sandstorm and hail damage. Switching out cures major status and heals 1/8 max HP only if a status was cured. Bewitched Woods cures status at turn end without this extra heal.",
+		"desc": "On entry, it compares the opposing side's combined Defense and Special Defense. If Defense is lower, its Attack rises; otherwise its Special Attack rises. Once per battle on entry, gains Laser Focus for its next attack that hits, lasting through the following turn. On entry, it compares the opposing side's combined Attack and Special Attack. If Attack is higher or tied, its Defense rises; otherwise its Special Defense rises. The defensive boost is +1; Fairy Tale raises both defenses by 1. Once per battle on entry, locks onto all active foes for two turns. Heals 1/16 max HP each turn and ignores sandstorm and hail damage. Switching out cures major status and heals 1/8 max HP only if a status was cured. Bewitched Woods cures status at turn end without this extra heal.",
 		"shortDesc": "Boosts the offense targeting foes' weaker defense; first damaging move crits; Entry defensive boost based on foes' offenses; first move aimed at a foe cannot miss; Heals 1/16 HP per turn; switching cures status and heals 1/3 HP if cured."
 	},
 	"aevianglacier": {
@@ -669,8 +669,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "No indirect damage; +1 status priority; up to double power from fainted allies; fainted foes give healing."
 	},
 	"fallenstar": {
-		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Designated arrow moves gain +1 priority at 1/4 max HP or less and 1.3x power against trapped foes: Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, Magical Leaf, Spike Cannon, Pin Missile, Icicle Spear, Rock Blast, Bullet Seed, Scale Shot, Psycho Cut and Ceaseless Edge. Has its arrow follow-up and protective effects.",
-		"shortDesc": "Mold Breaker; arrow moves: +1 priority at 1/4 max HP or less; 1.3x power against trapped foes."
+		"desc": "Mold Breaker. Moves bypass breakable opposing abilities. Dual Wield grants a second strike to eligible moves. Same-type attacks gain 1.3x power. Arrow moves gain 1.3x power against trapped foes and +1 priority at 1/4 HP or less. After landing an arrow, the user takes 25% less attack damage for the rest of the turn. Otherwise, at half HP or less, it takes 20% less. In Free-for-All, arrows strike one chosen foe twice. In other formats, an arrow knockout can trigger a half-power follow-up against another foe.",
+		"shortDesc": "Arrows gain priority at 1/4 HP. Takes 25% less after an arrow or 20% less at half HP."
 	},
 	"eclipse": {
 		"desc": "This Ability cannot be suppressed. During weather, its attacks deal 1.5x damage. In clear weather, attacks deal 0.5x damage to it. Its Psychic-type moves become Dark type if Dark would do more damage, and its Dark-type moves become Psychic type if Psychic would do more damage. It restores 1/4 max HP instead of taking damage from Psychic- or Dark-type moves.",
@@ -4271,7 +4271,7 @@ AbilityDescriptionOverrides.lunarorbit = {
 
 AbilityDescriptionOverrides.cosmicanalysis = {
 	shortDesc: 'Analytic + Download.',
-	desc: 'Attacks gain 30% power after all other active Pokemon have acted. On entry, raises Attack if foes have lower combined Defense, otherwise Sp. Atk. Its first damaging move each entry is a critical hit. Retains Download’s field bonuses.',
+	desc: 'Attacks gain 30% power after all other active Pokemon have acted. On entry, raises Attack if foes have lower combined Defense, otherwise Sp. Atk. Once per battle on entry, Download grants Laser Focus for the next attack that hits, through the following turn. Retains Download’s field bonuses.',
 };
 
 AbilityDescriptionOverrides.evergreen = {

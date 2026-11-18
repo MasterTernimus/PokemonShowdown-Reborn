@@ -43,8 +43,9 @@ describe('Approved Ultra Instinct and Inferno Ascendant rework', () => {
 				const [p, q] = setup(instinct); q.setAbility(ego, null, null, true);
 				hit(q, p, {multihit: 3}); assert.equal(p.hp, 3820);
 				hit(q, p); assert.equal(p.hp, 3720);
-				hit(p, q); assert.equal(q.boosts.atk, 1); assert.equal(q.boosts.spa, 1);
-				hit(p, q); assert.equal(q.boosts.atk, 1); assert.equal(q.boosts.spa, 1);
+				hit(p, q); assert.equal(q.boosts.atk, 0); assert.equal(q.boosts.spa, 0);
+				hit(p, q); battle.fieldEvent('Residual');
+				assert.equal(q.boosts.atk, 1); assert.equal(q.boosts.spa, 1);
 			});
 		}
 	}
@@ -165,16 +166,27 @@ describe('Approved Ultra Instinct and Inferno Ascendant rework', () => {
 	it('preserves callbacks outside the later approved Ego hit rework', () => {
 		const before = require('../../../artifacts/ultra-instinct-before.json');
 		for (const id of ['ultraego', 'burningego', 'opportunist']) {
-			const current = Object.fromEntries(Object.entries(Dex.abilities.get(id)).filter(([,v]) => typeof v === 'function').map(([k, v]) => [k, v.toString()]));
+			// The terrain check now comes from a shared module; its coverage stays the same.
+			const current = Object.fromEntries(Object.entries(Dex.abilities.get(id))
+				.filter(([, value]) => typeof value === 'function')
+				.map(([key, fn]) => [key, fn.toString()
+					.replaceAll('(0, import_ultra_rivalry.isUltraSuppressedTerrain)', 'isUltraSuppressedTerrain')]));
 			const expected = { ...before.abilities[id].callbacks };
-			if (id !== 'opportunist') { delete current.onDamagingHit; delete expected.onDamagingHit; delete current.boostedField; delete expected.boostedField; }
+			if (id !== 'opportunist') {
+				for (const hook of ['onDamagingHit', 'onSourceDamagingHit', 'boostedField']) {
+					delete current[hook];
+					delete expected[hook];
+				}
+			}
 			assert.deepEqual(current, expected, id);
 		}
 	});
-	for (const ability of ['Ultra Ego', 'Burning Ego']) it(ability + ' boosts on alternate whole attacks, not each hit', () => {
+	for (const ability of ['Ultra Ego', 'Burning Ego']) it(ability + ' boosts on alternate qualifying turns, including multihit attacks', () => {
 		const [p, q] = setup(ability);
 		for (const stage of [1, 1, 2, 2]) {
 			hit(q, p, { multihit: 3 });
+			battle.fieldEvent('Residual');
+			battle.turn++;
 			assert.equal(p.boosts.atk, stage);
 			assert.equal(p.boosts.spa, stage);
 		}

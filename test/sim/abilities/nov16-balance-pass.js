@@ -158,4 +158,12 @@ describe('November 16 approved balance changes', () => {
 			}
 		});
 	}
+	it('keeps Endure legal for the unevolved Hisuian starter lines and other final evolutions', () => {
+		const validator = TeamValidator.get('gen9dragonsden');
+		for (const name of ['Cyndaquil', 'Quilava', 'Rowlet', 'Dartrix', 'Oshawott', 'Dewott', 'Meganium']) {
+			const species = Dex.species.get(name);
+			assert(Dex.species.getFullLearnset(species.id).some(data => data.learnset.endure?.length), name);
+			assert.equal(validator.validateTeam([{ species: name, ability: species.abilities[0], moves: ['Endure'] }]), null);
+		}
+	});
 });

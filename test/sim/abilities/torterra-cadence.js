@@ -20,15 +20,21 @@ describe('Mega Torterra attack cadence', () => {
   const move = Object.assign(Dex.getActiveMove('tackle'),{multihit:hits, damage:10, accuracy:true, willCrit:false});
   battle.actions.useMove(move,source,{target});
  }
- it('X boosts on the first and third incoming attacks even when it attacks between them', () => {
+ it('X boosts on the first and third damaging turns even when it also attacks', () => {
   const [p,q] = start('Torterra-Mega-X','Terra Ascendant');
   attack(q,p,5);
+		assert.equal(p.boosts.atk, 0);
+		battle.fieldEvent('Residual');
   assert.deepEqual([p.boosts.atk,p.boosts.spa,p.hp],[1,1,850]);
+		battle.turn++;
   attack(p,q,1);
   attack(q,p,2);
+		battle.fieldEvent('Residual');
   assert.deepEqual([p.boosts.atk,p.boosts.spa],[1,1]);
+		battle.turn++;
   const before = p.hp;
   attack(q,p,3);
+		battle.fieldEvent('Residual');
   assert.deepEqual([p.boosts.atk,p.boosts.spa,p.hp],[2,2,before-30+80]);
  });
  it('Y heals once per attack, gains Defense once per turn and reduces attack damage with Solid Rock', () => {

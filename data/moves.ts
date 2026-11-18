@@ -5101,7 +5101,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
 		secondary: {
-			chance: 50,
+			chance: 100,
 			volatileStatus: 'confusion',
 		},
 		target: "normal",
@@ -11536,6 +11536,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onRestart(pokemon) {
 				this.effectState.duration = 2;
 				this.add('-start', pokemon, 'move: Laser Focus');
+			},
+			onSourceTryPrimaryHit(target, source, move) {
+				if (move.category === 'Status') return;
+				// All hits and targets of this use share the same active move.
+				move.critRatio = 5;
+				source.removeVolatile('laserfocus');
 			},
 			onModifyCritRatio(critRatio) {
 				return 5;
@@ -24715,7 +24721,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
 		secondary: {
-			chance: 50,
+			chance: 100,
 			status: 'par',
 		},
 		target: "normal",

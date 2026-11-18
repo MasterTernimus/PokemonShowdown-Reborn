@@ -154,7 +154,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	crueltag: ['shadowtag', 'infiltrator', 'baddreams'],
 	emperorsresolve: ['competitive', 'slushrush', 'swiftswim', 'proficient'],
 	execution: ['duskilate', 'moldbreaker'],
-	fallenstar: ['moldbreaker', 'dualwield', 'selfsufficient', 'proficient'],
+	fallenstar: ['moldbreaker', 'dualwield', 'proficient'],
 	parasitism: ['dryskin'],
 	completeparasitism: ['parasitism', 'dryskin', 'filter', 'selfrepair'],
 	silkendecoy: ['insomnia', 'selfsufficient', 'swarm'],
@@ -1104,7 +1104,6 @@ for (const id of [
 	'fortressshell',
 	'burningcrown',
 	'royalscales',
-	'fallenstar',
 	'atrocity',
 	'ragingstorm',
 ]) {

@@ -164,6 +164,8 @@ describe('Final approved Predator Aura Precision and Entrenched designs', () => 
 		q.hp = 800;
 		battle.actions.useMove(Object.assign(Dex.getActiveMove('tackle'), { damage: 120, accuracy: true }), p, { target: q });
 		assert.equal(q.hp, 755);
+		assert.equal(q.boosts.atk, 0);
+		battle.fieldEvent('Residual');
 		assert.equal(q.boosts.atk, 1);
 		assert.equal(q.boosts.spa, 1);
 	});

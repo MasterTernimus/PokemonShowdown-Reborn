@@ -41,7 +41,7 @@ describe('Burning Ego Magma Armor replacement', () => {
 		battle.randomChance = (a, b) => { rolls.push([a, b]); return true; };
 		battle.singleEvent('DamagingHit', p.getAbility(), p.abilityState, p, foe, battle.dex.getActiveMove('tackle'), 10);
 		assert.deepEqual(rolls, [[3, 10]]); assert.equal(foe.status, 'brn');
-		assert.equal(p.boosts.atk, 1); assert.equal(p.boosts.spa, 1); assert(p.hp > 100);
+		assert.equal(p.boosts.atk, 0); assert.equal(p.boosts.spa, 0); assert(p.hp > 100);
 		assert.equal(battle.runEvent('BasePower', p, foe, battle.dex.getActiveMove('firepunch'), 100), 130);
 	});
 });

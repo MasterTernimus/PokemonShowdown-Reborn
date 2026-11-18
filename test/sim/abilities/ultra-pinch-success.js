@@ -15,7 +15,7 @@ describe('Ultra Ego successful pinch consumption', () => {
 		battle.singleEvent('DamagingHit', p.getAbility(), p.abilityState, p, foe, battle.dex.getActiveMove('tackle'), 10);
 		assert.equal(p.hp, 1);
 		assert.equal(p.abilityState.ultraEgoPinch, false, 'blocked healing must not spend the pinch recovery');
-		assert.equal(p.boosts.atk, 1); assert.equal(p.boosts.spa, 1);
+		assert.equal(p.boosts.atk, 0); assert.equal(p.boosts.spa, 0);
 		p.removeVolatile('healblock');
 		// Preserve the existing window reset: the holder completes its own damaging move.
 		battle.singleEvent('AfterMove', p.getAbility(), p.abilityState, p, foe, move);

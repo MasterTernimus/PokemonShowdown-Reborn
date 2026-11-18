@@ -1,4 +1,5 @@
 import {adaptiveZHit} from '../sim/adaptive-cycle';
+import { isUltraSuppressedTerrain } from '../sim/ultra-rivalry';
 import {updatePreparedIndicator} from './grand-strategy';
 import {updateRelicArmorIndicator} from './relic-armor';
 import {protectsWarnedMove} from './warned-moves';
@@ -9,6 +10,18 @@ import {resolveForesight} from './foresight-memory';
 import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	...JackpotConditions,
+	ultraegocombat: {
+		name: 'Ultra Ego Combat', noCopy: true,
+		onResidualOrder: 26,
+		onResidual(holder) {
+			const state = this.effectState;
+			if (state.combatTurn !== this.turn || !holder.hp || isUltraSuppressedTerrain(this) ||
+				!holder.hasAbilityOrPassive('ultraego')) return;
+			delete state.combatTurn;
+			state.combatTurns = (state.combatTurns || 0) + 1;
+			if (state.combatTurns % 2 === 1) this.boost({ atk: 1, spa: 1 }, holder, holder, state.sourceEffect);
+		},
+	},
 	aimassistlock: {
 		name: 'Aim Assist Lock', noCopy: true,
 		onStart(holder, target) {

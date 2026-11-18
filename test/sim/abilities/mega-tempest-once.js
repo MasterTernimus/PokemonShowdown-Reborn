@@ -9,7 +9,22 @@ describe('Mega Gyarados once-per-battle Tempest Fury',()=>{afterEach(()=>{b?.des
 		assert.deepEqual(Dex.species.get('gyarados').passives, ['tempestfury']);
 		assert.equal(Dex.species.get('gyarados').abilities[1], 'Intimidate');
 	});
-it('acquires once, does not stack, consumes and cannot recharge with Unleashed Ego',()=>{const[p,q]=setup();charge(p,q);assert(p.m.megaTempestAcquired);assert(p.m.megaTempestCharged);assert.equal(p.boosts.atk,1);charge(p,q);assert.equal(p.boosts.atk,1);assert(move(p,q).willCrit);spend(p,q);assert(!p.m.megaTempestCharged);charge(p,q);assert(!move(p,q).willCrit);assert(p.m.megaTempestAcquired);});
+	it('acquires once, does not stack, consumes and cannot recharge with Unleashed Ego', () => {
+		const [p, q] = setup();
+		charge(p, q);
+		assert(p.m.megaTempestAcquired);
+		assert(p.m.megaTempestCharged);
+		assert.equal(p.boosts.atk, 0);
+		charge(p, q);
+		b.fieldEvent('Residual');
+		assert.equal(p.boosts.atk, 1);
+		assert(move(p, q).willCrit);
+		spend(p, q);
+		assert(!p.m.megaTempestCharged);
+		charge(p, q);
+		assert(!move(p, q).willCrit);
+		assert(p.m.megaTempestAcquired);
+	});
 it('requires surviving opposing positive direct HP damage',()=>{const[p,q]=setup();charge(p,p);assert(!p.m.megaTempestAcquired);b.runEvent('DamagingHit',p,q,Dex.getActiveMove('tackle'),0);assert(!p.m.megaTempestAcquired);p.hp=0;charge(p,q);assert(!p.m.megaTempestAcquired);});
 it('does not apply to status or non-Water attacks',()=>{const[p,q]=setup();charge(p,q);assert(!move(p,q,'splash').willCrit);assert(!move(p,q,'tackle').willCrit);assert(p.m.megaTempestCharged);});
 for(const obstacle of ['miss','protect','immunity'])it('preserves charge through '+obstacle,()=>{const[p,q]=setup('Gyarados-Mega','No Ability');charge(p,q);const m=move(p,q);if(obstacle==='miss')m.accuracy=0;if(obstacle==='protect')q.addVolatile('protect');if(obstacle==='immunity')q.setAbility('Water Absorb');b.actions.useMove(m,p,{target:q});assert(p.m.megaTempestCharged);});

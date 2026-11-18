@@ -1090,6 +1090,10 @@ export class Pokemon {
 		return (lockedMove === true) ? null : lockedMove;
 	}
 
+	usesFallenStarTarget(move: Move) {
+		return this.battle.gameType === 'freeforall' && !!move.flags.arrow && this.hasAbilityOrPassive('fallenstar');
+	}
+
 	getMoves(lockedMove?: ID | null, restrictData?: boolean): MoveRequestData[] {
 		if (lockedMove) {
 			lockedMove = toID(lockedMove);
@@ -1127,7 +1131,7 @@ export class Pokemon {
 				const basePowerCallback = this.battle.dex.moves.get(moveSlot.id).basePowerCallback as (pokemon: Pokemon) => number;
 				moveName += ` ${basePowerCallback(this)}`;
 			}
-			let target = moveSlot.target;
+			let target = this.usesFallenStarTarget(this.battle.dex.moves.get(moveSlot.id)) ? 'adjacentFoe' : moveSlot.target;
 			if (moveSlot.id === 'decorate' && this.hasAbility('masterpatissier')) target = 'normalOrSelf';
 			switch (moveSlot.id) {
 			case 'petaldance': case 'petalblizzard':
@@ -1213,7 +1217,7 @@ export class Pokemon {
 			let protectMove = false;
 			if (move.volatileStatus && protectVolatiles.includes(move.volatileStatus)) protectMove = true;
 			if (this.species.id === 'aegislashgmax' && move.id === 'kingsshield') protectMove = false;
-			let actualTarget = move.target;
+			let actualTarget = this.usesFallenStarTarget(move) ? 'adjacentFoe' : move.target;
 			if (move.id === 'decorate' && this.hasAbility('masterpatissier')) actualTarget = 'normalOrSelf';
 			switch (moveSlot.id) {
 			case 'curse':

@@ -114,7 +114,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"corrosiveburn": "Fire damage 1.2x against poisoned targets.",
 	"noseformation": "Three adaptive 30 BP Mini-Noses chain after KOs and trigger Elevate.",
 	"mourningvessel": "Fainted allies increase power up to 2x; fainted foes restore HP.",
-	"fallenstar": "Arrow moves gain +1 priority at 1/4 max HP or less; 1.3x power against trapped foes and for same-type moves.",
+	"fallenstar": "Arrows gain priority at 1/4 HP. Takes 25% less after an arrow or 20% less at half HP.",
 	"ragingstorm": "Bypasses screens and defensive stages; halves priority damage; KOs damage other foes.",
 	"ragingoverlord": "Combines the listed abilities.",
 	"vanguard": "Enhanced Extreme Speed; single-foe protection.",

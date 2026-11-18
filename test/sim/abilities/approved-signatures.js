@@ -320,15 +320,16 @@ describe('Approved signature batch', () => {
 		for (const id of ['keeneye', 'ultraego']) assert(source.hasAbility(id));
 		for (const id of ['battlefervor', 'precision', 'opportunist']) assert(!source.hasAbility(id));
 	});
-	it('Dusk Ego boosts once per multi-hit attack and retains Keen Eye without Precision or berry blocking', () => {
+	it('Dusk Ego defers a multi-hit attack boost and retains Keen Eye without Precision or berry blocking', () => {
 		const [source, target] = start('Dusk Ego');
 		assert.notEqual(battle.runEvent('TryEatItem', target, null, null, Dex.items.get('sitrusberry')), false);
 		use(target, source, 'tackle', { basePower: 1, multihit: 3 });
-		assert.equal(source.boosts.atk, 1); assert.equal(source.boosts.spa, 1);
+		assert.equal(source.boosts.atk, 0); assert.equal(source.boosts.spa, 0);
 		battle.boost({ accuracy: -1 }, source, target); assert.equal(source.boosts.accuracy, 0);
 		const move = battle.dex.getActiveMove('airslash'); battle.runEvent('ModifyMove', source, target, move, move);
 		assert.equal(move.accuracy, 95); assert.equal(move.ignoreEvasion, true); assert.equal(move.ignoreAbility, true);
 		battle.boost({ def: 2 }, target, target); battle.fieldEvent('Residual'); assert.equal(source.boosts.def, 0);
+		assert.equal(source.boosts.atk, 1); assert.equal(source.boosts.spa, 1);
 	});
 	it('Twilight Instinct retains Ultra Instinct attack timing and copies opposing boosts', () => {
 		const [source, target] = start('Twilight Instinct');

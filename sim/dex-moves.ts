@@ -294,6 +294,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	allowSpreadKOSpillover?: boolean;
 	dualWieldBoosted?: boolean;
 	fallenStarFollowUp?: boolean;
+	fallenStarSingleTarget?: boolean;
 	fullDamageSpread?: boolean;
 	heavyArtilleryPrimary?: PokemonSlot;
 	hydraBondSingleTargetSpread?: boolean;
@@ -350,12 +351,14 @@ interface MoveHitData {
 		hpBeforeDamage?: number,
 		staminaTriggered?: boolean,
 		ultraEgoTriggered?: boolean,
+		attackerGuaranteedHit?: boolean,
 	};
 }
 
 type MutableMove = BasicEffect & MoveData;
 export interface ActiveMove extends MutableMove {
 	keenHuntAnnounced?: boolean;
+	attackerGuaranteedHit?: boolean;
 	/** Chosen moveset slot for PP accounting when multiple slots share an ID. */
 	ppSlot?: number;
 	/** Retains the Ground field bonus after Midnight Zone converts the move to Water. */

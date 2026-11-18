@@ -75,6 +75,31 @@ describe('Pressure per-user battle limit and Skull Bash power', () => {
 		p.setAbility('Pressure'); assert.equal(q.boosts.def, -1); entry(p); assert.equal(q.boosts.spd, -1);
 	});
 
+	for (const [terrain, expectedTerrain, cost] of [
+		['', '', 2],
+		['midnightzoneterrain', 'midnightzoneterrain', 3],
+		['underwaterterrain', 'midnightzoneterrain', 3],
+	]) {
+		it(`Iron Dominion applies Pressure's PP cost on ${terrain || 'ordinary terrain'} even when damage is blocked`, () => {
+			const [holder, foe] = setup(true);
+			const ally = battle.p1.active[1];
+			ally.hp = 1000;
+			if (terrain) battle.field.setTerrain(terrain, holder);
+			holder.setAbility('Iron Dominion');
+			assert.equal(battle.field.terrain, expectedTerrain);
+			assert.equal(ally.hp, 2000, 'Sworn Duty should heal the ally once');
+			assert.equal(foe.boosts.def, -1, 'the Pressure drop should apply once');
+			holder.addVolatile('protect');
+			const pp = foe.moveSlots[1].pp;
+			battle.makeChoices('move 1, move 1', 'move 2 1, move 1');
+			assert(battle.log.includes(`|-activate|${holder}|move: Protect`));
+			assert.equal(foe.moveSlots[1].pp, pp - cost);
+			battle.boost({ spe: -1 }, holder, foe, Dex.moves.get('scaryface'));
+			assert.equal(holder.boosts.spe, 0);
+			assert.equal(foe.boosts.spe, -1, 'Mirror Armor should reflect the drop once');
+		});
+	}
+
 	it('Lunar Dread uses Dishearten without spending a Pressure attempt', () => {
 		const [p, q] = setup(); p.setAbility('Lunar Dread');
 		assert.equal(q.boosts.spa, -1); assert.equal(q.boosts.def, 0); assert.equal(q.boosts.spd, 0);

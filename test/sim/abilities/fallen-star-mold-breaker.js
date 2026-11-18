@@ -29,7 +29,7 @@ describe('Fallen Star full local Mold Breaker',()=>{
 		p.hp = Math.floor(p.maxhp / 4);
 		assert.equal(battle.runEvent('ModifyPriority',p,t,battle.dex.getActiveMove('triplearrows'),0),1);
 		assert.equal(battle.runEvent('ModifyPriority',p,t,battle.dex.getActiveMove('tackle'),0),0);
-		assert.equal(battle.runEvent('ModifyDamage',t,p,battle.dex.getActiveMove('tackle'),1000),500);
+		assert.equal(battle.runEvent('ModifyDamage',t,p,battle.dex.getActiveMove('tackle'),1000),800);
 		assert(!/Skill Link|crit.*stack|side.*crit/i.test(p.getAbility().desc));
 	});
 });

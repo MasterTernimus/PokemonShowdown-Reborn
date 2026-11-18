@@ -40,7 +40,7 @@ export const GrandStrategy: import('../sim/dex-abilities').AbilityData = {
 };
 export const GrandStrategyDescription = {
  shortDesc: "Mold Breaker; team hits prepare foes while active; once-battle cure grants Laser Focus.",
- desc: "Mold Breaker. While the holder is active, its team's attacks dealing opposing HP damage prepare that foe for the holder. Its next physical HP-damaging attack consumes the mark after the whole attack, ignoring positive defensive stages and Reflect, Light Screen and Aurora Veil. That attack cannot rearm the mark. Marks do not stack, survive the holder switching out, and clear when the foe switches or faints, or the holder faints or loses this ability. Once per battle, an end-of-turn major-status cure clears negative accuracy stages and grants Laser Focus through the next turn; switching clears Laser Focus. Suppression delays the cure; other cures do not spend it.",
+ desc: "Mold Breaker. While the holder is active, its team's attacks dealing opposing HP damage prepare that foe for the holder. Its next physical HP-damaging attack consumes the mark after the whole attack, ignoring positive defensive stages and Reflect, Light Screen and Aurora Veil. That attack cannot rearm the mark. Marks do not stack, survive the holder switching out, and clear when the foe switches or faints, or the holder faints or loses this ability. Once per battle, an end-of-turn major-status cure clears negative accuracy stages and grants Laser Focus for the next attack that hits, through the following turn; switching clears Laser Focus. Suppression delays the cure; other cures do not spend it.",
 };
 
 export function updatePreparedIndicator(battle: Battle, target: Pokemon) {

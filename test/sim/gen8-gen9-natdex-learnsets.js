@@ -3,11 +3,12 @@
 const assert = require('./../assert');
 const {CustomLearnsetRemovals, Learnsets} = require('./../../dist/data/learnsets');
 const {Gen8Gen9NatDexLearnsets} = require('./../../dist/data/natdex-gen8-gen9-learnsets');
+const { November16MoveRemovals } = require('../../dist/data/nov16-movepool-removals');
 
 function intentionallyRemoved(species, move) {
 	return move === 'terablast' || (move === 'decorate' && species !== 'alcremie') ||
 		(['corsola', 'corsolaalt'].includes(species) && ['hex', 'nightshade', 'willowisp', 'trickroom', 'shadowball'].includes(move)) ||
-		(CustomLearnsetRemovals[species] || []).includes(move);
+		(CustomLearnsetRemovals[species] || []).includes(move) || !!November16MoveRemovals[species]?.includes(move);
 }
 function hasImportedSource(localData, officialData, move, source) {
 	const sources = localData.learnset?.[move === 'mudslap' ? 'mudbarrage' : move] || [];

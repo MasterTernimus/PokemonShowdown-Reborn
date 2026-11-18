@@ -1,7 +1,17 @@
+export function isUltraSuppressedTerrain(battle: Battle) {
+	return battle.field.isTerrain(['bewitchedwoodsterrain', 'hauntedterrain', 'holyterrain']);
+}
+
+export function recordUltraEgoCombat(battle: Battle, holder: Pokemon) {
+	if (!holder.volatiles.ultraegocombat) holder.addVolatile('ultraegocombat', holder, battle.effect);
+	const state = holder.volatiles.ultraegocombat;
+	if (state) state.combatTurn = battle.turn;
+}
+
 /** Rivalry is a direct opposing matchup, including effective composite components. */
 export function ultraRivalry(battle: Battle, source: Pokemon, target: Pokemon) {
 	return !source.isAlly(target) &&
-		!battle.field.isTerrain(['bewitchedwoodsterrain', 'hauntedterrain', 'holyterrain']) &&
+		!isUltraSuppressedTerrain(battle) &&
 		source.hasAbility('ultraego') && target.hasAbility('ultrainstinct');
 }
 

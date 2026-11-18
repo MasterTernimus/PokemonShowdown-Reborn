@@ -45,14 +45,18 @@ describe('Approved Darts, Drive and Mamoswine packages', () => {
 		assert(!Dex.abilities.get('duskdrive').onModifyCritRatio);
 		assert(Dex.abilities.get('duskdrive').desc.includes('Ultra Ego'));
 	});
-	it('Dusk Ego retains native Ultra Ego hit retaliation once', () => {
+	it('Dusk Ego rewards an opposing hit at turn end and respects suppression', () => {
 		const [p, q] = start('Dusk Ego');
 		battle.actions.useMove('tackle', q, {target: p});
+		assert.equal(p.boosts.atk, 0);
+		battle.fieldEvent('Residual');
 		assert.equal(p.boosts.atk, 1);
 		assert.equal(p.boosts.spa, 1);
 		p.addVolatile('gastroacid', q);
 		p.boosts.atk = p.boosts.spa = 0;
+		battle.turn++;
 		battle.actions.useMove('tackle', q, {target: p});
+		battle.fieldEvent('Residual');
 		assert.equal(p.boosts.atk, 0);
 	});
 	it('Twilight Instinct retains Ultra Instinct timing power without Battle Fervor', () => {

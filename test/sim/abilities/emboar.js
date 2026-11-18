@@ -80,8 +80,8 @@ describe('Emboar abilities and Mega Evolution', () => {
 		emboar.hp = Math.floor(emboar.maxhp * 0.75);
 		const before = emboar.hp;
 		battle.singleEvent('DamagingHit', emboar.getAbility(), emboar.abilityState, emboar, foe, battle.dex.getActiveMove('tackle'), 40);
-		assert.equal(emboar.boosts.atk, 1);
-		assert.equal(emboar.boosts.spa, 1);
+		assert.equal(emboar.boosts.atk, 0);
+		assert.equal(emboar.boosts.spa, 0);
 		assert(emboar.hp > before, 'Ultra Ego should heal when hit');
 		assert.equal(battle.runEvent('SourceModifyAtk', emboar, foe, battle.dex.getActiveMove('firepunch'), 100), 100,
 			'Magma Armor should not retain Thick Fat Fire reduction');

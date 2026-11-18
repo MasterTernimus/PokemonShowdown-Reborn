@@ -1700,8 +1700,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dynamicpunch: {
 		name: "Dynamic Punch",
-		desc: "A hit has a 50% chance to confuse the target.",
-		shortDesc: "50% chance to confuse the target.",
+		desc: "A hit confuses the target. The chance is 50% if the user's ability or passive guarantees the hit.",
+		shortDesc: "Confuses on hit. 50% if the user's ability guarantees the hit.",
 	},
 	earthpower: {
 		name: "Earth Power",
@@ -3585,8 +3585,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	laserfocus: {
 		name: "Laser Focus",
-		desc: "Until the end of the next turn, the user's attacks will be critical hits.",
-		shortDesc: "Until the end of the next turn, user's moves crit.",
+		desc: "The user's next damaging move that hits scores critical hits against every target that can take one. This applies to all hits of that move and expires at the end of the next turn.",
+		shortDesc: "The user's next attack that hits is a critical hit.",
 
 		start: "  [POKEMON] concentrated intensely!",
 	},
@@ -7770,8 +7770,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	zapcannon: {
 		name: "Zap Cannon",
-		desc: "A hit has a 50% chance to paralyze the target.",
-		shortDesc: "50% chance to paralyze the target.",
+		desc: "A hit paralyzes the target. The chance is 50% if the user's ability or passive guarantees the hit.",
+		shortDesc: "Paralyzes on hit. 50% if the user's ability guarantees the hit.",
 	},
 	zenheadbutt: {
 		name: "Zen Headbutt",

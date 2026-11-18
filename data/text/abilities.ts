@@ -852,7 +852,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	disguise: {"name":"Disguise","desc":"Intact Mimikyu gains +1 status-move priority. Its first damaging hit breaks Disguise, prevents that hit's damage and critical hit, costs 1/8 max HP, and curses an opposing attacker. This Curse deals 1/8 max HP per turn. Confusion damage also breaks Disguise. Busted forms do not curse later attackers and have no continuing Relic Armor damage reduction, critical immunity or defensive boosts.","shortDesc":"Intact: +1 status priority; first hit blocked, costs 1/8 HP and curses foe. No ongoing armor or curses."},
 	download: {
 		name: "Download",
-		desc: "On switch-in, this Pokemon compares the opposing side's combined Defense and Special Defense. If Defense is lower, its Attack rises; otherwise its Special Attack rises. Once per battle on entry, gains Laser Focus for two turns.",
+		desc: "On switch-in, this Pokemon compares the opposing side's combined Defense and Special Defense. If Defense is lower, its Attack rises; otherwise its Special Attack rises. Once per battle on entry, gains Laser Focus for its next attack that hits, lasting through the following turn.",
 		shortDesc: "Boosts the offense targeting foes' weaker defense; Laser Focus once per battle.",
 	},
 	livinglegend: {
@@ -975,8 +975,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	fallenstar: {
 		"name": "Fallen Star",
-		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Designated arrow moves gain +1 priority at half HP or less and 1.3x power against trapped foes: Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, Magical Leaf, Spike Cannon, Pin Missile, Icicle Spear, Rock Blast, Bullet Seed, Scale Shot, Psycho Cut and Ceaseless Edge. Has its arrow follow-up and protective effects.",
-		"shortDesc": "Mold Breaker; arrow moves: +1 priority at half HP or less; 1.3x power against trapped foes."
+		"desc": "Mold Breaker. Moves bypass breakable opposing abilities. Dual Wield grants a second strike to eligible moves. Same-type attacks gain 1.3x power. Arrow moves gain 1.3x power against trapped foes and +1 priority at 1/4 HP or less. After landing an arrow, the user takes 25% less attack damage for the rest of the turn. Otherwise, at half HP or less, it takes 20% less. In Free-for-All, arrows strike one chosen foe twice. In other formats, an arrow knockout can trigger a half-power follow-up against another foe.",
+		"shortDesc": "Arrows gain priority at 1/4 HP. Takes 25% less after an arrow or 20% less at half HP."
 	},
 	eclipse: {
 		name: "Eclipse",

@@ -929,6 +929,9 @@ export class Battle {
 			this.add('message', 'Parent event: ' + this.event.id);
 			throw new Error("Stack overflow");
 		}
+		const accuracySensitiveMove = (sourceEffect?.id === 'zapcannon' || sourceEffect?.id === 'dynamicpunch') &&
+			(eventid === 'ModifyMove' || eventid === 'Accuracy' || eventid === 'ModifyAccuracy') ?
+			sourceEffect as ActiveMove : null;
 		const preparingDualDamage = eventid === 'DualWieldDamageBoost';
 		if (preparingDualDamage) eventid = 'ModifyDamage';
 		let temporaryDualContext = false;
@@ -1092,6 +1095,7 @@ export class Battle {
 				continue;
 			}
 			let returnVal;
+			const previousAccuracy = accuracySensitiveMove?.accuracy;
 			const previousModifier = this.event.modifier;
 			const adaptiveEventMove = ['ModifyMove', 'ModifyType'].includes(eventid) ? args[0] as ActiveMove :
 				eventid === 'PrepareHit' ? sourceEffect as ActiveMove : null;
@@ -1114,6 +1118,15 @@ export class Battle {
 				this.effectState = parentEffectState;
 			} else {
 				returnVal = handler.callback;
+			}
+			if (accuracySensitiveMove && (effect.effectType === 'Ability' || handler.state?.speciesPassive)) {
+				if (eventid === 'ModifyMove' && effectHolder === target && previousAccuracy !== true &&
+					accuracySensitiveMove.accuracy === true && typeof accuracySensitiveMove.dualWieldAccuracy !== 'number') {
+					accuracySensitiveMove.attackerGuaranteedHit = true;
+				} else if (eventid !== 'ModifyMove' && effectHolder === source && returnVal === true &&
+					(eventid === 'Accuracy' || relayVar !== true) && target instanceof Pokemon) {
+					target.getMoveHitData(accuracySensitiveMove).attackerGuaranteedHit = true;
+				}
 			}
 			if (adaptiveMoveBefore && adaptiveEventMove) adaptiveCaptureMove(adaptiveEventMove, adaptiveMoveBefore, effect, effectHolder instanceof Pokemon ? effectHolder : undefined);
 			if (this.event.target instanceof Pokemon) {
@@ -2881,6 +2894,7 @@ export class Battle {
 	getTarget(pokemon: Pokemon, move: string | Move, targetLoc: number, originalTarget?: Pokemon) {
 		move = this.dex.moves.get(move);
 		if (move.id === 'decorate' && pokemon.hasAbility('masterpatissier')) move = {...move, target:'normalOrSelf'};
+		if (pokemon.usesFallenStarTarget(move)) move = { ...move, target: 'adjacentFoe' };
 		if (['followme', 'ragepowder'].includes(move.id)) {
 			if (this.gameType !== 'freeforall') return pokemon;
 			const selectedTarget = pokemon.getAtLoc(targetLoc);

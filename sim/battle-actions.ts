@@ -673,6 +673,7 @@ export class BattleActions {
 			if (!move.hasBounced) move.pranksterBoosted = this.battle.activeMove.pranksterBoosted;
 		}
 		if (move.id === 'decorate' && pokemon.hasAbility('masterpatissier')) move.target = 'normalOrSelf';
+		if (pokemon.usesFallenStarTarget(move)) move.target = 'adjacentFoe';
 		const baseTarget = move.target;
 		let targetRelayVar = { target };
 		targetRelayVar = this.battle.runEvent('ModifyTarget', pokemon, target, move, targetRelayVar, true);
@@ -750,7 +751,7 @@ export class BattleActions {
 			const selectedTarget = targets.includes(originalTarget) ? originalTarget : target;
 			targets.splice(0, targets.length, selectedTarget);
 		}
-		if (this.battle.gameType === 'freeforall' && move.multihitType === 'dualwield' && targets.length > 1 && !(move as any).fallenStarSpread) {
+		if (this.battle.gameType === 'freeforall' && move.multihitType === 'dualwield' && targets.length > 1) {
 			const selectedTarget = targets.includes(originalTarget) ? originalTarget : target;
 			targets.splice(0, targets.length, selectedTarget);
 		}
@@ -1309,15 +1310,16 @@ export class BattleActions {
 			if (twinStrike && (!pokemon.hp || pokemon.fainted || !pokemon.isActive)) break;
 			if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
 			(move as any).spilloverDamageModifier = undefined;
-			if (twinStrike && hit > 1 && (!originalMultihitTarget?.hp || !originalMultihitTarget.isActive)) break;
-			if (hit > 1 && move.multihitType === 'dualwield' && !move.dualWieldFullPower && !(move as any).fallenStarSpread) {
+			if ((twinStrike || move.fallenStarSingleTarget) && hit > 1 &&
+				(!originalMultihitTarget?.hp || !originalMultihitTarget.isActive)) break;
+			if (hit > 1 && move.multihitType === 'dualwield' && !move.dualWieldFullPower && !move.fallenStarSingleTarget) {
 				const livingFoes = pokemon.foes().filter(foe => this.canChainHitTarget(foe, pokemon, move));
 				if (!livingFoes.length) break;
 				targets = [this.battle.sample(livingFoes)];
 				damage = [0];
 				if (targets[0] !== originalMultihitTarget) move.smartTarget = false;
 			}
-			if (hit > 1 && move.dualWieldFullPower && !(move as any).fallenStarSpread) {
+			if (hit > 1 && move.dualWieldFullPower && !move.fallenStarSingleTarget) {
 				const livingFoes = pokemon.foes().filter(foe => this.canChainHitTarget(foe, pokemon, move));
 				if (!livingFoes.length) break;
 				const otherFoes = livingFoes.filter(foe => foe !== originalMultihitTarget);
@@ -1480,7 +1482,8 @@ export class BattleActions {
 					move.lastHit = false;
 				}
 			}
-			if (!twinStrike && !battleBondHitOffset && hit < targetHits && targets.every(target => !target?.hp)) {
+			if (!twinStrike && !move.fallenStarSingleTarget && !battleBondHitOffset &&
+				hit < targetHits && targets.every(target => !target?.hp)) {
 				const spilloverTarget = originalMultihitTarget && this.getMultihitSpilloverTarget(originalMultihitTarget, pokemon, move, hit + 1, targetHits);
 				if (spilloverTarget) {
 					targets = [spilloverTarget];
@@ -2018,8 +2021,13 @@ export class BattleActions {
 				const secondaryRoll = this.battle.random(100);
 				// User stat boosts or target stat drops can possibly overflow if it goes beyond 256 in Gen 8 or prior
 				const secondaryOverflow = (secondary.boosts || secondary.self) && this.battle.gen <= 8;
-				if (typeof secondary.chance === 'undefined' ||
-					secondaryRoll < (secondaryOverflow ? secondary.chance % 256 : secondary.chance)) {
+				let chance = secondary.chance;
+				if (((move.id === 'zapcannon' && secondary.status === 'par') ||
+					(move.id === 'dynamicpunch' && secondary.volatileStatus === 'confusion')) &&
+					(move.attackerGuaranteedHit || target?.getMoveHitData(move).attackerGuaranteedHit)) {
+					chance = Math.min(chance ?? 100, 50);
+				}
+				if (chance === undefined || secondaryRoll < (secondaryOverflow ? chance % 256 : chance)) {
 					this.moveHit(target, source, move, secondary, true, isSelf);
 				}
 			}

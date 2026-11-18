@@ -52,10 +52,12 @@ describe('Twilight Instinct and Dusk Ego', () => {
 		assert(holder.hasAbility('Dusk Drive'));
 		assert(holder.hasAbility('Dusk Ego'));
 		battle.actions.useMove('tackle', foe, { target: holder });
-		assert.equal(holder.boosts.atk, 1);
-		assert.equal(holder.boosts.spa, 1);
+		assert.equal(holder.boosts.atk, 0);
+		assert.equal(holder.boosts.spa, 0);
 		battle.boost({ def: 2 }, foe, foe);
 		battle.fieldEvent('Residual');
+		assert.equal(holder.boosts.atk, 1);
+		assert.equal(holder.boosts.spa, 1);
 		assert.equal(holder.boosts.def, 0);
 	});
 	it('uses only Ultra Instinct and Opportunist, with no Battle Fervor effects', () => {

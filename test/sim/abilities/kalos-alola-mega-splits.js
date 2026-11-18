@@ -180,12 +180,14 @@ describe('Approved Kalos Alola nine Mega migrations and Ultra damage removal', (
 		battle.p2.active[1].setAbility('No Ability');
 		p.hp = 600;
 		battle.runEvent('DamagingHit', p, q, move, 10);
-		assert.equal(p.boosts.atk, 1);
-		assert.equal(p.boosts.spa, 1);
+		assert.equal(p.boosts.atk, 0);
+		assert.equal(p.boosts.spa, 0);
 		assert.equal(p.hp, 675);
 		battle.runEvent('DamagingHit', p, q, move, 10);
 		assert.equal(p.hp, 675, 'duplicate DamagingHit dispatch for the same move must not heal again');
+		battle.fieldEvent('Residual');
 		assert.equal(p.boosts.atk, 1);
+		assert.equal(p.boosts.spa, 1);
 	});
 	it('retains standalone Battle Fervor authority damage effects', () => {
 		const [p, q] = setup('hawluchamega', true);

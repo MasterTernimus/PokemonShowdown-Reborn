@@ -1,9 +1,17 @@
 /** Approved species removals, including their existing combat and cosmetic variants. */
 export const November16MoveRemovals: {[id: string]: readonly string[]} = {
-	"typhlosion": ["earthpower"],
-	"typhlosionalt": ["earthpower"],
-	"typhlosionhisui": ["earthpower"],
-	"typhlosionmega": ["earthpower"],
+	typhlosion: ['earthpower', 'endure'],
+	typhlosionalt: ['earthpower', 'endure'],
+	typhlosionhisui: ['earthpower', 'endure'],
+	typhlosionmega: ['earthpower', 'endure'],
+	decidueye: ['endure'],
+	decidueyealt: ['endure'],
+	decidueyehisui: ['endure'],
+	decidueyehisuialt: ['endure'],
+	samurott: ['endure'],
+	samurottalt: ['endure'],
+	samurotthisui: ['endure'],
+	samurotthisuialt: ['endure'],
 	"poliwrath": [
 		"meteormash"
 	],
