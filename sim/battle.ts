@@ -1127,6 +1127,10 @@ export class Battle {
 					(eventid === 'Accuracy' || relayVar !== true) && target instanceof Pokemon) {
 					target.getMoveHitData(accuracySensitiveMove).attackerGuaranteedHit = true;
 				}
+			} else if (accuracySensitiveMove && eventid === 'Accuracy' && effect.id === 'midnightzoneterrain' &&
+				returnVal === true && target instanceof Pokemon) {
+				// Midnight Zone grants perfect accuracy specifically through the attacker's Illuminate.
+				target.getMoveHitData(accuracySensitiveMove).attackerGuaranteedHit = true;
 			}
 			if (adaptiveMoveBefore && adaptiveEventMove) adaptiveCaptureMove(adaptiveEventMove, adaptiveMoveBefore, effect, effectHolder instanceof Pokemon ? effectHolder : undefined);
 			if (this.event.target instanceof Pokemon) {

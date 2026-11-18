@@ -69,11 +69,8 @@ export const MidnightZone: TerrainData = {
 				delete move.types;
 			}
 		},
-		onAccuracy(accuracy, target, source, move) {
-			if (source.hasAbilityOrPassive('illuminate')) {
-				if (move.id === 'zapcannon' || move.id === 'dynamicpunch') target.getMoveHitData(move).attackerGuaranteedHit = true;
-				return true;
-			}
+		onAccuracy(accuracy, target, source) {
+			if (source.hasAbilityOrPassive('illuminate')) return true;
 		},
 		onBasePowerPriority: 6,
 		onBasePower(basePower, source, target, move) {

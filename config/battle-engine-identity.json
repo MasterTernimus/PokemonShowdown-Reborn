@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "50d4172567fa743d218dd124f7274cd69d6d7999e47c55882e1ddb0bf0ace101",
-  "packageManifestSHA256": "79956f17e321e4a204a1385ee7043015f270da4929283c40ab0bc07ed3da5bdb",
-  "mechanicsSHA256": "becf82bd12f9262f090a9d81960391101c542b4eafcc482149b6893b0f32014e",
+  "packageEngineRevision": "5255521efab2cf2b09061926ef63ae95a605f60966687ad7348794cb9e0f2ca8",
+  "packageManifestSHA256": "4f8affff863bd28acba762b021db8440d6764f67c892015edf255dc025172a5e",
+  "mechanicsSHA256": "60cb3f040b0fb0a9c6b6b51b62dcd32a25182c1b93d1ebf4e91d0e72dcaca517",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -487,7 +487,7 @@
     },
     {
       "file": "dist/data/midnight-zone.js",
-      "sha256": "aaa157c43956d32b4237a3eed97dcfeedaebc69293f64e1f22dc96da882e97ab"
+      "sha256": "919f3730bdf720a25eeb7ac9868866e0148112ca90e21e49981fbb810789b324"
     },
     {
       "file": "dist/data/mime-aim-approved.js",
@@ -1147,7 +1147,7 @@
     },
     {
       "file": "dist/sim/battle.js",
-      "sha256": "c50e38e03fb5f2dd97909607c86b5db152034b57f95a675390d3a7cdb8b03839"
+      "sha256": "090d7f14713ef4ae0d345ac889fb9bdcd216e71ad1325879b4ce7979b3c58473"
     },
     {
       "file": "dist/sim/beast-hunter.js",
