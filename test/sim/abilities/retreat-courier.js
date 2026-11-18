@@ -12,7 +12,7 @@ describe('Approved Tactical Retreat and Rain Courier',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
 	it('replaces only approved slots and exposes calculator metadata', () => {
 		assert.deepEqual(Dex.species.get('golisopod').abilities, { 0: 'Tactical Retreat', 1: 'Inner Focus', H: 'Shell Armor' });
-		assert.deepEqual(Dex.species.get('pelipper').abilities, { 0: 'Accumulation', 1: 'Keen Eye', H: 'Rain Courier' });
+		assert.deepEqual(Dex.species.get('pelipper').abilities, { 0: 'Accumulation', 1: 'Hydration', H: 'Rain Courier' });
 		assert.notEqual(Dex.species.get('golisopodmega').abilities[0], 'Tactical Retreat');
 		const m = require('../../../dist/sim/custom-calculator').calculatorMetadata();
 		for (const id of ['golisopod', 'pelipper'])assert.deepEqual(m.species.find(s => s.name === Dex.species.get(id).name).abilities, Dex.species.get(id).abilities);

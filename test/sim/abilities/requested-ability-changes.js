@@ -10,7 +10,7 @@ describe('Requested ability changes', () => {
 
 	it('updates the affected roster slots and ability names', () => {
 		for (const [species, slot, expected] of [
-			['Blastoise', 'H', 'Hydraulic Armor'],
+			['Blastoise', 'H', 'Rain Dish'],
 			['Butterfree-Gmax', '0', 'Mythic Scale'],
 			['Golem', '0', 'Wrecking Ball'],
 			['Weezing', 'H', 'Flare Boost'],

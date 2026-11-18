@@ -52,7 +52,7 @@ describe('Mega composite ability components', () => {
 		assert.equal(battle.runEvent('ModifyDamage', foe, gengar, battle.dex.getActiveMove('doublehit'), 100), 60);
 	});
 
-	it('Heavy Artillery and Toxic Bloom ignore enemy boosts through Unaware', () => {
+	it('only Heavy Artillery ignores enemy boosts through Unaware', () => {
 		for (const [species, item, ability] of [
 			['Clawitzer', 'Clawitzerite', 'heavyartillery'],
 			['Venusaur', 'Venusaurite', 'toxicbloom'],
@@ -63,8 +63,8 @@ describe('Mega composite ability components', () => {
 			battle.activePokemon = foe;
 			battle.activeTarget = holder;
 			const boosts = battle.runEvent('ModifyBoost', foe, null, null, { atk: 6, spa: 3, def: 2 });
-			assert.equal(boosts.atk, 0);
-			assert.equal(boosts.spa, 0);
+			assert.equal(boosts.atk, ability === 'heavyartillery' ? 0 : 6);
+			assert.equal(boosts.spa, ability === 'heavyartillery' ? 0 : 3);
 		}
 	});
 

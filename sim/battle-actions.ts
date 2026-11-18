@@ -18,7 +18,7 @@ import {predatorUltraMatch} from './predator';
 import {ultraRivalry, ultraGuardAvailable} from './ultra-rivalry';
 import {ringmasterSwitch, ringmasterEntry, resetQueuedEntry, shedDecoyEntry} from '../data/queued-abilities-approved';
 import {guardFixedDamage} from '../data/guard-passives-approved';
-import {qualifiesForRelicBeam} from '../data/relic-beam';
+import {qualifiesForMalignantLight} from '../data/relic-beam';
 
 const CHOOSABLE_TARGETS = new Set(['normal', 'normalOrSelf', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
@@ -947,7 +947,7 @@ export class BattleActions {
 		if (immuneAbilities.some(([type, abilities]) =>
 			this.battle.movehasType(move, type) && target.hasAbility(abilities))) return false;
 		return !(this.battle.movehasType(move, 'Fire') &&
-			!this.battle.field.isTerrain('coldeclipseterrain') && target.hasAbility(['flashfire', 'kindledfury']));
+			!this.battle.field.isTerrain('coldeclipseterrain') && target.hasAbilityOrPassive('flashfire'));
 	}
 	redirectWaterShurikenFromProtect(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
 		if (move.id !== 'watershuriken') return;
@@ -2530,11 +2530,13 @@ export class BattleActions {
 		}
 
 		// Liquid Arsenal compares fully modified defenses per target/hit; category and offense are unchanged.
+		const malignantLightApplies = move.category === 'Special' && source.hasAbilityOrPassive('malignantlight') &&
+			qualifiesForMalignantLight(move);
 		// Each defense's modifiers run once. Explicit move defense overrides retain precedence; ties keep normal defense.
 		if (move.category !== 'Status' && !move.overrideDefensivePokemon && (
             (source.hasAbility('liquidarsenal') && this.battle.movehasType(move, 'Water') && !move.overrideDefensiveStat) ||
             (source.hasAbility('psychedominion') && this.battle.movehasType(move, 'Psychic')) ||
-            (move.category === 'Special' && source.hasAbilityOrPassive('malignantlight') && qualifiesForRelicBeam(move)) ||
+            malignantLightApplies ||
             (move.id === 'psystrike' && ['mewtwo','mewtwomegax','mewtwomegay'].includes(source.species.id))
         )) {
 			const alternateStat = defenseStat === 'def' ? 'spd' : 'def';

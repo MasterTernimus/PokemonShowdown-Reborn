@@ -172,18 +172,18 @@ describe('Team Validator', function () {
 		// base forme ability
 		let team = [
 			{species: 'gyaradosmega', item: 'gyaradosite', ability: 'intimidate', moves: ['dragondance', 'crunch', 'waterfall', 'icefang'], evs: {hp: 1}},
-			{species: 'kyogreprimal', item: 'blueorb', ability: 'drizzle', moves: ['originpulse'], evs: {hp: 1}},
-			{species: 'rayquazamega', item: 'leftovers', ability: 'airlock', moves: ['dragonascent'], evs: {hp: 1}},
+			{species: 'kyogreprimal', item: 'blueorb', ability: 'raindish', moves: ['originpulse'], evs: {hp: 1}},
+			{species: 'rayquazamega', item: 'leftovers', ability: 'innerfocus', moves: ['dragonascent'], evs: {hp: 1}},
 		];
-		assert.legalTeam(team, validationFormat(7, { customRules: ['+Unleashed Ego'] }));
+		assert.legalTeam(team, validationFormat(7, { customRules: ['+Unleashed Ego', '+Abyssal Deluge', '+Stratospheric Force'] }));
 
 		// mega forme ability
 		team = [
 			{ species: 'gyaradosmega', item: 'gyaradosite', ability: 'unleashedego', moves: ['dragondance', 'crunch', 'waterfall', 'icefang'], evs: { hp: 1 } },
-			{species: 'kyogreprimal', item: 'blueorb', ability: 'primordialsea', moves: ['originpulse'], evs: {hp: 1}},
-			{species: 'rayquazamega', item: 'leftovers', ability: 'deltastream', moves: ['dragonascent'], evs: {hp: 1}},
+			{species: 'kyogreprimal', item: 'blueorb', ability: 'abyssaldeluge', moves: ['originpulse'], evs: {hp: 1}},
+			{species: 'rayquazamega', item: 'leftovers', ability: 'stratosphericforce', moves: ['dragonascent'], evs: {hp: 1}},
 		];
-		assert.legalTeam(team, validationFormat(7, { customRules: ['+Unleashed Ego'] }));
+		assert.legalTeam(team, validationFormat(7, { customRules: ['+Unleashed Ego', '+Abyssal Deluge', '+Stratospheric Force'] }));
 	});
 
 	common.itGen(1, 'should reject newer Pokemon in older gens', () => {

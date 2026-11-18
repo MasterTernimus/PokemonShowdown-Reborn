@@ -20,16 +20,17 @@ describe('Starter chip replaced by move accuracy', () => {
 		'Sun Sovereign', 'Blazing Crown', 'Water Barrage', 'Bombardment', 'Tidal Crown',
 	];
 	for (const ability of abilities) {
-		it(ability + ' gives exactly 1.1x accuracy to damaging and status moves', () => {
+		const hasAccuracyBonus = !['Pollen Bloom', 'Sun Sovereign'].includes(ability);
+		it(ability + ' applies its current accuracy to damaging and status moves', () => {
 			const [p, q] = setup(ability);
 			for (const id of ['tackle', 'hydropump', 'hypnosis', 'sleeppowder']) {
 				const move = Dex.getActiveMove(id);
-				assert.equal(battle.runEvent('ModifyAccuracy', q, p, move, 80), 88);
+				assert.equal(battle.runEvent('ModifyAccuracy', q, p, move, 80), hasAccuracyBonus ? 88 : 80);
 				assert.equal(battle.runEvent('ModifyAccuracy', q, p, move, true), true);
 			}
-			assert.equal(battle.runEvent('ModifyAccuracy', q, p, Dex.getActiveMove('hypnosis'), 60), 66);
+			assert.equal(battle.runEvent('ModifyAccuracy', q, p, Dex.getActiveMove('hypnosis'), 60), hasAccuracyBonus ? 66 : 60);
 			p.addVolatile('gastroacid');
-			assert.equal(battle.runEvent('ModifyAccuracy', q, p, Dex.getActiveMove('tackle'), 80), p.getAbility().flags.cantsuppress ? 88 : 80);
+			assert.equal(battle.runEvent('ModifyAccuracy', q, p, Dex.getActiveMove('tackle'), 80), hasAccuracyBonus && p.getAbility().flags.cantsuppress ? 88 : 80);
 		});
 		for (const format of ['gen9nofieldsinglesgame', calculatorFormats().find(f => f.gameType === 'freeforall').id]) {
 			it(ability + ' has no chip or chip healing in ' + format, () => {

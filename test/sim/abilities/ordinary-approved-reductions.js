@@ -145,7 +145,16 @@ describe('Approved ordinary species reductions',()=>{
 		assert.equal(battle.runEvent('ModifyDef', p, null, null, 100), 130);
 		assert(!p.hasAbility('toughclaws'));
 	});
- it('Sun Sovereign keeps eight-turn sun and Unbound Blaze entry effects without Intimidate',()=>{const[p,q]=setup('Sun Sovereign');assert.equal(q.boosts.atk,0);assert.equal(battle.field.weather,'sunnyday');assert.equal(battle.field.weatherState.duration,8);battle.field.terrain='volcanicterrain';battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.boosts.def,1);assert.equal(p.boosts.spd,1);assert.equal(q.boosts.atk,0);});
+	it('Sun Sovereign applies Drought and Infernal Dominion field entry', () => {
+		const [p, q] = setup('Sun Sovereign');
+		assert.equal(q.boosts.atk, -1);
+		assert.equal(battle.field.weather, 'sunnyday');
+		assert.equal(battle.field.weatherState.duration, 5);
+		battle.field.terrain = 'volcanicterrain';
+		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
+		assert.equal(p.boosts.atk, 1);
+		assert.equal(p.boosts.spa, 1);
+	});
 	it('Fortress Shell no longer chips or heals at turn end', () => {
 		const [p, q] = setup('Fortress Shell');
 		p.hp = 2000;

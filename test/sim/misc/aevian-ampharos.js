@@ -35,7 +35,7 @@ describe('Aevian Ampharos', function () {
 	it('has the supplied move profile', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const learnset = Learnsets.ampharosaevian.learnset;
-		for (const move of ['tackle', 'snowscape', 'thunderwave', 'thundershock', 'thunderpunch',
+		for (const move of ['meteorbeam', 'slackoff', 'tackle', 'snowscape', 'thunderwave', 'thundershock', 'thunderpunch',
 			'icywind', 'iceball', 'blizzard', 'haze', 'auroraveil', 'iciclespear', 'voltswitch', 'paraboliccharge']) {
 			assert(learnset[move], `Ampharos-Aevian should learn ${move}`);
 		}

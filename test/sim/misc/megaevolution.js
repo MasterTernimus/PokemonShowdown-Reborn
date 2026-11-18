@@ -9,7 +9,7 @@ let battle;
 
 describe('Mega Evolution', function () {
 	afterEach(function () {
-		battle.destroy();
+		battle?.destroy();
 	});
 
 	it('should overwrite normally immutable abilities', function () {
@@ -118,8 +118,8 @@ describe('Mega Evolution', function () {
 	});
 
 	describe('Mega Rayquaza', () => {
-		const TEAMS = [[{ species: 'Rayquaza', ability: 'Air Lock', moves: ['Dragon Ascent'], evs: { hp: 1 } }],
-			[{ species: 'Rayquaza', ability: 'Air Lock', moves: ['Protect'], evs: { hp: 1 } }]];
+		const TEAMS = [[{ species: 'Rayquaza', ability: 'Inner Focus', moves: ['Dragon Ascent'], evs: { hp: 1 } }],
+			[{ species: 'Rayquaza', ability: 'Inner Focus', moves: ['Protect'], evs: { hp: 1 } }]];
 		function format(mod = 'gen9', extra = []) {
 			return new Format({ name: 'Rayquaza clause regression', effectType: 'Format', mod, ruleset: ['Obtainable', 'Team Preview', '+Past', ...extra] });
 		}

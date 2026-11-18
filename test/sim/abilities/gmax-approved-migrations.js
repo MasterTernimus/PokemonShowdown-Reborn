@@ -42,7 +42,7 @@ describe('Approved Gmax migrations and selected redesigns', () => {
 	});
 	for (const [species, historicalPassive] of Object.entries(grants)) it(species + ' retains its full passive under suppression and active ability replacement', () => {
 		const [p, q] = setup(species);
-        const passive = ({hatterenegmax:'healingmirror',aegislashgmax:'cursedbody',toxtricitygmax:'feedback',toxtricitylowkeygmax:'feedback'})[species] || historicalPassive;
+        const passive = ({coalossalgmax: 'flashfire',hatterenegmax:'healingmirror',aegislashgmax:'cursedbody',toxtricitygmax:'feedback', toxtricitylowkeygmax:'feedback'})[species] || historicalPassive;
 		assert.deepEqual(p.getPassives(), [passive]);
 		p.setAbility('Run Away'); p.addVolatile('gastroacid');
 		assert(p.hasAbilityOrPassive(passive));
@@ -143,8 +143,8 @@ describe('Approved Gmax migrations and selected redesigns', () => {
 			battle.destroy(); battle = null;
 		}
 	});
-	it('Infernal Eclipse grants native Flame Body and the selected package entry defenses once each', () => {
-		for (const [species, expected] of [['Coalossal-Gmax', 2], ['Centiskorch-Gmax', 1]]) {
+	it('Infernal Eclipse grants Furnace Engine and native Flame Body entry defenses once on their respective users', () => {
+		for (const [species, expected] of [['Coalossal-Gmax', 1], ['Centiskorch-Gmax', 1]]) {
 			const [p] = setup('Mew'); battle.field.terrain = 'infernaleclipseterrain';
 			p.formeChange(species, null, true); assert.equal(p.boosts.def, expected, species); assert.equal(p.boosts.spd, expected, species);
 			battle.destroy(); battle = null;

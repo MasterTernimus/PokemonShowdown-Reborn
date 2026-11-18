@@ -28,7 +28,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	blazingtempo: ['proficient', 'speedboost', 'striker', 'magmaarmor', 'keeneye'],
 	verdantdrake: ['proficient', 'dualwield', 'regenerator', 'lightningrod', 'limber'],
 	mightyjaw: ['proficient'],
-	blazingmane: ['firemane'],
+	blazingmane: ['flashfire'],
 	coronafurnace: ['flamebody'],
 
 	gigavolt: ['moldbreaker', 'lightningrod', 'static'],
@@ -463,9 +463,7 @@ Object.assign(AbilityComponents, {
   "twilightinstinct": [],
   "twincannons": [],
   "twinblades": [],
-  "heatreservoir": [
-    "flashfire"
-  ],
+  "heatreservoir": [],
   "mourningcoat": [
     "fluffy"
   ],
@@ -517,7 +515,7 @@ Object.assign(AbilityComponents, {
     "currentcoil",
     "swiftswim"
   ],
-  "soulpyre": [],
+  "soulpyre": ["infiltrator"],
   "blackviper": [
     "whiplash"
   ],
@@ -794,7 +792,7 @@ Object.assign(AbilityComponents, SelectedExactComponents);
 AbilityComponents.uncheckedassault = [...AbilityComponents.uncheckedassault, 'vitalspirit'];
 // These primitives already dispatch these components; record their genuine ownership.
 AbilityComponents.waterbarrage = ['dualwield', 'stalwart'];
-AbilityComponents.pollenbloom = ['thickfat', 'unaware'];
+AbilityComponents.pollenbloom = ['thickfat', 'aromaveil'];
 
 import {GmaxExtractedComponents} from './gmax-passive-data';
 for (const [id, components] of Object.entries(GmaxExtractedComponents)) {
@@ -916,7 +914,7 @@ AbilityComponents.beguilingbouquet = ['aromaveil'];
 AbilityComponents.venomspurs = ['corrosion'];
 AbilityComponents.lastbrood = ['swarm'];
 
-AbilityComponents.racingspirit = ['rockhead','limber'];
+AbilityComponents.racingspirit = ['rockhead', 'flashfire'];
 
 AbilityComponents.soothingcream = ['ripen'];
 AbilityComponents.masterpatissier = ['aromaveil'];
@@ -1075,7 +1073,7 @@ AbilityComponents.tidalpoise = TidalPoiseComponents;
 AbilityComponents.omensight = ['anticipation', 'forewarn'];
 AbilityComponents.gentleembrace = ['hydration'];
 AbilityComponents.shellboundfury = [];
-AbilityComponents.soulforgedarmor = [];
+AbilityComponents.soulforgedarmor = ['flashfire'];
 AbilityComponents.dunecarver = [];
 AbilityComponents.tatteredmemory = ['cursedbody', 'frisk'];
 AbilityComponents.spinyhide = ['roughskin', 'poisonpoint'];
@@ -1174,6 +1172,7 @@ AbilityComponents.insight = ['convergence', 'ultrainstinct'];
 AbilityComponents.coldlogic = [...AbilityComponents.coldlogic, 'convergence'];
 
 AbilityComponents.malignantlight = ['illuminate'];
+AbilityComponents.splintershell = ['aftermath'];
 AbilityComponents.ironmaiden = ['moxie'];
 AbilityComponents.siegegrip = ['moldbreaker'];
 AbilityComponents.astralcore = ['purepower', 'naturalcure', 'malignantlight'];
@@ -1186,3 +1185,7 @@ AbilityComponents.verdanthospitality = ['friendguard', 'naturalcure'];
 AbilityComponents.waterbarrage = ['dualwield', 'shellarmor'];
 AbilityComponents.siegelauncher = ['megalauncher', 'dualwield', 'stalwart'];
 AbilityComponents.fortressshell = ['stalwart', 'guardianpresence'];
+
+AbilityComponents.cruelshell = [];
+
+for (const id of ['giftofknowledge', 'giftofemotion', 'giftofwill']) AbilityComponents[id] = ['levitate'];

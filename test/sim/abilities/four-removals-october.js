@@ -8,8 +8,9 @@ describe('Four approved composite removals',()=>{
   return[battle.p1.active[0],battle.p2.active[0]];
  }
  it('Double Strike maximizes Tail Slap but gives only its Technician multiplier',()=>{
-  const[p,t]=setup('Double Strike','Ambipom'),m=battle.dex.getActiveMove('tailslap');
-  battle.singleEvent('ModifyMove',p.getAbility(),p.abilityState,m,p,t);assert.equal(m.multihit,5);
+  const[p,t]=setup('Pickup', 'Ambipom'),m=battle.dex.getActiveMove('tailslap');
+  battle.runEvent('ModifyMove', p, t, m, m);
+		assert.equal(m.multihit, 5);
   assert.equal(battle.runEvent('BasePower',p,t,m,40),60);
   const punch=battle.dex.getActiveMove('machpunch');assert.equal(battle.runEvent('BasePower',p,t,punch,40),60);
   battle.field.terrain='factoryterrain';assert.equal(battle.runEvent('BasePower',p,t,battle.dex.getActiveMove('tackle'),70),105);

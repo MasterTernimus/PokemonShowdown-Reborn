@@ -14,7 +14,7 @@ describe('Aevian Frost and Whiplash', () => {
 	});
 
 	it('defines Donphan-Rejuv and the requested learnsets', () => {
-		assert.equal(Dex.species.get('Donphan').abilities[0], 'Aevian Frost');
+		assert.equal(Dex.species.get('Donphan').abilities.S, 'Aevian Frost');
 		const rejuv = Dex.species.get('Donphan-Rejuv');
 		assert.deepEqual(rejuv.types, ['Ice', 'Ground']);
 		assert.deepEqual(rejuv.baseStats, {hp: 120, atk: 120, def: 115, spa: 50, spd: 60, spe: 45});

@@ -9,8 +9,8 @@ describe('Politoed event Aevian King', () => {
 	it('preserves regular slots and uses the existing event slot', () => {
 		assert.deepEqual(Dex.species.get('politoed').abilities, { 0: 'Zen', 1: 'Royal Decree', H: 'Storm Song', S: 'Aevian King' });
 		const p = Dex.species.get('politoedrejuv');
-		assert.deepEqual(p.baseStats, { hp: 110, atk: 70, def: 105, spa: 95, spd: 85, spe: 70 });
-		assert.equal(p.bst, 535);
+		assert.deepEqual(p.baseStats, { hp: 105, atk: 70, def: 105, spa: 95, spd: 85, spe: 70 });
+		assert.equal(p.bst, 530);
 		assert.deepEqual(p.types, ['Normal', 'Dragon']);
 		assert.equal(p.battleOnly, 'Politoed');
 		assert.equal(p.requiredAbility, 'Aevian King');
@@ -44,7 +44,7 @@ describe('Politoed event Aevian King', () => {
 			assert.equal(p.hp, hp);
 			assert.equal(b.log.filter(x => x.includes('-immune') && x.includes('Politoed')).length, 1);
 			b.makeChoices('move 1, move 1 1', 'move 1 1, move 1');
-			assert.equal(p.hp, Math.min(p.maxhp, hp + Math.round(p.baseMaxhp / 4)));
+			assert.equal(p.hp, Math.min(p.maxhp, hp + Math.floor(p.baseMaxhp / 4)));
 		} finally {
 			b.destroy();
 		}

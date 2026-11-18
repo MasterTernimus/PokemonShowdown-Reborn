@@ -4949,3 +4949,6 @@ import {November16BalanceDescriptions} from '../nov16-balance-descriptions';
 for (const [id, text] of Object.entries(November16BalanceDescriptions)) {
 	AbilitiesText[id as ID] = {...(AbilitiesText[id as ID] || {name: text.name || id}), ...text};
 }
+
+import { revisedNames } from '../nov18-roster';
+for (const [id, name] of Object.entries(revisedNames)) AbilitiesText[id as ID] = { ...AbilitiesText[id as ID], name };

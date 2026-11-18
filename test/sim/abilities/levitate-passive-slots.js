@@ -20,7 +20,7 @@ describe('Approved Levitate selected-slot replacements',()=>{
   for(const id of ['eelektross','weezing','weezinggalar'])assert(Object.values(Dex.species.get(id).abilities).includes('Elevate'),id);
   for(const[id,ability]of [['chimecho','Temple Chime'],['mismagius','Void Crossing'],['solrock','Solar Idol'],['lunatone','Lunar Idol']])assert(Object.values(Dex.species.get(id).abilities).includes(ability),id);
 		assert.deepEqual(Dex.species.get('hydreigon').abilities, { 0: 'Dark Aura', 1: 'Strings of Ruin', H: 'Mold Breaker' }); assert.deepEqual(Dex.species.get('hydreigon').passives, ['hydraflight']);
-		assert.deepEqual(Dex.species.get('dusclops').passives, ['unnerve']);
+		assert.deepEqual(Dex.species.get('dusclops').passives, ['pressure']);
 		for (const id of ['chingling', 'vibrava'])assert.deepEqual(Dex.species.get(id).passives, []);
  });
 });

@@ -558,7 +558,9 @@ export class Field {
 	suppressingWeather() {
 		for (const side of this.battle.sides) {
 			for (const pokemon of side.active) {
-				if (!pokemon || pokemon.fainted || pokemon.ignoringAbility() || pokemon.abilityState.ending) continue;
+				if (!pokemon || pokemon.fainted) continue;
+				if (pokemon.getPassives().includes('airlock')) return true;
+				if (pokemon.ignoringAbility() || pokemon.abilityState.ending) continue;
 				const ability = pokemon.getAbility();
 				if (ability.suppressWeather) return true;
 				if (ability.id === 'rkssystem' && pokemon.hasAbilityOrPassive('airlock')) return true;

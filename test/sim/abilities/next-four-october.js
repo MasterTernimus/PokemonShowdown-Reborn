@@ -53,7 +53,8 @@ describe('Approved Haxorus, furnace, scales and Gooey changes',()=>{
 		const [p, t] = setup('Furnace Engine', 'Coalossal-Gmax');
 		for (const a of ['steamengine', 'solidrock', 'selfsufficient'])assert(p.hasAbility(a), a);
 		assert(p.hasAbilityOrPassive('flamebody'));
-		assert(!p.hasAbility('flamebody'));
+		assert(p.hasAbility('flamebody'));
+		assert.deepEqual(p.getPassives(), ['flashfire']);
 		p.hp -= 100;
 		const hp = p.hp, foehp = t.hp;
 		residual(p);

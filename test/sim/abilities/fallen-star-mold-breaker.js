@@ -65,15 +65,16 @@ describe('Revised composite Mold Breaker ownership', () => {
 		});
 	}
 	for (const name of ['Atrocity', 'Sun Sovereign'])it(name + ' retains field entry without retired healing', () => {
-		const[p,t]=start('No Ability',name);if(name==='Sun Sovereign'){assert.equal(battle.field.weather,'sunnyday');assert.equal(battle.field.weatherState.duration,8);}
+		const[p,t]=start('No Ability',name);if(name==='Sun Sovereign'){assert.equal(battle.field.weather,'sunnyday');assert.equal(battle.field.weatherState.duration,5);}
 		assert.equal(battle.runEvent('BasePower', p, t, battle.dex.getActiveMove('psychic'), 1000), 1000);
 		battle.field.setTerrain('dragonsdenterrain',p,p.getAbility());battle.singleEvent('Start',p.getAbility(),p.abilityState,p);
-		assert.equal(p.boosts.def,1);assert.equal(p.boosts.spd,1);
+		const stats = name === 'Sun Sovereign' ? ['atk', 'spa'] : ['def', 'spd'];
+		for (const stat of stats) assert.equal(p.boosts[stat], 1);
 		p.hp = 100; battle.singleEvent('Residual', p.getAbility(), p.abilityState, p); assert.equal(p.hp, 100);
 	});
-	it('Atrocity retains its crit stage, Dragon Rush accuracy and defense multipliers',()=>{
+	it('Atrocity retains its defense multipliers and leaves Dragon Rush crit and accuracy unchanged by ModifyMove',()=>{
 		const[p,t]=start('No Ability','Atrocity');const m=battle.dex.getActiveMove('dragonrush');const originalCrit=m.critRatio;battle.singleEvent('ModifyMove',p.getAbility(),p.abilityState,m,p,t);
-		assert.equal(m.critRatio, originalCrit + 1); assert.equal(m.accuracy, true); assert(!m.ignoreAbility);
+		assert.equal(m.critRatio, originalCrit); assert.equal(m.accuracy, battle.dex.moves.get('dragonrush').accuracy); assert(!m.ignoreAbility);
 		assert.equal(battle.runEvent('ModifyDef',p,null,null,1000),1300);assert.equal(battle.runEvent('ModifySpD',p,null,null,1000),1300);
 	});
 	it('Void Omen preserves Friend Guard and its one-use ward without Serene Grace', () => {

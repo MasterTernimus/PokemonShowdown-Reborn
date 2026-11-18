@@ -3,21 +3,44 @@ import {skipPassiveComponent} from './passive-ability-cleanup';
 const ordinary=(m:ActiveMove)=>!m.sourceEffect&&!m.isZ&&!m.isMax;
 export function installMimeAim(a:AbilityDataTable) {
  a.aimassist={name:'Aim Assist',num:11482,rating:4,flags:{},
-  onSwitchIn(p){delete p.m.aimLock;delete p.m.aimStatusTurn;delete p.m.aimAttackTurn;delete p.m.aimTarget;},
-  onTryMove(p,target,move){if(!ordinary(move))return;if(target&&!target.isAlly(p))p.m.aimTarget={target,turn:this.turn};if(move.category!=='Status'){p.m.aimAttackTurn=this.turn;if((move as any).aimAssistTarget)delete p.m.aimLock;}},
-  onAfterMove(p,target,move){if(ordinary(move)&&move.category==='Status'&&p.moveThisTurnResult===true)p.m.aimStatusTurn=this.turn;},
-  onResidual(p){
-   if(p.m.aimLock?.expires<=this.turn)delete p.m.aimLock;
-   if(p.m.aimStatusTurn!==this.turn||p.m.aimAttackTurn===this.turn)return;
-   const last=p.m.aimTarget?.turn===this.turn?p.m.aimTarget.target:null;
-   const target=last?.hp&&last.isActive?last:p.foes().find(q=>q.position===p.position)||p.foes()[0];
-   if(target){p.m.aimLock={target,expires:this.turn+1};this.add('-activate',p,'ability: Aim Assist',`[of] ${target}`);}
+  onSwitchIn(p) {
+   p.removeVolatile('aimassistlock');
+   delete p.m.aimStatusTurn;
+   delete p.m.aimAttackTurn;
+   delete p.m.aimTarget;
   },
-  onModifyMove(move,p,target){if(ordinary(move)&&move.category!=='Status'&&!move.ohko&&p.m.aimLock?.expires>=this.turn&&p.m.aimLock.target===target&&target?.hp&&target.isActive){(move as any).aimAssistTarget=target;move.ignorePositiveDefensive=true;}},
+  onEnd(p) { if (!p.getPassives().includes('aimassist')) p.removeVolatile('aimassistlock'); },
+		onTryMove(p, target, move) {
+			if (!ordinary(move)) return;
+			if (target && !target.isAlly(p)) p.m.aimTarget = { target, turn: this.turn };
+			if (move.category !== 'Status') {
+				p.m.aimAttackTurn = this.turn;
+				if ((move as any).aimAssistTarget) p.removeVolatile('aimassistlock');
+			}
+		},
+		onAfterMove(p, target, move) {
+			if (ordinary(move) && move.category === 'Status' && p.moveThisTurnResult === true) p.m.aimStatusTurn = this.turn;
+		},
+		onResidual(p) {
+			if (!p.hp || p.m.aimStatusTurn !== this.turn || p.m.aimAttackTurn === this.turn) return;
+			const last = p.m.aimTarget?.turn === this.turn ? p.m.aimTarget.target : null;
+			const foes = p.foes().filter(foe => foe.hp);
+			const target = foes.includes(last) ? last : foes.find(foe => foe.position === p.position) || foes[0];
+			if (!target) return;
+			p.removeVolatile('aimassistlock');
+			p.addVolatile('aimassistlock', target, this.effect);
+		},
+		onModifyMove(move, p, target) {
+			const lock = p.volatiles.aimassistlock;
+			if (ordinary(move) && move.category !== 'Status' && !move.ohko && target?.hp && target.isActive &&
+				lock?.source === target && lock.expires >= this.turn) {
+				(move as any).aimAssistTarget = target;
+				move.ignorePositiveDefensive = true;
+			}
+		},
   onSourceAccuracy(accuracy,target,source,move){if((move as any).aimAssistTarget===target)return true;},
   onSourceInvulnerabilityPriority:1,
   onSourceInvulnerability(target,source,move){if((move as any).aimAssistTarget===target)return 0;},
-  onAnySwitchOut(p){const holder=this.effectState.target as Pokemon;if(p===holder||holder.m.aimLock?.target===p)delete holder.m.aimLock;},
  };
  a.silentact={...a.soundproof,name:'Silent Act',num:11483,rating:4,
   onAfterMove(p,target,move){if(move.category==='Status'&&p.moveThisTurnResult===true)p.addVolatile('silentactready');},

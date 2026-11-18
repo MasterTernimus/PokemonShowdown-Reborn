@@ -40,7 +40,7 @@ describe('Approved Nido pair and defensive passive swaps',()=>{afterEach(()=>{ba
 		assert.deepEqual(Dex.species.get('duraludon').passives, ['keeneye']);
 		assert.deepEqual(Dex.species.get('murkrow').passives, ['infiltrator']);
 		assert.deepEqual(Dex.species.get('porygon2').passives, ['download']);
-		assert.deepEqual(Dex.species.get('dusclops').passives, ['unnerve']);
+		assert.deepEqual(Dex.species.get('dusclops').passives, ['pressure']);
 		assert.deepEqual(Dex.species.get('gligar').passives, ['poisontouch']);
 		assert.deepEqual(Dex.species.get('corsolagalar').passives, ['infiltrator']);
 		assert.deepEqual(Dex.species.get('mightyena').passives, ['rivalry']);
@@ -49,6 +49,6 @@ describe('Approved Nido pair and defensive passive swaps',()=>{afterEach(()=>{ba
 		assert.deepEqual(Dex.species.get('cinccinodeso').passives, ['shielddust']);
 		assert.equal(Dex.species.get('nidoking').abilities.H, "Royal Onslaught");
 		assert.equal(Dex.species.get('nidoqueen').abilities.H, 'Royal Aegis');
-		for (const [id, passive] of [['arcaninehisui', 'sturdy'], ['dragonite', 'championscommand'], ['dragonitemega', 'multiscale']])assert.deepEqual(Dex.species.get(id).passives, [passive]);
+		for (const [id, passive] of [['arcaninehisui', 'flashfire'], ['dragonite', 'championscommand'], ['dragonitemega', 'multiscale']])assert.deepEqual(Dex.species.get(id).passives, [passive]);
 	});
 });

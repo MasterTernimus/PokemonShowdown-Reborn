@@ -133,7 +133,7 @@ export function installOrdinaryReductions(a: AbilityDataTable) {
 
 export const OrdinaryComponents: {[id: string]: string[]} = {
 	guardianpresence: ['friendguard', 'powerspot'], fortressshell: ['waterbarrage', 'shellarmor', 'guardianpresence'], burningcrown: ['intimidate', 'unboundblaze', 'levitate'],
-	toxicbloom: ['pollenbloom'], ancientbloom: ['pollenbloom', 'friendguard'], atrocity: ['unboundblaze', 'fireward'], sunsovereign: ['drought', 'unboundblaze'], toxicevolution: ['corrosion', 'shielddust'],
+	toxicbloom: ['pollenbloom'], ancientbloom: ['pollenbloom', 'friendguard'], atrocity: ['unboundblaze', 'fireward'], sunsovereign: ['drought', 'infernaldominion', 'whitesmoke'], toxicevolution: ['corrosion', 'shielddust'],
  spiralevolution: ['moldbreaker', 'adaptability'], completeparasitism: ['selfrepair'], joyride: ['aerilate', 'violentrush'],
 	toxicsink: [], stillwaters: ['cloudnine', 'unaware'], shattercrust: ['crumblingshell'],
  freshplumage: ['naturalcure'], gemeye: ['magicguard', 'keeneye'], witheringtouch: ['poisontouch', 'corrosion'],
@@ -144,7 +144,7 @@ export const OrdinaryComponents: {[id: string]: string[]} = {
 };
 export const OrdinaryRemovals: {[id: string]: string[]} = {
  fortressshell: ['dualwield'], burningcrown: ['moldbreaker', 'whitesmoke', 'filter'],
- ancientbloom: ['effectspore'], sunsovereign: ['intimidate'],
+ ancientbloom: ['effectspore'],
  spiralevolution: ['dualwield'], completeparasitism: ['parasitism'], joyride: ['vitalspirit'],
 	toxicsink: ['invigorate', 'effectspore'], stillwaters: ['magicguard'], gemeye: ['magicbounce'], snowpack: ['toughclaws'],
  rebornflower: ['invigorate'], vaultkeeper: ['stickyhold'],

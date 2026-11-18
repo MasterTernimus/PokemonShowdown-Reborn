@@ -1421,6 +1421,21 @@ for (const [id, passives] of Object.entries(NovemberRosterPassives)) {
 }
 SpeciesPassives.centiskorch = Object.freeze(['flashfire']);
 ThematicPassiveIds.add('flashfire');
+SpeciesPassives.machamp = Object.freeze(['noguard']);
+SpeciesPassives.electabuzz = Object.freeze(['static']);
+SpeciesPassives.magmar = Object.freeze(['flamebody']);
+for (const id of ['noguard', 'static', 'flamebody']) ThematicPassiveIds.add(id);
+SpeciesPassives.sneasel = SpeciesPassives.sneaselhisui = Object.freeze(['sharpness']);
+SpeciesPassives.bellossom = Object.freeze(['petalrhythm']);
+SpeciesPassives.forretress = Object.freeze(['splintershell']);
+for (const id of ['sharpness', 'petalrhythm', 'splintershell']) ThematicPassiveIds.add(id);
+for (const id of [
+	'ninetales', 'ninetalesreborn', 'arcanine', 'arcaninehisui', 'houndoom', 'heatmor', 'coalossal', 'coalossalgmax',
+]) {
+	SpeciesPassives[id] = Object.freeze(['flashfire']);
+}
+SpeciesPassives.chandelure = Object.freeze(['soulsiphon']);
+ThematicPassiveIds.add('soulsiphon');
 // Synchronize final passives after all base-form revisions.
 for (const [skin, base] of Object.entries(CosmeticBattleCounterparts)) {
  SpeciesPassives[skin] = Object.freeze([...(SpeciesPassives[base] || [])]);
@@ -1440,6 +1455,10 @@ ThematicPassiveIds.add('roughskin');
 for (const [skin, base] of Object.entries(CosmeticBattleCounterparts)) {
  if (base === 'garchomp') SpeciesPassives[skin] = SpeciesPassives.garchomp;
 }
-SpeciesPassives.garchompbattlebond = SpeciesPassives.garchomp;
+import { revisedPassives } from './nov18-roster';
+for (const [id, passive] of Object.entries(revisedPassives)) {
+	SpeciesPassives[id] = Object.freeze([passive]);
+	ThematicPassiveIds.add(passive);
+}
 Object.freeze(SpeciesPassives);
 

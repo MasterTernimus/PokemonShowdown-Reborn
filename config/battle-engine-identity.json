@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "f7f8739ac2bc57574cd6e1ae9fe97f9d363355d176e461e9eedc41ebf5a69c99",
-  "packageManifestSHA256": "b274b46d4849574bf320899dd856b4f446b692f8f5f459bb76ccfe2aa4e72889",
-  "mechanicsSHA256": "d8ea21f00b603e1e87e09b09bba0f0613254dca19214f349ec1af74fd8ff0aab",
+  "packageEngineRevision": "76a8997da8cc0aafb5607339114e6e36115bf85a01aaf0e701f07e66090b8288",
+  "packageManifestSHA256": "17d7b927c552a0c8a8ac315411ec1ff7fc7799cef110331e0bbc0024be435f8f",
+  "mechanicsSHA256": "b31e68677e8d316ebe433382107ecb022a49e10fad600d259e878a3166023db8",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,11 +11,11 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "d7999c5a8f835732aaec69480d7b9c4581f57436c29fac5100c11f8a5780b75d"
+      "sha256": "325f78ee2d6f547fff059a601365601431eef03f3c789cf02089452da0e839c7"
     },
     {
       "file": "dist/data/ability-components.js",
-      "sha256": "4a1af75f78b3c3f21b6283387bf668aba31ada26398dc8f88ad8724d84f644df"
+      "sha256": "5e3c3bc8a37c1f066d5aee566c5afb7666275d2e1903e302580a8beda48191db"
     },
     {
       "file": "dist/data/ability-display-summaries.js",
@@ -23,7 +23,7 @@
     },
     {
       "file": "dist/data/ability-display.js",
-      "sha256": "93db3ed980036d9e657f7ad1ee942934ed0618669d1b82a359d4ecebecfb11c9"
+      "sha256": "4f7b71e4844a9b15d11b9fd218f96d9ca5c1794bf1b53fd5eb5b31bcd92d7644"
     },
     {
       "file": "dist/data/ability-readability.js",
@@ -67,7 +67,11 @@
     },
     {
       "file": "dist/data/aliases.js",
-      "sha256": "329c6ed384a2e6104fcb3fa6b98a59f49ff151f2922ead22b946b7ddf5ac1ec2"
+      "sha256": "ec926a2264076c8e303902dd6cf7d29da90d8975f3a5c4ee4ec527db8b89988f"
+    },
+    {
+      "file": "dist/data/alien-genome.js",
+      "sha256": "3b6c8afa62c298d5a88876ef3b1569ffc091c0b2a9c1a6a1a85d6aa4acd3f4ff"
     },
     {
       "file": "dist/data/ally-serene-grace.js",
@@ -175,7 +179,7 @@
     },
     {
       "file": "dist/data/conditions.js",
-      "sha256": "ca05a308aa865efc60e5c3326fa999a5709da98aa359e2038b71fb7290fbcc83"
+      "sha256": "8f3a5db60864ae971b6939fae2bb75f0dacece9e156214685c9dbfa0c18d6f55"
     },
     {
       "file": "dist/data/cosmetic-counterparts.js",
@@ -227,7 +231,7 @@
     },
     {
       "file": "dist/data/eeveelution-cloyster-approved.js",
-      "sha256": "a1d5aac1199747d7ff0ef4278a04ea4c10df9b785a8f284075979c616edc9b00"
+      "sha256": "78eb061beda79524b5d961b0a86ccd97c7cab83bd637eef2a2e6fa2e4551f8dc"
     },
     {
       "file": "dist/data/empoleon-megas.js",
@@ -331,7 +335,7 @@
     },
     {
       "file": "dist/data/goodra-armor-reworks.js",
-      "sha256": "715272f742088270233595ae40e7252d16360acbeb14f846073bb1cc6f808a8e"
+      "sha256": "6c479612c1d4668d81f24e80d0c56eda7d083b1ae82e11d81effdc77cec98ead"
     },
     {
       "file": "dist/data/grace-support.js",
@@ -382,6 +386,10 @@
       "sha256": "8fc104051b4ae4a2047e84a5634eae7fd5e4823ee374d95f0dd3790baef540a7"
     },
     {
+      "file": "dist/data/lake-guardians.js",
+      "sha256": "09ea76fe034680d7fdd432c00d45aebbc01d894996df24549dba05be8d0a377b"
+    },
+    {
       "file": "dist/data/lapras-rework.js",
       "sha256": "1d19bcc0b65fc1fad6bf1c93c745805937ec79072e54be644878c3f007cabbae"
     },
@@ -399,7 +407,7 @@
     },
     {
       "file": "dist/data/learnsets.js",
-      "sha256": "91c01ff110dfd0ac9d2dd265c380f793ed8114445423556df302e1c5163c6673"
+      "sha256": "a1a221980b2f0ca4f5fb86726e48114b071c642fb65eacb413fb76c995bfdde1"
     },
     {
       "file": "dist/data/legacy-gen8/bss-factory-sets.json",
@@ -447,7 +455,7 @@
     },
     {
       "file": "dist/data/malignant-light-pinsir.js",
-      "sha256": "233a3b3ce5651ceb54c77445237c29003f97c2ec326271d85d4cf40831e678a8"
+      "sha256": "d308cb49380f46fe938c794b896f0458dfc8bf4f82f8768e77b30c8ca13e17aa"
     },
     {
       "file": "dist/data/mega-hydreigon.js",
@@ -483,7 +491,7 @@
     },
     {
       "file": "dist/data/mime-aim-approved.js",
-      "sha256": "7d43f68fd6d5508e08947d6e13e6fa943e304557f2a46ce6a41431c5271dcd2e"
+      "sha256": "b1fcb6cd2d2fe531314a38c3a0aa4c20616777b0e737e145ac8102b2f8295e50"
     },
     {
       "file": "dist/data/mods/gen7/abilities.js",
@@ -627,7 +635,7 @@
     },
     {
       "file": "dist/data/moves.js",
-      "sha256": "c4a83a761308d97fe2b064d2eac3f2a86cbfa3831a572d716e6dabaca9937c9b"
+      "sha256": "427359ed72fe526c30c0ef4f9fbc8654d65c39118637f728b75598c768dbf1a9"
     },
     {
       "file": "dist/data/natdex-gen8-gen9-learnsets.js",
@@ -651,11 +659,19 @@
     },
     {
       "file": "dist/data/nov16-balance-descriptions.js",
-      "sha256": "a3a226dc4deacce20e72c00c0b3526b2e118d422a22a37be7b6f5dba91e9bb64"
+      "sha256": "a93ef40bc9e8aa4ea1ee792765a297c9cb88035d2eb0f8d37ff14b8aa0c82842"
     },
     {
       "file": "dist/data/nov16-movepool-removals.js",
-      "sha256": "9bdf12db9dfc3507976a516a7baa6d41cb49f88e089b53a9ec5b5d27630b4a08"
+      "sha256": "23efc85104937b98eacd8591ddf3cc1dbd8f5f4cf0252a6c7eaf2bcbc1936807"
+    },
+    {
+      "file": "dist/data/nov18-abilities.js",
+      "sha256": "4b2a1ee72117a2e5e200dc13b9bc6573e40bf1fbd80ca48dad582806ff514a68"
+    },
+    {
+      "file": "dist/data/nov18-roster.js",
+      "sha256": "dade87c4cacf519120acc2f5f9f65a3b157e077dd12d5def2359ba62955c406c"
     },
     {
       "file": "dist/data/november-roster.js",
@@ -671,7 +687,7 @@
     },
     {
       "file": "dist/data/ordinary-approved-reductions.js",
-      "sha256": "0aa0bea72ea880cb86b1f4105046510965281e04714ffa15b9fe3433771dccd4"
+      "sha256": "aa6635c9d6d61d8962fbe6076b170429005c6260b64f44337d31693d8190d3af"
     },
     {
       "file": "dist/data/passive-ability-cleanup.js",
@@ -691,7 +707,7 @@
     },
     {
       "file": "dist/data/pokedex.js",
-      "sha256": "80312ddb4002dcdf53ebf2bb244ee8e4797b17ed89e83e63e1223ba9a64a8059"
+      "sha256": "b39e2fe49a96d9bae97e5f878fbbf6da33a3b67edc060092fd626dd48172a0c0"
     },
     {
       "file": "dist/data/pokemongo.js",
@@ -787,7 +803,7 @@
     },
     {
       "file": "dist/data/relic-beam.js",
-      "sha256": "1c254440329c5bf6691a1478b7788f1a5aabcbb0d4fcb60f3c1bce67c1a353e0"
+      "sha256": "d229262954b97f5aee25fbb1c8d805bac27c6a2f8c32d14e6fad55cc42165f5c"
     },
     {
       "file": "dist/data/ripen-seeds.js",
@@ -823,7 +839,7 @@
     },
     {
       "file": "dist/data/roster-expansion-wave2.js",
-      "sha256": "47026b2b5060dff7a2ac71f4e14778adcf8f5a534777da4915fd40b58294cac9"
+      "sha256": "8f581f22aebd4e816ba62cb958451c791af54c80e7c4e15bf0428fb87b802068"
     },
     {
       "file": "dist/data/roster-expansion-wave3.js",
@@ -883,11 +899,15 @@
     },
     {
       "file": "dist/data/signature-passive-data.js",
-      "sha256": "29e29f33c1a955dd83a2d95bed8f515f24150f42ecc67d94d9ba2042fd6aa2a4"
+      "sha256": "6a6fa9392241034dfc48c19313da3035d9384f4233502c231a6830e94f602193"
     },
     {
       "file": "dist/data/simple-repeatable-abilities.js",
       "sha256": "96fff3ce2f3a39c52b695887ff823796bf226c40b2c5d49d40d64762fdc647f3"
+    },
+    {
+      "file": "dist/data/sky-sea-land.js",
+      "sha256": "fd4e396f2c1ee9664253883563656aba7aa8ddc8c9b5c3a3e03c57e1c1fdb180"
     },
     {
       "file": "dist/data/snowy-field.js",
@@ -903,7 +923,7 @@
     },
     {
       "file": "dist/data/species-passives.js",
-      "sha256": "8f6ffa934d5d5e1cbbb753ae767fcdd183ed596ac2b13079f5acff633cdea7d9"
+      "sha256": "53dc0ae0a10f013bb605fd437867d2cf000a7a65a3fba9ef3db3f31736400b05"
     },
     {
       "file": "dist/data/stance-disguise-aggron.js",
@@ -923,7 +943,7 @@
     },
     {
       "file": "dist/data/stat-balance-approved.js",
-      "sha256": "0b798ef888bbfdbe444aab16da3b8b3cbae6498832ce10f7cb718a4e874289b3"
+      "sha256": "91bae46ce3e934bd88e437e38c23e45951b5408cd3e7ebae708b9f3e635532a8"
     },
     {
       "file": "dist/data/stunfisk-approved.js",
@@ -951,7 +971,7 @@
     },
     {
       "file": "dist/data/text/abilities.js",
-      "sha256": "6ee3df41b4bc2dbb592e82f63745da93bc22cf5dc952cf923c6c4720f848b980"
+      "sha256": "b8ed6c2ef2e09eac1a84e9d01121f1baea4ff3600b8fd317ea14d930ff27c81e"
     },
     {
       "file": "dist/data/text/default.js",
@@ -972,6 +992,10 @@
     {
       "file": "dist/data/text/terrains.js",
       "sha256": "93356a7cd6d8b42db50f83c39371a9d279148bafe43d7a11225da6852ec6fc06"
+    },
+    {
+      "file": "dist/data/tower-and-forest.js",
+      "sha256": "e3120f32d34726e994acee09adecc50cb2a40de53d034c3b83ad7268494036bb"
     },
     {
       "file": "dist/data/typechart.js",
@@ -1111,7 +1135,7 @@
     },
     {
       "file": "dist/sim/battle-actions.js",
-      "sha256": "8306a70682c94b777435da9abf8df0cc6ce9504834c2d92246314430e3fc553b"
+      "sha256": "c21820a240d7463e2a999facdf2678bac019871f0b3f58ab64e268fcd631e2bd"
     },
     {
       "file": "dist/sim/battle-queue.js",
@@ -1195,7 +1219,7 @@
     },
     {
       "file": "dist/sim/field.js",
-      "sha256": "48b19238a03f7ff3ab648a51e7d3b69fb71092ce1502822b95634c4d57262bb4"
+      "sha256": "1ba72300d970c35dcab076e9aa52478fbf78a01f106c172b822c8568c22f1071"
     },
     {
       "file": "dist/sim/finisher-cost.js",
@@ -1211,7 +1235,7 @@
     },
     {
       "file": "dist/sim/pokemon.js",
-      "sha256": "d484f2c91f49676107c2f932a413514d0f78157fc318db8c3f9a3b364e341da5"
+      "sha256": "6e13b97d244d810241bc8b043cdc44c3a2d124babb1c67a31c4969224e7a595d"
     },
     {
       "file": "dist/sim/predator.js",
@@ -1235,7 +1259,7 @@
     },
     {
       "file": "dist/sim/species-passives.js",
-      "sha256": "3c0a6d9b4d6ec026ffc23eaf525c9b374e5d0172e651dcae5edb55b99dc06b44"
+      "sha256": "82f5b3235663c18a123148a7f060548ec5a1d3e499dd11e2061591880f2e0b30"
     },
     {
       "file": "dist/sim/starter-boost-indicators.js",

@@ -16,9 +16,9 @@ describe('Poliwrath Reservoir', () => {
 	it('is unique, exposes all components and is legal with the mixed spread', () => {
 		const [p] = setup();
 		assert.deepEqual(p.species.abilities, { 0: 'Reservoir', 1: 'Knuckle Tide', H: 'Crosscurrent', S: 'Aevian Ascendance' });
-		assert.equal(p.species.bst, 560);
+		assert.equal(p.species.bst, 530);
 		assert.equal(p.species.baseStats.atk, 100);
-		assert.equal(p.species.baseStats.spa, 95);
+		assert.equal(p.species.baseStats.spa, 80);
 		for (const a of ['waterabsorb', 'gluttony']) assert(p.hasAbility(a), a);
 		assert(!p.hasAbilityOrPassive('damp'));
 		assert.deepEqual(Dex.abilities.all().filter(a => a.num === 11233).map(a => a.id), ['reservoir']);

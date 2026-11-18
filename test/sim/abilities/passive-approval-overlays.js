@@ -119,7 +119,7 @@ const reviewedStats = {
  sevipermega: [75,140,120,90,120,65], staraptor: [85,120,80,50,70,105], staraptormega: [85,140,110,60,100,115],
 };
 exports.stats = (id, fallback) => reviewedStats[id] ? Object.fromEntries(['hp','atk','def','spa','spd','spe'].map((key,i)=>[key,reviewedStats[id][i]])) : fallback;
-exports.types = (id, fallback) => id === 'arbokmegay' ? ['Poison'] : id === 'gorebyss' ? ['Water', 'Fairy'] : id === 'delcatty' ? ['Normal', 'Ghost'] : id === 'rampardos' ? ['Rock', 'Steel'] : fallback;
+exports.types = (id, fallback) => ['typhlosion', 'typhlosionalt'].includes(id) ? ['Fire', 'Electric'] : id === 'arbokmegay' ? ['Poison'] : id === 'gorebyss' ? ['Water', 'Fairy'] : id === 'delcatty' ? ['Normal', 'Ghost'] : id === 'rampardos' ? ['Rock', 'Steel'] : fallback;
 exports.snapshot = old => ({id: old.id, abilities: exports.abilities(old.id, {...old.abilities}), passives: exports.current(old.id, old.passives), types: exports.types(old.id, old.types), stats: exports.stats(old.id, old.stats)});
 
 // Approved Talonflame swap: one Gale Wings passive, selectable Flame Body.

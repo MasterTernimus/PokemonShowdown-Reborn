@@ -13,7 +13,7 @@ describe('Agony Flame',function(){
  function use(p,t,extra={},name='flamethrower'){const m=b.dex.getActiveMove(name);Object.assign(m,{accuracy:true,willCrit:false,basePower:5,secondaries:undefined},extra);b.actions.runMove(m,p,p.getLocOf(t));}
  it('uses approved base/Mega stats and separate abilities',()=>{
   const[p]=setup();assert.deepEqual(p.species.baseStats,{hp:75,atk:110,def:60,spa:120,spd:85,spe:105});assert.equal(p.species.bst,555);
-  assert.deepEqual(p.species.abilities,{0:'Flash Fire',1:'Infiltrator',H:'Battle Fervor'});
+  assert.deepEqual(p.species.abilities,{0:'Agony Flame',1:'Insomnia',H:'Unnerve'});
   const mega=b.dex.species.get('houndoommega');assert.deepEqual(mega.baseStats,{hp:75,atk:110,def:100,spa:150,spd:95,spe:125});assert.equal(mega.bst,655);assert.equal(mega.abilities[0],'Hellfire Eclipse');
  });
  it('burns and Heal Blocks after the whole multi-hit move, once per target',()=>{
@@ -55,9 +55,33 @@ describe('Agony Flame',function(){
   b.makeChoices('move splash','move splash');assert(!t.volatiles.healblock);assert(b.heal(10,t,t,b.dex.moves.get('recover'))>0);
  });
  it('refreshes a shorter Heal Block without stacking durations',()=>{const[p,t]=setup();use(p,t);t.volatiles.healblock.duration=1;b.turn++;use(p,t);assert.equal(t.volatiles.healblock.duration,2);});
- it('Mega Evolution retains Agony Flame passive alongside Hellfire Eclipse',()=>{
+ it('Mega Evolution retains the burn and Heal Block through Hellfire Eclipse',()=>{
   const[p,t]=setup();assert(b.actions.runMegaEvo(p));assert.equal(p.ability,'hellfireeclipse');assert.equal(p.species.bst,655);use(p,t);assert.equal(t.status,'brn');assert(t.volatiles.healblock);assert.equal(b.field.weather,'');
  });
- for(const ability of ['Infiltrator','Agony Flame','Flash Fire'])it('passive burns once under suppression with selected '+ability,()=>{const[p,t]=setup();p.setAbility(ability);p.addVolatile('gastroacid');use(p,t);assert.equal(t.status,'brn');assert.equal(t.volatiles.healblock.duration,2);assert.equal(b.log.filter(l=>l.includes('|-status|')&&l.includes('|brn')).length,1);});
- it('Infiltrator HP damage through Substitute triggers the passive',()=>{const[p,t]=setup();p.setAbility('Infiltrator');t.addVolatile('substitute');const hp=t.hp,sub=t.volatiles.substitute.hp;use(p,t);assert(t.hp<hp);assert.equal(t.volatiles.substitute.hp,sub);assert.equal(t.status,'brn');assert(t.volatiles.healblock);});
+ it('uses Flash Fire passively and suppresses the selected Agony Flame', () => {
+		const [p, target] = setup();
+		assert.deepEqual(p.getPassives(), ['flashfire']);
+		p.addVolatile('gastroacid');
+		use(p, target);
+		assert.equal(target.status, '');
+		assert(!target.volatiles.healblock);
+		b.actions.useMove('flamethrower', target, { target: p });
+		assert(p.volatiles.flashfire);
+		p.removeVolatile('gastroacid');
+		use(p, target);
+		assert.equal(target.status, 'brn');
+		assert.equal(target.volatiles.healblock.duration, 2);
+ });
+	it('Infiltrator by itself bypasses Substitute without triggering Agony Flame', () => {
+		const [p, target] = setup();
+		p.setAbility('Infiltrator');
+		target.addVolatile('substitute');
+		const hp = target.hp;
+		const sub = target.volatiles.substitute.hp;
+		use(p, target);
+		assert(target.hp < hp);
+		assert.equal(target.volatiles.substitute.hp, sub);
+		assert.equal(target.status, '');
+		assert(!target.volatiles.healblock);
+	});
 });

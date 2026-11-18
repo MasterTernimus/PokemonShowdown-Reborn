@@ -4,16 +4,16 @@ describe('Approved birds, Solar Power, Iron Mountain and Mega Banette',()=>{
  function setup(species='Mew',ability='No Ability',foe='Mew',foeAbility='No Ability'){const m={species:'Mew',ability:'No Ability',moves:['splash','tackle','doubleedge']};b=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{...m,species,ability},m],[{...m,species:foe,ability:foeAbility},m]]);b.makeChoices('team 12','team 12');for(const s of b.sides)for(const p of s.pokemon)p.hp=p.maxhp=p.baseMaxhp=4800;b.randomChance=(n,d)=>n>=d;return[b.p1.active[0],b.p2.active[0]];}
  it('Pidgeot passive Keen Eye reveals an opposing disguise on entry',()=>{const[p,q]=setup('Pidgeot','Gale Wings','Zoroark','Illusion');assert.deepEqual(p.getPassives(),['keeneye']);assert.deepEqual(p.species.abilities,{0:'Updraft',1:'Gale Wings',H:'Wind Power'});assert(!p.illusion);b.makeChoices('switch 2','move splash');q.illusion=q.side.pokemon[1];b.makeChoices('switch 2','move splash');assert(!q.illusion);assert(b.log.some(l=>l.includes('|-end|')&&l.includes('|Illusion')));assert.deepEqual(Dex.species.get('pidgeotmega').passives,['noguard']);});
  it('Keen Eye retains accuracy protection and ignores evasion under suppression',()=>{const[p,q]=setup('Pidgeot','Gale Wings');p.addVolatile('gastroacid');b.boost({accuracy:-1},p,q,Dex.getActiveMove('sandattack'));assert.equal(p.boosts.accuracy,0);const move=Dex.getActiveMove('tackle');b.runEvent('ModifyMove',p,q,move,move);assert(move.ignoreEvasion);});
-	it('Pelipper has Keen Eye, Drizzle passive and retains Rain Courier', () => {
-		const [p] = setup('Pelipper', 'Keen Eye');
-		assert.deepEqual(p.species.abilities, { 0: 'Accumulation', 1: 'Keen Eye', H: 'Rain Courier' });
+	it('Pelipper has Hydration, Drizzle passive and retains Rain Courier', () => {
+		const [p] = setup('Pelipper', 'Hydration');
+		assert.deepEqual(p.species.abilities, { 0: 'Accumulation', 1: 'Hydration', H: 'Rain Courier' });
 		assert.deepEqual(p.getPassives(), ['drizzle']);
 		assert.equal(b.field.weather, 'raindance');
 		p.hp = 2400;
+		p.setStatus('par', b.p2.active[0]);
 		b.fieldEvent('Residual');
+		assert.equal(p.status, '');
 		assert.equal(p.hp, 2400);
-		b.boost({ accuracy: -1 }, p, b.p2.active[0]);
-		assert.equal(p.boosts.accuracy, 0);
 	});
  for(const [species,ability] of [['Mew','Solar Power'],['Mew','Noble Conduit'],['Mew','Summer Renewal'],['Houndoom-Mega','Hellfire Eclipse'],['Houndoom-Mega','Solar Power'],['Sunflora-Mega','Solar Power']])it(species+'/'+ability+' solar offense and cost apply exactly once',()=>{const[p,q]=setup(species,ability);b.field.setWeather('sunnyday',p);const move=Dex.getActiveMove('tackle');assert.equal(b.runEvent('ModifyAtk',p,q,move,100),150);assert.equal(b.runEvent('ModifySpA',p,q,move,100),150);const hp=p.hp;b.fieldEvent('Residual');assert.equal(hp-p.hp,600);b.field.terrain='coldeclipseterrain';assert.equal(b.runEvent('ModifyAtk',p,q,move,100),100);assert.equal(b.runEvent('ModifySpA',p,q,move,100),100);const hp2=p.hp;b.fieldEvent('Residual');assert.equal(p.hp,hp2);});
  it('Iron Mountain inherits Brute Force power and uses Stamina',()=>{const[p,q]=setup('Aggron-Mega','Iron Mountain');assert(p.hasAbility('bruteforce'));assert(!p.hasAbility('suctioncups'));assert.deepEqual(p.getPassives(),['filter']);const move=Dex.getActiveMove('doubleedge');assert.equal(b.runEvent('BasePower',p,q,move,100),120);b.field.terrain='chessboardterrain';assert.equal(b.runEvent('BasePower',p,q,move,100),144);b.boost({atk:-1},p,q,Dex.getActiveMove('growl'));assert.equal(p.boosts.atk,-1);assert.notEqual(b.runEvent('DragOut',p,q,Dex.getActiveMove('roar')),null);});

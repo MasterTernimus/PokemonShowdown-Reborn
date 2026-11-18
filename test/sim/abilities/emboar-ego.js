@@ -7,7 +7,7 @@ describe('Emboar Ego cosmetic variants',()=>{
 		for (const old of require('../../../artifacts/emboar-ego/before.json')) {
 			const s = Dex.species.get(old.id);
 			assert.deepEqual(s.abilities, ['emboar', 'emboaralt'].includes(old.id) ? { ...old.abilities, 0: 'Controlled Fury' } : old.abilities);
-			assert.deepEqual(s.baseStats, old.stats);
+			assert.deepEqual(s.baseStats, { ...old.stats, spa: old.stats.spa + 7 });
 			assert.deepEqual(s.types, old.types);
 			assert.deepEqual(s.passives, old.passives);
 			const expected = old.learnset && { ...old.learnset };

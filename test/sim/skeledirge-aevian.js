@@ -10,8 +10,8 @@ describe('Skeledirge-Aevian', () => {
 		assert(species.exists && species.standalone);
 		assert.equal(species.tier, 'OU');
 		assert.deepEqual(species.types, ['Fairy', 'Poison']);
-		assert.deepEqual(species.baseStats, {hp: 90, atk: 50, def: 110, spa: 100, spd: 105, spe: 77});
-		assert.equal(species.bst, 532);
+		assert.deepEqual(species.baseStats, {hp: 90, atk: 50, def: 110, spa: 103, spd: 105, spe: 77});
+		assert.equal(species.bst, 535);
 		assert.deepEqual(species.abilities, {'0': 'Unaware', '1': 'Misty Surge', H: 'Venom Canticle'});
 		const learnset = Dex.species.getLearnsetData(species.id).learnset;
 		assert.equal(Object.keys(learnset).length, 38);

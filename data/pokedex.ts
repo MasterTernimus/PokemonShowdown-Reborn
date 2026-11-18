@@ -37,7 +37,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Venusaur",
 		types: ["Grass", "Poison"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 80, atk: 82, def: 83, spa: 100, spd: 100, spe: 80 },
+		baseStats: { hp: 80, atk: 92, def: 83, spa: 100, spd: 100, spe: 80 },
 		abilities: { "0": "Verdant Monarch", "1": "Creeping Bloom", "H": "Chlorophyll" },
 		heightm: 2,
 		weightkg: 100,
@@ -71,7 +71,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Gmax",
 		types: ["Grass", "Poison"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 136, atk: 82, def: 83, spa: 100, spd: 100, spe: 80 },
+		baseStats: { hp: 136, atk: 92, def: 83, spa: 100, spd: 100, spe: 80 },
 		abilities: { 0: "Ancient Bloom" },
 		heightm: 24,
 		weightkg: 0,
@@ -112,7 +112,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Charizard",
 		types: ["Fire", "Flying"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 78, atk: 109, def: 75, spa: 114, spd: 78, spe: 100 },
+		baseStats: { hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100 },
 		abilities: { 0: "Blazing Monarch", 1: "Intimidate", H: "Solar Power" },
 		heightm: 1.7,
 		weightkg: 90.5,
@@ -132,7 +132,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Alt",
 		types: ["Fire", "Flying"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 78, atk: 109, def: 75, spa: 114, spd: 78, spe: 100 },
+		baseStats: { hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100 },
 		abilities: { 0: "Blazing Monarch", 1: "Intimidate", H: "Solar Power" },
 		heightm: 1.7,
 		weightkg: 90.5,
@@ -151,7 +151,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega-X",
 		types: ["Fire", "Dragon"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 78, atk: 135, def: 110, spa: 120, spd: 106, spe: 105 },
+		baseStats: { hp: 78, atk: 130, def: 111, spa: 130, spd: 85, spe: 100 },
 		abilities: { 0: "Atrocity" },
 		heightm: 1.7,
 		weightkg: 110.5,
@@ -166,7 +166,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega-X-Alt",
 		types: ["Fire", "Dragon"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 78, atk: 135, def: 110, spa: 120, spd: 106, spe: 105 },
+		baseStats: { hp: 78, atk: 130, def: 111, spa: 130, spd: 85, spe: 100 },
 		abilities: { 0: "Atrocity" },
 		heightm: 1.7,
 		weightkg: 110.5,
@@ -184,7 +184,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega-Y",
 		types: ["Fire", "Flying"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 78, atk: 90, def: 100, spa: 160, spd: 116, spe: 110 },
+		baseStats: { hp: 78, atk: 104, def: 78, spa: 159, spd: 115, spe: 100 },
 		abilities: { 0: "Sun Sovereign" },
 		heightm: 1.7,
 		weightkg: 100.5,
@@ -199,7 +199,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Gmax",
 		types: ["Fire", "Dragon"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 133, atk: 109, def: 75, spa: 114, spd: 78, spe: 100 },
+		baseStats: { hp: 133, atk: 84, def: 78, spa: 109, spd: 85, spe: 100 },
 		abilities: { 0: "Burning Crown" },
 		heightm: 28,
 		weightkg: 0,
@@ -240,7 +240,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Blastoise",
 		types: ["Water", "Steel"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 79, atk: 75, def: 95, spa: 100, spd: 108, spe: 78 },
+		baseStats: { hp: 79, atk: 83, def: 100, spa: 85, spd: 105, spe: 78 },
 		abilities: { 0: "Tidal Monarch", 1: "Bulletproof", H: "Stamina" },
 		heightm: 1.6,
 		weightkg: 85.5,
@@ -259,7 +259,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Water","Steel"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 79, atk: 85, def: 135, spa: 135, spd: 123, spe: 78 },
+		baseStats: { hp: 79, atk: 103, def: 120, spa: 135, spd: 115, spe: 78 },
 		abilities: { 0: "Siege Launcher" },
 		heightm: 1.6,
 		weightkg: 101.1,
@@ -274,7 +274,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Gmax",
 		types: ["Water", "Steel"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 140, atk: 75, def: 95, spa: 100, spd: 108, spe: 78 },
+		baseStats: { hp: 145, atk: 83, def: 100, spa: 85, spd: 105, spe: 78 },
 		abilities: { 0: "Fortress Shell" },
 		heightm: 25,
 		weightkg: 0,
@@ -3911,7 +3911,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Meganium",
 		types: ["Grass", "Fairy"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 80, atk: 62, def: 115, spa: 73, spd: 125, spe: 70 },
+		baseStats: { hp: 80, atk: 62, def: 115, spa: 83, spd: 125, spe: 70 },
 		abilities: { 0: "Triage", 1: "Verdant Hospitality", H: "Invigorate" },
 		heightm: 1.8,
 		weightkg: 100.5,
@@ -3929,7 +3929,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Grass", "Fairy"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 80, atk: 92, def: 115, spa: 143, spd: 115, spe: 80 },
+		baseStats: { hp: 80, atk: 92, def: 115, spa: 153, spd: 115, spe: 80 },
 		abilities: { 0: "Blooming Sun" },
 		heightm: 2.4,
 		weightkg: 201,
@@ -3945,7 +3945,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega-Y",
 		types: ["Grass", "Fire"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 80, atk: 82, def: 130, spa: 113, spd: 130, spe: 90 },
+		baseStats: { hp: 80, atk: 82, def: 130, spa: 123, spd: 130, spe: 90 },
 		abilities: { 0: "Blooming Sun" },
 		heightm: 2.4,
 		weightkg: 201,
@@ -3986,10 +3986,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	typhlosion: {
 		num: 157,
 		name: "Typhlosion",
-		types: ["Fire", "Ground"],
+		types: ["Fire", "Electric"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 83, atk: 95, def: 85, spa: 112, spd: 70, spe: 100 },
-		abilities: { 0: "Blazing Mane", 1: "Drought", H: "Sand Rush" },
+		baseStats: { hp: 78, atk: 84, def: 78, spa: 110, spd: 85, spe: 100 },
+		abilities: { 0: "Blazing Mane", 1: "Drought", H: "Galvanize" },
 		heightm: 1.7,
 		weightkg: 79.5,
 		color: "Yellow",
@@ -4004,10 +4004,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Typhlosion-Alt",
 		baseSpecies: "Typhlosion",
 		forme: "Alt",
-		types: ["Fire", "Ground"],
+		types: ["Fire", "Electric"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 83, atk: 95, def: 85, spa: 112, spd: 70, spe: 100 },
-		abilities: { 0: "Blazing Mane", 1: "Drought", H: "Sand Rush" },
+		baseStats: { hp: 78, atk: 84, def: 78, spa: 110, spd: 85, spe: 100 },
+		abilities: { 0: "Blazing Mane", 1: "Drought", H: "Galvanize" },
 		heightm: 1.7,
 		weightkg: 79.5,
 		color: "Yellow",
@@ -4023,7 +4023,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Hisui",
 		types: ["Fire", "Ghost"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 83, atk: 95, def: 80, spa: 127, spd: 65, spe: 95 },
+		baseStats: { hp: 73, atk: 84, def: 78, spa: 120, spd: 85, spe: 95 },
 		abilities: { 0: "Blazing Mane", 1: "Soul Fire", H: "Wraith Procession" },
 		heightm: 1.6,
 		weightkg: 69.8,
@@ -4039,7 +4039,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Fire", "Electric"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 83, atk: 138, def: 85, spa: 139, spd: 70, spe: 130 },
+		baseStats: { hp: 78, atk: 127, def: 78, spa: 137, spd: 85, spe: 130 },
 		abilities: { 0: "Plasma Eruption" },
 		heightm: 1.7,
 		weightkg: 79.5,
@@ -4080,7 +4080,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Feraligatr",
 		types: ["Water", "Dark"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 100, atk: 109, def: 100, spa: 59, spd: 93, spe: 78 },
+		baseStats: { hp: 100, atk: 109, def: 100, spa: 59, spd: 89, spe: 78 },
 		abilities: { 0: "Water Veil", 1: "Mighty Jaw", H: "Sheer Force" },
 		heightm: 2.3,
 		weightkg: 88.8,
@@ -4099,7 +4099,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Water", "Dragon"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 100, atk: 164, def: 125, spa: 59, spd: 108, spe: 83 },
+		baseStats: { hp: 100, atk: 164, def: 125, spa: 59, spd: 104, spe: 83 },
 		abilities: { 0: "Draconic Force" },
 		heightm: 2.3,
 		weightkg: 108.8,
@@ -4883,8 +4883,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 205,
 		name: "Forretress",
 		types: ["Bug", "Steel"],
-		baseStats: { hp: 75, atk: 100, def: 140, spa: 60, spd: 80, spe: 20 },
-		abilities: { 0: "Overcoat", 1: "Heatproof", H: "Aftermath" },
+		baseStats: { hp: 85, atk: 105, def: 145, spa: 60, spd: 85, spe: 20 },
+		abilities: { 0: "Sturdy", 1: "Heatproof", H: "Ballast Plating" },
 		heightm: 1.2,
 		weightkg: 125.8,
 		color: "Purple",
@@ -5093,7 +5093,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Sneasel",
 		types: ["Dark", "Ice"],
 		baseStats: { hp: 55, atk: 95, def: 55, spa: 35, spd: 75, spe: 115 },
-		abilities: { 0: "Inner Focus", 1: "Sharpness", H: "Pickpocket" },
+		abilities: { 0: "Inner Focus", 1: "Keen Eye", H: "Pickpocket" },
 		heightm: 0.9,
 		weightkg: 28,
 		color: "Black",
@@ -5109,7 +5109,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Hisui",
 		types: ["Fighting", "Poison"],
 		baseStats: { hp: 55, atk: 95, def: 55, spa: 35, spd: 75, spe: 115 },
-		abilities: { 0: "Inner Focus", 1: "Sharpness", H: "Pickpocket" },
+		abilities: { 0: "Inner Focus", 1: "Keen Eye", H: "Pickpocket" },
 		heightm: 0.9,
 		weightkg: 27,
 		color: "Gray",
@@ -5711,7 +5711,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Sceptile",
 		types: ["Grass", "Dragon"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 70, atk: 105, def: 60, spa: 115, spd: 60, spe: 120 },
+		baseStats: { hp: 70, atk: 105, def: 60, spa: 115, spd: 65, spe: 120 },
 		abilities: { 0: "Regenerator", 1: "Dual Wield", H: "Unburden" },
 		heightm: 1.7,
 		weightkg: 52.2,
@@ -5729,7 +5729,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Grass", "Dragon"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 70, atk: 130, def: 70, spa: 145, spd: 70, spe: 145 },
+		baseStats: { hp: 70, atk: 130, def: 70, spa: 145, spd: 75, spe: 145 },
 		abilities: { 0: "Verdant Drake" },
 		heightm: 1.9,
 		weightkg: 55.2,
@@ -5770,7 +5770,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Blaziken",
 		types: ["Fire", "Fighting"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 80, atk: 120, def: 70, spa: 110, spd: 70, spe: 80 },
+		baseStats: { hp: 80, atk: 120, def: 70, spa: 110, spd: 75, spe: 80 },
 		abilities: { 0: "Defiant", 1: "Striker", H: "Speed Boost" },
 		heightm: 1.9,
 		weightkg: 52,
@@ -5788,7 +5788,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Fire", "Fighting"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 80, atk: 160, def: 80, spa: 130, spd: 80, spe: 100 },
+		baseStats: { hp: 80, atk: 160, def: 80, spa: 130, spd: 85, spe: 100 },
 		abilities: { 0: "Blazing Tempo" },
 		heightm: 1.9,
 		weightkg: 52,
@@ -7100,7 +7100,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 332,
 		name: "Cacturne",
 		types: ["Grass", "Dark"],
-		baseStats: { hp: 75, atk: 160, def: 70, spa: 105, spd: 70, spe: 90 },
+		baseStats: { hp: 75, atk: 145, def: 70, spa: 90, spd: 70, spe: 85 },
 		abilities: { 0: "Scarecrow", 1: "Solar Rush", H: "Storm Drain" },
 		heightm: 1.3,
 		weightkg: 77.4,
@@ -7117,7 +7117,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Cacturne",
 		forme: "Alt",
 		types: ["Grass", "Dark"],
-		baseStats: { hp: 75, atk: 160, def: 70, spa: 105, spd: 70, spe: 90 },
+		baseStats: { hp: 75, atk: 145, def: 70, spa: 90, spd: 70, spe: 85 },
 		abilities: { 0: "Scarecrow", 1: "Solar Rush", H: "Storm Drain" },
 		heightm: 1.3,
 		weightkg: 77.4,
@@ -8249,7 +8249,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseForme: "Normal",
 		types: ["Psychic"],
 		gender: "N",
-		baseStats: { hp: 50, atk: 150, def: 50, spa: 150, spd: 50, spe: 150 },
+		baseStats: { hp: 50, atk: 120, def: 90, spa: 120, spd: 90, spe: 130 },
 		abilities: { 0: "Pressure" },
 		heightm: 1.7,
 		weightkg: 60.8,
@@ -10873,7 +10873,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Serperior",
 		types: ["Grass", "Dragon"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 75, atk: 75, def: 95, spa: 75, spd: 95, spe: 113 },
+		baseStats: { hp: 75, atk: 75, def: 95, spa: 82, spd: 95, spe: 113 },
 		abilities: { 0: "Multiscale", 1: "Royal Decree", H: "Contrary" },
 		heightm: 3.3,
 		weightkg: 63,
@@ -10900,7 +10900,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Grass", "Dragon"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 75, atk: 95, def: 115, spa: 95, spd: 115, spe: 133 },
+		baseStats: { hp: 75, atk: 95, def: 115, spa: 102, spd: 115, spe: 133 },
 		abilities: { 0: "Queen's Guard" },
 		heightm: 3.3,
 		weightkg: 63,
@@ -10941,7 +10941,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Emboar",
 		types: ["Fire", "Fighting"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 110, atk: 123, def: 75, spa: 80, spd: 75, spe: 65 },
+		baseStats: { hp: 110, atk: 123, def: 75, spa: 87, spd: 75, spe: 65 },
 		abilities: { 0: "Gluttony", 1: "Thick Fat", H: "Brute Force" },
 		heightm: 1.6,
 		weightkg: 150,
@@ -10959,7 +10959,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Fire", "Fighting"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 110, atk: 150, def: 93, spa: 85, spd: 115, spe: 75 },
+		baseStats: { hp: 110, atk: 150, def: 93, spa: 92, spd: 115, spe: 75 },
 		abilities: { 0: "Burning Ego" },
 		heightm: 1.8,
 		weightkg: 180.3,
@@ -11026,7 +11026,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Reborn",
 		types: ["Fire", "Fighting"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 110, atk: 123, def: 75, spa: 80, spd: 75, spe: 65 },
+		baseStats: { hp: 110, atk: 123, def: 75, spa: 87, spd: 75, spe: 65 },
 		abilities: { 0: "Gluttony", 1: "Thick Fat", H: "Brute Force" },
 		heightm: 1.6,
 		weightkg: 150,
@@ -11043,7 +11043,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega-Reborn",
 		types: ["Fire", "Fighting"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 110, atk: 150, def: 93, spa: 85, spd: 115, spe: 75 },
+		baseStats: { hp: 110, atk: 150, def: 93, spa: 92, spd: 115, spe: 75 },
 		abilities: { 0: "Burning Ego" },
 		heightm: 1.8,
 		weightkg: 180.3,
@@ -11087,7 +11087,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Samurott",
 		types: ["Water", "Fighting"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 90, atk: 105, def: 85, spa: 115, spd: 80, spe: 75 },
+		baseStats: { hp: 90, atk: 100, def: 85, spa: 105, spd: 80, spe: 75 },
 		abilities: { 0: "Swift Swim", 1: "Blade Mastery", H: "Shell Armor" },
 		heightm: 1.5,
 		weightkg: 94.6,
@@ -11115,7 +11115,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Hisui",
 		types: ["Water", "Dark"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 90, atk: 115, def: 80, spa: 105, spd: 65, spe: 95 },
+		baseStats: { hp: 90, atk: 115, def: 80, spa: 100, spd: 65, spe: 85 },
 		abilities: { 0: "Lightning Rod", 1: "Blade Mastery", H: "Swift Swim" },
 		heightm: 1.5,
 		weightkg: 58.2,
@@ -13932,7 +13932,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Chesnaught",
 		types: ["Grass", "Fighting"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 88, atk: 107, def: 122, spa: 74, spd: 75, spe: 64 },
+		baseStats: { hp: 88, atk: 107, def: 122, spa: 74, spd: 80, spe: 64 },
 		abilities: { 0: "Friend Guard", 1: "Royal Decree", H: "Bulletproof" },
 		heightm: 1.6,
 		weightkg: 90,
@@ -13950,7 +13950,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Grass", "Fighting"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 88, atk: 137, def: 172, spa: 74, spd: 115, spe: 44 },
+		baseStats: { hp: 88, atk: 137, def: 172, spa: 74, spd: 120, spe: 44 },
 		abilities: { 0: "Wrath Shield" },
 		heightm: 1.6,
 		weightkg: 90,
@@ -13992,7 +13992,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Delphox",
 		types: ["Fire", "Psychic"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 75, atk: 69, def: 72, spa: 114, spd: 100, spe: 104 },
+		baseStats: { hp: 75, atk: 69, def: 72, spa: 115, spd: 100, spe: 104 },
 		abilities: { 0: "Sworn Duty", 1: "Magic Guard", H: "Magician" },
 		heightm: 1.5,
 		weightkg: 39,
@@ -14010,7 +14010,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Fire", "Psychic"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 75, atk: 69, def: 72, spa: 159, spd: 125, spe: 134 },
+		baseStats: { hp: 75, atk: 69, def: 72, spa: 160, spd: 125, spe: 134 },
 		abilities: { 0: "Astral Witchcraft" },
 		heightm: 1.5,
 		weightkg: 39,
@@ -15809,7 +15809,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Decidueye",
 		types: ["Grass", "Ghost"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 83, atk: 112, def: 80, spa: 85, spd: 90, spe: 100 },
+		baseStats: { hp: 83, atk: 112, def: 80, spa: 85, spd: 90, spe: 85 },
 		abilities: { 0: "Fallen Star", 1: "Long Reach", H: "Tinted Lens" },
 		heightm: 1.6,
 		weightkg: 36.6,
@@ -15836,7 +15836,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Hisui",
 		types: ["Grass", "Fighting"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 93, atk: 117, def: 80, spa: 80, spd: 85, spe: 95 },
+		baseStats: { hp: 93, atk: 117, def: 80, spa: 80, spd: 85, spe: 80 },
 		abilities: { 0: "Fallen Star", 1: "Unburden", H: "Scrappy" },
 		heightm: 1.6,
 		weightkg: 37,
@@ -17998,7 +17998,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Rillaboom",
 		types: ["Grass"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 100, atk: 125, def: 90, spa: 60, spd: 70, spe: 85 },
+		baseStats: { hp: 100, atk: 125, def: 90, spa: 60, spd: 75, spe: 85 },
 		abilities: { 0: "Violent Rush", 1: "Soundproof", H: "Grassy Surge" },
 		heightm: 2.1,
 		weightkg: 90,
@@ -18056,7 +18056,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Cinderace",
 		types: ["Fire"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 80, atk: 116, def: 75, spa: 65, spd: 75, spe: 119 },
+		baseStats: { hp: 80, atk: 121, def: 75, spa: 65, spd: 75, spe: 119 },
 		abilities: { 0: "Defiant", 1: "No Guard", H: "Libero" },
 		heightm: 1.4,
 		weightkg: 33,
@@ -18116,7 +18116,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Inteleon",
 		types: ["Water"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 70, atk: 85, def: 65, spa: 125, spd: 65, spe: 120 },
+		baseStats: { hp: 70, atk: 85, def: 65, spa: 130, spd: 65, spe: 120 },
 		abilities: { 0: "Dual Wield", 1: "Sniper", H: "Precision" },
 		heightm: 1.9,
 		weightkg: 45.2,
@@ -20091,7 +20091,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Skeledirge",
 		types: ["Fire", "Ghost"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 104, atk: 75, def: 100, spa: 110, spd: 75, spe: 66 },
+		baseStats: { hp: 104, atk: 75, def: 105, spa: 110, spd: 75, spe: 66 },
 		abilities: { 0: "Soul Fire", 1: "Unnerve", H: "Unaware" },
 		heightm: 1.6,
 		weightkg: 326.5,
@@ -20119,7 +20119,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		standalone: true,
 		types: ["Fairy", "Poison"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 90, atk: 50, def: 110, spa: 100, spd: 105, spe: 77 },
+		baseStats: { hp: 90, atk: 50, def: 110, spa: 103, spd: 105, spe: 77 },
 		abilities: { 0: "Unaware", 1: "Misty Surge", H: "Venom Canticle" },
 		heightm: 1.6,
 		weightkg: 326.5,
@@ -20160,7 +20160,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Quaquaval",
 		types: ["Water", "Fighting"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 85, atk: 120, def: 80, spa: 85, spd: 75, spe: 85 },
+		baseStats: { hp: 85, atk: 120, def: 80, spa: 85, spd: 80, spe: 85 },
 		abilities: { 0: "Guts", 1: "Dancer", H: "Moxie" },
 		heightm: 1.8,
 		weightkg: 61.9,
@@ -23557,7 +23557,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Fire", "Normal"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 80, atk: 146, def: 95, spa: 75, spd: 85, spe: 149 },
+		baseStats: { hp: 80, atk: 151, def: 95, spa: 75, spd: 85, spe: 149 },
 		abilities: { 0: "Perfect Striker" },
 		heightm: 1.4,
 		weightkg: 33,
@@ -23792,7 +23792,6 @@ const latestSpeciesUpdates: {[id: string]: any} = {
 	gourgeistlarge: {isNonstandard: "Unobtainable", tier: "Illegal"},
 	gourgeistsuper: {isNonstandard: null, tier: "RU"},
 	manectric: {abilities: {0: "Strong Jaw", 1: "Competitive", H: "Lightning Rod"}},
-	cacturne: {baseStats: {spa: 90}},
 	mightyena: {baseStats: {hp: 90, atk: 115, def: 80, spa: 75, spd: 80, spe: 110}},
 	mightyenadeso: {baseStats: {hp: 90, atk: 115, def: 80, spa: 75, spd: 80, spe: 110}},
 	cinccino: {baseStats: {hp: 75, atk: 110, def: 85, spa: 70, spd: 85, spe: 125}},
@@ -23802,10 +23801,6 @@ const latestSpeciesUpdates: {[id: string]: any} = {
 	machamp: {baseStats: {hp: 100, atk: 130, def: 90, spa: 70, spd: 85, spe: 75}},
 	machampgmax: {baseStats: {hp: 150, atk: 130, def: 90, spa: 70, spd: 85, spe: 75}},
 	probopass: {baseStats: {hp: 75, atk: 50, def: 150, spa: 95, spd: 155, spe: 25}},
-	samurott: {baseStats: { hp: 90, atk: 105, def: 85, spa: 115, spd: 80, spe: 75 }},
-	samurotthisui: {baseStats: { hp: 90, atk: 115, def: 80, spa: 105, spd: 65, spe: 95 }},
-	samurottalt: {baseStats: {hp: 90, atk: 105, def: 85, spa: 115, spd: 80, spe: 75}},
-	samurotthisuialt: {baseStats: {hp: 90, atk: 115, def: 80, spa: 105, spd: 65, spe: 95}},
 	toxicroak: {baseStats: {hp: 83, atk: 121, def: 70, spa: 111, spd: 70, spe: 95}},
 	toxicroakdeso: {baseStats: {hp: 83, atk: 121, def: 70, spa: 111, spd: 70, spe: 95}},
 	alakazam: {baseStats: {hp: 80, atk: 50, def: 50, spa: 135, spd: 95, spe: 120}},
@@ -23829,9 +23824,6 @@ const latestSpeciesUpdates: {[id: string]: any} = {
 	ninetalesalola: {baseStats: {hp: 73, atk: 57, def: 75, spa: 111, spd: 110, spe: 119}},
 	golurk: {baseStats: {hp: 100, atk: 125, def: 100, spa: 45, spd: 95, spe: 55}},
 	golurkmega: {baseStats: {hp: 100, atk: 170, def: 125, spa: 70, spd: 100, spe: 55}},
-	blastoise: {baseStats: {hp: 89, atk: 80, def: 95, spa: 100, spd: 108, spe: 78}},
-	blastoisemega: {baseStats: {hp: 89, atk: 90, def: 135, spa: 135, spd: 123, spe: 78}},
-	blastoisegmax: {baseStats: {hp: 145, atk: 80, def: 95, spa: 100, spd: 108, spe: 78}},
 	grapploct: {baseStats: {hp: 80, atk: 128, def: 85, spa: 40, spd: 90, spe: 82}},
 	incineroar: {baseStats: {hp: 95, atk: 115, def: 90, spa: 85, spd: 90, spe: 60}},
 	primarina: {baseStats: {hp: 80, atk: 74, def: 74, spa: 126, spd: 116, spe: 65}},
@@ -23848,8 +23840,6 @@ const latestSpeciesUpdates: {[id: string]: any} = {
 	gallademega: {baseStats: {hp: 75, atk: 165, def: 95, spa: 68, spd: 125, spe: 112}},
 	castform: {baseStats: {hp: 70, atk: 70, def: 70, spa: 70, spd: 70, spe: 100}},
 	heliolisk: {baseStats: {hp: 62, atk: 50, def: 60, spa: 110, spd: 99, spe: 109}},
-	typhlosion: {baseStats: {hp: 83, atk: 95, def: 85, spa: 112, spd: 70, spe: 100}},
-	typhlosionhisui: {baseStats: {hp: 83, atk: 95, def: 80, spa: 127, spd: 65, spe: 95}},
 	xatu: {baseStats: {hp: 65, atk: 75, def: 90, spa: 105, spd: 90, spe: 95}},
 	gligar: {baseStats: {hp: 85, atk: 85, def: 115, spa: 35, spd: 75, spe: 90}},
 	luxray: {baseStats: {hp: 85, atk: 125, def: 85, spa: 65, spd: 85, spe: 90}},
@@ -24138,7 +24128,7 @@ for (const [id, abilities] of Object.entries({
   },
   "quagsire": {
     "0": "Mud Meditation",
-    "1": "Stillwater"
+    "1": "Water Absorb"
   }
 })) {
  const species = Pokedex[id as ID];
@@ -24178,11 +24168,6 @@ Object.assign(Pokedex.armaldo.abilities!, { "H": "Primeval Hunt" });
 Object.assign(Pokedex.walrein.abilities!, { "0": "Rimebreaker" });
 Object.assign(Pokedex.amoonguss.abilities!, { "1": "Spore Shroud" });
 Pokedex.magcargo.baseStats = { hp: 95, atk: 50, def: 145, spa: 115, spd: 105, spe: 30 };
-
-for (const id of ['charizardmegax', 'charizardmegaxalt'] as const) {
-	Pokedex[id].baseStats!.atk = 130;
-	Pokedex[id].baseStats!.spa = 125;
-}
 
 // Cosmetic counterpart keeps the approved base-form ability slots.
 Pokedex.grimmsnarlazzy.abilities = { ...Pokedex.grimmsnarl.abilities! };
@@ -24649,7 +24634,7 @@ Pokedex.annihilape.abilities = {0:'Unbound Spirit', 1:'Raging Heart', H:'Defiant
 // Gale Wings is supplied by Talonflame's passive; Flame Body is selectable.
 Pokedex.talonflame.abilities!.H = 'Flame Body';
 
-Pokedex.donphan.abilities = {0:'Aevian Frost',1:'Rolling Fortress',H:'Siege Tusks'};
+Pokedex.donphan.abilities = {0: 'Sturdy', 1: 'Rolling Fortress', H: 'Siege Tusks', S: 'Aevian Frost'};
 
 for(const id of ['sandslash','sandslashalt','sandslashreborn'] as const)if(Pokedex[id])Pokedex[id].abilities={0:'Dune Claws',1:'Sand Rush',H:'Own Tempo'};
 Pokedex.sandslashalola.abilities={0:'Glacier Claws',1:'Slush Rush',H:'Ice Body'};
@@ -24894,6 +24879,16 @@ Pokedex.meganiummega.abilities = {0: 'Verdant Eruption'};
 Pokedex.meganiummegay.abilities = {0: 'Solar Eruption'};
 Pokedex.feraligatrmega.abilities = {0: 'Tidal Eruption'};
 
+Pokedex.venusaur.abilities![1] = 'Unaware';
+Pokedex.charizard.abilities![1] = 'Rivalry';
+Pokedex.blastoise.abilities!.H = 'Rain Dish';
+Pokedex.machamp.abilities = { 0: 'Guts', 1: 'Inner Focus', H: 'Perfect Form' };
+Pokedex.mrmime.abilities = { 0: 'Soundproof', 1: 'Technician', H: 'Filter' };
+Pokedex.electabuzz.abilities![0] = 'Motor Drive';
+Pokedex.magmar.abilities![0] = 'White Smoke';
+Pokedex.sandslashalt.baseStats = { ...Pokedex.sandslash.baseStats! };
+Pokedex.tentacruelalt.baseStats = { ...Pokedex.tentacruel.baseStats! };
+
 // Synchronize after every base-form override.
 for (const [skinId, counterpartId] of Object.entries(CosmeticBattleCounterparts)) {
 	const skin = Pokedex[skinId as ID] as import('../sim/dex-species').SpeciesData;
@@ -24933,6 +24928,13 @@ for (const [skin, base] of Object.entries(CosmeticBattleCounterparts)) {
  }
 }
 
+Pokedex.ninetales.abilities![1] = 'Cursed Body';
+Pokedex.ninetalesalt.abilities![1] = 'Cursed Body';
+Pokedex.arcaninehisui.abilities![1] = 'Sturdy';
+Pokedex.houndoom.abilities![0] = 'Agony Flame';
+Pokedex.houndoom.abilities!.H = 'Unnerve';
+Pokedex.chandelure.abilities[0] = 'Infiltrator';
+
 Pokedex.meganium.abilities![0] = 'Hospitality';
 Pokedex.meganium.abilities![1] = 'Bloom Shelter';
 for (const [id, species] of Object.entries(Pokedex)) {
@@ -24945,3 +24947,15 @@ for (const [id, species] of Object.entries(Pokedex)) {
 for (const [skin, base] of Object.entries(CosmeticBattleCounterparts)) {
  if (base === 'meganium' && Pokedex[skin as ID]) Pokedex[skin as ID].abilities = {...Pokedex.meganium.abilities!};
 }
+
+import { revisedSlots } from './nov18-roster';
+for (const [id, slots] of Object.entries(revisedSlots)) Pokedex[id as ID].abilities = slots;
+Pokedex.meganium.abilities![1] = 'Verdant Awakening';
+Pokedex.feraligatr.abilities![1] = 'Tidal Awakening';
+for (const id of ['typhlosion', 'typhlosionalt', 'typhlosionhisui']) {
+	Pokedex[id as ID].abilities![0] = 'Plasma Awakening';
+}
+Pokedex.togetic.baseStats = { hp: 65, atk: 40, def: 85, spa: 80, spd: 105, spe: 50 };
+Pokedex.dusclops.baseStats = { hp: 55, atk: 70, def: 130, spa: 60, spd: 130, spe: 25 };
+Pokedex.solrock.baseStats = { hp: 100, atk: 125, def: 90, spa: 35, spd: 90, spe: 70 };
+Pokedex.lunatone.baseStats = { hp: 100, atk: 35, def: 90, spa: 125, spd: 90, spe: 70 };

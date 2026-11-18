@@ -58,9 +58,10 @@ describe('October follow-up rules', () => {
 		assert.equal(battle.field.terrain, 'underwaterterrain');
 		assert(battle.log.some(l => l.includes('ability: Pulse Blockade')));
 	});
-	it('Chandelure has three regular component abilities and Soul Fire only in its event slot', () => {
+	it('Chandelure has Soul Siphon as its passive and Soul Fire only in its event slot', () => {
 		const species = Dex.species.get('chandelure');
-		assert.deepEqual(species.abilities, { 0: 'Soul Siphon', 1: 'Soul Pyre', H: 'Malice Well', S: 'Soul Fire' });
+		assert.deepEqual(species.passives, ['soulsiphon']);
+		assert.deepEqual(species.abilities, { 0: 'Infiltrator', 1: 'Soul Pyre', H: 'Malice Well', S: 'Soul Fire' });
 		for (const ability of Object.values(species.abilities)) {
 			const result = new TeamValidator('gen9nofieldsinglesgame').validateTeam([
 				{ species: 'Chandelure', ability, moves: ['shadowball'], evs: { spa: 252 }, nature: 'Modest' },
@@ -70,7 +71,7 @@ describe('October follow-up rules', () => {
 	});
 	for (const ability of ['Soul Siphon', 'Soul Cremation']) {
 		it(`${ability} absorbs Fire once, grants exactly 1.5x boost, and clears it on ability loss`, () => {
-			const [p, foe] = start(ability, 'Chandelure');
+			const [p, foe] = start(ability);
 			const hp = p.hp;
 			battle.actions.runMove('ember', foe, foe.getLocOf(p), { externalMove: true });
 			assert.equal(p.hp, hp); assert(p.volatiles.flashfire); assert(p.hasAbility('flashfire'));
@@ -80,7 +81,7 @@ describe('October follow-up rules', () => {
 			p.setAbility('No Ability'); assert(!p.volatiles.flashfire);
 		});
 		it(`${ability} Cold Eclipse gives no entry defenses and disables Fire absorption`, () => {
-			const [p, foe] = start('No Ability', 'Chandelure');
+			const [p, foe] = start();
 			battle.field.setTerrain('coldeclipseterrain', p);
 			const before = { ...p.boosts }; p.setAbility(ability);
 			const stages = 0;
@@ -91,7 +92,7 @@ describe('October follow-up rules', () => {
 		});
 		for (const field of ['burningterrain', 'volcanicterrain']) {
 			it(`${ability} receives Flash Fire's ${field} residual activation once`, () => {
-				const [p] = start(ability, 'Chandelure'); battle.field.setTerrain(field, p);
+				const [p] = start(ability); battle.field.setTerrain(field, p);
 				battle.singleEvent('Residual', p.getAbility(), p.abilityState, p);
 				assert(p.volatiles.flashfire);
 				assert.equal(battle.log.filter(l => l.includes('|-start|') && l.includes('ability: Flash Fire')).length, 1);

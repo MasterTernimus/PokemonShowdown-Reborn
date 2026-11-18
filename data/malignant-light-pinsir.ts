@@ -4,8 +4,8 @@ import { SharedPassiveAbilityDescriptions } from './passive-ability-cleanup';
 
 export const LightPinsirDescriptions = {
 	malignantlight: {
-		shortDesc: 'Illuminate; special beam, pulse and bullet moves target the lower defense.',
-		desc: 'Special moves in the /relicbeam move list use the target’s lower Defense or Sp. Def. They still use the holder’s Sp. Atk and retain their type, category and other effects. This effect adds no power multiplier.',
+		shortDesc: 'Illuminate; special beams, pulses, bullets, Photon Geyser and Lumina Crash target the lower defense.',
+		desc: 'Lumina Crash, special Photon Geyser and special moves in the /relicbeam list use the target’s lower Defense or Sp. Def. They still use the holder’s Sp. Atk and retain their type, category and other effects. This effect adds no power multiplier.',
 	},
 	ironmaiden: {
 		shortDesc: 'Moxie; opposing contact attackers lose 1/8 max HP once per move.',

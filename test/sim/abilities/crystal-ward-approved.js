@@ -21,7 +21,7 @@ describe('Alolan Ninetales Crystal Ward',()=>{
  it('Ability Shield retains local Mold Breaker protection',()=>{const[p,a,q]=setup();p.setItem('abilityshield');q.setAbility('Mold Breaker');hit(q,a,'shadowball');assert.equal(a.hp,1000);});
 	it('both Ninetales use Cursed Body; Crystal Ward is not a selectable Alolan slot', () => {
 		assert.deepEqual(Dex.species.get('ninetalesalola').passives, ['cursedbody']);
-		assert.deepEqual(Dex.species.get('ninetales').passives, ['cursedbody']);
+		assert.deepEqual(Dex.species.get('ninetales').passives, ['flashfire']);
 		assert.deepEqual(Dex.species.get('ninetalesalola').abilities, { 0: 'Magic Bounce', 1: 'Serene Grace', H: 'Void Sanctum' });
 	});
 });

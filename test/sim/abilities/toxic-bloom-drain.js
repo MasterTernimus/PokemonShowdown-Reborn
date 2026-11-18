@@ -18,7 +18,7 @@ describe('Toxic Bloom Poison drain', () => {
 		Object.assign(move, { basePower: 30, accuracy: true, willCrit: false, secondaries: undefined }, extra);
 		const before = t.hp; battle.actions.runMove(move, p, p.getLocOf(t)); return before - t.hp;
 	}
-	it('inherits Thick Fat and Unaware once while keeping Proficient as a separate passive', () => {
+	it('inherits Thick Fat and Aroma Veil once while keeping Proficient as a separate passive', () => {
 		const [p, t] = setup(); assert.deepEqual(AbilityComponents.toxicbloom, ['pollenbloom', 'toxicsink']);
 		const damage = (source, target, id) => {
 			const move = battle.dex.getActiveMove(id);
@@ -28,7 +28,7 @@ describe('Toxic Bloom Poison drain', () => {
 		const outgoing = damage(p, t, 'tackle'), incoming = damage(t, p, 'flamethrower');
 		p.setAbility('Pollen Bloom'); assert.equal(damage(p, t, 'tackle'), outgoing); assert.equal(damage(t, p, 'flamethrower'), incoming);
 		assert(!p.hasAbility('proficient')); assert(p.hasAbilityOrPassive('proficient'));
-		assert(p.hasAbility('thickfat')); assert(p.hasAbility('unaware'));
+		assert(p.hasAbility('thickfat')); assert(p.hasAbility('aromaveil')); assert(!p.hasAbility('unaware'));
 		assert.equal(Dex.species.all().filter(s => Object.values(s.abilities).includes('Virulence')).map(s => s.id).join(','), 'venusaurmega');
 	});
 	it('does not heal from Poison attack damage at any missing-HP amount', () => {

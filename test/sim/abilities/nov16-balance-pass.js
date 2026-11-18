@@ -29,7 +29,8 @@ describe('November 16 approved balance changes', () => {
 		return [battle.p1.active[0], battle.p2.active[0]];
 	}
 	it('uses the approved species slots, typing and passive without changing Mega Garchomp', () => {
-		for (const id of ['garchomp', 'garchompbattlebond']) assert.deepEqual(Dex.species.get(id).passives, ['roughskin']);
+		assert.deepEqual(Dex.species.get('garchomp').passives, ['roughskin']);
+		assert.deepEqual(Dex.species.get('garchompbattlebond').passives, ['serratedscales']);
 		assert.deepEqual(Dex.species.get('garchompmega').passives, ['sharpness']);
 		assert.deepEqual(Dex.species.get('garchompmegaz').passives, ['levitate']);
 		assert.deepEqual(Dex.species.get('arbokmegay').types, ['Poison']);
@@ -128,7 +129,7 @@ describe('November 16 approved balance changes', () => {
   const [p,q]=setup('Bloom Shelter');assert.equal(p.ability,'verdanthospitality');assert(p.hasAbility('friendguard'));assert(p.hasAbility('naturalcure'));assert(!p.hasAbility('proficient'));
   assert.equal(battle.runEvent('BasePower',p,q,Dex.getActiveMove('psychic'),100),100);
   p.hp=Math.floor(p.maxhp/2);const hp=p.hp;p.setStatus('par');battle.makeChoices('switch 2','move splash');assert.equal(p.status,'');assert(p.hp>hp);
-  assert.deepEqual(Dex.species.get('meganium').abilities,{0:'Hospitality',1:'Bloom Shelter',H:'Invigorate'});
+  assert.deepEqual(Dex.species.get('meganium').abilities,{0:'Hospitality',1:'Verdant Awakening',H:'Invigorate'});
  });
  for(const ability of ['Solid Rock','Filter'])it(ability+' grants 10% reduction and its extra super-effective protection',()=>{
   const [p,q]=setup(ability);const m=Dex.getActiveMove('tackle');assert(Math.abs(battle.runEvent('ModifyDamage',q,p,m,10000)-9000)<=2);

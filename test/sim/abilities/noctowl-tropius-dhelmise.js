@@ -14,21 +14,21 @@ function residual(){battle.fieldEvent('Residual');}
 describe('Approved Noctowl, Tropius and Dhelmise abilities',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  it('replaces only exact slots and leaves stats untouched',()=>{
-		for (const [id, abilities, stats] of [['noctowl', { 0: 'Duskilate', 1: 'Night Watch', H: 'Lunar Spirit' }, [100, 50, 78, 96, 106, 80]], ['tropius', { 0: 'Fruitful Bough', 1: 'Hospitality', H: 'Windy Surge' }, [115, 90, 95, 75, 95, 70]], ['dhelmise', { 0: 'Water Bubble', 1: 'Blackwater Anchor', H: 'Rocky Payload' }, [85, 135, 110, 60, 100, 40]]]) { assert.deepEqual(Dex.species.get(id).abilities, abilities); assert.deepEqual(Object.values(Dex.species.get(id).baseStats), stats); }
+		for (const [id, abilities, stats] of [['noctowl', { 0: 'Duskilate', 1: 'Night Watch', H: 'Tinted Lens' }, [100, 50, 78, 96, 106, 80]], ['tropius', { 0: 'Fruitful Bough', 1: 'Hospitality', H: 'Windy Surge' }, [115, 90, 95, 75, 95, 70]], ['dhelmise', { 0: 'Water Bubble', 1: 'Blackwater Anchor', H: 'Rocky Payload' }, [85, 135, 110, 60, 100, 40]]]) { assert.deepEqual(Dex.species.get(id).abilities, abilities); assert.deepEqual(Object.values(Dex.species.get(id).baseStats), stats); }
 	});
-	it('Night Watch retains Insomnia alongside Noctowl’s independent Keen Eye passive', () => {
+	it('Night Watch retains Insomnia alongside Noctowl’s independent Frisk passive', () => {
 		const [p, t] = start('Night Watch');
 		assert(!p.hasAbility('keeneye'));
-		assert(p.hasAbilityOrPassive('keeneye'));
+		assert(p.hasAbilityOrPassive('frisk'));
 		assert(p.hasAbility('insomnia'));
 		assert.equal(p.trySetStatus('slp', t), false);
 		assert(!p.addVolatile('yawn', t));
 		const m = battle.dex.getActiveMove('darkpulse');
 		battle.runEvent('ModifyMove', p, t, m, m);
-		assert(m.ignoreEvasion);
+		assert(!m.ignoreEvasion);
 		assert.equal(battle.runEvent('BasePower', p, t, m, 1000), 1300);
 		battle.boost({ accuracy: -1 }, p, t);
-		assert.equal(p.boosts.accuracy, 0);
+		assert.equal(p.boosts.accuracy, -1);
 	});
 	// Night Watch now responds to a successful opposing status hit, not repeated self-setup.
 	it('Disables the first successful opposing status hit and can respond again', () => {

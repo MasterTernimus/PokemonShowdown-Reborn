@@ -22,7 +22,7 @@ describe('Approved thematic species passives',()=>{
 	it('keeps the revised thematic records, cosmetic equivalents and starter records', () => {
 		const ids = Object.values(ThematicPassiveGroups).flat(); assert.equal(ids.length, 78);
   const cosmetics=Object.entries(PassiveCosmeticForms).flatMap(([base,forms])=>forms.map(form=>base+form));assert.equal(cosmetics.length,27);
-		assert.equal(Object.keys(SpeciesPassives).length, 963);
+		assert.equal(Object.keys(SpeciesPassives).length, 986);
 		for (const [passive, group] of Object.entries(ThematicPassiveGroups)) for (const id of group)assert.deepEqual(Dex.species.get(id).passives, expected(id, passive), id);
   for(const id of cosmetics){const s=Dex.species.get(id);assert(s.exists,id);assert.deepEqual(s.passives,SpeciesPassives[id]);const base=Dex.species.get(s.baseSpecies);assert.deepEqual(s.baseStats,base.baseStats);assert.deepEqual(s.types,base.types);assert.deepEqual(s.abilities,base.abilities);}
   for(const[id,passives]of Object.entries(StarterPassives))assert.deepEqual(Dex.species.get(id).passives,passives,id);
@@ -79,7 +79,7 @@ describe('Approved thematic species passives',()=>{
   assert.equal(battle.log.filter(l=>l.includes('|-damage|')&&l.includes('passive: Liquid Ooze')).length,4);
  });
  it('Keen Eye entry uses its own state, runs once with overlap, and does not replay on ability changes',()=>{
-  const[p,t]=setup('Noctowl','Keen Eye');battle.field.setTerrain('mirrorarenaterrain',p);p.boosts.accuracy=0;
+  const[p,t]=setup('Watchog','Keen Eye');battle.field.setTerrain('mirrorarenaterrain',p);p.boosts.accuracy=0;
   battle.makeChoices('switch 3','move splash');battle.makeChoices('switch 3','move splash');
   assert.equal(p.boosts.accuracy,1);assert(p.volatiles.laserfocus);
   p.setAbility('Keen Eye');assert.equal(p.boosts.accuracy,1);
@@ -89,7 +89,7 @@ describe('Approved thematic species passives',()=>{
   protocol.push({name:'keen-eye',log:battle.log});
  });
  it('Keen Eye reveals an opposing Illusion on entry even with a suppressed different ability',()=>{
-  const[p,t]=setup('Noctowl','Pressure');t.illusion=battle.p2.pokemon[2];t.setAbility('Illusion');p.addVolatile('gastroacid');
+  const[p,t]=setup('Watchog','Pressure');t.illusion=battle.p2.pokemon[2];t.setAbility('Illusion');p.addVolatile('gastroacid');
   battle.fieldEvent('SwitchIn',[p]);assert.equal(t.illusion,null);assert.equal(p.ability,'pressure');
   protocol.push({name:'keen-eye-illusion',log:battle.log});
  });

@@ -3072,3 +3072,19 @@ for (const [id, name] of Object.entries(NovemberAbilityNames)) Aliases[name.toLo
 Aliases.moonveil = 'voidpromise';
 
 Aliases.bloomshelter = 'verdanthospitality';
+
+import { revisedNames } from './nov18-roster';
+for (const [id, name] of Object.entries(revisedNames)) Aliases[name.toLowerCase().replace(/ /g, '') as ID] = id;
+
+// Teams saved before the tower and forest rework keep their selected ability slot.
+Object.assign(Aliases, {
+	silversquall: 'Silver Wing Canticle',
+	abyssalecho: 'Tidal Bell Echo',
+	silversanctuary: 'Whirl Islands Oath',
+	rainbowplume: 'Rainbow Wing Canticle',
+	sacredrenewal: 'Clear Bell Echo',
+	ashenvigil: 'Burned Tower Oath',
+	ilexblessing: 'Ilex Shrine',
+	futureecho: 'Voice of Tomorrow',
+	forestmemory: 'Time Slip',
+});

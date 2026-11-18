@@ -111,7 +111,7 @@ describe('Approved Kanto and Johto passive migration', () => {
 		assert.equal(p.hp, 0);
 	});
 	it('Early Bird advances sleep twice while suppressed', () => {
-		const [p, t] = setup('Xatu');
+		const [p, t] = setup('Arboliva-Aevian');
 		p.addVolatile('gastroacid');
 		p.setStatus('slp', t);
 		p.statusState.time = 5;

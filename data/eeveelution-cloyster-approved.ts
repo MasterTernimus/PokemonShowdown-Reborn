@@ -38,6 +38,4 @@ export function installEeveeCloyster(abilities:AbilityDataTable) {
   a[id][key]=function(this:Battle,...args:any[]){if(skipPassiveComponent(this,this.effectState.target,id))return;return callback.apply(this,args);};
  }
  for(const [key,callback]of Object.entries(a.icebody))if(key.startsWith('on')&&key!=='onDamagingHit'&&typeof callback==='function')a.frozenfortress[key]=function(this:Battle,...args:any[]){return a.icebody[key].apply(this,args);};
- // The volatile belongs to the native Flash Fire even after selected-ability loss/suppression.
- for(const key of ['onModifyAtk','onModifySpA'])a.flashfire.condition[key]=function(this:Battle,stat:number,attacker:Pokemon,defender:Pokemon,move:ActiveMove){if(move&&this.movehasType(move,'Fire')&&attacker.hasAbilityOrPassive('flashfire'))return this.chainModify(1.5);};
 }

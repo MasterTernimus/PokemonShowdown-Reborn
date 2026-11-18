@@ -86,7 +86,7 @@ describe('Lycanroc options and Qwilfish Spiny Hide',()=>{
   const[p]=start(mon('No Ability','Qwilfish'));assert.deepEqual(p.getPassives(),['spinyhide']);
   assert.equal(battle.runEvent('ModifyDef',p,null,null,1000),1200);
   assert.equal(battle.runEvent('ModifySpD',p,null,null,1000),1200);
-  assert.deepEqual(Dex.species.get('qwilfishhisui').passives,[]);
+  assert.deepEqual(Dex.species.get('qwilfishhisui').passives,['ironbarbs']);
   assert.deepEqual(Dex.species.get('overqwil').passives,['aftermath']);
  });
  it('contact triggers exactly Rough Skin and Poison Point, with no Toxic Spikes',()=>{

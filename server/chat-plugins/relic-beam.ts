@@ -1,16 +1,16 @@
 import { Dex } from '../../sim/dex';
 import { Utils } from '../../lib';
-import { qualifiesForRelicBeam, RelicBeamMoves } from '../../data/relic-beam';
+import { qualifiesForMalignantLight, qualifiesForRelicBeam, RelicBeamMoves } from '../../data/relic-beam';
 
 export function renderRelicBeamReference() {
 	const named = [...RelicBeamMoves].map(id => Dex.moves.get(id).name).sort();
 	const other = Dex.moves.all().filter(move =>
 		move.category !== 'Status' && qualifiesForRelicBeam(move) && !RelicBeamMoves.has(move.id))
 		.map(move => move.name).sort();
-	return '<strong>Relic Beam / Malignant Light</strong><p>These moves gain 50% power.</p>' +
+	return '<strong>Relic Beam / Malignant Light</strong><p>Relic Beam gives these moves 50% more power. Malignant Light uses the lower defense when they are special.</p>' +
 		`<p><strong>Named beam moves:</strong> ${Utils.escapeHTML(named.join(', '))}.</p>` +
 		`<p><strong>Other pulse/bullet moves:</strong> ${Utils.escapeHTML(other.join(', '))}.</p>` +
-		'<p>Relic Beam also uses Defense and its stages for Sp. Atk. Check one move with /relicbeam MOVE.</p>';
+		'<p>Malignant Light also covers special Photon Geyser and Lumina Crash. Relic Beam uses Defense and its stages for Sp. Atk. Check one move with /relicbeam MOVE.</p>';
 }
 
 export const commands: Chat.ChatCommands = {
@@ -25,8 +25,10 @@ export const commands: Chat.ChatCommands = {
 			return this.sendReplyBox(`${Utils.escapeHTML(move.name)} is a status move and gains no damage bonus.`);
 		}
 		this.sendReplyBox(`${Utils.escapeHTML(move.name)} ${qualifiesForRelicBeam(move) ?
-			'gains 50% power from Relic Beam and Malignant Light' : 'does not receive the Relic Beam power bonus'}.`);
+			'gains 50% power from Relic Beam. Malignant Light uses the lower defense when this move is special' :
+			qualifiesForMalignantLight(move) ?
+				'uses the lower defense with Malignant Light when special' : 'does not receive the Relic Beam power bonus'}.`);
 	},
-	relicbeamhelp: ['/relicbeam — lists all moves boosted by Relic Beam and Malignant Light.',
+	relicbeamhelp: ['/relicbeam — lists the moves affected by Relic Beam and Malignant Light.',
 		'/relicbeam MOVE — checks a particular move. Alias: /beams.'],
 };

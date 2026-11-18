@@ -14,6 +14,12 @@ export function passiveEffect(battle: Battle, id: string): Condition {
 	if (!effect) {
 		effect = new Condition({ ...ability, id: `speciespassive${id}`, effectType: 'Condition',
 			fullname: `passive: ${ability.name}`, onSwitchIn: ability.onStart || ability.onSwitchIn, onSwitchInSubOrder: 7 });
+		if (['primordialsea', 'desolateland', 'deltastream'].includes(id)) {
+			const endWeather = function (this: Battle, pokemon: Pokemon) {
+				if (this.field.weather === id) ability.onEnd?.call(this, pokemon as Pokemon & Side & Field);
+			};
+			Object.assign(effect, { onSwitchOut: endWeather, onFaint: endWeather });
+		}
 		const callbacks = SignaturePassiveCallbacks[id];
 		if (callbacks) for (const key of Object.keys(effect)) {
 			if (key.startsWith('on') && typeof (effect as any)[key] === 'function' && !callbacks.includes(key)) {
@@ -44,7 +50,7 @@ export function thematicPassives(pokemon: Pokemon) {
 
 const migratedEntryPassives = new Set(['supremeoverlord', 'unnerve', 'fairyaura', 'darkaura', 'contrary', 'moldbreaker', 'noguard',
 	'eldritchremedy', 'mimecraft', 'saltbastion', 'download', 'hospitality', 'composed',
-	'frisk', 'oblivious', 'waterveil', 'drizzle', 'grassysurge', 'electricsurge', 'thermalexchange', 'flamebody', 'intimidate', 'slowstart',
+	'frisk', 'oblivious', 'waterveil', 'drizzle', 'grassysurge', 'electricsurge', 'primordialsea', 'desolateland', 'deltastream', 'thermalexchange', 'flamebody', 'intimidate', 'slowstart',
 	'zerotohero', 'supersweetsyrup', 'swornduty', 'gluttony', 'heavymetal', 'stalwart']);
 /** Evolution starts all newly gained passives; other acquisitions retain their approved entry hooks. */
 export function startGainedPassives(

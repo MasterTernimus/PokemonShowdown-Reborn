@@ -84,7 +84,7 @@ describe('Neutralizing Gas', function () {
 
 	it(`should negate Primal weather Abilities`, function () {
 		battle = common.createBattle([[
-			{species: 'Groudon', item: 'redorb', moves: ['sleeptalk']},
+			{species: 'Mew', ability: 'Desolate Land', moves: ['sleeptalk']},
 		], [
 			{species: 'Wynaut', moves: ['sleeptalk']},
 			{species: 'Weezing', ability: 'neutralizinggas', moves: ['sleeptalk']},

@@ -21,7 +21,7 @@ describe('Approved mixed attacker and guardian abilities', () => {
 
 	it('Knuckle Tide primes both physical and special Water attacks', () => {
 		const [holder, , foe] = doubles('Poliwrath', 'Knuckle Tide');
-		assert.deepEqual(holder.species.baseStats, {hp: 100, atk: 100, def: 100, spa: 95, spd: 90, spe: 75});
+		assert.deepEqual(holder.species.baseStats, {hp: 95, atk: 100, def: 95, spa: 80, spd: 85, spe: 75});
 		assert(holder.hasAbility('ironfist'));
 		const punch = battle.dex.getActiveMove('drainpunch');
 		assert.equal(battle.runEvent('BasePower', holder, foe, punch, 100), 140);
@@ -91,7 +91,7 @@ describe('Approved mixed attacker and guardian abilities', () => {
 	it('Mimecraft and Pearl Current heal allies from their stated triggers', () => {
 		let [holder, ally, foe] = doubles('Mr. Mime', 'Silent Act');
 		assert.deepEqual(holder.species.baseStats, {hp: 65, atk: 45, def: 80, spa: 110, spd: 125, spe: 95});
-		assert.equal(holder.species.abilities[1], 'Silent Act');
+		assert.equal(holder.species.abilities[1], 'Technician');
 		assert.deepEqual(holder.getPassives(), ['mimecraft']);
 		assert(require('../../../dist/data/learnsets').Learnsets.mrmime.learnset.wideguard);
 		ally.hp -= 40;

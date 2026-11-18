@@ -26,7 +26,7 @@ describe('November roster balance', () => {
 	it('has exact stat totals and respects Rhydon mainline floors', () => {
 		const rhydon = Dex.species.get('rhydon').baseStats;
 		for (const [id, n] of Object.entries({ hp: 105, atk: 130, def: 120, spa: 45, spd: 45, spe: 40 }))assert(rhydon[id] >= n, id);
-		assert.equal(Object.values(rhydon).reduce((a, b) => a + b), 520);
+		assert.equal(Object.values(rhydon).reduce((a, b) => a + b), 500);
 		assert.equal(Object.values(Dex.species.get('lanturn').baseStats).reduce((a, b) => a + b), 540);
 	});
 	for (const ability of ['Royal Scales', 'Verdant Crown', 'Tidal Crown', 'Burning Crown', 'Fallen Star', 'Atrocity', 'Raging Storm'])it(ability + ' no longer grants Self-Sufficient', () => {

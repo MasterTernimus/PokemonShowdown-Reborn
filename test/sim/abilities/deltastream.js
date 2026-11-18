@@ -12,7 +12,7 @@ describe('Delta Stream', function () {
 
 	it('should activate the Delta Stream weather upon switch-in', function () {
 		battle = common.createBattle([[
-			{species: "Rayquaza", ability: 'deltastream', moves: ['roost']},
+			{species: "Dragonite", ability: 'deltastream', moves: ['roost']},
 		], [
 			{species: "Abra", ability: 'magicguard', moves: ['teleport']},
 		]]);
@@ -36,7 +36,7 @@ describe('Delta Stream', function () {
 
 	it('should not negate the type weaknesses of any other type, even if the Pokemon is Flying-type', function () {
 		battle = common.createBattle([[
-			{species: "Rayquaza", ability: 'deltastream', item: 'weaknesspolicy', moves: ['recover']},
+			{species: "Dragonite", ability: 'deltastream', item: 'weaknesspolicy', moves: ['recover']},
 		], [
 			{species: "Smeargle", ability: 'owntempo', moves: ['dragonpulse']},
 		]]);
@@ -49,7 +49,7 @@ describe('Delta Stream', function () {
 
 	it('should not reduce damage from Stealth Rock', function () {
 		battle = common.createBattle([[
-			{species: "Rayquaza", ability: 'pressure', moves: ['roost']},
+			{species: "Dragonite", ability: 'pressure', moves: ['roost']},
 			{species: "Ho-Oh", ability: 'pressure', moves: ['roost']},
 		], [
 			{species: "Lugia", ability: 'deltastream', moves: ['stealthrock']},
@@ -61,7 +61,7 @@ describe('Delta Stream', function () {
 
 	it('should prevent moves and abilities from setting the weather to Sunny Day, Rain Dance, Sandstorm, or Hail', function () {
 		battle = common.createBattle([[
-			{species: "Rayquaza", ability: 'deltastream', moves: ['helpinghand']},
+			{species: "Dragonite", ability: 'deltastream', moves: ['helpinghand']},
 		], [
 			{species: "Abra", ability: 'magicguard', moves: ['teleport']},
 			{species: "Kyogre", ability: 'drizzle', moves: ['raindance']},
@@ -79,7 +79,7 @@ describe('Delta Stream', function () {
 
 	it('should cause the Delta Stream weather to fade if it switches out and no other Delta Stream Pokemon are active', function () {
 		battle = common.createBattle([[
-			{species: "Rayquaza", ability: 'deltastream', moves: ['helpinghand']},
+			{species: "Dragonite", ability: 'deltastream', moves: ['helpinghand']},
 			{species: "Ho-Oh", ability: 'pressure', moves: ['roost']},
 		], [
 			{species: "Lugia", ability: 'pressure', moves: ['roost']},
@@ -89,17 +89,17 @@ describe('Delta Stream', function () {
 
 	it('should not cause the Delta Stream weather to fade if it switches out and another Delta Stream Pokemon is active', function () {
 		battle = common.createBattle([[
-			{species: "Rayquaza", ability: 'deltastream', moves: ['helpinghand']},
+			{species: "Dragonite", ability: 'deltastream', moves: ['helpinghand']},
 			{species: "Ho-Oh", ability: 'pressure', moves: ['roost']},
 		], [
-			{species: "Rayquaza", ability: 'deltastream', moves: ['bulkup']},
+			{species: "Dragonite", ability: 'deltastream', moves: ['bulkup']},
 		]]);
 		assert.constant(() => battle.field.isWeather('deltastream'), () => battle.makeChoices('switch 2', 'move bulkup'));
 	});
 
 	it('should cause the Delta Stream weather to fade if its ability is suppressed and no other Delta Stream Pokemon are active', function () {
 		battle = common.createBattle([[
-			{species: "Rayquaza", ability: 'deltastream', moves: ['helpinghand']},
+			{species: "Dragonite", ability: 'deltastream', moves: ['helpinghand']},
 		], [
 			{species: "Lugia", ability: 'pressure', moves: ['gastroacid']},
 		]]);
@@ -108,16 +108,16 @@ describe('Delta Stream', function () {
 
 	it('should not cause the Delta Stream weather to fade if its ability is suppressed and another Delta Stream Pokemon is active', function () {
 		battle = common.createBattle([[
-			{species: "Rayquaza", ability: 'deltastream', moves: ['helpinghand']},
+			{species: "Dragonite", ability: 'deltastream', moves: ['helpinghand']},
 		], [
-			{species: "Rayquaza", ability: 'deltastream', moves: ['gastroacid']},
+			{species: "Dragonite", ability: 'deltastream', moves: ['gastroacid']},
 		]]);
 		assert.constant(() => battle.field.isWeather('deltastream'), () => battle.makeChoices('move helpinghand', 'move gastroacid'));
 	});
 
 	it('should cause the Delta Stream weather to fade if its ability is changed and no other Delta Stream Pokemon are active', function () {
 		battle = common.createBattle([[
-			{species: "Rayquaza", ability: 'deltastream', moves: ['helpinghand']},
+			{species: "Dragonite", ability: 'deltastream', moves: ['helpinghand']},
 		], [
 			{species: "Lugia", ability: 'pressure', moves: ['entrainment']},
 		]]);

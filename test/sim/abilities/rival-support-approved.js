@@ -53,9 +53,17 @@ describe('Approved rival and support queue',()=>{
   battle.log.length=0;hit(p,q,'doublehit',{multihit:2});assert(battle.log.some(x=>x.includes('|-hitcount|')&&x.endsWith('|2')));
  });
  it('Aim Assist rewards successful status only, consumes next targeted attempt, and does not own manual Lock-On',()=>{
-  const[p,q]=setup('Klinklang','No Ability','singles',['splash','tackle']);battle.makeChoices('move splash','move splash');assert(p.m.aimLock);assert(!p.volatiles.lockon);
+		const[p,q]=setup('Klinklang','No Ability','singles',['splash','tackle']);
+		battle.makeChoices('move splash','move splash');
+		assert(p.volatiles.aimassistlock);
+		assert(!p.volatiles.lockon);
+		assert(battle.log.some(line => line.includes('|move: Lock-On|[of] ' + q)));
+		assert(battle.log.some(line => line.includes('|-start|' + p + '|Aim Assist Lock')));
   const move=Dex.getActiveMove('tackle');battle.runEvent('ModifyMove',p,q,move,move);assert.equal(move.ignorePositiveDefensive,true);
-  battle.runEvent('TryMove',p,q,move);assert(!p.m.aimLock);assert.equal(battle.runEvent('Accuracy',q,p,move,1),true);
+		battle.runEvent('TryMove',p,q,move);
+		assert(!p.volatiles.aimassistlock);
+		assert(battle.log.some(line => line.includes('|-end|' + p + '|Aim Assist Lock')));
+		assert.equal(battle.runEvent('Accuracy',q,p,move,1),true);
  });
  it('Silent Act arms after successful status and consumes on damaging attempt',()=>{
   const[p,q]=setup('Mr. Mime','Silent Act','singles',['splash','psychic']);battle.makeChoices('move splash','move splash');assert(p.volatiles.silentactready);
@@ -128,12 +136,12 @@ describe('Rival/support boundary checks',()=>{
   const[p,q]=setup('Parasect','No Ability','doubles');q.hp=1;const other=battle.p2.active[1];const hp=other?.hp;hit(p,q,'tackle');if(other)assert.equal(other.hp,hp);
  });
  it('Aim Assist does not reward a failed status move or an attacking turn',()=>{
-  const[p,q]=setup('Klinklang','No Ability','singles',['splash','tackle','recover']);p.hp=p.maxhp;battle.makeChoices('move recover','move splash');assert(!p.m.aimLock);
-  battle.makeChoices('move tackle','move splash');assert(!p.m.aimLock);
+  const[p,q]=setup('Klinklang','No Ability','singles',['splash','tackle','recover']);p.hp=p.maxhp;battle.makeChoices('move recover','move splash');assert(!p.volatiles.aimassistlock);
+  battle.makeChoices('move tackle','move splash');assert(!p.volatiles.aimassistlock);
  });
  it('Aim Assist lock expires and clears when its target leaves',()=>{
-  const[p,q]=setup('Klinklang','No Ability','singles',['splash','tackle']);battle.makeChoices('move splash','move splash');assert(p.m.aimLock);
-  battle.makeChoices('move splash','switch 2');assert.notEqual(p.m.aimLock?.target,q);
+  const[p,q]=setup('Klinklang','No Ability','singles',['splash','tackle']);battle.makeChoices('move splash','move splash');assert(p.volatiles.aimassistlock);
+  battle.makeChoices('move splash','switch 2');assert.notEqual(p.volatiles.aimassistlock?.source,q);
  });
  it('Stage Sweep does not Helping Hand an already-acted partner, but still pivots without hazards',()=>{
   const[p,q]=setup('Mr. Rime','Stage Sweep');const ally=p.side.active[1];ally.newlySwitched=false;hit(p,q,'rapidspin');assert(!ally.volatiles.helpinghand);assert(p.switchFlag);assert(!p.m.stageSweepReward);

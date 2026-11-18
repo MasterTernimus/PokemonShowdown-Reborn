@@ -73,7 +73,7 @@ describe('Gimmick follow-up audit regressions', () => {
 		battle = common.createBattle({ formatid: 'gen9mistyfieldadrienn' }, [[
 			{ species: 'Snorlax', ability: 'Gluttony', gigantamax: true, moves: ['tackle', 'amnesia'] },
 			{ species: 'Mew', ability: 'Synchronize', moves: ['amnesia'] },
-		], [{ species: 'Dusclops', ability: 'Frisk', moves: ['calmmind'] }]]);
+		], [{ species: 'Duskull', ability: 'Frisk', moves: ['calmmind'] }]]);
 		battle.makeChoices('team 12', 'team 1');
 		const snorlax = battle.p1.active[0];
 		const otherPP = snorlax.moveSlots[1].pp;

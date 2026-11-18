@@ -5,7 +5,12 @@ function setup(species,ability,mode='doubles'){battle=common.createBattle({forma
 function hit(p,q,id='tackle',extra={}){battle.actions.useMove(Object.assign(Dex.getActiveMove(id),{accuracy:true,willCrit:false,secondaries:null},extra),p,{target:q});}
 describe('October Rapidash, Alcremie, royal and Mega Parasect additions',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- it('Racing Spirit retains local paralysis and opposing Speed protection under suppression',()=>{const[p,a,q]=setup('Rapidash','Flame Body');p.addVolatile('gastroacid');assert(!p.trySetStatus('par',q));battle.boost({spe:-1},p,q);assert.equal(p.boosts.spe,0);battle.boost({spe:-1},p,p);assert.equal(p.boosts.spe,-1);p.status='par';battle.runEvent('Update',p);assert.equal(p.status,'');});
+ it('Racing Spirit absorbs Fire and permits opposing Speed drops',()=>{
+		const [p,,q]=setup('Rapidash','Flame Body');
+		const hp=p.hp; hit(q,p,'ember');
+		assert.equal(p.hp,hp);assert(p.volatiles.flashfire);
+		assert(p.trySetStatus('par',q));battle.boost({spe:-1},p,q);assert.equal(p.boosts.spe,-1);
+	});
  it('Racing Spirit prevents ordinary recoil but retains Struggle and Life Orb costs',()=>{const[p,a,q]=setup('Rapidash','No Ability');p.addVolatile('gastroacid');hit(p,q,'doubleedge');assert.equal(p.hp,1000);hit(p,q,'struggle');assert.equal(p.hp,750);p.setItem('lifeorb');hit(p,q);assert.equal(p.hp,650);});
  it('Racing Spirit copied active Limber does not double drops or cures',()=>{const[p,a,q]=setup('Rapidash','Limber');battle.boost({spe:-1},p,q);assert.equal(p.boosts.spe,0);assert.deepEqual(p.getPassives(),['racingspirit']);});
  for(const targetKind of ['self','ally','foe'])it('actual Decorate grants +2 only to chosen '+targetKind,()=>{const[p,a,q]=setup('Alcremie','Master Pâtissier'),t=targetKind==='self'?p:targetKind==='ally'?a:q;assert.equal(p.getMoves().find(m=>m.id==='decorate').target,'normalOrSelf');hit(p,t,'decorate');assert.equal(t.boosts.atk,2);assert.equal(t.boosts.spa,2);if(t!==p)assert.equal(p.boosts.atk,0);});

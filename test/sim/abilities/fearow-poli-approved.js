@@ -16,7 +16,7 @@ describe('Approved Fearow and Poliwrath refinements', () => {
  function modified(id, p) {const m=battle.dex.getActiveMove(id);return battle.runEvent('ModifyMove',p,battle.p2.active[0],m,m);}
  it('loads exact approved species, independent ability alternatives, and selective moves', () => {
   const p=Dex.species.get('Poliwrath'), f=Dex.species.get('Fearow');
-  assert.deepEqual(p.baseStats,{hp:100,atk:100,def:100,spa:95,spd:90,spe:75});
+  assert.deepEqual(p.baseStats,{hp:95,atk:100,def:95,spa:80,spd:85,spe:75});
 		assert.deepEqual(p.abilities, { 0: 'Reservoir', 1: 'Knuckle Tide', H: 'Crosscurrent', S: 'Aevian Ascendance' });
   assert.deepEqual(f.baseStats,{hp:80,atk:125,def:80,spa:45,spd:80,spe:125});
   assert.deepEqual(f.types,['Normal','Flying']);

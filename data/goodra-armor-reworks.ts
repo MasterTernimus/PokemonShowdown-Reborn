@@ -37,6 +37,7 @@ export function installGoodraArmorReworks(abilities: AbilityDataTable) {
 		},
 	};
 	abilities.soulforgedarmor = {
+		...abilities.flashfire,
 		name: 'Soulforged Armor', num: 12064, rating: 3, flags: {breakable: 1},
 		shortDesc: 'Takes 20% less damage from super-effective attacks.',
 		desc: 'Super-effective attacks deal 20% less damage.',

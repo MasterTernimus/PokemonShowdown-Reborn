@@ -32,8 +32,18 @@ describe('Monarch names and Sovereign chip replacements', () => {
 		const [p, q] = setup(name);
 		assert(p.hasAbility(old));
 		assert(p.hasAbility(name));
-		assert.equal(battle.runEvent('ModifyAccuracy', q, p, Dex.getActiveMove('hypnosis'), 60), 66);
+		assert.equal(battle.runEvent('ModifyAccuracy', q, p, Dex.getActiveMove('hypnosis'), 60), id === 'pollenbloom' ? 60 : 66);
 	});
+	for (const name of ['Verdant Monarch', 'Virulence', 'Verdant Crown']) {
+		it(name + ' protects the holder and ally from Taunt', () => {
+			const [holder, foe] = setup(name, true);
+			for (const target of [holder, battle.p1.active[1]]) {
+				assert(!target.addVolatile('taunt', foe, battle.dex.moves.get('taunt')));
+				assert(!target.volatiles.taunt);
+			}
+			assert(!holder.hasAbility('unaware'));
+		});
+	}
 	it('keeps Atrocity contact damage free of Tough Claws', () => {
 		const [p, q] = setup('Atrocity');
 		assert(!AbilityComponents.atrocity.includes('toughclaws'));

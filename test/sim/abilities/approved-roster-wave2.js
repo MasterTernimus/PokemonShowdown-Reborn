@@ -269,14 +269,14 @@ describe('Approved roster follow-up', () => {
 		assert(battle.activeMove.ignorePositiveDefensive);
 		assert(!modify('flamethrower', p, foe).multihit);
 	});
-	it('Heat Reservoir spends a Flash Fire charge after Armor Cannon and blocks both self drops', () => {
-		const [p, , foe] = make('Heat Reservoir');
+	it('Heat Reservoir preserves Sp. Def once and leaves Soulforged Armor’s Fire Boost active', () => {
+		const [p, , foe] = make('Heat Reservoir', 'Armarouge');
 		hit('ember', foe, p);
 		assert(p.volatiles.flashfire);
 		hit('armorcannon', p, foe);
-		assert(!p.volatiles.flashfire); assert.equal(p.boosts.def, 0); assert.equal(p.boosts.spd, 0);
+		assert(p.volatiles.flashfire); assert.equal(p.boosts.def, -1); assert.equal(p.boosts.spd, 0);
 		hit('armorcannon', p, foe);
-		assert.equal(p.boosts.def, -1);
+		assert.equal(p.boosts.def, -2); assert.equal(p.boosts.spd, -1);
 	});
 	it('Mourning Coat permanently loses Fire weakness after a teammate faints', () => {
 		const [p, ally, foe] = make('Mourning Coat');

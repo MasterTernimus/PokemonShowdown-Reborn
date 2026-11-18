@@ -47,6 +47,18 @@ describe('Malignant Light and Pinsir', () => {
 		assert(!qualifiesForRelicBeam(Dex.moves.get('watergun')));
 	});
 
+	it('keeps physical Photon Geyser on Defense even when Sp. Def is lower', () => {
+		const [p, foe] = start('Malignant Light');
+		p.storedStats.atk = 400;
+		p.storedStats.spa = 100;
+		foe.storedStats.def = 400;
+		foe.storedStats.spd = 80;
+		const first = hit(p, foe, 'photongeyser');
+		foe.storedStats.spd = 400;
+		assert.equal(hit(p, foe, 'photongeyser'), first);
+		foe.storedStats.def = 80;
+		assert(hit(p, foe, 'photongeyser') > 2 * first);
+	});
 	it('preserves Relic Beam itself', () => {
 		const [p, foe] = start('Relic Beam');
 		assert.equal(battle.runEvent('BasePower', p, foe, Dex.getActiveMove('hydropump'), 100), 150);
@@ -61,6 +73,16 @@ describe('Malignant Light and Pinsir', () => {
 				assert.equal(battle.runEvent('BasePower', p, foe, Dex.getActiveMove(id), 100), 100, id);
 			}
 			assert(!p.hasAbility('relicbeam'));
+			for (const id of ['photongeyser', 'luminacrash']) {
+				assert(!qualifiesForRelicBeam(Dex.moves.get(id)));
+				foe.storedStats.def = 80;
+				foe.storedStats.spd = 240;
+				const damage = () => battle.actions.getDamage(p, foe, Object.assign(Dex.getActiveMove(id), { willCrit: false }));
+				const lower = damage();
+				foe.storedStats.def = 240;
+				assert(lower > damage() * 2, id);
+			}
+
 			p.storedStats.spa = 200; p.storedStats.def = 500;
 			assert.equal(p.getStat('spa'), 200);
 			const damage = (id, extra = {}) => battle.actions.getDamage(p, foe,

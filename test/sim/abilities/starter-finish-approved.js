@@ -8,7 +8,7 @@ describe('Final approved starter selected abilities',()=>{
  it('Cloyster uses approved native Water Absorb, distinct from Gorebyss Pearl Tide',()=>{const[p,q]=setup('Cloyster','Shell Armor');assert.deepEqual(p.getPassives(),['waterabsorb']);p.hp=800;const ally=p.side.active[1];ally.hp=800;use(q,p,'watergun');assert.equal(p.hp,1200);assert.equal(ally.hp,800);assert.equal(Dex.species.get('gorebyss').abilities.H,'Pearl Tide');});
 	it('changes only Venusaur selected slot, retaining Overgrow and other choices', () => {
 		const p = Dex.species.get('venusaur');
-		assert.deepEqual(p.abilities, { 0: 'Verdant Monarch', 1: 'Soothing Bouquet', H: 'Chlorophyll' });
+		assert.deepEqual(p.abilities, { 0: 'Verdant Monarch', 1: 'Unaware', H: 'Chlorophyll' });
 		assert.deepEqual(p.passives, ['overgrow']);
 		assert.equal(Dex.species.get('venusaurmega').abilities[0], 'Virulence');
 	});

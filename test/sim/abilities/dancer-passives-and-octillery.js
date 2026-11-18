@@ -31,7 +31,7 @@ describe('Approved eleven dancer passives and Anchored Battery extension', () =>
 		for (const [passive, ids] of Object.entries(require('./regional-passives-approved.json').groups)) for (const id of ids) expected[id] = [...(expected[id] || []), passive];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(SpeciesPassives, expected);
-		assert.equal(Object.keys(expected).length, 963);
+		assert.equal(Object.keys(expected).length, 986);
 		for (const old of before.species) {
 			const s = Dex.species.get(old.id);
 			// Own Tempo moved to Ludicolo's passive; Rain Dish fills its former slot.
@@ -64,7 +64,31 @@ describe('Approved eleven dancer passives and Anchored Battery extension', () =>
 		assert.deepEqual(Dex.species.get('quaquaval').passives, ['torrent']);
 		for (const id of ['lotad', 'lombre', 'petilil', 'oddish', 'gloom', 'quaxly', 'quaxwell', 'meloettamega']) assert(!Dex.species.get(id).passives.includes('owntempo'));
 	});
-	for (const id of before.forms.filter(id => !['quaquaval', 'meloetta', 'meloettapirouette', 'ludicolo'].includes(id))) it(id + ' blocks confusion and Intimidate through suppression and copying only the active ability', () => {
+	it('Petal Rhythm heals for a copied dance once per entry and resets after switching', () => {
+		const [p] = setup('Bellossom', 'Dancer');
+		p.hp = 5000;
+		battle.makeChoices('move splash', 'move dragondance');
+		assert.equal(p.hp, 6250);
+		battle.makeChoices('move dragondance', 'move splash');
+		assert.equal(p.hp, 6250);
+		battle.makeChoices('switch 2', 'move splash');
+		battle.makeChoices('switch 2', 'move splash');
+		battle.makeChoices('move dragondance', 'move splash');
+		assert.equal(p.hp, 7500);
+	});
+	it('a failed dance preserves Petal Rhythm and a successful dance at full HP uses it', () => {
+		const [p] = setup('Bellossom', 'Chlorophyll');
+		p.boosts.atk = p.boosts.spe = 6;
+		battle.makeChoices('move dragondance', 'move splash');
+		assert(!p.volatiles.petalrhythmspent);
+		p.boosts.atk = 0;
+		battle.makeChoices('move dragondance', 'move splash');
+		assert(p.volatiles.petalrhythmspent);
+		p.hp = 5000;
+		battle.makeChoices('move dragondance', 'move splash');
+		assert.equal(p.hp, 5000);
+	});
+	for (const id of before.forms.filter(id => !['quaquaval', 'meloetta', 'meloettapirouette', 'ludicolo', 'bellossom'].includes(id))) it(id + ' blocks confusion and Intimidate through suppression and copying only the active ability', () => {
 		const [p, t] = setup(id);
 		for (const state of ['normal', 'gastroacid', 'meridianseal', 'gas', 'replacement']) {
 			if (state === 'gas') t.setAbility('Neutralizing Gas'); else if (state === 'replacement') {

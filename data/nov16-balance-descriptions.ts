@@ -1,5 +1,65 @@
 /** Current wording for the approved November 16 balance pass. */
 export const November16BalanceDescriptions: Record<string, {name?: string; desc: string; shortDesc: string}> = {
+	racingspirit: {
+		shortDesc: "Rock Head + Flash Fire.",
+		desc: "Prevents move recoil except Struggle. Includes Flash Fire: absorbs Fire moves for a 1.5× Fire Boost, with its usual field effects.",
+	},
+	soulforgedarmor: {
+		shortDesc: "Flash Fire; takes 20% less damage from super-effective attacks.",
+		desc: "Super-effective attacks deal 20% less damage. Includes Flash Fire: absorbs Fire moves for a 1.5× Fire Boost, with its usual field effects.",
+	},
+	soulpyre: {
+		shortDesc: "Infiltrator; heals after foe burn damage. Ghost hits weaken burned foes.",
+		desc: "Bypasses Substitute, screens, Safeguard and Mist. Heals 1/8 max HP at turn end if a foe took burn damage. Once per turn, a Ghost hit lowers an already-burned foe’s Sp. Def by 1.",
+	},
+	soulsiphon: {
+		shortDesc: "Flash Fire; Fire/Ghost hits drain HP and block healing.",
+		desc: "Includes Flash Fire and its field effects. Fire or Ghost hits to opposing HP block healing through the next turn and restore one third of damage dealt, capped at 1/6 max HP per turn. Delayed attacks do not trigger this effect. Draining moves only grant their own healing.",
+	},
+	heatreservoir: {
+		shortDesc: "Preserves Sp. Def on the first Armor Cannon stat drop each entry.",
+		desc: "Once per switch-in, Armor Cannon’s own stat drop lowers only Defense. Later uses lower both Defense and Sp. Def as usual.",
+	},
+	flashfire: {
+		shortDesc: "Absorbs Fire for a 1.5× Fire Boost that carries through Mega Evolution.",
+		desc: "Absorbing a Fire move grants Fire Boost, multiplying Fire attacks by 1.5. The boost carries through Mega Evolution and clears on switching. Burning or grounded Volcanic grants it at turn end. Infernal Eclipse grants a temporary charge while the field lasts. Cold Eclipse disables Fire absorption.",
+	},
+	stalwart: {
+		shortDesc: "Moves ignore redirection and hit through Substitute.",
+		desc: "Moves ignore redirection and bypass the target’s Substitute. On entry in New World, Starlight Arena, Fairy Tale or Chessboard, raises Sp. Atk by 1.",
+	},
+	petalrhythm: {
+		name: "Petal Rhythm", shortDesc: "The first successful dance each entry restores 1/8 max HP.",
+		desc: "The first time the holder successfully uses a dance move after switching in, it restores 1/8 of its maximum HP. Dances copied by Dancer count.",
+	},
+	splintershell: {
+		name: "Splinter Shell", shortDesc: "Blocks critical hits. Contact KOs trigger Aftermath.",
+		desc: "Prevents critical hits. A foe that knocks out the holder with a contact move loses 1/4 of its maximum HP, or 1/2 on Corrosive Mist. Damp prevents this damage.",
+	},
+	ballastplating: {
+		name: "Ballast Plating", shortDesc: "Body Press, Heavy Slam and Gyro Ball have 1.2× power.",
+		desc: "Multiplies the base power of Body Press, Heavy Slam and Gyro Ball by 1.2.",
+	},
+	pollenbloom: {
+		shortDesc: "Thick Fat + Aroma Veil.",
+		desc: "Halves the attacking stat of incoming Fire and Ice moves and protects against hail. Aroma Veil protects the holder and its allies from attraction and move restrictions.",
+	},
+	sunsovereign: {
+		shortDesc: "Drought + Infernal Dominion + White Smoke.",
+		desc: "Summons sun and lowers opposing Attack on entry. White Smoke blocks opposing stat drops. On Volcanic Field or Dragon's Den, entry raises Attack and Sp. Atk by 1. Rock attacks are capped at neutral effectiveness, and Stealth Rock deals no damage to the holder. A direct Fire hit clears sand and grants Molten Guard once per turn against the next opposing Rock attack.",
+	},
+	stormpower: {
+		shortDesc: "Rain boosts Attack and Sp. Atk by 1.5×. Costs 1/8 max HP each rain turn.",
+		desc: "In rain or heavy rain, Attack and Sp. Atk are multiplied by 1.5. The holder loses 1/8 of its maximum HP at the end of each rain turn.",
+	},
+	ancientbloom: {
+		shortDesc: "Verdant Monarch + Friend Guard; field bonuses and 1.1× accuracy.",
+		desc: "Thick Fat and Aroma Veil protect the holder. Aroma Veil protects allies from move restrictions, and Friend Guard reduces damage to allies by 25%. Fairy Tale, New World, Cold Eclipse and Starlight Arena entry grant +1 Defense and Sp. Def. The latter three grant 1.5× move power. All moves have 1.1× accuracy.",
+	},
+	toxicbloom: {
+		shortDesc: "Verdant Monarch + Toxic Sink; 1.1× accuracy.",
+		desc: "Includes Thick Fat, Aroma Veil and Toxic Sink. All moves have 1.1× accuracy.",
+	},
 	"prismscale": {
 		"desc": "Friend Guard reduces attack damage to allies by 25%. Swift Swim boosts Speed in rain and its supported water fields.",
 		"shortDesc": "Friend Guard + Swift Swim."
@@ -96,11 +156,11 @@ Object.assign(November16BalanceDescriptions, {
     "shortDesc": "Dual Wield + Shell Armor; all moves gain 10% accuracy."
   },
   "siegelauncher": {
-    "desc": "Mega Launcher gives pulse and bullet moves 1.5x power. Dual Wield supplies exactly one eligible pair: outside Free-for-All, pulse/bullet attacks use 1.5x power for the first hit and 0.15x for the second before STAB and passives. In Free-for-All both hits use full power, with the second-target selection. Existing multi-hit, charging, delayed, Z/Max and ineligible moves gain no extra pair. Stalwart: redirection bypass and +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. All moves have 1.1x accuracy.",
+    "desc": "Mega Launcher gives pulse and bullet moves 1.5x power. Dual Wield supplies exactly one eligible pair: outside Free-for-All, pulse/bullet attacks use 1.5x power for the first hit and 0.15x for the second before STAB and passives. In Free-for-All both hits use full power, with the second-target selection. Existing multi-hit, charging, delayed, Z/Max and ineligible moves gain no extra pair. Stalwart: bypasses redirection and Substitute, and gives +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. All moves have 1.1x accuracy.",
     "shortDesc": "Mega Launcher + Dual Wield + Stalwart; all moves gain 10% accuracy."
   },
   "fortressshell": {
-    "desc": "Stalwart bypasses redirection and gives +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. Guardian Presence boosts allies move power by 1.3x, or 1.5x on Haunted, Bewitched Woods, Holy and Psychic fields, and reduces their attack damage by 25%; neither applies to the holder. During Electric Aura or Electric Terrain, Murkwater Surface, Water Surface, Underwater, Midnight Zone, Factory and Short-Circuit, redirects and absorbs Electric moves for +1 Attack and Sp. Atk. Existing Fairy Tale, New World, Cold Eclipse and Starlight Arena entry/terrain bonuses give +1 Defense and Sp. Def; the latter three retain 1.5x move power. All moves have 1.1x accuracy.",
+    "desc": "Stalwart bypasses redirection and Substitute, and gives +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. Guardian Presence boosts allies move power by 1.3x, or 1.5x on Haunted, Bewitched Woods, Holy and Psychic fields, and reduces their attack damage by 25%; neither applies to the holder. During Electric Aura or Electric Terrain, Murkwater Surface, Water Surface, Underwater, Midnight Zone, Factory and Short-Circuit, redirects and absorbs Electric moves for +1 Attack and Sp. Atk. Existing Fairy Tale, New World, Cold Eclipse and Starlight Arena entry/terrain bonuses give +1 Defense and Sp. Def; the latter three retain 1.5x move power. All moves have 1.1x accuracy.",
     "shortDesc": "Stalwart + Guardian Presence; field bonuses and Electric absorption; 10% accuracy."
   }
 });
@@ -159,3 +219,12 @@ Object.assign(November16BalanceDescriptions, {
     "shortDesc": "Guts + Keen Eye + Solid Rock; Galvantula becomes Rejuv."
   }
 });
+
+import { rosterDescriptions } from './nov18-abilities';
+Object.assign(November16BalanceDescriptions, rosterDescriptions);
+November16BalanceDescriptions.verdanthospitality.name = 'Verdant Awakening';
+
+November16BalanceDescriptions.mightyjaw = {
+	shortDesc: '1.3x same-type power, 1.5x bite power, Intimidate. Opening bites gain +2 priority.',
+	desc: 'On entry, lowers adjacent foes’ Attack with Intimidate. Same-type attacks have 1.3x power and biting attacks have 1.5x power. Both apply to a same-type bite. Biting moves gain +2 priority on its first action after switching in.',
+};

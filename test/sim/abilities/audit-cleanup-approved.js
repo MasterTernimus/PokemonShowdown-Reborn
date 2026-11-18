@@ -85,9 +85,16 @@ describe('Approved audit cleanup', () => {
  it('Kick Fiend retains kicks and Limber without the opening burst',()=>{
   const[p,q]=setup('Kick Fiend');assert.equal(battle.runEvent('ModifyAtk',p,q,Dex.getActiveMove('tackle'),100),100);assert.equal(battle.runEvent('ModifySpe',p,null,null,100),100);assert(!p.trySetStatus('par',q));assert(power(p,q,'lowkick')>100);
  });
- it('Cruel Shell keeps local Shell Armor and never triggers Anger Shell',()=>{
-  const[p,q]=setup('Cruel Shell');p.hp=5001;move(q,p,'tackle');assert.equal(p.boosts.atk,0);assert.equal(p.boosts.spe,0);assert.equal(battle.runEvent('CriticalHit',p,q,Dex.getActiveMove('tackle')),false);
-  assert.deepEqual(getAbilityDisplayComponents('cruelshell'),['shellarmor']);
+ it('Cruel Shell raises Attack once per turn on damaging contact',()=>{
+		const[p,q]=setup('Cruel Shell');
+		p.hp=5001;
+		move(q,p,'tackle');
+		assert.equal(p.boosts.atk,1);
+		move(q,p,'tackle');
+		assert.equal(p.boosts.atk,1);
+		assert.equal(p.boosts.spe,0);
+		assert(!p.hasAbility('shellarmor'));
+  assert.deepEqual(getAbilityDisplayComponents('cruelshell'),[]);
  });
  it('Sweet Resonance retains entry evasion and Hydra Bond without item protection or Embargo',()=>{
   const[p,q]=setup('Sweet Resonance');assert.equal(q.boosts.evasion,-1);p.setItem('Leftovers');assert(p.takeItem(q));move(q,p,'tackle');assert(!q.volatiles.embargo);

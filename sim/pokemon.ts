@@ -1725,10 +1725,13 @@ export class Pokemon {
 	) {
 		const rawSpecies = this.battle.dex.species.get(speciesId);
 		const previousPassives = this.getPassives();
+		const fireBoost = isPermanent && rawSpecies.isMega && this.volatiles['flashfire'] &&
+			this.hasAbilityOrPassive(['flashfire', 'livinglegend', 'kindledfury']);
 		if (this.m.regionalFormSuppressed && source?.effectType === 'Ability' &&
 			ABILITY_REGIONAL_FORMS[source.id]?.[1] === rawSpecies.id) return false;
 		const species = this.setSpecies(rawSpecies, source);
 		if (!species) return false;
+		if (fireBoost) this.volatiles['flashfire'].retainedByMega = true;
 
 		if (this.battle.gen <= 2) return true;
 
@@ -2362,13 +2365,19 @@ export class Pokemon {
 		return (this.m.perfectIllusion && this.illusion ? this.illusion.species : this.species).passives;
 	}
 
+	getPassiveWithEffect(id: string) {
+		return this.getPassives().find(passive => passive === id || SignaturePassiveComponents[passive]?.includes(id));
+	}
+
 	/** Mechanical helper; selected ability identity remains separate from species traits. */
 	hasAbilityOrPassive(ability: string | string[]) {
 		const ids = (Array.isArray(ability) ? ability : [ability]).map(toID);
 		return ids.some(id => {
-			const passive = this.getPassives().find(p => p === id || SignaturePassiveComponents[p]?.includes(id));
+			const passive = this.getPassiveWithEffect(id);
 			if (!passive) return this.hasAbility(id);
-			const component = this.battle.dex.abilities.get(((['hydraflight', 'abyssalrebirth'].includes(passive) && id === 'levitate') || (passive === 'serratedscales' && id === 'limber') || (passive === 'absolutepressure' && ['innerfocus', 'insomnia'].includes(id))) ? id : passive);
+			const useComponent = id === 'levitate' || (passive === 'serratedscales' && id === 'limber') ||
+				(passive === 'absolutepressure' && ['innerfocus', 'insomnia'].includes(id));
+			const component = this.battle.dex.abilities.get(useComponent ? id : passive);
 			return !component.flags.breakable || !this.battle.suppressingAbility(this, component);
 		});
 	}
@@ -2627,8 +2636,8 @@ export class Pokemon {
 		if (item === 'ironball') return true;
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 		if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
-		if (this.getPassives().some(id => ['levitate', 'hydraflight', 'abyssalrebirth'].includes(id)) && this.hasAbilityOrPassive('levitate')) return null;
-		if (this.getPassives().some(id => id === 'elevate' || id === 'noseformation') && this.hasAbilityOrPassive('elevate')) return null;
+		if (this.getPassiveWithEffect('levitate') && this.hasAbilityOrPassive('levitate')) return null;
+		if (this.getPassiveWithEffect('elevate') && this.hasAbilityOrPassive('elevate')) return null;
 		if (!this.getAbilityComponentExclusions().includes('levitate') && this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'burningcrown', 'astralwitchcraft',
 			'voidcraft', 'phantombarrage', 'silentflight']) && !this.battle.suppressingAbility(this)) return null;
 		if ('magnetrise' in this.volatiles) return false;
@@ -2745,9 +2754,10 @@ export class Pokemon {
 			if (notImmune) continue;
 			if (!message) return false;
 			if (notImmune === null) {
-				if (this.getPassives().some(id => ['levitate', 'elevate', 'hydraflight', 'abyssalrebirth'].includes(id))) {
+				const airbornePassive = this.getPassiveWithEffect('levitate') || this.getPassiveWithEffect('elevate');
+				if (airbornePassive) {
 					if (this.illusion) this.battle.add('-immune', this);
-					else this.battle.add('-immune', this, `[from] passive: ${this.getPassives().includes('abyssalrebirth') ? 'Abyssal Rebirth' : this.getPassives().includes('hydraflight') ? 'Hydra Flight' : this.getPassives().includes('elevate') ? 'Elevate' : 'Levitate'}`);
+					else this.battle.add('-immune', this, `[from] passive: ${this.battle.dex.abilities.get(airbornePassive).name}`);
 				} else {
 					this.battle.add('-immune', this, '[from] ability: Levitate');
 				}

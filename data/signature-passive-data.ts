@@ -60,7 +60,10 @@ SignaturePassiveComponents.beguilingbouquet = ['aromaveil'];
 
 SignaturePassiveComponents.guidinggallop = ['pastelveil'];
 
-SignaturePassiveComponents.racingspirit = ['rockhead','limber'];
+SignaturePassiveComponents.racingspirit = ['rockhead', 'flashfire'];
+SignaturePassiveComponents.soulforgedarmor = ['flashfire'];
+SignaturePassiveComponents.soulsiphon = ['flashfire'];
+SignaturePassiveComponents.soulpyre = ['infiltrator'];
 
 SignaturePassiveComponents.tirelessmuscle = ['innerfocus'];
 
@@ -68,6 +71,7 @@ SignaturePassiveComponents.rimeboundspirit = ['heatproof'];
 
 SignaturePassiveComponents.hydraflight=['levitate','hydrabond'];
 SignaturePassiveComponents.abyssalrebirth = ['levitate', 'hydrabond'];
+for (const gift of ['giftofknowledge', 'giftofemotion', 'giftofwill']) SignaturePassiveComponents[gift] = ['levitate'];
 
 SignaturePassiveComponents.absolutepressure=['pressure','innerfocus','insomnia','moldbreaker'];
 
@@ -105,3 +109,5 @@ SignaturePassiveComponents.healingmirror = ['magicbounce', 'healer'];
 SignaturePassiveComponents.frameperfect = ['innerfocus'];
 
 SignaturePassiveComponents.malignantlight = ['illuminate'];
+
+SignaturePassiveComponents.doublestrike = ['skilllink', 'technician'];

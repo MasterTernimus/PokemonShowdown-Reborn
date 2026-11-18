@@ -297,12 +297,11 @@ export function applyRosterWave2(base: AbilityDataTable) {
 		});
 	}
 	add('heatreservoir', 'Heat Reservoir', {
-		...base.flashfire,
 		onTryBoost(boost, target, source, effect) {
-			if (target !== source || effect?.id !== 'armorcannon' || !target.volatiles['flashfire']) return;
-			if (boost.def && boost.def < 0) delete boost.def;
-			if (boost.spd && boost.spd < 0) delete boost.spd;
-			target.removeVolatile('flashfire');
+			if (target !== source || effect?.id !== 'armorcannon' || !boost.spd || boost.spd >= 0 ||
+				target.volatiles['heatreservoirspent']) return;
+			target.addVolatile('heatreservoirspent', target, this.effect);
+			delete boost.spd;
 			this.add('-activate', target, 'ability: Heat Reservoir');
 		},
 	});

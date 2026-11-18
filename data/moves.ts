@@ -703,7 +703,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						this.add('-immune', ally, '[from] ability: Good as Gold');
 						continue;
 					}
-					if (ally.volatiles['substitute'] && !move.infiltrates) continue;
+					if (ally.volatiles['substitute'] && !move.infiltrates && !move.flags.bypasssub) continue;
 				}
 				if (ally.cureStatus()) {
 					success = true;
@@ -4071,7 +4071,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 		onHit(target, source, move) {
 			let success = this.field.clearAura();
-			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({ evasion: -1 }) || success;
+			if (!target.volatiles['substitute'] || move.infiltrates || source.hasAbilityOrPassive('stalwart')) {
+				success = !!this.boost({ evasion: -1 }) || success;
+			}
 			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend'];
 			const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'arenitewall', 'atlantiswall', 'safeguard', 'mist', ...removeAll];
 			for (const targetCondition of removeTarget) {
@@ -7202,7 +7204,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	frostbreath: {
 		num: 524,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 60,
 		category: "Special",
 		name: "Frost Breath",
@@ -13345,7 +13347,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	metalsound: {
 		num: 319,
-		accuracy: 85,
+		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		name: "Metal Sound",
@@ -17602,7 +17604,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	rockslide: {
 		num: 157,
-		accuracy: 90,
+		accuracy: 95,
 		basePower: 75,
 		category: "Physical",
 		name: "Rock Slide",
@@ -18275,7 +18277,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	screech: {
 		num: 103,
-		accuracy: 85,
+		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		name: "Screech",
@@ -19806,7 +19808,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			noCopy: true,
 			onStart(pokemon) {
 				let applies = false;
-				if (pokemon.hasType('Flying') || pokemon.getPassives().some(id => id === 'levitate' || id === 'elevate') ||
+				if (pokemon.hasType('Flying') || pokemon.getPassiveWithEffect('levitate') || pokemon.getPassiveWithEffect('elevate') ||
 					pokemon.hasAbility(['levitate', 'elevate', 'silentflight'])) applies = true;
 				if (pokemon.hasItem('ironball') || pokemon.volatiles['ingrain'] ||
 					(this.field.getPseudoWeather('gravity') && !pokemon.hasGravityExemption())) applies = false;
@@ -20303,7 +20305,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onHit(pokemon, source, move) {
 				this.add('-activate', source, 'move: Aromatherapy');
 				for (const ally of source.side.pokemon) {
-					if (ally !== source && (ally.volatiles['substitute'] && !move.infiltrates)) {
+					if (ally !== source && ally.volatiles['substitute'] && !move.infiltrates && !move.flags.bypasssub) {
 						continue;
 					}
 					ally.cureStatus();

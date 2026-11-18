@@ -15,22 +15,41 @@ describe('Four approved Sovereign additions', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	it('preserves existing Sovereign weather and mitigation callbacks', () => {
 		const before = require('../../../artifacts/sovereign-before.json');
-		for (const [id, events] of Object.entries({ rainsovereign: Object.keys(before.rainsovereign).filter(k => k !== 'onResidual'), sandsovereign: ['onStart', 'onSourceModifyDamage'], frostsovereign: ['onStart', 'onWeather', 'onDamagingHit', 'onImmunity', 'onSourceModifyDamage'], sunsovereign: Object.keys(before.sunsovereign).filter(k => k !== 'onStart') })) for (const event of events)assert.equal(Dex.abilities.get(id)[event].toString(), before[id][event], id + '/' + event);
+		for (const [id, events] of Object.entries({ rainsovereign: Object.keys(before.rainsovereign).filter(k => k !== 'onResidual'), sandsovereign: ['onStart', 'onSourceModifyDamage'], frostsovereign: ['onStart', 'onWeather', 'onDamagingHit', 'onImmunity', 'onSourceModifyDamage'] })) for (const event of events)assert.equal(Dex.abilities.get(id)[event].toString(), before[id][event], id + '/' + event);
 	});
-	for (const species of ['Charizard-Mega-Y', 'Mew'])it('Sun Sovereign summons eight-turn sun without Intimidate with ' + species, () => {
+	for (const species of ['Charizard-Mega-Y', 'Mew'])it('Sun Sovereign summons Drought sun with Intimidate with ' + species, () => {
 		const [p, q] = setup(species, 'Sun Sovereign', true); const foe = battle.p2.active[1]; q.boosts.atk = foe.boosts.atk = 0; delete p.abilityState.intimidateActivated;
-		battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(q.boosts.atk, 0); assert.equal(foe.boosts.atk, 0); assert.equal(battle.field.weather, 'sunnyday'); assert.equal(battle.field.weatherState.duration, 8);
-		battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(q.boosts.atk, 0); hit(p, q, 'flamethrower', { damage: 100 }); assert(!q.volatiles.partiallytrapped);
+		battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(q.boosts.atk, -1); assert.equal(foe.boosts.atk, -1); assert.equal(battle.field.weather, 'sunnyday'); assert.equal(battle.field.weatherState.duration, 5);
+		battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(q.boosts.atk, -1); hit(p, q, 'flamethrower', { damage: 100 }); assert(!q.volatiles.partiallytrapped);
 	});
 	for (const protection of ['Inner Focus', 'Substitute', 'Gastro Acid'])it('Sun Sovereign Intimidate respects ' + protection, () => {
 		const [p, q] = setup('Charizard-Mega-Y', 'Sun Sovereign'); q.boosts.atk = 0; delete p.abilityState.intimidateActivated;
 		if (protection === 'Substitute')q.addVolatile('substitute'); else if (protection === 'Gastro Acid')p.addVolatile('gastroacid'); else q.setAbility(protection);
 		battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(q.boosts.atk, 0);
 	});
-	it('Sun retains full Unbound Blaze conversion, field defense and separate Proficient', () => {
-		const [p, q] = setup('Charizard-Mega-Y', 'Sun Sovereign'); assert.deepEqual(p.getPassives(), ['proficient']); assert(p.hasAbility('unboundblaze')); assert(!p.hasAbility('proficient')); assert(!p.hasAbility('moldbreaker'));
-		const move = Dex.getActiveMove('tackle'); battle.runEvent('ModifyType', p, q, move, move); assert.equal(move.type, 'Dragon');
-		battle.field.terrain = 'volcanicterrain'; p.boosts.def = p.boosts.spd = 0; battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(p.boosts.def, 1); assert.equal(p.boosts.spd, 1);
+	for (const terrain of ['volcanicterrain', 'dragonsdenterrain']) {
+		it('applies White Smoke once when Charizard Mega Evolves on ' + terrain, () => {
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+				{ species: 'Charizard', item: 'Charizardite Y', ability: 'Rivalry', moves: ['splash'] },
+			], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
+			battle.makeChoices('team 1', 'team 1');
+			const holder = battle.p1.active[0], foe = battle.p2.active[0];
+			battle.field.setTerrain(terrain, holder);
+			battle.makeChoices('move splash mega', 'move splash');
+			assert.equal(holder.species.id, 'charizardmegay');
+			assert(holder.hasAbility('whitesmoke'));
+			assert.equal(holder.boosts.atk, 1);
+			assert.equal(holder.boosts.spa, 1);
+			battle.boost({ atk: -1 }, holder, foe, Dex.moves.get('growl'));
+			assert.equal(holder.boosts.atk, 1);
+			battle.boost({ spa: -2 }, holder, holder, Dex.moves.get('overheat'));
+			assert.equal(holder.boosts.spa, -1);
+		});
+	}
+	it('Sun grants Infernal Dominion and keeps Proficient as its separate passive', () => {
+		const [p, q] = setup('Charizard-Mega-Y', 'Sun Sovereign'); assert.deepEqual(p.getPassives(), ['proficient']); assert(!p.hasAbility('unboundblaze')); assert(p.hasAbility('infernaldominion')); assert(!p.hasAbility('proficient')); assert(!p.hasAbility('moldbreaker'));
+		const move = Dex.getActiveMove('tackle'); battle.runEvent('ModifyType', p, q, move, move); assert.equal(move.type, 'Normal');
+		battle.field.terrain = 'volcanicterrain'; p.boosts.def = p.boosts.spd = 0; battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(p.boosts.def, 0); assert.equal(p.boosts.spd, 0); hit(p, q, 'flamethrower'); assert(p.volatiles.moltenguard);
 	});
 	for (const [species, ability] of [['Pidgeot', 'Updraft'], ['Pidgeot-Mega', 'Storm Sovereign']])it(ability + ' uses one entry budget across hits, ability changes and switching', () => {
 		const [p, q] = setup(species, ability, true), ally = battle.p1.active[1]; hit(p, q, 'airslash', { damage: 100, multihit: 3 }); assert.equal(ally.boosts.spe, 1); assert.equal(p.boosts.spe, 0);

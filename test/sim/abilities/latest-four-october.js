@@ -47,10 +47,22 @@ describe('Latest four approved base-form changes',()=>{
   const move=use(p,t,'dragondarts');assert.equal(move.category,category);assert.deepEqual(before,[true,true]);assert(!t.side.sideConditions[category==='Physical'?'reflect':'lightscreen']);assert(t.side.sideConditions[category==='Physical'?'lightscreen':'reflect']);assert(t.side.sideConditions.auroraveil);
   t.side.addSideCondition(category==='Physical'?'reflect':'lightscreen',t);p.setAbility('No Ability');p.setAbility('Dreepy Vanguard');use(p,t,'dragondarts');assert(t.side.sideConditions[category==='Physical'?'reflect':'lightscreen']);
  });
- it('Dreepy Vanguard excludes other moves, allies, immunity and Substitute-only damage',()=>{
+ it('Dreepy Vanguard excludes other moves, allies and immunities, then hits through Substitute with Stalwart',()=>{
   const[p,t]=setup('Dreepy Vanguard','doubles');t.side.addSideCondition('reflect',t);use(p,t);assert(!p.m.dreepyVanguardUsed);
-  t.setType('Fairy');use(p,t,'dragondarts',{smartTarget:false,multihit:1});assert(!p.m.dreepyVanguardUsed);t.setType('Normal');t.addVolatile('substitute');t.volatiles.substitute.hp=999;use(p,t,'dragondarts',{smartTarget:false});assert(!p.m.dreepyVanguardUsed);
-  use(p,p.side.active[1],'dragondarts',{smartTarget:false});assert(!p.m.dreepyVanguardUsed);assert(t.side.sideConditions.reflect);
+  t.setType('Fairy');
+  use(p, t, 'dragondarts', {smartTarget: false, multihit: 1});
+		assert(!p.m.dreepyVanguardUsed);
+		use(p, p.side.active[1], 'dragondarts', {smartTarget: false});
+		assert(!p.m.dreepyVanguardUsed);
+		assert(t.side.sideConditions.reflect);
+		t.setType('Normal');
+		t.addVolatile('substitute');
+		t.volatiles.substitute.hp = 999;
+		const hp = t.hp;
+		use(p, t, 'dragondarts', {smartTarget: false});
+		assert(t.hp < hp);
+		assert.equal(t.volatiles.substitute.hp, 999);
+		assert(p.m.dreepyVanguardUsed);
  });
  it('Dreepy Vanguard preserves Stalwart tracking and field boosts',()=>{const[p,t]=setup('Dreepy Vanguard');const m=battle.dex.getActiveMove('tackle');battle.runEvent('ModifyMove',p,t,m,m);assert(m.tracksTarget);battle.field.setTerrain('fairytaleterrain',p);const before=p.boosts.spa;battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.boosts.spa,before+1);});
  it('Dreepy Vanguard only clears FFA sides actually damaged',()=>{const[p,t]=setup('Dreepy Vanguard','ffa');p.storedStats.atk=200;p.storedStats.spa=100;for(const side of battle.sides.slice(1))side.addSideCondition('reflect',side.active[0]);use(p,t,'dragondarts');assert(!t.side.sideConditions.reflect);assert(battle.p3.sideConditions.reflect);assert(battle.p4.sideConditions.reflect);});

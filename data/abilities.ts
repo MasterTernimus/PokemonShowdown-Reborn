@@ -887,6 +887,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10390,
 	},
 	stormpower: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon, target, move) {
+			return this.dex.abilities.get('stormpower').onModifySpA?.call(this, atk, pokemon, target, move);
+		},
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
 			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
@@ -2011,6 +2015,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10393,
 	},
 	aevianbolt: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon, target, move) {
+			return this.dex.abilities.get('stormpower').onModifyAtk?.call(this, atk, pokemon, target, move);
+		},
 		onStart(pokemon) {
 			if (pokemon.species.id === 'druddigon' && !pokemon.abilityState.aevianBoltTransformed) {
 				pokemon.abilityState.aevianBoltTransformed = true;
@@ -2666,11 +2674,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHit(damage, target, source, move) {
 			if (skipPassiveComponent(this, this.effectState.target, 'aftermath')) return;
 			if (!target.hp && this.checkMoveMakesContact(move, source, target, true)) {
-				if (this.field.isTerrain('corrosivemistterrain')) {
-					this.damage(source.baseMaxhp / 2, source, target);
-				} else {
-					this.damage(source.baseMaxhp / 4, source, target);
-				}
+				const divisor = this.field.isTerrain('corrosivemistterrain') ? 2 : 4;
+				this.damage(source.baseMaxhp / divisor, source, target, this.dex.abilities.get('aftermath'));
 			}
 		},
 		flags: {},
@@ -4379,7 +4384,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.weatherState.source !== pokemon) return;
 			for (const target of this.getAllActive()) {
 				if (target === pokemon) continue;
-				if (target.hasAbility('deltastream')) {
+				if (target.hp && target.hasAbilityOrPassive('deltastream')) {
 					this.field.weatherState.source = target;
 					return;
 				}
@@ -4404,7 +4409,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.weatherState.source !== pokemon) return;
 			for (const target of this.getAllActive()) {
 				if (target === pokemon) continue;
-				if (target.hasAbility('desolateland')) {
+				if (target.hp && target.hasAbilityOrPassive('desolateland')) {
 					this.field.weatherState.source = target;
 					return;
 				}
@@ -8539,8 +8544,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
    if (this.field.isTerrain('infernaleclipseterrain')) {
     const hadCharge = Object.prototype.hasOwnProperty.call(pokemon.volatiles, 'flashfire');
     if (!hadCharge && pokemon.addVolatile('flashfire')) pokemon.volatiles.flashfire.infernalOnly = true;
-   } else if (pokemon.volatiles.flashfire?.infernalOnly) {
-    pokemon.removeVolatile('flashfire');
    }
   },
 		onTryHit(target, source, move) {
@@ -8559,23 +8562,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onEnd(pokemon) {
-			pokemon.removeVolatile('flashfire');
+			if (!pokemon.volatiles['flashfire']?.retainedByMega) pokemon.removeVolatile('flashfire');
 		},
 		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
+			onTerrainChange(pokemon) {
+				if (this.effectState.infernalOnly && !this.field.isTerrain('infernaleclipseterrain')) {
+					pokemon.removeVolatile('flashfire');
+				}
+			},
 			onStart(target) {
 				this.add('-start', target, 'ability: Flash Fire');
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, attacker, defender, move) {
-				if (move && this.movehasType(move, 'Fire') && attacker.hasAbility(['flashfire', 'livinglegend', 'kindledfury'])) {
+				if (move && this.movehasType(move, 'Fire') && (this.effectState.retainedByMega ||
+					attacker.hasAbilityOrPassive(['flashfire', 'livinglegend', 'kindledfury']))) {
 					this.debug('Flash Fire boost');
 					return this.chainModify(1.5);
 				}
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(atk, attacker, defender, move) {
-				if (move && this.movehasType(move, 'Fire') && attacker.hasAbility(['flashfire', 'livinglegend', 'kindledfury'])) {
+				if (move && this.movehasType(move, 'Fire') && (this.effectState.retainedByMega ||
+					attacker.hasAbilityOrPassive(['flashfire', 'livinglegend', 'kindledfury']))) {
 					this.debug('Flash Fire boost');
 					return this.chainModify(1.5);
 				}
@@ -13016,7 +13026,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.weatherState.source !== pokemon) return;
 			for (const target of this.getAllActive()) {
 				if (target === pokemon) continue;
-				if (target.hasAbility('primordialsea')) {
+				if (target.hp && target.hasAbilityOrPassive('primordialsea')) {
 					this.field.weatherState.source = target;
 					return;
 				}
@@ -16248,6 +16258,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (skipPassiveComponent(this, this.effectState.target, 'stalwart')) return;
 			// most of the implementation is in Battle#getTarget
 			move.tracksTarget = move.target !== 'scripted';
+			move.flags.bypasssub = 1;
 		},
 		flags: {},
 		name: "Stalwart",
@@ -21174,15 +21185,8 @@ for (const id of ['guidinggallop', 'pastelveil'] as const) {
  }
 }
 
-Abilities.racingspirit = {...Abilities.rockhead, ...Abilities.limber, name:'Racing Spirit', num:11519, rating:4, flags:{}};
-for (const [key, callback] of Object.entries(Abilities.limber)) {
- if (!key.startsWith('on') || typeof callback !== 'function') continue;
- (Abilities.racingspirit as any)[key] = function(this: Battle, ...args: any[]) {
-  const pokemon = this.effectState.target as Pokemon;
-  if (skipPassiveComponent(this, pokemon, 'racingspirit') || this.suppressingAbility(pokemon, this.dex.abilities.get('limber'))) return;
-  return (callback as Function).apply(this, args);
- };
-}
+Abilities.racingspirit = {name: 'Racing Spirit', num: 11519, rating: 4, flags: {}};
+composeSelectedAbility(Abilities, 'racingspirit', ['rockhead', 'flashfire'], true);
 
 import {installAlcremie} from './alcremie-approved';
 installAlcremie(Abilities);
@@ -21730,9 +21734,44 @@ Abilities.waterbarrage.onSourceModifyDamage = Abilities.shellarmor.onSourceModif
 Abilities.waterbarrage.onCriticalHit = Abilities.shellarmor.onCriticalHit;
 Abilities.waterbarrage.onAfterEachBoost = Abilities.shellarmor.onAfterEachBoost;
 
+composeSelectedAbility(Abilities, 'pollenbloom', ['thickfat', 'aromaveil']);
+for (const id of ['toxicbloom', 'ancientbloom'] as const) {
+	Abilities[id].onAllyTryAddVolatile = Abilities.aromaveil.onAllyTryAddVolatile;
+}
+composeSelectedAbility(Abilities, 'atrocity', ['unboundblaze', 'fireward'], true);
+Abilities.atrocity = { ...Abilities.atrocity, flags: {} };
+composeSelectedAbility(Abilities, 'sunsovereign', ['drought', 'infernaldominion', 'whitesmoke'], true);
+Abilities.sunsovereign = { ...Abilities.sunsovereign, flags: {} };
+
+Abilities.soulpyre.onModifyMove = Abilities.infiltrator.onModifyMove;
+
+Abilities.petalrhythm = {
+	name: 'Petal Rhythm', num: 32599, rating: 2, flags: {},
+	onAfterMove(pokemon, target, move) {
+		if (!move.flags.dance || !pokemon.moveThisTurnResult || pokemon.volatiles['petalrhythmspent']) return;
+		pokemon.addVolatile('petalrhythmspent', pokemon, this.effect);
+		this.heal(pokemon.baseMaxhp / 8, pokemon);
+	},
+};
+Abilities.splintershell = {
+	...Abilities.aftermath, name: 'Splinter Shell', num: 32600, rating: 3,
+	onCriticalHit: false,
+};
+Abilities.ballastplating = {
+	name: 'Ballast Plating', num: 32601, rating: 3, flags: {},
+	onBasePower(basePower, pokemon, target, move) {
+		if (['bodypress', 'heavyslam', 'gyroball'].includes(move.id)) return this.chainModify(1.2);
+	},
+};
+
 // Installers can supply legacy text; apply the approved descriptions after them.
 import {November16BalanceDescriptions} from './nov16-balance-descriptions';
 for (const [id, text] of Object.entries(November16BalanceDescriptions)) {
 	const ability = Abilities[id as ID];
 	if (ability) Object.assign(ability, text);
 }
+
+import { installRosterAbilities } from './nov18-abilities';
+import { revisedNames } from './nov18-roster';
+installRosterAbilities(Abilities);
+for (const [id, name] of Object.entries(revisedNames)) Object.assign(Abilities[id as ID], { id: id as ID, name });

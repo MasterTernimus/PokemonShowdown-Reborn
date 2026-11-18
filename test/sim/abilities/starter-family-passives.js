@@ -31,7 +31,7 @@ describe('Starter family passives', () => {
  });
  it('names Fire Mane and Sand Rush in their composite display', () => {
   const {getAbilityDisplayComponents} = require('../../../dist/data/ability-display');
-  assert.deepEqual(getAbilityDisplayComponents('blazingmane'), ['firemane']);
+  assert.deepEqual(getAbilityDisplayComponents('blazingmane'), ['flashfire']);
   assert.deepEqual(getAbilityDisplayComponents('cactuschorus'), ['waterabsorb','sandrush']);
  });
  it('covers the complete current final-starter inventory by original family, with no other grants', () => {

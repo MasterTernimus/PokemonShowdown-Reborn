@@ -42,7 +42,7 @@ describe('Lore partnership reworks', () => {
 			['flygon', '0', 'Mirage Drift', 'levitate'], ['flygon', 'H', 'Dune Caller', 'levitate'],
 			['krookodile', 'H', 'Dune Hunter', 'controlledfury'], ['dhelmise', '1', 'Blackwater Anchor', 'steelworker'],
 			['dragalge', '1', 'Blackwater Venom', 'liquidooze'], ['espeon', '1', 'Remembered Step', 'magicbounce'],
-			['arcanine', '0', 'Remembered Flame', 'guarddog'], ['lapras', 'H', 'Storm Memory', 'liquidvoice'],
+			['arcanine', '0', 'Remembered Flame', 'flashfire'], ['lapras', 'H', 'Storm Memory', 'liquidvoice'],
 			['swanna', '0', 'Jetstream Ballet', 'bigpecks'],
 		]) {
 			assert.equal(Dex.species.get(id).abilities[slot], ability);

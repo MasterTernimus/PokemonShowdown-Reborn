@@ -20,15 +20,15 @@ describe('Mega Typhlosion Corona Furnace', () => {
 		battle?.destroy();
 		battle = null;
 	});
-	it('keeps stats and Proficient while changing only Mega typing and selected ability', () => {
+	it('uses the 635 BST Mega spread with Plasma Eruption and Proficient', () => {
 		const s = Dex.species.get('typhlosionmega');
 		assert.deepEqual(s.types, ['Fire', 'Electric']);
 		assert.deepEqual(s.abilities, { 0: 'Plasma Eruption' });
-		assert.deepEqual(s.baseStats, { hp: 83, atk: 138, def: 85, spa: 139, spd: 70, spe: 130 });
+		assert.deepEqual(s.baseStats, { hp: 78, atk: 127, def: 78, spa: 137, spd: 85, spe: 130 });
 		assert.deepEqual(s.passives, ['proficient']);
 		for (const id of ['typhlosion', 'typhlosionalt', 'typhlosionhisui']) {
 			const mon = Dex.species.get(id);
-			assert.equal(mon.abilities[0], 'Blazing Mane');
+			assert.equal(mon.abilities[0], 'Plasma Awakening');
 			assert.deepEqual(mon.passives, ['blaze']);
 		}
 	});
@@ -135,7 +135,7 @@ describe('Mega Typhlosion Corona Furnace', () => {
 		assert.deepEqual(require('../../../dist/data/ability-components').AbilityComponents.coronafurnace, ['flamebody']);
 	});
 	for (const species of ['Typhlosion', 'Typhlosion-Alt', 'Typhlosion-Hisui']) it(species + ' Mega route reaches the same Plasma Eruption form', () => {
-		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[{ species, ability: 'Blazing Mane', item: 'Typhlosionite', moves: ['splash'] }], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[{ species, ability: 'Plasma Awakening', item: 'Typhlosionite', moves: ['splash'] }], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash mega', 'move splash');
 		const p = battle.p1.active[0];

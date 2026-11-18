@@ -28087,7 +28087,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			zenheadbutt: [],
 			aurasphere: ["9M"],
 			knockoff: ["9M"],
-			earthpower: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 70, moves: ["quickattack", "flamewheel", "swift", "flamethrower"], pokeball: "pokeball"},
@@ -112423,6 +112422,7 @@ for (const move of rebornFlowerMoves) {
 	if (!(Learnsets as any).florges.learnset[move]) (Learnsets as any).florges.learnset[move] = ['9L1'];
 }
 (Learnsets as any).ampharosaevian = {learnset: {
+	meteorbeam: ['9M'], slackoff: ['9L1'],
 	tackle: ['9L1'], snowscape: ['9L1'], thunderwave: ['9L1'], thundershock: ['9L1'], paraboliccharge: ['9L1'],
 	thunderpunch: ['9L1'], icywind: ['9L1'], cottonspore: ['9L1'], takedown: ['9L1'],
 	iceball: ['9L1'], confuseray: ['9L1'], powergem: ['9L1'], discharge: ['9L1'],
@@ -113171,6 +113171,10 @@ for (const species of DELUGE_TM_SPECIES) {
 }
 
 // Approved support coverage. Cosmetic forms inherit the same effective pools.
+Learnsets.audino.learnset!.psychup = ['9M'];
+for (const id of ['vaporeon', 'jolteon', 'flareon', 'espeon', 'umbreon', 'leafeon', 'glaceon'] as const) {
+	Learnsets[id].learnset!.playrough = ['9M'];
+}
 Learnsets.maractus.learnset!.rapidspin = ['9L1'];
 Learnsets.lumineon.learnset!.haze = ['9L1'];
 

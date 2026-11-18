@@ -45,12 +45,12 @@ describe('Approved healing, PP and Atrocity components', () => {
   const [p]=start(ability);battle.makeChoices('move splash','move knockoff');
   assert.equal(p.item,ability==='Withering Shell'?'leftovers':'');
  });
- it('Atrocity is grounded and keeps hidden move riders', () => {
+ it('Atrocity is grounded and keeps the normal Dragon Rush accuracy and crit ratio', () => {
   const [p]=start('Atrocity');assert.equal(p.isGrounded(),true);
   const m=battle.dex.getActiveMove('dragonrush');const initialCrit=m.critRatio;
-  p.getAbility().onModifyMove.call(battle,m,p,null);
-  assert.equal(m.accuracy,true);assert.equal(m.critRatio,initialCrit+1);
-  assert(p.getAbility().flags.cantsuppress);
+  battle.runEvent('ModifyMove',p,null,m,m);
+  assert.equal(m.accuracy,battle.dex.moves.get('dragonrush').accuracy);assert.equal(m.critRatio, initialCrit);
+  assert(!p.getAbility().flags.cantsuppress);
  });
  for(const field of ['', 'coldeclipseterrain','dragonsdenterrain']) it('Fire Ward defense factor on '+field,()=>{
   const [p]=start('Fire Ward');if(field)battle.field.setTerrain(field,p);

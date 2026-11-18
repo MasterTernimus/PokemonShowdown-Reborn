@@ -471,7 +471,7 @@ describe('Composite ability cleanup', function () {
 		battle.singleEvent('ModifyMove', pokemon.getAbility(), pokemon.abilityState, calderaMove, pokemon);
 		assert.equal(calderaMove.hasSheerForce, undefined);
 		assert(!pokemon.hasAbility('sheerforce'));
-		assert.deepEqual(battle.dex.species.get('Coalossal-Gmax').passives, ['flamebody']);
+		assert.deepEqual(battle.dex.species.get('Coalossal-Gmax').passives, ['flashfire']);
 	});
 
 	it('should keep active slots intact while Mega starters receive the Proficient passive', function () {

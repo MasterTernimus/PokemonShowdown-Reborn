@@ -10,6 +10,19 @@ describe('Storm Fright', () => {
 		battle = null;
 	});
 
+	for (const ability of ['Storm Power', 'Storm Fright', 'Aevian Bolt']) {
+		it(ability + ' boosts both offenses only in effective rain', () => {
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[{ species: 'Mew', ability, moves: ['splash'] }], [{ species: 'Mew', moves: ['splash'] }]]);
+			battle.makeChoices('team 1', 'team 1');
+			const p = battle.p1.active[0], foe = battle.p2.active[0];
+			for (const [weather, expected] of [['', 100], ['raindance', 150], ['primordialsea', 150], ['sunnyday', 100]]) {
+				battle.field.weather = weather;
+				for (const event of ['ModifyAtk', 'ModifySpA']) {
+					assert.equal(battle.runEvent(event, p, foe, battle.dex.getActiveMove('tackle'), 100), expected);
+				}
+			}
+		});
+	}
 	it('gives Mega Manectric passive Intimidate alongside Storm Power and Lightning Rod', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Manectric', item: 'Manectite', moves: ['splash', 'bite']},

@@ -366,11 +366,11 @@ describe('Approved signature batch', () => {
 		use(target, source, 'tackle', { basePower: 30 });
 		assert.equal(damages[4], damages[0]);
 	});
-	it('Atrocity omits Tough Claws and Levitate and preserves the 654 BST', () => {
+	it('Atrocity omits Tough Claws and Levitate and preserves the 635 BST', () => {
 		const [source, target] = start('Atrocity', 'No Ability', 'Charizard-Mega-X');
 		for (const id of ['charizardmegax', 'charizardmegaxalt']) {
-			assert.deepEqual(Dex.species.get(id).baseStats, { hp: 78, atk: 130, def: 110, spa: 125, spd: 106, spe: 105 });
-			assert.equal(Dex.species.get(id).bst, 654);
+			assert.deepEqual(Dex.species.get(id).baseStats, { hp: 78, atk: 130, def: 111, spa: 131, spd: 85, spe: 100 });
+			assert.equal(Dex.species.get(id).bst, 635);
 		}
 		assert(!source.hasAbility('levitate')); assert(!source.hasAbility('toughclaws')); assert(source.isGrounded());
 		assert(source.runImmunity('Ground'));

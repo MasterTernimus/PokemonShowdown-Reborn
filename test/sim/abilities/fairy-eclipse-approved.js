@@ -27,7 +27,7 @@ describe('Approved Eclipse and Shadow Tag numeric/passive changes',()=>{
 describe('Approved Mime family passive migration',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  for(const id of ['mrrime','mrmimegalar'])it(id+' gets one passive screen priority/heal with duplicate selected ability',()=>{const[p,q]=setup(id,'Mimecraft');const ally=p.side.active[1];ally.hp=100;const move=Dex.getActiveMove('reflect');assert.equal(battle.runEvent('ModifyPriority',p,q,move,0),1);use(p,p,'reflect');assert.equal(ally.hp,225);p.setAbility('No Ability');p.setAbility('Mimecraft');use(p,p,'lightscreen');assert.equal(ally.hp,225);});
- it('only the exact Galar slot changes; regular/Pulse and pending Rime slot stay',()=>{assert.equal(Dex.species.get('mrmimegalar').abilities[0],'Invisible Wall');assert.deepEqual(Dex.species.get('mrrime').abilities,{0:'Tap Tempo',1:'Curtain Call',H:'Stage Sweep'});assert.deepEqual(Dex.species.get('mrmime').abilities,{0:'Invisible Wall',1:'Silent Act',H:'Trick Performer'});assert.deepEqual(Dex.species.get('mrmimepulse').passives,[]);assert.deepEqual(Dex.species.get('mrrime').passives,['mimecraft']);});
+ it('only the exact Galar slot changes; regular/Pulse and pending Rime slot stay',()=>{assert.equal(Dex.species.get('mrmimegalar').abilities[0],'Invisible Wall');assert.deepEqual(Dex.species.get('mrrime').abilities,{0:'Tap Tempo',1:'Curtain Call',H:'Stage Sweep'});assert.deepEqual(Dex.species.get('mrmime').abilities,{0: 'Soundproof', 1: 'Technician', H: 'Filter'});assert.deepEqual(Dex.species.get('mrmimepulse').passives,[]);assert.deepEqual(Dex.species.get('mrrime').passives,['mimecraft']);});
 });
 
 describe('Approved paired Concord abilities',()=>{

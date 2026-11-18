@@ -19,8 +19,8 @@ describe('Feraligatr custom data', function () {
 		const feraligatr = battle.dex.species.get('Feraligatr');
 		const mega = battle.dex.species.get('Feraligatr-Mega');
 		const gmax = battle.dex.species.get('Feraligatr-Gmax');
-		assert.deepEqual(feraligatr.baseStats, {hp: 100, atk: 109, def: 100, spa: 59, spd: 93, spe: 78});
-		assert.deepEqual(mega.baseStats, {hp: 100, atk: 164, def: 125, spa: 59, spd: 108, spe: 83});
+		assert.deepEqual(feraligatr.baseStats, {hp: 100, atk: 109, def: 100, spa: 59, spd: 89, spe: 78});
+		assert.deepEqual(mega.baseStats, {hp: 100, atk: 164, def: 125, spa: 59, spd: 104, spe: 83});
 		assert.deepEqual(gmax.baseStats, {hp: 150, atk: 109, def: 100, spa: 59, spd: 93, spe: 78});
 		assert.equal(feraligatr.canGigantamax, 'G-Max Death Roll');
 		assert.equal(gmax.abilities[0], 'Tidal Jaw');

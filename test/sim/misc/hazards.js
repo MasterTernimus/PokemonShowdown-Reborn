@@ -25,7 +25,7 @@ describe('Hazards', function () {
 	it(`should damage multiple Pokemon switching in simulatenously by Speed order`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['stealthrock', 'sleeptalk']},
-			{species: 'kyogre', ability: 'drizzle', item: 'choicescarf', moves: ['sleeptalk']},
+			{species: 'mew', ability: 'drizzle', item: 'choicescarf', moves: ['sleeptalk']},
 		], [
 			{species: 'miltank', moves: ['stealthrock', 'finalgambit']},
 			{species: 'landorus-therian', ability: 'intimidate', moves: ['sleeptalk']},
@@ -34,13 +34,13 @@ describe('Hazards', function () {
 		battle.makeChoices('move sleeptalk', 'move finalgambit');
 		battle.makeChoices('switch 2', 'switch 2');
 		const log = battle.getDebugLog();
-		const rocksKyogreIndex = log.indexOf('|-damage|p1a: Kyogre|299/341|[from] Stealth Rock');
-		const abilityKyogreIndex = log.indexOf('ability: Drizzle|[of] p1a: Kyogre');
+		const rocksMewIndex = log.indexOf('|-damage|p1a: Mew|299/341|[from] Stealth Rock');
+		const abilityMewIndex = log.indexOf('ability: Drizzle|[of] p1a: Mew');
 		const rocksLandorusIndex = log.indexOf('|-damage|p2a: Landorus|280/319|[from] Stealth Rock');
 		const abilityLandorusIndex = log.indexOf('|-ability|p2a: Landorus|Intimidate');
 
-		assert(rocksKyogreIndex < abilityKyogreIndex, 'Stealth Rock should damage Kyogre before Drizzle activates.');
-		assert(abilityKyogreIndex < rocksLandorusIndex, 'Kyogre should activate Drizzle before Landorus takes rocks damage.');
+		assert(rocksMewIndex >= 0 && rocksMewIndex < abilityMewIndex, 'Stealth Rock should damage Mew before Drizzle activates.');
+		assert(abilityMewIndex < rocksLandorusIndex, 'Mew should activate Drizzle before Landorus takes rocks damage.');
 		assert(rocksLandorusIndex < abilityLandorusIndex, 'Stealth Rock should damage Landorus before Intimidate activates.');
 	});
 

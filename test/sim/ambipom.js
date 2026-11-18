@@ -15,7 +15,8 @@ describe('Ambipom custom data', function () {
 		assert.deepEqual(ambipom.types, ['Normal', 'Fighting']);
 		assert.deepEqual(ambipom.baseStats, {hp: 80, atk: 110, def: 70, spa: 100, spd: 70, spe: 120});
 		assert.equal(Object.values(ambipom.baseStats).reduce((sum, stat) => sum + stat, 0), 550);
-		assert.deepEqual(ambipom.abilities, { 0: 'Whiplash', 1: 'Double Strike', H: 'Scrappy' });
+		assert.deepEqual(ambipom.abilities, { 0: 'Whiplash', 1: 'Pickup', H: 'Scrappy' });
+		assert.deepEqual(ambipom.passives, ['doublestrike']);
 		for (const move of requestedMoves) {
 			assert(Dex.species.getFullLearnset('Ambipom').some(data => data.learnset[move]?.length), `Ambipom should learn ${move}`);
 		}

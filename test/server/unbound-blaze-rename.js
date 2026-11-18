@@ -21,8 +21,8 @@ describe('Blazing Monarch rename', function () {
   assert.equal(holders.length, 2);
   assert(!Dex.species.all().some(s => Object.values(s.abilities).includes('Wildfire Core')));
  });
- it('shows the new component in all three nested Charizard packages', () => {
-  for (const id of ['atrocity', 'sunsovereign', 'burningcrown']) {
+ it('shows the new component in the two nested Charizard packages', () => {
+  for (const id of ['atrocity', 'burningcrown']) {
    const ability = Dex.abilities.get(id);
    assert(getAbilityDisplayComponents(id).includes('unboundblaze'), id);
 			assert(!ability.shortDesc.includes('Wildfire Core'), id);

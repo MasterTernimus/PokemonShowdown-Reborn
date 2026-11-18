@@ -9,6 +9,30 @@ import {resolveForesight} from './foresight-memory';
 import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	...JackpotConditions,
+	aimassistlock: {
+		name: 'Aim Assist Lock', noCopy: true,
+		onStart(holder, target) {
+			this.effectState.expires = this.turn + 1;
+			this.add('-anim', holder, 'Lock-On', target);
+			this.add('-activate', holder, 'move: Lock-On', `[of] ${target}`);
+			this.add('-start', holder, 'Aim Assist Lock', '[silent]');
+		},
+		onResidualOrder: 29,
+		onResidual(holder) {
+			if (this.turn >= this.effectState.expires) holder.removeVolatile('aimassistlock');
+		},
+		onAnySwitchOut(pokemon) {
+			if (pokemon === this.effectState.source || pokemon === this.effectState.target) {
+				this.effectState.target.removeVolatile('aimassistlock');
+			}
+		},
+		onAnyFaint(pokemon) {
+			if (pokemon === this.effectState.source || pokemon === this.effectState.target) {
+				this.effectState.target.removeVolatile('aimassistlock');
+			}
+		},
+		onEnd(holder) { this.add('-end', holder, 'Aim Assist Lock', '[silent]'); },
+	},
  activenoguard: {
   name:'Active No Guard', noCopy:true,
   onStart(pokemon) { this.add('-start', pokemon, 'Active No Guard'); },
@@ -794,6 +818,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	anchoredbatteryspent: {name: 'anchoredbatteryspent', noCopy: true},
 	hivecourierspent: {name: 'hivecourierspent', noCopy: true},
 	deepchillturnspent: {name: 'deepchillturnspent', noCopy: true, duration: 1},
+	heatreservoirspent: { name: 'heatreservoirspent', noCopy: true },
+	petalrhythmspent: { name: 'petalrhythmspent', noCopy: true },
 	nobledancespent: {name: 'nobledancespent', noCopy: true},
 	nobledanceward: {
 		name: 'nobledanceward', noCopy: true, duration: 2,
@@ -1148,6 +1174,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (data.source.hasAbilityOrPassive('infiltrator') && this.gen >= 6) {
 				data.moveData.infiltrates = true;
 			}
+			if (this.gen >= 9 && data.source.hasAbilityOrPassive('stalwart')) {
+				data.moveData.flags = { ...data.moveData.flags, bypasssub: 1 };
+			}
 			if (data.source.hasAbility('normalize') && this.gen >= 6) {
 				data.moveData.type = 'Normal';
 			}
@@ -1498,7 +1527,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && !this.field.isTerrain('coldeclipseterrain') && pokemon.hasAbilityOrPassive(['monarchofice', 'mindfreeze', 'icebody', 'thickfat', 'execution', 'argentdevotion', 'unboundblaze', 'waterbarrage', 'atrocity', 'sunsovereign', 'siegelauncher', 'fortressshell']));
+			const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && !this.field.isTerrain('coldeclipseterrain') && pokemon.hasAbilityOrPassive(['monarchofice', 'mindfreeze', 'icebody', 'thickfat', 'execution', 'argentdevotion', 'unboundblaze', 'waterbarrage', 'atrocity', 'siegelauncher', 'fortressshell']));
 			if (iceBeneficiary && this.field.isWeather('hail')) {
 				if (this.field.isTerrain('snowymountainterrain')) {
 					return this.modify(def, 2.25);

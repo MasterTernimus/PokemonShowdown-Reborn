@@ -6,8 +6,8 @@ function start(mode='singles',ability='No Ability'){
 function hit(p,t,id='sludgebomb',extra={}){battle.clearActiveMove();const m=battle.dex.getActiveMove(id);Object.assign(m,{accuracy:true,willCrit:false,basePower:10,secondaries:null},extra);battle.actions.useMove(m,p,{target:t});battle.clearActiveMove();return m;}
 describe('Venusaur Creeping Bloom',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
-	it('keeps legacy Creeping Bloom mechanics while Venusaur selects Soothing Bouquet', () => {
-		assert.deepEqual(Dex.species.get('venusaur').abilities, { 0: 'Verdant Monarch', 1: 'Soothing Bouquet', H: 'Chlorophyll' });
+	it('keeps legacy Creeping Bloom mechanics while Venusaur selects Unaware', () => {
+		assert.deepEqual(Dex.species.get('venusaur').abilities, { 0: 'Verdant Monarch', 1: 'Unaware', H: 'Chlorophyll' });
 		const [p] = start();
 		assert(p.hasAbility('infiltrator'));
 		assert.equal(p.getAbility().onModifyMove, battle.dex.abilities.get('infiltrator').onModifyMove);

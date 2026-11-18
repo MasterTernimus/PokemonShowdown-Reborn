@@ -20,7 +20,7 @@ describe('Fire-only Fire Mane and simplified Blazing Mane', () => {
 		battle?.destroy();
 		battle = null;
 	});
-	for (const ability of ['Fire Mane', 'Blazing Mane']) {
+	for (const ability of ['Fire Mane']) {
 		it(ability + ' boosts non-STAB Fire exactly once and not non-Fire STAB', () => {
 			const [p, q] = start(ability);
 			assert.equal(power(p, q, 'flamethrower'), 150);
@@ -37,7 +37,7 @@ describe('Fire-only Fire Mane and simplified Blazing Mane', () => {
 		});
 	}
 	it('grants Fire priority only at or below one quarter HP and not to status/non-Fire moves', () => {
-		const [p, q] = start('Blazing Mane');
+		const [p, q] = start('Plasma Awakening');
 		p.maxhp = 400;
 		const priority = id => battle.runEvent('ModifyPriority', p, q, battle.dex.getActiveMove(id), 0);
 		p.hp = 101;
@@ -50,7 +50,7 @@ describe('Fire-only Fire Mane and simplified Blazing Mane', () => {
 		}
 	});
 	it('does not add another damaging hit or Proficient to a real attack', () => {
-		const [p, q] = start('Blazing Mane');
+		const [p, q] = start('Plasma Awakening');
 		battle.randomChance = (n, d) => n >= d;
 		let hits = 0;
 		battle.onEvent('DamagingHit', battle.format, (damage, target, source, move) => {
@@ -61,7 +61,7 @@ describe('Fire-only Fire Mane and simplified Blazing Mane', () => {
 		assert.equal(hits, 1);
 		assert(!battle.log.slice(before).some(line => line.includes('|-hitcount|')));
 		assert(!p.hasAbilityOrPassive('proficient'));
-		assert.deepEqual(require('../../../dist/data/ability-components').AbilityComponents.blazingmane, ['firemane']);
+		assert.deepEqual(require('../../../dist/data/ability-components').AbilityComponents.blazingmane, ['flashfire']);
 		assert(q.hp < q.maxhp);
 	});
 	it('uses effective Weather Ball typing in the complete move path', () => {
@@ -75,7 +75,7 @@ describe('Fire-only Fire Mane and simplified Blazing Mane', () => {
 		assert.deepEqual(seen, ['Fire']);
 	});
 	for (const field of ['burningterrain', 'volcanicterrain']) it('has no Speed boost on ' + field + ' start or entry', () => {
-		const [p] = start('Blazing Mane', 'Mew', true);
+		const [p] = start('Plasma Awakening', 'Mew', true);
 		battle.field.setTerrain(field, p);
 		assert.equal(p.boosts.spe, 0);
 		battle.makeChoices('switch 2', 'move splash');
@@ -84,7 +84,7 @@ describe('Fire-only Fire Mane and simplified Blazing Mane', () => {
 	it('preserves each actual selected-ability distribution', () => {
 		for (const id of ['rapidash', 'taurospaldeablaze', 'pyroar']) assert(Object.values(Dex.species.get(id).abilities).includes('Fire Mane'), id);
 		assert.equal(Dex.species.get('flareon').abilities[1], 'Flame Body');
-		for (const id of ['typhlosion', 'typhlosionalt', 'typhlosionhisui']) assert.equal(Dex.species.get(id).abilities[0], 'Blazing Mane');
+		for (const id of ['typhlosion', 'typhlosionalt', 'typhlosionhisui']) assert.equal(Dex.species.get(id).abilities[0], 'Plasma Awakening');
 	});
 });
 

@@ -63,7 +63,7 @@ describe('Field audit regressions', () => {
 			});
 		}
 	}
-	for (const id of ['magmaarmor', 'unboundblaze', 'burningspirit', 'blazingtempo', 'hisuianresolve', 'sunsovereign', 'burningcrown', 'calderacore', 'burningego']) {
+	for (const id of ['magmaarmor', 'unboundblaze', 'burningspirit', 'blazingtempo', 'hisuianresolve', 'burningcrown', 'calderacore', 'burningego']) {
 		it(`${id} describes Infernal entry defenses and Fire immunity without changing Cold freeze rules`, () => {
 			const description = Dex.abilities.get(id).desc;
 			assert.match(description, /Dragon(?:'s)? Den and Infernal Eclipse block Fire moves/);

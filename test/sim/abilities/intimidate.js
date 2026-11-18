@@ -80,14 +80,14 @@ describe('Intimidate', function () {
 		]]);
 		let intimidateCount = 0;
 		battle.onEvent('TryBoost', battle.format, (boost, target, source, effect) => {
-			// Guard Dog can independently boost Arcanine during Intimidate.
+			// Count only Attack changes from the two switch-in abilities.
 			if (effect?.id !== 'intimidate') return;
 			assert.species(source, intimidateCount === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
 		});
 		battle.makeChoices('default', 'default'); // Finish Team Preview, switch both Pokemon in
 		assert.equal(intimidateCount, 2);
-		assert.statStage(battle.p1.active[0], 'atk', 1);
+		assert.statStage(battle.p1.active[0], 'atk', -1);
 		assert.statStage(battle.p2.active[0], 'atk', -1);
 
 		// Do it again with the Pokemon in reverse order
@@ -99,7 +99,7 @@ describe('Intimidate', function () {
 		]]);
 		intimidateCount = 0;
 		battle.onEvent('TryBoost', battle.format, (boost, target, source, effect) => {
-			// Guard Dog can independently boost Arcanine during Intimidate.
+			// Count only Attack changes from the two switch-in abilities.
 			if (effect?.id !== 'intimidate') return;
 			assert.species(source, intimidateCount === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
@@ -107,7 +107,7 @@ describe('Intimidate', function () {
 		battle.makeChoices('default', 'default'); // Finish Team Preview, switch both Pokemon in
 		assert.equal(intimidateCount, 2);
 		assert.statStage(battle.p1.active[0], 'atk', -1);
-		assert.statStage(battle.p2.active[0], 'atk', 1);
+		assert.statStage(battle.p2.active[0], 'atk', -1);
 	});
 
 	it('should wait until all simultaneous switch ins after double-KOs have completed before activating', function () {
@@ -123,7 +123,7 @@ describe('Intimidate', function () {
 		const [p1active, p2active] = [battle.p1.active, battle.p2.active];
 		let intimidateCount = 0;
 		battle.onEvent('TryBoost', battle.format, (boost, target, source, effect) => {
-			// Guard Dog can independently boost Arcanine during Intimidate.
+			// Count only Attack changes from the two switch-in abilities.
 			if (effect?.id !== 'intimidate') return;
 			assert.species(source, intimidateCount % 2 === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
@@ -135,13 +135,13 @@ describe('Intimidate', function () {
 		battle.makeChoices('switch arcanine', 'switch gyarados');
 		// Both Pokemon switched in at the same time
 		assert.equal(intimidateCount, 2);
-		assert.statStage(p1active[0], 'atk', 1);
+		assert.statStage(p1active[0], 'atk', -1);
 		assert.statStage(p2active[0], 'atk', -1);
 		// Do it again with the Pokemon in reverse order
 		battle.makeChoices('move healingwish', 'move healingwish');
 		battle.makeChoices('switch gyarados', 'switch arcanine');
 		assert.equal(intimidateCount, 4);
 		assert.statStage(p1active[0], 'atk', -1);
-		assert.statStage(p2active[0], 'atk', 1);
+		assert.statStage(p2active[0], 'atk', -1);
 	});
 });
