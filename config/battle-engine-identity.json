@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "fb92687d89537971fccebb7b2e91e7b9736be200ae590d0e5cf2bf748d715e3c",
-  "packageManifestSHA256": "d6447a68c83e1a14effe44e2ba8abf5907c3847fcb08da117b8634131e9e037f",
-  "mechanicsSHA256": "845c1a33b02b2f57ddb931cca997ecad9fd2b9d39c32cd89c9aba36f96a8c778",
+  "packageEngineRevision": "ddd43a678f7254ca69a98e4b7f1f22e17ef9e4e08ec8446523ac3be82ebdb900",
+  "packageManifestSHA256": "03ad2f92e2af1314e19ab72faf55793164487e84c8dbdf42d019eb12b69b6498",
+  "mechanicsSHA256": "b69b9827495e5ea08691ac67604145ce3494b7f44388e0e3999c1c8244ddaf54",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -635,7 +635,7 @@
     },
     {
       "file": "dist/data/moves.js",
-      "sha256": "9f3aa749629840ff085ff212cb347b7533d077fa08cf8492922458e8db9c7ea1"
+      "sha256": "66da2c2c898c37e9337eb3330b076b9636cbd549869d698494cd61e8db1e928b"
     },
     {
       "file": "dist/data/natdex-gen8-gen9-learnsets.js",
@@ -983,7 +983,7 @@
     },
     {
       "file": "dist/data/text/moves.js",
-      "sha256": "e51ecbd14827db109c33485d1535525d0b3b8867a21d2daa401d6c923088bffd"
+      "sha256": "6736bcee081e3cd67e64f2d9007e6fe7d12f7708c693c64c46c4dd6b7de3cf2e"
     },
     {
       "file": "dist/data/text/pokedex.js",

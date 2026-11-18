@@ -17,7 +17,7 @@ describe('Character move field previews', () => {
 			execFileSync(process.execPath, [path.resolve(__dirname, '../../tools/export-client-field-rules.cjs'), root]);
 			const text = fs.readFileSync(path.join(src, 'battle-field-rules.ts'), 'utf8');
 			const moveRules = text.match(/const BattleFieldMoveRules = ([\s\S]*?);\nconst BattleAuraRules/);
-			assert.ok(moveRules, 'Generated move preview rules');
+			assert(moveRules, 'Generated move preview rules');
 			const rules = vm.runInNewContext('(' + moveRules[1] + ')', {
 				import_adaptive_cycle: { adaptiveFieldMultiplier: (battle, source, target, factor) => factor },
 			});

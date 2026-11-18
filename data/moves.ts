@@ -3022,7 +3022,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		secondary: {
 			// Sheer Force negates the selfBoost even though it is not secondary
 		},
-		target: "allAdjacentFoes",
+		target: "adjacentFoe",
 		type: "Dragon",
 		contestType: "Cool",
 	},
@@ -5101,7 +5101,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
 		secondary: {
-			chance: 100,
+			chance: 50,
 			volatileStatus: 'confusion',
 		},
 		target: "normal",
@@ -24715,7 +24715,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
 		secondary: {
-			chance: 100,
+			chance: 50,
 			status: 'par',
 		},
 		target: "normal",

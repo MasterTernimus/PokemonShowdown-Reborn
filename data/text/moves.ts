@@ -992,8 +992,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	clangoroussoulblaze: {
 		name: "Clangorous Soulblaze",
-		desc: "Raises the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
-		shortDesc: "Raises the user's Atk/Def/SpAtk/SpDef/Spe by 1.",
+		desc: "Hits one adjacent foe and raises the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
+		shortDesc: "Hits one foe. Raises the user's Atk/Def/SpA/SpD/Spe by 1.",
 	},
 	clearsmog: {
 		name: "Clear Smog",
@@ -1700,8 +1700,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dynamicpunch: {
 		name: "Dynamic Punch",
-		desc: "Has a 100% chance to confuse the target.",
-		shortDesc: "100% chance to confuse the target.",
+		desc: "A hit has a 50% chance to confuse the target.",
+		shortDesc: "50% chance to confuse the target.",
 	},
 	earthpower: {
 		name: "Earth Power",
@@ -7770,8 +7770,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	zapcannon: {
 		name: "Zap Cannon",
-		desc: "Has a 100% chance to paralyze the target.",
-		shortDesc: "100% chance to paralyze the target.",
+		desc: "A hit has a 50% chance to paralyze the target.",
+		shortDesc: "50% chance to paralyze the target.",
 	},
 	zenheadbutt: {
 		name: "Zen Headbutt",
