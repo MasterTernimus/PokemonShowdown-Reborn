@@ -352,6 +352,7 @@ interface MoveHitData {
 		staminaTriggered?: boolean,
 		ultraEgoTriggered?: boolean,
 		attackerGuaranteedHit?: boolean,
+		poisonedBeforeHit?: boolean,
 	};
 }
 

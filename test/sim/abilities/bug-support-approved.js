@@ -1,7 +1,7 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const { Dex } = require('../../../dist/sim');
+const { Battle, Dex } = require('../../../dist/sim');
 let battle;
 function setup(species, ability, mode = 'doubles') {
 	const mon = (species = 'Mew', ability = 'No Ability') => ({ species, ability, moves: ['splash', 'uturn', 'pollenpuff', 'toxic'] });
@@ -95,6 +95,29 @@ describe('Approved Beedrill and Butterfree support changes', () => {
 		p.hp = 4000;
 		use('tackle', p, t);
 		assert.equal(p.hp, 5000);
+	});
+	it('preserves Toxic Evolution healing through a saved doubles battle', () => {
+		const [holder, poisoned] = setup('Butterfree-Mega', 'Toxic Evolution');
+		holder.hp = 4000;
+		poisoned.setStatus('psn', poisoned);
+		use('bulletseed', holder, poisoned);
+		assert.equal(holder.hp, 5000);
+		const restored = Battle.fromJSON(JSON.parse(JSON.stringify(battle.toJSON())));
+		try {
+			const user = restored.p1.active[0];
+			const [target, healthy] = restored.p2.active;
+			restored.actions.useMove('tackle', user, { target });
+			assert.equal(user.hp, 5000, 'a restored battle retains its once-per-turn healing limit');
+			restored.fieldEvent('Residual');
+			restored.actions.useMove('tackle', user, { target: healthy });
+			assert.equal(user.hp, 5000, 'another target cannot inherit the prior poison snapshot');
+			target.hp = 1;
+			restored.actions.useMove('swift', user, { target });
+			assert.equal(target.hp, 0);
+			assert.equal(user.hp, 6000, 'a spread attack can heal once after knocking out a poisoned foe');
+		} finally {
+			restored.destroy();
+		}
 	});
 	it('Toxic Evolution shares its infliction/damage cap and has no contact retaliation', () => {
 		const [p, t] = setup('Butterfree-Mega', 'Toxic Evolution');

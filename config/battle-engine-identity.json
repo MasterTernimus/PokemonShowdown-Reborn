@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "6307c300d93f98abd86bea9bfe8cc8c5a1bf75ed2e2c7100baa8235b033b2797",
-  "packageManifestSHA256": "4665c8cdce1bc9d0dea1c454f092861b981398eaa205235d61ee76b95b2a439c",
-  "mechanicsSHA256": "6456c6bd92081f374d4dd0d3fe130c15d131dc37c7dbb70a3ac204ed4a2a918c",
+  "packageEngineRevision": "50d4172567fa743d218dd124f7274cd69d6d7999e47c55882e1ddb0bf0ace101",
+  "packageManifestSHA256": "79956f17e321e4a204a1385ee7043015f270da4929283c40ab0bc07ed3da5bdb",
+  "mechanicsSHA256": "becf82bd12f9262f090a9d81960391101c542b4eafcc482149b6893b0f32014e",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,7 +11,7 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "c2dffab1906853c08ae4c5d3c0850794db7d3d11ee2680a4e9a13fdc21809840"
+      "sha256": "68c551211d0b54d7846b62481e59f8f6657dde6f252ee186824b39c73789179b"
     },
     {
       "file": "dist/data/ability-components.js",

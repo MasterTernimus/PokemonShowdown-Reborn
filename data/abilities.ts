@@ -5449,15 +5449,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 
 
 		onSourceTryPrimaryHit(target, source, move) {
-			this.effectState.poisonedBeforeHit ||= new WeakMap();
-			let targets = this.effectState.poisonedBeforeHit.get(move);
-			if (!targets) this.effectState.poisonedBeforeHit.set(move, targets = new Set());
-			if (['psn', 'tox'].includes(target.status)) targets.add(target);
-			else targets.delete(target);
+			target.getMoveHitData(move).poisonedBeforeHit = ['psn', 'tox'].includes(target.status);
 		},
 		onSourceDamagingHit(damage, target, source, move) {
 			if (damage <= 0 || move.category === 'Status' || target.isAlly(source) || !source.hp ||
-				!this.effectState.poisonedBeforeHit?.get(move)?.has(target) || source.volatiles['toxicevolutionhealed']) return;
+				!target.getMoveHitData(move).poisonedBeforeHit || source.volatiles['toxicevolutionhealed']) return;
 			source.addVolatile('toxicevolutionhealed', source, this.effect);
 			this.heal(source.baseMaxhp / 8, source, source, this.effect);
 		},
