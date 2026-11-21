@@ -1,4 +1,4 @@
-import {disconnectBattleEngineGuard} from './battle-engine-guard';
+import { disconnectBattleEngineGuard } from './battle-engine-guard';
 /**
  * Users
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -292,7 +292,7 @@ export class Connection {
 		this.onDisconnect();
 	}
 	onDisconnect() {
-  disconnectBattleEngineGuard(this);
+		disconnectBattleEngineGuard(this);
 		connections.delete(this.id);
 		if (this.user) this.user.onDisconnect(this);
 		this.user = null!;

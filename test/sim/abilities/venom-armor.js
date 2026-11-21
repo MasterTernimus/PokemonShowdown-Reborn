@@ -5,15 +5,15 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Venom Armor', function () {
-	afterEach(function () {
+describe('Venom Armor', () => {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
-	it('self-poisons and keeps passive poison recovery alongside Dual Wield and Run Away', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Zangoose', ability: 'Venom Armor', moves: ['Metal Claw']}],
-			[{species: 'Magikarp', moves: ['Splash']}],
+	it('self-poisons and keeps passive poison recovery alongside Dual Wield and Run Away', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Zangoose', ability: 'Venom Armor', moves: ['Metal Claw'] }],
+			[{ species: 'Magikarp', moves: ['Splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const zangoose = battle.p1.active[0];
@@ -26,5 +26,4 @@ describe('Venom Armor', function () {
 		assert.equal(zangoose.hp, before + Math.floor(zangoose.maxhp / 8));
 		assert(zangoose.hasAbility('dualwield'));
 	});
-
 });

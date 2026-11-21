@@ -4,9 +4,9 @@ describe('Rocky Field local Bulletproof coverage', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
 	function setup(field = true, ability = 'No Ability') {
-		battle = common.createBattle({formatid: field ? 'gen9rockyfield' : 'gen9nofieldsinglesgame'}, [
-			[{species: 'Blastoise', ability: 'Hydraulic Armor', moves: ['withdraw', 'protect', 'skullbash', 'splash']}],
-			[{species: 'Mew', ability, moves: ['watergun', 'splash']}],
+		battle = common.createBattle({ formatid: field ? 'gen9rockyfield' : 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Blastoise', ability: 'Hydraulic Armor', moves: ['withdraw', 'protect', 'skullbash', 'splash'] }],
+			[{ species: 'Mew', ability, moves: ['watergun', 'splash'] }],
 		]);
 		battle.makeChoices(); battle.randomChance = (n, d) => n >= d; battle.randomizer = n => n;
 		const p = battle.p1.active[0], q = battle.p2.active[0];
@@ -15,8 +15,8 @@ describe('Rocky Field local Bulletproof coverage', () => {
 	}
 	function hit(p, q, id, extra = {}) {
 		battle.clearActiveMove(); const m = battle.dex.getActiveMove(id);
-		Object.assign(m, {accuracy: true, willCrit: false}, extra);
-		battle.actions.useMove(m, p, {target:q}); battle.runEvent('AfterMove',p,q,battle.activeMove);
+		Object.assign(m, { accuracy: true, willCrit: false }, extra);
+		battle.actions.useMove(m, p, { target: q }); battle.runEvent('AfterMove', p, q, battle.activeMove);
 	}
 	for (const id of ['waterpulse', 'aurasphere', 'shadowball', 'hydropump', 'surf']) {
 		it('Rocky raised Defense matches local Bulletproof for ' + id, () => {

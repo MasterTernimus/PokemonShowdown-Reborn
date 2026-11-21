@@ -1,13 +1,16 @@
 'use strict';
 exports.passives = expected => {
 	for (const f of ['latest-passives-approved.json', 'settled-passives-approved.json'])
-		for (const [p, ids] of Object.entries(require('./' + f).groups)) for (const id of ids) expected[id] = [p];
+		for (const [p, ids] of Object.entries(require('./' + f).groups))
+			for (const id of ids) expected[id] = [p];
 	Object.assign(expected, require('./passive-revision-approved.json').overrides);
 	expected.grimer = ['liquidooze'];
 	expected.muk = ['liquidooze'];
 	Object.assign(expected, require('./mega-paused-explicit.json'));
-	for (const [id, passive] of Object.entries(require('./mega-approved-choices.json'))) expected[id] = [passive];
-	for (const [id, normal] of Object.entries(require('./mega-approved-variants.json'))) if (expected[normal]?.length) expected[id] = expected[normal];
+	for (const [id, passive] of Object.entries(require('./mega-approved-choices.json')))
+		expected[id] = [passive];
+	for (const [id, normal] of Object.entries(require('./mega-approved-variants.json')))
+		if (expected[normal]?.length) expected[id] = expected[normal];
 	for (const [id, p] of Object.entries(require('./gmax-approved.json').passives)) expected[id] = [p];
 	expected.gardevoir = ['breakingnews'];
 	expected.lapras = ['liquidvoice'];
@@ -15,119 +18,244 @@ exports.passives = expected => {
 	return expected;
 };
 exports.abilities = (id, expected) => {
- if(id==='seviper') expected.H="Venam's Kiss";
-	if (require('./gmax-approved.json').abilities[id]) return {...require('./gmax-approved.json').abilities[id]};
+	if (id === 'seviper') expected.H = "Venam's Kiss";
+	if (require('./gmax-approved.json').abilities[id])
+		return { ...require('./gmax-approved.json').abilities[id] };
 	if (id === 'mismagiusmega') expected[0] = 'Void Craft';
-	for (const [species, slot, , name] of require('./latest-passives-approved.json').slots) if (species === id) expected[slot] = name;
+	for (const [species, slot, , name] of require('./latest-passives-approved.json').slots)
+		if (species === id) expected[slot] = name;
 	if (id === 'venusaur') expected.S = 'Uproot';
 	if (id === 'lucariomegaz') expected[0] = 'Aura Precision';
-	const slots = {lucariomega: ['0', 'Aura Convergence'], kangaskhan: ['1', 'Healer'], froslass: ['0', 'Haunting Veil'], salamencemega: ['0', 'Crescent Rend'], gengarmega: ['0', 'Shadow Double'], scovillainmega: ['0', 'Crossfire']};
+	const slots = {
+		lucariomega: ['0', 'Aura Convergence'],
+		kangaskhan: ['1', 'Healer'],
+		froslass: ['0', 'Haunting Veil'],
+		salamencemega: ['0', 'Crescent Rend'],
+		gengarmega: ['0', 'Shadow Double'],
+		scovillainmega: ['0', 'Crossfire'],
+	};
 	if (slots[id]) expected[slots[id][0]] = slots[id][1];
 	return expected;
 };
 
-const megaExpected = Object.fromEntries(require('./mega-approved-before.json').map(s => [s.id, s.passives]));
+const megaExpected = Object.fromEntries(
+	require('./mega-approved-before.json').map(s => [s.id, s.passives])
+);
 Object.assign(megaExpected, require('./mega-paused-explicit.json'));
-for (const [id, passive] of Object.entries(require('./mega-approved-choices.json'))) megaExpected[id] = [passive];
-for (const [id, normal] of Object.entries(require('./mega-approved-variants.json'))) if (megaExpected[normal]?.length) megaExpected[id] = megaExpected[normal];
+for (const [id, passive] of Object.entries(require('./mega-approved-choices.json')))
+	megaExpected[id] = [passive];
+for (const [id, normal] of Object.entries(require('./mega-approved-variants.json')))
+	if (megaExpected[normal]?.length) megaExpected[id] = megaExpected[normal];
 for (const [id, p] of Object.entries(require('./gmax-approved.json').passives)) megaExpected[id] = [p];
 megaExpected.gardevoir = ['breakingnews'];
 megaExpected.lapras = ['liquidvoice'];
 megaExpected.yanmega = ['levitate'];
-exports.current = (id, fallback) => ({dragonitemega: ['multiscale'], corviknight: ['mirrorarmor']}[id] || megaExpected[id] || fallback);
+exports.current = (id, fallback) =>
+	({ dragonitemega: ['multiscale'], corviknight: ['mirrorarmor'] })[id] ||
+	megaExpected[id] ||
+	fallback;
 
-const shortlist=require('./shortlist-approved.json');
-const previousPassives=exports.passives;
-exports.passives=expected=>Object.assign(previousPassives(expected),shortlist.passives);
-Object.assign(megaExpected,shortlist.passives);
-const previousAbilities=exports.abilities;
-exports.abilities=(id,expected)=>Object.assign(previousAbilities(id,expected),shortlist.slots[id]||{});
+const shortlist = require('./shortlist-approved.json');
+const previousPassives = exports.passives;
+exports.passives = expected => Object.assign(previousPassives(expected), shortlist.passives);
+Object.assign(megaExpected, shortlist.passives);
+const previousAbilities = exports.abilities;
+exports.abilities = (id, expected) =>
+	Object.assign(previousAbilities(id, expected), shortlist.slots[id] || {});
 
-const beforeSilvallyAbilities=exports.abilities;
-exports.abilities=(id,expected)=>{const result=beforeSilvallyAbilities(id,expected);if(id==='silvally')delete result.S;return result;};
+const beforeSilvallyAbilities = exports.abilities;
+exports.abilities = (id, expected) => {
+	const result = beforeSilvallyAbilities(id, expected);
+	if (id === 'silvally') delete result.S;
+	return result;
+};
 
 // Approved gym-signature migration removes only event slots with these exact old values.
-const migratedEventAbilities = new Set(["Multipulse","Aquabatics","Fever Pitch","Thunder Raid","Desert's Mark","Super U.M.D. Move","Gale Strike","Spectral Scream","Barbed Web","Cold Truth","Bunraku Beatdown","Matrix Shot","Pyrokinesis","Venam's Kiss","Heavenly Wing","Uproot"]);
+const migratedEventAbilities = new Set([
+	'Multipulse',
+	'Aquabatics',
+	'Fever Pitch',
+	'Thunder Raid',
+	"Desert's Mark",
+	'Super U.M.D. Move',
+	'Gale Strike',
+	'Spectral Scream',
+	'Barbed Web',
+	'Cold Truth',
+	'Bunraku Beatdown',
+	'Matrix Shot',
+	'Pyrokinesis',
+	"Venam's Kiss",
+	'Heavenly Wing',
+	'Uproot',
+]);
 const beforeRejuvMoveAbilities = exports.abilities;
 exports.abilities = (id, expected) => {
- const result = beforeRejuvMoveAbilities(id, expected);
- for (const slot of ['S', 'E']) if (migratedEventAbilities.has(result[slot])) delete result[slot];
- return result;
+	const result = beforeRejuvMoveAbilities(id, expected);
+	for (const slot of ['S', 'E']) if (migratedEventAbilities.has(result[slot])) delete result[slot];
+	return result;
 };
 
 // Explicit Kingambit migration: replace Entrenched, do not append another passive.
 const beforeKingambitPassives = exports.passives;
-exports.passives = expected => Object.assign(beforeKingambitPassives(expected), {kingambit: ['supremeoverlord']});
+exports.passives = expected =>
+	Object.assign(beforeKingambitPassives(expected), { kingambit: ['supremeoverlord'] });
 megaExpected.kingambit = ['supremeoverlord'];
 
 const beforeWrathPassives = exports.passives;
-exports.passives = expected => Object.assign(beforeWrathPassives(expected), {gyarados: ['intimidate'], honchkrow: ['stakeout']});
+exports.passives = expected =>
+	Object.assign(beforeWrathPassives(expected), { gyarados: ['intimidate'], honchkrow: ['stakeout'] });
 megaExpected.gyarados = ['intimidate'];
 megaExpected.honchkrow = ['stakeout'];
 const beforeOverqwilPassives = exports.passives;
-exports.passives = expected => Object.assign(beforeOverqwilPassives(expected), {overqwil: ['aftermath']});
+exports.passives = expected =>
+	Object.assign(beforeOverqwilPassives(expected), { overqwil: ['aftermath'] });
 megaExpected.overqwil = ['aftermath'];
 const beforeWrathAbilities = exports.abilities;
-exports.abilities = (id, expected) => Object.assign(beforeWrathAbilities(id, expected), id === 'gyarados' ? {0: 'Unbridled Wrath'} : {});
+exports.abilities = (id, expected) =>
+	Object.assign(beforeWrathAbilities(id, expected), id === 'gyarados' ? { 0: 'Unbridled Wrath' } : {});
 
 const beforeSwiftVenomAbilities = exports.abilities;
-exports.abilities = (id, expected) => Object.assign(beforeSwiftVenomAbilities(id, expected), id === 'overqwil' ? {1: 'Swift Venom'} : {});
+exports.abilities = (id, expected) =>
+	Object.assign(
+		beforeSwiftVenomAbilities(id, expected),
+		id === 'overqwil' ? { 1: 'Swift Venom' } : {}
+	);
 
 // Approved starter G-Max and Golisopod passive revisions.
-const octoberPassives = {"charizardgmax":["blaze"],"blastoisegmax":["torrent"],"venusaurgmax":["overgrow"],"cinderacegmax":["blaze"],"feraligatrgmax":["torrent"],"rillaboomgmax":["overgrow"],"inteleongmax":["torrent"],"golisopod":["toughclaws"]};
+const octoberPassives = {
+	charizardgmax: ['blaze'],
+	blastoisegmax: ['torrent'],
+	venusaurgmax: ['overgrow'],
+	cinderacegmax: ['blaze'],
+	feraligatrgmax: ['torrent'],
+	rillaboomgmax: ['overgrow'],
+	inteleongmax: ['torrent'],
+	golisopod: ['toughclaws'],
+};
 Object.assign(megaExpected, octoberPassives);
 const beforeOctoberPassives = exports.passives;
 exports.passives = expected => Object.assign(beforeOctoberPassives(expected), octoberPassives);
 // Approved Mudsdale and Rhydon ability/passive separation.
-Object.assign(megaExpected, {mudsdale: ['stamina'], rhydon: ['powerdrill']});
+Object.assign(megaExpected, { mudsdale: ['stamina'], rhydon: ['powerdrill'] });
 const beforeMudsdalePassives = exports.passives;
-exports.passives = expected => Object.assign(beforeMudsdalePassives(expected), {mudsdale: ['stamina'], rhydon: ['powerdrill']});
+exports.passives = expected =>
+	Object.assign(beforeMudsdalePassives(expected), { mudsdale: ['stamina'], rhydon: ['powerdrill'] });
 const beforeMudsdaleAbilities = exports.abilities;
-exports.abilities = (id, expected) => Object.assign(beforeMudsdaleAbilities(id, expected), {mudsdale: {0: 'Unyielding', 1: 'Battle Armor', H: 'Surefoot'}, rhydon: {0: 'Brute Force', 1: 'War Path', H: 'Lightning Rod'}}[id] || {});
+exports.abilities = (id, expected) =>
+	Object.assign(
+		beforeMudsdaleAbilities(id, expected),
+		{
+			mudsdale: { 0: 'Unyielding', 1: 'Battle Armor', H: 'Surefoot' },
+			rhydon: { 0: 'Brute Force', 1: 'War Path', H: 'Lightning Rod' },
+		}[id] || {}
+	);
 // Later approved signature slots and defensive passive corrections.
-Object.assign(megaExpected, {beartic: ['thickfat'], archaludon: ['stalwart']});
+Object.assign(megaExpected, { beartic: ['thickfat'], archaludon: ['stalwart'] });
 const beforeSignaturePassives = exports.passives;
-exports.passives = expected => Object.assign(beforeSignaturePassives(expected), {beartic: ['thickfat'], archaludon: ['stalwart']});
+exports.passives = expected =>
+	Object.assign(beforeSignaturePassives(expected), {
+		beartic: ['thickfat'],
+		archaludon: ['stalwart'],
+	});
 const beforeSignatureAbilities = exports.abilities;
-const signatureSlots = {skarmory: {H: 'Burning Quake'}, kingdra: {H: 'Storm Drain'}, gallade: {S: 'Ruptured Heaven'}, dusknoir: {H: 'Soul Reaver'}, escavalier: {S: 'Ruined Sky'}, talonflame: {S: 'Burning Quake'}, corviknight: {H: 'Steelwing Escort', S: 'Burning Quake'}, sirfetchd: {S: 'Ruined Sky'}, tinkaton: {1: 'Apocalyptic Flame'}};
-exports.abilities = (id, expected) => Object.assign(beforeSignatureAbilities(id, expected), signatureSlots[id] || {});
+const signatureSlots = {
+	skarmory: { H: 'Burning Quake' },
+	kingdra: { H: 'Storm Drain' },
+	gallade: { S: 'Ruptured Heaven' },
+	dusknoir: { H: 'Soul Reaver' },
+	escavalier: { S: 'Ruined Sky' },
+	talonflame: { S: 'Burning Quake' },
+	corviknight: { H: 'Steelwing Escort', S: 'Burning Quake' },
+	sirfetchd: { S: 'Ruined Sky' },
+	tinkaton: { 1: 'Apocalyptic Flame' },
+};
+exports.abilities = (id, expected) =>
+	Object.assign(beforeSignatureAbilities(id, expected), signatureSlots[id] || {});
 
-const beforeRoyalAegisAbilities=exports.abilities;
-exports.abilities=(id,expected)=>Object.assign(beforeRoyalAegisAbilities(id,expected),id==='nidoqueen'?{H:'Royal Aegis'}:{});
+const beforeRoyalAegisAbilities = exports.abilities;
+exports.abilities = (id, expected) =>
+	Object.assign(
+		beforeRoyalAegisAbilities(id, expected),
+		id === 'nidoqueen' ? { H: 'Royal Aegis' } : {}
+	);
 
-const beforeSilentEchoAbilities=exports.abilities;
-exports.abilities=(id,expected)=>Object.assign(beforeSilentEchoAbilities(id,expected),{gliscor:{1:'Silent Hunter'},gliscoralt:{1:'Silent Hunter'},froslassaevian:{1:'Dissonant Echo'}}[id]||{});
+const beforeSilentEchoAbilities = exports.abilities;
+exports.abilities = (id, expected) =>
+	Object.assign(
+		beforeSilentEchoAbilities(id, expected),
+		{
+			gliscor: { 1: 'Silent Hunter' },
+			gliscoralt: { 1: 'Silent Hunter' },
+			froslassaevian: { 1: 'Dissonant Echo' },
+		}[id] || {}
+	);
 
 // Explicit approved revisions reconciled with their original evidence; no baseline regeneration.
-const starterFinish=require('./starter-finish-reviewed.json');
-Object.assign(megaExpected,starterFinish.passives);
-const beforeStarterFinishAbilities=exports.abilities;
-exports.abilities=(id,expected)=>Object.assign(beforeStarterFinishAbilities(id,expected),starterFinish.slots[id]||{});
+const starterFinish = require('./starter-finish-reviewed.json');
+Object.assign(megaExpected, starterFinish.passives);
+const beforeStarterFinishAbilities = exports.abilities;
+exports.abilities = (id, expected) =>
+	Object.assign(beforeStarterFinishAbilities(id, expected), starterFinish.slots[id] || {});
 
 // Recorded roster revisions, shared by historical scope snapshots. Values are
 // fixed expectations from the approved roster, not read from the runtime Dex.
 megaExpected.mightyenagrim = ['rattled'];
 const reviewedStats = {
- mewtwomegax: [106,195,130,99,100,150],
- mewtwomegay: [106,90,100,199,130,155],
- probopass: [75,35,150,110,155,25],
- stunfisk:[109,66,99,95,109,32],stunfiskgalar:[109,95,109,66,99,32],
- kingdra: [85,105,90,105,90,95],
- mightyena: [90,115,80,75,80,110], mightyenadeso: [90,115,80,75,80,110], mightyenagrim: [90,115,80,75,80,110],
- mightyenamega: [90,140,105,85,100,130],
-	cinccinodeso: [75, 110, 85, 70, 85, 125], toxicroak: [83, 121, 70, 111, 70, 95], toxicroakdeso: [83, 121, 70, 111, 70, 95],
- sevipermega: [75,140,120,90,120,65], staraptor: [85,120,80,50,70,105], staraptormega: [85,140,110,60,100,115],
+	mewtwomegax: [106, 195, 130, 99, 100, 150],
+	mewtwomegay: [106, 90, 100, 199, 130, 155],
+	probopass: [75, 35, 150, 110, 155, 25],
+	stunfisk: [109, 66, 99, 95, 109, 32],
+	stunfiskgalar: [109, 95, 109, 66, 99, 32],
+	kingdra: [85, 105, 90, 105, 90, 95],
+	mightyena: [90, 115, 80, 75, 80, 110],
+	mightyenadeso: [90, 115, 80, 75, 80, 110],
+	mightyenagrim: [90, 115, 80, 75, 80, 110],
+	mightyenamega: [90, 140, 105, 85, 100, 130],
+	cinccinodeso: [75, 110, 85, 70, 85, 125],
+	toxicroak: [83, 121, 70, 111, 70, 95],
+	toxicroakdeso: [83, 121, 70, 111, 70, 95],
+	sevipermega: [75, 140, 120, 90, 120, 65],
+	staraptor: [85, 120, 80, 50, 70, 105],
+	staraptormega: [85, 140, 110, 60, 100, 115],
 };
-exports.stats = (id, fallback) => reviewedStats[id] ? Object.fromEntries(['hp','atk','def','spa','spd','spe'].map((key,i)=>[key,reviewedStats[id][i]])) : fallback;
-exports.types = (id, fallback) => ['typhlosion', 'typhlosionalt'].includes(id) ? ['Fire', 'Electric'] : id === 'arbokmegay' ? ['Poison'] : id === 'gorebyss' ? ['Water', 'Fairy'] : id === 'delcatty' ? ['Normal', 'Ghost'] : id === 'rampardos' ? ['Rock', 'Steel'] : fallback;
-exports.snapshot = old => ({id: old.id, abilities: exports.abilities(old.id, {...old.abilities}), passives: exports.current(old.id, old.passives), types: exports.types(old.id, old.types), stats: exports.stats(old.id, old.stats)});
+exports.stats = (id, fallback) =>
+	reviewedStats[id] ?
+		Object.fromEntries(
+			['hp', 'atk', 'def', 'spa', 'spd', 'spe'].map((key, i) => [key, reviewedStats[id][i]])
+		) :
+		fallback;
+exports.types = (id, fallback) =>
+	['typhlosion', 'typhlosionalt'].includes(id) ?
+		['Fire', 'Electric'] :
+		id === 'arbokmegay' ?
+			['Poison'] :
+			id === 'gorebyss' ?
+				['Water', 'Fairy'] :
+				id === 'delcatty' ?
+					['Normal', 'Ghost'] :
+					id === 'rampardos' ?
+						['Rock', 'Steel'] :
+						fallback;
+exports.snapshot = old => ({
+	id: old.id,
+	abilities: exports.abilities(old.id, { ...old.abilities }),
+	passives: exports.current(old.id, old.passives),
+	types: exports.types(old.id, old.types),
+	stats: exports.stats(old.id, old.stats),
+});
 
 // Approved Talonflame swap: one Gale Wings passive, selectable Flame Body.
 megaExpected.talonflame = ['galewings'];
 const beforeTalonflamePassives = exports.passives;
-exports.passives = expected => Object.assign(beforeTalonflamePassives(expected), {talonflame: ['galewings']});
+exports.passives = expected =>
+	Object.assign(beforeTalonflamePassives(expected), { talonflame: ['galewings'] });
 const beforeTalonflameAbilities = exports.abilities;
-exports.abilities = (id, expected) => Object.assign(beforeTalonflameAbilities(id, expected), id === 'talonflame' ? {H: 'Flame Body'} : {});
+exports.abilities = (id, expected) =>
+	Object.assign(
+		beforeTalonflameAbilities(id, expected),
+		id === 'talonflame' ? { H: 'Flame Body' } : {}
+	);
 
 const guardPassives = require('./guard-passives-approved.json');
 Object.assign(megaExpected, guardPassives);
@@ -135,97 +263,341 @@ const beforeGuardPassives = exports.passives;
 exports.passives = expected => Object.assign(beforeGuardPassives(expected), guardPassives);
 
 // Recorded Sandslash revision: artifacts/sandslash-rework/verified-final.json.
-const beforeClawAbilities=exports.abilities,beforeClawCurrent=exports.current,clawRevision=require('./sandslash-later-approval.json');
-exports.abilities=(id,fallback)=>clawRevision[id]?.abilities||beforeClawAbilities(id,fallback);
-exports.current=(id,fallback)=>clawRevision[id]?.passives||beforeClawCurrent(id,fallback);
+const beforeClawAbilities = exports.abilities,
+	beforeClawCurrent = exports.current,
+	clawRevision = require('./sandslash-later-approval.json');
+exports.abilities = (id, fallback) => clawRevision[id]?.abilities || beforeClawAbilities(id, fallback);
+exports.current = (id, fallback) => clawRevision[id]?.passives || beforeClawCurrent(id, fallback);
 
 // Recorded Eeveelution/Cloyster approval: artifacts/eeveelution-cloyster/verified-final.json.
-const beforeEeveeCurrent=exports.current;const eeveeCurrent={"jolteon":["voltabsorb"],"flareon":["flashfire"],"vaporeon":["waterabsorb"],"glaceon":["icebody"],"leafeon":["chlorophyll"],"espeon":["magicbounce"],"umbreon":["innerfocus"],"sylveon":["pixilate"],"cloyster":["waterabsorb"]};exports.current=(id,fallback)=>eeveeCurrent[id]||beforeEeveeCurrent(id,fallback);
+const beforeEeveeCurrent = exports.current;
+const eeveeCurrent = {
+	jolteon: ['voltabsorb'],
+	flareon: ['flashfire'],
+	vaporeon: ['waterabsorb'],
+	glaceon: ['icebody'],
+	leafeon: ['chlorophyll'],
+	espeon: ['magicbounce'],
+	umbreon: ['innerfocus'],
+	sylveon: ['pixilate'],
+	cloyster: ['waterabsorb'],
+};
+exports.current = (id, fallback) => eeveeCurrent[id] || beforeEeveeCurrent(id, fallback);
 
 // Recorded Grand Strategy approval: artifacts/grand-strategy/verified-final.json.
-const beforeGrandAbilities=exports.abilities,beforeGrandCurrent=exports.current;exports.abilities=(id,fallback)=>id==='rhydon'?{0:'Grand Strategy',1:'Lightning Rod',H:'Brute Force'}:beforeGrandAbilities(id,fallback);exports.current=(id,fallback)=>id==='rhydon'?['powerdrill']:beforeGrandCurrent(id,fallback);
+const beforeGrandAbilities = exports.abilities,
+	beforeGrandCurrent = exports.current;
+exports.abilities = (id, fallback) =>
+	id === 'rhydon' ?
+		{ 0: 'Grand Strategy', 1: 'Lightning Rod', H: 'Brute Force' } :
+		beforeGrandAbilities(id, fallback);
+exports.current = (id, fallback) =>
+	id === 'rhydon' ? ['powerdrill'] : beforeGrandCurrent(id, fallback);
 
 // Exact later approvals: Mewtwo, Hydreigon, Meloetta, legendary and Primordial checkpoints.
-const beforeLaterAbilities=exports.abilities,beforeLaterCurrent=exports.current,laterReviewed=require('./later-reviewed-rosters.json');exports.abilities=(id,fallback)=>laterReviewed[id]?.abilities||beforeLaterAbilities(id,fallback);exports.current=(id,fallback)=>laterReviewed[id]?.passives||beforeLaterCurrent(id,fallback);
+const beforeLaterAbilities = exports.abilities,
+	beforeLaterCurrent = exports.current,
+	laterReviewed = require('./later-reviewed-rosters.json');
+exports.abilities = (id, fallback) =>
+	laterReviewed[id]?.abilities || beforeLaterAbilities(id, fallback);
+exports.current = (id, fallback) => laterReviewed[id]?.passives || beforeLaterCurrent(id, fallback);
 
-const beforeMegaGyaradosRemoval=exports.current;exports.current=(id,original)=>id==='gyaradosmega'?['tempestfury']:beforeMegaGyaradosRemoval(id,original);
+const beforeMegaGyaradosRemoval = exports.current;
+exports.current = (id, original) =>
+	id === 'gyaradosmega' ? ['tempestfury'] : beforeMegaGyaradosRemoval(id, original);
 
-const beforeDrillAbilities=exports.abilities,beforeDrillCurrent=exports.current;exports.abilities=(id,fallback)=>{const slots=beforeDrillAbilities(id,fallback);return id==='fearow'?{...slots,0:'Power Drill'}:id==='beedrill'?{...slots,1:'Twin Drills'}:id==='rapidash'?{...slots,H:'Power Drill'}:slots;};exports.current=(id,fallback)=>['dudunsparce','dudunsparcethreesegment'].includes(id)?['powerdrill']:beforeDrillCurrent(id,fallback);
+const beforeDrillAbilities = exports.abilities,
+	beforeDrillCurrent = exports.current;
+exports.abilities = (id, fallback) => {
+	const slots = beforeDrillAbilities(id, fallback);
+	return id === 'fearow' ?
+		{ ...slots, 0: 'Power Drill' } :
+		id === 'beedrill' ?
+			{ ...slots, 1: 'Twin Drills' } :
+			id === 'rapidash' ?
+				{ ...slots, H: 'Power Drill' } :
+				slots;
+};
+exports.current = (id, fallback) =>
+	['dudunsparce', 'dudunsparcethreesegment'].includes(id) ?
+		['powerdrill'] :
+		beforeDrillCurrent(id, fallback);
 
-const beforePlainFilter=exports.abilities;exports.abilities=(id,original)=>id==='probopass'?{...beforePlainFilter(id,original),H:'Filter'}:beforePlainFilter(id,original);
+const beforePlainFilter = exports.abilities;
+exports.abilities = (id, original) =>
+	id === 'probopass' ?
+		{ ...beforePlainFilter(id, original), H: 'Filter' } :
+		beforePlainFilter(id, original);
 
-const beforeOrdinarySlots=exports.abilities;exports.abilities=(id,original)=>({...beforeOrdinarySlots(id,original),...{"ferrothorn":{"H":"Stamina"},"seismitoad":{"H":"Water Absorb"},"klefki":{"0":"Prankster"}}[id]});
+const beforeOrdinarySlots = exports.abilities;
+exports.abilities = (id, original) => ({
+	...beforeOrdinarySlots(id, original),
+	...{ ferrothorn: { H: 'Stamina' }, seismitoad: { H: 'Water Absorb' }, klefki: { 0: 'Prankster' } }[
+		id
+	],
+});
 
 // October 19 review supersedes older slots and passive assignments.
-const oct19=require('./oct19-reviewed-rosters.json');
-const beforeOct19Abilities=exports.abilities,beforeOct19Current=exports.current;
-exports.abilities=(id,fallback)=>({...beforeOct19Abilities(id,fallback),...oct19.abilities[id]});
-exports.current=(id,fallback)=>oct19.passives[id]||beforeOct19Current(id,fallback);
+const oct19 = require('./oct19-reviewed-rosters.json');
+const beforeOct19Abilities = exports.abilities,
+	beforeOct19Current = exports.current;
+exports.abilities = (id, fallback) => ({
+	...beforeOct19Abilities(id, fallback),
+	...oct19.abilities[id],
+});
+exports.current = (id, fallback) => oct19.passives[id] || beforeOct19Current(id, fallback);
 
 // Explicit October 22 approvals: regular Decidueye Silent Flight; Hisuian Canopy Performer.
 const beforeDecidueyeSlots = exports.abilities;
-exports.abilities = (id, fallback) => ({ ...beforeDecidueyeSlots(id, fallback), ...({ decidueye: { 1: 'Silent Flight' }, decidueyehisui: { H: 'Canopy Performer' } }[id] || {}) });
+exports.abilities = (id, fallback) => ({
+	...beforeDecidueyeSlots(id, fallback),
+	...({ decidueye: { 1: 'Silent Flight' }, decidueyehisui: { H: 'Canopy Performer' } }[id] || {}),
+});
 
-const beforeVileplumeEffectSpore = exports.current; exports.current = (id, fallback) => id === 'vileplume' ? ['effectspore'] : beforeVileplumeEffectSpore(id, fallback);
+const beforeVileplumeEffectSpore = exports.current;
+exports.current = (id, fallback) =>
+	id === 'vileplume' ? ['effectspore'] : beforeVileplumeEffectSpore(id, fallback);
 
 // Reviewed cosmetic equivalence and the explicit Klefki passive/slot request.
 const beforeCosmeticSlots = exports.abilities;
 const cosmeticSlots = {
 	decidueyealt: { 1: 'Silent Flight', H: 'Canopy Performer' },
 	decidueyehisuialt: { H: 'Canopy Performer' },
-	emboaralt: { 0: 'Controlled Fury' }, emboarreborn: { 0: 'Controlled Fury' }, grimmsnarlazzy: { 0: 'Guts' },
-	galladeazzy: { S: 'Ruptured Heaven' }, klefki: { 0: 'Adhesive Armor' },
+	emboaralt: { 0: 'Controlled Fury' },
+	emboarreborn: { 0: 'Controlled Fury' },
+	grimmsnarlazzy: { 0: 'Guts' },
+	galladeazzy: { S: 'Ruptured Heaven' },
+	klefki: { 0: 'Adhesive Armor' },
 };
 exports.abilities = (id, fallback) => ({ ...beforeCosmeticSlots(id, fallback), ...cosmeticSlots[id] });
 const beforeKlefkiCurrent = exports.current;
-exports.current = (id, fallback) => id === 'klefki' ? ['prankster'] : beforeKlefkiCurrent(id, fallback);
+exports.current = (id, fallback) =>
+	id === 'klefki' ? ['prankster'] : beforeKlefkiCurrent(id, fallback);
 const beforeKlefkiPassives = exports.passives;
 exports.passives = expected => Object.assign(beforeKlefkiPassives(expected), { klefki: ['prankster'] });
 
-{const prior={abilities:exports.abilities,passives:exports.passives};
-exports.abilities=(id,f)=>({...prior.abilities(id,f),...({crabominable:{H:'Controlled Fury'},primeape:{1:'Controlled Fury'}}[id]||{})});
-	exports.passives = expected => Object.assign(prior.passives(expected), { krookodile: ['controlledfury'], annihilape: ['controlledfury'] }); }
+{
+	const prior = { abilities: exports.abilities, passives: exports.passives };
+	exports.abilities = (id, f) => ({
+		...prior.abilities(id, f),
+		...({ crabominable: { H: 'Controlled Fury' }, primeape: { 1: 'Controlled Fury' } }[id] || {}),
+	});
+	exports.passives = expected =>
+		Object.assign(prior.passives(expected), {
+			krookodile: ['controlledfury'],
+			annihilape: ['controlledfury'],
+		});
+}
 
 // Explicit later Rivalry distributions and Dustox selected-slot approval.
-const newRivalryDistribution = Object.fromEntries(['luxray', 'beautifly', 'dustox', 'pyroar', 'unfezant', 'unfezantrejuv', 'haxorus', 'braviary', 'braviaryhisui', 'mandibuzz', 'scrafty', 'mightyena', 'mightyenagrim', 'mightyenadeso', 'delcatty'].map(id => [id, ['rivalry']]));
-const beforeNewRivalry = {current: exports.current, passives: exports.passives, abilities: exports.abilities, stats: exports.stats};
-exports.current = (id, fallback) => newRivalryDistribution[id] || beforeNewRivalry.current(id, fallback);
-exports.passives = expected => Object.assign(beforeNewRivalry.passives(expected), newRivalryDistribution);
-exports.abilities = (id, fallback) => ({...beforeNewRivalry.abilities(id, fallback), ...({dustox:{0:'Night Forager'},beautifly:{1:'Pastel Sanctuary'}}[id] || {})});
-exports.stats = (id, fallback) => id === 'beautifly' ? {hp:80, atk:50, def:85, spa:125, spd:75, spe:115} : beforeNewRivalry.stats(id, fallback);
+const newRivalryDistribution = Object.fromEntries(
+	[
+		'luxray',
+		'beautifly',
+		'dustox',
+		'pyroar',
+		'unfezant',
+		'unfezantrejuv',
+		'haxorus',
+		'braviary',
+		'braviaryhisui',
+		'mandibuzz',
+		'scrafty',
+		'mightyena',
+		'mightyenagrim',
+		'mightyenadeso',
+		'delcatty',
+	].map(id => [id, ['rivalry']])
+);
+const beforeNewRivalry = {
+	current: exports.current,
+	passives: exports.passives,
+	abilities: exports.abilities,
+	stats: exports.stats,
+};
+exports.current = (id, fallback) =>
+	newRivalryDistribution[id] || beforeNewRivalry.current(id, fallback);
+exports.passives = expected =>
+	Object.assign(beforeNewRivalry.passives(expected), newRivalryDistribution);
+exports.abilities = (id, fallback) => ({
+	...beforeNewRivalry.abilities(id, fallback),
+	...({ dustox: { 0: 'Night Forager' }, beautifly: { 1: 'Pastel Sanctuary' } }[id] || {}),
+});
+exports.stats = (id, fallback) =>
+	id === 'beautifly' ?
+		{ hp: 80, atk: 50, def: 85, spa: 125, spd: 75, spe: 115 } :
+		beforeNewRivalry.stats(id, fallback);
 
 // October revisions: fixed expectations for the newer roster packages.
 // Keep historical snapshots intact; these values are independent of runtime Dex.
-const october27Passives = {venomoth:['mothborn'],scyther:['steadfast'],gyarados:['tempestfury'],jumpluff:['cottondown'],sableye:['prankster'],hariyama:['thickfat'],garchomp:['serratedscales'],lucario:['mindseye'],mamoswine:['coldexpertise'],krookodile:['controlledfury'],ribombee:['sweetveil'],golisopodmega:['toughclaws'],annihilape:['controlledfury'],haxorusmega:['twinfang'],donphanrejuv:['heatproof'],breloomrejuv:['owntempo'],bronzongrejuv:['clearbody'],drapionrejuv:['stickyhold'],musharnarejuv:['synchronize'],sigilyphrejuv:['frisk'],druddigonrejuv:['raindish'],turtonatorrejuv:['oblivious'],veluzarejuv:['unnerve']};
-const october27Slots = {poliwrath:{S:'Aevian Ascendance'},scyther:{0:'Technician',1:'Sharpness',H:'Swarm'},gyarados:{1:'Intimidate'},typhlosionhisui:{H:'Wraith Procession'},typhlosionmega:{0:'Plasma Eruption'},politoed:{S:'Aevian King'},jumpluff:{0:'Chlorophyll',1:'Wind Rider',H:'Windy Surge'},umbreon:{1:'Lunar Ward'},hariyama:{0:'Grit Grappler',1:'Sheer Force',H:'Stamina'},delcatty:{0:'Moonlit Prowl',1:'Natural Cure'},salamence:{H:'Rightful Exalt'},salamencemega:{0:'Exalted Aether'},rampardos:{H:'Primeval Skull'},bastiodon:{H:'Primeval Shield'},lucario:{0:'Carry On',1:'Sworn Duty',H:'Armorize'},lucariomega:{0:'Insight'},mamoswine:{0:'Forsaken Sleeper',1:'Old North',H:'Glacial Prime'},galvantula:{S:'Aevian Web'},noivern:{1:'Infiltrator'},ribombee:{0:'Shield Dust',1:'Aroma Veil',H:'Friend Guard'},palafin:{0:'Sworn Duty',1:'Friend Guard',H:'Hydration'},palafinhero:{0:'Sworn Duty',1:'Friend Guard',H:'Hydration'}};
-for(const id of ['minior','miniororange','minioryellow','miniorgreen','miniorblue','miniorindigo','miniorviolet','miniormeteor']){october27Passives[id]=['shieldsdown'];october27Slots[id]={0:'Light Metal',1:'Self Repair',H:'Brute Force'};}
-for(const id of ['alcremie','alcremierubycream','alcremiematchacream','alcremiemintcream','alcremielemoncream','alcremierubyswirl','alcremiecaramelswirl','alcremierainbowswirl','alcremiesaltedcream'])october27Slots[id]={0:'Soothing Cream',1:'Sticky Hold',H:'Master Pâtissier'};
-for (const suffix of ['', 'cosplay','rockstar','belle','popstar','phd','libre','original','hoenn','sinnoh','unova','kalos','alola','partner','starter','world']) october27Passives['pikachu' + suffix] = ['cheekcapacitor'];
-october27Slots.sableye = {H:'Acquired Taste'}; october27Slots.sableyemega = {0:'Tome of Avarice'}; october27Slots.absol = {1:'Beast Fang'};
-const beforeOctober27 = {current:exports.current,abilities:exports.abilities,passives:exports.passives};
-exports.current=(id,fallback)=>october27Passives[id]||beforeOctober27.current(id,fallback);
-exports.abilities=(id,fallback)=>({...beforeOctober27.abilities(id,fallback),...october27Slots[id]});
-exports.passives=expected=>Object.assign(beforeOctober27.passives(expected),october27Passives);
+const october27Passives = {
+	venomoth: ['mothborn'],
+	scyther: ['steadfast'],
+	gyarados: ['tempestfury'],
+	jumpluff: ['cottondown'],
+	sableye: ['prankster'],
+	hariyama: ['thickfat'],
+	garchomp: ['serratedscales'],
+	lucario: ['mindseye'],
+	mamoswine: ['coldexpertise'],
+	krookodile: ['controlledfury'],
+	ribombee: ['sweetveil'],
+	golisopodmega: ['toughclaws'],
+	annihilape: ['controlledfury'],
+	haxorusmega: ['twinfang'],
+	donphanrejuv: ['heatproof'],
+	breloomrejuv: ['owntempo'],
+	bronzongrejuv: ['clearbody'],
+	drapionrejuv: ['stickyhold'],
+	musharnarejuv: ['synchronize'],
+	sigilyphrejuv: ['frisk'],
+	druddigonrejuv: ['raindish'],
+	turtonatorrejuv: ['oblivious'],
+	veluzarejuv: ['unnerve'],
+};
+const october27Slots = {
+	poliwrath: { S: 'Aevian Ascendance' },
+	scyther: { 0: 'Technician', 1: 'Sharpness', H: 'Swarm' },
+	gyarados: { 1: 'Intimidate' },
+	typhlosionhisui: { H: 'Wraith Procession' },
+	typhlosionmega: { 0: 'Plasma Eruption' },
+	politoed: { S: 'Aevian King' },
+	jumpluff: { 0: 'Chlorophyll', 1: 'Wind Rider', H: 'Windy Surge' },
+	umbreon: { 1: 'Lunar Ward' },
+	hariyama: { 0: 'Grit Grappler', 1: 'Sheer Force', H: 'Stamina' },
+	delcatty: { 0: 'Moonlit Prowl', 1: 'Natural Cure' },
+	salamence: { H: 'Rightful Exalt' },
+	salamencemega: { 0: 'Exalted Aether' },
+	rampardos: { H: 'Primeval Skull' },
+	bastiodon: { H: 'Primeval Shield' },
+	lucario: { 0: 'Carry On', 1: 'Sworn Duty', H: 'Armorize' },
+	lucariomega: { 0: 'Insight' },
+	mamoswine: { 0: 'Forsaken Sleeper', 1: 'Old North', H: 'Glacial Prime' },
+	galvantula: { S: 'Aevian Web' },
+	noivern: { 1: 'Infiltrator' },
+	ribombee: { 0: 'Shield Dust', 1: 'Aroma Veil', H: 'Friend Guard' },
+	palafin: { 0: 'Sworn Duty', 1: 'Friend Guard', H: 'Hydration' },
+	palafinhero: { 0: 'Sworn Duty', 1: 'Friend Guard', H: 'Hydration' },
+};
+for (const id of [
+	'minior',
+	'miniororange',
+	'minioryellow',
+	'miniorgreen',
+	'miniorblue',
+	'miniorindigo',
+	'miniorviolet',
+	'miniormeteor',
+]) {
+	october27Passives[id] = ['shieldsdown'];
+	october27Slots[id] = { 0: 'Light Metal', 1: 'Self Repair', H: 'Brute Force' };
+}
+for (const id of [
+	'alcremie',
+	'alcremierubycream',
+	'alcremiematchacream',
+	'alcremiemintcream',
+	'alcremielemoncream',
+	'alcremierubyswirl',
+	'alcremiecaramelswirl',
+	'alcremierainbowswirl',
+	'alcremiesaltedcream',
+])
+	october27Slots[id] = { 0: 'Soothing Cream', 1: 'Sticky Hold', H: 'Master Pâtissier' };
+for (const suffix of [
+	'',
+	'cosplay',
+	'rockstar',
+	'belle',
+	'popstar',
+	'phd',
+	'libre',
+	'original',
+	'hoenn',
+	'sinnoh',
+	'unova',
+	'kalos',
+	'alola',
+	'partner',
+	'starter',
+	'world',
+])
+	october27Passives['pikachu' + suffix] = ['cheekcapacitor'];
+october27Slots.sableye = { H: 'Acquired Taste' };
+october27Slots.sableyemega = { 0: 'Tome of Avarice' };
+october27Slots.absol = { 1: 'Beast Fang' };
+const beforeOctober27 = {
+	current: exports.current,
+	abilities: exports.abilities,
+	passives: exports.passives,
+};
+exports.current = (id, fallback) => october27Passives[id] || beforeOctober27.current(id, fallback);
+exports.abilities = (id, fallback) => ({
+	...beforeOctober27.abilities(id, fallback),
+	...october27Slots[id],
+});
+exports.passives = expected => Object.assign(beforeOctober27.passives(expected), october27Passives);
 
 // Approved Hitmon Fiend passives and replacement hidden abilities.
-const beforeHitmon = {current:exports.current, abilities:exports.abilities, passives:exports.passives};
-const hitmonPassives = {hitmonchan:['punchfiend'], hitmonlee:['kickfiend'], hitmontop:['spinfiend']};
-exports.current=(id,fallback)=>hitmonPassives[id]||beforeHitmon.current(id,fallback);
-exports.abilities=(id,fallback)=>({...beforeHitmon.abilities(id,fallback),...({hitmonchan:{H:'Check Hook'},hitmonlee:{H:'Springheel'},hitmontop:{H:'Cyclone Rhythm'}}[id]||{})});
-exports.passives=expected=>Object.assign(beforeHitmon.passives(expected),hitmonPassives);
+const beforeHitmon = {
+	current: exports.current,
+	abilities: exports.abilities,
+	passives: exports.passives,
+};
+const hitmonPassives = {
+	hitmonchan: ['punchfiend'],
+	hitmonlee: ['kickfiend'],
+	hitmontop: ['spinfiend'],
+};
+exports.current = (id, fallback) => hitmonPassives[id] || beforeHitmon.current(id, fallback);
+exports.abilities = (id, fallback) => ({
+	...beforeHitmon.abilities(id, fallback),
+	...({
+		hitmonchan: { H: 'Check Hook' },
+		hitmonlee: { H: 'Springheel' },
+		hitmontop: { H: 'Cyclone Rhythm' },
+	}[id] || {}),
+});
+exports.passives = expected => Object.assign(beforeHitmon.passives(expected), hitmonPassives);
 
-const beforeOracular = {current:exports.current,passives:exports.passives};
-exports.current=(id,fallback)=>id==='politoed'?['oraclesrefrain']:beforeOracular.current(id,fallback);
-exports.passives=expected=>Object.assign(beforeOracular.passives(expected),{politoed:['oraclesrefrain']});
+const beforeOracular = { current: exports.current, passives: exports.passives };
+exports.current = (id, fallback) =>
+	id === 'politoed' ? ['oraclesrefrain'] : beforeOracular.current(id, fallback);
+exports.passives = expected =>
+	Object.assign(beforeOracular.passives(expected), { politoed: ['oraclesrefrain'] });
 
-const beforeEmpoleonSplit={abilities:exports.abilities,current:exports.current,passives:exports.passives};
-exports.abilities=(id,fallback)=>({...beforeEmpoleonSplit.abilities(id,fallback),...(id==='empoleon'?{1:'Imperial Legacy'}:{})});
-exports.current=(id,fallback)=>['empoleonmegax','empoleonmegay'].includes(id)?['proficient']:beforeEmpoleonSplit.current(id,fallback);
-exports.passives=expected=>Object.assign(beforeEmpoleonSplit.passives(expected),{empoleonmegax:['proficient'],empoleonmegay:['proficient']});
+const beforeEmpoleonSplit = {
+	abilities: exports.abilities,
+	current: exports.current,
+	passives: exports.passives,
+};
+exports.abilities = (id, fallback) => ({
+	...beforeEmpoleonSplit.abilities(id, fallback),
+	...(id === 'empoleon' ? { 1: 'Imperial Legacy' } : {}),
+});
+exports.current = (id, fallback) =>
+	['empoleonmegax', 'empoleonmegay'].includes(id) ?
+		['proficient'] :
+		beforeEmpoleonSplit.current(id, fallback);
+exports.passives = expected =>
+	Object.assign(beforeEmpoleonSplit.passives(expected), {
+		empoleonmegax: ['proficient'],
+		empoleonmegay: ['proficient'],
+	});
 
 // Later explicit room-setter roster approvals.
 const beforeRooms = exports.abilities;
-exports.abilities = (id, fallback) => ({...beforeRooms(id, fallback), ...({unown:{0:'Lost Epoch'},claydolmega:{0:'World Axis'},lunatone:{1:'Gravity Well'},solrock:{1:'Gravity Well'},carbink:{0:'Arcane Chamber'},beheeyem:{0:'Mirror Chamber'}}[id] || {})});
+exports.abilities = (id, fallback) => ({
+	...beforeRooms(id, fallback),
+	...({
+		unown: { 0: 'Lost Epoch' },
+		claydolmega: { 0: 'World Axis' },
+		lunatone: { 1: 'Gravity Well' },
+		solrock: { 1: 'Gravity Well' },
+		carbink: { 0: 'Arcane Chamber' },
+		beheeyem: { 0: 'Mirror Chamber' },
+	}[id] || {}),
+});
 
 // Dusk Ego is the approved display rename; the battle ID remains duskdrive.
 const beforeDuskEgoAbilities = exports.abilities;
@@ -235,42 +607,109 @@ exports.abilities = (id, expected) => {
 	return result;
 };
 
-const beforeGolemGalvanize = {current: exports.current, passives: exports.passives};
-exports.current = (id, fallback) => id === 'golemalola' ? ['galvanize'] : beforeGolemGalvanize.current(id, fallback);
-exports.passives = expected => Object.assign(beforeGolemGalvanize.passives(expected), {golemalola: ['galvanize']});
+const beforeGolemGalvanize = { current: exports.current, passives: exports.passives };
+exports.current = (id, fallback) =>
+	id === 'golemalola' ? ['galvanize'] : beforeGolemGalvanize.current(id, fallback);
+exports.passives = expected =>
+	Object.assign(beforeGolemGalvanize.passives(expected), { golemalola: ['galvanize'] });
 
 // November approvals supersede historical snapshots without reading runtime Dex.
 {
-	const prior = { current: exports.current, passives: exports.passives, abilities: exports.abilities, stats: exports.stats };
-	const passives = { starmie: ['illuminate'], honchkrow: ['moxie'], revavroom: ['overcoat'], kingdra: ['swiftswim'],
-		drapion: ['poisontouch'], farigiraf: ['armortail'], toxicroak: ['anticipation'], dachsbun: ['wellbakedbody'],
-		maushold: ['friendguard'], mausholdfour: ['friendguard'], conkeldurr: ['rockypayload'], magneton: ['hydrabond'],
-		arcanineaevian: ['earlybird'], glalieaevian: ['levitate'], glalieaevianmega: ['levitate'],
-		froslassaevian: ['owntempo'], froslassaevianmega: ['owntempo'], gyaradosaevian: ['owntempo'], gyaradosaevianmega: ['owntempo'],
-		laprasaeviangmax: ['owntempo'], ampharosaevian: ['static'], ampharosaevianmega: ['static'], roseradeaevian: ['poisonpoint'],
-		gastrodonaevian: ['stickyhold'], gastrodoneastaevian: ['stickyhold'], mismagiusaevian: ['owntempo'], chandelureaevian: ['static'],
-		volcaronaaevian: ['bigpecks'], golisopodaevian: ['heatproof'], golisopodaevianmega: ['heatproof'], kommooaevian: ['owntempo'],
-		sneasleraevian: ['keeneye'], arbolivaaevian: ['earlybird'], glimmoraaevian: ['selfrepair'], glimmoraaevianmega: ['selfrepair'] };
-	const slots = { cinderace: { 1: 'Rising Striker' }, rillaboom: { 1: 'Rising Rhythm' }, inteleon: { 0: 'Infiltrator', 1: 'Rising Marksman' },
-		cinderacegmax: { 0: 'Grand Striker' }, rillaboomgmax: { 0: 'Grand Rhythm' }, inteleongmax: { 0: 'Grand Marksman' },
-		hydreigon: { 1: 'Strings of Ruin' }, slowkinggalar: { 1: 'Own Tempo' }, conkeldurr: { 0: 'Guts', 1: 'Stamina' },
-		farigiraf: { 1: 'Twin Focus' }, kingdra: { 0: 'Damp' }, magneton: { 0: 'Magnet Pull', 1: 'Elevate', H: 'Analytic' } };
+	const prior = {
+		current: exports.current,
+		passives: exports.passives,
+		abilities: exports.abilities,
+		stats: exports.stats,
+	};
+	const passives = {
+		starmie: ['illuminate'],
+		honchkrow: ['moxie'],
+		revavroom: ['overcoat'],
+		kingdra: ['swiftswim'],
+		drapion: ['poisontouch'],
+		farigiraf: ['armortail'],
+		toxicroak: ['anticipation'],
+		dachsbun: ['wellbakedbody'],
+		maushold: ['friendguard'],
+		mausholdfour: ['friendguard'],
+		conkeldurr: ['rockypayload'],
+		magneton: ['hydrabond'],
+		arcanineaevian: ['earlybird'],
+		glalieaevian: ['levitate'],
+		glalieaevianmega: ['levitate'],
+		froslassaevian: ['owntempo'],
+		froslassaevianmega: ['owntempo'],
+		gyaradosaevian: ['owntempo'],
+		gyaradosaevianmega: ['owntempo'],
+		laprasaeviangmax: ['owntempo'],
+		ampharosaevian: ['static'],
+		ampharosaevianmega: ['static'],
+		roseradeaevian: ['poisonpoint'],
+		gastrodonaevian: ['stickyhold'],
+		gastrodoneastaevian: ['stickyhold'],
+		mismagiusaevian: ['owntempo'],
+		chandelureaevian: ['static'],
+		volcaronaaevian: ['bigpecks'],
+		golisopodaevian: ['heatproof'],
+		golisopodaevianmega: ['heatproof'],
+		kommooaevian: ['owntempo'],
+		sneasleraevian: ['keeneye'],
+		arbolivaaevian: ['earlybird'],
+		glimmoraaevian: ['selfrepair'],
+		glimmoraaevianmega: ['selfrepair'],
+	};
+	const slots = {
+		cinderace: { 1: 'Rising Striker' },
+		rillaboom: { 1: 'Rising Rhythm' },
+		inteleon: { 0: 'Infiltrator', 1: 'Rising Marksman' },
+		cinderacegmax: { 0: 'Grand Striker' },
+		rillaboomgmax: { 0: 'Grand Rhythm' },
+		inteleongmax: { 0: 'Grand Marksman' },
+		hydreigon: { 1: 'Strings of Ruin' },
+		slowkinggalar: { 1: 'Own Tempo' },
+		conkeldurr: { 0: 'Guts', 1: 'Stamina' },
+		farigiraf: { 1: 'Twin Focus' },
+		kingdra: { 0: 'Damp' },
+		magneton: { 0: 'Magnet Pull', 1: 'Elevate', H: 'Analytic' },
+	};
 	exports.current = (id, fallback) => passives[id] || prior.current(id, fallback);
 	exports.passives = expected => Object.assign(prior.passives(expected), passives);
 	exports.abilities = (id, fallback) => ({ ...prior.abilities(id, fallback), ...slots[id] });
-	const stats = { glalieaevian: [110, 110, 105, 50, 85, 40], glalieaevianmega: [110, 135, 105, 90, 85, 80], froslassaevianmega: [70, 80, 80, 140, 100, 130] };
-	exports.stats = (id, fallback) => stats[id] ? Object.fromEntries(['hp', 'atk', 'def', 'spa', 'spd', 'spe'].map((stat, i) => [stat, stats[id][i]])) : prior.stats(id, fallback);
+	const stats = {
+		glalieaevian: [110, 110, 105, 50, 85, 40],
+		glalieaevianmega: [110, 135, 105, 90, 85, 80],
+		froslassaevianmega: [70, 80, 80, 140, 100, 130],
+	};
+	exports.stats = (id, fallback) =>
+		stats[id] ?
+			Object.fromEntries(
+				['hp', 'atk', 'def', 'spa', 'spd', 'spe'].map((stat, i) => [stat, stats[id][i]])
+			) :
+			prior.stats(id, fallback);
 }
 
 // Fixed review snapshot: stat-balance-approved.ts, later signature passives,
 // and the user's November roster decisions. Never derive expectations from Dex.
 {
 	const reviewed = require('./november-roster-expectations.json');
-	const prior = { current: exports.current, passives: exports.passives, abilities: exports.abilities, stats: exports.stats };
+	const prior = {
+		current: exports.current,
+		passives: exports.passives,
+		abilities: exports.abilities,
+		stats: exports.stats,
+	};
 	exports.current = (id, fallback) => reviewed.passives[id] || prior.current(id, fallback);
 	exports.passives = expected => Object.assign(prior.passives(expected), reviewed.passives);
-	exports.abilities = (id, fallback) => ({ ...prior.abilities(id, fallback), ...reviewed.abilities[id] });
-	exports.stats = (id, fallback) => reviewed.stats[id] ? Object.fromEntries(['hp', 'atk', 'def', 'spa', 'spd', 'spe'].map((key, i) => [key, reviewed.stats[id][i]])) : prior.stats(id, fallback);
+	exports.abilities = (id, fallback) => ({
+		...prior.abilities(id, fallback),
+		...reviewed.abilities[id],
+	});
+	exports.stats = (id, fallback) =>
+		reviewed.stats[id] ?
+			Object.fromEntries(
+				['hp', 'atk', 'def', 'spa', 'spd', 'spe'].map((key, i) => [key, reviewed.stats[id][i]])
+			) :
+			prior.stats(id, fallback);
 }
 
 // Bulk and per-species assertions must apply the same reviewed overrides.
@@ -288,35 +727,71 @@ exports.passives = expected => {
 // Approved starter display names retain their original mechanics IDs.
 const beforeJohtoEruptions = exports.abilities;
 exports.abilities = (id, fallback) => {
-	const names = {meganiummega: 'Verdant Eruption', meganiummegay: 'Solar Eruption', feraligatrmega: 'Tidal Eruption'};
+	const names = {
+		meganiummega: 'Verdant Eruption',
+		meganiummegay: 'Solar Eruption',
+		feraligatrmega: 'Tidal Eruption',
+	};
 	const slots = beforeJohtoEruptions(id, fallback);
-	return names[id] ? {...slots, 0: names[id]} : slots;
+	return names[id] ? { ...slots, 0: names[id] } : slots;
 };
-{ const previous = exports.abilities; const names = { 'Pollen Bloom': 'Verdant Monarch', 'Water Barrage': 'Tidal Monarch', 'Unbound Blaze': 'Blazing Monarch' }; exports.abilities = (id, original) => Object.fromEntries(Object.entries(previous(id, original)).map(([slot, name]) => [slot, names[name] || name])); }
+{
+	const previous = exports.abilities;
+	const names = {
+		'Pollen Bloom': 'Verdant Monarch',
+		'Water Barrage': 'Tidal Monarch',
+		'Unbound Blaze': 'Blazing Monarch',
+	};
+	exports.abilities = (id, original) =>
+		Object.fromEntries(
+			Object.entries(previous(id, original)).map(([slot, name]) => [slot, names[name] || name])
+		);
+}
 
 {
- const reviewed=require('./november-10-roster-expectations.json');
- const prior={current:exports.current,passives:exports.passives,abilities:exports.abilities,stats:exports.stats};
- exports.current=(id,fallback)=>reviewed.passives[id]||prior.current(id,fallback);
- exports.passives=expected=>Object.assign(prior.passives(expected),reviewed.passives);
- exports.abilities=(id,fallback)=>Object.fromEntries(Object.entries({...prior.abilities(id,fallback),...reviewed.slots[id]}).map(([slot,name])=>[slot,reviewed.names[name]||name]));
- exports.stats=(id,fallback)=>({...prior.stats(id,fallback),...reviewed.stats[id]});
+	const reviewed = require('./november-10-roster-expectations.json');
+	const prior = {
+		current: exports.current,
+		passives: exports.passives,
+		abilities: exports.abilities,
+		stats: exports.stats,
+	};
+	exports.current = (id, fallback) => reviewed.passives[id] || prior.current(id, fallback);
+	exports.passives = expected => Object.assign(prior.passives(expected), reviewed.passives);
+	exports.abilities = (id, fallback) =>
+		Object.fromEntries(
+			Object.entries({ ...prior.abilities(id, fallback), ...reviewed.slots[id] }).map(
+				([slot, name]) => [slot, reviewed.names[name] || name]
+			)
+		);
+	exports.stats = (id, fallback) => ({ ...prior.stats(id, fallback), ...reviewed.stats[id] });
 }
 
 // Current approved roster values are kept in one independently reviewed fixture.
 const currentRoster = require('./current-roster-approved.json');
-const priorRoster = {abilities: exports.abilities, current: exports.current, passives: exports.passives, stats: exports.stats};
+const priorRoster = {
+	abilities: exports.abilities,
+	current: exports.current,
+	passives: exports.passives,
+	stats: exports.stats,
+};
 exports.abilities = (id, fallback) => {
-	const slots = {...(currentRoster.exactSlots[id] || priorRoster.abilities(id, fallback)), ...currentRoster.slots[id]};
+	const slots = {
+		...(currentRoster.exactSlots[id] || priorRoster.abilities(id, fallback)),
+		...currentRoster.slots[id],
+	};
 	for (const [prefix, names] of Object.entries(currentRoster.slotRenamesByPrefix)) {
-		if (id.startsWith(prefix)) for (const key of Object.keys(slots)) slots[key] = names[slots[key]] || slots[key];
+		if (id.startsWith(prefix))
+			for (const key of Object.keys(slots)) slots[key] = names[slots[key]] || slots[key];
 	}
 	return slots;
 };
-exports.current = (id, fallback) => currentRoster.passives[id] ? [...currentRoster.passives[id]] : priorRoster.current(id, fallback);
+exports.current = (id, fallback) =>
+	currentRoster.passives[id] ? [...currentRoster.passives[id]] : priorRoster.current(id, fallback);
 exports.passives = expected => {
 	priorRoster.passives(expected);
 	for (const [id, passives] of Object.entries(currentRoster.passives)) expected[id] = [...passives];
 	return expected;
 };
-exports.stats = (id, fallback) => currentRoster.stats[id] ? {...currentRoster.stats[id]} : priorRoster.stats(id, fallback);
+exports.stats = (id, fallback) =>
+	currentRoster.stats[id] ? { ...currentRoster.stats[id] } : priorRoster.stats(id, fallback);

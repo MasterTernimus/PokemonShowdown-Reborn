@@ -1,7 +1,38 @@
-'use strict';const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim');
-describe('Annihilape, Vital Spirit and Staraptor approvals',()=>{let battle;afterEach(()=>{battle?.destroy();battle=null;});
-function setup(ability='Defiant',species='Annihilape'){const m=(s,a)=>({species:s,ability:a,moves:['thrash','outrage','splash','shadowball','shadowclaw','confuseray']});battle=common.createBattle({gameType:'doubles'},[[m(species,ability),m('Mew','No Ability')],[m('Mew','No Ability'),m('Mew','No Ability')]]);for(const p of battle.getAllActive())p.hp=p.maxhp=p.baseMaxhp=10000;battle.randomizer=n=>n;return[battle.p1.active[0],battle.p2.active[0],battle.p1.active[1]];}
-function hit(p,q,id,extra={}){battle.clearActiveMove();battle.actions.useMove(Object.assign(Dex.getActiveMove(id),{accuracy:true,willCrit:false,...extra}),p,{target:q});const m=battle.activeMove;battle.clearActiveMove();return m;}
+'use strict';
+const assert = require('assert').strict,
+	common = require('../../common'),
+	{ Dex } = require('../../../dist/sim');
+describe('Annihilape, Vital Spirit and Staraptor approvals', () => {
+	let battle;
+	afterEach(() => {
+		battle?.destroy();
+		battle = null;
+	});
+	function setup(ability = 'Defiant', species = 'Annihilape') {
+		const m = (s, a) => ({
+			species: s,
+			ability: a,
+			moves: ['thrash', 'outrage', 'splash', 'shadowball', 'shadowclaw', 'confuseray'],
+		});
+		battle = common.createBattle({ gameType: 'doubles' }, [
+			[m(species, ability), m('Mew', 'No Ability')],
+			[m('Mew', 'No Ability'), m('Mew', 'No Ability')],
+		]);
+		for (const p of battle.getAllActive()) p.hp = p.maxhp = p.baseMaxhp = 10000;
+		battle.randomizer = n => n;
+		return [battle.p1.active[0], battle.p2.active[0], battle.p1.active[1]];
+	}
+	function hit(p, q, id, extra = {}) {
+		battle.clearActiveMove();
+		battle.actions.useMove(
+			Object.assign(Dex.getActiveMove(id), { accuracy: true, willCrit: false, ...extra }),
+			p,
+			{ target: q }
+		);
+		const m = battle.activeMove;
+		battle.clearActiveMove();
+		return m;
+	}
 	it('Annihilape combines Ghost Thrash with its independent Controlled Fury passive', () => {
 		const [p, q] = setup('Raging Heart');
 		const m = hit(p, q, 'thrash');
@@ -32,24 +63,79 @@ function hit(p,q,id,extra={}){battle.clearActiveMove();battle.actions.useMove(Ob
 		assert.equal(p.boosts.def, 0);
 		assert.equal(p.boosts.spd, 0);
 	});
-	for (const ability of ['Vital Spirit', 'Joyride', 'Galvanic Spirit', 'Blast Chamber', 'Unbound Spirit', 'Imperial Princess', 'Unchecked Assault'])it(ability + ' revised damage/sleep/Yawn/Fighting behavior', () => {
-		const [p, q] = setup(ability, 'Mew');
+	for (const ability of [
+		'Vital Spirit',
+		'Joyride',
+		'Galvanic Spirit',
+		'Blast Chamber',
+		'Unbound Spirit',
+		'Imperial Princess',
+		'Unchecked Assault',
+	])
+		it(ability + ' revised damage/sleep/Yawn/Fighting behavior', () => {
+			const [p, q] = setup(ability, 'Mew');
+			p.hp = 5000;
+			const m = Dex.getActiveMove('tackle');
+			assert.equal(
+				battle.runEvent('ModifyDamage', q, p, m, 100),
+				['Imperial Princess', 'Unchecked Assault'].includes(ability) ? 80 : 100
+			);
+			if (ability === 'Joyride') {
+				assert(p.setStatus('slp', q));
+				p.cureStatus();
+				assert(p.addVolatile('yawn', q));
+			} else {
+				assert.equal(p.setStatus('slp', q), false);
+				assert(!p.addVolatile('yawn', q));
+			}
+			assert.equal(
+				battle.runEvent('ModifyAtk', p, q, Dex.getActiveMove('brickbreak'), 100),
+				ability === 'Joyride' ? 156 : 130
+			);
+		});
+	it('preserves unrelated Multiscale defense and does not grant exceptions to other selected slots', () => {
+		const [p, q] = setup('Fighting Fiend', 'Mew');
+		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('tackle'), 100), 50);
+		p.setAbility('Kick Fiend');
 		p.hp = 5000;
-		const m = Dex.getActiveMove('tackle');
-		assert.equal(battle.runEvent('ModifyDamage', q, p, m, 100), ['Imperial Princess', 'Unchecked Assault'].includes(ability) ? 80 : 100);
-		if (ability === 'Joyride') {
-			assert(p.setStatus('slp', q));
-			p.cureStatus();
-			assert(p.addVolatile('yawn', q));
-		} else {
-			assert.equal(p.setStatus('slp', q), false);
-			assert(!p.addVolatile('yawn', q));
-		}
-		assert.equal(battle.runEvent('ModifyAtk', p, q, Dex.getActiveMove('brickbreak'), 100), ability === 'Joyride' ? 156 : 130);
+		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('tackle'), 100), 100);
 	});
-it('preserves unrelated Multiscale defense and does not grant exceptions to other selected slots',()=>{const[p,q]=setup('Fighting Fiend','Mew');assert.equal(battle.runEvent('ModifyDamage',q,p,Dex.getActiveMove('tackle'),100),50);p.setAbility('Kick Fiend');p.hp=5000;assert.equal(battle.runEvent('ModifyDamage',q,p,Dex.getActiveMove('tackle'),100),100);});
-for(const[screen,id]of [['reflect','shadowclaw'],['lightscreen','shadowball']])it('Unbound Spirit bypasses only '+screen+' for Ghost',()=>{const[p,q]=setup('Unbound Spirit');const m=Object.assign(Dex.getActiveMove(id),{willCrit:false});const bare=battle.actions.getDamage(p,q,m);q.side.addSideCondition(screen,q);assert.equal(battle.actions.getDamage(p,q,Object.assign(Dex.getActiveMove(id),{willCrit:false})),bare);p.addVolatile('gastroacid');assert(battle.actions.getDamage(p,q,Object.assign(Dex.getActiveMove(id),{willCrit:false}))<bare);});
-it('Unbound Spirit retains Aurora Veil, Substitute and Normal immunity',()=>{const[p,q]=setup('Unbound Spirit');const m=()=>Object.assign(Dex.getActiveMove('shadowball'),{willCrit:false});const bare=battle.actions.getDamage(p,q,m());battle.field.setWeather('snow',q);q.side.addSideCondition('auroraveil',q);assert(battle.actions.getDamage(p,q,m())<bare);q.side.removeSideCondition('auroraveil');q.addVolatile('substitute');const hp=q.hp;hit(p,q,'shadowball');assert.equal(q.hp,hp);q.removeVolatile('substitute');q.setType('Normal');hit(p,q,'shadowball');assert.equal(q.hp,hp);});
+	for (const [screen, id] of [
+		['reflect', 'shadowclaw'],
+		['lightscreen', 'shadowball'],
+	])
+		it('Unbound Spirit bypasses only ' + screen + ' for Ghost', () => {
+			const [p, q] = setup('Unbound Spirit');
+			const m = Object.assign(Dex.getActiveMove(id), { willCrit: false });
+			const bare = battle.actions.getDamage(p, q, m);
+			q.side.addSideCondition(screen, q);
+			assert.equal(
+				battle.actions.getDamage(p, q, Object.assign(Dex.getActiveMove(id), { willCrit: false })),
+				bare
+			);
+			p.addVolatile('gastroacid');
+			assert(
+				battle.actions.getDamage(p, q, Object.assign(Dex.getActiveMove(id), { willCrit: false })) <
+					bare
+			);
+		});
+	it('Unbound Spirit retains Aurora Veil, Substitute and Normal immunity', () => {
+		const [p, q] = setup('Unbound Spirit');
+		const m = () => Object.assign(Dex.getActiveMove('shadowball'), { willCrit: false });
+		const bare = battle.actions.getDamage(p, q, m());
+		battle.field.setWeather('snow', q);
+		q.side.addSideCondition('auroraveil', q);
+		assert(battle.actions.getDamage(p, q, m()) < bare);
+		q.side.removeSideCondition('auroraveil');
+		q.addVolatile('substitute');
+		const hp = q.hp;
+		hit(p, q, 'shadowball');
+		assert.equal(q.hp, hp);
+		q.removeVolatile('substitute');
+		q.setType('Normal');
+		hit(p, q, 'shadowball');
+		assert.equal(q.hp, hp);
+	});
 	it('Raging Heart preserves native Thrash stats, target, chance and lock while converting selected attacks', () => {
 		const [p, q] = setup('Raging Heart', 'Mew');
 		const m = hit(p, q, 'thrash');
@@ -83,10 +169,36 @@ it('Unbound Spirit retains Aurora Veil, Substitute and Normal immunity',()=>{con
 	});
 	it('Ghost Thrash does not hit Normal targets', () => {
 		const [p, q] = setup('Raging Heart', 'Mew');
-		for (const t of p.foes())t.setType('Normal');
+		for (const t of p.foes()) t.setType('Normal');
 		const hp = q.hp;
 		hit(p, q, 'thrash');
 		assert.equal(q.hp, hp);
 	});
-it('Staraptor changes only +5 Speed on exactly base and Mega',()=>{assert.deepEqual(Dex.species.get('staraptor').baseStats,{hp:85,atk:120,def:80,spa:50,spd:70,spe:105});assert.equal(Dex.species.get('staraptor').bst,510);assert.deepEqual(Dex.species.get('staraptormega').baseStats,{hp:85,atk:140,def:110,spa:60,spd:100,spe:115});assert.equal(Dex.species.get('staraptormega').bst,610);assert.deepEqual(Dex.species.all().filter(p=>p.baseSpecies==='Staraptor').map(p=>p.id),['staraptor','staraptormega']);});
+	it('Staraptor changes only +5 Speed on exactly base and Mega', () => {
+		assert.deepEqual(Dex.species.get('staraptor').baseStats, {
+			hp: 85,
+			atk: 120,
+			def: 80,
+			spa: 50,
+			spd: 70,
+			spe: 105,
+		});
+		assert.equal(Dex.species.get('staraptor').bst, 510);
+		assert.deepEqual(Dex.species.get('staraptormega').baseStats, {
+			hp: 85,
+			atk: 140,
+			def: 110,
+			spa: 60,
+			spd: 100,
+			spe: 115,
+		});
+		assert.equal(Dex.species.get('staraptormega').bst, 610);
+		assert.deepEqual(
+			Dex.species
+				.all()
+				.filter(p => p.baseSpecies === 'Staraptor')
+				.map(p => p.id),
+			['staraptor', 'staraptormega']
+		);
+	});
 });

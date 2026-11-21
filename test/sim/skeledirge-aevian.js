@@ -1,8 +1,8 @@
 'use strict';
 
 const assert = require('assert').strict;
-const {Dex} = require('../../dist/sim');
-const {TeamValidator} = require('../../dist/sim/team-validator');
+const { Dex } = require('../../dist/sim');
+const { TeamValidator } = require('../../dist/sim/team-validator');
 
 describe('Skeledirge-Aevian', () => {
 	it('uses its own stats, abilities, and requested learnset', () => {
@@ -10,9 +10,9 @@ describe('Skeledirge-Aevian', () => {
 		assert(species.exists && species.standalone);
 		assert.equal(species.tier, 'OU');
 		assert.deepEqual(species.types, ['Fairy', 'Poison']);
-		assert.deepEqual(species.baseStats, {hp: 90, atk: 50, def: 110, spa: 103, spd: 105, spe: 77});
+		assert.deepEqual(species.baseStats, { hp: 90, atk: 50, def: 110, spa: 103, spd: 105, spe: 77 });
 		assert.equal(species.bst, 535);
-		assert.deepEqual(species.abilities, {'0': 'Unaware', '1': 'Misty Surge', H: 'Venom Canticle'});
+		assert.deepEqual(species.abilities, { '0': 'Unaware', '1': 'Misty Surge', H: 'Venom Canticle' });
 		const learnset = Dex.species.getLearnsetData(species.id).learnset;
 		assert.equal(Object.keys(learnset).length, 38);
 		assert.deepEqual(learnset.flamethrower, ['9M', '9L1']);
@@ -28,8 +28,8 @@ describe('Skeledirge-Aevian', () => {
 		const validator = TeamValidator.get('gen9nofieldsinglesgame');
 		for (const ability of Object.values(Dex.species.get('Skeledirge-Aevian').abilities)) {
 			assert.equal(validator.validateTeam([
-				{species: 'Skeledirge-Aevian', ability, moves: ['Torch Song', 'Strange Steam', 'Toxic Spikes', 'Fly']},
-				{species: 'Mew', moves: ['Splash']},
+				{ species: 'Skeledirge-Aevian', ability, moves: ['Torch Song', 'Strange Steam', 'Toxic Spikes', 'Fly'] },
+				{ species: 'Mew', moves: ['Splash'] },
 			]), null, ability);
 		}
 	});

@@ -2,7 +2,7 @@
 
 const assert = require('./../../assert');
 const common = require('./../../common');
-const {Dex} = require('./../../../dist/sim');
+const { Dex } = require('./../../../dist/sim');
 
 let battle;
 
@@ -18,10 +18,10 @@ describe('Toxic Sink custom effects', () => {
 	});
 
 	it('should absorb Poison moves and raise only Special Attack', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Vileplume', ability: 'Toxic Sink', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Vileplume', ability: 'Toxic Sink', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['sludgebomb']},
+			{ species: 'Mew', moves: ['sludgebomb'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const vileplume = battle.p1.active[0];
@@ -37,16 +37,16 @@ describe('Toxic Sink custom effects', () => {
 	});
 
 	it('should redirect Poison moves away from its ally', () => {
-		battle = common.createBattle({formatid: 'gen964doublesnofield'}, [[
-			{species: 'Vileplume', ability: 'Toxic Sink', moves: ['splash']},
-			{species: 'Chansey', moves: ['splash']},
-			{species: 'Pikachu', moves: ['splash']},
-			{species: 'Eevee', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen964doublesnofield' }, [[
+			{ species: 'Vileplume', ability: 'Toxic Sink', moves: ['splash'] },
+			{ species: 'Chansey', moves: ['splash'] },
+			{ species: 'Pikachu', moves: ['splash'] },
+			{ species: 'Eevee', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['sludgebomb']},
-			{species: 'Mew', moves: ['splash']},
-			{species: 'Pikachu', moves: ['splash']},
-			{species: 'Eevee', moves: ['splash']},
+			{ species: 'Mew', moves: ['sludgebomb'] },
+			{ species: 'Mew', moves: ['splash'] },
+			{ species: 'Pikachu', moves: ['splash'] },
+			{ species: 'Eevee', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1234', 'team 1234');
 		const [vileplume, chansey] = battle.p1.active;
@@ -57,10 +57,10 @@ describe('Toxic Sink custom effects', () => {
 	});
 
 	it('should retain passive Effect Spore without amplifying healing', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Vileplume', ability: 'Toxic Sink', moves: ['recover']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Vileplume', ability: 'Toxic Sink', moves: ['recover'] },
 		], [
-			{species: 'Mew', moves: ['tackle']},
+			{ species: 'Mew', moves: ['tackle'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const vileplume = battle.p1.active[0];
@@ -75,15 +75,15 @@ describe('Toxic Sink custom effects', () => {
 
 	it('should let poison field-changing moves pollute water through Toxic Sink', () => {
 		for (const testCase of [
-			{terrain: 'watersurfaceterrain', move: 'sludgewave', choice: 'move sludgewave', turns: 2},
-			{terrain: 'underwaterterrain', move: 'sludgewave', choice: 'move sludgewave', turns: 2},
-			{terrain: 'watersurfaceterrain', move: 'aciddownpour', choice: 'move sludgebomb zmove', turns: 1},
-			{terrain: 'underwaterterrain', move: 'aciddownpour', choice: 'move sludgebomb zmove', turns: 1},
+			{ terrain: 'watersurfaceterrain', move: 'sludgewave', choice: 'move sludgewave', turns: 2 },
+			{ terrain: 'underwaterterrain', move: 'sludgewave', choice: 'move sludgewave', turns: 2 },
+			{ terrain: 'watersurfaceterrain', move: 'aciddownpour', choice: 'move sludgebomb zmove', turns: 1 },
+			{ terrain: 'underwaterterrain', move: 'aciddownpour', choice: 'move sludgebomb zmove', turns: 1 },
 		]) {
-			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-				{species: 'Mew', item: testCase.move === 'aciddownpour' ? 'Poisonium Z' : undefined, moves: ['sludgewave', 'sludgebomb', 'splash']},
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+				{ species: 'Mew', item: testCase.move === 'aciddownpour' ? 'Poisonium Z' : undefined, moves: ['sludgewave', 'sludgebomb', 'splash'] },
 			], [
-				{species: 'Vileplume', ability: 'Toxic Sink', moves: ['splash']},
+				{ species: 'Vileplume', ability: 'Toxic Sink', moves: ['splash'] },
 			]]);
 			battle.makeChoices('team 1', 'team 1');
 			const source = battle.p1.active[0];

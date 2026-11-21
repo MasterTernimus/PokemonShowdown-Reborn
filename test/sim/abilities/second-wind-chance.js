@@ -8,9 +8,9 @@ describe('Second Wind chance', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 
 	function start(ability = 'Second Wind') {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Mew', ability, moves: ['splash']},
-		], [{species: 'Mew', moves: ['tackle']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Mew', ability, moves: ['splash'] },
+		], [{ species: 'Mew', moves: ['tackle'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		return [battle.p1.active[0], battle.p2.active[0]];
 	}

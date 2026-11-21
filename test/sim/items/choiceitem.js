@@ -5,8 +5,8 @@ const common = require('./../../common');
 
 let battle;
 
-describe("Choice Items", function () {
-	afterEach(function () {
+describe("Choice Items", () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
@@ -14,7 +14,7 @@ describe("Choice Items", function () {
 		battle = common.createBattle({ formatid: 'gen9factoryfield' }, [[
 			{ species: 'charizard', gigantamax: true, moves: ['sleeptalk', 'splash'], item: 'choicescarf' },
 		], [
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move 1', 'auto');

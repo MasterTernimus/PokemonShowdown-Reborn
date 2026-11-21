@@ -14,16 +14,16 @@ describe('Winged Wraith custom effects', () => {
 	it('should expose the reworked data on Crobat and Crobat-Alt', () => {
 		for (const name of ['Crobat', 'Crobat-Alt']) {
 			const species = Dex.species.get(name);
-			assert.deepEqual(species.baseStats, {hp: 80, atk: 100, def: 80, spa: 100, spd: 80, spe: 130});
+			assert.deepEqual(species.baseStats, { hp: 80, atk: 100, def: 80, spa: 100, spd: 80, spe: 130 });
 			assert.deepEqual(species.abilities, { 0: 'Poison Touch', 1: 'Wind Rider', H: 'Winged Wraith' });
 		}
 	});
 
 	it('should combine Infiltrator and Gale Wings', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Crobat-Alt', ability: 'Winged Wraith', moves: ['aerialace']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Crobat-Alt', ability: 'Winged Wraith', moves: ['aerialace'] },
 		], [
-			{species: 'Deoxys-Speed', moves: ['tackle']},
+			{ species: 'Deoxys-Speed', moves: ['tackle'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const crobat = battle.p1.active[0];

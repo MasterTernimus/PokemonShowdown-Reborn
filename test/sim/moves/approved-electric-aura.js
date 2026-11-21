@@ -98,11 +98,11 @@ describe('Approved Ion Deluge and Plasma Fists Aura provenance', () => {
 		assert.equal(battle.field.terrain, 'electricterrain'); assert.equal(battle.field.terrainState.duration, 8);
 	});
 	it('Cold Eclipse does not pause the non-promotable Electric Aura', () => {
-  const [p, t] = setup('coldeclipseterrain'); use('iondeluge', p, t);
-  for (let i=0;i<3;i++) battle.field.tickAura();
-  assert.equal(battle.field.auraField, ''); assert.equal(battle.field.terrain, 'coldeclipseterrain');
-  assert.equal(battle.field.promoteAura(p, battle.dex.moves.get('gravity')), false);
- });
+		const [p, t] = setup('coldeclipseterrain'); use('iondeluge', p, t);
+		for (let i = 0; i < 3; i++) battle.field.tickAura();
+		assert.equal(battle.field.auraField, ''); assert.equal(battle.field.terrain, 'coldeclipseterrain');
+		assert.equal(battle.field.promoteAura(p, battle.dex.moves.get('gravity')), false);
+	});
 	it('Plasma Fists does not create an Aura on Protect or immunity', () => {
 		const [p, t] = setup(); t.addVolatile('protect'); use('plasmafists', p, t);
 		assert.equal(battle.field.auraField, '');

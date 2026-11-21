@@ -1,10 +1,10 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {BattleStream} = require('../../../dist/sim/battle-stream');
-const {commands, resolveFieldName, renderField, renderFieldFull, renderFieldMove, renderAura} = require('../../../dist/server/chat-plugins/field-info');
+const { BattleStream } = require('../../../dist/sim/battle-stream');
+const { commands, resolveFieldName, renderField, renderFieldFull, renderFieldMove, renderAura } = require('../../../dist/server/chat-plugins/field-info');
 const reference = require('../../../data/field-reference.json');
-const {FieldNotes} = require('../../../dist/data/field-guide');
+const { FieldNotes } = require('../../../dist/data/field-guide');
 
 describe('Field and Aura information commands', () => {
 	it('groups Rocky rules and labels move references without promising calculated damage', () => {
@@ -16,9 +16,9 @@ describe('Field and Aura information commands', () => {
 	});
 	it('distinguishes paused Auras from permanent fields and ordinary countdowns', async () => {
 		const replies = [];
-		const context = {sendReplyBox: text => replies.push(text), errorReply: text => replies.push(text)};
-		const state = {field: 'coldeclipseterrain', fieldTurns: null, aura: 'psychicterrain', auraTurns: null};
-		const room = {battle: {getFieldInfo: async () => state}};
+		const context = { sendReplyBox: text => replies.push(text), errorReply: text => replies.push(text) };
+		const state = { field: 'coldeclipseterrain', fieldTurns: null, aura: 'psychicterrain', auraTurns: null };
+		const room = { battle: { getFieldInfo: async () => state } };
 		await commands.aura.call(context, '', room);
 		assert(replies.pop().includes('Duration paused by Cold Eclipse'));
 		await commands.field.call(context, '', room);
@@ -58,7 +58,7 @@ describe('Field and Aura information commands', () => {
 	});
 	it('supports named lookups in general chat and clear missing-name errors', async () => {
 		const replies = [];
-		const context = {sendReplyBox: text => replies.push(text), errorReply: text => replies.push(text)};
+		const context = { sendReplyBox: text => replies.push(text), errorReply: text => replies.push(text) };
 		await commands.field.call(context, 'Chess', null);
 		assert(replies.pop().includes('Chess Board'));
 		await commands.field.call(context, 'Chess, Fake Out', null);
@@ -73,11 +73,11 @@ describe('Field and Aura information commands', () => {
 		assert(replies.pop().includes('/field Chess'));
 	});
 	it('reads current field and Aura through the public simulator query, including transitions', async () => {
-		const battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		const battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
-		const stream = new BattleStream({keepAlive: true});
+		const stream = new BattleStream({ keepAlive: true });
 		stream.battle = battle;
 		try {
 			battle.makeChoices('team 1', 'team 1');
@@ -96,8 +96,8 @@ describe('Field and Aura information commands', () => {
 			assert.equal((await getFieldInfo()).fieldTurns, 5);
 			battle.field.setTerrainDuration(9999);
 			const replies = [];
-			const context = {sendReplyBox: text => replies.push(text), errorReply: text => replies.push(text)};
-			const room = {battle: {getFieldInfo}};
+			const context = { sendReplyBox: text => replies.push(text), errorReply: text => replies.push(text) };
+			const room = { battle: { getFieldInfo } };
 			await commands.field.call(context, 'info', room);
 			assert(replies.pop().includes('Water Surface'));
 			await commands.field.call(context, 'full', room);

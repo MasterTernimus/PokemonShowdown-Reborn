@@ -1,4 +1,4 @@
-import type {AbilityDataTable} from '../sim/dex-abilities';
+import type { AbilityDataTable } from '../sim/dex-abilities';
 
 export const CalculatedTrajectoryDescriptions = {
 	calculatedtrajectory: {
@@ -16,10 +16,9 @@ export function installCalculatedTrajectory(abilities: AbilityDataTable) {
 			const foes = pokemon.foes().filter(p => p.hp && p.isActive);
 			const target = foes.find(p => p.position === pokemon.position) || foes[0];
 			if (!pokemon.hp || !target) return;
-			const saved = {move: this.activeMove, pokemon: this.activePokemon, target: this.activeTarget,
-				event: this.event, effect: this.effect, state: this.effectState, result: pokemon.moveThisTurnResult};
-			try { this.actions.useMove('kinesis', pokemon, {target, sourceEffect: this.effect}); }
-			finally {
+			const saved = { move: this.activeMove, pokemon: this.activePokemon, target: this.activeTarget,
+				event: this.event, effect: this.effect, state: this.effectState, result: pokemon.moveThisTurnResult };
+			try { this.actions.useMove('kinesis', pokemon, { target, sourceEffect: this.effect }); } finally {
 				this.activeMove = saved.move; this.activePokemon = saved.pokemon; this.activeTarget = saved.target;
 				this.event = saved.event; this.effect = saved.effect; this.effectState = saved.state;
 				pokemon.moveThisTurnResult = saved.result;

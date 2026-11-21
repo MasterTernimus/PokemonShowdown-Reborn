@@ -8,10 +8,10 @@ describe('Mourning Snow Free-for-All faint healing', () => {
 	for (const gameType of ['singles', 'doubles', 'freeforall']) {
 		for (const [cause, amount] of [['tackle', 50], ['icebeam', 100], ['hail', 100], ['snow', 100], ['curse', 100]]) {
 			it(`${gameType}: ${cause} faint has the correct healing`, () => {
-				const mon = (species = 'Mew', ability = 'No Ability') => ({species, ability, moves: ['splash']});
+				const mon = (species = 'Mew', ability = 'No Ability') => ({ species, ability, moves: ['splash'] });
 				const teams = [[mon('Froslass-Mega', 'Mourning Snow'), mon()], [mon(), mon()]];
 				if (gameType === 'freeforall') teams.push([mon()], [mon()]);
-				battle = common.createBattle({gameType}, teams);
+				battle = common.createBattle({ gameType }, teams);
 				battle.field.clearWeather();
 				const holder = battle.p1.active[0], target = battle.p2.active[0];
 				holder.hp = 100;

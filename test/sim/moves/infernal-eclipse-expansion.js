@@ -3,9 +3,9 @@ const assert = require('assert').strict;
 const common = require('../../common');
 let battle;
 function setup(field = 'infernaleclipseterrain', duration = 5) {
-	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-		[{species: 'Mew', ability: 'noability', moves: ['eruption', 'glaciate', 'infernalparade', 'splash']}],
-		[{species: 'Mew', ability: 'noability', moves: ['splash', 'protect', 'raindance', 'hail']}],
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+		[{ species: 'Mew', ability: 'noability', moves: ['eruption', 'glaciate', 'infernalparade', 'splash'] }],
+		[{ species: 'Mew', ability: 'noability', moves: ['splash', 'protect', 'raindance', 'hail'] }],
 	]);
 	battle.makeChoices('team 1', 'team 1');
 	const p = battle.p1.active[0], q = battle.p2.active[0];
@@ -14,8 +14,8 @@ function setup(field = 'infernaleclipseterrain', duration = 5) {
 	return [p, q];
 }
 function use(p, q, id, props = {}) {
-	const move = Object.assign(battle.dex.getActiveMove(id), {accuracy: true, willCrit: false}, props);
-	if (!p.getMoveData(id)) p.moveSlots.push({id: move.id, move: move.name, pp: 20, maxpp: 20, target: move.target, disabled: false, used: false});
+	const move = Object.assign(battle.dex.getActiveMove(id), { accuracy: true, willCrit: false }, props);
+	if (!p.getMoveData(id)) p.moveSlots.push({ id: move.id, move: move.name, pp: 20, maxpp: 20, target: move.target, disabled: false, used: false });
 	battle.actions.runMove(move, p, p.getLocOf(q));
 }
 function modify(id, p, q) {
@@ -117,7 +117,7 @@ describe('Prepared Eclipse direct swaps', () => {
 				// Isolate the lock from Pulse Blockade's separate entry field setter.
 				if (failure === 'pulseblockade') q.ability = failure;
 				else if (!['protect', 'miss'].includes(failure)) q.setAbility(failure);
-				use(p, q, attack, failure === 'miss' ? {accuracy: 0} : {});
+				use(p, q, attack, failure === 'miss' ? { accuracy: 0 } : {});
 				assert.equal(battle.field.terrain, start);
 				assert.equal(battle.field.auraField, aura);
 				assert.equal(battle.field.auraTurns, 7);

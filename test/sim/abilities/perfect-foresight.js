@@ -3,9 +3,9 @@ const assert = require('assert').strict;
 const common = require('../../common');
 let battle;
 function start(ability = 'Pressure') {
-	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-		[{species: 'Alakazam', ability: 'Perfect Foresight', moves: ['splash']}],
-		[{species: 'Mew', ability, moves: ['splash']}],
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+		[{ species: 'Alakazam', ability: 'Perfect Foresight', moves: ['splash'] }],
+		[{ species: 'Mew', ability, moves: ['splash'] }],
 	]);
 	battle.makeChoices('team 1', 'team 1');
 	return battle.p1.active[0];
@@ -14,9 +14,9 @@ describe('Perfect Foresight copied abilities', () => {
 	afterEach(() => battle?.destroy());
 	for (const sand of [false, true]) {
 		it(`selects ${sand ? 'active Sand Rush' : 'the strongest attacker without sand'} and applies actual Speed`, () => {
-			battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [
-				[{species: 'Alakazam', ability: 'No Ability', moves: ['splash']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
-				[{species: 'Magikarp', ability: 'Sand Rush', moves: ['splash']}, {species: 'Mewtwo', ability: 'Pressure', moves: ['splash']}],
+			battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
+				[{ species: 'Alakazam', ability: 'No Ability', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+				[{ species: 'Magikarp', ability: 'Sand Rush', moves: ['splash'] }, { species: 'Mewtwo', ability: 'Pressure', moves: ['splash'] }],
 			]);
 			battle.makeChoices('team 12', 'team 12');
 			const mon = battle.p1.active[0];
@@ -34,7 +34,7 @@ describe('Perfect Foresight copied abilities', () => {
 	}
 	it('keeps manual Future Sight ordinary and independent of stored attacks', () => {
 		const mon = start(), foe = battle.p2.active[0];
-		battle.actions.useMove('futuresight', mon, {target: foe});
+		battle.actions.useMove('futuresight', mon, { target: foe });
 		assert.equal(foe.side.slotConditions[foe.position].futuremove.moveData.basePower, 120);
 		assert(!foe.side.slotConditions[foe.position].futuremove.moveData.perfectForesight);
 		assert(!battle.field.pseudoWeather.foresightmemory);
@@ -65,26 +65,26 @@ describe('Perfect Foresight copied abilities', () => {
 });
 
 describe('Copied weather suppression', () => {
- for (const copier of ['Perfect Foresight', 'Void Voice']) for (const copied of ['Cloud Nine', 'Air Lock']) {
-  it(copier + (copier === 'Void Voice' ? ' does not copy ' : ' keeps ') + copied + ' after its original holder leaves', () => {
-   const b=common.createBattle({formatid:'gen9nofieldsinglesgame'}, [[{species:'Alakazam',ability:copier,moves:['splash']}],[{species:'Golduck',ability:copied,moves:['splash']},{species:'Mew',ability:'No Ability',moves:['splash']}]]);
-   try {
-    b.makeChoices('team 1','team 12');const p=b.p1.active[0];
-    b.field.setWeather('sunnyday',p);
-    b.makeChoices('move splash','switch 2');
-    assert.equal(b.field.effectiveWeather(),copier === 'Void Voice' ? 'sunnyday' : '');
-    p.addVolatile('gastroacid',b.p2.active[0]);
-    assert.equal(b.field.effectiveWeather(),'sunnyday');
-    p.removeVolatile('gastroacid');
-    b.singleEvent('Start',p.getAbility(),p.abilityState,p);
-    assert.equal(b.field.effectiveWeather(),'sunnyday','recopying No Ability must discard suppression');
-    b.p2.active[0].setAbility(copied);
-    b.singleEvent('Start',p.getAbility(),p.abilityState,p);
-    b.p2.active[0].setAbility('No Ability');
-    assert.equal(b.field.effectiveWeather(),copier === 'Void Voice' ? 'sunnyday' : '');
-    p.faint();b.faintMessages();
-    assert.equal(b.field.effectiveWeather(),'sunnyday');
-   } finally {b.destroy();}
-  });
- }
+	for (const copier of ['Perfect Foresight', 'Void Voice']) for (const copied of ['Cloud Nine', 'Air Lock']) {
+		it(copier + (copier === 'Void Voice' ? ' does not copy ' : ' keeps ') + copied + ' after its original holder leaves', () => {
+			const b = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[{ species: 'Alakazam', ability: copier, moves: ['splash'] }], [{ species: 'Golduck', ability: copied, moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
+			try {
+				b.makeChoices('team 1', 'team 12'); const p = b.p1.active[0];
+				b.field.setWeather('sunnyday', p);
+				b.makeChoices('move splash', 'switch 2');
+				assert.equal(b.field.effectiveWeather(), copier === 'Void Voice' ? 'sunnyday' : '');
+				p.addVolatile('gastroacid', b.p2.active[0]);
+				assert.equal(b.field.effectiveWeather(), 'sunnyday');
+				p.removeVolatile('gastroacid');
+				b.singleEvent('Start', p.getAbility(), p.abilityState, p);
+				assert.equal(b.field.effectiveWeather(), 'sunnyday', 'recopying No Ability must discard suppression');
+				b.p2.active[0].setAbility(copied);
+				b.singleEvent('Start', p.getAbility(), p.abilityState, p);
+				b.p2.active[0].setAbility('No Ability');
+				assert.equal(b.field.effectiveWeather(), copier === 'Void Voice' ? 'sunnyday' : '');
+				p.faint(); b.faintMessages();
+				assert.equal(b.field.effectiveWeather(), 'sunnyday');
+			} finally { b.destroy(); }
+		});
+	}
 });

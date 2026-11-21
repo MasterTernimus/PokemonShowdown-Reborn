@@ -7,15 +7,15 @@ describe('Battle Bond Water Shuriken restart', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 	function setup(format = 'doubles', ability = 'Battle Bond') {
-		const user = {species: 'Greninja', ability, moves: ['watershuriken']};
-		const foe = {species: 'Mew', ability: 'No Ability', moves: ['splash']};
+		const user = { species: 'Greninja', ability, moves: ['watershuriken'] };
+		const foe = { species: 'Mew', ability: 'No Ability', moves: ['splash'] };
 		const formats = {
 			doubles: 'gen9nofielddoublesbattle', singles: 'gen9nofieldsinglesgame',
 			multi: 'gen9multimistyfieldadrienn', ffa: 'gen9freeforall4pmistyfieldadrienn',
 		};
 		const teams = ['multi', 'ffa'].includes(format) ? [[user, foe], [foe, foe], [foe, foe], [foe, foe]] :
 			[[user, foe], [foe, foe, foe]];
-		battle = common.createBattle({formatid: formats[format]}, teams);
+		battle = common.createBattle({ formatid: formats[format] }, teams);
 		battle.makeChoices(...teams.map(team => `team ${team.map((_, i) => i + 1).join('')}`));
 		battle.randomChance = (n, d) => n >= d;
 		battle.randomizer = n => n;
@@ -27,15 +27,15 @@ describe('Battle Bond Water Shuriken restart', () => {
 		battle.actions.getDamage = function (source, defender, move, ...rest) {
 			const damage = original.call(this, source, defender, move, ...rest);
 			if (source === user && move.id === 'watershuriken') {
-				events.push({target: defender, hit: move.hit, species: source.species.id, ability: source.ability,
+				events.push({ target: defender, hit: move.hit, species: source.species.id, ability: source.ability,
 					power: move.basePower, crit: move.willCrit, infiltrates: move.infiltrates,
-					modifier: move.spilloverDamageModifier, damage, passives: [...source.getPassives()]});
+					modifier: move.spilloverDamageModifier, damage, passives: [...source.getPassives()] });
 			}
 			return damage;
 		};
 		const move = battle.dex.getActiveMove('watershuriken');
 		move.multihit = hits;
-		battle.actions.useMove(move, user, {target});
+		battle.actions.useMove(move, user, { target });
 		battle.actions.getDamage = original;
 		return events;
 	}

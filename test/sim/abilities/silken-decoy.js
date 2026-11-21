@@ -5,14 +5,14 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Silken Decoy', function () {
+describe('Silken Decoy', () => {
 	afterEach(() => battle?.destroy());
 
 	for (const move of ['Nuzzle', 'Acid Spray', 'Fake Out']) {
-		it(`blocks ${move}'s secondary effect with the absorbed hit`, function () {
-			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-				{species: 'Ariados', ability: 'Insomnia', item: 'Aridiate', moves: ['Splash']},
-			], [{species: 'Mew', moves: [move, 'Splash']}]]);
+		it(`blocks ${move}'s secondary effect with the absorbed hit`, () => {
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+				{ species: 'Ariados', ability: 'Insomnia', item: 'Aridiate', moves: ['Splash'] },
+			], [{ species: 'Mew', moves: [move, 'Splash'] }]]);
 			battle.makeChoices('team 1', 'team 1');
 			const mon = battle.p1.active[0];
 			assert.false.hurts(mon, () => battle.makeChoices('move splash mega', 'move 1'));
@@ -26,10 +26,10 @@ describe('Silken Decoy', function () {
 		});
 	}
 
-	it('blocks status moves without spending the cocoon and includes Swarm', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Ariados', ability: 'Insomnia', item: 'Aridiate', moves: ['Splash']},
-		], [{species: 'Mew', moves: ['Will-O-Wisp', 'Thunder Wave']}]]);
+	it('blocks status moves without spending the cocoon and includes Swarm', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Ariados', ability: 'Insomnia', item: 'Aridiate', moves: ['Splash'] },
+		], [{ species: 'Mew', moves: ['Will-O-Wisp', 'Thunder Wave'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash mega', 'move 1');
 		const mon = battle.p1.active[0];
@@ -43,11 +43,11 @@ describe('Silken Decoy', function () {
 		assert.equal(battle.runEvent('ModifySpA', mon, battle.p2.active[0], move, 100), 150);
 	});
 
-	it('Mega Ariados starts with a cocoon and blocks the rest of a multi-hit move', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Ariados', ability: 'Neutralization', item: 'Aridiate', moves: ['Splash']},
+	it('Mega Ariados starts with a cocoon and blocks the rest of a multi-hit move', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Ariados', ability: 'Neutralization', item: 'Aridiate', moves: ['Splash'] },
 		], [
-			{species: 'Cloyster', moves: ['Icicle Spear']},
+			{ species: 'Cloyster', moves: ['Icicle Spear'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const ariados = battle.p1.active[0];
@@ -61,12 +61,12 @@ describe('Silken Decoy', function () {
 		assert(battle.log.some(line => line.includes("protective cocoon blocked the hit")));
 	});
 
-	it('remembers an unused cocoon through switching', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Ariados', ability: 'Neutralization', item: 'Aridiate', moves: ['Splash']},
-			{species: 'Magikarp', moves: ['Splash']},
+	it('remembers an unused cocoon through switching', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Ariados', ability: 'Neutralization', item: 'Aridiate', moves: ['Splash'] },
+			{ species: 'Magikarp', moves: ['Splash'] },
 		], [
-			{species: 'Magikarp', moves: ['Splash']},
+			{ species: 'Magikarp', moves: ['Splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash mega', 'move splash');
@@ -79,12 +79,12 @@ describe('Silken Decoy', function () {
 		assert.equal(battle.log.filter(line => line.includes("Silken Decoy spun a protective cocoon")).length, 1);
 	});
 
-	it('does not restore a spent cocoon after switching', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Ariados', ability: 'Neutralization', item: 'Aridiate', moves: ['Splash']},
-			{species: 'Magikarp', moves: ['Splash']},
+	it('does not restore a spent cocoon after switching', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Ariados', ability: 'Neutralization', item: 'Aridiate', moves: ['Splash'] },
+			{ species: 'Magikarp', moves: ['Splash'] },
 		], [
-			{species: 'Cloyster', moves: ['Icicle Spear', 'Splash']},
+			{ species: 'Cloyster', moves: ['Icicle Spear', 'Splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash mega', 'move iciclespear');

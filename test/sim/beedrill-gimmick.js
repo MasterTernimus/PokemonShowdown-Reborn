@@ -5,13 +5,13 @@ const common = require('../common');
 
 describe('Beedrill Mega after a teammate Z-Move', () => {
 	it('keeps the second gimmick available in Doubles Water Surface', () => {
-		const battle = common.createBattle({formatid: 'gen9doubleswatersurface'}, [[
-			{species: 'Crobat', item: 'Poisonium Z', moves: ['crosspoison']},
-			{species: 'Magikarp', moves: ['splash']},
-			{species: 'Beedrill', item: 'Beedrillite', ability: 'Sniper', moves: ['uturn']},
+		const battle = common.createBattle({ formatid: 'gen9doubleswatersurface' }, [[
+			{ species: 'Crobat', item: 'Poisonium Z', moves: ['crosspoison'] },
+			{ species: 'Magikarp', moves: ['splash'] },
+			{ species: 'Beedrill', item: 'Beedrillite', ability: 'Sniper', moves: ['uturn'] },
 		], [
-			{species: 'Chansey', moves: ['splash']},
-			{species: 'Blissey', moves: ['splash']},
+			{ species: 'Chansey', moves: ['splash'] },
+			{ species: 'Blissey', moves: ['splash'] },
 		]]);
 		try {
 			battle.makeChoices('team 123', 'team 12');
@@ -30,14 +30,14 @@ describe('Beedrill Mega after a teammate Z-Move', () => {
 	});
 
 	it('keeps Mega Evolution after a Z-Move, Murkwater replacement, and Fake Out flinch', () => {
-		const battle = common.createBattle({formatid: 'gen9doubleswatersurface'}, [[
-			{species: 'Crobat', item: 'Poisonium Z', moves: ['crosspoison', 'splash']},
-			{species: 'Magikarp', moves: ['splash']},
-			{species: 'Beedrill', item: 'Beedrillite', ability: 'Sniper', moves: ['uturn', 'splash']},
+		const battle = common.createBattle({ formatid: 'gen9doubleswatersurface' }, [[
+			{ species: 'Crobat', item: 'Poisonium Z', moves: ['crosspoison', 'splash'] },
+			{ species: 'Magikarp', moves: ['splash'] },
+			{ species: 'Beedrill', item: 'Beedrillite', ability: 'Sniper', moves: ['uturn', 'splash'] },
 		], [
-			{species: 'Mewtwo', moves: ['thunderbolt', 'splash']},
-			{species: 'Blissey', moves: ['splash']},
-			{species: 'Toxicroak-Deso', ability: 'Neutralization', moves: ['fakeout', 'splash']},
+			{ species: 'Mewtwo', moves: ['thunderbolt', 'splash'] },
+			{ species: 'Blissey', moves: ['splash'] },
+			{ species: 'Toxicroak-Deso', ability: 'Neutralization', moves: ['fakeout', 'splash'] },
 		]]);
 		try {
 			battle.makeChoices('team 123', 'team 12');

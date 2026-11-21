@@ -2,8 +2,8 @@
 
 const assert = require('./../assert');
 
-describe('Gen 8/9 and regional learnsets', function () {
-	it('includes the official entries repaired in the local data patch', function () {
+describe('Gen 8/9 and regional learnsets', () => {
+	it('includes the official entries repaired in the local data patch', () => {
 		const expected = {
 			orbeetle: ['leechlife'],
 			thievul: ['foulplay', 'lashout', 'mudshot', 'protect', 'round', 'uturn'],

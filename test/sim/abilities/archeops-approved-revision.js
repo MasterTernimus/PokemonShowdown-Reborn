@@ -1,10 +1,42 @@
 'use strict';
-const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim/dex');let battle;
-function start(ability='Relic Instinct',mode='singles'){const p={species:'Archeops',ability,moves:['splash','tackle']},t={species:'Mew',ability:'No Ability',moves:['splash','tackle']};battle=common.createBattle({formatid:mode==='doubles'?'gen9nofielddoublesbattle':'gen9nofieldsinglesgame'},[[p,{...t},{...t}],[t,{...t},{...t}]]);battle.makeChoices('team 123','team 123');battle.field.terrain='';battle.randomizer=d=>d;for(const s of battle.sides)for(const p of s.active)p.hp=p.maxhp=p.baseMaxhp=4000;return[battle.p1.active[0],battle.p2.active[0]];}
-function hit(p,t,id='tackle',extra={}){battle.clearActiveMove();const m=battle.dex.getActiveMove(id);Object.assign(m,{accuracy:true,willCrit:false,secondaries:null},extra);battle.actions.useMove(m,p,{target:t});battle.clearActiveMove();}
-describe('Approved Archeops full revision',()=>{
- afterEach(()=>{battle?.destroy();battle=null;});
- it('keeps the exact Archeops slots and Defeatist',()=>assert.deepEqual(Dex.species.get('archeops').abilities,{0:'Defeatist',1:'Relic Instinct',H:'Fossil Frenzy'}));
+const assert = require('assert').strict,
+	common = require('../../common'),
+	{ Dex } = require('../../../dist/sim/dex');
+let battle;
+function start(ability = 'Relic Instinct', mode = 'singles') {
+	const p = { species: 'Archeops', ability, moves: ['splash', 'tackle'] },
+		t = { species: 'Mew', ability: 'No Ability', moves: ['splash', 'tackle'] };
+	battle = common.createBattle(
+		{ formatid: mode === 'doubles' ? 'gen9nofielddoublesbattle' : 'gen9nofieldsinglesgame' },
+		[
+			[p, { ...t }, { ...t }],
+			[t, { ...t }, { ...t }],
+		]
+	);
+	battle.makeChoices('team 123', 'team 123');
+	battle.field.terrain = '';
+	battle.randomizer = d => d;
+	for (const s of battle.sides) for (const p of s.active) p.hp = p.maxhp = p.baseMaxhp = 4000;
+	return [battle.p1.active[0], battle.p2.active[0]];
+}
+function hit(p, t, id = 'tackle', extra = {}) {
+	battle.clearActiveMove();
+	const m = battle.dex.getActiveMove(id);
+	Object.assign(m, { accuracy: true, willCrit: false, secondaries: null }, extra);
+	battle.actions.useMove(m, p, { target: t });
+	battle.clearActiveMove();
+}
+describe('Approved Archeops full revision', () => {
+	afterEach(() => {
+		battle?.destroy();
+		battle = null;
+	});
+	it('keeps the exact Archeops slots and Defeatist', () =>
+		assert.deepEqual(Dex.species.get('archeops').abilities, {
+			0: 'Defeatist',
+			1: 'Relic Instinct',
+			H: 'Fossil Frenzy',
+		}));
 	it('Relic Instinct no longer restores emergency HP or clears negative stages after a hit', () => {
 		const [p, t] = start();
 		p.hp = 1200;
@@ -74,16 +106,82 @@ describe('Approved Archeops full revision',()=>{
 	});
 	it('end-turn healing is exactly 1/16 and only at half HP or less', () => {
 		const [p] = start();
-		for (const [hp, expected] of [[800, 1050], [2000, 2250], [2001, 2001]]) {
+		for (const [hp, expected] of [
+			[800, 1050],
+			[2000, 2250],
+			[2001, 2001],
+		]) {
 			p.hp = hp;
 			battle.fieldEvent('Residual');
 			assert.equal(p.hp, expected);
 		}
 	});
- it('retains both threshold modes and does not tax a healthy attack',()=>{const[p,t]=start();const move=battle.dex.getActiveMove('tackle');battle.runEvent('ModifyMove',p,t,move,move);assert(move.ignoreAbility);const hp=p.hp;hit(p,t);assert.equal(p.hp,hp);p.hp=1800;assert.equal(battle.runEvent('ModifyAtk',p,t,move,100),50);assert.equal(battle.runEvent('ModifySpA',p,t,move,100),50);assert.equal(battle.runEvent('ModifyDamage',t,p,move,100),75);assert.equal(battle.runEvent('CriticalHit',p,t,move),false);battle.singleEvent('Residual',p.getAbility(),p.abilityState,p);assert.equal(p.hp,2050);});
- it('Fossil Frenzy boosts and confuses once after an entire opposing multi-hit move',()=>{const[p,t]=start('Fossil Frenzy');let hits=0;battle.onEvent('DamagingHit',battle.format,()=>{hits++;assert.equal(p.boosts.atk,0);assert(!p.volatiles.confusion);});hit(t,p,'doublehit',{damage:100,multihit:2});assert.equal(hits,2);assert.equal(p.boosts.atk,1);assert.equal(p.boosts.spe,1);assert(p.volatiles.confusion);});
- it('Fossil Frenzy can reward a later move but never an attack that KOs it',()=>{const[p,t]=start('Fossil Frenzy');hit(t,p,'tackle',{damage:100});hit(t,p,'tackle',{damage:100});assert.equal(p.boosts.atk,2);p.hp=100;const from=battle.log.length;hit(t,p,'doublehit',{damage:100,multihit:2});assert.equal(p.hp,0);assert(!battle.log.slice(from).some(l=>l.startsWith('|-boost|')));});
- it('Fossil Frenzy excludes ally, self and residual damage',()=>{const[p,t]=start('Fossil Frenzy','doubles');hit(p.allies()[0],p,'tackle');hit(p,p,'tackle');battle.damage(100,p,t,battle.dex.conditions.get('brn'));battle.runEvent('Update',p);assert.equal(p.boosts.atk,0);assert(!p.volatiles.confusion);});
- it('Fossil Frenzy retains Klutz, confusion vulnerability and confusion HP cost',()=>{const[p,t]=start('Fossil Frenzy');p.setItem('leftovers');assert(p.ignoringItem());p.addVolatile('confusion',p);const m=battle.dex.getActiveMove('tackle');assert.equal(battle.runEvent('Damage',p,t,m,100),125);const hp=p.hp;battle.damage(100,p,p,battle.dex.conditions.get('confused'));assert.equal(hp-p.hp,600);});
- it('Fossil Frenzy retains ordinary self-confusion through Safeguard',()=>{const[p,t]=start('Fossil Frenzy');p.side.addSideCondition('safeguard',t);hit(t,p,'tackle');assert.equal(p.boosts.atk,1);assert(p.volatiles.confusion);});
+	it('retains both threshold modes and does not tax a healthy attack', () => {
+		const [p, t] = start();
+		const move = battle.dex.getActiveMove('tackle');
+		battle.runEvent('ModifyMove', p, t, move, move);
+		assert(move.ignoreAbility);
+		const hp = p.hp;
+		hit(p, t);
+		assert.equal(p.hp, hp);
+		p.hp = 1800;
+		assert.equal(battle.runEvent('ModifyAtk', p, t, move, 100), 50);
+		assert.equal(battle.runEvent('ModifySpA', p, t, move, 100), 50);
+		assert.equal(battle.runEvent('ModifyDamage', t, p, move, 100), 75);
+		assert.equal(battle.runEvent('CriticalHit', p, t, move), false);
+		battle.singleEvent('Residual', p.getAbility(), p.abilityState, p);
+		assert.equal(p.hp, 2050);
+	});
+	it('Fossil Frenzy boosts and confuses once after an entire opposing multi-hit move', () => {
+		const [p, t] = start('Fossil Frenzy');
+		let hits = 0;
+		battle.onEvent('DamagingHit', battle.format, () => {
+			hits++;
+			assert.equal(p.boosts.atk, 0);
+			assert(!p.volatiles.confusion);
+		});
+		hit(t, p, 'doublehit', { damage: 100, multihit: 2 });
+		assert.equal(hits, 2);
+		assert.equal(p.boosts.atk, 1);
+		assert.equal(p.boosts.spe, 1);
+		assert(p.volatiles.confusion);
+	});
+	it('Fossil Frenzy can reward a later move but never an attack that KOs it', () => {
+		const [p, t] = start('Fossil Frenzy');
+		hit(t, p, 'tackle', { damage: 100 });
+		hit(t, p, 'tackle', { damage: 100 });
+		assert.equal(p.boosts.atk, 2);
+		p.hp = 100;
+		const from = battle.log.length;
+		hit(t, p, 'doublehit', { damage: 100, multihit: 2 });
+		assert.equal(p.hp, 0);
+		assert(!battle.log.slice(from).some(l => l.startsWith('|-boost|')));
+	});
+	it('Fossil Frenzy excludes ally, self and residual damage', () => {
+		const [p, t] = start('Fossil Frenzy', 'doubles');
+		hit(p.allies()[0], p, 'tackle');
+		hit(p, p, 'tackle');
+		battle.damage(100, p, t, battle.dex.conditions.get('brn'));
+		battle.runEvent('Update', p);
+		assert.equal(p.boosts.atk, 0);
+		assert(!p.volatiles.confusion);
+	});
+	it('Fossil Frenzy retains Klutz, confusion vulnerability and confusion HP cost', () => {
+		const [p, t] = start('Fossil Frenzy');
+		p.setItem('leftovers');
+		assert(p.ignoringItem());
+		p.addVolatile('confusion', p);
+		const m = battle.dex.getActiveMove('tackle');
+		assert.equal(battle.runEvent('Damage', p, t, m, 100), 125);
+		const hp = p.hp;
+		battle.damage(100, p, p, battle.dex.conditions.get('confused'));
+		assert.equal(hp - p.hp, 600);
+	});
+	it('Fossil Frenzy retains ordinary self-confusion through Safeguard', () => {
+		const [p, t] = start('Fossil Frenzy');
+		p.side.addSideCondition('safeguard', t);
+		hit(t, p, 'tackle');
+		assert.equal(p.boosts.atk, 1);
+		assert(p.volatiles.confusion);
+	});
 });

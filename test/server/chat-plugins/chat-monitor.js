@@ -6,7 +6,7 @@
 'use strict';
 
 const assert = require('assert').strict;
-const {makeUser} = require('../../users-utils');
+const { makeUser } = require('../../users-utils');
 
 let Filters;
 before(() => { ({ Filters } = require('../../../dist/server/chat-plugins/chat-monitor')); });

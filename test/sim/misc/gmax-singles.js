@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('G-Max field Singles option', function () {
-	afterEach(function () {
+describe('G-Max field Singles option', () => {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
-	it('allows Gigantamaxing in a field Singles format', function () {
-		battle = common.createBattle({formatid: 'gen9mistyfieldadrienn'}, [[
-			{species: 'Charizard', gigantamax: true, moves: ['flamethrower']},
+	it('allows Gigantamaxing in a field Singles format', () => {
+		battle = common.createBattle({ formatid: 'gen9mistyfieldadrienn' }, [[
+			{ species: 'Charizard', gigantamax: true, moves: ['flamethrower'] },
 		], [
-			{species: 'Blastoise', moves: ['splash']},
+			{ species: 'Blastoise', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move flamethrower dynamax', 'move splash');
@@ -23,11 +23,11 @@ describe('G-Max field Singles option', function () {
 		assert.species(battle.p1.active[0], 'Charizard-Gmax');
 	});
 
-	it('keeps ordinary no-field Singles unable to Gigantamax', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Charizard', gigantamax: true, moves: ['flamethrower']},
+	it('keeps ordinary no-field Singles unable to Gigantamax', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Charizard', gigantamax: true, moves: ['flamethrower'] },
 		], [
-			{species: 'Blastoise', moves: ['splash']},
+			{ species: 'Blastoise', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		assert.cantMove(() => battle.choose('p1', 'move flamethrower dynamax'));

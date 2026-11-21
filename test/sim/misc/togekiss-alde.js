@@ -1,8 +1,8 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim/dex');
-const {TeamValidator} = require('../../../dist/sim/team-validator');
+const { Dex } = require('../../../dist/sim/dex');
+const { TeamValidator } = require('../../../dist/sim/team-validator');
 
 describe('Togekiss-Alde cosmetic profile', () => {
 	it('inherits Togekiss mechanics and is legal with its base learnset', () => {
@@ -13,7 +13,7 @@ describe('Togekiss-Alde cosmetic profile', () => {
 			assert.deepEqual(skin[key], base[key], key);
 		}
 		for (const ability of Object.values(base.abilities)) {
-			const team = [{species: 'Togekiss-Alde', ability, moves: ['airslash', 'roost', 'aurasphere', 'dazzlinggleam']}];
+			const team = [{ species: 'Togekiss-Alde', ability, moves: ['airslash', 'roost', 'aurasphere', 'dazzlinggleam'] }];
 			assert.equal(new TeamValidator('gen9nofieldsinglesgame').validateTeam(team), null);
 			assert.equal(team[0].species, 'Togekiss-Alde');
 		}
@@ -21,8 +21,8 @@ describe('Togekiss-Alde cosmetic profile', () => {
 	for (const shiny of [false, true]) {
 		it(`retains the cosmetic form in battle with shiny=${shiny}`, () => {
 			const battle = common.createBattle([[
-				{species: 'Togekiss-Alde', ability: 'Void Omen', shiny, moves: ['splash']},
-			], [{species: 'Mew', ability: 'No Ability', moves: ['splash']}]]);
+				{ species: 'Togekiss-Alde', ability: 'Void Omen', shiny, moves: ['splash'] },
+			], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
 			try {
 				const pokemon = battle.p1.active[0];
 				assert.equal(pokemon.species.name, 'Togekiss-Alde');

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Seeds', function () {
-	afterEach(function () {
+describe('Seeds', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should activate even on a double-switch-in`, function () {
+	it(`should activate even on a double-switch-in`, () => {
 		battle = common.createBattle([[
 			{ species: 'Tapu Koko', ability: 'electricsurge', item: 'elementalseed', moves: ['protect'] },
 		], [
@@ -20,28 +20,29 @@ describe('Seeds', function () {
 		assert.false.holdsItem(battle.p2.active[0]);
 	});
 
-	it(`should not activate when Magic Room ends`, function () {
+	it(`should not activate when Magic Room ends`, () => {
 		battle = common.createBattle([[
-			{species: 'Tapu Koko', ability: 'electricsurge', moves: ['protect']},
+			{ species: 'Tapu Koko', ability: 'electricsurge', moves: ['protect'] },
 			{ species: 'Hawlucha', item: 'elementalseed', moves: ['protect'] },
 		], [
-			{species: 'Alakazam', moves: ['magicroom']},
+			{ species: 'Alakazam', moves: ['magicroom'] },
 		]]);
 		battle.makeChoices('move protect', 'move magicroom');
 		battle.makeChoices('switch 2', 'move magicroom');
 		assert.holdsItem(battle.p1.active[0]);
 	});
 
-	it.skip(`should activate on switching in after other entrance Abilities, at the same time as Primal reversion`, function () {
+	it.skip(`should activate on switching in after other entrance Abilities, at the same time as Primal reversion`, () => {
 		battle = common.createBattle([[
-			{species: 'Tapu Koko', ability: 'electricsurge', moves: ['finalgambit']},
-			{species: 'Groudon', ability: 'drought', item: 'redorb', moves: ['sleeptalk']},
+			{ species: 'Tapu Koko', ability: 'electricsurge', moves: ['finalgambit'] },
+			{ species: 'Groudon', ability: 'drought', item: 'redorb', moves: ['sleeptalk'] },
 		], [
-			{species: 'Bounsweet', moves: ['sleeptalk']},
+			{ species: 'Bounsweet', moves: ['sleeptalk'] },
 			{ species: 'Shuckle', item: 'elementalseed', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices();
+		const log = battle.log.join('\n');
 		const redOrbIndex = log.indexOf('Groudon-Primal');
 		const electricSeedIndex = log.indexOf('Electric Seed');
 		assert(redOrbIndex < electricSeedIndex, 'Groudon should undergo Primal Reversion first, then Electric Seed should activate, because Groudon is faster.');

@@ -1,18 +1,18 @@
 'use strict';
 
 const assert = require('../../assert');
-const {Dex} = require('../../../dist/sim');
-const {Learnsets} = require('../../../dist/data/learnsets');
+const { Dex } = require('../../../dist/sim');
+const { Learnsets } = require('../../../dist/data/learnsets');
 
-describe('Chandelure-Aevian', function () {
-	it('has the requested regional profile', function () {
+describe('Chandelure-Aevian', () => {
+	it('has the requested regional profile', () => {
 		const species = Dex.species.get('Chandelure-Aevian');
 		assert.deepEqual(species.types, ['Ghost', 'Electric']);
-		assert.deepEqual(species.baseStats, {hp: 85, atk: 50, def: 90, spa: 145, spd: 90, spe: 80});
-		assert.deepEqual(species.abilities, {0: 'Illuminate', 1: 'Levitate', H: 'Magic Guard'});
+		assert.deepEqual(species.baseStats, { hp: 85, atk: 50, def: 90, spa: 145, spd: 90, spe: 80 });
+		assert.deepEqual(species.abilities, { 0: 'Illuminate', 1: 'Levitate', H: 'Magic Guard' });
 	});
 
-	it('uses only its regional learnset', function () {
+	it('uses only its regional learnset', () => {
 		const learnset = Learnsets.chandelureaevian.learnset;
 		for (const move of ['allyswitch', 'discharge', 'nuzzle', 'risingvoltage', 'spikes', 'voltswitch', 'zapcannon']) {
 			assert(learnset[move], `${move} should be in Chandelure-Aevian's learnset`);

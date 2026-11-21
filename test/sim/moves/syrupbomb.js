@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Syrup Bomb', function () {
-	afterEach(function () {
+describe('Syrup Bomb', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should lower the opponent's Speed for 3 turns, but not remove its volatile until after 4 turns`, function () {
+	it(`should lower the opponent's Speed for 3 turns, but not remove its volatile until after 4 turns`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', ability: 'noguard', moves: ['syrupbomb']},
+			{ species: 'Wynaut', ability: 'noguard', moves: ['syrupbomb'] },
 		], [
-			{species: 'Applin', moves: ['sleeptalk']},
+			{ species: 'Applin', moves: ['sleeptalk'] },
 		]]);
 
 		for (let i = 0; i < 3; i++) battle.makeChoices();

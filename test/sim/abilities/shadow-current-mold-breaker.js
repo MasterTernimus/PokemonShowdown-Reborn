@@ -5,9 +5,9 @@ const common = require('../../common');
 
 let battle;
 function start(foeAbility = 'No Ability') {
-	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'},
-		[[{species: 'Mew', ability: 'Aegis Tide', moves: ['earthquake', 'watergun', 'tackle']}],
-			[{species: 'Mew', ability: foeAbility, moves: ['splash']}]]);
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' },
+		[[{ species: 'Mew', ability: 'Aegis Tide', moves: ['earthquake', 'watergun', 'tackle'] }],
+			[{ species: 'Mew', ability: foeAbility, moves: ['splash'] }]]);
 	battle.makeChoices('team 1', 'team 1');
 	return [battle.p1.active[0], battle.p2.active[0]];
 }
@@ -22,9 +22,8 @@ describe('Aegis Tide Mold Breaker component', () => {
 		it(`respects ${ability} with ${move}`, () => {
 			const [user, target] = start(ability);
 			if (ability === 'Sturdy') target.hp = target.maxhp = target.baseMaxhp = 1;
-			battle.actions.useMove(move, user, {target});
+			battle.actions.useMove(move, user, { target });
 			assert.equal(target.hp, target.maxhp);
-
 		});
 	}
 
@@ -44,12 +43,12 @@ describe('Aegis Tide Mold Breaker component', () => {
 	for (const defense of ['Ability Shield', 'suppression']) it('respects ' + defense, () => {
 		const [user, target] = start('Water Absorb');
 		if (defense === 'Ability Shield') target.setItem('Ability Shield'); else user.addVolatile('gastroacid', target);
-		battle.actions.useMove('watershuriken', user, {target}); assert.equal(target.hp, target.maxhp);
+		battle.actions.useMove('watershuriken', user, { target }); assert.equal(target.hp, target.maxhp);
 	});
 	it('still respects Protect', () => {
 		const [user, target] = start();
 		target.addVolatile('protect', target);
-		battle.actions.useMove('watergun', user, {target});
+		battle.actions.useMove('watergun', user, { target });
 		assert.equal(target.hp, target.maxhp);
 	});
 });

@@ -1,9 +1,37 @@
-'use strict';const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim');let b;
-function setup(species='Gyarados-Mega',ability='Unleashed Ego'){b=common.createBattle({},[[{species,ability,moves:['waterfall','splash']},{species:'Mew',ability:'No Ability',moves:['splash']}],[{species:'Mew',ability:'No Ability',moves:['splash']}]]);const p=b.p1.active[0],q=b.p2.active[0];for(const mon of [p,q])mon.hp=mon.maxhp=mon.baseMaxhp=10000;return[p,q];}
-function charge(p,q){b.runEvent('DamagingHit',p,q,Dex.getActiveMove('tackle'),20);}
-function move(p,q,id='waterfall'){const m=Dex.getActiveMove(id);b.runEvent('ModifyMove',p,q,m,m);return m;}
-function spend(p,q){b.runEvent('DamagingHit',q,p,Dex.getActiveMove('waterfall'),20);}
-describe('Mega Gyarados once-per-battle Tempest Fury',()=>{afterEach(()=>{b?.destroy();b=null;});
+'use strict';
+const assert = require('assert').strict,
+	common = require('../../common'),
+	{ Dex } = require('../../../dist/sim');
+let b;
+function setup(species = 'Gyarados-Mega', ability = 'Unleashed Ego') {
+	b = common.createBattle({}, [
+		[
+			{ species, ability, moves: ['waterfall', 'splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+		],
+		[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+	]);
+	const p = b.p1.active[0],
+		q = b.p2.active[0];
+	for (const mon of [p, q]) mon.hp = mon.maxhp = mon.baseMaxhp = 10000;
+	return [p, q];
+}
+function charge(p, q) {
+	b.runEvent('DamagingHit', p, q, Dex.getActiveMove('tackle'), 20);
+}
+function move(p, q, id = 'waterfall') {
+	const m = Dex.getActiveMove(id);
+	b.runEvent('ModifyMove', p, q, m, m);
+	return m;
+}
+function spend(p, q) {
+	b.runEvent('DamagingHit', q, p, Dex.getActiveMove('waterfall'), 20);
+}
+describe('Mega Gyarados once-per-battle Tempest Fury', () => {
+	afterEach(() => {
+		b?.destroy();
+		b = null;
+	});
 	it('shares the once-per-battle passive between base and Mega; Intimidate remains selectable', () => {
 		assert.deepEqual(Dex.species.get('gyaradosmega').passives, ['tempestfury']);
 		assert.deepEqual(Dex.species.get('gyarados').passives, ['tempestfury']);
@@ -25,12 +53,64 @@ describe('Mega Gyarados once-per-battle Tempest Fury',()=>{afterEach(()=>{b?.des
 		assert(!move(p, q).willCrit);
 		assert(p.m.megaTempestAcquired);
 	});
-it('requires surviving opposing positive direct HP damage',()=>{const[p,q]=setup();charge(p,p);assert(!p.m.megaTempestAcquired);b.runEvent('DamagingHit',p,q,Dex.getActiveMove('tackle'),0);assert(!p.m.megaTempestAcquired);p.hp=0;charge(p,q);assert(!p.m.megaTempestAcquired);});
-it('does not apply to status or non-Water attacks',()=>{const[p,q]=setup();charge(p,q);assert(!move(p,q,'splash').willCrit);assert(!move(p,q,'tackle').willCrit);assert(p.m.megaTempestCharged);});
-for(const obstacle of ['miss','protect','immunity'])it('preserves charge through '+obstacle,()=>{const[p,q]=setup('Gyarados-Mega','No Ability');charge(p,q);const m=move(p,q);if(obstacle==='miss')m.accuracy=0;if(obstacle==='protect')q.addVolatile('protect');if(obstacle==='immunity')q.setAbility('Water Absorb');b.actions.useMove(m,p,{target:q});assert(p.m.megaTempestCharged);});
-it('spends charge on actual Substitute damage',()=>{const[p,q]=setup('Gyarados-Mega','No Ability');charge(p,q);q.addVolatile('substitute');b.actions.useMove(move(p,q),p,{target:q});assert(!p.m.megaTempestCharged);});
-it('normal critical prevention remains and a damaging hit still spends charge',()=>{const[p,q]=setup('Gyarados-Mega','No Ability');q.setAbility('Battle Armor');charge(p,q);const m=move(p,q);b.actions.getDamage(p,q,m);assert.equal(q.getMoveHitData(m).crit,false);b.actions.useMove(m,p,{target:q});assert(!p.m.megaTempestCharged);});
-it('banks charge across real switches and cannot reacquire after spending and switching',()=>{const[p,q]=setup();charge(p,q);b.makeChoices('switch 2','move splash');b.makeChoices('switch 2','move splash');assert.equal(b.p1.active[0],p);assert(move(p,q).willCrit);spend(p,q);b.makeChoices('switch 2','move splash');b.makeChoices('switch 2','move splash');charge(p,q);assert(!move(p,q).willCrit);});
+	it('requires surviving opposing positive direct HP damage', () => {
+		const [p, q] = setup();
+		charge(p, p);
+		assert(!p.m.megaTempestAcquired);
+		b.runEvent('DamagingHit', p, q, Dex.getActiveMove('tackle'), 0);
+		assert(!p.m.megaTempestAcquired);
+		p.hp = 0;
+		charge(p, q);
+		assert(!p.m.megaTempestAcquired);
+	});
+	it('does not apply to status or non-Water attacks', () => {
+		const [p, q] = setup();
+		charge(p, q);
+		assert(!move(p, q, 'splash').willCrit);
+		assert(!move(p, q, 'tackle').willCrit);
+		assert(p.m.megaTempestCharged);
+	});
+	for (const obstacle of ['miss', 'protect', 'immunity'])
+		it('preserves charge through ' + obstacle, () => {
+			const [p, q] = setup('Gyarados-Mega', 'No Ability');
+			charge(p, q);
+			const m = move(p, q);
+			if (obstacle === 'miss') m.accuracy = 0;
+			if (obstacle === 'protect') q.addVolatile('protect');
+			if (obstacle === 'immunity') q.setAbility('Water Absorb');
+			b.actions.useMove(m, p, { target: q });
+			assert(p.m.megaTempestCharged);
+		});
+	it('spends charge on actual Substitute damage', () => {
+		const [p, q] = setup('Gyarados-Mega', 'No Ability');
+		charge(p, q);
+		q.addVolatile('substitute');
+		b.actions.useMove(move(p, q), p, { target: q });
+		assert(!p.m.megaTempestCharged);
+	});
+	it('normal critical prevention remains and a damaging hit still spends charge', () => {
+		const [p, q] = setup('Gyarados-Mega', 'No Ability');
+		q.setAbility('Battle Armor');
+		charge(p, q);
+		const m = move(p, q);
+		b.actions.getDamage(p, q, m);
+		assert.equal(q.getMoveHitData(m).crit, false);
+		b.actions.useMove(m, p, { target: q });
+		assert(!p.m.megaTempestCharged);
+	});
+	it('banks charge across real switches and cannot reacquire after spending and switching', () => {
+		const [p, q] = setup();
+		charge(p, q);
+		b.makeChoices('switch 2', 'move splash');
+		b.makeChoices('switch 2', 'move splash');
+		assert.equal(b.p1.active[0], p);
+		assert(move(p, q).willCrit);
+		spend(p, q);
+		b.makeChoices('switch 2', 'move splash');
+		b.makeChoices('switch 2', 'move splash');
+		charge(p, q);
+		assert(!move(p, q).willCrit);
+	});
 	it('form cycling preserves the acquisition and unspent charge', () => {
 		const [p, q] = setup();
 		charge(p, q);
@@ -65,5 +145,14 @@ it('banks charge across real switches and cannot reacquire after spending and sw
 		assert(!move(p, q).willCrit);
 	});
 
-it('active copy and ability toggles cannot bypass the passive limit',()=>{const[p,q]=setup();p.setAbility('Tempest Fury',null,null,true);charge(p,q);spend(p,q);p.setAbility('No Ability',null,null,true);p.setAbility('Tempest Fury',null,null,true);charge(p,q);assert(!move(p,q).willCrit);});
+	it('active copy and ability toggles cannot bypass the passive limit', () => {
+		const [p, q] = setup();
+		p.setAbility('Tempest Fury', null, null, true);
+		charge(p, q);
+		spend(p, q);
+		p.setAbility('No Ability', null, null, true);
+		p.setAbility('Tempest Fury', null, null, true);
+		charge(p, q);
+		assert(!move(p, q).willCrit);
+	});
 });

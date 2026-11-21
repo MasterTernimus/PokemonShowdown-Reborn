@@ -29,7 +29,7 @@ describe('Hariyama Thick Fat passive and balanced choices', () => {
 	it('suppresses selected Grit Grappler, not passive hail immunity', () => {
 		const [p, q] = setup();
 		p.setStatus('brn');
-		let m = Dex.getActiveMove('tackle');
+		const m = Dex.getActiveMove('tackle');
 		assert.equal(b.runEvent('ModifyAtk', p, q, m, 100), 150);
 		p.addVolatile('gastroacid');
 		assert.equal(b.runEvent('ModifyAtk', p, q, m, 100), 100);

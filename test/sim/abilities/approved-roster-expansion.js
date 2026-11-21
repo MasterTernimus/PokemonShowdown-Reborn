@@ -384,14 +384,13 @@ describe('Approved roster expansion and component search', () => {
 	});
 });
 
-
 describe('Roster support duration protocol', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 	function setup(ability) {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Mew', ability, moves: ['hypervoice', 'splash']},
-		], [{species: 'Blissey', ability: 'No Ability', moves: ['splash', 'tackle']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Mew', ability, moves: ['hypervoice', 'splash'] },
+		], [{ species: 'Blissey', ability: 'No Ability', moves: ['splash', 'tackle'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		return battle.p1.active[0];
 	}

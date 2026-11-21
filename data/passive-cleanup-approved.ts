@@ -1,7 +1,11 @@
 import type { AbilityDataTable } from '../sim/dex-abilities';
 
 export const PassiveCleanupDescriptions = {
- rivalry: {shortDesc: '1.3x power vs same-gender or genderless targets; other allies take 0.75x attack damage. Stacks.', desc: 'Damaging moves have 1.3x power against targets of the same gender or genderless targets. All other matchups retain normal power with no penalty. Other allies take 25% less attack damage, including friendly fire, regardless of gender; the holder does not protect itself. Protection stacks with Friend Guard and with each other Rivalry holder. The same holder\'s active and passive Rivalry do not duplicate its effects.'},
+	rivalry: {
+		shortDesc:
+			'1.3x power vs same-gender or genderless targets; other allies take 0.75x attack damage. Stacks.',
+		desc: "Damaging moves have 1.3x power against targets of the same gender or genderless targets. All other matchups retain normal power with no penalty. Other allies take 25% less attack damage, including friendly fire, regardless of gender; the holder does not protect itself. Protection stacks with Friend Guard and with each other Rivalry holder. The same holder's active and passive Rivalry do not duplicate its effects.",
+	},
 	rockypayload: {
 		shortDesc: 'Rock attacks use 1.5x Attack or Sp. Atk.',
 		desc: 'Rock attacks use 1.5x Attack or Special Attack on all fields.',
@@ -17,8 +21,9 @@ export const PassiveCleanupDescriptions = {
 		desc: "Full Poison Touch: contact attacks have a 30% poison chance, subject to Shield Dust, Covert Cloak and normal poison immunities. The first damaging contact hit dealing opposing HP damage each entry lowers that target's Speed by 1. Switching resets this allowance; ability changes do not. Misses, protection, immunity and Substitute-only damage do not spend it. A knockout spends it without lowering a fainted target's Speed.",
 	},
 	surgesurfer: {
-		shortDesc: 'Doubles Speed on Electric, Water Surface, Underwater, Murkwater Surface and Short-Circuit fields.',
-		desc: 'The Pokemon\'s Speed is doubled on Electric Terrain, Water Surface, Underwater, Murkwater Surface and Short-Circuit fields.',
+		shortDesc:
+			'Doubles Speed on Electric, Water Surface, Underwater, Murkwater Surface and Short-Circuit fields.',
+		desc: "The Pokemon's Speed is doubled on Electric Terrain, Water Surface, Underwater, Murkwater Surface and Short-Circuit fields.",
 	},
 };
 
@@ -33,7 +38,12 @@ export function installPassiveCleanupApproved(abilities: AbilityDataTable) {
 	};
 
 	abilities.unbridledwrath = {
-		...abilities.sheerforce, ...abilities.innerfocus, name: 'Unbridled Wrath', num: 11441, rating: 4, flags: {},
+		...abilities.sheerforce,
+		...abilities.innerfocus,
+		name: 'Unbridled Wrath',
+		num: 11441,
+		rating: 4,
+		flags: {},
 	};
 	const stormMove = abilities.ragingstorm.onModifyMove!;
 	abilities.ragingstorm.onModifyMove = function (move, pokemon, target) {
@@ -50,13 +60,25 @@ export function installPassiveCleanupApproved(abilities: AbilityDataTable) {
 	};
 
 	abilities.venompincer = {
-		name: 'Venom Pincer', num: 11440, rating: 4, flags: {},
+		name: 'Venom Pincer',
+		num: 11440,
+		rating: 4,
+		flags: {},
 		onSourceDamagingHit: abilities.poisontouch.onSourceDamagingHit,
 		onSourceAfterDamageApplied(damage, target, source, move) {
-            if (!move || move.effectType !== 'Move' || !move.flags || damage <= 0 || target.isAlly(source) || move.category === 'Status' || source.volatiles.venompincerspent || !this.checkMoveMakesContact(move, target, source)) return;
-            source.addVolatile('venompincerspent', source, this.effect);
-            if (target.hp) this.boost({spe: -1}, target, source, this.effect);
-        },
+			if (
+				!move ||
+				move.effectType !== 'Move' ||
+				!move.flags ||
+				damage <= 0 ||
+				target.isAlly(source) ||
+				move.category === 'Status' ||
+				source.volatiles.venompincerspent ||
+				!this.checkMoveMakesContact(move, target, source)
+			)
+				return;
+			source.addVolatile('venompincerspent', source, this.effect);
+			if (target.hp) this.boost({ spe: -1 }, target, source, this.effect);
+		},
 	};
-
 }

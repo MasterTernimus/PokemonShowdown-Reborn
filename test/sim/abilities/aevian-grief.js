@@ -2,8 +2,8 @@
 
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
-const {TeamValidator} = require('../../../dist/sim/team-validator');
+const { Dex } = require('../../../dist/sim');
+const { TeamValidator } = require('../../../dist/sim/team-validator');
 
 const requestedMoves = `Astonish|Miracle Eye|Hypnosis|Fairy Wind|Tailwind|Whirlwind|Night Shade|Draining Kiss|Lucky Chant|Safeguard|Ominous Wind|Nightmare|Mind Reader|Hex|Dream Eater|Mystical Fire|Cosmic Power|Ancient Power|Curse|Future Sight|Psychic|Psychoshift|Roost|Stored Power|Aerial Ace|Air Slash|Ally Switch|Aura Sphere|Calm Mind|Charge Beam|Dark Pulse|Dazzling Gleam|Defog|Dual Wingbeat|Energy Ball|Fire Spin|Flamethrower|Flash|Fly|Frustration|Giga Impact|Gravity|Guard Swap|Heat Wave|Hyper Beam|Icy Wind|Incinerate|Light Screen|Magic Coat|Magic Room|Misty Explosion|Misty Terrain|Pain Split|Phantom Force|Poltergeist|Power Swap|Reflect|Shadow Ball|Shadow Claw|Shock Wave|Signal Beam|Skill Swap|Solar Beam|Spite|Steel Wing|Thief|Thunder Wave|Trick|Trick Room|Will-O-Wisp|Wonder Room`.split('|').map(name => Dex.toID(name));
 
@@ -20,7 +20,7 @@ describe('Sigilyph-Rejuv and Aevian Grief', () => {
 		assert.deepEqual(rejuv.types, ['Ghost', 'Fairy']);
 		assert.deepEqual(rejuv.baseStats, base.baseStats);
 		assert.equal(base.abilities.S, 'Aevian Grief');
-		assert.deepEqual(rejuv.abilities, {0: 'Aevian Grief'});
+		assert.deepEqual(rejuv.abilities, { 0: 'Aevian Grief' });
 		assert.equal(rejuv.requiredAbility, 'Aevian Grief');
 		assert.equal(new Set(requestedMoves).size, requestedMoves.length);
 		assert.equal(requestedMoves.length, 71);
@@ -35,8 +35,8 @@ describe('Sigilyph-Rejuv and Aevian Grief', () => {
 	it('rejects unlisted moves only with Aevian Grief', () => {
 		const validator = TeamValidator.get('gen9nofieldsinglesgame');
 		const set = (ability, moves) => [
-			{species: 'Sigilyph', ability, moves},
-			{species: 'Mew', moves: ['Splash']},
+			{ species: 'Sigilyph', ability, moves },
+			{ species: 'Mew', moves: ['Splash'] },
 		];
 		assert.equal(validator.validateTeam(set('Aevian Grief',
 			['Dazzling Gleam', 'Shadow Ball', 'Frustration', 'Calm Mind'])), null);
@@ -49,17 +49,17 @@ describe('Sigilyph-Rejuv and Aevian Grief', () => {
 			assert(problems?.some(problem => problem.includes(`can't use ${move} with Aevian Grief`)), move);
 		}
 		const rejuvProblems = validator.validateTeam([
-			{species: 'Sigilyph-Rejuv', ability: 'Aevian Grief', moves: ['Protect']},
-			{species: 'Mew', moves: ['Splash']},
+			{ species: 'Sigilyph-Rejuv', ability: 'Aevian Grief', moves: ['Protect'] },
+			{ species: 'Mew', moves: ['Splash'] },
 		]);
 		assert(rejuvProblems?.some(problem => problem.includes("can't use Protect with Aevian Grief")));
 		assert.equal(validator.validateTeam(set('Magic Guard', ['Protect', 'Air Cutter'])), null);
 	});
 
 	it('transforms on entry and provides Magic Guard, Cursed Body, Wonder Skin, and Levitate', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Sigilyph', ability: 'Aevian Grief', moves: ['splash']},
-		], [{species: 'Mew', moves: ['splash']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Sigilyph', ability: 'Aevian Grief', moves: ['splash'] },
+		], [{ species: 'Mew', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		const sigilyph = battle.p1.active[0];
 		const foe = battle.p2.active[0];

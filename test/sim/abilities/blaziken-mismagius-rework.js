@@ -7,9 +7,9 @@ describe('Blazing Tempo, Void Hex, and Shadow Tag rework', () => {
 	afterEach(() => battle?.destroy());
 
 	it('gives Mega Blaziken Raging Flame and a separate Proficient passive', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
 			[{ species: 'Blaziken-Mega', ability: 'Raging Flame', moves: ['highjumpkick', 'splash'] }],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const mon = battle.p1.active[0], foe = battle.p2.active[0];
@@ -24,7 +24,7 @@ describe('Blazing Tempo, Void Hex, and Shadow Tag rework', () => {
 		const move = battle.dex.getActiveMove('tackle');
 		battle.singleEvent('ModifyMove', mon.getAbility(), mon.abilityState, move, mon, foe);
 		assert(!move.ignoreEvasion);
-		battle.boost({accuracy: -1}, mon, foe);
+		battle.boost({ accuracy: -1 }, mon, foe);
 		assert.equal(mon.boosts.accuracy, -1);
 		assert(!mon.addVolatile('flinch', foe));
 		battle.boost({ atk: -1 }, mon, foe, battle.dex.abilities.get('intimidate'));
@@ -34,9 +34,9 @@ describe('Blazing Tempo, Void Hex, and Shadow Tag rework', () => {
 	});
 
 	it('gives Mismagius Void Hex earned trapping, Prankster and Cursed Body without Haunted Field', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mismagius', ability: 'Void Hex', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}, {species: 'Ditto', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Mismagius', ability: 'Void Hex', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }, { species: 'Ditto', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const mon = battle.p1.active[0], foe = battle.p2.active[0];
@@ -55,9 +55,9 @@ describe('Blazing Tempo, Void Hex, and Shadow Tag rework', () => {
 
 	it('stops standalone Shadow Tag and Cruel Tag from summoning Haunted Field', () => {
 		for (const ability of ['Shadow Tag', 'Cruel Tag']) {
-			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-				[{species: 'Mew', ability, moves: ['splash']}],
-				[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+				[{ species: 'Mew', ability, moves: ['splash'] }],
+				[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 			]);
 			battle.makeChoices('team 1', 'team 1');
 			battle.p1.active[0].faint();
@@ -69,9 +69,9 @@ describe('Blazing Tempo, Void Hex, and Shadow Tag rework', () => {
 	});
 
 	it('keeps Victreebel’s approved Corrosion option', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Victreebel', ability: 'Arena Trap', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Victreebel', ability: 'Arena Trap', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		assert.deepEqual(battle.dex.species.get('Victreebel').abilities, {
 			0: 'Chlorophyll', 1: 'Corrosion', H: 'Baited Bloom',

@@ -3,19 +3,19 @@
 const assert = require('../assert');
 const common = require('../common');
 
-describe('Supreme Overlord faint tracking', function () {
+describe('Supreme Overlord faint tracking', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 
-	it('does not refresh when an opponent faints, but updates for a fallen ally', function () {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Kingambit', ability: 'supremeoverlord', moves: ['splash']},
-			{species: 'Eevee', ability: 'runaway', moves: ['splash']},
-			{species: 'Eevee', ability: 'runaway', moves: ['splash']},
+	it('does not refresh when an opponent faints, but updates for a fallen ally', () => {
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Kingambit', ability: 'supremeoverlord', moves: ['splash'] },
+			{ species: 'Eevee', ability: 'runaway', moves: ['splash'] },
+			{ species: 'Eevee', ability: 'runaway', moves: ['splash'] },
 		], [
-			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
-			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
-			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+			{ species: 'Magikarp', ability: 'swiftswim', moves: ['splash'] },
+			{ species: 'Magikarp', ability: 'swiftswim', moves: ['splash'] },
+			{ species: 'Magikarp', ability: 'swiftswim', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1, 2', 'team 1, 2');
 		const kingambit = battle.p1.active[0];
@@ -41,13 +41,13 @@ describe('Supreme Overlord faint tracking', function () {
 		assert.equal(activations(), initialActivations + 1);
 	});
 
-	it('grants Infiltrator at two, flinch immunity at four, and no lethal-hit survival', function () {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Kingambit', ability: 'supremeoverlord', moves: ['splash']},
-			{species: 'Eevee', ability: 'runaway', moves: ['splash']},
+	it('grants Infiltrator at two, flinch immunity at four, and no lethal-hit survival', () => {
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Kingambit', ability: 'supremeoverlord', moves: ['splash'] },
+			{ species: 'Eevee', ability: 'runaway', moves: ['splash'] },
 		], [
-			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
-			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+			{ species: 'Magikarp', ability: 'swiftswim', moves: ['splash'] },
+			{ species: 'Magikarp', ability: 'swiftswim', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1, 2', 'team 1, 2');
 		const kingambit = battle.p1.active[0];
@@ -55,7 +55,7 @@ describe('Supreme Overlord faint tracking', function () {
 		const ability = kingambit.getAbility();
 		const flinch = battle.dex.conditions.get('flinch');
 		kingambit.side.totalFainted = 1;
-		battle.boost({atk: -1}, kingambit, foe, battle.dex.moves.get('growl'));
+		battle.boost({ atk: -1 }, kingambit, foe, battle.dex.moves.get('growl'));
 		assert.equal(kingambit.boosts.atk, -1, 'Supreme Overlord must not block stat drops');
 		const before = battle.dex.getActiveMove('slash');
 		battle.singleEvent('ModifyMove', ability, kingambit.passiveStates.supremeoverlord, before, kingambit, foe);

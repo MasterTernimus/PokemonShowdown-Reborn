@@ -86,15 +86,15 @@ describe('Keen Light and Pinsir', () => {
 			p.storedStats.spa = 200; p.storedStats.def = 500;
 			assert.equal(p.getStat('spa'), 200);
 			const damage = (id, extra = {}) => battle.actions.getDamage(p, foe,
-				Object.assign(Dex.getActiveMove(id), {willCrit: false}, extra));
+				Object.assign(Dex.getActiveMove(id), { willCrit: false }, extra));
 			for (const field of ['', 'volcanicterrain', 'dragonsdenterrain', 'mirrorarenaterrain', 'starlightarenaterrain', 'psychicterrain']) {
 				battle.field.terrain = field;
 				for (const [def, spd] of [[100, 300], [300, 100]]) {
 					foe.storedStats.def = def; foe.storedStats.spd = spd;
 					const normal = damage('hydropump');
-					assert.equal(normal, damage('hydropump', {overrideDefensiveStat: def < spd ? 'def' : 'spd'}), field);
-					assert.equal(damage('watergun'), damage('watergun', {overrideDefensiveStat: 'spd'}));
-					assert.equal(damage('bulletseed'), damage('bulletseed', {overrideDefensiveStat: 'def'}));
+					assert.equal(normal, damage('hydropump', { overrideDefensiveStat: def < spd ? 'def' : 'spd' }), field);
+					assert.equal(damage('watergun'), damage('watergun', { overrideDefensiveStat: 'spd' }));
+					assert.equal(damage('bulletseed'), damage('bulletseed', { overrideDefensiveStat: 'def' }));
 				}
 			}
 		});

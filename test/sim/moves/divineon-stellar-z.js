@@ -1,7 +1,7 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
+const { Dex } = require('../../../dist/sim');
 
 describe('Divineon Stellar and Z-Move bonus exemption', () => {
 	let battle;
@@ -10,9 +10,9 @@ describe('Divineon Stellar and Z-Move bonus exemption', () => {
 		for (const z of [false, true]) {
 			for (const category of ['Physical', 'Special']) {
 				it(`preserves ordinary damage: Stellar=${stellar}, Z=${z}, ${category}`, () => {
-					battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-						[{species: 'Mew', ability: 'No Ability', moves: ['tackle']}],
-						[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+					battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+						[{ species: 'Mew', ability: 'No Ability', moves: ['tackle'] }],
+						[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 					]);
 					battle.makeChoices();
 					battle.randomizer = damage => damage;

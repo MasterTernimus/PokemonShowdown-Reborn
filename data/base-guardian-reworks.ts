@@ -1,4 +1,4 @@
-import {composeSelectedAbility} from './selected-mega-simplifications';
+import { composeSelectedAbility } from './selected-mega-simplifications';
 import type { AbilityDataTable } from '../sim/dex-abilities';
 
 /** Keep non-base holders and Mega delegates on their original handlers. */
@@ -57,7 +57,7 @@ export function installBaseGuardianReworks(a: AbilityDataTable) {
 			return target.hp - 1;
 		},
 	});
-	const veil = {onTryHit: a.telepathy.onTryHit, onModifySpe: a.telepathy.onModifySpe};
+	const veil = { onTryHit: a.telepathy.onTryHit, onModifySpe: a.telepathy.onModifySpe };
 	baseOnly(a, 'voidveil', 'gardevoir', veil);
 	composeSelectedAbility(a, 'voidvoice', ['queenlymajesty'], true);
 	Object.assign(a.voidvoice, veil);

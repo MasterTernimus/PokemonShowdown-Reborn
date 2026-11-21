@@ -4,9 +4,9 @@ const common = require('../../common');
 describe('Alakazam alternate Mega Evolution', () => {
 	for (const species of ['Alakazam', 'Alakazam-Alt']) {
 		it(`preserves the form for ${species}`, () => {
-			const battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-				[{species, item: 'Alakazite', ability: 'Insomnia', moves: ['splash']}],
-				[{species: 'Mew', ability: 'Pressure', moves: ['splash']}],
+			const battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+				[{ species, item: 'Alakazite', ability: 'Insomnia', moves: ['splash'] }],
+				[{ species: 'Mew', ability: 'Pressure', moves: ['splash'] }],
 			]);
 			try {
 				battle.makeChoices('team 1', 'team 1');
@@ -18,15 +18,21 @@ describe('Alakazam alternate Mega Evolution', () => {
 				assert.deepEqual(mon.types, ['Psychic', 'Dark']);
 				assert.equal(mon.ability, 'perfectforesight');
 				assert(!mon.canMegaEvo);
-			} finally { battle.destroy(); }
+			} finally {
+				battle.destroy();
+			}
 		});
 	}
 	it('does not offer the alternate Mega with the wrong stone', () => {
-		const battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Alakazam-Alt', item: 'Leftovers', ability: 'Insomnia', moves: ['splash']}],
-			[{species: 'Mew', ability: 'Pressure', moves: ['splash']}],
+		const battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Alakazam-Alt', item: 'Leftovers', ability: 'Insomnia', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'Pressure', moves: ['splash'] }],
 		]);
-		try { battle.makeChoices('team 1', 'team 1'); assert(!battle.p1.active[0].canMegaEvo); }
-		finally { battle.destroy(); }
+		try {
+			battle.makeChoices('team 1', 'team 1');
+			assert(!battle.p1.active[0].canMegaEvo);
+		} finally {
+			battle.destroy();
+		}
 	});
 });

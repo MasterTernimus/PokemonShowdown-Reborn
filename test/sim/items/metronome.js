@@ -5,8 +5,8 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Metronome (item)', function () {
-	afterEach(function () {
+describe('Metronome (item)', () => {
+	afterEach(() => {
 		battle?.destroy();
 		battle = null;
 	});
@@ -60,11 +60,11 @@ describe('Metronome (item)', function () {
 		compare('solarbeam', [['solarbeam', 'splash'], ['solarbeam', 'splash', true], ['solarbeam', 'splash']], [1, 0, 1.2], true);
 	});
 
-	it.skip(`should use called moves to determine the Metronome multiplier`, function () {
+	it.skip(`should use called moves to determine the Metronome multiplier`, () => {
 		battle = common.createBattle([[
-			{species: 'goomy', item: 'metronome', moves: ['copycat', 'surf']},
+			{ species: 'goomy', item: 'metronome', moves: ['copycat', 'surf'] },
 		], [
-			{species: 'clefable', evs: {hp: 252}, ability: 'shellarmor', moves: ['softboiled', 'surf']},
+			{ species: 'clefable', evs: { hp: 252 }, ability: 'shellarmor', moves: ['softboiled', 'surf'] },
 		]]);
 		battle.makeChoices('move copycat', 'move surf');
 		const clefable = battle.p2.active[0];

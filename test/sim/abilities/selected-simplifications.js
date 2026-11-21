@@ -4,7 +4,7 @@ const assert = require('assert').strict;
 const common = require('../../common');
 const { Dex } = require('../../../dist/sim');
 const historical = require('./selected-simplifications-approved.json');
-const approved = {...historical, exact: {...historical.exact}, removed: {...historical.removed}};
+const approved = { ...historical, exact: { ...historical.exact }, removed: { ...historical.removed } };
 // Later approvals replace Ange's selected/passive split and restore Stamina.
 approved.exact.siegelauncher = ['megalauncher', 'dualwield', 'stalwart'];
 approved.exact.railguncircuit = ['lightningrod'];
@@ -41,7 +41,7 @@ describe('Individually selected Mega simplifications', () => {
 		const changed = [];
 		for (const old of require('./selected-simplifications-before.json')) {
 			const s = Dex.species.get(old.id);
-			assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, {...old.abilities}), old.id);
+			assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, { ...old.abilities }), old.id);
 			assert.deepEqual(s.passives, require('./passive-approval-overlays').current(old.id, approved.passives[old.id] ? [approved.passives[old.id]] : old.passives), old.id);
 			if (approved.passives[old.id]) changed.push(old.id);
 		}

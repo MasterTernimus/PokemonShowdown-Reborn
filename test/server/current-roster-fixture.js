@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('assert').strict;
-const {Dex} = require('../../dist/sim');
+const { Dex } = require('../../dist/sim');
 const approved = require('../sim/abilities/current-roster-approved.json');
 const expected = require('../sim/abilities/passive-approval-overlays');
 

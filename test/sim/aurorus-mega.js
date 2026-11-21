@@ -2,18 +2,18 @@
 
 const assert = require('../assert');
 const common = require('../common');
-const {Dex} = require('../../dist/sim/dex');
+const { Dex } = require('../../dist/sim/dex');
 
-describe('Aurorus-Mega', function () {
+describe('Aurorus-Mega', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 
-	it('has the requested stats, typing, ability, and stone', function () {
+	it('has the requested stats, typing, ability, and stone', () => {
 		const base = Dex.species.get('Aurorus');
 		const mega = Dex.species.get('Aurorus-Mega');
 		assert.deepEqual(base.otherFormes, ['Aurorus-Mega']);
 		assert.deepEqual(mega.types, ['Fairy', 'Ice']);
-		assert.deepEqual(mega.baseStats, {hp: 123, atk: 47, def: 135, spa: 145, spd: 140, spe: 50});
+		assert.deepEqual(mega.baseStats, { hp: 123, atk: 47, def: 135, spa: 145, spd: 140, spe: 50 });
 		assert.equal(mega.bst, 640);
 		assert.equal(mega.abilities[0], 'Aurora Domain');
 		assert.equal(mega.requiredItem, 'Aurorite');
@@ -21,9 +21,9 @@ describe('Aurorus-Mega', function () {
 	});
 
 	it('starts Snow Warning without entry Veil, then sets five-turn Veil without changing the field on faint', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Aurorus', item: 'Aurorite', ability: 'relicarmor', moves: ['splash', 'tackle']},
-		], [{species: 'Magikarp', moves: ['splash']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Aurorus', item: 'Aurorite', ability: 'relicarmor', moves: ['splash', 'tackle'] },
+		], [{ species: 'Magikarp', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash mega', 'move splash');
 		const aurorus = battle.p1.active[0];
@@ -47,9 +47,9 @@ describe('Aurorus-Mega', function () {
 	});
 
 	it('does not retain removed Relic Armor healing and permits manual Aurora Veil', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Aurorus', item: 'Aurorite', ability: 'Relic Armor', moves: ['splash', 'auroraveil']},
-		], [{species: 'Mew', ability: 'No Ability', moves: ['splash']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Aurorus', item: 'Aurorite', ability: 'Relic Armor', moves: ['splash', 'auroraveil'] },
+		], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		const holder = battle.p1.active[0];
 		holder.hp = 100;
@@ -63,5 +63,4 @@ describe('Aurorus-Mega', function () {
 		assert(holder.side.getSideCondition('auroraveil'), 'manual Veil remains available');
 		assert.equal(holder.hp, 100, 'Mega Relic Armor has no residual healing');
 	});
-
 });

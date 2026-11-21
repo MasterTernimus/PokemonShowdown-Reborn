@@ -7,9 +7,9 @@ describe('Gardevoir abilities and cosmetic Mega branches', () => {
 	for (const species of ['Gardevoir', 'Gardevoir-Void']) {
 		for (const [choice, expected] of [['mega', species === 'Gardevoir' ? 'Gardevoir-Mega' : 'Gardevoir-Mega-Alt'], ['megax', 'Gardevoir-Mega-Z'], ['megay', 'Gardevoir-Void-Mega']]) {
 			it(`${species} uses Gardevoirite for ${expected}`, () => {
-				battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-					[{species, ability: 'Void Veil', item: 'Gardevoirite', moves: ['splash']}],
-					[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+				battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+					[{ species, ability: 'Void Veil', item: 'Gardevoirite', moves: ['splash'] }],
+					[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 				]);
 				battle.makeChoices('team 1', 'team 1');
 				const mon = battle.p1.active[0];
@@ -26,9 +26,9 @@ describe('Gardevoir abilities and cosmetic Mega branches', () => {
 		}
 	}
 	function doubles(ability) {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [
-			[{species: ability === 'Void Voice' ? 'Gardevoir-Mega' : 'Gardevoir', ability, moves: ['splash']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['quickattack', 'splash']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
+			[{ species: ability === 'Void Voice' ? 'Gardevoir-Mega' : 'Gardevoir', ability, moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['quickattack', 'splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 12', 'team 12');
 		return battle.p1.active;

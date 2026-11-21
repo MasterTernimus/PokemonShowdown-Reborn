@@ -1,28 +1,28 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim/dex');
-const {TeamValidator} = require('../../../dist/sim/team-validator');
+const { Dex } = require('../../../dist/sim/dex');
+const { TeamValidator } = require('../../../dist/sim/team-validator');
 
 describe('Mega Mightyena and Dread Dominion', () => {
 	let battle;
 	afterEach(() => { if (battle) battle.destroy(); battle = null; });
 	for (const species of ['Mightyena', 'Mightyena-Grim', 'Mightyena-Deso']) {
 		it('rejects unavailable Grimyinite routes for ' + species, () => {
-			const set = {species, ability: 'Intimidate', item: 'Grimyinite', moves: ['Protect']};
+			const set = { species, ability: 'Intimidate', item: 'Grimyinite', moves: ['Protect'] };
 			const errors = TeamValidator.get('gen9nofieldsinglesgame').validateTeam([set]);
 			assert(errors.some(error => error.includes(species === 'Mightyena-Grim' ? 'Mightyena-Grim is disabled' : 'Mightyena-Mega is disabled')));
 			assert(Dex.species.get(species === 'Mightyena-Grim' ? 'Mightyena-Mega-Grim' : 'Mightyena-Mega').exists);
 		});
 	}
 	function setup() {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Mew', ability: 'Dread Dominion', moves: ['Tackle']},
-			{species: 'Clefairy', ability: 'No Ability', moves: ['Splash']},
-			{species: 'Mew', ability: 'No Ability', moves: ['Splash']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Mew', ability: 'Dread Dominion', moves: ['Tackle'] },
+			{ species: 'Clefairy', ability: 'No Ability', moves: ['Splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['Splash'] },
 		], [
-			{species: 'Clefairy', ability: 'No Ability', moves: ['Splash']},
-			{species: 'Umbreon', ability: 'No Ability', moves: ['Splash']},
+			{ species: 'Clefairy', ability: 'No Ability', moves: ['Splash'] },
+			{ species: 'Umbreon', ability: 'No Ability', moves: ['Splash'] },
 		]]);
 		return battle.p1.active[0];
 	}
@@ -61,12 +61,12 @@ describe('Mega Mightyena and Dread Dominion', () => {
 		assert.equal(effectiveness(battle.p2.active[1], 'Fairy'), 1);
 	});
 	it('does not stack Dark Aura passives and still supports Aura Break', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Mew', ability: 'Dread Dominion', moves: ['Splash'] },
 			{ species: 'Mew', ability: 'Dread Dominion', moves: ['Splash'] },
 		], [
-			{species: 'Mew', ability: 'No Ability', moves: ['Splash']},
-			{species: 'Mew', ability: 'No Ability', moves: ['Splash']},
+			{ species: 'Mew', ability: 'No Ability', moves: ['Splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['Splash'] },
 		]]);
 		// Isolate legacy Dark Aura passive mechanics without enabling a disabled species.
 		for (const holder of battle.p1.active) holder.getPassives = () => ['darkaura'];
@@ -78,9 +78,9 @@ describe('Mega Mightyena and Dread Dominion', () => {
 		assert.equal(battle.runEvent('BasePower', source, target, move, 80, true), 60);
 	});
 	it('uses the existing Hydra Bond hits and Moxie knockout boost', () => {
-		battle = common.createBattle({}, [[{species: 'Mew', ability: 'Dread Dominion', moves: ['Tackle']}], [
-			{species: 'Blissey', ability: 'No Ability', moves: ['Splash']},
-			{species: 'Mew', ability: 'No Ability', moves: ['Splash']},
+		battle = common.createBattle({}, [[{ species: 'Mew', ability: 'Dread Dominion', moves: ['Tackle'] }], [
+			{ species: 'Blissey', ability: 'No Ability', moves: ['Splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['Splash'] },
 		]]);
 		const holder = battle.p1.active[0];
 		assert(holder.hasAbility('hydrabond'));

@@ -15,7 +15,7 @@
 
 /* eslint no-else-return: "error" */
 import { Utils, ProcessManager } from '../../lib';
-import {battleEngineQuery} from '../battle-engine-guard';
+import { battleEngineQuery } from '../battle-engine-guard';
 import { queryCalculator } from '../custom-calculator';
 import type { UserSettings } from '../users';
 import { describeChallengeOptions, validateChallengeOptions, type ChallengeOptions } from '../../sim/challenge-options';
@@ -23,7 +23,7 @@ import type { GlobalPermission, RoomPermission } from '../user-groups';
 
 const calculatorRequests = new WeakMap<User, number>();
 export const crqHandlers: { [k: string]: Chat.CRQHandler } = {
- battleengine(target, user, trustable) {return battleEngineQuery(this.connection, target, !!trustable);},
+	battleengine(target, user, trustable) { return battleEngineQuery(this.connection, target, !!trustable); },
 	challengeoptions(target, user, trustable) {
 		if (!trustable || target.length > 2000) return null;
 		try {
@@ -980,14 +980,14 @@ export const commands: Chat.ChatCommands = {
 	},
 
 	movesheets(target, room, user) {
-  const battle = this.requireRoom().battle;
-  if (!battle) throw new Chat.ErrorMessage('Must be in a battle room.');
-  const [action, token] = target.trim().split(/\s+/);
-  try { battle.moveSheets(user, action, token); } catch (error) {
-   throw new Chat.ErrorMessage((error as Error).message);
-  }
- },
- movesheetshelp: ['/movesheets - Request private species-and-moves-only team sheets. Both players must agree.'],
+		const battle = this.requireRoom().battle;
+		if (!battle) throw new Chat.ErrorMessage('Must be in a battle room.');
+		const [action, token] = target.trim().split(/\s+/);
+		try { battle.moveSheets(user, action, token); } catch (error) {
+			throw new Chat.ErrorMessage((error as Error).message);
+		}
+	},
+	movesheetshelp: ['/movesheets - Request private species-and-moves-only team sheets. Both players must agree.'],
 	acceptopenteamsheets(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		const battle = room.battle;
@@ -1063,7 +1063,7 @@ export const commands: Chat.ChatCommands = {
 		const isFreeForAllPlayerDraw =
 			battle.gameType === 'freeforall' && battle.players.length >= 3 && battle.players.length <= 4 && !!player;
 		if (!isFreeForAllPlayerDraw) this.checkCan('roomvoice', null, room);
-		if ((cmd === 'accepttie' || cmd === 'acceptdraw') && !battle.players.some(player => player.wantsTie)) {
+		if ((cmd === 'accepttie' || cmd === 'acceptdraw') && !battle.players.some(nestedPlayer => nestedPlayer.wantsTie)) {
 			throw new Chat.ErrorMessage(this.tr`No other player is requesting a tie right now. It was probably canceled.`);
 		}
 		if (!battle.players.some(curPlayer => curPlayer.wantsTie)) {

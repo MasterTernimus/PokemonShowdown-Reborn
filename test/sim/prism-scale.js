@@ -3,21 +3,21 @@
 const assert = require('../assert');
 const common = require('../common');
 
-describe('Prism Scale', function () {
+describe('Prism Scale', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 
 	function setup(foeAbility = 'blaze', foeMoves = ['splash']) {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Milotic-Terajuma', ability: 'prismscale', moves: ['splash', 'doublehit']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Milotic-Terajuma', ability: 'prismscale', moves: ['splash', 'doublehit'] },
 		], [
-			{species: 'Arcanine', ability: foeAbility, moves: foeMoves},
+			{ species: 'Arcanine', ability: foeAbility, moves: foeMoves },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		return [battle.p1.active[0], battle.p2.active[0]];
 	}
 
-	it('retains Marvel Scale Defense and gains Swift Swim Speed', function () {
+	it('retains Marvel Scale Defense and gains Swift Swim Speed', () => {
 		const [milotic, foe] = setup();
 		const defense = milotic.getStat('def');
 		const speed = milotic.getStat('spe');
@@ -31,14 +31,14 @@ describe('Prism Scale', function () {
 		assert.equal(milotic.getStat('spe'), speed * 2);
 	});
 
-	it('no longer blocks Intimidate or Taunt', function () {
+	it('no longer blocks Intimidate or Taunt', () => {
 		const [milotic] = setup('intimidate', ['taunt']);
 		assert.equal(milotic.boosts.atk, -1);
 		battle.makeChoices('move splash', 'move taunt');
 		assert(!!milotic.volatiles.taunt);
 	});
 
-	it('no longer has Dragonize move hooks', function () {
+	it('no longer has Dragonize move hooks', () => {
 		const ability = setup()[0].getAbility();
 		assert.equal(ability.onModifyType, undefined);
 		assert.equal(ability.onModifySTAB, undefined);

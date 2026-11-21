@@ -26,24 +26,33 @@ const effects: Record<string, string> = {
 	livingrampart: 'Rock and Steel moves gain 20% power while its Defense is boosted.',
 	lastfirework: 'Fire and Ghost moves gain 20% power at half HP or less.',
 };
-for (const [id, text] of Object.entries(effects)) UltraBeastDescriptions[id] = { shortDesc: text, desc: text };
+for (const [id, text] of Object.entries(effects))
+	UltraBeastDescriptions[id] = { shortDesc: text, desc: text };
 export function installUltraBeasts(a: AbilityDataTable) {
 	for (const [index, slots] of Object.values(UltraBeastSlots).entries()) {
 		const id = slots.H.toLowerCase().replace(/[^a-z0-9]/g, '') as ID;
-		a[id] = { name: slots.H,
+		a[id] = {
+			name: slots.H,
 			num: 12330 + index,
 			rating: 3,
 			flags: id === 'paperaegis' ? { breakable: 1 } : {},
-			...UltraBeastDescriptions[id] };
+			...UltraBeastDescriptions[id],
+		};
 	}
-	const powerChecks: Record<string, (battle: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => boolean> = {
+	const powerChecks: Record<
+		string,
+		(battle: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => boolean
+	> = {
 		nerveparasite: (b, s, t, m) => b.movehasType(m, 'Poison') && !!t.status && !s.isAlly(t),
 		siphonmuscle: (b, s, t, m) => !!m.drain,
 		immaculateform: (b, s, t, m) => s.hp === s.maxhp && b.movehasType(m, 'Bug'),
 		launchchamber: (b, s, t, m) => b.movehasType(m, 'Fire'),
-		queenvenom: (b, s, t, m) => b.movehasType(m, 'Dragon') && ['psn', 'tox'].includes(t.status) && !s.isAlly(t),
-		livingrampart: (b, s, t, m) => s.boosts.def > 0 && (b.movehasType(m, 'Rock') || b.movehasType(m, 'Steel')),
-		lastfirework: (b, s, t, m) => s.hp <= s.maxhp / 2 && (b.movehasType(m, 'Fire') || b.movehasType(m, 'Ghost')),
+		queenvenom: (b, s, t, m) =>
+			b.movehasType(m, 'Dragon') && ['psn', 'tox'].includes(t.status) && !s.isAlly(t),
+		livingrampart: (b, s, t, m) =>
+			s.boosts.def > 0 && (b.movehasType(m, 'Rock') || b.movehasType(m, 'Steel')),
+		lastfirework: (b, s, t, m) =>
+			s.hp <= s.maxhp / 2 && (b.movehasType(m, 'Fire') || b.movehasType(m, 'Ghost')),
 	};
 	for (const [id, check] of Object.entries(powerChecks)) {
 		a[id as ID].onBasePowerPriority = 21;
@@ -52,7 +61,14 @@ export function installUltraBeasts(a: AbilityDataTable) {
 		};
 	}
 	a.livecircuit.onSourceDamagingHit = function (damage, target, source, move) {
-		if (damage <= 0 || !source.hp || source.isAlly(target) || !this.movehasType(move, 'Electric') || source.m.liveCircuitTurn === this.turn) return;
+		if (
+			damage <= 0 ||
+			!source.hp ||
+			source.isAlly(target) ||
+			!this.movehasType(move, 'Electric') ||
+			source.m.liveCircuitTurn === this.turn
+		)
+			return;
 		source.m.liveCircuitTurn = this.turn;
 		this.heal(source.baseMaxhp / 16, source, source, this.effect);
 	};
@@ -63,15 +79,29 @@ export function installUltraBeasts(a: AbilityDataTable) {
 		if (hit.paperAegis) return this.chainModify(0.8);
 	};
 	a.paperaegis.onDamagingHit = function (damage, target, source, move) {
-		if (damage > 0 && !source.isAlly(target) && move.category === 'Special') target.m.paperAegisSpent = true;
+		if (damage > 0 && !source.isAlly(target) && move.category === 'Special')
+			target.m.paperAegisSpent = true;
 	};
 	a.endlessgullet.onSourceAfterFaint = function (length, target, source, effect) {
-		if (!source.hp || source.isAlly(target) || effect?.effectType !== 'Move' || source.m.endlessGulletTurn === this.turn) return;
+		if (
+			!source.hp ||
+			source.isAlly(target) ||
+			effect?.effectType !== 'Move' ||
+			source.m.endlessGulletTurn === this.turn
+		)
+			return;
 		source.m.endlessGulletTurn = this.turn;
 		this.heal(source.baseMaxhp / 8, source, source, this.effect);
 	};
 	a.toxiccanvas.onSourceDamagingHit = function (damage, target, source, move) {
-		if (damage <= 0 || !target.hp || source.isAlly(target) || !this.movehasType(move, 'Poison') || source.m.toxicCanvasSpent) return;
+		if (
+			damage <= 0 ||
+			!target.hp ||
+			source.isAlly(target) ||
+			!this.movehasType(move, 'Poison') ||
+			source.m.toxicCanvasSpent
+		)
+			return;
 		source.m.toxicCanvasSpent = true;
 		this.boost({ accuracy: -1 }, target, source, this.effect);
 	};

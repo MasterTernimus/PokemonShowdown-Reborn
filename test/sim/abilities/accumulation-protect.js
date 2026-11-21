@@ -3,14 +3,14 @@
 const assert = require('./../../assert');
 const common = require('./../../common');
 
-describe('Accumulation end-of-turn attacks', function () {
+describe('Accumulation end-of-turn attacks', () => {
 	for (const release of ['belch', 'spitup']) {
 		for (const protectedTarget of [true, false]) {
-			it(`${release} ${protectedTarget ? 'respects Protect' : 'hits an unprotected target'}`, function () {
-				const battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-					{species: 'Muk-Pulse', ability: 'Accumulation', moves: ['splash']},
+			it(`${release} ${protectedTarget ? 'respects Protect' : 'hits an unprotected target'}`, () => {
+				const battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+					{ species: 'Muk-Pulse', ability: 'Accumulation', moves: ['splash'] },
 				], [
-					{species: 'Manectric', ability: 'Static', moves: ['splash', 'protect']},
+					{ species: 'Manectric', ability: 'Static', moves: ['splash', 'protect'] },
 				]]);
 				try {
 					battle.makeChoices('team 1', 'team 1');

@@ -4,7 +4,7 @@ const common = require('../../common');
 const { Dex } = require('../../../dist/sim');
 const approved = { arbokmegax: 'regenerator', arbokmegay: 'shedskin', raichumegax: 'electricsurge', raichumegay: 'noguard', parasectmega: 'dryskin', victreebelmega: 'digestivesap', noctowlmega: 'insomnia', ledianmega: 'ironfist', ariadosmega: 'selfsufficient', sunfloramega: 'solarpower', skarmorymega: 'stalwart' };
 let battle;
-Object.assign(approved, {arbokmegax:'shedskin',sunfloramega:'solarbud'});
+Object.assign(approved, { arbokmegax: 'shedskin', sunfloramega: 'solarbud' });
 Object.assign(approved, require('./hoenn-mega-approved.json'), require('./sinnoh-unova-mega-approved.json'));
 Object.assign(approved, { parasectmega: 'mycelialbond', ariadosmega: 'venomthread', sevipermega: 'rivalmalice', haxorusmega: 'twinfang' });
 function setup(species, ability, doubles = false) {
@@ -26,7 +26,7 @@ describe('Approved Kanto and Johto Mega splits', () => {
 		for (const old of require('./kanto-mega-before.json')) {
 			const now = Dex.species.get(old.id);
 			assert.deepEqual(now.passives, require('./passive-approval-overlays').current(old.id, old.passives), old.id);
-			assert.deepEqual(now.abilities, require('./passive-approval-overlays').abilities(old.id, {...old.abilities}), old.id);
+			assert.deepEqual(now.abilities, require('./passive-approval-overlays').abilities(old.id, { ...old.abilities }), old.id);
 		}
 	});
 	for (const [species, item, id] of [
@@ -133,17 +133,17 @@ describe('Approved Kanto and Johto Mega splits', () => {
 		}
 	});
 	it('Railgun Circuit clears opposing special screens only after a special Electric HP hit', () => {
-		const [p,q] = setup('Raichu-Mega-Y');
-		q.hp=q.maxhp=q.baseMaxhp=4000;
-		for (const id of ['reflect','lightscreen','auroraveil']) q.side.addSideCondition(id,q);
-		const hit = id => battle.actions.useMove(Dex.getActiveMove(id),p,{target:q});
+		const [p, q] = setup('Raichu-Mega-Y');
+		q.hp = q.maxhp = q.baseMaxhp = 4000;
+		for (const id of ['reflect', 'lightscreen', 'auroraveil']) q.side.addSideCondition(id, q);
+		const hit = id => battle.actions.useMove(Dex.getActiveMove(id), p, { target: q });
 		hit('nuzzle'); hit('psychic');
-		q.addVolatile('substitute');hit('thunderbolt');
+		q.addVolatile('substitute'); hit('thunderbolt');
 		assert(q.side.sideConditions.lightscreen && q.side.sideConditions.auroraveil);
-		q.removeVolatile('substitute');hit('thunderbolt');
+		q.removeVolatile('substitute'); hit('thunderbolt');
 		assert(!q.side.sideConditions.lightscreen && !q.side.sideConditions.auroraveil);
 		assert(q.side.sideConditions.reflect);
-		assert(p.hasAbility('lightningrod'));assert(!p.hasAbility('transistor'));
+		assert(p.hasAbility('lightningrod')); assert(!p.hasAbility('transistor'));
 	});
 	it('Dry Skin absorbs once and applies its Fire modifier once through nested Parasitism', () => {
 		const [p, q] = setup('Parasect-Mega');
@@ -184,7 +184,7 @@ describe('Approved Kanto and Johto Mega splits', () => {
 	it('Digestive Sap is passive on Mega Victreebel and remains available as a selected primitive', () => {
 		const [p, q] = setup('Victreebel-Mega');
 		p.hp = 100;
-		battle.actions.useMove(Object.assign(Dex.getActiveMove('sludgebomb'), {damage: 300, accuracy: true}), p, { target: q });
+		battle.actions.useMove(Object.assign(Dex.getActiveMove('sludgebomb'), { damage: 300, accuracy: true }), p, { target: q });
 		assert.equal(p.hp, 200);
 		assert(p.hasAbility('accumulation'));
 		assert(p.hasAbility('liquidooze'));

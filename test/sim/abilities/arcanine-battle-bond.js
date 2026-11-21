@@ -35,12 +35,12 @@ describe('Arcanine Battle Bond', () => {
 
 	for (const species of ['Arcanine', 'Arcanine-Alt', 'Arcanine-Hisui']) {
 		it(`${species} transforms after Sacred Fire KO on Rocky Terrain with Embargo and a held berry`, () => {
-			battle = common.createBattle({formatid: 'gen9doublesrockyfield'}, [[
-				{species, ability: 'Battle Bond', item: 'Sitrus Berry', moves: ['sacredfire']},
-				{species: 'Mew', ability: 'No Ability', moves: ['splash']},
+			battle = common.createBattle({ formatid: 'gen9doublesrockyfield' }, [[
+				{ species, ability: 'Battle Bond', item: 'Sitrus Berry', moves: ['sacredfire'] },
+				{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
 			], [
-				{species: 'Charizard-Mega-X', level: 1, ability: 'No Ability', moves: ['splash']},
-				{species: 'Venusaur-Mega', ability: 'No Ability', moves: ['splash']},
+				{ species: 'Charizard-Mega-X', level: 1, ability: 'No Ability', moves: ['splash'] },
+				{ species: 'Venusaur-Mega', ability: 'No Ability', moves: ['splash'] },
 			]]);
 			battle.makeChoices('team 12', 'team 12');
 			const dog = battle.p1.active[0];
@@ -55,9 +55,9 @@ describe('Arcanine Battle Bond', () => {
 	}
 
 	it('does not transform Arcanine-Alt without a knockout', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Arcanine-Alt', ability: 'Battle Bond', moves: ['splash']},
-		], [{species: 'Mew', moves: ['splash']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Arcanine-Alt', ability: 'Battle Bond', moves: ['splash'] },
+		], [{ species: 'Mew', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash', 'move splash');
 		assert.equal(battle.p1.active[0].species.id, 'arcaninealt');
@@ -65,11 +65,11 @@ describe('Arcanine Battle Bond', () => {
 
 	for (const guard of ['indirect damage', 'transformed', 'fainted', 'already triggered', 'last opponent']) {
 		it(`does not transform Arcanine-Alt with ${guard}`, () => {
-			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-				{species: 'Arcanine-Alt', ability: 'Battle Bond', moves: ['splash']},
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+				{ species: 'Arcanine-Alt', ability: 'Battle Bond', moves: ['splash'] },
 			], [
-				{species: 'Mew', moves: ['splash']},
-				{species: 'Pikachu', moves: ['splash']},
+				{ species: 'Mew', moves: ['splash'] },
+				{ species: 'Pikachu', moves: ['splash'] },
 			]]);
 			battle.makeChoices('team 1', 'team 1');
 			const dog = battle.p1.active[0];

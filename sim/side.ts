@@ -25,11 +25,20 @@ import { Pokemon, type EffectState } from './pokemon';
 import { State } from './state';
 import { toID } from './dex';
 
-type MoveEvent = 'mega' | 'megax' | 'megay' | 'zmove' | 'ultra' | 'dynamax' | 'terastallize' | 'zmove-terastallize' | '';
+type MoveEvent =
+	| 'mega' |
+	'megax' |
+	'megay' |
+	'zmove' |
+	'ultra' |
+	'dynamax' |
+	'terastallize' |
+	'zmove-terastallize' |
+	'';
 
 /** A single action that can be chosen. Choices will have one Action for each pokemon. */
 export interface ChosenAction {
-	choice: 'move' | 'switch' | 'instaswitch' | 'revivalblessing' | 'team' | 'shift' | 'pass';// action type
+	choice: 'move' | 'switch' | 'instaswitch' | 'revivalblessing' | 'team' | 'shift' | 'pass'; // action type
 	pokemon?: Pokemon; // the pokemon doing the action
 	targetLoc?: number; // relative location of the target to pokemon (move action only)
 	moveid?: string; // a move to use (move action only)
@@ -91,7 +100,7 @@ export interface PokemonSwitchRequestData {
 	passives?: readonly string[];
 	rageFistBonus?: number;
 	/** Owner-only current disguise; omitted from ally requests and public logs. */
-	disguise?: {name: string, species: string, mode: 'illusion' | 'perfectillusion'};
+	disguise?: { name: string, species: string, mode: 'illusion' | 'perfectillusion' };
 	/** Owner-only projected stats for Seviper's Mega move preview. */
 	megaStats?: StatsExceptHPTable;
 	/** @see https://dex.pokemonshowdown.com/abilities/commander */
@@ -109,7 +118,7 @@ export interface MoveRequestData {
 	target?: string;
 	disabled?: string | boolean;
 	disabledSource?: string;
-};
+}
 
 export interface PokemonMoveRequestData {
 	moves: MoveRequestData[];
@@ -128,7 +137,7 @@ export interface PokemonMoveRequestData {
 	canTerastallize?: string;
 }
 export interface DynamaxOptions {
-	maxMoves: ({ move: string, target: MoveTarget, disabled?: boolean })[];
+	maxMoves: { move: string, target: MoveTarget, disabled?: boolean }[];
 	gigantamax?: string;
 }
 export interface SideRequestData {
@@ -249,7 +258,8 @@ export class Side {
 		case 'doubles':
 			this.active = [null!, null!];
 			break;
-		case 'triples': case 'rotation':
+		case 'triples':
+		case 'rotation':
 			this.active = [null!, null!, null!];
 			break;
 		default:
@@ -314,11 +324,21 @@ export class Side {
 	}
 
 	canDynamaxNow(): boolean {
-		const allowsGmaxInFieldSingles = this.battle.gameType === 'singles' && !!this.battle.format.terrain;
-		if (!allowsGmaxInFieldSingles && !['doubles', 'multi', 'freeforall'].includes(this.battle.gameType)) return false;
+		const allowsGmaxInFieldSingles =
+			this.battle.gameType === 'singles' && !!this.battle.format.terrain;
+		if (
+			!allowsGmaxInFieldSingles &&
+			!['doubles', 'multi', 'freeforall'].includes(this.battle.gameType)
+		)
+			return false;
 		// In multi battles, players on a team are alternatingly given the option to dynamax each turn
 		// Starting on turn 2, players alternate. On turn 1, all players can Gigantamax immediately.
-		if (this.battle.gameType === 'multi' && this.battle.turn > 1 && this.battle.turn % 2 !== [1, 1, 0, 0][this.n]) return false;
+		if (
+			this.battle.gameType === 'multi' &&
+			this.battle.turn > 1 &&
+			this.battle.turn % 2 !== [1, 1, 0, 0][this.n]
+		)
+			return false;
 		if (this.battle.gameType === 'multi' && this.allySide?.hasLivingGmax()) return false;
 		// if (this.battle.gameType === 'multitriples' && this.battle.turn % 3 !== [1, 1, 2, 2, 0, 0][this.side.n]) {
 		//		return false;
@@ -328,33 +348,42 @@ export class Side {
 
 	/** convert a Choice into a choice string */
 	getChoice() {
-		if (this.choice.actions.length > 1 && this.choice.actions.every(action => action.choice === 'team')) {
+		if (
+			this.choice.actions.length > 1 &&
+			this.choice.actions.every(action => action.choice === 'team')
+		) {
 			return `team ` + this.choice.actions.map(action => action.pokemon!.position + 1).join(', ');
 		}
-		return this.choice.actions.map(action => {
-			switch (action.choice) {
-			case 'move':
-				let details = ``;
-				if (action.targetLoc && this.active.length > 1) details += ` ${action.targetLoc > 0 ? '+' : ''}${action.targetLoc}`;
-				if (action.mega) details += (action.pokemon!.item === 'ultranecroziumz' ? ` ultra` : ` mega`);
-				if (action.megax) details += ` megax`;
-				if (action.megay) details += ` megay`;
-				if (action.zmove) details += ` zmove`;
-				if (action.maxMove) details += ` dynamax`;
-				if (action.terastallize) details += ` terastallize`;
-				const duplicateSlot = action.moveSlot !== undefined &&
-					(action.pokemon?.moveSlots.filter(slot => slot.id === action.moveid).length || 0) > 1;
-				return `move ${duplicateSlot ? action.moveSlot! + 1 : action.moveid}${details}`;
-			case 'switch':
-			case 'instaswitch':
-			case 'revivalblessing':
-				return `switch ${action.target!.position + 1}`;
-			case 'team':
-				return `team ${action.pokemon!.position + 1}`;
-			default:
-				return action.choice;
-			}
-		}).join(', ');
+		return this.choice.actions
+			.map(action => {
+				switch (action.choice) {
+				case 'move':
+					let details = ``;
+					if (action.targetLoc && this.active.length > 1)
+						details += ` ${action.targetLoc > 0 ? '+' : ''}${action.targetLoc}`;
+					if (action.mega)
+						details += action.pokemon!.item === 'ultranecroziumz' ? ` ultra` : ` mega`;
+					if (action.megax) details += ` megax`;
+					if (action.megay) details += ` megay`;
+					if (action.zmove) details += ` zmove`;
+					if (action.maxMove) details += ` dynamax`;
+					if (action.terastallize) details += ` terastallize`;
+					const duplicateSlot =
+							action.moveSlot !== undefined &&
+							(action.pokemon?.moveSlots.filter(slot => slot.id === action.moveid).length || 0) >
+							1;
+					return `move ${duplicateSlot ? action.moveSlot! + 1 : action.moveid}${details}`;
+				case 'switch':
+				case 'instaswitch':
+				case 'revivalblessing':
+					return `switch ${action.target!.position + 1}`;
+				case 'team':
+					return `team ${action.pokemon!.position + 1}`;
+				default:
+					return action.choice;
+				}
+			})
+			.join(', ');
 	}
 
 	toString() {
@@ -366,10 +395,15 @@ export class Side {
 			name: this.name,
 			id: this.id,
 			pokemon: [] as PokemonSwitchRequestData[],
-			gimmicks: this.battle.dex.currentMod === 'base' && !this.battle.format.name.includes('Multi 1v2') ?
-				this.battle.sides.map(side => ({
-					id: side.id, name: side.name, used: side.gimmickCount, limit: this.battle.gimmickLimit,
-				})) : undefined,
+			gimmicks:
+				this.battle.dex.currentMod === 'base' && !this.battle.format.name.includes('Multi 1v2') ?
+					this.battle.sides.map(side => ({
+						id: side.id,
+						name: side.name,
+						used: side.gimmickCount,
+						limit: this.battle.gimmickLimit,
+					})) :
+					undefined,
 		};
 		for (const pokemon of this.pokemon) {
 			data.pokemon.push(pokemon.getSwitchRequestData(forAlly));
@@ -391,7 +425,10 @@ export class Side {
 	}
 	foePokemonLeft() {
 		if (this.battle.gameType === 'freeforall') {
-			return this.battle.sides.filter(side => side !== this).map(side => side.pokemonLeft).reduce((a, b) => a + b);
+			return this.battle.sides
+				.filter(side => side !== this)
+				.map(side => side.pokemonLeft)
+				.reduce((a, b) => a + b);
 		}
 
 		if (this.foe.allySide) return this.foe.pokemonLeft + this.foe.allySide.pokemonLeft;
@@ -407,7 +444,8 @@ export class Side {
 	}
 	foes(all?: boolean) {
 		if (this.battle.gameType === 'freeforall') {
-			return this.battle.sides.map(side => side.active[0])
+			return this.battle.sides
+				.map(side => side.active[0])
 				.filter(pokemon => pokemon && pokemon.side !== this && (all || !!pokemon.hp));
 		}
 		return this.foe.allies(all);
@@ -415,14 +453,16 @@ export class Side {
 	activeTeam() {
 		if (this.battle.gameType !== 'multi') return this.active;
 
-		return this.battle.sides[this.n % 2].active.concat(this.battle.sides[this.n % 2 + 2].active);
+		return this.battle.sides[this.n % 2].active.concat(this.battle.sides[(this.n % 2) + 2].active);
 	}
 	hasAlly(pokemon: Pokemon) {
 		return pokemon.side === this || pokemon.side === this.allySide;
 	}
 
 	addSideCondition(
-		status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
+		status: string | Condition,
+		source: Pokemon | 'debug' | null = null,
+		sourceEffect: Effect | null = null,
 	): boolean {
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.active[0];
@@ -432,7 +472,14 @@ export class Side {
 		status = this.battle.dex.conditions.get(status);
 		if (this.sideConditions[status.id]) {
 			if (!(status as any).onSideRestart) return false;
-			return this.battle.singleEvent('SideRestart', status, this.sideConditions[status.id], this, source, sourceEffect);
+			return this.battle.singleEvent(
+				'SideRestart',
+				status,
+				this.sideConditions[status.id],
+				this,
+				source,
+				sourceEffect,
+			);
 		}
 		this.sideConditions[status.id] = this.battle.initEffectState({
 			id: status.id,
@@ -442,10 +489,23 @@ export class Side {
 			duration: status.duration,
 		});
 		if (status.durationCallback) {
-			this.sideConditions[status.id].duration =
-				status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
+			this.sideConditions[status.id].duration = status.durationCallback.call(
+				this.battle,
+				this.active[0],
+				source,
+				sourceEffect,
+			);
 		}
-		if (!this.battle.singleEvent('SideStart', status, this.sideConditions[status.id], this, source, sourceEffect)) {
+		if (
+			!this.battle.singleEvent(
+				'SideStart',
+				status,
+				this.sideConditions[status.id],
+				this,
+				source,
+				sourceEffect,
+			)
+		) {
 			delete this.sideConditions[status.id];
 			return false;
 		}
@@ -473,8 +533,10 @@ export class Side {
 	}
 
 	addSlotCondition(
-		target: Pokemon | number, status: string | Condition, source: Pokemon | 'debug' | null = null,
-		sourceEffect: Effect | null = null
+		target: Pokemon | number,
+		status: string | Condition,
+		source: Pokemon | 'debug' | null = null,
+		sourceEffect: Effect | null = null,
 	) {
 		source ??= this.battle.event?.target || null;
 		if (source === 'debug') source = this.active[0];
@@ -484,21 +546,41 @@ export class Side {
 		status = this.battle.dex.conditions.get(status);
 		if (this.slotConditions[target][status.id]) {
 			if (!status.onRestart) return false;
-			return this.battle.singleEvent('Restart', status, this.slotConditions[target][status.id], this, source, sourceEffect);
+			return this.battle.singleEvent(
+				'Restart',
+				status,
+				this.slotConditions[target][status.id],
+				this,
+				source,
+				sourceEffect,
+			);
 		}
-		const conditionState = this.slotConditions[target][status.id] = this.battle.initEffectState({
+		const conditionState = (this.slotConditions[target][status.id] = this.battle.initEffectState({
 			id: status.id,
 			target: this,
 			source,
 			sourceSlot: source.getSlot(),
 			isSlotCondition: true,
 			duration: status.duration,
-		});
+		}));
 		if (status.durationCallback) {
-			conditionState.duration =
-				status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
+			conditionState.duration = status.durationCallback.call(
+				this.battle,
+				this.active[0],
+				source,
+				sourceEffect,
+			);
 		}
-		if (!this.battle.singleEvent('Start', status, conditionState, this.active[target], source, sourceEffect)) {
+		if (
+			!this.battle.singleEvent(
+				'Start',
+				status,
+				conditionState,
+				this.active[target],
+				source,
+				sourceEffect,
+			)
+		) {
 			delete this.slotConditions[target][status.id];
 			return false;
 		}
@@ -524,10 +606,14 @@ export class Side {
 	}
 
 	send(...parts: (string | number | Function | AnyObject)[]) {
-		const sideUpdate = '|' + parts.map(part => {
-			if (typeof part !== 'function') return part;
-			return part(this);
-		}).join('|');
+		const sideUpdate =
+			'|' +
+			parts
+				.map(part => {
+					if (typeof part !== 'function') return part;
+					return part(this);
+				})
+				.join('|');
 		this.battle.send('sideupdate', `${this.id}\n${sideUpdate}`);
 	}
 
@@ -549,7 +635,8 @@ export class Side {
 	}
 
 	emitChoiceError(
-		message: string, update?: { pokemon: Pokemon, update: (req: PokemonMoveRequestData) => boolean | void }
+		message: string,
+		update?: { pokemon: Pokemon, update: (req: PokemonMoveRequestData) => boolean | void },
 	) {
 		this.choice.error = message;
 		const updated = update ? this.updateRequestForPokemon(update.pokemon, update.update) : null;
@@ -573,11 +660,7 @@ export class Side {
 		return this.choice.actions.length >= this.active.length;
 	}
 
-	chooseMove(
-		moveText?: string | number,
-		targetLoc = 0,
-		event: MoveEvent = ''
-	) {
+	chooseMove(moveText?: string | number, targetLoc = 0, event: MoveEvent = '') {
 		if (this.requestState !== 'move') {
 			return this.emitChoiceError(`Can't move: You need a ${this.requestState} response`);
 		}
@@ -602,7 +685,9 @@ export class Side {
 			// Parse a one-based move index.
 			const moveIndex = Number(moveText) - 1;
 			if (moveIndex < 0 || moveIndex >= request.moves.length || !request.moves[moveIndex]) {
-				return this.emitChoiceError(`Can't move: Your ${pokemon.name} doesn't have a move ${moveIndex + 1}`);
+				return this.emitChoiceError(
+					`Can't move: Your ${pokemon.name} doesn't have a move ${moveIndex + 1}`,
+				);
 			}
 			moveSlot = moveIndex;
 			moveid = request.moves[moveIndex].id;
@@ -645,7 +730,9 @@ export class Side {
 			}
 			if (!targetType) {
 				if (moveid !== 'testfight') {
-					return this.emitChoiceError(`Can't move: Your ${pokemon.name} doesn't have a move matching ${moveid}`);
+					return this.emitChoiceError(
+						`Can't move: Your ${pokemon.name} doesn't have a move matching ${moveid}`,
+					);
 				}
 			}
 		}
@@ -674,8 +761,10 @@ export class Side {
 
 		// Dynamax
 		// Is dynamaxed or will dynamax this turn.
-		let maxMove = (event === 'dynamax' || pokemon.volatiles['dynamax']) ?
-			this.battle.actions.getMaxMove(move, pokemon) : undefined;
+		let maxMove =
+			event === 'dynamax' || pokemon.volatiles['dynamax'] ?
+				this.battle.actions.getMaxMove(move, pokemon) :
+				undefined;
 		if (maxMove?.name !== pokemon.canGigantamax) {
 			maxMove = undefined;
 		}
@@ -683,8 +772,11 @@ export class Side {
 
 		// Validate targeting
 		// Older clients can submit the static FFA target for these self-targeting moves.
-		if (this.battle.gameType !== 'freeforall' && !maxMove &&
-			['followme', 'ragepowder'].includes(move.id)) {
+		if (
+			this.battle.gameType !== 'freeforall' &&
+			!maxMove &&
+			['followme', 'ragepowder'].includes(move.id)
+		) {
 			targetType = 'self';
 			targetLoc = 0;
 		}
@@ -702,8 +794,7 @@ export class Side {
 				if (targetLoc && !this.battle.validTargetLoc(targetLoc, pokemon, 'normal')) {
 					return this.emitChoiceError(`Can't move: Invalid target for ${move.name}`);
 				}
-			} else
-			if (targetLoc) {
+			} else if (targetLoc) {
 				return this.emitChoiceError(`Can't move: You can't choose a target for ${move.name}`);
 			}
 		}
@@ -723,8 +814,10 @@ export class Side {
 				moveid: lockedMoveID,
 			});
 			return true;
-		} else if (this.battle.gen === 1 &&
-			(['frz', 'slp'].includes(pokemon.status) || pokemon.volatiles['partiallytrapped'])) {
+		} else if (
+			this.battle.gen === 1 &&
+			(['frz', 'slp'].includes(pokemon.status) || pokemon.volatiles['partiallytrapped'])
+		) {
 			if (pokemon.maybeLocked) this.choice.cantUndo = true;
 			this.choice.actions.push({
 				choice: 'move',
@@ -746,7 +839,9 @@ export class Side {
 		} else if (moveid === 'testfight') {
 			// test fight button
 			if (!pokemon.maybeLocked) {
-				return this.emitChoiceError(`Can't move: ${pokemon.name}'s Fight button is known to be safe`);
+				return this.emitChoiceError(
+					`Can't move: ${pokemon.name}'s Fight button is known to be safe`,
+				);
 			}
 			this.updateRequestForPokemon(pokemon, req => this.updateDisabledRequest(pokemon, req));
 			this.emitRequest(this.activeRequest!, true);
@@ -766,8 +861,8 @@ export class Side {
 			// Check for disabled moves
 			let isEnabled = false;
 			let disabledSource = '';
-			for (const [index, m] of moves.entries()) {
-				if (moveSlot !== undefined && index !== moveSlot) continue;
+			for (const [moveIndex, m] of moves.entries()) {
+				if (moveSlot !== undefined && moveIndex !== moveSlot) continue;
 				if (m.id !== moveid) continue;
 				if (!m.disabled) {
 					isEnabled = true;
@@ -779,33 +874,35 @@ export class Side {
 			if (!isEnabled) {
 				// Request a different choice
 				if (autoChoose) throw new Error(`autoChoose chose a disabled move`);
-				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`, { pokemon, update: req => {
-					let updated = this.updateDisabledRequest(pokemon, req);
-					for (const [index, m] of req.moves.entries()) {
-						if (moveSlot !== undefined && index !== moveSlot) continue;
-						if (m.id === moveid) {
-							if (!m.disabled) {
-								m.disabled = true;
-								updated = true;
+				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`, {
+					pokemon,
+					update: req => {
+						let updated = this.updateDisabledRequest(pokemon, req);
+						for (const [moveIndex, m] of req.moves.entries()) {
+							if (moveSlot !== undefined && moveIndex !== moveSlot) continue;
+							if (m.id === moveid) {
+								if (!m.disabled) {
+									m.disabled = true;
+									updated = true;
+								}
+								if (m.disabledSource !== disabledSource) {
+									m.disabledSource = disabledSource;
+									updated = true;
+								}
+								break;
 							}
-							if (m.disabledSource !== disabledSource) {
-								m.disabledSource = disabledSource;
-								updated = true;
-							}
-							break;
 						}
-					}
-					return updated;
-				} });
+						return updated;
+					},
+				});
 			}
 			// The chosen move is valid yay
 		}
 
 		// Mega evolution
-		const mixandmega = this.battle.format.mod === 'mixandmega';
-		const mega = (event === 'mega');
-		const megax = (event === 'megax');
-		const megay = (event === 'megay');
+		const mega = event === 'mega';
+		const megax = event === 'megax';
+		const megay = event === 'megay';
 		if (mega && !pokemon.canMegaEvo) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve`);
 		}
@@ -815,12 +912,13 @@ export class Side {
 		if (megay && !pokemon.canMegaEvoY) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve Y`);
 		}
-		const ultra = (event === 'ultra');
+		const ultra = event === 'ultra';
 		if (ultra && !pokemon.canUltraBurst) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't ultra burst`);
 		}
-		let dynamax = (event === 'dynamax');
-		const canDynamax = (this.activeRequest as MoveRequest)?.active[this.active.indexOf(pokemon)].canDynamax;
+		let dynamax = event === 'dynamax';
+		const canDynamax = (this.activeRequest as MoveRequest)?.active[this.active.indexOf(pokemon)]
+			.canDynamax;
 		if (dynamax && (this.choice.dynamax || !canDynamax)) {
 			if (pokemon.volatiles['dynamax']) {
 				dynamax = false;
@@ -833,7 +931,7 @@ export class Side {
 				return this.emitChoiceError(`Can't move: ${pokemon.name} can't Dynamax now.`);
 			}
 		}
-		const terastallize = (event === 'terastallize' || event === 'zmove-terastallize');
+		const terastallize = event === 'terastallize' || event === 'zmove-terastallize';
 		if (terastallize && !pokemon.canTerastallize) {
 			// Make this work properly
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't Terastallize.`);
@@ -847,12 +945,23 @@ export class Side {
 		}
 		const maxGimmicks = this.battle.gimmickLimit;
 		const pendingGimmicks = this.choice.actions.reduce((total, action) => {
-			return total + (action.mega || action.megax || action.megay ? 1 : 0) + (action.dynamax ? 1 : 0) +
-				(action.zmove ? 1 : 0) + (action.terastallize ? 1 : 0);
+			return (
+				total +
+				(action.mega || action.megax || action.megay ? 1 : 0) +
+				(action.dynamax ? 1 : 0) +
+				(action.zmove ? 1 : 0) +
+				(action.terastallize ? 1 : 0)
+			);
 		}, 0);
-		const requestedGimmicks = (mega || megax || megay || ultra ? 1 : 0) + (dynamax ? 1 : 0) +
-			(zMove ? 1 : 0) + (terastallize ? 1 : 0);
-		if (requestedGimmicks && pokemon.side.gimmickCount + pendingGimmicks + requestedGimmicks > maxGimmicks) {
+		const requestedGimmicks =
+			(mega || megax || megay || ultra ? 1 : 0) +
+			(dynamax ? 1 : 0) +
+			(zMove ? 1 : 0) +
+			(terastallize ? 1 : 0);
+		if (
+			requestedGimmicks &&
+			pokemon.side.gimmickCount + pendingGimmicks + requestedGimmicks > maxGimmicks
+		) {
 			return this.emitChoiceError(`Can't move: You don't have enough gimmick uses left`);
 		}
 
@@ -871,9 +980,11 @@ export class Side {
 			terastallize: terastallize ? pokemon.teraType : undefined,
 		});
 
-		if (pokemon.maybeDisabled && (this.battle.gameType === 'singles' || (
-			this.battle.gen <= 3 && !this.battle.actions.targetTypeChoices(targetType)
-		))) {
+		if (
+			pokemon.maybeDisabled &&
+			(this.battle.gameType === 'singles' ||
+				(this.battle.gen <= 3 && !this.battle.actions.targetTypeChoices(targetType)))
+		) {
 			this.choice.cantUndo = true;
 		}
 
@@ -901,7 +1012,10 @@ export class Side {
 			for (const [index, m] of req.moves.entries()) {
 				const slot = pokemon.moveSlots[index];
 				const disabled = slot?.id === m.id ? slot.disabled : pokemon.getMoveData(m.id)?.disabled;
-				if (disabled && (this.battle.gen >= 4 || this.battle.actions.targetTypeChoices(m.target!))) {
+				if (
+					disabled &&
+					(this.battle.gen >= 4 || this.battle.actions.targetTypeChoices(m.target!))
+				) {
 					m.disabled = true;
 					updated = true;
 				}
@@ -957,7 +1071,9 @@ export class Side {
 		const index = this.getChoiceIndex();
 		if (index >= this.active.length) {
 			if (this.requestState === 'switch') {
-				return this.emitChoiceError(`Can't switch: You sent more switches than Pokémon that need to switch`);
+				return this.emitChoiceError(
+					`Can't switch: You sent more switches than Pokémon that need to switch`,
+				);
 			}
 			return this.emitChoiceError(`Can't switch: You sent more choices than unfainted Pokémon`);
 		}
@@ -982,21 +1098,33 @@ export class Side {
 			// maybe it's a name/species id!
 			slot = -1;
 			for (const [i, mon] of this.pokemon.entries()) {
-				if (slotText!.toLowerCase() === mon.name.toLowerCase() || toID(slotText) === mon.species.id) {
+				if (
+					slotText!.toLowerCase() === mon.name.toLowerCase() ||
+					toID(slotText) === mon.species.id
+				) {
 					slot = i;
 					break;
 				}
 			}
 			if (slot < 0) {
-				return this.emitChoiceError(`Can't switch: You do not have a Pokémon named "${slotText}" to switch to`);
+				return this.emitChoiceError(
+					`Can't switch: You do not have a Pokémon named "${slotText}" to switch to`,
+				);
 			}
 		}
 		if (slot >= this.pokemon.length) {
-			return this.emitChoiceError(`Can't switch: You do not have a Pokémon in slot ${slot + 1} to switch to`);
-		} else if (slot < this.active.length && !this.slotConditions[pokemon.position]['revivalblessing']) {
+			return this.emitChoiceError(
+				`Can't switch: You do not have a Pokémon in slot ${slot + 1} to switch to`,
+			);
+		} else if (
+			slot < this.active.length &&
+			!this.slotConditions[pokemon.position]['revivalblessing']
+		) {
 			return this.emitChoiceError(`Can't switch: You can't switch to an active Pokémon`);
 		} else if (this.choice.switchIns.has(slot)) {
-			return this.emitChoiceError(`Can't switch: The Pokémon in slot ${slot + 1} can only switch in once`);
+			return this.emitChoiceError(
+				`Can't switch: The Pokémon in slot ${slot + 1} can only switch in once`,
+			);
 		}
 		const targetPokemon = this.pokemon[slot];
 
@@ -1005,7 +1133,10 @@ export class Side {
 				return this.emitChoiceError(`Can't switch: You have to pass to a fainted Pokémon`);
 			}
 			// Should always subtract, but stop at 0 to prevent errors.
-			this.choice.forcedSwitchesLeft = this.battle.clampIntRange(this.choice.forcedSwitchesLeft - 1, 0);
+			this.choice.forcedSwitchesLeft = this.battle.clampIntRange(
+				this.choice.forcedSwitchesLeft - 1,
+				0,
+			);
 			pokemon.switchFlag = false;
 			this.choice.actions.push({
 				choice: 'revivalblessing',
@@ -1021,18 +1152,21 @@ export class Side {
 
 		if (this.requestState === 'move') {
 			if (pokemon.trapped) {
-				return this.emitChoiceError(`Can't switch: The active Pokémon is trapped`, { pokemon, update: req => {
-					let updated = false;
-					if (req.maybeTrapped) {
-						delete req.maybeTrapped;
-						updated = true;
-					}
-					if (!req.trapped) {
-						req.trapped = true;
-						updated = true;
-					}
-					return updated;
-				} });
+				return this.emitChoiceError(`Can't switch: The active Pokémon is trapped`, {
+					pokemon,
+					update: req => {
+						let updated = false;
+						if (req.maybeTrapped) {
+							delete req.maybeTrapped;
+							updated = true;
+						}
+						if (!req.trapped) {
+							req.trapped = true;
+							updated = true;
+						}
+						return updated;
+					},
+				});
 			} else if (pokemon.maybeTrapped) {
 				this.choice.cantUndo = true;
 			}
@@ -1046,7 +1180,7 @@ export class Side {
 		this.choice.switchIns.add(slot);
 
 		this.choice.actions.push({
-			choice: (this.requestState === 'switch' ? 'instaswitch' : 'switch'),
+			choice: this.requestState === 'switch' ? 'instaswitch' : 'switch',
 			pokemon,
 			target: targetPokemon,
 		});
@@ -1068,11 +1202,14 @@ export class Side {
 
 	chooseTeam(data?: string) {
 		if (this.requestState !== 'teampreview') {
-			return this.emitChoiceError(`Can't choose for Team Preview: You're not in a Team Preview phase`);
+			return this.emitChoiceError(
+				`Can't choose for Team Preview: You're not in a Team Preview phase`,
+			);
 		}
 
 		const ruleTable = this.battle.ruleTable;
-		let positions = data ? data.split(data.includes(',') ? ',' : '').map(datum => parseInt(datum) - 1) :
+		let positions = data ?
+			data.split(data.includes(',') ? ',' : '').map(datum => parseInt(datum) - 1) :
 			[...this.pokemon.keys()]; // autoChoose
 		const pickedTeamSize = this.pickedTeamSize();
 
@@ -1090,10 +1227,14 @@ export class Side {
 
 		for (const [index, pos] of positions.entries()) {
 			if (isNaN(pos) || pos < 0 || pos >= this.pokemon.length) {
-				return this.emitChoiceError(`Can't choose for Team Preview: You do not have a Pokémon in slot ${pos + 1}`);
+				return this.emitChoiceError(
+					`Can't choose for Team Preview: You do not have a Pokémon in slot ${pos + 1}`,
+				);
 			}
 			if (positions.indexOf(pos) !== index) {
-				return this.emitChoiceError(`Can't choose for Team Preview: The Pokémon in slot ${pos + 1} can only switch in once`);
+				return this.emitChoiceError(
+					`Can't choose for Team Preview: The Pokémon in slot ${pos + 1} can only switch in once`,
+				);
 			}
 		}
 
@@ -1103,7 +1244,9 @@ export class Side {
 				return this.emitChoiceError(`Can't choose for Team Preview: ${result}`);
 			}
 			if (result.length < pickedTeamSize) {
-				throw new Error(`onChooseTeam from ${ruleTable.onChooseTeam![1]} returned a team of size ${result.length}, which is less than the required size of ${pickedTeamSize}`);
+				throw new Error(
+					`onChooseTeam from ${ruleTable.onChooseTeam![1]} returned a team of size ${result.length}, which is less than the required size of ${pickedTeamSize}`,
+				);
 			}
 			positions = result.slice(0, pickedTeamSize);
 		}
@@ -1147,7 +1290,9 @@ export class Side {
 		let forcedPasses = 0;
 		if (this.battle.requestState === 'switch') {
 			const canSwitchOut = this.active.filter(pokemon => pokemon?.switchFlag).length;
-			const canSwitchIn = this.pokemon.slice(this.active.length).filter(pokemon => pokemon && !pokemon.fainted).length;
+			const canSwitchIn = this.pokemon
+				.slice(this.active.length)
+				.filter(pokemon => pokemon && !pokemon.fainted).length;
 			forcedSwitches = Math.min(canSwitchOut, canSwitchIn);
 			forcedPasses = canSwitchOut - forcedSwitches;
 		}
@@ -1201,21 +1346,25 @@ export class Side {
 	choose(input: string) {
 		if (!this.requestState) {
 			return this.emitChoiceError(
-				this.battle.ended ? `Can't do anything: The game is over` : `Can't do anything: It's not your turn`
+				this.battle.ended ?
+					`Can't do anything: The game is over` :
+					`Can't do anything: It's not your turn`,
 			);
 		}
 
 		if (this.choice.cantUndo) {
-			return this.emitChoiceError(`Can't undo: A trapping/disabling effect would cause undo to leak information`);
+			return this.emitChoiceError(
+				`Can't undo: A trapping/disabling effect would cause undo to leak information`,
+			);
 		}
 
 		this.clearChoice();
 
-		const choiceStrings = (input.startsWith('team ') ? [input] : input.split(','));
+		const choiceStrings = input.startsWith('team ') ? [input] : input.split(',');
 
 		if (choiceStrings.length > this.active.length) {
 			return this.emitChoiceError(
-				`Can't make choices: You sent choices for ${choiceStrings.length} Pokémon, but this is a ${this.battle.gameType} game!`
+				`Can't make choices: You sent choices for ${choiceStrings.length} Pokémon, but this is a ${this.battle.gameType} game!`,
 			);
 		}
 
@@ -1230,7 +1379,8 @@ export class Side {
 			switch (choiceType) {
 			case 'move':
 				const original = data;
-				const error = () => this.emitChoiceError(`Conflicting arguments for "move": ${original}`);
+				const error = () =>
+					this.emitChoiceError(`Conflicting arguments for "move": ${original}`);
 				let targetLoc: number | undefined;
 				let event: MoveEvent = '';
 				const addEvent = (nextEvent: Exclude<MoveEvent, '' | 'zmove-terastallize'>) => {
@@ -1354,16 +1504,21 @@ export class Side {
 
 		switch (this.requestState) {
 		case 'switch':
-			if (pokemon.switchFlag) { // This condition will always happen if called by Battle#choose()
+			if (pokemon.switchFlag) {
+				// This condition will always happen if called by Battle#choose()
 				if (!this.choice.forcedPassesLeft) {
-					return this.emitChoiceError(`Can't pass: You need to switch in a Pokémon to replace ${pokemon.name}`);
+					return this.emitChoiceError(
+						`Can't pass: You need to switch in a Pokémon to replace ${pokemon.name}`,
+					);
 				}
 				this.choice.forcedPassesLeft--;
 			}
 			break;
 		case 'move':
 			if (!pokemon.fainted && !pokemon.volatiles['commanding']) {
-				return this.emitChoiceError(`Can't pass: Your ${pokemon.name} must make a move (or switch)`);
+				return this.emitChoiceError(
+					`Can't pass: Your ${pokemon.name} must make a move (or switch)`,
+				);
 			}
 			break;
 		default:
@@ -1383,7 +1538,8 @@ export class Side {
 		} else if (this.requestState === 'switch') {
 			let i = 0;
 			while (!this.isChoiceDone()) {
-				if (!this.chooseSwitch()) throw new Error(`autoChoose switch crashed: ${this.choice.error}`);
+				if (!this.chooseSwitch())
+					throw new Error(`autoChoose switch crashed: ${this.choice.error}`);
 				i++;
 				if (i > 10) throw new Error(`autoChoose failed: infinite looping`);
 			}

@@ -4,9 +4,9 @@ describe('Multiple stored Foresight attacks', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	for (const [ability, delay] of [['Grandmaster', 2], ['Perfect Foresight', 1]]) {
 		for (const departure of ['stay', 'switch', 'faint']) it(ability + ' retains independent same-slot snapshots and serial releases after owner ' + departure, () => {
-			const reserve = {species: 'Mew', ability: 'No Ability', moves: ['splash']};
-			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-				[{species: 'Alakazam', ability, moves: ['psychic']}, {...reserve}], [reserve, {...reserve}],
+			const reserve = { species: 'Mew', ability: 'No Ability', moves: ['splash'] };
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+				[{ species: 'Alakazam', ability, moves: ['psychic'] }, { ...reserve }], [reserve, { ...reserve }],
 			]);
 			battle.makeChoices('team 12', 'team 12');
 			const p = battle.p1.active[0], q = battle.p2.active[0];
@@ -14,8 +14,8 @@ describe('Multiple stored Foresight attacks', () => {
 			for (const boost of [0, 1, 2]) {
 				p.boosts.spa = boost; battle.clearActiveMove();
 				const move = battle.dex.getActiveMove('psychic');
-				Object.assign(move, {accuracy: true, basePower: 10, willCrit: false, secondaries: undefined, multihit: 3});
-				battle.actions.useMove(move, p, {target: q});
+				Object.assign(move, { accuracy: true, basePower: 10, willCrit: false, secondaries: undefined, multihit: 3 });
+				battle.actions.useMove(move, p, { target: q });
 			}
 			const state = battle.field.pseudoWeather.foresightmemory, entries = state.entries;
 			assert.equal(entries.length, 3);

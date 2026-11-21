@@ -1,8 +1,8 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex, TeamValidator} = require('../../../dist/sim');
-const {abilityIncludesComponent} = require('../../../dist/data/ability-components');
+const { Dex, TeamValidator } = require('../../../dist/sim');
+const { abilityIncludesComponent } = require('../../../dist/data/ability-components');
 
 describe('Talonflame passive swap and Safeguard support coverage', () => {
 	let battle;
@@ -20,12 +20,12 @@ describe('Talonflame passive swap and Safeguard support coverage', () => {
 	it('swaps exactly one selected slot and one passive', () => {
 		const species = Dex.species.get('talonflame');
 		assert.deepEqual(species.passives, ['galewings']);
-		assert.deepEqual(species.abilities, {0: 'Open Sky', 1: 'Scorch Sweep', H: 'Flame Body', S: 'Burning Quake'});
+		assert.deepEqual(species.abilities, { 0: 'Open Sky', 1: 'Scorch Sweep', H: 'Flame Body', S: 'Burning Quake' });
 	});
 	for (const ability of ['Open Sky', 'Flame Body', 'Gale Wings']) it(`Gale Wings adds priority once with ${ability}, including suppression`, () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Talonflame', ability, moves: ['bravebird', 'flamethrower']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Talonflame', ability, moves: ['bravebird', 'flamethrower'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices();
 		const p = battle.p1.active[0], q = battle.p2.active[0];

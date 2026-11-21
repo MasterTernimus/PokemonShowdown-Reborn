@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('../../assert');
-const {TeamValidator} = require('../../../dist/sim/team-validator');
+const { TeamValidator } = require('../../../dist/sim/team-validator');
 
 const CUSTOM_FIELD_PROFILES = [
 	'Palossand-Fiery',
@@ -24,13 +24,13 @@ const FIELD_FORMATS = [
 	'gen9doublesicyfield',
 ];
 
-describe('Field format custom legality', function () {
-	it('uses the registered Murkwater Surface terrain', function () {
+describe('Field format custom legality', () => {
+	it('uses the registered Murkwater Surface terrain', () => {
 		assert.equal(TeamValidator.get('gen9murkwatersurface').format.terrain, 'murkwatersurfaceterrain');
 	});
 
 	for (const format of FIELD_FORMATS) {
-		it(`allows custom profiles in ${format}`, function () {
+		it(`allows custom profiles in ${format}`, () => {
 			const team = CUSTOM_FIELD_PROFILES.map(species => ({
 				species,
 				ability: 'No Ability',

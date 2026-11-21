@@ -2,13 +2,13 @@
 const assert = require('../../assert');
 const common = require('../../common');
 let battle;
-describe('Crown, Bloom, and Shell updates', function () {
+describe('Crown, Bloom, and Shell updates', () => {
 	afterEach(() => battle?.destroy());
 	function setup(ability, foeAbility = 'noability') {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Mew', ability, moves: ['psychic', 'splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Mew', ability, moves: ['psychic', 'splash'] },
 		], [
-			{species: 'Mew', ability: foeAbility, moves: ['splash']},
+			{ species: 'Mew', ability: foeAbility, moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		return battle.p1.active[0];
@@ -18,7 +18,7 @@ describe('Crown, Bloom, and Shell updates', function () {
 		const foe = battle.p2.active[0];
 		assert.statStage(foe, 'atk', -1);
 		for (const component of ['intimidate', 'unboundblaze', 'levitate']) assert(holder.hasAbility(component));
-		battle.boost({atk: -1}, holder, foe, battle.dex.moves.get('growl'));
+		battle.boost({ atk: -1 }, holder, foe, battle.dex.moves.get('growl'));
 		assert.statStage(holder, 'atk', -1);
 		battle.boost({ atk: -1 }, holder, holder, battle.dex.moves.get('superpower'));
 		assert.statStage(holder, 'atk', -2);
@@ -32,7 +32,7 @@ describe('Crown, Bloom, and Shell updates', function () {
 		assert(!holder.hasAbility('whitesmoke'));
 	});
 	for (const ability of ['ancientbloom', 'pollenbloom', 'thickfat']) {
-		it(`${ability} applies exactly one Thick Fat reduction`, function () {
+		it(`${ability} applies exactly one Thick Fat reduction`, () => {
 			const holder = setup(ability);
 			for (const [event, move] of [['ModifyAtk', 'firepunch'], ['ModifyAtk', 'icepunch'], ['ModifySpA', 'flamethrower'], ['ModifySpA', 'icebeam']]) {
 				assert.equal(battle.runEvent(event, battle.p2.active[0], holder, battle.dex.getActiveMove(move), 100), 50);
@@ -40,7 +40,7 @@ describe('Crown, Bloom, and Shell updates', function () {
 		});
 	}
 	for (const terrain of ['electricterrain', 'murkwatersurfaceterrain']) {
-		it(`absorbs Electric moves on ${terrain}`, function () {
+		it(`absorbs Electric moves on ${terrain}`, () => {
 			const holder = setup('fortressshell');
 			battle.field.setTerrain(terrain, holder);
 			const hp = holder.hp;

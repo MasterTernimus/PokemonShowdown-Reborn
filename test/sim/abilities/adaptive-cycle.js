@@ -2,21 +2,33 @@
 const assert = require('assert').strict;
 const common = require('../../common');
 const A = require('../../../dist/sim/adaptive-cycle');
-const {Dex} = require('../../../dist/sim/dex');
-const {TeamValidator} = require('../../../dist/sim/team-validator');
+const { Dex } = require('../../../dist/sim/dex');
+const { TeamValidator } = require('../../../dist/sim/team-validator');
 
 describe('Adaptive Cycle', () => {
 	let battle, p, foe;
-	afterEach(() => { battle?.destroy(); battle = null; });
+	afterEach(() => {
+		battle?.destroy();
+		battle = null;
+	});
 	function setup(ability = 'No Ability', species = 'Mew') {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Kecleon', ability: 'Adaptive Cycle', moves: ['recover', 'protect', 'tackle', 'splash']},
-				{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
-			[{species, ability, moves: ['tackle', 'splash', 'ember', 'watergun']},
-				{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[
+				{
+					species: 'Kecleon',
+					ability: 'Adaptive Cycle',
+					moves: ['recover', 'protect', 'tackle', 'splash'],
+				},
+				{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+			],
+			[
+				{ species, ability, moves: ['tackle', 'splash', 'ember', 'watergun'] },
+				{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+			],
 		]);
 		battle.makeChoices('team 12', 'team 12');
-		p = battle.p1.active[0]; foe = battle.p2.active[0];
+		p = battle.p1.active[0];
+		foe = battle.p2.active[0];
 	}
 	function analyzed() {
 		for (let i = 0; i < 4; i++) battle.makeChoices('move splash', 'move splash');
@@ -27,25 +39,47 @@ describe('Adaptive Cycle', () => {
 		const moves = Dex.species.getLearnsetData('kecleon').learnset;
 		assert(!moves.conversion);
 		assert(moves.conversion2);
-		const set = { species: 'Kecleon', ability: 'Adaptive Cycle', moves: ['Conversion'], nature: 'Serious' };
-		const result = new TeamValidator('gen9nofieldsinglesgame@@@Obtainable Abilities,Obtainable Moves').validateTeam([set]);
+		const set = {
+			species: 'Kecleon',
+			ability: 'Adaptive Cycle',
+			moves: ['Conversion'],
+			nature: 'Serious',
+		};
+		const result = new TeamValidator(
+			'gen9nofieldsinglesgame@@@Obtainable Abilities,Obtainable Moves'
+		).validateTeam([set]);
 		assert(result && result.some(line => /Conversion/.test(line)), JSON.stringify(result));
 	});
 	it('does not erase offensive boosts from Z-Moves against fully adapted Kecleon', () => {
-		setup(); analyzed();
+		setup();
+		analyzed();
 		battle.randomizer = damage => damage;
-		const attack = () => Object.assign(Dex.getActiveMove('infernooverdrive'), { category: 'Special', basePower: 100, willCrit: false });
+		const attack = () =>
+			Object.assign(Dex.getActiveMove('infernooverdrive'), {
+				category: 'Special',
+				basePower: 100,
+				willCrit: false,
+			});
 		const neutral = battle.actions.getDamage(foe, p, attack());
 		foe.boosts.spa = 2;
 		const boosted = battle.actions.getDamage(foe, p, attack());
 		assert(boosted > neutral * 1.8, boosted + ' vs ' + neutral);
 	});
 
-	for (const [category, offense, defense] of [['Physical', 'atk', 'def'], ['Special', 'spa', 'spd']]) {
+	for (const [category, offense, defense] of [
+		['Physical', 'atk', 'def'],
+		['Special', 'spa', 'spd'],
+	]) {
 		it('Z-Moves bypass Kecleon ' + defense + ' boosts but retain attacker penalties', () => {
-			setup(); analyzed();
+			setup();
+			analyzed();
 			battle.randomizer = damage => damage;
-			const attack = () => Object.assign(Dex.getActiveMove('infernooverdrive'), { category, basePower: 100, willCrit: false });
+			const attack = () =>
+				Object.assign(Dex.getActiveMove('infernooverdrive'), {
+					category,
+					basePower: 100,
+					willCrit: false,
+				});
 			const damage = () => battle.actions.getDamage(foe, p, attack());
 			const baseline = damage();
 			p.boosts[defense] = 6;
@@ -62,50 +96,66 @@ describe('Adaptive Cycle', () => {
 			assert(damage() < ordinary, 'other Kecleon abilities keep ordinary defensive stages');
 		});
 	}
-	for (const weather of ['', 'raindance', 'primordialsea']) it('takes the full Fire Z-Move through Protect: '+(weather || 'clear'),()=>{
-		setup();
-		battle.randomizer = damage => damage;
-		foe.setItem('firiumz');
-		p.setType('Normal');
-		const z = Object.assign(Dex.getActiveMove('infernooverdrive'), {basePower:100,category:'Special',willCrit:false});
-		p.setAbility('No Ability');
-		const neutral = battle.actions.getDamage(foe,p,z);
-		p.setAbility('Adaptive Cycle');
-		analyzed();
-		p.setType('Fire');
-		const memory = A.adaptiveMemory(p);
-		memory.types.Fire = {stage:3,turn:battle.turn};memory.activeTypes = ['Fire'];
-		p.hp = p.maxhp = p.baseMaxhp = 4000;
-		if (weather) battle.field.setWeather(weather,foe);
-		p.side.addSideCondition('lightscreen',p);
-		let directDamage = 0;
-		battle.onEvent('DamagingHit',battle.format,(damage,target,source,move)=>{
-			if (target === p && move.isZ) directDamage += damage;
+	for (const weather of ['', 'raindance', 'primordialsea'])
+		it('takes the full Fire Z-Move through Protect: ' + (weather || 'clear'), () => {
+			setup();
+			battle.randomizer = damage => damage;
+			foe.setItem('firiumz');
+			p.setType('Normal');
+			const z = Object.assign(Dex.getActiveMove('infernooverdrive'), {
+				basePower: 100,
+				category: 'Special',
+				willCrit: false,
+			});
+			p.setAbility('No Ability');
+			const neutral = battle.actions.getDamage(foe, p, z);
+			p.setAbility('Adaptive Cycle');
+			analyzed();
+			p.setType('Fire');
+			const memory = A.adaptiveMemory(p);
+			memory.types.Fire = { stage: 3, turn: battle.turn };
+			memory.activeTypes = ['Fire'];
+			p.hp = p.maxhp = p.baseMaxhp = 4000;
+			if (weather) battle.field.setWeather(weather, foe);
+			p.side.addSideCondition('lightscreen', p);
+			let directDamage = 0;
+			battle.onEvent('DamagingHit', battle.format, (damage, target, source, move) => {
+				if (target === p && move.isZ) directDamage += damage;
+			});
+			battle.makeChoices('move protect', 'move ember zmove');
+			assert.equal(directDamage, neutral * 4);
 		});
-		battle.makeChoices('move protect','move ember zmove');
-		assert.equal(directDamage,neutral*4);
-	});
-	it('Hydro Vortex hits through harsh sun and Max Guard at full strength',()=>{
+	it('Hydro Vortex hits through harsh sun and Max Guard at full strength', () => {
 		setup();
 		battle.randomizer = damage => damage;
-		const attack = () => Object.assign(Dex.getActiveMove('hydrovortex'),{category:'Special',basePower:100,willCrit:false});
+		const attack = () =>
+			Object.assign(Dex.getActiveMove('hydrovortex'), {
+				category: 'Special',
+				basePower: 100,
+				willCrit: false,
+			});
 		p.hp = p.maxhp = p.baseMaxhp = 4000;
-		const expected = battle.actions.getDamage(foe,p,attack());
-		battle.field.setWeather('desolateland',foe);
-		p.addVolatile('maxguard',p);
-		battle.actions.useMove(attack(),foe,{target:p});
-		assert.equal(4000-p.hp,expected);
+		const expected = battle.actions.getDamage(foe, p, attack());
+		battle.field.setWeather('desolateland', foe);
+		p.addVolatile('maxguard', p);
+		battle.actions.useMove(attack(), foe, { target: p });
+		assert.equal(4000 - p.hp, expected);
 	});
-	it('hits a naturally immune holder but respects other Pokémon’s immunities',()=>{
-		setup();p.setType('Ground');
-		const z=Object.assign(Dex.getActiveMove('gigavolthavoc'),{category:'Special',basePower:100});
-		assert(battle.actions.getDamage(foe,p,z)>0);
-		assert.equal(p.getMoveHitData(z).typeMod,2);
+	it('hits a naturally immune holder but respects other Pokémon’s immunities', () => {
+		setup();
+		p.setType('Ground');
+		const z = Object.assign(Dex.getActiveMove('gigavolthavoc'), {
+			category: 'Special',
+			basePower: 100,
+		});
+		assert(battle.actions.getDamage(foe, p, z) > 0);
+		assert.equal(p.getMoveHitData(z).typeMod, 2);
 		p.setAbility('No Ability');
-		assert.equal(battle.actions.getDamage(foe,p,Dex.getActiveMove('gigavolthavoc')),false);
+		assert.equal(battle.actions.getDamage(foe, p, Dex.getActiveMove('gigavolthavoc')), false);
 	});
 	it('stops Murkwater damage and hurt messages after natural field adaptation', () => {
-		setup(); battle.field.setTerrain('murkwatersurfaceterrain', p);
+		setup();
+		battle.field.setTerrain('murkwatersurfaceterrain', p);
 		for (let turn = 0; turn < 3; turn++) battle.makeChoices('move splash', 'move splash');
 		assert(A.adaptiveEnvironment(p, 'fields'));
 		const hp = p.hp;
@@ -114,24 +164,32 @@ describe('Adaptive Cycle', () => {
 		battle.makeChoices('move splash', 'move splash');
 		assert.equal(p.hp, hp, 'the adapted holder must take no field damage');
 		assert(foe.hp < otherHP, 'unadapted opponents still take field damage');
-		assert(!battle.log.slice(logStart).some(line => line.includes(`${p.name} is hurt by the toxic water`)));
+		assert(
+			!battle.log
+				.slice(logStart)
+				.some(line => line.includes(`${p.name} is hurt by the toxic water`))
+		);
 		battle.makeChoices('switch 2', 'move splash');
 		battle.makeChoices('switch 2', 'move splash');
 		assert.equal(p.hp, hp, 'switching preserves completed field protection');
 	});
 	it('bypasses type immunity only for the analyzed target and forces super effectiveness', () => {
-		setup(); analyzed();
+		setup();
+		analyzed();
 		foe.setType('Ghost');
 		const move = Dex.getActiveMove('tackle');
 		assert(battle.actions.getDamage(p, foe, move, true) > 0);
 		assert.equal(foe.getMoveHitData(move).typeMod, 1);
-		const other = battle.p2.pokemon[1]; other.setType('Ghost'); other.isActive = true;
+		const other = battle.p2.pokemon[1];
+		other.setType('Ghost');
+		other.isActive = true;
 		assert.equal(battle.actions.getDamage(p, other, move, true), false);
 		assert.notEqual(move.ignoreImmunity, true, 'must not mutate the shared spread move');
 		other.isActive = false;
 	});
 	it('retains stronger natural effectiveness and resists attacks even when countertyping cannot change Tera', () => {
-		setup(); analyzed();
+		setup();
+		analyzed();
 		foe.setType(['Grass', 'Steel']);
 		const fire = Dex.getActiveMove('ember');
 		battle.actions.getDamage(p, foe, fire, true);
@@ -141,23 +199,33 @@ describe('Adaptive Cycle', () => {
 		assert.equal(p.getMoveHitData(fire).typeMod, -1);
 	});
 	it('gives completed defender analysis priority in both directions', () => {
-		setup('Adaptive Cycle'); analyzed();
+		setup('Adaptive Cycle');
+		analyzed();
 		assert(A.adaptiveAnalyzed(foe, p));
-		for (const [source, target] of [[p, foe], [foe, p]]) {
+		for (const [source, target] of [
+			[p, foe],
+			[foe, p],
+		]) {
 			const move = Dex.getActiveMove('tackle');
 			battle.actions.getDamage(source, target, move, true);
 			assert.equal(target.getMoveHitData(move).typeMod, -1);
 		}
 	});
 	it('does not grant immunity bypass before completion or to status moves; fixed damage stays fixed', () => {
-		setup(); foe.setType('Ghost');
+		setup();
+		foe.setType('Ghost');
 		assert.equal(battle.actions.getDamage(p, foe, Dex.getActiveMove('tackle'), true), false);
 		analyzed();
-		assert.notEqual(A.adaptiveMoveView(Dex.getActiveMove('thunderwave'), p, foe).ignoreImmunity, true);
+		assert.notEqual(
+			A.adaptiveMoveView(Dex.getActiveMove('thunderwave'), p, foe).ignoreImmunity,
+			true
+		);
 		assert.equal(battle.actions.getDamage(p, foe, Dex.getActiveMove('seismictoss'), true), p.level);
 	});
 	it('lands an actual immune attack after analysis while Protect still blocks it', () => {
-		setup(); analyzed(); foe.setType('Ghost');
+		setup();
+		analyzed();
+		foe.setType('Ghost');
 		const before = foe.hp;
 		battle.makeChoices('move tackle', 'move splash');
 		assert(foe.hp < before);
@@ -169,28 +237,46 @@ describe('Adaptive Cycle', () => {
 	it('registers a separate event slot and legal Recover on the three remaining recipients without Mimicry', () => {
 		for (const species of ['Kecleon', 'Stunfisk', 'Stunfisk-Galar']) {
 			assert.equal(Dex.species.get(species).abilities.S, 'Adaptive Cycle');
-			const set = {species, ability: 'Adaptive Cycle', moves: ['Recover'], nature: 'Serious', evs: {hp: 252, def: 252, spd: 4}};
-			const result = new TeamValidator('gen9nofieldsinglesgame@@@Obtainable Abilities,Obtainable Moves').validateTeam([set]);
+			const set = {
+				species,
+				ability: 'Adaptive Cycle',
+				moves: ['Recover'],
+				nature: 'Serious',
+				evs: { hp: 252, def: 252, spd: 4 },
+			};
+			const result = new TeamValidator(
+				'gen9nofieldsinglesgame@@@Obtainable Abilities,Obtainable Moves'
+			).validateTeam([set]);
 			assert.equal(result, null, JSON.stringify(result));
 		}
-		setup(); assert(!p.hasAbility('mimicry'));
+		setup();
+		assert(!p.hasAbility('mimicry'));
 	});
 	for (const ability of ['Ultra Ego', 'Burning Ego', 'Terra Ascendant', 'Perfect Ego']) {
 		it(`negates ${ability}'s interaction callbacks in both directions, leaving other targets unaffected`, () => {
-			setup(); analyzed(); foe.setAbility(ability);
+			setup();
+			analyzed();
+			foe.setAbility(ability);
 			const move = Dex.getActiveMove('tackle');
-			foe.hp = Math.floor(foe.maxhp / 2); foe.boosts.atk = foe.boosts.spa = 0;
+			foe.hp = Math.floor(foe.maxhp / 2);
+			foe.boosts.atk = foe.boosts.spa = 0;
 			const hp = foe.hp;
 			battle.setActiveMove(move, p, foe);
 			battle.runEvent('DamagingHit', foe, p, move, 10);
-			assert.equal(foe.hp, hp); assert.equal(foe.boosts.atk, 0); assert.equal(foe.boosts.spa, 0);
+			assert.equal(foe.hp, hp);
+			assert.equal(foe.boosts.atk, 0);
+			assert.equal(foe.boosts.spa, 0);
 			battle.setActiveMove(move, foe, p);
 			battle.runEvent('DamagingHit', p, foe, move, 10);
 			assert.equal(foe.hp, hp);
-			const other = battle.p1.pokemon[1]; other.isActive = true;
+			const other = battle.p1.pokemon[1];
+			other.isActive = true;
 			battle.setActiveMove(move, other, foe);
 			battle.runEvent('DamagingHit', foe, other, move, 10);
-			assert(foe.hp > hp || foe.boosts.atk > 0, 'unrelated interaction must still trigger the composite');
+			assert(
+				foe.hp > hp || foe.boosts.atk > 0,
+				'unrelated interaction must still trigger the composite'
+			);
 			other.isActive = false;
 		});
 	}
@@ -198,8 +284,10 @@ describe('Adaptive Cycle', () => {
 		setup('Mold Breaker');
 		battle.makeChoices('move splash', 'move tackle');
 		const record = Object.values(p.m.adaptiveCycle.opponents)[0];
-		assert(record.bypass.includes('moldbreaker')); assert(!record.complete);
-		const move = Dex.getActiveMove('tackle'); move.ignoreAbility = true;
+		assert(record.bypass.includes('moldbreaker'));
+		assert(!record.complete);
+		const move = Dex.getActiveMove('tackle');
+		move.ignoreAbility = true;
 		battle.setActiveMove(move, foe, p);
 		assert.equal(A.adaptiveDamageMultiplier(p, foe, move), 0.8);
 	});
@@ -214,7 +302,8 @@ describe('Adaptive Cycle', () => {
 		assert.equal(battle.runEvent('ModifyDamage', p, foe, Dex.getActiveMove('ember'), 100), 50);
 	});
 	it('does not learn from Substitute-only hits, allies or zero HP damage', () => {
-		setup(); p.addVolatile('substitute', p);
+		setup();
+		p.addVolatile('substitute', p);
 		battle.makeChoices('move splash', 'move tackle');
 		assert.deepEqual(p.m.adaptiveCycle.activeTypes, []);
 		p.removeVolatile('substitute');
@@ -234,25 +323,42 @@ describe('Adaptive Cycle', () => {
 		assert.equal(A.adaptiveDamageMultiplier(p, foe, move), 0.8);
 	});
 	it('blocks known harmful status moves after full analysis, while unfamiliar ones work once', () => {
-		setup(); analyzed();
+		setup();
+		analyzed();
 		const sleep = Dex.getActiveMove('spore');
-		battle.actions.runMove(sleep, foe, foe.getLocOf(p), {externalMove: true});
-		assert.equal(p.status, 'slp'); p.cureStatus();
-		battle.actions.runMove(sleep, foe, foe.getLocOf(p), {externalMove: true});
+		battle.actions.runMove(sleep, foe, foe.getLocOf(p), { externalMove: true });
+		assert.equal(p.status, 'slp');
+		p.cureStatus();
+		battle.actions.runMove(sleep, foe, foe.getLocOf(p), { externalMove: true });
 		assert.equal(p.status, '');
 	});
 	it('keeps type and opponent records across a serialized battle restore', () => {
-		setup(); analyzed();
-		const {Battle} = require('../../../dist/sim/battle');
+		setup();
+		analyzed();
+		const { Battle } = require('../../../dist/sim/battle');
 		const restored = Battle.fromJSON(battle.toJSON());
-		try { assert(A.adaptiveAnalyzed(restored.p1.active[0], restored.p2.active[0])); }
-		finally { restored.destroy(); }
+		try {
+			assert(A.adaptiveAnalyzed(restored.p1.active[0], restored.p2.active[0]));
+		} finally {
+			restored.destroy();
+		}
 	});
-	for (const weather of ['raindance', 'sunnyday', 'sandstorm', 'hail', 'primordialsea', 'desolateland', 'deltastream']) {
+	for (const weather of [
+		'raindance',
+		'sunnyday',
+		'sandstorm',
+		'hail',
+		'primordialsea',
+		'desolateland',
+		'deltastream',
+	]) {
 		it(`completes the ${weather} cycle independently and only once per turn`, () => {
-			setup(); battle.field.setWeather(weather, p);
+			setup();
+			battle.field.setWeather(weather, p);
 			for (let turn = 1; turn <= 3; turn++) {
-				battle.turn = turn; A.adaptiveCheckpoint(battle); A.adaptiveCheckpoint(battle);
+				battle.turn = turn;
+				A.adaptiveCheckpoint(battle);
+				A.adaptiveCheckpoint(battle);
 				assert.equal(p.m.adaptiveCycle.weather[weather].stage, turn);
 			}
 			assert(A.adaptiveEnvironment(p, 'weather'));
@@ -261,32 +367,48 @@ describe('Adaptive Cycle', () => {
 	it('keeps all five Flower Garden stages in one memory', () => {
 		setup();
 		for (const [i, field] of ['flowergarden1', 'flowergarden3', 'flowergarden5'].entries()) {
-			battle.field.terrain = field; battle.turn = i + 1; A.adaptiveCheckpoint(battle);
+			battle.field.terrain = field;
+			battle.turn = i + 1;
+			A.adaptiveCheckpoint(battle);
 		}
 		assert.deepEqual(Object.keys(p.m.adaptiveCycle.fields), ['flowergarden']);
 		assert(A.adaptiveEnvironment(p, 'fields'));
 	});
 	for (const gameType of ['doubles', 'multi', 'freeforall']) {
 		it(`observes only actual opposing individuals in ${gameType}`, () => {
-			const teams = Array.from({length: gameType === 'doubles' ? 2 : 4}, (_, side) =>
-				Array.from({length: gameType === 'doubles' ? 2 : 1}, (_, slot) => ({species: 'Kecleon',
-					ability: side === 0 && slot === 0 ? 'Adaptive Cycle' : 'No Ability', moves: ['splash']})));
-			battle = common.createBattle({gameType}, teams);
+			const teams = Array.from({ length: gameType === 'doubles' ? 2 : 4 }, (_, side) =>
+				Array.from({ length: gameType === 'doubles' ? 2 : 1 }, (_, slot) => ({
+					species: 'Kecleon',
+					ability: side === 0 && slot === 0 ? 'Adaptive Cycle' : 'No Ability',
+					moves: ['splash'],
+				}))
+			);
+			battle = common.createBattle({ gameType }, teams);
 			p = battle.p1.active[0];
 			battle.makeChoices(...teams.map(team => team.map(() => 'move splash').join(', ')));
-			assert.equal(Object.keys(p.m.adaptiveCycle.opponents).length, gameType === 'freeforall' ? 3 : 2);
+			assert.equal(
+				Object.keys(p.m.adaptiveCycle.opponents).length,
+				gameType === 'freeforall' ? 3 : 2
+			);
 			assert(Object.values(p.m.adaptiveCycle.opponents).every(r => r.points === 2));
 		});
 	}
-	const fullFields = [...Object.keys(Dex.data.Terrains), ...Object.keys(Dex.data.Moves)
-		.filter(id => Dex.data.Moves[id].condition?.effectType === 'Terrain')];
+	const fullFields = [
+		...Object.keys(Dex.data.Terrains),
+		...Object.keys(Dex.data.Moves).filter(
+			id => Dex.data.Moves[id].condition?.effectType === 'Terrain'
+		),
+	];
 	for (const field of fullFields) {
 		it(`filters direct power contributions on ${field}, without disabling the field`, () => {
-			setup(); assert(battle.field.setTerrain(field, p));
-			p.m.adaptiveCycle.fields[A.adaptiveFieldKey(field)] = {stage: 3, turn: battle.turn};
+			setup();
+			assert(battle.field.setTerrain(field, p));
+			p.m.adaptiveCycle.fields[A.adaptiveFieldKey(field)] = { stage: 3, turn: battle.turn };
 			for (const type of A.ADAPTIVE_TYPE_ORDER) {
 				for (const category of ['Physical', 'Special']) {
-					const move = Dex.getActiveMove('tackle'); move.type = type; move.category = category;
+					const move = Dex.getActiveMove('tackle');
+					move.type = type;
+					move.category = category;
 					const incoming = battle.runEvent('BasePower', foe, p, move, 100);
 					assert(incoming <= 100, `${field} ${type} ${category}: incoming ${incoming}`);
 					const outgoing = battle.runEvent('BasePower', p, foe, move, 100);
@@ -297,79 +419,111 @@ describe('Adaptive Cycle', () => {
 		});
 	}
 	it('removes only the full field bonus and keeps an independent Electric Aura', () => {
-		setup(); battle.field.setTerrain('coldeclipseterrain', p); battle.field.setAura('electricterrain', 5, p);
-		p.m.adaptiveCycle.fields.coldeclipseterrain = {stage: 3, turn: -1};
+		setup();
+		battle.field.setTerrain('coldeclipseterrain', p);
+		battle.field.setAura('electricterrain', 5, p);
+		p.m.adaptiveCycle.fields.coldeclipseterrain = { stage: 3, turn: -1 };
 		const move = Dex.getActiveMove('thunderbolt');
 		assert.equal(battle.runEvent('BasePower', foe, p, move, 100), 130);
 		assert.equal(battle.field.auraField, 'electricterrain');
 	});
 	it('keeps benefits while removing penalties when one field callback multiplies both', () => {
-		setup(); battle.field.setTerrain('mistyterrain', p);
-		p.m.adaptiveCycle.fields.mistyterrain = {stage: 3, turn: -1};
-		const move = Dex.getActiveMove('darkpulse'); move.type = 'Fairy';
+		setup();
+		battle.field.setTerrain('mistyterrain', p);
+		p.m.adaptiveCycle.fields.mistyterrain = { stage: 3, turn: -1 };
+		const move = Dex.getActiveMove('darkpulse');
+		move.type = 'Fairy';
 		assert.equal(battle.runEvent('BasePower', p, foe, move, 100), 150);
 		assert.equal(battle.runEvent('BasePower', foe, p, move, 100), 50);
 	});
 	it('permits personal Fire/Water moves under primal weather without replacing it', () => {
 		setup();
-		for (const [weather, move] of [['primordialsea', 'ember'], ['desolateland', 'watergun']]) {
-			battle.field.weather = weather; battle.field.weatherState = battle.initEffectState({id: weather});
-			p.m.adaptiveCycle.weather[weather] = {stage: 3, turn: -1};
+		for (const [weather, move] of [
+			['primordialsea', 'ember'],
+			['desolateland', 'watergun'],
+		]) {
+			battle.field.weather = weather;
+			battle.field.weatherState = battle.initEffectState({ id: weather });
+			p.m.adaptiveCycle.weather[weather] = { stage: 3, turn: -1 };
 			assert.equal(battle.runEvent('TryMove', p, foe, Dex.getActiveMove(move)), true);
 			assert.equal(battle.runEvent('TryMove', foe, p, Dex.getActiveMove(move)), null);
 			assert.equal(battle.field.weather, weather);
 		}
 	});
 	it('preserves overlapping Aura power after the base field bonus is removed', () => {
-		setup(); battle.field.setTerrain('factoryterrain', p); battle.field.setAura('electricterrain', 5, p);
-		p.m.adaptiveCycle.fields.factoryterrain = {stage: 3, turn: -1};
+		setup();
+		battle.field.setTerrain('factoryterrain', p);
+		battle.field.setAura('electricterrain', 5, p);
+		p.m.adaptiveCycle.fields.factoryterrain = { stage: 3, turn: -1 };
 		assert.equal(battle.runEvent('BasePower', foe, p, Dex.getActiveMove('thunderbolt'), 100), 130);
 	});
 	it('restores native frostbite chance after learning hail while retaining another ability multiplier', () => {
-		setup('Serene Grace'); battle.field.setWeather('hail', p);
-		p.m.adaptiveCycle.weather.hail = {stage: 3, turn: -1};
+		setup('Serene Grace');
+		battle.field.setWeather('hail', p);
+		p.m.adaptiveCycle.weather.hail = { stage: 3, turn: -1 };
 		const move = Dex.getActiveMove('icebeam');
 		battle.runEvent('ModifyMove', foe, p, move, move);
 		const normal = move.secondaries.find(x => x.status === 'frz').chance;
 		const adapted = A.adaptiveMoveView(move, foe, p).secondaries.find(x => x.status === 'frz').chance;
-		assert.equal(normal, 40); assert.equal(adapted, 20);
+		assert.equal(normal, 40);
+		assert.equal(adapted, 20);
 	});
 	it('allows Silvally countertyping despite the ordinary species type lock', () => {
-		setup(); p.formeChange('Silvally', battle.dex.conditions.get('test'), false); p.setAbility('Adaptive Cycle'); analyzed();
+		setup();
+		p.formeChange('Silvally', battle.dex.conditions.get('test'), false);
+		p.setAbility('Adaptive Cycle');
+		analyzed();
 		A.adaptiveCountertype(p, foe, Dex.getActiveMove('tackle'));
 		assert.deepEqual(p.getTypes(), ['Rock']);
 	});
 	it('learns Stealth Rock without removing it for the holder’s teammate', () => {
-		setup(); p.side.addSideCondition('stealthrock', foe);
+		setup();
+		p.side.addSideCondition('stealthrock', foe);
 		battle.makeChoices('switch 2', 'move splash');
-		const ally = battle.p1.active[0]; const allyHP = ally.hp;
+		const ally = battle.p1.active[0];
+		const allyHP = ally.hp;
 		battle.makeChoices('switch 2', 'move splash');
 		assert.equal(p.m.adaptiveCycle.chip.stealthrock.stage, 1);
 		battle.makeChoices('move splash', 'move splash');
 		assert.equal(p.m.adaptiveCycle.chip.stealthrock.stage, 2);
-		battle.makeChoices('switch 2', 'move splash'); assert(ally.hp < allyHP);
+		battle.makeChoices('switch 2', 'move splash');
+		assert(ally.hp < allyHP);
 		const hp = p.hp;
-		battle.makeChoices('switch 2', 'move splash'); assert.equal(p.hp, hp);
+		battle.makeChoices('switch 2', 'move splash');
+		assert.equal(p.hp, hp);
 		assert(p.side.sideConditions.stealthrock);
 	});
 	it('learns Sticky Web from its actual drop and does not remove someone else’s speed drops', () => {
-		setup(); p.side.addSideCondition('stickyweb', foe);
-		battle.makeChoices('switch 2', 'move splash'); battle.makeChoices('switch 2', 'move splash');
+		setup();
+		p.side.addSideCondition('stickyweb', foe);
+		battle.makeChoices('switch 2', 'move splash');
+		battle.makeChoices('switch 2', 'move splash');
 		assert.equal(p.m.adaptiveCycle.chip.stickyweb.stage, 1);
-		battle.boost({spe: -1}, p, foe, Dex.moves.get('scaryface'));
-		battle.makeChoices('move splash', 'move splash'); assert.equal(p.boosts.spe, -2);
-		battle.makeChoices('switch 2', 'move splash'); battle.makeChoices('switch 2', 'move splash');
-		assert.equal(p.boosts.spe, 0); assert(p.side.sideConditions.stickyweb);
+		battle.boost({ spe: -1 }, p, foe, Dex.moves.get('scaryface'));
+		battle.makeChoices('move splash', 'move splash');
+		assert.equal(p.boosts.spe, -2);
+		battle.makeChoices('switch 2', 'move splash');
+		battle.makeChoices('switch 2', 'move splash');
+		assert.equal(p.boosts.spe, 0);
+		assert(p.side.sideConditions.stickyweb);
 	});
 	it('learns setup on two turns without erasing it or ignoring Speed and negative stages', () => {
-		setup(); foe.boosts.atk = 1; foe.boosts.spe = 2;
-		battle.makeChoices('move splash', 'move splash'); assert(!A.adaptiveSetup(p, foe));
-		battle.makeChoices('move splash', 'move splash'); assert(A.adaptiveSetup(p, foe));
-		const move = Dex.getActiveMove('tackle'); move.noDamageVariance = true;
+		setup();
+		foe.boosts.atk = 1;
+		foe.boosts.spe = 2;
+		battle.makeChoices('move splash', 'move splash');
+		assert(!A.adaptiveSetup(p, foe));
+		battle.makeChoices('move splash', 'move splash');
+		assert(A.adaptiveSetup(p, foe));
+		const move = Dex.getActiveMove('tackle');
+		move.noDamageVariance = true;
 		const learnedDamage = battle.actions.getDamage(foe, p, move);
-		foe.boosts.atk = 6; assert.equal(battle.actions.getDamage(foe, p, move), learnedDamage);
-		assert.equal(foe.boosts.atk, 6); assert.equal(foe.boosts.spe, 2);
-		foe.boosts.atk = -2; assert(battle.actions.getDamage(foe, p, move) < learnedDamage);
+		foe.boosts.atk = 6;
+		assert.equal(battle.actions.getDamage(foe, p, move), learnedDamage);
+		assert.equal(foe.boosts.atk, 6);
+		assert.equal(foe.boosts.spe, 2);
+		foe.boosts.atk = -2;
+		assert(battle.actions.getDamage(foe, p, move) < learnedDamage);
 	});
 	it('does not reveal an unannounced defensive ability in the memory protocol', () => {
 		setup('Multiscale');
@@ -379,61 +533,103 @@ describe('Adaptive Cycle', () => {
 		assert(!line.toLowerCase().includes('multiscale'));
 	});
 	it('ignores contact punishment and absorption only for the analyzed holder', () => {
-		setup(); analyzed(); foe.setAbility('Rough Skin');
-		const hp = p.hp, move = Dex.getActiveMove('tackle');
-		battle.setActiveMove(move, p, foe); battle.runEvent('DamagingHit', foe, p, move, 10);
+		setup();
+		analyzed();
+		foe.setAbility('Rough Skin');
+		const hp = p.hp,
+			move = Dex.getActiveMove('tackle');
+		battle.setActiveMove(move, p, foe);
+		battle.runEvent('DamagingHit', foe, p, move, 10);
 		assert.equal(p.hp, hp);
-		foe.setAbility('Water Absorb'); const water = Dex.getActiveMove('watergun');
+		foe.setAbility('Water Absorb');
+		const water = Dex.getActiveMove('watergun');
 		assert.equal(battle.runEvent('TryHit', foe, p, water), true);
-		const other = battle.p1.pokemon[1]; other.isActive = true;
-		battle.setActiveMove(water, other, foe); assert.notEqual(battle.runEvent('TryHit', foe, other, water), true);
+		const other = battle.p1.pokemon[1];
+		other.isActive = true;
+		battle.setActiveMove(water, other, foe);
+		assert.notEqual(battle.runEvent('TryHit', foe, other, water), true);
 		other.isActive = false;
 	});
 	it('supports a real attack from an analyzed Ultra Ego without disabling its ability', () => {
-		setup(); analyzed(); foe.setAbility('Ultra Ego');
-		const hp = p.hp; foe.hp -= 100; const foeHP = foe.hp;
+		setup();
+		analyzed();
+		foe.setAbility('Ultra Ego');
+		const hp = p.hp;
+		foe.hp -= 100;
+		const foeHP = foe.hp;
 		battle.makeChoices('move splash', 'move tackle');
-		assert(p.hp < hp); assert.equal(foe.hp, foeHP); assert.equal(foe.ability, 'ultraego');
+		assert(p.hp < hp);
+		assert.equal(foe.hp, foeHP);
+		assert.equal(foe.ability, 'ultraego');
 	});
 	for (const gameType of ['doubles', 'freeforall']) {
 		it(`keeps spread immunity bypass specific to completed opponents in ${gameType}`, () => {
 			const count = gameType === 'doubles' ? 2 : 4;
-			const teams = Array.from({length: count}, (_, side) => Array.from({length: count === 2 ? 2 : 1}, (_, slot) =>
-				({species: 'Mew', ability: side === 0 && slot === 0 ? 'Adaptive Cycle' : 'No Ability', moves: ['splash', 'earthquake']})));
-			battle = common.createBattle({gameType}, teams); p = battle.p1.active[0]; foe = battle.p2.active[0];
-			for (let i = 0; i < 2; i++) battle.makeChoices(...teams.map(team => team.map(() => 'move splash').join(', ')));
+			const teams = Array.from({ length: count }, (_, side) =>
+				Array.from({ length: count === 2 ? 2 : 1 }, (_, slot) => ({
+					species: 'Mew',
+					ability: side === 0 && slot === 0 ? 'Adaptive Cycle' : 'No Ability',
+					moves: ['splash', 'earthquake'],
+				}))
+			);
+			battle = common.createBattle({ gameType }, teams);
+			p = battle.p1.active[0];
+			foe = battle.p2.active[0];
+			for (let i = 0; i < 2; i++)
+				battle.makeChoices(...teams.map(team => team.map(() => 'move splash').join(', ')));
 			const other = gameType === 'doubles' ? battle.p2.active[1] : battle.p3.active[0];
 			p.m.adaptiveCycle.opponents[other.m.adaptiveCycleIdentity].complete = false;
-			foe.setType('Flying'); other.setType('Flying');
-			const hp = foe.hp, otherHP = other.hp;
-			battle.actions.runMove('earthquake', p, 0, {externalMove: true});
-			assert(foe.hp < hp); assert.equal(other.hp, otherHP);
+			foe.setType('Flying');
+			other.setType('Flying');
+			const hp = foe.hp,
+				otherHP = other.hp;
+			battle.actions.runMove('earthquake', p, 0, { externalMove: true });
+			assert(foe.hp < hp);
+			assert.equal(other.hp, otherHP);
 		});
 		it(`filters offensive ability bonuses per target in ${gameType}`, () => {
 			const count = gameType === 'doubles' ? 2 : 4;
-			const teams = Array.from({length: count}, (_, side) => Array.from({length: count === 2 ? 2 : 1}, (_, slot) =>
-				({species: 'Mew', ability: side === 0 && slot === 0 ? 'Adaptive Cycle' : 'No Ability', moves: ['splash', 'surf']})));
-			battle = common.createBattle({gameType}, teams); p = battle.p1.active[0]; foe = battle.p2.active[0];
-			for (let i = 0; i < 2; i++) battle.makeChoices(...teams.map(team => team.map(() => 'move splash').join(', ')));
-			assert(A.adaptiveAnalyzed(p, foe)); foe.setAbility('Mega Launcher');
+			const teams = Array.from({ length: count }, (_, side) =>
+				Array.from({ length: count === 2 ? 2 : 1 }, (_, slot) => ({
+					species: 'Mew',
+					ability: side === 0 && slot === 0 ? 'Adaptive Cycle' : 'No Ability',
+					moves: ['splash', 'surf'],
+				}))
+			);
+			battle = common.createBattle({ gameType }, teams);
+			p = battle.p1.active[0];
+			foe = battle.p2.active[0];
+			for (let i = 0; i < 2; i++)
+				battle.makeChoices(...teams.map(team => team.map(() => 'move splash').join(', ')));
+			assert(A.adaptiveAnalyzed(p, foe));
+			foe.setAbility('Mega Launcher');
 			const other = gameType === 'doubles' ? battle.p1.active[1] : battle.p3.active[0];
-			const move = Dex.getActiveMove('waterpulse'); move.target = 'allAdjacentFoes';
+			const move = Dex.getActiveMove('waterpulse');
+			move.target = 'allAdjacentFoes';
 			battle.setActiveMove(move, foe, p);
 			assert.equal(battle.runEvent('BasePower', foe, p, move, 100), 100);
 			battle.activeTarget = other;
 			assert.equal(battle.runEvent('BasePower', foe, other, move, 100), 150);
 			assert.equal(foe.ability, 'megalauncher');
-   p.setType('Water'); other.setType('Water'); move.accuracy = true; move.willCrit = false;
-   const ownHP = p.hp, otherHP = other.hp;
-   battle.actions.runMove(move, foe, foe.getLocOf(p), {externalMove: true});
-   const ownDamage = ownHP - p.hp, otherDamage = otherHP - other.hp;
-   assert(ownDamage > 0 && otherDamage > 0);
-   assert(ownDamage <= otherDamage * 0.42 && ownDamage >= otherDamage * 0.24,
-    JSON.stringify({ownDamage, otherDamage}));
+			p.setType('Water');
+			other.setType('Water');
+			move.accuracy = true;
+			move.willCrit = false;
+			const ownHP = p.hp,
+				otherHP = other.hp;
+			battle.actions.runMove(move, foe, foe.getLocOf(p), { externalMove: true });
+			const ownDamage = ownHP - p.hp,
+				otherDamage = otherHP - other.hp;
+			assert(ownDamage > 0 && otherDamage > 0);
+			assert(
+				ownDamage <= otherDamage * 0.42 && ownDamage >= otherDamage * 0.24,
+				JSON.stringify({ ownDamage, otherDamage })
+			);
 		});
 	}
 	it('starts after an entire damaging move and advances without repeated hits', () => {
-		setup(); battle.makeChoices('move splash', 'move tackle');
+		setup();
+		battle.makeChoices('move splash', 'move tackle');
 		assert.equal(p.m.adaptiveCycle.types.Normal.stage, 1);
 		battle.makeChoices('move protect', 'move splash');
 		assert.equal(p.m.adaptiveCycle.types.Normal.stage, 2);
@@ -442,7 +638,8 @@ describe('Adaptive Cycle', () => {
 	});
 	it('archives the oldest type and restores saved progress after the reactivation move', () => {
 		setup();
-		for (const move of ['tackle', 'ember', 'watergun']) battle.makeChoices('move recover', 'move ' + move);
+		for (const move of ['tackle', 'ember', 'watergun'])
+			battle.makeChoices('move recover', 'move ' + move);
 		assert.deepEqual(p.m.adaptiveCycle.activeTypes, ['Fire', 'Water']);
 		assert.equal(p.m.adaptiveCycle.types.Normal.stage, 2);
 		battle.makeChoices('move recover', 'move tackle');
@@ -450,187 +647,281 @@ describe('Adaptive Cycle', () => {
 		assert.equal(p.m.adaptiveCycle.types.Normal.stage, 3);
 	});
 	it('finishes ordinary analysis in four observed turns and shared typing in two', () => {
-		setup(); analyzed(); assert.equal(Object.values(p.m.adaptiveCycle.opponents)[0].points, 4);
-		battle.destroy(); battle = null;
+		setup();
+		analyzed();
+		assert.equal(Object.values(p.m.adaptiveCycle.opponents)[0].points, 4);
+		battle.destroy();
+		battle = null;
 		setup('No Ability', 'Kecleon');
-		battle.makeChoices('move splash', 'move splash'); assert(!A.adaptiveAnalyzed(p, foe));
-		battle.makeChoices('move splash', 'move splash'); assert(A.adaptiveAnalyzed(p, foe));
+		battle.makeChoices('move splash', 'move splash');
+		assert(!A.adaptiveAnalyzed(p, foe));
+		battle.makeChoices('move splash', 'move splash');
+		assert(A.adaptiveAnalyzed(p, foe));
 	});
 	it('pauses records on the bench and during ability replacement', () => {
-		setup(); battle.makeChoices('move splash', 'move tackle');
-		battle.makeChoices('switch 2', 'move splash'); battle.makeChoices('move splash', 'move splash');
+		setup();
+		battle.makeChoices('move splash', 'move tackle');
+		battle.makeChoices('switch 2', 'move splash');
+		battle.makeChoices('move splash', 'move splash');
 		assert.equal(p.m.adaptiveCycle.types.Normal.stage, 1);
-		battle.makeChoices('switch 2', 'move splash'); assert.equal(p.m.adaptiveCycle.types.Normal.stage, 2);
-		p.setAbility('No Ability'); battle.makeChoices('move splash', 'move splash');
+		battle.makeChoices('switch 2', 'move splash');
 		assert.equal(p.m.adaptiveCycle.types.Normal.stage, 2);
-		p.setAbility('Adaptive Cycle'); battle.makeChoices('move splash', 'move splash');
+		p.setAbility('No Ability');
+		battle.makeChoices('move splash', 'move splash');
+		assert.equal(p.m.adaptiveCycle.types.Normal.stage, 2);
+		p.setAbility('Adaptive Cycle');
+		battle.makeChoices('move splash', 'move splash');
 		assert.equal(p.m.adaptiveCycle.types.Normal.stage, 3);
 	});
 	it('learns and cures poison on the second checkpoint and retains learning after a cure', () => {
-		setup(); p.setStatus('tox', foe);
-		battle.makeChoices('move splash', 'move splash'); assert.equal(p.status, 'tox');
-		battle.makeChoices('move splash', 'move splash'); assert.equal(p.status, '');
+		setup();
+		p.setStatus('tox', foe);
+		battle.makeChoices('move splash', 'move splash');
+		assert.equal(p.status, 'tox');
+		battle.makeChoices('move splash', 'move splash');
+		assert.equal(p.status, '');
 		assert.equal(p.setStatus('psn', foe), false);
-		p.addVolatile('confusion', foe); p.removeVolatile('confusion');
-		battle.makeChoices('move splash', 'move splash'); battle.makeChoices('move splash', 'move splash');
+		p.addVolatile('confusion', foe);
+		p.removeVolatile('confusion');
+		battle.makeChoices('move splash', 'move splash');
+		battle.makeChoices('move splash', 'move splash');
 		assert.equal(p.addVolatile('confusion', foe), false);
 	});
 	it('learns Leech Seed personally, removes it, and blocks further draining', () => {
-		setup(); p.addVolatile('leechseed', foe); foe.hp -= 100;
-		battle.makeChoices('move splash', 'move splash'); assert(p.volatiles.leechseed);
-		battle.makeChoices('move splash', 'move splash'); assert(!p.volatiles.leechseed);
+		setup();
+		p.addVolatile('leechseed', foe);
+		foe.hp -= 100;
+		battle.makeChoices('move splash', 'move splash');
+		assert(p.volatiles.leechseed);
+		battle.makeChoices('move splash', 'move splash');
+		assert(!p.volatiles.leechseed);
 		const hp = foe.hp;
 		assert.equal(p.addVolatile('leechseed', foe), false);
-		battle.makeChoices('move splash', 'move splash'); assert.equal(foe.hp, hp);
+		battle.makeChoices('move splash', 'move splash');
+		assert.equal(foe.hp, hp);
 	});
 	it('keeps opponent and type reductions nonmultiplicative, countertypes, and retains negative boosts', () => {
-		setup(); analyzed();
+		setup();
+		analyzed();
 		const move = Dex.getActiveMove('tackle');
-		A.adaptiveCountertype(p, foe, move); assert(p.hasType('Rock') || p.hasType('Steel'));
+		A.adaptiveCountertype(p, foe, move);
+		assert(p.hasType('Rock') || p.hasType('Steel'));
 		assert.equal(A.adaptiveDamageMultiplier(p, foe, move), 0.5);
 		assert(A.adaptiveSetup(p, foe));
 		foe.boosts.atk = -2;
 		assert.equal(foe.boosts.atk, -2);
 	});
 	it('ignores an analyzed individual after an ability change, including Neutralizing Gas and Mold Breaker', () => {
-		setup(); analyzed();
-		foe.setAbility('neutralizinggas'); assert(!p.ignoringAbility());
+		setup();
+		analyzed();
+		foe.setAbility('neutralizinggas');
+		assert(!p.ignoringAbility());
 		foe.setAbility('moldbreaker');
-		const move = Dex.getActiveMove('tackle'); move.ignoreAbility = true;
+		const move = Dex.getActiveMove('tackle');
+		move.ignoreAbility = true;
 		battle.setActiveMove(move, foe, p);
 		assert(!battle.suppressingAbility(p));
 		assert.equal(A.adaptiveDamageMultiplier(p, foe, move), 0.5);
-		assert.equal(p.addVolatile('gastroacid', p), false); assert(!p.ignoringAbility());
+		assert.equal(p.addVolatile('gastroacid', p), false);
+		assert(!p.ignoringAbility());
 	});
 	it('tracks full field and weather separately and preserves Aura contributions', () => {
-		setup(); battle.field.setTerrain('mistyterrain', p); battle.field.setWeather('raindance', p);
+		setup();
+		battle.field.setTerrain('mistyterrain', p);
+		battle.field.setWeather('raindance', p);
 		for (let i = 0; i < 3; i++) battle.makeChoices('move splash', 'move splash');
-		assert(A.adaptiveEnvironment(p, 'fields')); assert(A.adaptiveEnvironment(p, 'weather'));
+		assert(A.adaptiveEnvironment(p, 'fields'));
+		assert(A.adaptiveEnvironment(p, 'weather'));
 		const fire = Dex.getActiveMove('ember');
 		assert.equal(battle.runEvent('WeatherModifyDamage', p, foe, fire, 100), 100);
 		const water = Dex.getActiveMove('watergun');
 		assert.equal(battle.runEvent('WeatherModifyDamage', foe, p, water, 100), 100);
 	});
- it('rejects Gas and Gastro Acid before learning any opponent', () => {
-  setup('Neutralizing Gas');
-  assert(!p.ignoringAbility()); assert(p.hasAbility('adaptivecycle'));
-  battle.actions.runMove(Dex.getActiveMove('gastroacid'), foe, foe.getLocOf(p), {externalMove: true});
-  assert(!p.volatiles.gastroacid); assert(!p.ignoringAbility());
-  assert(!A.adaptiveAnalyzed(p, foe));
-  battle.makeChoices('move splash', 'move tackle');
-  assert.equal(p.m.adaptiveCycle.types.Normal.stage, 1);
- });
- it('learns separate reduction components without unlocking an unobserved component', () => {
-  setup();
-  const ability = foe.getAbility();
-  const scale = Dex.abilities.get('multiscale'), filter = Dex.abilities.get('filter');
-  const testAbility = new (require('../../../dist/sim/dex-abilities').Ability)({...ability, onSourceModifyDamage(damage, attacker, defender, move) {
-   if (move.type === 'Normal') return scale.onSourceModifyDamage.call(this, damage, attacker, defender, move);
-   return filter.onSourceModifyDamage.call(this, damage, attacker, defender, move);
-  }});
-  battle.dex.abilities.abilityCache.set(ability.id, testAbility);
-  try {
-   const normal = Dex.getActiveMove('tackle'), fire = Dex.getActiveMove('ember');
-   foe.getMoveHitData(fire).typeMod = 1;
-   assert.equal(battle.runEvent('ModifyDamage', p, foe, normal, 100), 50);
-   battle.makeChoices('move splash', 'move splash');
-   assert.equal(battle.runEvent('ModifyDamage', p, foe, normal, 100), 100);
-   assert.equal(battle.runEvent('ModifyDamage', p, foe, fire, 100), 67);
-  } finally {battle.dex.abilities.abilityCache.set(ability.id, ability);}
- });
- it('keeps field healing penalties separate from completed weather adaptation', () => {
-  setup(); battle.field.setTerrain('coldeclipseterrain', p); battle.field.setWeather('raindance', p);
-  A.adaptiveMemory(p).weather.raindance = {stage: 3, turn: battle.turn};
-  p.hp = 1; const before = p.hp;
-  battle.actions.runMove(Dex.getActiveMove('synthesis'), p, 0, {externalMove: true});
-  assert.equal(p.hp - before, battle.modify(p.maxhp, 0.25));
-  A.adaptiveMemory(p).fields.coldeclipseterrain = {stage: 3, turn: battle.turn};
-  p.hp = 1; battle.actions.runMove(Dex.getActiveMove('synthesis'), p, 0, {externalMove: true});
-  assert.equal(p.hp - 1, battle.modify(p.maxhp, 0.5));
- });
+	it('rejects Gas and Gastro Acid before learning any opponent', () => {
+		setup('Neutralizing Gas');
+		assert(!p.ignoringAbility());
+		assert(p.hasAbility('adaptivecycle'));
+		battle.actions.runMove(Dex.getActiveMove('gastroacid'), foe, foe.getLocOf(p), {
+			externalMove: true,
+		});
+		assert(!p.volatiles.gastroacid);
+		assert(!p.ignoringAbility());
+		assert(!A.adaptiveAnalyzed(p, foe));
+		battle.makeChoices('move splash', 'move tackle');
+		assert.equal(p.m.adaptiveCycle.types.Normal.stage, 1);
+	});
+	it('learns separate reduction components without unlocking an unobserved component', () => {
+		setup();
+		const ability = foe.getAbility();
+		const scale = Dex.abilities.get('multiscale'),
+			filter = Dex.abilities.get('filter');
+		const testAbility = new (require('../../../dist/sim/dex-abilities').Ability)({
+			...ability,
+			onSourceModifyDamage(damage, attacker, defender, move) {
+				if (move.type === 'Normal')
+					return scale.onSourceModifyDamage.call(this, damage, attacker, defender, move);
+				return filter.onSourceModifyDamage.call(this, damage, attacker, defender, move);
+			},
+		});
+		battle.dex.abilities.abilityCache.set(ability.id, testAbility);
+		try {
+			const normal = Dex.getActiveMove('tackle'),
+				fire = Dex.getActiveMove('ember');
+			foe.getMoveHitData(fire).typeMod = 1;
+			assert.equal(battle.runEvent('ModifyDamage', p, foe, normal, 100), 50);
+			battle.makeChoices('move splash', 'move splash');
+			assert.equal(battle.runEvent('ModifyDamage', p, foe, normal, 100), 100);
+			assert.equal(battle.runEvent('ModifyDamage', p, foe, fire, 100), 67);
+		} finally {
+			battle.dex.abilities.abilityCache.set(ability.id, ability);
+		}
+	});
+	it('keeps field healing penalties separate from completed weather adaptation', () => {
+		setup();
+		battle.field.setTerrain('coldeclipseterrain', p);
+		battle.field.setWeather('raindance', p);
+		A.adaptiveMemory(p).weather.raindance = { stage: 3, turn: battle.turn };
+		p.hp = 1;
+		const before = p.hp;
+		battle.actions.runMove(Dex.getActiveMove('synthesis'), p, 0, { externalMove: true });
+		assert.equal(p.hp - before, battle.modify(p.maxhp, 0.25));
+		A.adaptiveMemory(p).fields.coldeclipseterrain = { stage: 3, turn: battle.turn };
+		p.hp = 1;
+		battle.actions.runMove(Dex.getActiveMove('synthesis'), p, 0, { externalMove: true });
+		assert.equal(p.hp - 1, battle.modify(p.maxhp, 0.5));
+	});
 
- it('discards queued types when a later hit faints the holder, preserving older memory through revival', () => {
-  setup(); A.adaptiveMemory(p).types.Fire = {stage: 2, turn: 0};
-  const move = Dex.getActiveMove('doubleslap');
-  A.adaptiveDamaged(p, foe, move, 10); assert.deepEqual(p.m.adaptiveCycle.pendingTypes, [move.type]);
-  p.hp = 0; A.adaptiveAfterMove(battle, foe, move, true);
-  p.hp = p.maxhp; A.adaptiveAfterMove(battle, foe, Dex.getActiveMove('splash'), true);
-  assert(!p.m.adaptiveCycle.types[move.type]); assert.equal(p.m.adaptiveCycle.types.Fire.stage, 2);
- });
+	it('discards queued types when a later hit faints the holder, preserving older memory through revival', () => {
+		setup();
+		A.adaptiveMemory(p).types.Fire = { stage: 2, turn: 0 };
+		const move = Dex.getActiveMove('doubleslap');
+		A.adaptiveDamaged(p, foe, move, 10);
+		assert.deepEqual(p.m.adaptiveCycle.pendingTypes, [move.type]);
+		p.hp = 0;
+		A.adaptiveAfterMove(battle, foe, move, true);
+		p.hp = p.maxhp;
+		A.adaptiveAfterMove(battle, foe, Dex.getActiveMove('splash'), true);
+		assert(!p.m.adaptiveCycle.types[move.type]);
+		assert.equal(p.m.adaptiveCycle.types.Fire.stage, 2);
+	});
 
- it('learns an encountered damage cap without globally disabling Sturdy', () => {
-  setup('Sturdy'); const move = Dex.getActiveMove('tackle');
-  assert.equal(battle.runEvent('Damage', foe, p, move, foe.maxhp * 2), foe.maxhp - 1);
-  battle.makeChoices('move splash', 'move splash');
-  assert.equal(battle.runEvent('Damage', foe, p, move, foe.maxhp * 2), foe.maxhp * 2);
-  assert.equal(foe.ability, 'sturdy');
- });
+	it('learns an encountered damage cap without globally disabling Sturdy', () => {
+		setup('Sturdy');
+		const move = Dex.getActiveMove('tackle');
+		assert.equal(battle.runEvent('Damage', foe, p, move, foe.maxhp * 2), foe.maxhp - 1);
+		battle.makeChoices('move splash', 'move splash');
+		assert.equal(battle.runEvent('Damage', foe, p, move, foe.maxhp * 2), foe.maxhp * 2);
+		assert.equal(foe.ability, 'sturdy');
+	});
 
- it('applies incoming reduction before deciding whether Focus Sash is needed', () => {
-  setup(); analyzed(); p.setItem('Focus Sash');
-  const raw = p.maxhp + 20, expected = battle.modify(raw, 0.5);
-  assert.equal(battle.damage(raw, p, foe, Dex.getActiveMove('tackle')), expected);
-  assert.equal(p.item, 'focussash'); assert.equal(p.hp, p.maxhp - expected);
- });
- it('leaves one HP after Focus Sash caps an adapted outgoing attack', () => {
-  setup(); analyzed(); foe.setItem('Focus Sash'); p.boosts.atk = 6;
-  const move = Dex.getActiveMove('slash'); Object.assign(move, {basePower: 250, accuracy: true, willCrit: false});
-  battle.actions.runMove(move, p, p.getLocOf(foe), {externalMove: true});
-  assert.equal(foe.item, ''); assert.equal(foe.hp, 1);
- });
- it('keeps an adapted incoming lethal attack subject to Focus Sash', () => {
-  setup(); analyzed(); p.setItem('Focus Sash');
-  battle.damage(p.maxhp * 3, p, foe, Dex.getActiveMove('tackle'));
-  assert.equal(p.item, ''); assert.equal(p.hp, 1);
- });
- it('excludes analyzed Grave Hunger from actual residual healing', () => {
-  setup('Grave Hunger'); analyzed(); p.setItem('Leftovers'); p.hp -= 100; foe.hp -= 100;
-  const ownHP = p.hp, otherHP = foe.hp;
-  battle.makeChoices('move splash', 'move splash');
-  assert.equal(p.hp - ownHP, Math.floor(p.maxhp / 16)); assert.equal(foe.hp, otherHP);
- });
- for (const completed of [false, true]) {
-  it('preserves native screen breaking while filtering Flint Fracture: analysis=' + completed, () => {
-   setup(); if (completed) analyzed(); foe.setAbility('Flint Fracture'); p.side.addSideCondition('reflect', p);
-   const slash = Dex.getActiveMove('slash'); Object.assign(slash, {basePower: 1, accuracy: true, willCrit: false});
-   battle.actions.runMove(slash, foe, foe.getLocOf(p), {externalMove: true});
-   assert.equal(!!p.side.sideConditions.reflect, completed);
-   if (!p.side.sideConditions.reflect) p.side.addSideCondition('reflect', p);
-   const brick = Dex.getActiveMove('brickbreak'); Object.assign(brick, {basePower: 1, accuracy: true, willCrit: false});
-   brick.flags.slicing = 1;
-   battle.actions.runMove(brick, foe, foe.getLocOf(p), {externalMove: true});
-   assert(!p.side.sideConditions.reflect);
-  });
- }
- it('does not disable Flint Fracture against an unrelated doubles target', () => {
-  const teams = [[{species:'Kecleon',ability:'Adaptive Cycle',moves:['splash']},{species:'Mew',ability:'No Ability',moves:['splash']}],
-   [{species:'Mew',ability:'Flint Fracture',moves:['splash','slash']},{species:'Mew',ability:'No Ability',moves:['splash']}]];
-  battle = common.createBattle({gameType:'doubles'}, teams); p = battle.p1.active[0]; foe = battle.p2.active[0];
-  for(let i=0;i<4;i++) battle.makeChoices('move splash, move splash','move splash, move splash');
-  assert(A.adaptiveAnalyzed(p, foe)); p.side.addSideCondition('reflect',p);
-  const move = Dex.getActiveMove('slash'); Object.assign(move,{basePower:1,accuracy:true,willCrit:false});
-  battle.actions.runMove(move,foe,foe.getLocOf(battle.p1.active[1]),{externalMove:true});
-  assert(!p.side.sideConditions.reflect);
- });
- it('uses registered Hail for Weather Ball and preserves its Ice typing and 100 BP after adaptation', () => {
-  setup(); assert(Dex.conditions.get('hail').exists); assert(!Dex.conditions.get('snow').exists);
-  battle.field.setWeather('hail',p);
-  for (const complete of [false,true]) {
-   if (complete) A.adaptiveMemory(p).weather.hail = {stage:3,turn:battle.turn};
-   const move = Dex.getActiveMove('weatherball');
-   battle.singleEvent('ModifyType',move,null,p,foe,move,move);
-   battle.singleEvent('ModifyMove',move,null,p,foe,move,move);
-   assert.equal(move.type,'Ice'); assert.equal(move.basePower,100);
-  }
- });
- it('keeps Hail weakening Solar Beam and Solar Blade until weather adaptation completes', () => {
-  setup(); battle.field.setWeather('hail',p);
-  for (const id of ['solarbeam','solarblade']) {
-   delete A.adaptiveMemory(p).weather.hail; const move= Dex.getActiveMove(id);
-   assert.equal(battle.runEvent('BasePower',p,foe,move,100,true),50);
-   A.adaptiveMemory(p).weather.hail={stage:3,turn:battle.turn};
-   assert.equal(battle.runEvent('BasePower',p,foe,move,100,true),100);
-  }
- });
-
+	it('applies incoming reduction before deciding whether Focus Sash is needed', () => {
+		setup();
+		analyzed();
+		p.setItem('Focus Sash');
+		const raw = p.maxhp + 20,
+			expected = battle.modify(raw, 0.5);
+		assert.equal(battle.damage(raw, p, foe, Dex.getActiveMove('tackle')), expected);
+		assert.equal(p.item, 'focussash');
+		assert.equal(p.hp, p.maxhp - expected);
+	});
+	it('leaves one HP after Focus Sash caps an adapted outgoing attack', () => {
+		setup();
+		analyzed();
+		foe.setItem('Focus Sash');
+		p.boosts.atk = 6;
+		const move = Dex.getActiveMove('slash');
+		Object.assign(move, { basePower: 250, accuracy: true, willCrit: false });
+		battle.actions.runMove(move, p, p.getLocOf(foe), { externalMove: true });
+		assert.equal(foe.item, '');
+		assert.equal(foe.hp, 1);
+	});
+	it('keeps an adapted incoming lethal attack subject to Focus Sash', () => {
+		setup();
+		analyzed();
+		p.setItem('Focus Sash');
+		battle.damage(p.maxhp * 3, p, foe, Dex.getActiveMove('tackle'));
+		assert.equal(p.item, '');
+		assert.equal(p.hp, 1);
+	});
+	it('excludes analyzed Grave Hunger from actual residual healing', () => {
+		setup('Grave Hunger');
+		analyzed();
+		p.setItem('Leftovers');
+		p.hp -= 100;
+		foe.hp -= 100;
+		const ownHP = p.hp,
+			otherHP = foe.hp;
+		battle.makeChoices('move splash', 'move splash');
+		assert.equal(p.hp - ownHP, Math.floor(p.maxhp / 16));
+		assert.equal(foe.hp, otherHP);
+	});
+	for (const completed of [false, true]) {
+		it(
+			'preserves native screen breaking while filtering Flint Fracture: analysis=' + completed,
+			() => {
+				setup();
+				if (completed) analyzed();
+				foe.setAbility('Flint Fracture');
+				p.side.addSideCondition('reflect', p);
+				const slash = Dex.getActiveMove('slash');
+				Object.assign(slash, { basePower: 1, accuracy: true, willCrit: false });
+				battle.actions.runMove(slash, foe, foe.getLocOf(p), { externalMove: true });
+				assert.equal(!!p.side.sideConditions.reflect, completed);
+				if (!p.side.sideConditions.reflect) p.side.addSideCondition('reflect', p);
+				const brick = Dex.getActiveMove('brickbreak');
+				Object.assign(brick, { basePower: 1, accuracy: true, willCrit: false });
+				brick.flags.slicing = 1;
+				battle.actions.runMove(brick, foe, foe.getLocOf(p), { externalMove: true });
+				assert(!p.side.sideConditions.reflect);
+			}
+		);
+	}
+	it('does not disable Flint Fracture against an unrelated doubles target', () => {
+		const teams = [
+			[
+				{ species: 'Kecleon', ability: 'Adaptive Cycle', moves: ['splash'] },
+				{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+			],
+			[
+				{ species: 'Mew', ability: 'Flint Fracture', moves: ['splash', 'slash'] },
+				{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+			],
+		];
+		battle = common.createBattle({ gameType: 'doubles' }, teams);
+		p = battle.p1.active[0];
+		foe = battle.p2.active[0];
+		for (let i = 0; i < 4; i++)
+			battle.makeChoices('move splash, move splash', 'move splash, move splash');
+		assert(A.adaptiveAnalyzed(p, foe));
+		p.side.addSideCondition('reflect', p);
+		const move = Dex.getActiveMove('slash');
+		Object.assign(move, { basePower: 1, accuracy: true, willCrit: false });
+		battle.actions.runMove(move, foe, foe.getLocOf(battle.p1.active[1]), { externalMove: true });
+		assert(!p.side.sideConditions.reflect);
+	});
+	it('uses registered Hail for Weather Ball and preserves its Ice typing and 100 BP after adaptation', () => {
+		setup();
+		assert(Dex.conditions.get('hail').exists);
+		assert(!Dex.conditions.get('snow').exists);
+		battle.field.setWeather('hail', p);
+		for (const complete of [false, true]) {
+			if (complete) A.adaptiveMemory(p).weather.hail = { stage: 3, turn: battle.turn };
+			const move = Dex.getActiveMove('weatherball');
+			battle.singleEvent('ModifyType', move, null, p, foe, move, move);
+			battle.singleEvent('ModifyMove', move, null, p, foe, move, move);
+			assert.equal(move.type, 'Ice');
+			assert.equal(move.basePower, 100);
+		}
+	});
+	it('keeps Hail weakening Solar Beam and Solar Blade until weather adaptation completes', () => {
+		setup();
+		battle.field.setWeather('hail', p);
+		for (const id of ['solarbeam', 'solarblade']) {
+			delete A.adaptiveMemory(p).weather.hail;
+			const move = Dex.getActiveMove(id);
+			assert.equal(battle.runEvent('BasePower', p, foe, move, 100, true), 50);
+			A.adaptiveMemory(p).weather.hail = { stage: 3, turn: battle.turn };
+			assert.equal(battle.runEvent('BasePower', p, foe, move, 100, true), 100);
+		}
+	});
 });

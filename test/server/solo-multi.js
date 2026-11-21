@@ -4,7 +4,7 @@ const assert = require('assert').strict;
 const { makeUser } = require('../users-utils');
 const { Teams } = require('../../dist/sim');
 
-describe('1v2 Multi battle room', function () {
+describe('1v2 Multi battle room', () => {
 	let users = [];
 	let room;
 	afterEach(() => {
@@ -17,7 +17,7 @@ describe('1v2 Multi battle room', function () {
 		users = [];
 	});
 
-	it('runs both solo choices against two human teammates', async function () {
+	it('runs both solo choices against two human teammates', async () => {
 		const [solo, opponent, teammate] = ['SoloTrainer', 'FirstOpponent', 'SecondOpponent'].map(name => makeUser(name));
 		users = [solo, opponent, teammate];
 		const privateMessages = [];
@@ -47,7 +47,7 @@ describe('1v2 Multi battle room', function () {
 		const waitFor = async condition => {
 			for (let i = 0; i < 100; i++) {
 				if (condition()) return;
-				await new Promise(resolve => setTimeout(resolve, 20));
+				await new Promise(resolve => { setTimeout(resolve, 20); });
 			}
 			assert.fail('The battle did not advance to the expected request');
 		};

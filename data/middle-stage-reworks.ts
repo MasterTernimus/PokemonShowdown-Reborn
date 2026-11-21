@@ -1,17 +1,17 @@
-import type {AbilityDataTable} from '../sim/dex-abilities';
-import {composeSelectedAbility} from './selected-mega-simplifications';
+import type { AbilityDataTable } from '../sim/dex-abilities';
+import { composeSelectedAbility } from './selected-mega-simplifications';
 
 /** Eviolite remains available; evolved forms are deliberately outside this table. */
 export const MiddleStageReworks = {
-	shelgon: {stats: [80, 100, 110, 65, 75, 50], slot: '1', ability: 'Dreaming Shell'},
-	metang: {stats: [70, 85, 110, 80, 85, 50], slot: 'H', ability: 'Linked Minds'},
-	dragonair: {stats: [75, 85, 80, 95, 95, 70], slot: '1', ability: 'Weather Weave'},
-	pupitar: {stats: [80, 100, 90, 65, 85, 70], slot: '1', ability: 'Pressure Jet'},
-	zweilous: {stats: [82, 105, 85, 65, 85, 68], slot: '1', ability: 'Rival Appetites'},
-	sliggoo: {stats: [78, 75, 68, 93, 116, 60], slot: '1', ability: 'Caustic Mucus'},
-	sliggoohisui: {stats: [68, 80, 98, 88, 116, 40], slot: '0', ability: 'Iron Solute'},
-	gabite: {stats: [78, 100, 85, 60, 75, 92], slot: '0', ability: 'Medicinal Scales'},
-	hakamoo: {stats: [70, 95, 100, 65, 85, 75], slot: 'H', ability: 'Castoff Scales'},
+	shelgon: { stats: [80, 100, 110, 65, 75, 50], slot: '1', ability: 'Dreaming Shell' },
+	metang: { stats: [70, 85, 110, 80, 85, 50], slot: 'H', ability: 'Linked Minds' },
+	dragonair: { stats: [75, 85, 80, 95, 95, 70], slot: '1', ability: 'Weather Weave' },
+	pupitar: { stats: [80, 100, 90, 65, 85, 70], slot: '1', ability: 'Pressure Jet' },
+	zweilous: { stats: [82, 105, 85, 65, 85, 68], slot: '1', ability: 'Rival Appetites' },
+	sliggoo: { stats: [78, 75, 68, 93, 116, 60], slot: '1', ability: 'Caustic Mucus' },
+	sliggoohisui: { stats: [68, 80, 98, 88, 116, 40], slot: '0', ability: 'Iron Solute' },
+	gabite: { stats: [78, 100, 85, 60, 75, 92], slot: '0', ability: 'Medicinal Scales' },
+	hakamoo: { stats: [70, 95, 100, 65, 85, 75], slot: 'H', ability: 'Castoff Scales' },
 } as const;
 
 function firstHitThisEntry(pokemon: Pokemon, key: string) {
@@ -43,7 +43,7 @@ export function installMiddleStageReworks(abilities: AbilityDataTable) {
 		},
 	};
 	abilities.dreamingshell = {
-		name: 'Dreaming Shell', num: 12069, rating: 3, flags: {breakable: 1},
+		name: 'Dreaming Shell', num: 12069, rating: 3, flags: { breakable: 1 },
 		shortDesc: 'While asleep, heals 1/16 HP each turn.',
 		desc: 'While asleep, restores 1/16 of its maximum HP at turn end.',
 		onResidualOrder: 28,
@@ -82,7 +82,7 @@ export function installMiddleStageReworks(abilities: AbilityDataTable) {
 		desc: 'Once per entry, surviving a hit that damages its HP from an opposing attack grants +2 Speed.',
 		onDamagingHit(damage, target, source) {
 			if (damage > 0 && target.hp && !source.isAlly(target) && firstHitThisEntry(target, 'pressureJetEntry')) {
-				this.boost({spe: 2}, target, target, this.effect);
+				this.boost({ spe: 2 }, target, target, this.effect);
 			}
 		},
 	};
@@ -105,11 +105,11 @@ export function installMiddleStageReworks(abilities: AbilityDataTable) {
 			if (damage <= 0 || !source.hp || source.isAlly(target) || target.m.causticMucusMove === token ||
 				!this.checkMoveMakesContact(move, source, target)) return;
 			target.m.causticMucusMove = token;
-			this.boost({spd: -1}, source, target, this.effect);
+			this.boost({ spd: -1 }, source, target, this.effect);
 		},
 	};
 	abilities.ironsolute = {
-		name: 'Iron Solute', num: 12075, rating: 3, flags: {breakable: 1},
+		name: 'Iron Solute', num: 12075, rating: 3, flags: { breakable: 1 },
 		shortDesc: 'Takes half Water damage; surviving a foe Water attack grants +1 Defense.',
 		desc: 'Water attacks deal half damage. Surviving a foe’s Water hit that damages its HP grants +1 Defense, once per attack.',
 		onSourceModifyDamage(damage, source, target, move) {
@@ -119,7 +119,7 @@ export function installMiddleStageReworks(abilities: AbilityDataTable) {
 			const token = this.activeMove || move;
 			if (damage > 0 && target.hp && !source.isAlly(target) && move.type === 'Water' && target.m.ironSoluteMove !== token) {
 				target.m.ironSoluteMove = token;
-				this.boost({def: 1}, target, target, this.effect);
+				this.boost({ def: 1 }, target, target, this.effect);
 			}
 		},
 	};
@@ -139,7 +139,7 @@ export function installMiddleStageReworks(abilities: AbilityDataTable) {
 		desc: 'Once per entry, surviving a physical hit that damages its HP from a foe grants +1 Attack and Speed, but lowers Defense by 1.',
 		onDamagingHit(damage, target, source, move) {
 			if (damage > 0 && target.hp && !source.isAlly(target) && move.category === 'Physical' &&
-				firstHitThisEntry(target, 'castoffScalesEntry')) this.boost({atk: 1, spe: 1, def: -1}, target, target, this.effect);
+				firstHitThisEntry(target, 'castoffScalesEntry')) this.boost({ atk: 1, spe: 1, def: -1 }, target, target, this.effect);
 		},
 	};
 }

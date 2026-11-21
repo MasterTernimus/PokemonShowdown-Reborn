@@ -92,5 +92,4 @@ export function installRejuvenationEvents(abilities: AbilityDataTable) {
 		},
 		flags: {}, name: "Venam's Kiss", rating: 4.5, num: 11330,
 	};
-
 }

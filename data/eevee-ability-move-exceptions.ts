@@ -1,5 +1,5 @@
 // Ability-specific exceptions to the ordinary Starter Eevee removal batch.
-export const StarterEeveeMoveExceptions: {[ability: string]: readonly string[]} = {
+export const StarterEeveeMoveExceptions: { [ability: string]: readonly string[] } = {
 	"sinisterblaze": [
 		"strengthsap",
 		"pursuit",
@@ -17,7 +17,7 @@ export const StarterEeveeMoveExceptions: {[ability: string]: readonly string[]} 
 		"hex",
 		"icefang",
 		"nightshade",
-		"ominouswind"
+		"ominouswind",
 	],
 	"ascendance": [
 		"punishment",
@@ -30,6 +30,6 @@ export const StarterEeveeMoveExceptions: {[ability: string]: readonly string[]} 
 		"playrough",
 		"tailwind",
 		"thunderfang",
-		"triattack"
-	]
+		"triattack",
+	],
 };

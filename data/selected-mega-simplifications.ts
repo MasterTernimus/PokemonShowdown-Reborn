@@ -1,11 +1,20 @@
 import type { AbilityDataTable } from '../sim/dex-abilities';
 import { installCursedArmament } from './cursed-armament';
 
-export function composeSelectedAbility(abilities: AbilityDataTable, id: string, parts: string[], checkSuppression = false) {
+export function composeSelectedAbility(
+	abilities: AbilityDataTable,
+	id: string,
+	parts: string[],
+	checkSuppression = false,
+) {
 	const table = abilities as any;
 	const previous = table[id];
-	const result: any = Object.fromEntries(Object.entries(previous).filter(([key]) => !key.startsWith('on')));
-	const keys = new Set(parts.flatMap(part => Object.keys(table[part]).filter(key => key.startsWith('on'))));
+	const result: any = Object.fromEntries(
+		Object.entries(previous).filter(([key]) => !key.startsWith('on')),
+	);
+	const keys = new Set(
+		parts.flatMap(part => Object.keys(table[part]).filter(key => key.startsWith('on'))),
+	);
 	for (const key of keys) {
 		const handlers = parts.map(part => table[part][key]).filter(value => value !== undefined);
 		if (!handlers.some(value => typeof value === 'function')) {
@@ -16,7 +25,12 @@ export function composeSelectedAbility(abilities: AbilityDataTable, id: string, 
 			let returned;
 			for (const part of parts) {
 				const component = this.dex.abilities.get(part);
-				if (checkSuppression && component.flags.breakable && this.suppressingAbility(this.effectState.target, component)) continue;
+				if (
+					checkSuppression &&
+					component.flags.breakable &&
+					this.suppressingAbility(this.effectState.target, component)
+				)
+					continue;
 				const handler = (component as any)[key];
 				if (handler === undefined) continue;
 				const value = typeof handler === 'function' ? handler.apply(this, args) : handler;
@@ -39,7 +53,13 @@ export function installSelectedMegaSimplifications(abilities: AbilityDataTable) 
 	compose('surgeconduit', ['lightningrod', 'rockhead']);
 	compose('railguncircuit', ['lightningrod']);
 	abilities.railguncircuit.onSourceDamagingHit = function (damage, target, source, move) {
-		if (damage <= 0 || source.isAlly(target) || move.category !== 'Special' || !this.movehasType(move, 'Electric')) return;
+		if (
+			damage <= 0 ||
+			source.isAlly(target) ||
+			move.category !== 'Special' ||
+			!this.movehasType(move, 'Electric')
+		)
+			return;
 		target.side.removeSideCondition('lightscreen');
 		target.side.removeSideCondition('auroraveil');
 	};
@@ -74,14 +94,20 @@ export function installSelectedMegaSimplifications(abilities: AbilityDataTable) 
 	abilities.uncheckedassault.onSetStatus = function (status, target, source, effect) {
 		const result = uncheckedStatus?.call(this, status, target, source, effect);
 		if (result !== undefined) return result;
-		const limberResult = this.dex.abilities.get('limber').onSetStatus?.call(this, status, target, source, effect);
+		const limberResult = this.dex.abilities
+			.get('limber')
+			.onSetStatus?.call(this, status, target, source, effect);
 		if (limberResult !== undefined) return limberResult;
-		return this.dex.abilities.get('vitalspirit').onSetStatus?.call(this, status, target, source, effect);
+		return this.dex.abilities
+			.get('vitalspirit')
+			.onSetStatus?.call(this, status, target, source, effect);
 	};
 	abilities.uncheckedassault.onTryAddVolatile = function (status, target, source, effect) {
 		const result = uncheckedVolatile?.call(this, status, target, source, effect);
 		if (result !== undefined) return result;
-		return this.dex.abilities.get('vitalspirit').onTryAddVolatile?.call(this, status, target, source, effect);
+		return this.dex.abilities
+			.get('vitalspirit')
+			.onTryAddVolatile?.call(this, status, target, source, effect);
 	};
 	// The earlier passive-separation override removed this handler. The final
 	// approved composition retains full Limber alongside Vital Spirit.
@@ -95,5 +121,4 @@ export function installSelectedMegaSimplifications(abilities: AbilityDataTable) 
 		this.dex.abilities.get('illuminate').onStart?.call(this, pokemon);
 	};
 	abilities.nighthunt.onModifyMove = abilities.illuminate.onModifyMove;
-
 }

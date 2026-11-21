@@ -1,6 +1,35 @@
-'use strict';const assert=require('assert').strict,{MoveSheetConsent}=require('../../dist/server/move-sheet-consent'),{RoomBattle}=require('../../dist/server/room-battle'),common=require('../common');
-describe('Private moves-only team sheets',()=>{
-function fake(){const messages=[],writes=[],players=['alice','bob'].map((id,i)=>({id,slot:'p'+(i+1),sendRoom:s=>messages.push([id,s])}));const b={p1:players[0],p2:players[1],players,playerTable:Object.fromEntries(players.map(p=>[p.id,p])),gameType:'singles',ended:false,moveSheetConsent:new MoveSheetConsent(),stream:{write:s=>writes.push(s)}};return{b,messages,writes,act:(id,action='',token='')=>RoomBattle.prototype.moveSheets.call(b,{id},action,token)};}
+'use strict';
+const assert = require('assert').strict,
+	{ MoveSheetConsent } = require('../../dist/server/move-sheet-consent'),
+	{ RoomBattle } = require('../../dist/server/room-battle'),
+	common = require('../common');
+describe('Private moves-only team sheets', () => {
+	function fake() {
+		const messages = [],
+			writes = [],
+			players = ['alice', 'bob'].map((id, i) => ({
+				id,
+				slot: 'p' + (i + 1),
+				sendRoom: s => messages.push([id, s]),
+			}));
+		const b = {
+			p1: players[0],
+			p2: players[1],
+			players,
+			playerTable: Object.fromEntries(players.map(p => [p.id, p])),
+			gameType: 'singles',
+			ended: false,
+			moveSheetConsent: new MoveSheetConsent(),
+			stream: { write: s => writes.push(s) },
+		};
+		return {
+			b,
+			messages,
+			writes,
+			act: (id, action = '', token = '') =>
+				RoomBattle.prototype.moveSheets.call(b, { id }, action, token),
+		};
+	}
 	it('never sends moves after unilateral consent; both explicit decisions send once', () => {
 		const f = fake();
 		f.act('alice');
@@ -17,15 +46,60 @@ function fake(){const messages=[],writes=[],players=['alice','bob'].map((id,i)=>
 		f.act('alice');
 		assert.equal(f.writes[1], '>show-movesheets ' + g + ' p1');
 	});
-it('spectators, ended battles, Multi and FFA cannot authorize',()=>{const f=fake();assert.throws(()=>f.act('watcher'),/players/);for(const type of ['multi','freeforall']){f.b.gameType=type;assert.throws(()=>f.act('alice'),/not supported/);}f.b.gameType='doubles';f.b.ended=true;assert.throws(()=>f.act('alice'),/ended/);assert.deepEqual(f.writes,[]);});
-it('cancel or decline expires stale accept; player replacement invalidates consent',()=>{const f=fake();f.act('alice');let g=f.b.moveSheetConsent.generation;f.act('alice','request',String(g));f.act('bob','decline',String(g));assert.throws(()=>f.act('bob','accept',String(g)),/expired/);g=f.b.moveSheetConsent.generation;f.act('alice','request',String(g));f.act('alice','cancel',String(g));assert.throws(()=>f.act('bob','accept',String(g)),/expired/);g=f.b.moveSheetConsent.generation;f.act('alice','request',String(g));f.b.players[1].id='carol';f.b.playerTable.carol=f.b.players[1];delete f.b.playerTable.bob;assert.throws(()=>f.act('carol','accept',String(g)),/expired/);assert.deepEqual(f.writes,[]);});
+	it('spectators, ended battles, Multi and FFA cannot authorize', () => {
+		const f = fake();
+		assert.throws(() => f.act('watcher'), /players/);
+		for (const type of ['multi', 'freeforall']) {
+			f.b.gameType = type;
+			assert.throws(() => f.act('alice'), /not supported/);
+		}
+		f.b.gameType = 'doubles';
+		f.b.ended = true;
+		assert.throws(() => f.act('alice'), /ended/);
+		assert.deepEqual(f.writes, []);
+	});
+	it('cancel or decline expires stale accept; player replacement invalidates consent', () => {
+		const f = fake();
+		f.act('alice');
+		let g = f.b.moveSheetConsent.generation;
+		f.act('alice', 'request', String(g));
+		f.act('bob', 'decline', String(g));
+		assert.throws(() => f.act('bob', 'accept', String(g)), /expired/);
+		g = f.b.moveSheetConsent.generation;
+		f.act('alice', 'request', String(g));
+		f.act('alice', 'cancel', String(g));
+		assert.throws(() => f.act('bob', 'accept', String(g)), /expired/);
+		g = f.b.moveSheetConsent.generation;
+		f.act('alice', 'request', String(g));
+		f.b.players[1].id = 'carol';
+		f.b.playerTable.carol = f.b.players[1];
+		delete f.b.playerTable.bob;
+		assert.throws(() => f.act('carol', 'accept', String(g)), /expired/);
+		assert.deepEqual(f.writes, []);
+	});
 	it('simulator emits private allowlisted moves without altering battle or public replay', () => {
 		const messages = [];
-		const mon = { species: 'Zoroark', name: 'SECRET_NICK', ability: 'Illusion', item: 'Leftovers', nature: 'Timid', teraType: 'Fire', moves: ['nightdaze', 'splash'], evs: { spa: 252 } };
-		const b = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[mon], [{ ...mon, species: 'Mew' }]]);
+		const mon = {
+			species: 'Zoroark',
+			name: 'SECRET_NICK',
+			ability: 'Illusion',
+			item: 'Leftovers',
+			nature: 'Timid',
+			teraType: 'Fire',
+			moves: ['nightdaze', 'splash'],
+			evs: { spa: 252 },
+		};
+		const b = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[mon],
+			[{ ...mon, species: 'Mew' }],
+		]);
 		try {
 			b.makeChoices('team 1', 'team 1');
-			const log = b.log.slice(), p = b.p1.pokemon[0], hp = p.hp, moves = JSON.stringify(p.moveSlots), team = JSON.stringify(b.p1.team);
+			const log = b.log.slice(),
+				p = b.p1.pokemon[0],
+				hp = p.hp,
+				moves = JSON.stringify(p.moveSlots),
+				team = JSON.stringify(b.p1.team);
 			b.send = (type, data) => messages.push([type, data]);
 			b.showMoveSheets('7');
 			assert.equal(messages.length, 2);
@@ -34,7 +108,17 @@ it('cancel or decline expires stale accept; player replacement invalidates conse
 				assert(data.includes('|movesheetprivate|7|'));
 				assert(data.includes('Night Daze'));
 				assert(data.includes('Zoroark'));
-				for (const secret of ['SECRET_NICK', 'Leftovers', 'Illusion', 'Timid', 'teraType', '252', 'ivs', 'evs'])assert(!data.includes(secret), secret);
+				for (const secret of [
+					'SECRET_NICK',
+					'Leftovers',
+					'Illusion',
+					'Timid',
+					'teraType',
+					'252',
+					'ivs',
+					'evs',
+				])
+					assert(!data.includes(secret), secret);
 			}
 			assert.deepEqual(b.log, log);
 			assert.equal(b.p1.pokemon[0], p);
@@ -49,5 +133,33 @@ it('cancel or decline expires stale accept; player replacement invalidates conse
 			b.destroy();
 		}
 	});
-it('late simulator replies are dropped after player replacement or battle end',()=>{const f=fake();f.act('alice');const g=f.b.moveSheetConsent.generation;f.act('alice','request',String(g));f.act('bob','accept',String(g));f.messages.length=0;RoomBattle.prototype.receive.call(f.b,['sideupdate','p1','|movesheetprivate|'+g+'|SAFE_DATA']);assert.deepEqual(f.messages,[['alice','|uhtml|movesheet-data|SAFE_DATA']]);f.messages.length=0;f.b.players[1].id='carol';RoomBattle.prototype.receive.call(f.b,['sideupdate','p1','|movesheetprivate|'+g+'|SECRET']);assert.deepEqual(f.messages,[]);f.b.ended=true;RoomBattle.prototype.receive.call(f.b,['sideupdate','p1','|movesheetprivate|'+g+'|SECRET']);assert.deepEqual(f.messages,[]);});
+	it('late simulator replies are dropped after player replacement or battle end', () => {
+		const f = fake();
+		f.act('alice');
+		const g = f.b.moveSheetConsent.generation;
+		f.act('alice', 'request', String(g));
+		f.act('bob', 'accept', String(g));
+		f.messages.length = 0;
+		RoomBattle.prototype.receive.call(f.b, [
+			'sideupdate',
+			'p1',
+			'|movesheetprivate|' + g + '|SAFE_DATA',
+		]);
+		assert.deepEqual(f.messages, [['alice', '|uhtml|movesheet-data|SAFE_DATA']]);
+		f.messages.length = 0;
+		f.b.players[1].id = 'carol';
+		RoomBattle.prototype.receive.call(f.b, [
+			'sideupdate',
+			'p1',
+			'|movesheetprivate|' + g + '|SECRET',
+		]);
+		assert.deepEqual(f.messages, []);
+		f.b.ended = true;
+		RoomBattle.prototype.receive.call(f.b, [
+			'sideupdate',
+			'p1',
+			'|movesheetprivate|' + g + '|SECRET',
+		]);
+		assert.deepEqual(f.messages, []);
+	});
 });

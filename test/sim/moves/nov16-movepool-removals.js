@@ -1,6 +1,6 @@
 'use strict';
 const assert = require('assert').strict;
-const {Dex, TeamValidator} = require('../../../dist/sim');
+const { Dex, TeamValidator } = require('../../../dist/sim');
 
 const removals = {
 	shoreup: ['hippowdon', 'hippowdonrift', 'nidoking', 'nidoqueen', 'rhyperior', 'rhydon'],
@@ -14,7 +14,7 @@ describe('Approved Shore Up and Salt Cure removals', () => {
 				it(`${format} rejects ${moveid} for ${id}, including pasted teams`, () => {
 					const validator = TeamValidator.get(format), move = Dex.moves.get(moveid);
 					assert(validator.checkCanLearn(move, Dex.species.get(id)));
-					const problems = validator.validateTeam([{species: id, moves: [move.name]}, {species: 'Mew', moves: ['Protect']}]);
+					const problems = validator.validateTeam([{ species: id, moves: [move.name] }, { species: 'Mew', moves: ['Protect'] }]);
 					assert(problems?.some(problem => problem.includes(move.name)), JSON.stringify(problems));
 				});
 			}

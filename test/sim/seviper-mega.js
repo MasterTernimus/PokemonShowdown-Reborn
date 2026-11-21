@@ -3,11 +3,11 @@ const assert = require('./../assert');
 const common = require('./../common');
 let battle;
 
-describe('Seviper-Mega', function () {
+describe('Seviper-Mega', () => {
 	afterEach(() => battle?.destroy());
 
-	it('defines Seviper and its Mega as separate battle forms', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('defines Seviper and its Mega as separate battle forms', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		const base = battle.dex.species.get('Seviper');
 		const mega = battle.dex.species.get('Seviper-Mega');
 		assert.deepEqual(base.types, ['Poison', 'Dark']);
@@ -22,10 +22,10 @@ describe('Seviper-Mega', function () {
 		assert.equal(battle.dex.items.get('Sevipite').megaStone.Seviper, 'Seviper-Mega');
 	});
 
-	it('Mega Evolves with Sevipite and activates every Sirius component', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Seviper', item: 'Sevipite', moves: ['poisonfang', 'dragontail']},
-		], [{species: 'Magikarp', moves: ['splash']}]]);
+	it('Mega Evolves with Sevipite and activates every Sirius component', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Seviper', item: 'Sevipite', moves: ['poisonfang', 'dragontail'] },
+		], [{ species: 'Magikarp', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move poisonfang mega', 'move splash');
 		const seviper = battle.p1.active[0];
@@ -44,10 +44,10 @@ describe('Seviper-Mega', function () {
 		assert.equal(battle.runEvent('SourceModifyAtk', seviper, battle.p2.active[0], battle.dex.moves.get('icepunch'), 100), 100);
 	});
 
-	it('does not Stockpile or auto-release after Mega Evolution', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Seviper', item: 'Sevipite', moves: ['splash']},
-		], [{species: 'Magikarp', moves: ['splash']}]]);
+	it('does not Stockpile or auto-release after Mega Evolution', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Seviper', item: 'Sevipite', moves: ['splash'] },
+		], [{ species: 'Magikarp', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		for (let turn = 1; turn <= 4; turn++) {
 			battle.makeChoices(turn === 1 ? 'move splash mega' : 'move splash', 'move splash');

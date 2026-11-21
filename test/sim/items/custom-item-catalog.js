@@ -13,22 +13,22 @@ const removedItems = [
 	'razzberry', 'spelonberry', 'tamatoberry', 'watmelberry', 'wepearberry',
 ];
 
-describe('Custom item catalog', function () {
+describe('Custom item catalog', () => {
 	let battle;
-	afterEach(function () {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
-	it('should remove redundant legacy items', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should remove redundant legacy items', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		for (const item of removedItems) assert.false(battle.dex.items.get(item).exists, item);
 	});
 
-	it('should rename Star Sweet to Amulet Coin and preserve its field effect', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Mew', ability: 'synchronize', item: 'amuletcoin', moves: ['splash']},
+	it('should rename Star Sweet to Amulet Coin and preserve its field effect', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Mew', ability: 'synchronize', item: 'amuletcoin', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['toxic']},
+			{ species: 'Mew', ability: 'noguard', moves: ['toxic'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		assert.false(battle.dex.items.get('starsweet').exists);
@@ -38,8 +38,8 @@ describe('Custom item catalog', function () {
 		assert.equal(battle.p1.active[0].status, '');
 	});
 
-	it('should describe Amplifield Rock accurately', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should describe Amplifield Rock accurately', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		assert.match(battle.dex.items.get('amplifieldrock').desc, /terrains and room effects/i);
 	});
 });

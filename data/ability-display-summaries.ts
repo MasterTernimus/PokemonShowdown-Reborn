@@ -1,652 +1,807 @@
-import {AbilityDescriptionOverrides} from './ability-descriptions';
+import { AbilityDescriptionOverrides } from './ability-descriptions';
 /** Reviewed compact display text. Never used for battle identity or callback dispatch. */
 export const AbilityDisplaySummaries: Record<string, string> = {
 	dreaddominion: 'Hydra Bond, Moxie and Intimidate.',
-	"selfrepair": "Combines the listed abilities.",
-	"naturalrecovery": "Switching out heals an extra 1/8 HP if a major status was cured.",
-	"smolderingshroud": "First blocked opposing stat drop each entry raises Sp. Atk by 1.",
-	"springfur": "Surviving the first opposing physical move each entry gives +1 Attack.",
-	"knuckletide": "A damaging punch lets the next Water hit ignore positive defensive stages.",
-	"reservoir": "Water-field healing; Low-HP Berries activate at half HP; halves incoming Fire attacking stats.",
-	"crosscurrent": "Alternating damaging physical and special attacks gain 1.3x power.",
-	"pearlcurrent": "First Water absorption each entry also heals an ally by 1/8 HP.",
-	"slipstream": "First landed Flying attack each switch-in sets 3-turn Tailwind.",
-	"apexflytrap": "Once per entry, traps a contact attacker through the following turn.",
-	"forgegrit": "First opposing HP hit while statused each entry gives +1 Defense.",
-	"masonsfist": "Punches that damage a foe break that side's screens.",
-	"marshconduit": "First Water absorption each entry slows foes and clears confusion and negative accuracy.",
-	"swarmdrive": "First non-pivot Bug-move KO each switch-in raises Speed by 1.",
-	"mirechorus": "Noncontact sound hits have a 20% poison chance.",
-	"boretunnel": "First Ground absorption each switch-in clears own-side hazards.",
-	"mossarmor": "Combines the listed abilities.",
-	"stormcalling": "Combines the listed abilities.",
-	"hisuianpath": "Combines the listed abilities.",
-	"scarecrow": "Combines the listed abilities.",
-	"bruteforce": "Combines the listed abilities.",
-	"gigavolt": "Combines the listed abilities.",
-	"verdantedge": "Combines the listed abilities.",
-	"permafrost": "Combines the listed abilities.",
-	"glacialheart": "Combines the listed abilities.",
-	"moonveil": November16BalanceDescriptions.moonveil.shortDesc,
-	"tidalwave": "Combines the listed abilities.",
-	"livewire": "Combines the listed abilities.",
-	"kindledfury": "Combines the listed abilities.",
-	"burningrage": "Recoil/explosion and punching power; no move recoil; ignores abilities; same-type moves gain 1.3x power.",
-	"exalt": "Cannot flinch; Steel Wing also receives the slicing-move power boost.",
-	"fightingfiend": "Moves never miss; stronger Fighting attacks; 20% less damage, 60% at full HP.",
-	"kickfiend": "Combines the listed abilities.",
-	"wreckingball": "Combines the listed abilities.",
-	"swiftdrill": "Combines the listed abilities.",
-	"lifeguard": "Successful protection in Free-for-All earns one 25% damage guard.",
-	"zen": "Water-field healing; reveals Illusions; halves incoming Fire attacking stats.",
-	"stormsong": "Combines the listed abilities.",
-	"astralward": "Reflects status moves; Psychic-field Speed boost; reveals threats and Illusions.",
-	"moonlightvigil": "Blocks Intimidate; opposing moves spend extra PP; reveals Illusions.",
-	"neurotoxin": "Combines the listed abilities.",
-	"punchfiend": "Keen Eye, Unseen Fist and Inner Focus.",
-	"doublestrike": "Maximizes multi-hit counts; 1.5x weak-move and 1.4x punching power, stacking when both apply.",
-	"spinfiend": "1.5x power for moves at 60 power or less (80 on Factory); Prevents and cures sleep.",
-	"terragift": "Same-type moves gain 1.3x power.",
-	"seafiend": "Contact damage; doubled Water attacking stats; Fire/burn/weather protection.",
-	"hisuianoath": "Combines the listed abilities.",
-	"aevianoath": "Combines the listed abilities.",
-	"hisuianvanguard": "Entry: 1.5x Spe, 1.2x SpA. Inner Focus.",
-	"unovavanguard": "Entry: 1.5x Spe, 1.2x Atk. Inner Focus.",
-	"unovawing": "Combines the listed abilities.",
-	"aevianwing": "Transforms Unfezant on entry.",
-	"aeviandream": "Transforms Musharna into Musharna-Rejuv.",
-	"aevianfrost": "No hail damage; ignores burn attack penalty.",
-	"aeviantoxin": "Combines the listed abilities.",
-	"aevianspark": "Transforms Breloom on entry.",
-	"aeviangrief": "Combines the listed abilities.",
-	"aevianrocket": "Transforms Veluza into Veluza-Rejuv.",
-	"adaptivecore": "First damaging move crits; moves cannot miss.",
-	"aevianglacier": "Transforms Turtonator on entry.",
-	"aevianbolt": "Transforms Druddigon on entry.",
-	"hisuianresolve": "No move recoil except Struggle; field defenses.",
-	"nobleconduit": "Combines the listed abilities.",
-	"nobledance": "Entry heals adjacent allies by 1/4 HP; No confusion or Intimidate Attack drop.",
-	"noblearmor": "Field defenses; no hail damage.",
-	"noblerider": "Double Speed in rain and water fields; Moves ignore bypassable abilities.",
-	"celestialheart": "Misty/Rainbow also give +2 Sp. Def; Allies take 25% less attack damage; no charging turns.",
-	"crueltag": "Combines the listed abilities.",
-	"cruelshell": "Combines the listed abilities.",
-	"spiralevolution": "Combines the listed abilities.",
-	"alchemistsurge": "Combines the listed abilities.",
-	"voidomen": "First applied secondary each entry wards the holder or an ally against one opposing stat-drop event.",
-	"greatmarsh": "Reveals threats; rain/field healing; stronger STAB; hits may badly poison.",
-	"phalanxform": "Gains Steel STAB and cannot be trapped.",
-	"windchime": "Normal moves become Steel; boosted sound moves; half sound damage.",
-	"hauntedchime": "Combines the listed abilities.",
-	"auramaster": "Takes half damage from contact moves.",
-	"patternshift": "Changes type to match each eligible move; Dragon's Den changes the effect; reveals Illusions.",
-	"bonewarrior": "Foe stat drops give +2 Defense; immune to sandstorm and hail damage.",
-	"ironvise": "Combines the listed abilities.",
-	"apexvenom": "Poison hits Poison/Steel; bites bypass protection and badly poison 30%.",
-	"sirius": "Bites bypass protection and badly poison 30%.",
-	"apexpredator": "Combines the listed abilities.",
-	"bullrush": "First active turn: 1.5x Spe and 1.2x Atk; Entry lowers adjacent foes' Attack by 1.",
-	"unleashedego": November16BalanceDescriptions.unleashedego.shortDesc,
-	"joyride": "Combines the listed abilities.",
-	"asoneglastrier": "Combines the listed abilities.",
-	"asonespectrier": "Combines the listed abilities.",
-	"aquashell": "Heatproof + Frisk.",
-	"battlebond": "A move KO triggers a Bond form; heals 1/16 HP each turn.",
-	"shadowbond": "Water Shuriken hits 3 times at 30 power and always critically hits; 1.3x same-type move power.",
-	"apexbond": "Dual Chop cannot miss and always critically hits.",
-	"sacredbond": "Extreme Speed always critically hits.",
-	"apexarmor": "Combines the listed abilities.",
-	"hardyskin": "No sleep; rain heals 1/8 HP per turn, sun costs 1/8; move KOs give +1 Attack.",
-	"solarhydra": "FFA singles hit all foes at 1.3x; Creates Grassy Terrain on entry; disabled on Cold Eclipse.",
-	"astralengine": "Combines the listed abilities.",
-	"queensguard": "Same-type moves gain 1.3x power.",
-	"corrosivetouch": "Grass STAB.",
-	"witheringshell": "Switching out cures status and heals exactly 1/3 HP, with no additional cure bonus.",
-	"fossilfrenzy": "After each opposing damaging move it survives: +1 Attack/Speed and confusion. Confusion can still hurt it.",
-	"draconicforce": "Same-type moves gain 1.3x power.",
-	"sunsovereign": "Eight-turn sun + Blazing Monarch; all moves have 1.1x accuracy.",
-	"burningspirit": "Same-type moves gain 1.3x power.",
-	"emperorsresolve": "Same-type moves gain 1.3x power.",
-	"terraresolve": November16BalanceDescriptions.terraresolve.shortDesc,
-	"primalego": November16BalanceDescriptions.primalego.shortDesc,
-	"venomarmor": "Dual Wield and Battle Armor; Metal Claw hits twice at 60% power.",
-	"toxicarmor": "Dual Wield + opening Violent Rush; blocks Intimidate; priority preparation.",
-	"corrosiveburn": "Fire damage 1.2x against poisoned targets.",
-	"noseformation": "Three adaptive 30 BP Mini-Noses chain after KOs and trigger Elevate.",
-	"mourningvessel": "Fainted allies increase power up to 2x; fainted foes restore HP.",
-	"fallenstar": "Arrows gain priority at 1/4 HP. Takes 25% less after an arrow or 20% less at half HP.",
-	"ragingstorm": "Bypasses screens and defensive stages; halves priority damage; KOs damage other foes.",
-	"ragingoverlord": "Combines the listed abilities.",
-	"vanguard": "Enhanced Extreme Speed; single-foe protection.",
-	"apexcleave": "1.5x slicing power; eligible moves hit twice; move KOs give +1 Attack.",
-	"aurainstinct": "Stronger STAB; eligible moves hit twice; one 50% roll per battle to survive a lethal attack.",
-	"abysssniper": "Critical hits deal 2.25x damage; +1 Sp. Atk on specified fields.",
- "grandstrategy": "While active, team HP hits prepare foes; earned marks survive its switches. Physical HP hits consume marks to bypass screens and positive defensive stages.",
-	"atrocity": "Blazing Monarch + Fire Ward + Tough Claws; all moves have 1.1x accuracy.",
-	"wickedsnare": "Combines the listed abilities.",
-	"voidcommand": "20% less attack damage; KOs boost higher offense. First successful Z-Move also boosts it, without doubling a KO reward.",
-	"bewitchingmajesty": "Creates 5-turn Bewitched Woods; reflects targeted status moves; blocks foe priority against its side.",
-	"mythicscale": "Powder/Befuddle status: +1 Def, allies +1 SpD once/entry.",
-	"toxicevolution": "Own poison heals 1/8 HP once/turn.",
-	"auroraresonance": "Combines the listed abilities.",
-	"auroracurrent": "Electric STAB; in Snow, Electric never misses and Def/SpD 1.5x.",
-	"alloycore": "No indirect/weather damage; heals 1/16 HP per turn; moves ignore redirection.",
-	"hellfireeclipse": November16BalanceDescriptions.hellfireeclipse.shortDesc,
-	"sacrededge": "Combines the listed abilities.",
-	"omenedge": "Stronger slicing moves; eligible moves hit twice; foes spend extra PP; physical Doom Desire on fainting.",
-	"dreadmaw": "Doubles Attack; 30% chance of 5-turn Embargo; 50% to cure ally status each turn.",
-	"cursedkeepsake": "Curses attackers; cursed foes deal 0.5x; heals 1/2 Curse damage.",
-	"curseddoll": November16BalanceDescriptions.curseddoll.shortDesc,
-	"cursedmarionette": "Status priority; attacks and incoming hits curse; cursed foes deal 20% less damage; Curse damage heals it.",
-	"sandsovereign": "Solid Rock; eight-turn sand; Rock/Ground matchup; Rock/Dark hits break screens.",
-	"tyrantstream": "Biting moves have 1.5x power.",
-	"frostsovereign": "Ice Body + Filter + Soundproof; eight-turn hail; first Ice attack lowers foe Speed.",
-	"freezerburn": "Double Speed in snow and supported fields; stronger biting moves; Normal moves become Ice.",
-	"stormfright": "Combines the listed abilities.",
-	"enlightenment": "Combines the listed abilities.",
-	"relentlesslink": "Combines the listed abilities.",
-	"mirrorgreed": "Combines the listed abilities.",
-	"uncheckedassault": "Combines the listed abilities.",
-	"voidvoice": "Queenly Majesty + Void Veil. Blocks opposing priority and avoids allied attacks.",
-	"dreamsickness": "Heals its side 1/16 each turn; once per entry saves an ally at a 1/4 HP cost.",
-	"voidveil": "First Dark/Ghost hit bypasses barriers; Gardevoir ignores New World defense penalties.",
-	"rifteater": "Summons sand; Stockpile every 2 eligible turns; once-battle half-HP guard, heal and awakening.",
-	"mountainrift": "5-turn Mountain; half HP: Gravity + Mountain reset; first faint: full reset into Shatter.",
-	"desertrift": "5-turn Desert Field; fixed four-move set.",
-	"adaptivepower": "Double Attack; heals 1/3 HP on switching; no indirect damage.",
-	"perfectforesight": "Ability copy; Miracle Eye; stored attacks; once-per-battle Mega screens.",
-	"doomwarning": "Magic Bounce + Magic Guard; fainting sets Doom Desire against each foe.",
-	"perfectego": November16BalanceDescriptions.perfectego.shortDesc,
-	"heavenlychorus": "Half contact damage, double Fire damage.",
-	"mourningsnow": "8-turn Hail/Veil; frostbite and Disable; snow healing; FFA faint healing; two-turn faint Curse.",
-	"venombastion": "HP hits heal 1/16 and boost Defense once per turn; poisoned attackers lose their higher offense once per turn.",
-	"rimeknuckle": November16BalanceDescriptions.rimeknuckle.shortDesc,
-	"streettyrant": "End-turn status cure and stat reset can restore HP; Mega form heals 1/8.",
-	"vitalsigns": "Heals and cures each teammate once when an attack leaves it at half HP or less.",
-	"divineintervention": "Emergency team healing and cleansing with priority recovery and ally protection.",
-	"mountainhunger": "Absorbs Grass for attacking boosts; no hail damage; shorter sleep.",
-	"irondominion": "Entry and Gigantamax activation trigger its stat effects and ally healing.",
-	"astralwatcher": "Reveals opposing Illusions/items; 30% Embargo chance per item holder; +1 status-move priority.",
-	"treasuretitan": "Lowers foes' Attack; absorbs Ground; 25% less super-effective damage.",
-	"ragingfists": "Normal/Fighting hits Ghosts; damaging moves cannot miss.",
-	"warship": November16BalanceDescriptions.warship.shortDesc,
-	"furnaceengine": November16BalanceDescriptions.furnaceengine.shortDesc,
-	"duneterror": "Desert Field for 5 turns on faint.",
-	"heatcoil": "Speed Boost + Long Reach.",
-	"sweetdecay": "Combines the listed abilities.",
-	"bakedbliss": "Combines the listed abilities.",
-	"sweetsanctuary": "Combines the listed abilities.",
-	"riptideclaws": "Double Speed in rain; 1.3x contact power; critical-hit/damage protection; ignores abilities.",
-	"tidaljaw": November16BalanceDescriptions.tidaljaw.shortDesc,
-	"sacredpower": "Normal moves become Dark type and have 1.3x power; 1.3x Dark/Ghost power; Fairy Tale entry gives +1 Sp. Def.",
-	"execution": "Normal moves become Dark/Fairy; ignores abilities; stronger attacks against weakened foes; KOs heal 1/8 HP.",
-	"caverndrake": November16BalanceDescriptions.caverndrake.shortDesc,
-	"eternalflower": "2x damage to Pulse; Grass offenses 1.5x; weakens opposing gimmicks.",
-	"ange": "Ignores abilities/indirect damage; double damage to Pulse; boosts Grass/Fairy; weakens special opposing forms.",
-	"fluffyevo": "1.5x off-type move power; attacks bypass type immunities; no powder/weather damage.",
-	"riotamp": "Normal moves become Electric; stronger sound moves spare allies.",
-	"tyrantdomain": "Combines the listed abilities.",
-	"auroradomain": "Summons hail; Rock/critical-hit protection; stronger Ice moves; field and Veil on fainting.",
-	"royalscales": "Heals 1/16 each turn; immune to Sandstorm and Hail.",
-	"falsedevotion": "+1 status priority; switching cures status and heals HP.",
-	"truedevotion": "Status priority; stronger weak moves and secondary chances; switching cures status and heals.",
-	"ancientbloom": "Verdant Monarch + Friend Guard; field bonuses; all moves have 1.1x accuracy.",
-	"pollenbloom": "Thick Fat, Unaware; all moves have 1.1x accuracy.",
-	"blazingmane": "Fire Mane; damaging Fire moves gain +1 priority at 1/4 HP or less.",
-	"coronafurnace": "Flame Body; damaging Fire moves ignore positive defensive stages.",
+	selfrepair: 'Combines the listed abilities.',
+	naturalrecovery: 'Switching out heals an extra 1/8 HP if a major status was cured.',
+	smolderingshroud: 'First blocked opposing stat drop each entry raises Sp. Atk by 1.',
+	springfur: 'Surviving the first opposing physical move each entry gives +1 Attack.',
+	knuckletide: 'A damaging punch lets the next Water hit ignore positive defensive stages.',
+	reservoir:
+		'Water-field healing; Low-HP Berries activate at half HP; halves incoming Fire attacking stats.',
+	crosscurrent: 'Alternating damaging physical and special attacks gain 1.3x power.',
+	pearlcurrent: 'First Water absorption each entry also heals an ally by 1/8 HP.',
+	slipstream: 'First landed Flying attack each switch-in sets 3-turn Tailwind.',
+	apexflytrap: 'Once per entry, traps a contact attacker through the following turn.',
+	forgegrit: 'First opposing HP hit while statused each entry gives +1 Defense.',
+	masonsfist: "Punches that damage a foe break that side's screens.",
+	marshconduit:
+		'First Water absorption each entry slows foes and clears confusion and negative accuracy.',
+	swarmdrive: 'First non-pivot Bug-move KO each switch-in raises Speed by 1.',
+	mirechorus: 'Noncontact sound hits have a 20% poison chance.',
+	boretunnel: 'First Ground absorption each switch-in clears own-side hazards.',
+	mossarmor: 'Combines the listed abilities.',
+	stormcalling: 'Combines the listed abilities.',
+	hisuianpath: 'Combines the listed abilities.',
+	scarecrow: 'Combines the listed abilities.',
+	bruteforce: 'Combines the listed abilities.',
+	gigavolt: 'Combines the listed abilities.',
+	verdantedge: 'Combines the listed abilities.',
+	permafrost: 'Combines the listed abilities.',
+	glacialheart: 'Combines the listed abilities.',
+	moonveil: November16BalanceDescriptions.moonveil.shortDesc,
+	tidalwave: 'Combines the listed abilities.',
+	livewire: 'Combines the listed abilities.',
+	kindledfury: 'Combines the listed abilities.',
+	burningrage:
+		'Recoil/explosion and punching power; no move recoil; ignores abilities; same-type moves gain 1.3x power.',
+	exalt: 'Cannot flinch; Steel Wing also receives the slicing-move power boost.',
+	fightingfiend: 'Moves never miss; stronger Fighting attacks; 20% less damage, 60% at full HP.',
+	kickfiend: 'Combines the listed abilities.',
+	wreckingball: 'Combines the listed abilities.',
+	swiftdrill: 'Combines the listed abilities.',
+	lifeguard: 'Successful protection in Free-for-All earns one 25% damage guard.',
+	zen: 'Water-field healing; reveals Illusions; halves incoming Fire attacking stats.',
+	stormsong: 'Combines the listed abilities.',
+	astralward: 'Reflects status moves; Psychic-field Speed boost; reveals threats and Illusions.',
+	moonlightvigil: 'Blocks Intimidate; opposing moves spend extra PP; reveals Illusions.',
+	neurotoxin: 'Combines the listed abilities.',
+	punchfiend: 'Keen Eye, Unseen Fist and Inner Focus.',
+	doublestrike:
+		'Maximizes multi-hit counts; 1.5x weak-move and 1.4x punching power, stacking when both apply.',
+	spinfiend: '1.5x power for moves at 60 power or less (80 on Factory); Prevents and cures sleep.',
+	terragift: 'Same-type moves gain 1.3x power.',
+	seafiend: 'Contact damage; doubled Water attacking stats; Fire/burn/weather protection.',
+	hisuianoath: 'Combines the listed abilities.',
+	aevianoath: 'Combines the listed abilities.',
+	hisuianvanguard: 'Entry: 1.5x Spe, 1.2x SpA. Inner Focus.',
+	unovavanguard: 'Entry: 1.5x Spe, 1.2x Atk. Inner Focus.',
+	unovawing: 'Combines the listed abilities.',
+	aevianwing: 'Transforms Unfezant on entry.',
+	aeviandream: 'Transforms Musharna into Musharna-Rejuv.',
+	aevianfrost: 'No hail damage; ignores burn attack penalty.',
+	aeviantoxin: 'Combines the listed abilities.',
+	aevianspark: 'Transforms Breloom on entry.',
+	aeviangrief: 'Combines the listed abilities.',
+	aevianrocket: 'Transforms Veluza into Veluza-Rejuv.',
+	adaptivecore: 'First damaging move crits; moves cannot miss.',
+	aevianglacier: 'Transforms Turtonator on entry.',
+	aevianbolt: 'Transforms Druddigon on entry.',
+	hisuianresolve: 'No move recoil except Struggle; field defenses.',
+	nobleconduit: 'Combines the listed abilities.',
+	nobledance: 'Entry heals adjacent allies by 1/4 HP; No confusion or Intimidate Attack drop.',
+	noblearmor: 'Field defenses; no hail damage.',
+	noblerider: 'Double Speed in rain and water fields; Moves ignore bypassable abilities.',
+	celestialheart:
+		'Misty/Rainbow also give +2 Sp. Def; Allies take 25% less attack damage; no charging turns.',
+	crueltag: 'Combines the listed abilities.',
+	cruelshell: 'Combines the listed abilities.',
+	spiralevolution: 'Combines the listed abilities.',
+	alchemistsurge: 'Combines the listed abilities.',
+	voidomen:
+		'First applied secondary each entry wards the holder or an ally against one opposing stat-drop event.',
+	greatmarsh: 'Reveals threats; rain/field healing; stronger STAB; hits may badly poison.',
+	phalanxform: 'Gains Steel STAB and cannot be trapped.',
+	windchime: 'Normal moves become Steel; boosted sound moves; half sound damage.',
+	hauntedchime: 'Combines the listed abilities.',
+	auramaster: 'Takes half damage from contact moves.',
+	patternshift:
+		"Changes type to match each eligible move; Dragon's Den changes the effect; reveals Illusions.",
+	bonewarrior: 'Foe stat drops give +2 Defense; immune to sandstorm and hail damage.',
+	ironvise: 'Combines the listed abilities.',
+	apexvenom: 'Poison hits Poison/Steel; bites bypass protection and badly poison 30%.',
+	sirius: 'Bites bypass protection and badly poison 30%.',
+	apexpredator: 'Combines the listed abilities.',
+	bullrush: "First active turn: 1.5x Spe and 1.2x Atk; Entry lowers adjacent foes' Attack by 1.",
+	unleashedego: November16BalanceDescriptions.unleashedego.shortDesc,
+	joyride: 'Combines the listed abilities.',
+	asoneglastrier: 'Combines the listed abilities.',
+	asonespectrier: 'Combines the listed abilities.',
+	aquashell: 'Heatproof + Frisk.',
+	battlebond: 'A move KO triggers a Bond form; heals 1/16 HP each turn.',
+	shadowbond:
+		'Water Shuriken hits 3 times at 30 power and always critically hits; 1.3x same-type move power.',
+	apexbond: 'Dual Chop cannot miss and always critically hits.',
+	sacredbond: 'Extreme Speed always critically hits.',
+	apexarmor: 'Combines the listed abilities.',
+	hardyskin: 'No sleep; rain heals 1/8 HP per turn, sun costs 1/8; move KOs give +1 Attack.',
+	solarhydra:
+		'FFA singles hit all foes at 1.3x; Creates Grassy Terrain on entry; disabled on Cold Eclipse.',
+	astralengine: 'Combines the listed abilities.',
+	queensguard: 'Same-type moves gain 1.3x power.',
+	corrosivetouch: 'Grass STAB.',
+	witheringshell:
+		'Switching out cures status and heals exactly 1/3 HP, with no additional cure bonus.',
+	fossilfrenzy:
+		'After each opposing damaging move it survives: +1 Attack/Speed and confusion. Confusion can still hurt it.',
+	draconicforce: 'Same-type moves gain 1.3x power.',
+	sunsovereign: 'Eight-turn sun + Blazing Monarch; all moves have 1.1x accuracy.',
+	burningspirit: 'Same-type moves gain 1.3x power.',
+	emperorsresolve: 'Same-type moves gain 1.3x power.',
+	terraresolve: November16BalanceDescriptions.terraresolve.shortDesc,
+	primalego: November16BalanceDescriptions.primalego.shortDesc,
+	venomarmor: 'Dual Wield and Battle Armor; Metal Claw hits twice at 60% power.',
+	toxicarmor: 'Dual Wield + opening Violent Rush; blocks Intimidate; priority preparation.',
+	corrosiveburn: 'Fire damage 1.2x against poisoned targets.',
+	noseformation: 'Three adaptive 30 BP Mini-Noses chain after KOs and trigger Elevate.',
+	mourningvessel: 'Fainted allies increase power up to 2x; fainted foes restore HP.',
+	fallenstar: 'Arrows gain priority at 1/4 HP. Takes 25% less after an arrow or 20% less at half HP.',
+	ragingstorm: 'Bypasses screens and defensive stages; halves priority damage; KOs damage other foes.',
+	ragingoverlord: 'Combines the listed abilities.',
+	vanguard: 'Enhanced Extreme Speed; single-foe protection.',
+	apexcleave: '1.5x slicing power; eligible moves hit twice; move KOs give +1 Attack.',
+	aurainstinct:
+		'Stronger STAB; eligible moves hit twice; one 50% roll per battle to survive a lethal attack.',
+	abysssniper: 'Critical hits deal 2.25x damage; +1 Sp. Atk on specified fields.',
+	grandstrategy:
+		'While active, team HP hits prepare foes; earned marks survive its switches. Physical HP hits consume marks to bypass screens and positive defensive stages.',
+	atrocity: 'Blazing Monarch + Fire Ward + Tough Claws; all moves have 1.1x accuracy.',
+	wickedsnare: 'Combines the listed abilities.',
+	voidcommand:
+		'20% less attack damage; KOs boost higher offense. First successful Z-Move also boosts it, without doubling a KO reward.',
+	bewitchingmajesty:
+		'Creates 5-turn Bewitched Woods; reflects targeted status moves; blocks foe priority against its side.',
+	mythicscale: 'Powder/Befuddle status: +1 Def, allies +1 SpD once/entry.',
+	toxicevolution: 'Own poison heals 1/8 HP once/turn.',
+	auroraresonance: 'Combines the listed abilities.',
+	auroracurrent: 'Electric STAB; in Snow, Electric never misses and Def/SpD 1.5x.',
+	alloycore: 'No indirect/weather damage; heals 1/16 HP per turn; moves ignore redirection.',
+	hellfireeclipse: November16BalanceDescriptions.hellfireeclipse.shortDesc,
+	sacrededge: 'Combines the listed abilities.',
+	omenedge:
+		'Stronger slicing moves; eligible moves hit twice; foes spend extra PP; physical Doom Desire on fainting.',
+	dreadmaw: 'Doubles Attack; 30% chance of 5-turn Embargo; 50% to cure ally status each turn.',
+	cursedkeepsake: 'Curses attackers; cursed foes deal 0.5x; heals 1/2 Curse damage.',
+	curseddoll: November16BalanceDescriptions.curseddoll.shortDesc,
+	cursedmarionette:
+		'Status priority; attacks and incoming hits curse; cursed foes deal 20% less damage; Curse damage heals it.',
+	sandsovereign: 'Solid Rock; eight-turn sand; Rock/Ground matchup; Rock/Dark hits break screens.',
+	tyrantstream: 'Biting moves have 1.5x power.',
+	frostsovereign:
+		'Ice Body + Filter + Soundproof; eight-turn hail; first Ice attack lowers foe Speed.',
+	freezerburn:
+		'Double Speed in snow and supported fields; stronger biting moves; Normal moves become Ice.',
+	stormfright: 'Combines the listed abilities.',
+	enlightenment: 'Combines the listed abilities.',
+	relentlesslink: 'Combines the listed abilities.',
+	mirrorgreed: 'Combines the listed abilities.',
+	uncheckedassault: 'Combines the listed abilities.',
+	voidvoice: 'Queenly Majesty + Void Veil. Blocks opposing priority and avoids allied attacks.',
+	dreamsickness: 'Heals its side 1/16 each turn; once per entry saves an ally at a 1/4 HP cost.',
+	voidveil: 'First Dark/Ghost hit bypasses barriers; Gardevoir ignores New World defense penalties.',
+	rifteater:
+		'Summons sand; Stockpile every 2 eligible turns; once-battle half-HP guard, heal and awakening.',
+	mountainrift:
+		'5-turn Mountain; half HP: Gravity + Mountain reset; first faint: full reset into Shatter.',
+	desertrift: '5-turn Desert Field; fixed four-move set.',
+	adaptivepower: 'Double Attack; heals 1/3 HP on switching; no indirect damage.',
+	perfectforesight: 'Ability copy; Miracle Eye; stored attacks; once-per-battle Mega screens.',
+	doomwarning: 'Magic Bounce + Magic Guard; fainting sets Doom Desire against each foe.',
+	perfectego: November16BalanceDescriptions.perfectego.shortDesc,
+	heavenlychorus: 'Half contact damage, double Fire damage.',
+	mourningsnow:
+		'8-turn Hail/Veil; frostbite and Disable; snow healing; FFA faint healing; two-turn faint Curse.',
+	venombastion:
+		'HP hits heal 1/16 and boost Defense once per turn; poisoned attackers lose their higher offense once per turn.',
+	rimeknuckle: November16BalanceDescriptions.rimeknuckle.shortDesc,
+	streettyrant: 'End-turn status cure and stat reset can restore HP; Mega form heals 1/8.',
+	vitalsigns: 'Heals and cures each teammate once when an attack leaves it at half HP or less.',
+	divineintervention:
+		'Emergency team healing and cleansing with priority recovery and ally protection.',
+	mountainhunger: 'Absorbs Grass for attacking boosts; no hail damage; shorter sleep.',
+	irondominion: 'Entry and Gigantamax activation trigger its stat effects and ally healing.',
+	astralwatcher:
+		'Reveals opposing Illusions/items; 30% Embargo chance per item holder; +1 status-move priority.',
+	treasuretitan: "Lowers foes' Attack; absorbs Ground; 25% less super-effective damage.",
+	ragingfists: 'Normal/Fighting hits Ghosts; damaging moves cannot miss.',
+	warship: November16BalanceDescriptions.warship.shortDesc,
+	furnaceengine: November16BalanceDescriptions.furnaceengine.shortDesc,
+	duneterror: 'Desert Field for 5 turns on faint.',
+	heatcoil: 'Speed Boost + Long Reach.',
+	sweetdecay: 'Combines the listed abilities.',
+	bakedbliss: 'Combines the listed abilities.',
+	sweetsanctuary: 'Combines the listed abilities.',
+	riptideclaws:
+		'Double Speed in rain; 1.3x contact power; critical-hit/damage protection; ignores abilities.',
+	tidaljaw: November16BalanceDescriptions.tidaljaw.shortDesc,
+	sacredpower:
+		'Normal moves become Dark type and have 1.3x power; 1.3x Dark/Ghost power; Fairy Tale entry gives +1 Sp. Def.',
+	execution:
+		'Normal moves become Dark/Fairy; ignores abilities; stronger attacks against weakened foes; KOs heal 1/8 HP.',
+	caverndrake: November16BalanceDescriptions.caverndrake.shortDesc,
+	eternalflower: '2x damage to Pulse; Grass offenses 1.5x; weakens opposing gimmicks.',
+	ange: 'Ignores abilities/indirect damage; double damage to Pulse; boosts Grass/Fairy; weakens special opposing forms.',
+	fluffyevo: '1.5x off-type move power; attacks bypass type immunities; no powder/weather damage.',
+	riotamp: 'Normal moves become Electric; stronger sound moves spare allies.',
+	tyrantdomain: 'Combines the listed abilities.',
+	auroradomain:
+		'Summons hail; Rock/critical-hit protection; stronger Ice moves; field and Veil on fainting.',
+	royalscales: 'Heals 1/16 each turn; immune to Sandstorm and Hail.',
+	falsedevotion: '+1 status priority; switching cures status and heals HP.',
+	truedevotion:
+		'Status priority; stronger weak moves and secondary chances; switching cures status and heals.',
+	ancientbloom: 'Verdant Monarch + Friend Guard; field bonuses; all moves have 1.1x accuracy.',
+	pollenbloom: 'Thick Fat, Unaware; all moves have 1.1x accuracy.',
+	blazingmane: 'Fire Mane; damaging Fire moves gain +1 priority at 1/4 HP or less.',
+	coronafurnace: 'Flame Body; damaging Fire moves ignore positive defensive stages.',
 
-	"fortressshell": November16BalanceDescriptions.fortressshell.shortDesc,
-	"waterbarrage": November16BalanceDescriptions.waterbarrage.shortDesc,
-	"dreepyvanguard": "Once per entry, Dragon Darts damage breaks the matching screen.",
-	"templechime": "Move KOs boost highest stat; once per entry, Heal Bell curing status clears negative Sp. Def.",
-	"soothingpresence": "Combines the listed abilities.",
-	"verdanthospitality": November16BalanceDescriptions.verdanthospitality.shortDesc,
-	"verdantsanctuary": "Grassy Terrain on entry; Hospitality and Friend Guard.",
-	"echosense": "Allies avoid own sound damage; 30% chance of 5-turn Embargo; double Speed on Psychic field/aura.",
-	"wingedwraith": "Moves bypass Substitute and opposing screens; If it is at full HP, its Flying-type moves have their priority increased by 1.",
-	"gooey": "Contact hits lower the attacker's Speed by 1.",
-	"hydraheart": "FFA singles hit all foes at 1.3x; +1 Defense once per turn.",
-	"sweetresonance": "Lowers foe evasion; protects item; attackers receive Embargo; heals; three-hit moves; ally Dragon Cheer.",
-	"phantombarrage": "Blocks foe stat drops; bypasses screens/Substitute; extra hits, or 1.2x power for signature moves.",
-	"astralcore": "Psychic Terrain doubles Sp. Atk instead; Woods cures status each turn; reveals Illusions.",
-	"divinemockery": "Water STAB.",
-	"truehydra": "Combines the listed abilities.",
-	"desertspirit": "Ground moves get STAB.",
-	"desertshell": "1.5x multi-hit power; Half Fire attacking stats and burn damage; Summons sandstorm on entry.",
-	"voidtyrant": "Once per battle, Draco Meteor clears its negative stages before White Herb is needed.",
-	"orchardbond": "FFA singles hit all foes at 1.3x; 50% chance to restore a consumed Berry/seed each turn.",
-	"burningcrown": "Intimidate + Blazing Monarch + Levitate; all moves have 1.1x accuracy.",
-	"unboundblaze": "Dragon conversion, Magma Armor; all moves have 1.1x accuracy.",
-	"frightfulwings": "Water attacks receive at least 1.5x STAB without stacking.",
-	"argentdevotion": "Combines the listed abilities.",
-	"lancepoint": "Accuracy protection; drill moves gain +1 critical-hit stage and make no contact.",
-	"longreach": "Removes contact and raises critical-hit rate by one stage.",
-	"lunarorbit": "Reflects status moves; stronger secondary chances; healing priority; no indirect damage; sets Gravity.",
-	"prismscale": November16BalanceDescriptions.prismscale.shortDesc,
-	"anchoredbattery": "1.5x pulse/bullet power; cannot be forced to switch.",
-	"heavyartillery": "Unaware; double-power artillery breaks screens; idle turns become Loaded (+1 Def/SpD); attacks become Fired (-1 Def/SpD).",
-	"bloomingsun": "Combines the listed abilities.",
-	"stormbell": "Takes 0.8x damage from attacks; Summons rain on entry; move KOs raise its highest stat.",
-	"requiem": November16BalanceDescriptions.requiem.shortDesc,
-	"reapersgrip": "Ignores opposing combat boosts; heals 1/16 HP; boosts all Dark moves; creates Haunted at half HP and on faint.",
-	"moonlitwings": "Fairy STAB.",
-	"parentalbond": "Attacks hit twice (second hit 80%); stronger contact moves; protects allies.",
-	"royalarmament": "Steel STAB; drill/horn moves have 1.5x power, or 2x and protection bypass on rocky fields.",
-	"ironwill": "20%/40% less attack damage; one survival roll; heals each turn; +1 accuracy; 1.5x tail power.",
-	"breakwater": "Water-field Speed boost; first qualifying physical Water hit clears own hazards.",
-	"relentlesshunt": "Moves <=60 BP gain +1 priority; boosted fields give 1.5x or 2x damage.",
-	"solarrush": "No sand damage; Double Speed in sun or Stage 4 Flower Garden.",
-	"safeharbor": "No hail damage; water-field healing; Cures status each turn in rain or water fields.",
-	"seablessing": "1.5x Def/SpD; entry heals self/allies 1/4.",
-	"schooling": "Changes form with HP and water fields; its School form gains the listed components.",
-	"seviischooling": "Changes Wishiwashi to Sevii form; School: Hydra Bond + Self Repair + Mold Breaker.",
-	"seasonalstride": "Normal -> primary type 1.5x; sun Speed 2x; weather forms.",
-	"voidcraft": November16BalanceDescriptions.voidcraft.shortDesc,
-	"voidhex": "Direct damaging hits trap surviving foes through the next turn; further hits refresh the trap.",
-	"blademastery": "At 1/4 max HP or less, slicing moves gain +1 priority.",
-	"goldentalons": "Combines the listed abilities.",
-	"silkendecoy": "Cocoon blocks a move, status and secondaries.",
-	"cursedarmament": "Curse becomes a 100 BP spread Ghost attack using the higher Attack or Sp. Atk; curses foes; heals 1/4 damage; half HP/faint sets Haunted Field.",
-	"slowclamp": "Combines the listed abilities.",
-	"shieldsdown": "Form changes at 1/2 HP.",
-	"soulsiphon": "Absorbs Fire; Fire/Ghost hits drain 1/3 damage, capped at 1/6 HP per turn, and block healing.",
-	"malicewell": "Contact may burn; surviving the first opposing damaging move each entry gives +1 Sp. Atk, even after Protect.",
-	"soulcremation": "Combines the listed abilities.",
+	fortressshell: November16BalanceDescriptions.fortressshell.shortDesc,
+	waterbarrage: November16BalanceDescriptions.waterbarrage.shortDesc,
+	dreepyvanguard: 'Once per entry, Dragon Darts damage breaks the matching screen.',
+	templechime:
+		'Move KOs boost highest stat; once per entry, Heal Bell curing status clears negative Sp. Def.',
+	soothingpresence: 'Combines the listed abilities.',
+	verdanthospitality: November16BalanceDescriptions.verdanthospitality.shortDesc,
+	verdantsanctuary: 'Grassy Terrain on entry; Hospitality and Friend Guard.',
+	echosense:
+		'Allies avoid own sound damage; 30% chance of 5-turn Embargo; double Speed on Psychic field/aura.',
+	wingedwraith:
+		'Moves bypass Substitute and opposing screens; If it is at full HP, its Flying-type moves have their priority increased by 1.',
+	gooey: "Contact hits lower the attacker's Speed by 1.",
+	hydraheart: 'FFA singles hit all foes at 1.3x; +1 Defense once per turn.',
+	sweetresonance:
+		'Lowers foe evasion; protects item; attackers receive Embargo; heals; three-hit moves; ally Dragon Cheer.',
+	phantombarrage:
+		'Blocks foe stat drops; bypasses screens/Substitute; extra hits, or 1.2x power for signature moves.',
+	astralcore:
+		'Psychic Terrain doubles Sp. Atk instead; Woods cures status each turn; reveals Illusions.',
+	divinemockery: 'Water STAB.',
+	truehydra: 'Combines the listed abilities.',
+	desertspirit: 'Ground moves get STAB.',
+	desertshell:
+		'1.5x multi-hit power; Half Fire attacking stats and burn damage; Summons sandstorm on entry.',
+	voidtyrant: 'Once per battle, Draco Meteor clears its negative stages before White Herb is needed.',
+	orchardbond:
+		'FFA singles hit all foes at 1.3x; 50% chance to restore a consumed Berry/seed each turn.',
+	burningcrown: 'Intimidate + Blazing Monarch + Levitate; all moves have 1.1x accuracy.',
+	unboundblaze: 'Dragon conversion, Magma Armor; all moves have 1.1x accuracy.',
+	frightfulwings: 'Water attacks receive at least 1.5x STAB without stacking.',
+	argentdevotion: 'Combines the listed abilities.',
+	lancepoint: 'Accuracy protection; drill moves gain +1 critical-hit stage and make no contact.',
+	longreach: 'Removes contact and raises critical-hit rate by one stage.',
+	lunarorbit:
+		'Reflects status moves; stronger secondary chances; healing priority; no indirect damage; sets Gravity.',
+	prismscale: November16BalanceDescriptions.prismscale.shortDesc,
+	anchoredbattery: '1.5x pulse/bullet power; cannot be forced to switch.',
+	heavyartillery:
+		'Unaware; double-power artillery breaks screens; idle turns become Loaded (+1 Def/SpD); attacks become Fired (-1 Def/SpD).',
+	bloomingsun: 'Combines the listed abilities.',
+	stormbell: 'Takes 0.8x damage from attacks; Summons rain on entry; move KOs raise its highest stat.',
+	requiem: November16BalanceDescriptions.requiem.shortDesc,
+	reapersgrip:
+		'Ignores opposing combat boosts; heals 1/16 HP; boosts all Dark moves; creates Haunted at half HP and on faint.',
+	moonlitwings: 'Fairy STAB.',
+	parentalbond: 'Attacks hit twice (second hit 80%); stronger contact moves; protects allies.',
+	royalarmament:
+		'Steel STAB; drill/horn moves have 1.5x power, or 2x and protection bypass on rocky fields.',
+	ironwill:
+		'20%/40% less attack damage; one survival roll; heals each turn; +1 accuracy; 1.5x tail power.',
+	breakwater: 'Water-field Speed boost; first qualifying physical Water hit clears own hazards.',
+	relentlesshunt: 'Moves <=60 BP gain +1 priority; boosted fields give 1.5x or 2x damage.',
+	solarrush: 'No sand damage; Double Speed in sun or Stage 4 Flower Garden.',
+	safeharbor: 'No hail damage; water-field healing; Cures status each turn in rain or water fields.',
+	seablessing: '1.5x Def/SpD; entry heals self/allies 1/4.',
+	schooling: 'Changes form with HP and water fields; its School form gains the listed components.',
+	seviischooling: 'Changes Wishiwashi to Sevii form; School: Hydra Bond + Self Repair + Mold Breaker.',
+	seasonalstride: 'Normal -> primary type 1.5x; sun Speed 2x; weather forms.',
+	voidcraft: November16BalanceDescriptions.voidcraft.shortDesc,
+	voidhex:
+		'Direct damaging hits trap surviving foes through the next turn; further hits refresh the trap.',
+	blademastery: 'At 1/4 max HP or less, slicing moves gain +1 priority.',
+	goldentalons: 'Combines the listed abilities.',
+	silkendecoy: 'Cocoon blocks a move, status and secondaries.',
+	cursedarmament:
+		'Curse becomes a 100 BP spread Ghost attack using the higher Attack or Sp. Atk; curses foes; heals 1/4 damage; half HP/faint sets Haunted Field.',
+	slowclamp: 'Combines the listed abilities.',
+	shieldsdown: 'Form changes at 1/2 HP.',
+	soulsiphon:
+		'Absorbs Fire; Fire/Ghost hits drain 1/3 damage, capped at 1/6 HP per turn, and block healing.',
+	malicewell:
+		'Contact may burn; surviving the first opposing damaging move each entry gives +1 Sp. Atk, even after Protect.',
+	soulcremation: 'Combines the listed abilities.',
 
-	"highnoon": "Accurate attacks; stronger same-type, pulse/bullet and Water moves; eligible moves hit twice.",
-	"forestsurge": "Sets Forest and Grassy Aura for 5 turns, or 8 with Amplifield Rock; 1.3x same-type power.",
-	"parasitism": "Above half: defensive protection; first KO triggers Resuscitation.",
-	"completeparasitism": "First KO triggers Resuscitation; 40% less if super effective.",
-	"venomheal": "Poison moves get 1.5x STAB.",
-	"resuscitation": "Revives Parasect as Parasite; healing and status recovery; no indirect/weather damage.",
-	"pendulumswing": "Moves cannot miss.",
-	"nightmarepulse": November16BalanceDescriptions.nightmarepulse.shortDesc,
-	"pulsewaste": "Once per battle, attempts to set 5-turn Swamp Field; uses a fixed moveset.",
-	"glacialmass": "Halves physical and Fire/Ice damage; hail immunity.",
-	"riftdancer": "Sun Speed boost; copies dances; stronger Grass moves; once-battle half-HP guard and growing Flower Garden.",
-	"royalsun": "Summons sun and gains fallen-ally effects up to the five-faint cap.",
-	"tremor": "Bug STAB; stronger allied sound moves; stronger Rock/Ground/Steel moves in sand fields.",
-	"verdantdrake": "Combines the listed abilities.",
-	"wrathshield": "Blocks bullet/pulse moves; entry Defense boost; end-turn healing; switching cures status.",
-	"shadowcurrent": "Changes type before attacks; boosts weak moves; scouts threats.",
-	"astralwitchcraft": "1.3x same-type power; No indirect damage; reflects status moves; field entry boosts.",
-	"blazingtempo": "+1 Speed after each full active turn; Same-type moves have 1.3x power; Kicks have 1.4x power; field defenses; reveals Illusions.",
-	"ragingcurrent": "Combines the listed abilities.",
-	"toxicbloom": "Verdant Monarch; all moves have 1.1x accuracy.",
-	"siegelauncher": November16BalanceDescriptions.siegelauncher.shortDesc,
-	"calderacore": "Nullifies the effects; Summons sun on entry; field defenses.",
-	"froststalker": "Combines the listed abilities.",
-	"perfectstriker": "1.4x kicks and 1.3x same-type power; moves by/against it always hit; changes type before moves.",
-	"strikersmomentum": "Stronger kicking and same-type moves; foe stat drops boost Attack; never misses; changes type; first KO boosts Speed.",
-	"nighthunt": "Combines the listed abilities.",
-	"blackfang": "Bites have 1.5x power; Prevents and cures sleep; Move KOs give +1 Attack.",
-	"fluffycraft": "Combines the listed abilities.",
-	"mightyjaw": "Biting moves gain +2 priority on first action.",
-	"supersweetsyrup": "On switch-in, lowers adjacent foes' evasiveness 1 stage; attackers are Embargoed for 5 turns.",
-	"railguncircuit": "Lightning Rod. Special Electric hits break Light Screen and Aurora Veil.",
-	"razorcurrent": "Summons rain on entry; Bites have 1.5x power; +1 Speed after each full active turn.",
-	"rainsovereign": "Eight-turn Rain; Electric/Water/Flying STAB; matching hits heal an ally once per turn.",
-	"toxicrenewal": "2x STAB; switching heals 1/3 HP; contact attacks may poison.",
-	"stormcircuit": "Combines the listed abilities.",
-	"ironmountain": "Combines the listed abilities.",
-	"woolyconductor": "Half contact damage, double Fire damage; ignores abilities; contact paralysis chance.",
-	"absolutezero": November16BalanceDescriptions.absolutezero.shortDesc,
-	"surgeconduit": "Creates Electric Terrain; absorbs Electric for +1 Sp. Atk; no recoil; 20%/40% less attack damage.",
-	"solartrap": "Automatic Stockpiles/releases; Poison drain; draining moves hurt their user.",
-	"pulsetriad": "5-turn Factory Field on entry.",
-	"razorreach": "All attacks non-contact; +1 accuracy on entry.",
-	"witheringtouch": "Poison HP hits on already-poisoned foes lower Attack once/turn.",
-	"vendetta": "Critical hits: +12 Attack; one roll per battle; immune to sandstorm and hail damage.",
-	"phantomfist": "Punches have 1.4x power; no weather damage; 40% less if super effective.",
-	"territorial": "Blocks Berries and forced switching; HP hits heal 1/16, +1 Defense once per turn; Intimidate gives +1 Attack.",
-	"lunardread": "Has their local field effects.",
-	"stillwaters": "Combines the listed abilities.",
-	"ragingbeast": "Ignores burn attack penalty; Moves ignore bypassable abilities.",
-	"scavenger": "Combines the listed abilities.",
-	"ultrainstinct": "Screen and timing boosts; field defenses.",
-	"duskdrive": "Combines the listed abilities.",
-	"burningego": November16BalanceDescriptions.burningego.shortDesc,
-	"waterbubble": "Doubles Water attacking stats; halves incoming Fire attacking stats.",
-	"stormsovereign": "Summons 8-turn Strong Winds; Flying priority; accuracy protection; moves never miss.",
-	"coldlogic": "Opponents cannot lower accuracy; Aftermath also triggers on noncontact KOs.",
-	"layeredcoat": "Doubles Defense; immune to powder effects, sandstorm and hail damage.",
-	"empress": "Blocks foe priority; resets and controls stat changes/screens; Fighting STAB; Fairy weakness protection. Allows holder self boosts and move costs.",
-	"imperialprincess": "Stronger kicks/Fighting moves; no sleep; 20% less attack damage; KOs boost Attack; Fairy weakness protection.",
-	"loyalguard": "Combines the listed abilities.",
-	"abysslure": "Absorbs Electric/Water for 1/4 HP and +1 Attack/Sp. Atk; accuracy protection and field healing.",
-	"bogbody": "Rain/field healing; Fire/Ice protection with Dry Skin's Fire penalty.",
-	"toxicsink": "Absorbs Poison moves for +1 Atk/SpA.",
-	"frostsiren": "Icy-field boost; takes 0.8x damage; Fire, sun and Desert hurt.",
-	"protectiveward": "Ignores wall conditions.",
-	"amethystglow": "Moves never miss; Normal moves become Ice; Ice/weather healing and protection; gains Ice typing.",
-	"crystalresonance": "Stronger Ice moves; Ice healing/protection; reflects status moves.",
-	"islandcurrent": "Double Speed in rain and water fields; Tailwind/Strong Winds raise Attack.",
-	"oceanicwings": "Cures status each turn in rain or water fields; Allies take 25% less attack damage.",
-	"ruinjaw": "Bites have 1.5x power.",
-	"triplethreat": "Combines the listed abilities.",
-	"strikerfrenzy": "1.4x kicking power; no sleep or Yawn; Fighting moves use 1.3x Attack.",
-	"venomveil": "Drain users take damage; can poison Steel/Poison foes; burn/weather protection and Aqua Ring.",
-	"rebornflower": "Boosts team healing; may cure allies each turn; protects Grass allies from status/stat drops; Florges transforms.",
-	"toxicspines": "Combines the listed abilities.",
-	"helios": "On entry, it summons harsh sunlight. Its moves ignore opposing Abilities.",
-	"corneredfang": "At half HP, the first biting move each entry gains +1 priority.",
-	"dunerunner": "Entering during sand clears its side's hazards once.",
-	"frostrunner": "Double Speed in hail, snow and icy fields.",
-	"bedrockclaw": "First Ground contact hit per entry breaks a screen.",
-	"rimeclaw": "First Ice contact hit per entry breaks a screen.",
-	"broodguard": "An ally dropping below half HP grants +1 Defense.",
-	"suncharm": "Summons sun; first Fire hit extends its sun; first inflicted burn each entry also curses the foe.",
-	"prismwings": "Resisted attacks deal double damage.",
-	"oneiricdust": "The first landed powder move each entry lowers Sp. Def.",
-	"pincercrush": "First Steel contact hit per entry lowers the foe’s Defense.",
-	"gemeye": "No indirect damage; reflects the first direct opposing status move each entry.",
-	"livingtangle": "Contact slows foes while opposing hits raise Defense and heal.",
-	"rootrenewal": "Switching out also cures one adjacent active ally’s major status.",
-	"fortunatewing": "First damaging critical hit each entry sets Safeguard and cures active allies’ confusion.",
-	"snowpack": "Immune to hail damage; no hail damage; Contact moves have 1.3x power.",
-	"stonewall": "When Sturdy saves it, sets one Spikes layer on the opposing side.",
-	"saltbastion": "When Sturdy saves it, sets 5-turn Safeguard for its side.",
-	"anchorbridge": November16BalanceDescriptions.anchorbridge.shortDesc,
-	"layeredshell": "The first special hit each entry deals 25% less damage.",
-	"fossilram": "Once per turn, recoil-move damage lowers the foe’s Speed.",
-	"rootediron": "Heals 1/16 HP on turns when it does not attack.",
-	"encorearia": "The first secondary effect each entry sets 5-turn Safeguard.",
-	"peppersting": "A Fire move primes the next Grass hit to lower Speed and Sp. Def.",
-	"sushitrick": "Entry heals adjacent allies 1/4 HP and clears confusion; alone, clears own confusion and negative accuracy.",
-	"mastercourse": "Water/Dragon HP hits charge an ally, or itself alone, after the move.",
-	"railsight": "Inner Focus; surviving a foe HP-damaging move once per entry powers the next Electric attack by 1.5x.",
-	"pollenengine": "Grass or powder hits heal it and its allies, more in sun.",
-	"titanpincer": "Crabhammer and physical Steel moves use Defense when higher than Attack.",
-	"tidaldominion": "Foes with lowered Speed cannot use priority against its side.",
-	"ironlash": "Tail hits raise Sp. Def once per turn.",
-	"gritgrappler": "While statused, damaging Fighting hits heal 1/16 HP once per turn.",
-	"dreadjaw": "A move KO lowers the next opposing entrant's Attack.",
-	"floehunter": "In hail, physical attacks deal 1.5x damage to Water-type foes.",
-	"lanceguard": "Blocking contact with Protect lowers the attacker’s Defense by 1.",
-	"herdshelter": "Adjacent allies are immune to opposing damaging sound moves.",
-	"tidalvoice": "1.3x sound, spares allies, first hit clears drops; Aria heals adjacent allies 1/8.",
-	"rechargerelay": "Volt Switch heals the incoming teammate by 1/8 HP.",
-	"hovercannon": "Above half HP, Electric attacks cannot miss or be redirected.",
-	"heatreservoir": "A boosted Armor Cannon avoids its own defensive drops.",
-	"mourningcoat": "Double Fire damage until a teammate has fainted.",
-	"gravewind": "Entering a fainted ally's slot summons sand for 3 turns.",
-	"dozinggiant": "While asleep, takes 25% less special damage and cannot be forced out; Sleep Talk excludes Rest.",
-	"quillreservoir": "After absorbing Water, its next landed Poison attack poisons the foe.",
-	"palmmastery": "Force Palm always paralyzes when it lands.",
-	"galvanicspirit": "Electric contact hits lower Sp. Def once per turn.",
-	"blastchamber": "Fire and Fighting hits make the other type's next attack never miss.",
-	"lastbrood": "Once per battle, crossing half HP creates a 1/8-HP Substitute.",
-	"silksights": "No foe accuracy drops; Electric moves bypass boosts on slowed foes.",
-	"livenet": "Its Sticky Web also chips grounded entrants with Electric damage.",
-	"barbharvest": "Restores its used Berry after three opposing contact attacks, once per battle.",
-	"currentcoil": "Coil also raises Sp. Atk.",
-	"blackviper": "Entry gives +1 accuracy; 1.5x tail power; first tail hit each entry badly poisons.",
-	"toxicserenity": "Dragon moves cannot miss while poisoned.",
-	"lockjaw": "Bites have 1.5x power.",
-	"rivershell": "Shell Smash keeps Defense but still lowers Sp. Def.",
-	"saltcrust": "While Defense is boosted, its held item cannot be removed.",
-	"beyondfear": "An opposing offensive boost grants a matching defensive boost once per entry.",
-	"stillwater": "Absorbs Water; absorbing it at full HP gives +1 Sp. Def once per turn.",
-	"quarrycannon": "Mega Launcher; damaging pulse/bullet moves become Physical (except Z/Max).",
-	"tundramarch": "Ground hits remove Spikes, Toxic Spikes, and Sticky Web.",
-	"undertow": "Water hits ground surviving foes.",
-	"ringmaster": "First Dark hit each entry Taunts the foe for 2 turns.",
-	"unyielding": "Inner Focus; opponents cannot force it to switch.",
-	"calculatedshot": "Water attacks gain +1 critical-hit stage and the highest normal damage roll.",
-	"falsebouquet": "First Flower Trick hit each entry attempts Leech Seed.",
-	"darkdominion": "Dark hits Heal Block surviving foes for 2 turns.",
-	"savageresolve": "Surviving a qualifying foe move while statused gives +1 Speed once per entry.",
-	"pulsefiltration": "Also absorbs Poison moves; transforms Underwater into Murkwater.",
-	"pulseeruption": "5-turn Super-Heated field on entry; no Skill Swap.",
-	"scrapbreaker": "Ignores abilities; Gigaton Hammer removes screens and grounds foes after HP damage.",
-	"toxicsignature": "Poison HP hits lay a first Toxic Spikes layer; ignores stages vs poisoned foes.",
-	"wickedweave": "Successful status moves ready a contact-hit Speed drop through the next turn.",
-	"vaultkeeper": "Protects this side's screens from opposing removal.",
-	"frozenfeast": "Ice HP hits lower Speed once; bites drain 25% against already-slowed foes.",
-	"cinderscales": "Combines the listed abilities.",
-	"sporeshroud": "Takes 25% less damage from contact attacks.",
-	"primevalhunt": "Final scheduled hit of 3+ hit moves critically hits.",
-	"rimebreaker": "Ice HP hits clear own Stealth Rock and one Spikes layer once per turn.",
-	"evaporate": "Ends ordinary rain; once per stay, ending rain or absorbing Water gives a special-hit veil.",
-	"shattercrust": "First opposing physical HP hit each stay deals half damage and adds Spikes.",
-	"gravehunger": "Ghost HP hits drain 25%; halves foe healing and takes prevented HP (combined cap 1/8 per turn).",
-	"primevalhunger": "Stockpile every 2 eligible turns; drain hits and new seeds block healing and lower a positive attacking stage.",
-	"dawnherald": "Summons sun; allies take 25% less attack damage.",
-	"transfixinggaze": "Opposing moves cannot pivot while it stays active.",
-	"freshplumage": "First Flying attack has 1.2x power; successful Roost restores the charge once per entry.",
-	"moonlithide": November16BalanceDescriptions.moonlithide.shortDesc,
-	"conquerorswill": "Kowtow Cleave breaks opposing screens.",
-	"nightwatch": "Once/entry, Disables a foe repeating its status move on consecutive turns.",
-	"fruitfulbough": "Consuming its own Berry heals active allies 1/8 HP once/turn, excluding itself.",
-	"soulanchor": "Its Anchor Shot tethers one trapped foe, draining 1/16 HP each turn.",
-	"guidinglight": "Successful Spotlight on an ally reduces its attack damage taken 20% this turn.",
-	"royalescort": "Once/entry, one successful Order weakens a foe, shields allies or heals allies.",
-	"liquidarsenal": "Water attacks use the target's lower Defense or Sp. Def without changing category.",
-	"knightsreprisal": "Blocking an attack with Spiky Shield grants the next damaging move +1 priority.",
-	"voidsanctum": "Aurora Veil blocks foe stat drops for its side; first exit under Veil extends it 1 turn, once per battle.",
-	"chargedtail": "Successful Nuzzle paralysis grants Charge for the next Electric attack.",
-	"eldritchremedy": "Eerie Spell cures one major status on self or an active ally once/turn.",
-	"infernaldominion": November16BalanceDescriptions.infernaldominion.shortDesc,
-	"hydraulicarmor": "Water Pulse and Hydro Pump use the higher boosted Defense or Sp. Atk, remaining Special.",
-	"hauntingpresence": "Hex also doubles against Taunt, Encore, Disable or Heal Block, without stacking.",
-	"slumberinggiant": "Combines the listed abilities.",
-	"oceanlullaby": "Sound hits heal self/allies 1/16 and clear confusion/accuracy drops once/turn.",
-	"shadowscreen": "Mat Block works after turn one but uses the normal consecutive-protection failure counter.",
-	"voidpromise": November16BalanceDescriptions.voidpromise.shortDesc,
-	"voiddrift": "Heals 1/16 maximum HP each turn during sandstorm.",
-	"voidguile": "Successful Mystical Fire also applies two-turn Embargo.",
-	"voidwrath": "First successful Sand Tomb bind each entry adds one Spikes layer to the foe's side.",
-	"creepingbloom": "First Poison attack to damage a foe each entry also attempts poison on all foes it damages.",
-	"dreadwings": "Weakens foes on entry; Dark Pulse damage applies Torment to surviving foes.",
-	"causticchamber": "Shell Side Arm ignores positive defensive stages without changing its category selection.",
-	"demolitiontrunk": "First Heavy Slam or Heat Crash damage each entry clears the foe side's screens after damage.",
-	"deepresonance": "Psychic Noise damage lowers surviving foes' Attack once per target per move.",
-	"siegemagnet": "First Electric attack damage each entry applies two-turn Heal Block.",
-	"patientmarksman": "Successful Focus Energy clears its confusion and negative accuracy.",
-	"cradleward": "Setting Trick Room also sets five-turn Safeguard on its side.",
-	"sunreserve": "Absorbing a Fire attack also heals 1/8 HP once per turn.",
-	"silentreprisal": "Combines the listed abilities.",
-	"dreamrefuge": "First successful Moonlight each entry cures the statused active ally with lowest HP percentage.",
-	"closedcircuit": "Heals 1/16 HP after Gear Grind if both hits damage the target.",
-	"pridecall": "Combines the listed abilities.",
-	"hydroelectric": "Damaging Water moves also heal 1/8 HP once per turn.",
-	"solarstride": "In effective sun, Electric attacks break opposing screens before damage.",
-	"frillflash": "Its Electrify conversion Disables the opposing move after execution through next turn.",
-	"stokebelly": "Eating a Berry clears its negative Attack stages.",
-	"rousingfeast": "Gluttony + Cud Chew; eating a Berry clears negative Attack and Speed.",
-	"invisiblewall": "Its first Wide Guard block each entry sets five-turn Safeguard.",
-	"sentinelfist": "Its first Wide Guard block each entry heals 1/8 maximum HP.",
-	"pursuitwake": "Damaging Aqua Jet clears its negative Speed stages.",
-	"gentlegiant": "Once per entry, +1 Sp. Atk when an adjacent ally survives a foe hit crossing half HP.",
-	"ringcraft": "First Flying Press damage each entry attempts two-turn Taunt after the hit.",
-	"constrictingheat": "Damaging Fire Lash binds one foe for two turns. Switching or Dynamax/Gigantamax ends it.",
-	"voidreprisal": "Surviving foe hits or burn damage charges a punch to ignore positive defensive stages.",
-	"wreckingcrew": "Damaging punches break opposing screens and custom walls before damage.",
-	"evergreen": "Combines the listed abilities.",
-	"battlegrip": "Move KOs against opponents also clear its confusion and negative accuracy.",
-	"scentscout": "Once per entry, reveals the first incoming opponent's item while already active.",
-	"surefoot": "Ground moves have 1.3x power while Defense is raised.",
-	"baitedbloom": "Combines the listed abilities.",
-	"guidinggallop": "Successful status moves directly targeting an ally clear that ally's negative Speed.",
-	"carrionwatch": "Combines the listed abilities.",
-	"scaleshelter": "Blocks powder moves and sandstorm/hail damage.",
-	"stagesweep": "Removing hazards with Rapid Spin clears its negative Defense and Sp. Def.",
-	"icebreaker": "Ice Hammer breaks Reflect before damage and keeps its Speed drop.",
-	"cactuschorus": "Successful Helping Hand clears the recipient ally's confusion.",
-	"crushingvenom": "First damaging bite each entry applies two-turn Heal Block after damage.",
-	"crosswire": "A damaging punch charges the next special Electric attack to ignore positive Sp. Def.",
-	"deepchill": "Oblivious; surviving a foe's physical HP hit lowers its Speed once per turn.",
-	"tunnelclearance": "Damaging Rapid Spin removes opposing Reflect and Light Screen after damage.",
-	"crystalbastion": "First own Wide Guard block each entry clears negative Defense and Sp. Def.",
-	"buriedcoil": "First successful Coil each entry clears confusion and negative accuracy.",
-	"staticreserve": "Its first successful Static paralysis each entry grants Charge.",
-	"lockinggrip": "First damaging Bug attack each entry applies Torment after damage.",
-	"garlandgift": "First successful Floral Healing each entry clears recipient confusion and negative accuracy.",
-	"riotstance": "First damaging Obstruct block each entry grants +1 priority to its next damaging Dark move.",
-	"drumguard": "First successful Drum Beating Speed drop each entry clears own negative Defense and Sp. Def.",
-	"measuredcounsel": "Successful Future Sight clears own confusion and negative Sp. Atk.",
-	"raincourier": "Once per entry, successfully setting Tailwind clears own-side entry hazards.",
-	"disorientingmind": "First damaging Psychic hit each entry applies Torment after damage.",
-	"wisecounsel": "First successful ally Instruct each entry cures confusion before the repeated action.",
-	"mindcurrent": "First damaging Psychic move each entry grants Charge after the move completes.",
-	"voidcrossing": "Ghost hits or Power Gem curse foes: their next attack deals 20% less damage."
+	highnoon:
+		'Accurate attacks; stronger same-type, pulse/bullet and Water moves; eligible moves hit twice.',
+	forestsurge:
+		'Sets Forest and Grassy Aura for 5 turns, or 8 with Amplifield Rock; 1.3x same-type power.',
+	parasitism: 'Above half: defensive protection; first KO triggers Resuscitation.',
+	completeparasitism: 'First KO triggers Resuscitation; 40% less if super effective.',
+	venomheal: 'Poison moves get 1.5x STAB.',
+	resuscitation:
+		'Revives Parasect as Parasite; healing and status recovery; no indirect/weather damage.',
+	pendulumswing: 'Moves cannot miss.',
+	nightmarepulse: November16BalanceDescriptions.nightmarepulse.shortDesc,
+	pulsewaste: 'Once per battle, attempts to set 5-turn Swamp Field; uses a fixed moveset.',
+	glacialmass: 'Halves physical and Fire/Ice damage; hail immunity.',
+	riftdancer:
+		'Sun Speed boost; copies dances; stronger Grass moves; once-battle half-HP guard and growing Flower Garden.',
+	royalsun: 'Summons sun and gains fallen-ally effects up to the five-faint cap.',
+	tremor: 'Bug STAB; stronger allied sound moves; stronger Rock/Ground/Steel moves in sand fields.',
+	verdantdrake: 'Combines the listed abilities.',
+	wrathshield:
+		'Blocks bullet/pulse moves; entry Defense boost; end-turn healing; switching cures status.',
+	shadowcurrent: 'Changes type before attacks; boosts weak moves; scouts threats.',
+	astralwitchcraft:
+		'1.3x same-type power; No indirect damage; reflects status moves; field entry boosts.',
+	blazingtempo:
+		'+1 Speed after each full active turn; Same-type moves have 1.3x power; Kicks have 1.4x power; field defenses; reveals Illusions.',
+	ragingcurrent: 'Combines the listed abilities.',
+	toxicbloom: 'Verdant Monarch; all moves have 1.1x accuracy.',
+	siegelauncher: November16BalanceDescriptions.siegelauncher.shortDesc,
+	calderacore: 'Nullifies the effects; Summons sun on entry; field defenses.',
+	froststalker: 'Combines the listed abilities.',
+	perfectstriker:
+		'1.4x kicks and 1.3x same-type power; moves by/against it always hit; changes type before moves.',
+	strikersmomentum:
+		'Stronger kicking and same-type moves; foe stat drops boost Attack; never misses; changes type; first KO boosts Speed.',
+	nighthunt: 'Combines the listed abilities.',
+	blackfang: 'Bites have 1.5x power; Prevents and cures sleep; Move KOs give +1 Attack.',
+	fluffycraft: 'Combines the listed abilities.',
+	mightyjaw: 'Biting moves gain +2 priority on first action.',
+	supersweetsyrup:
+		"On switch-in, lowers adjacent foes' evasiveness 1 stage; attackers are Embargoed for 5 turns.",
+	railguncircuit: 'Lightning Rod. Special Electric hits break Light Screen and Aurora Veil.',
+	razorcurrent: 'Summons rain on entry; Bites have 1.5x power; +1 Speed after each full active turn.',
+	rainsovereign:
+		'Eight-turn Rain; Electric/Water/Flying STAB; matching hits heal an ally once per turn.',
+	toxicrenewal: '2x STAB; switching heals 1/3 HP; contact attacks may poison.',
+	stormcircuit: 'Combines the listed abilities.',
+	ironmountain: 'Combines the listed abilities.',
+	woolyconductor:
+		'Half contact damage, double Fire damage; ignores abilities; contact paralysis chance.',
+	absolutezero: November16BalanceDescriptions.absolutezero.shortDesc,
+	surgeconduit:
+		'Creates Electric Terrain; absorbs Electric for +1 Sp. Atk; no recoil; 20%/40% less attack damage.',
+	solartrap: 'Automatic Stockpiles/releases; Poison drain; draining moves hurt their user.',
+	pulsetriad: '5-turn Factory Field on entry.',
+	razorreach: 'All attacks non-contact; +1 accuracy on entry.',
+	witheringtouch: 'Poison HP hits on already-poisoned foes lower Attack once/turn.',
+	vendetta: 'Critical hits: +12 Attack; one roll per battle; immune to sandstorm and hail damage.',
+	phantomfist: 'Punches have 1.4x power; no weather damage; 40% less if super effective.',
+	territorial:
+		'Blocks Berries and forced switching; HP hits heal 1/16, +1 Defense once per turn; Intimidate gives +1 Attack.',
+	lunardread: 'Has their local field effects.',
+	stillwaters: 'Combines the listed abilities.',
+	ragingbeast: 'Ignores burn attack penalty; Moves ignore bypassable abilities.',
+	scavenger: 'Combines the listed abilities.',
+	ultrainstinct: 'Screen and timing boosts; field defenses.',
+	duskdrive: 'Combines the listed abilities.',
+	burningego: November16BalanceDescriptions.burningego.shortDesc,
+	waterbubble: 'Doubles Water attacking stats; halves incoming Fire attacking stats.',
+	stormsovereign:
+		'Summons 8-turn Strong Winds; Flying priority; accuracy protection; moves never miss.',
+	coldlogic: 'Opponents cannot lower accuracy; Aftermath also triggers on noncontact KOs.',
+	layeredcoat: 'Doubles Defense; immune to powder effects, sandstorm and hail damage.',
+	empress:
+		'Blocks foe priority; resets and controls stat changes/screens; Fighting STAB; Fairy weakness protection. Allows holder self boosts and move costs.',
+	imperialprincess:
+		'Stronger kicks/Fighting moves; no sleep; 20% less attack damage; KOs boost Attack; Fairy weakness protection.',
+	loyalguard: 'Combines the listed abilities.',
+	abysslure:
+		'Absorbs Electric/Water for 1/4 HP and +1 Attack/Sp. Atk; accuracy protection and field healing.',
+	bogbody: "Rain/field healing; Fire/Ice protection with Dry Skin's Fire penalty.",
+	toxicsink: 'Absorbs Poison moves for +1 Atk/SpA.',
+	frostsiren: 'Icy-field boost; takes 0.8x damage; Fire, sun and Desert hurt.',
+	protectiveward: 'Ignores wall conditions.',
+	amethystglow:
+		'Moves never miss; Normal moves become Ice; Ice/weather healing and protection; gains Ice typing.',
+	crystalresonance: 'Stronger Ice moves; Ice healing/protection; reflects status moves.',
+	islandcurrent: 'Double Speed in rain and water fields; Tailwind/Strong Winds raise Attack.',
+	oceanicwings: 'Cures status each turn in rain or water fields; Allies take 25% less attack damage.',
+	ruinjaw: 'Bites have 1.5x power.',
+	triplethreat: 'Combines the listed abilities.',
+	strikerfrenzy: '1.4x kicking power; no sleep or Yawn; Fighting moves use 1.3x Attack.',
+	venomveil:
+		'Drain users take damage; can poison Steel/Poison foes; burn/weather protection and Aqua Ring.',
+	rebornflower:
+		'Boosts team healing; may cure allies each turn; protects Grass allies from status/stat drops; Florges transforms.',
+	toxicspines: 'Combines the listed abilities.',
+	helios: 'On entry, it summons harsh sunlight. Its moves ignore opposing Abilities.',
+	corneredfang: 'At half HP, the first biting move each entry gains +1 priority.',
+	dunerunner: "Entering during sand clears its side's hazards once.",
+	frostrunner: 'Double Speed in hail, snow and icy fields.',
+	bedrockclaw: 'First Ground contact hit per entry breaks a screen.',
+	rimeclaw: 'First Ice contact hit per entry breaks a screen.',
+	broodguard: 'An ally dropping below half HP grants +1 Defense.',
+	suncharm:
+		'Summons sun; first Fire hit extends its sun; first inflicted burn each entry also curses the foe.',
+	prismwings: 'Resisted attacks deal double damage.',
+	oneiricdust: 'The first landed powder move each entry lowers Sp. Def.',
+	pincercrush: 'First Steel contact hit per entry lowers the foe’s Defense.',
+	gemeye: 'No indirect damage; reflects the first direct opposing status move each entry.',
+	livingtangle: 'Contact slows foes while opposing hits raise Defense and heal.',
+	rootrenewal: 'Switching out also cures one adjacent active ally’s major status.',
+	fortunatewing:
+		'First damaging critical hit each entry sets Safeguard and cures active allies’ confusion.',
+	snowpack: 'Immune to hail damage; no hail damage; Contact moves have 1.3x power.',
+	stonewall: 'When Sturdy saves it, sets one Spikes layer on the opposing side.',
+	saltbastion: 'When Sturdy saves it, sets 5-turn Safeguard for its side.',
+	anchorbridge: November16BalanceDescriptions.anchorbridge.shortDesc,
+	layeredshell: 'The first special hit each entry deals 25% less damage.',
+	fossilram: 'Once per turn, recoil-move damage lowers the foe’s Speed.',
+	rootediron: 'Heals 1/16 HP on turns when it does not attack.',
+	encorearia: 'The first secondary effect each entry sets 5-turn Safeguard.',
+	peppersting: 'A Fire move primes the next Grass hit to lower Speed and Sp. Def.',
+	sushitrick:
+		'Entry heals adjacent allies 1/4 HP and clears confusion; alone, clears own confusion and negative accuracy.',
+	mastercourse: 'Water/Dragon HP hits charge an ally, or itself alone, after the move.',
+	railsight:
+		'Inner Focus; surviving a foe HP-damaging move once per entry powers the next Electric attack by 1.5x.',
+	pollenengine: 'Grass or powder hits heal it and its allies, more in sun.',
+	titanpincer: 'Crabhammer and physical Steel moves use Defense when higher than Attack.',
+	tidaldominion: 'Foes with lowered Speed cannot use priority against its side.',
+	ironlash: 'Tail hits raise Sp. Def once per turn.',
+	gritgrappler: 'While statused, damaging Fighting hits heal 1/16 HP once per turn.',
+	dreadjaw: "A move KO lowers the next opposing entrant's Attack.",
+	floehunter: 'In hail, physical attacks deal 1.5x damage to Water-type foes.',
+	lanceguard: 'Blocking contact with Protect lowers the attacker’s Defense by 1.',
+	herdshelter: 'Adjacent allies are immune to opposing damaging sound moves.',
+	tidalvoice: '1.3x sound, spares allies, first hit clears drops; Aria heals adjacent allies 1/8.',
+	rechargerelay: 'Volt Switch heals the incoming teammate by 1/8 HP.',
+	hovercannon: 'Above half HP, Electric attacks cannot miss or be redirected.',
+	heatreservoir: 'A boosted Armor Cannon avoids its own defensive drops.',
+	mourningcoat: 'Double Fire damage until a teammate has fainted.',
+	gravewind: "Entering a fainted ally's slot summons sand for 3 turns.",
+	dozinggiant:
+		'While asleep, takes 25% less special damage and cannot be forced out; Sleep Talk excludes Rest.',
+	quillreservoir: 'After absorbing Water, its next landed Poison attack poisons the foe.',
+	palmmastery: 'Force Palm always paralyzes when it lands.',
+	galvanicspirit: 'Electric contact hits lower Sp. Def once per turn.',
+	blastchamber: "Fire and Fighting hits make the other type's next attack never miss.",
+	lastbrood: 'Once per battle, crossing half HP creates a 1/8-HP Substitute.',
+	silksights: 'No foe accuracy drops; Electric moves bypass boosts on slowed foes.',
+	livenet: 'Its Sticky Web also chips grounded entrants with Electric damage.',
+	barbharvest: 'Restores its used Berry after three opposing contact attacks, once per battle.',
+	currentcoil: 'Coil also raises Sp. Atk.',
+	blackviper: 'Entry gives +1 accuracy; 1.5x tail power; first tail hit each entry badly poisons.',
+	toxicserenity: 'Dragon moves cannot miss while poisoned.',
+	lockjaw: 'Bites have 1.5x power.',
+	rivershell: 'Shell Smash keeps Defense but still lowers Sp. Def.',
+	saltcrust: 'While Defense is boosted, its held item cannot be removed.',
+	beyondfear: 'An opposing offensive boost grants a matching defensive boost once per entry.',
+	stillwater: 'Absorbs Water; absorbing it at full HP gives +1 Sp. Def once per turn.',
+	quarrycannon: 'Mega Launcher; damaging pulse/bullet moves become Physical (except Z/Max).',
+	tundramarch: 'Ground hits remove Spikes, Toxic Spikes, and Sticky Web.',
+	undertow: 'Water hits ground surviving foes.',
+	ringmaster: 'First Dark hit each entry Taunts the foe for 2 turns.',
+	unyielding: 'Inner Focus; opponents cannot force it to switch.',
+	calculatedshot: 'Water attacks gain +1 critical-hit stage and the highest normal damage roll.',
+	falsebouquet: 'First Flower Trick hit each entry attempts Leech Seed.',
+	darkdominion: 'Dark hits Heal Block surviving foes for 2 turns.',
+	savageresolve: 'Surviving a qualifying foe move while statused gives +1 Speed once per entry.',
+	pulsefiltration: 'Also absorbs Poison moves; transforms Underwater into Murkwater.',
+	pulseeruption: '5-turn Super-Heated field on entry; no Skill Swap.',
+	scrapbreaker: 'Ignores abilities; Gigaton Hammer removes screens and grounds foes after HP damage.',
+	toxicsignature: 'Poison HP hits lay a first Toxic Spikes layer; ignores stages vs poisoned foes.',
+	wickedweave: 'Successful status moves ready a contact-hit Speed drop through the next turn.',
+	vaultkeeper: "Protects this side's screens from opposing removal.",
+	frozenfeast: 'Ice HP hits lower Speed once; bites drain 25% against already-slowed foes.',
+	cinderscales: 'Combines the listed abilities.',
+	sporeshroud: 'Takes 25% less damage from contact attacks.',
+	primevalhunt: 'Final scheduled hit of 3+ hit moves critically hits.',
+	rimebreaker: 'Ice HP hits clear own Stealth Rock and one Spikes layer once per turn.',
+	evaporate:
+		'Ends ordinary rain; once per stay, ending rain or absorbing Water gives a special-hit veil.',
+	shattercrust: 'First opposing physical HP hit each stay deals half damage and adds Spikes.',
+	gravehunger:
+		'Ghost HP hits drain 25%; halves foe healing and takes prevented HP (combined cap 1/8 per turn).',
+	primevalhunger:
+		'Stockpile every 2 eligible turns; drain hits and new seeds block healing and lower a positive attacking stage.',
+	dawnherald: 'Summons sun; allies take 25% less attack damage.',
+	transfixinggaze: 'Opposing moves cannot pivot while it stays active.',
+	freshplumage:
+		'First Flying attack has 1.2x power; successful Roost restores the charge once per entry.',
+	moonlithide: November16BalanceDescriptions.moonlithide.shortDesc,
+	conquerorswill: 'Kowtow Cleave breaks opposing screens.',
+	nightwatch: 'Once/entry, Disables a foe repeating its status move on consecutive turns.',
+	fruitfulbough: 'Consuming its own Berry heals active allies 1/8 HP once/turn, excluding itself.',
+	soulanchor: 'Its Anchor Shot tethers one trapped foe, draining 1/16 HP each turn.',
+	guidinglight: 'Successful Spotlight on an ally reduces its attack damage taken 20% this turn.',
+	royalescort: 'Once/entry, one successful Order weakens a foe, shields allies or heals allies.',
+	liquidarsenal: "Water attacks use the target's lower Defense or Sp. Def without changing category.",
+	knightsreprisal: 'Blocking an attack with Spiky Shield grants the next damaging move +1 priority.',
+	voidsanctum:
+		'Aurora Veil blocks foe stat drops for its side; first exit under Veil extends it 1 turn, once per battle.',
+	chargedtail: 'Successful Nuzzle paralysis grants Charge for the next Electric attack.',
+	eldritchremedy: 'Eerie Spell cures one major status on self or an active ally once/turn.',
+	infernaldominion: November16BalanceDescriptions.infernaldominion.shortDesc,
+	hydraulicarmor:
+		'Water Pulse and Hydro Pump use the higher boosted Defense or Sp. Atk, remaining Special.',
+	hauntingpresence: 'Hex also doubles against Taunt, Encore, Disable or Heal Block, without stacking.',
+	slumberinggiant: 'Combines the listed abilities.',
+	oceanlullaby: 'Sound hits heal self/allies 1/16 and clear confusion/accuracy drops once/turn.',
+	shadowscreen:
+		'Mat Block works after turn one but uses the normal consecutive-protection failure counter.',
+	voidpromise: November16BalanceDescriptions.voidpromise.shortDesc,
+	voiddrift: 'Heals 1/16 maximum HP each turn during sandstorm.',
+	voidguile: 'Successful Mystical Fire also applies two-turn Embargo.',
+	voidwrath: "First successful Sand Tomb bind each entry adds one Spikes layer to the foe's side.",
+	creepingbloom:
+		'First Poison attack to damage a foe each entry also attempts poison on all foes it damages.',
+	dreadwings: 'Weakens foes on entry; Dark Pulse damage applies Torment to surviving foes.',
+	causticchamber:
+		'Shell Side Arm ignores positive defensive stages without changing its category selection.',
+	demolitiontrunk:
+		"First Heavy Slam or Heat Crash damage each entry clears the foe side's screens after damage.",
+	deepresonance: "Psychic Noise damage lowers surviving foes' Attack once per target per move.",
+	siegemagnet: 'First Electric attack damage each entry applies two-turn Heal Block.',
+	patientmarksman: 'Successful Focus Energy clears its confusion and negative accuracy.',
+	cradleward: 'Setting Trick Room also sets five-turn Safeguard on its side.',
+	sunreserve: 'Absorbing a Fire attack also heals 1/8 HP once per turn.',
+	silentreprisal: 'Combines the listed abilities.',
+	dreamrefuge:
+		'First successful Moonlight each entry cures the statused active ally with lowest HP percentage.',
+	closedcircuit: 'Heals 1/16 HP after Gear Grind if both hits damage the target.',
+	pridecall: 'Combines the listed abilities.',
+	hydroelectric: 'Damaging Water moves also heal 1/8 HP once per turn.',
+	solarstride: 'In effective sun, Electric attacks break opposing screens before damage.',
+	frillflash: 'Its Electrify conversion Disables the opposing move after execution through next turn.',
+	stokebelly: 'Eating a Berry clears its negative Attack stages.',
+	rousingfeast: 'Gluttony + Cud Chew; eating a Berry clears negative Attack and Speed.',
+	invisiblewall: 'Its first Wide Guard block each entry sets five-turn Safeguard.',
+	sentinelfist: 'Its first Wide Guard block each entry heals 1/8 maximum HP.',
+	pursuitwake: 'Damaging Aqua Jet clears its negative Speed stages.',
+	gentlegiant: 'Once per entry, +1 Sp. Atk when an adjacent ally survives a foe hit crossing half HP.',
+	ringcraft: 'First Flying Press damage each entry attempts two-turn Taunt after the hit.',
+	constrictingheat:
+		'Damaging Fire Lash binds one foe for two turns. Switching or Dynamax/Gigantamax ends it.',
+	voidreprisal:
+		'Surviving foe hits or burn damage charges a punch to ignore positive defensive stages.',
+	wreckingcrew: 'Damaging punches break opposing screens and custom walls before damage.',
+	evergreen: 'Combines the listed abilities.',
+	battlegrip: 'Move KOs against opponents also clear its confusion and negative accuracy.',
+	scentscout: "Once per entry, reveals the first incoming opponent's item while already active.",
+	surefoot: 'Ground moves have 1.3x power while Defense is raised.',
+	baitedbloom: 'Combines the listed abilities.',
+	guidinggallop:
+		"Successful status moves directly targeting an ally clear that ally's negative Speed.",
+	carrionwatch: 'Combines the listed abilities.',
+	scaleshelter: 'Blocks powder moves and sandstorm/hail damage.',
+	stagesweep: 'Removing hazards with Rapid Spin clears its negative Defense and Sp. Def.',
+	icebreaker: 'Ice Hammer breaks Reflect before damage and keeps its Speed drop.',
+	cactuschorus: "Successful Helping Hand clears the recipient ally's confusion.",
+	crushingvenom: 'First damaging bite each entry applies two-turn Heal Block after damage.',
+	crosswire: 'A damaging punch charges the next special Electric attack to ignore positive Sp. Def.',
+	deepchill: "Oblivious; surviving a foe's physical HP hit lowers its Speed once per turn.",
+	tunnelclearance: 'Damaging Rapid Spin removes opposing Reflect and Light Screen after damage.',
+	crystalbastion: 'First own Wide Guard block each entry clears negative Defense and Sp. Def.',
+	buriedcoil: 'First successful Coil each entry clears confusion and negative accuracy.',
+	staticreserve: 'Its first successful Static paralysis each entry grants Charge.',
+	lockinggrip: 'First damaging Bug attack each entry applies Torment after damage.',
+	garlandgift:
+		'First successful Floral Healing each entry clears recipient confusion and negative accuracy.',
+	riotstance:
+		'First damaging Obstruct block each entry grants +1 priority to its next damaging Dark move.',
+	drumguard:
+		'First successful Drum Beating Speed drop each entry clears own negative Defense and Sp. Def.',
+	measuredcounsel: 'Successful Future Sight clears own confusion and negative Sp. Atk.',
+	raincourier: 'Once per entry, successfully setting Tailwind clears own-side entry hazards.',
+	disorientingmind: 'First damaging Psychic hit each entry applies Torment after damage.',
+	wisecounsel: 'First successful ally Instruct each entry cures confusion before the repeated action.',
+	mindcurrent: 'First damaging Psychic move each entry grants Charge after the move completes.',
+	voidcrossing: 'Ghost hits or Power Gem curse foes: their next attack deals 20% less damage.',
 };
 
-AbilityDisplaySummaries.voiddrift = "On New World, its special Ground moves ignore lowered Sp. Atk while airborne.";
+AbilityDisplaySummaries.voiddrift =
+	'On New World, its special Ground moves ignore lowered Sp. Atk while airborne.';
 
-AbilityDisplaySummaries.voidwrath = "Outrage lasts one turn and does not cause confusion.";
+AbilityDisplaySummaries.voidwrath = 'Outrage lasts one turn and does not cause confusion.';
 
-AbilityDisplaySummaries.voidguile = "Combines the listed abilities.";
+AbilityDisplaySummaries.voidguile = 'Combines the listed abilities.';
 
 Object.assign(AbilityDisplaySummaries, {
-	"toxicbloom": "Verdant Monarch; all moves have 1.1x accuracy.",
-	"ancientbloom": "Verdant Monarch + Friend Guard; field bonuses; all moves have 1.1x accuracy.",
-	"bloomingsun": "Combines the listed abilities.",
-	"verdantdrake": "Combines the listed abilities.",
-	"primalego": November16BalanceDescriptions.primalego.shortDesc,
-	"terraresolve": November16BalanceDescriptions.terraresolve.shortDesc,
-	"queensguard": "Combines the listed abilities.",
-	"wrathshield": "Blocks bullet/pulse moves; entry Defense boost; end-turn healing; switching cures status.",
-	"forestsurge": "Sets Forest and Grassy Aura for 5 turns, or 8 with Amplifield Rock.",
-	"atrocity": "Blazing Monarch + Fire Ward + Tough Claws; all moves have 1.1x accuracy.",
-	"sunsovereign": "Eight-turn sun + Blazing Monarch; all moves have 1.1x accuracy.",
-	"burningcrown": "Intimidate + Blazing Monarch + Levitate; all moves have 1.1x accuracy.",
+	toxicbloom: 'Verdant Monarch; all moves have 1.1x accuracy.',
+	ancientbloom: 'Verdant Monarch + Friend Guard; field bonuses; all moves have 1.1x accuracy.',
+	bloomingsun: 'Combines the listed abilities.',
+	verdantdrake: 'Combines the listed abilities.',
+	primalego: November16BalanceDescriptions.primalego.shortDesc,
+	terraresolve: November16BalanceDescriptions.terraresolve.shortDesc,
+	queensguard: 'Combines the listed abilities.',
+	wrathshield:
+		'Blocks bullet/pulse moves; entry Defense boost; end-turn healing; switching cures status.',
+	forestsurge: 'Sets Forest and Grassy Aura for 5 turns, or 8 with Amplifield Rock.',
+	atrocity: 'Blazing Monarch + Fire Ward + Tough Claws; all moves have 1.1x accuracy.',
+	sunsovereign: 'Eight-turn sun + Blazing Monarch; all moves have 1.1x accuracy.',
+	burningcrown: 'Intimidate + Blazing Monarch + Levitate; all moves have 1.1x accuracy.',
 
-	"blazingtempo": "+1 Speed after each full active turn; kicks have 1.4x power; field defenses; reveals Illusions.",
-	"burningspirit": "Combines the listed abilities.",
-	"burningego": November16BalanceDescriptions.burningego.shortDesc,
-	"astralwitchcraft": "No indirect damage; reflects status moves; field entry boosts.",
-	"strikersmomentum": "Stronger kicking moves; foe stat drops boost Attack; never misses; changes type; first KO boosts Speed.",
-	"perfectstriker": "1.4x kicks; moves by/against it always hit; changes type before moves.",
-	"siegelauncher": November16BalanceDescriptions.siegelauncher.shortDesc,
-	"fortressshell": November16BalanceDescriptions.fortressshell.shortDesc,
-	"draconicforce": "Combines the listed abilities.",
-	"tidaljaw": November16BalanceDescriptions.tidaljaw.shortDesc,
-	"ragingcurrent": "Combines the listed abilities.",
-	"emperorsresolve": "Combines the listed abilities.",
-	"shadowbond": "Water Shuriken hits 3 times at 30 power and always critically hits.",
-	"shadowcurrent": "Changes type before attacks; boosts weak moves; scouts threats.",
-	"highnoon": "Accurate attacks; stronger pulse/bullet and Water moves; eligible moves hit twice.",
-	"titanpincer": "Crabhammer and physical Steel moves use Defense when higher than Attack.",
-	"lockinggrip": "First damaging Bug attack each entry applies Torment after damage.",
-	"cruelshell": "Combines the listed abilities.",
-	"scaleshelter": "Blocks powder moves and sandstorm/hail damage.",
-	"lancepoint": "Drill moves gain +1 critical-hit stage and make no contact.",
-	"nightwatch": "Once/entry, Disables a foe repeating its status move on consecutive turns.",
-	"royalescort": "Once/entry, one successful Order weakens a foe, shields allies or heals allies.",
-	"templechime": "Move KOs boost highest stat; once per entry, Heal Bell curing status clears negative Sp. Def.",
-	"voiddrift": "On New World, its special Ground moves ignore lowered Sp. Atk while airborne.",
-	"solaridol": "Fire power 1.5x; Attack 1.5x in sun; resists Grass.",
-	"lunaridol": "Hail-immune; 1.5x Ice power; 1.5x Sp. Atk in hail/snow."
+	blazingtempo:
+		'+1 Speed after each full active turn; kicks have 1.4x power; field defenses; reveals Illusions.',
+	burningspirit: 'Combines the listed abilities.',
+	burningego: November16BalanceDescriptions.burningego.shortDesc,
+	astralwitchcraft: 'No indirect damage; reflects status moves; field entry boosts.',
+	strikersmomentum:
+		'Stronger kicking moves; foe stat drops boost Attack; never misses; changes type; first KO boosts Speed.',
+	perfectstriker: '1.4x kicks; moves by/against it always hit; changes type before moves.',
+	siegelauncher: November16BalanceDescriptions.siegelauncher.shortDesc,
+	fortressshell: November16BalanceDescriptions.fortressshell.shortDesc,
+	draconicforce: 'Combines the listed abilities.',
+	tidaljaw: November16BalanceDescriptions.tidaljaw.shortDesc,
+	ragingcurrent: 'Combines the listed abilities.',
+	emperorsresolve: 'Combines the listed abilities.',
+	shadowbond: 'Water Shuriken hits 3 times at 30 power and always critically hits.',
+	shadowcurrent: 'Changes type before attacks; boosts weak moves; scouts threats.',
+	highnoon: 'Accurate attacks; stronger pulse/bullet and Water moves; eligible moves hit twice.',
+	titanpincer: 'Crabhammer and physical Steel moves use Defense when higher than Attack.',
+	lockinggrip: 'First damaging Bug attack each entry applies Torment after damage.',
+	cruelshell: 'Combines the listed abilities.',
+	scaleshelter: 'Blocks powder moves and sandstorm/hail damage.',
+	lancepoint: 'Drill moves gain +1 critical-hit stage and make no contact.',
+	nightwatch: 'Once/entry, Disables a foe repeating its status move on consecutive turns.',
+	royalescort: 'Once/entry, one successful Order weakens a foe, shields allies or heals allies.',
+	templechime:
+		'Move KOs boost highest stat; once per entry, Heal Bell curing status clears negative Sp. Def.',
+	voiddrift: 'On New World, its special Ground moves ignore lowered Sp. Atk while airborne.',
+	solaridol: 'Fire power 1.5x; Attack 1.5x in sun; resists Grass.',
+	lunaridol: 'Hail-immune; 1.5x Ice power; 1.5x Sp. Atk in hail/snow.',
 });
 
-Object.assign(AbilityDisplaySummaries, {"gentlescales":"Pollen Puff healing also cures an ally's major status once per turn.","hivecourier":"Successful Bug pivot clears hazards; replacement and active allies guard the next move by 25%."});
-AbilityDisplaySummaries.toxicevolution = 'Own poison or damage to a poisoned foe heals 1/8 HP, sharing one use per turn.';
-AbilityDisplaySummaries.mythicscale = 'Powder/Befuddle status: clears ally/own defensive drops, then boosts defenses once/entry.';
-AbilityDisplaySummaries.spiralevolution = 'Pierces protection at half power; double Twineedle power; Trick Room ordering; 20% less damage.';
+Object.assign(AbilityDisplaySummaries, {
+	gentlescales: "Pollen Puff healing also cures an ally's major status once per turn.",
+	hivecourier:
+		'Successful Bug pivot clears hazards; replacement and active allies guard the next move by 25%.',
+});
+AbilityDisplaySummaries.toxicevolution =
+	'Own poison or damage to a poisoned foe heals 1/8 HP, sharing one use per turn.';
+AbilityDisplaySummaries.mythicscale =
+	'Powder/Befuddle status: clears ally/own defensive drops, then boosts defenses once/entry.';
+AbilityDisplaySummaries.spiralevolution =
+	'Pierces protection at half power; double Twineedle power; Trick Room ordering; 20% less damage.';
 
 AbilityDisplaySummaries.conductivity = 'Electric moves hit Steel types super effectively.';
 AbilityDisplaySummaries.anchoredbattery = 'Pulse and bullet moves have 1.5x power.';
 
 AbilityDisplaySummaries.nobledance = 'Copies dance moves; heals adjacent allies by 1/4 HP on entry.';
-AbilityDisplaySummaries.anchoredbattery = "First pulse/bullet HP hit each entry lowers the foe's Speed by 1.";
+AbilityDisplaySummaries.anchoredbattery =
+	"First pulse/bullet HP hit each entry lowers the foe's Speed by 1.";
 
-AbilityDisplaySummaries.nobledance = 'First successful directly selected dance each entry wards the next opposing move by 20%.';
+AbilityDisplaySummaries.nobledance =
+	'First successful directly selected dance each entry wards the next opposing move by 20%.';
 
 Object.assign(AbilityDisplaySummaries, {
-  "deepchill": "Oblivious; surviving a foe's physical HP hit lowers its Speed once per turn.",
-  "venamskiss": "Poison attacks treat Steel typing as a weakness, with other typing counted normally, and actual opposing HP damage attempts regular poison even on Steel/Poison types.",
-  "dredger": "Once per turn after its Ground attack deals opposing HP damage, removes one layer of its side's Spikes, or one Toxic Spikes layer if no Spikes remain."
+	deepchill: "Oblivious; surviving a foe's physical HP hit lowers its Speed once per turn.",
+	venamskiss:
+		'Poison attacks treat Steel typing as a weakness, with other typing counted normally, and actual opposing HP damage attempts regular poison even on Steel/Poison types.',
+	dredger:
+		"Once per turn after its Ground attack deals opposing HP damage, removes one layer of its side's Spikes, or one Toxic Spikes layer if no Spikes remain.",
 });
 
 Object.assign(AbilityDisplaySummaries, {
-  "apexpredator": "Dragon conversion and wind boosts.",
-  "tyrantdomain": "Sandstorm and fallen-ally power; Dragon's Den on fainting.",
-  "auroradomain": "Hail and stronger Ice moves; field and Veil on fainting."
+	apexpredator: 'Dragon conversion and wind boosts.',
+	tyrantdomain: "Sandstorm and fallen-ally power; Dragon's Den on fainting.",
+	auroradomain: 'Hail and stronger Ice moves; field and Veil on fainting.',
 });
 
-AbilityDisplaySummaries.grapplingclaws = "Physical contact HP hits prevent switching/healing through next turn, once per foe per stay.";
+AbilityDisplaySummaries.grapplingclaws =
+	'Physical contact HP hits prevent switching/healing through next turn, once per foe per stay.';
 
 Object.assign(AbilityDisplaySummaries, {
-  "venamskiss": "Shed Skin; Poison hits drain any foe (up to 1/4 base HP/turn); pre-poisoned foes are heal-blocked. Poisoned foes are slower.",
-  "dredger": "First Ground HP hit each turn removes one own Spikes layer, then Toxic Spikes if none remain."
+	venamskiss:
+		'Shed Skin; Poison hits drain any foe (up to 1/4 base HP/turn); pre-poisoned foes are heal-blocked. Poisoned foes are slower.',
+	dredger:
+		'First Ground HP hit each turn removes one own Spikes layer, then Toxic Spikes if none remain.',
 });
 
-AbilityDisplaySummaries.pulseblockade = 'Sets a 3-turn Snowy Mountain Field; blocks other field creation while active.';
+AbilityDisplaySummaries.pulseblockade =
+	'Sets a 3-turn Snowy Mountain Field; blocks other field creation while active.';
 
 Object.assign(AbilityDisplaySummaries, {
-  "vendetta": "Once/entry, survive a hit to mark its attacker; next Ground/Dark retaliation cannot miss and traps on HP damage.",
-  "steadyaim": "Prevents external accuracy drops; self-inflicted costs remain.",
-  "silksights": "Keen Eye; Electric bypasses slowed foes' boosts; once/entry Bug HP hit on slowed foe Disables its last move."
+	vendetta:
+		'Once/entry, survive a hit to mark its attacker; next Ground/Dark retaliation cannot miss and traps on HP damage.',
+	steadyaim: 'Prevents external accuracy drops; self-inflicted costs remain.',
+	silksights:
+		"Keen Eye; Electric bypasses slowed foes' boosts; once/entry Bug HP hit on slowed foe Disables its last move.",
 });
 
-Object.assign(AbilityDisplaySummaries, {"freeflight":"Wind Power + Moxie.","entrenched":"Opposing moves and items cannot force it to switch."});
-AbilityDisplaySummaries.voidomen = 'First successful secondary or self status move: 3-turn Safeguard once/entry; secondary also grants stat-drop ward.';
+Object.assign(AbilityDisplaySummaries, {
+	freeflight: 'Wind Power + Moxie.',
+	entrenched: 'Opposing moves and items cannot force it to switch.',
+});
+AbilityDisplaySummaries.voidomen =
+	'First successful secondary or self status move: 3-turn Safeguard once/entry; secondary also grants stat-drop ward.';
 
-AbilityDisplaySummaries.hydroelectric = "Water HP hits heal 1/8 once/turn; first Water attack dealing opposing HP damage grants +1 Speed after the move.";
+AbilityDisplaySummaries.hydroelectric =
+	'Water HP hits heal 1/8 once/turn; first Water attack dealing opposing HP damage grants +1 Speed after the move.';
 
-AbilityDisplaySummaries.steadyswimmer = "Prevents and cures confusion only.";
+AbilityDisplaySummaries.steadyswimmer = 'Prevents and cures confusion only.';
 
-Object.assign(AbilityDisplaySummaries, {"hauntingveil":"Cursed Body + Infiltrator.","parentalbond":"Mold Breaker; eligible attacks hit twice; stronger contact moves; hits Ghosts.","ironwill":"Prism Armor, Self-Sufficient and Whiplash.","calderacore":"Drought + Magma Armor.","razorcurrent":"Summons rain; gains Speed each full active turn."});
+Object.assign(AbilityDisplaySummaries, {
+	hauntingveil: 'Cursed Body + Infiltrator.',
+	parentalbond: 'Mold Breaker; eligible attacks hit twice; stronger contact moves; hits Ghosts.',
+	ironwill: 'Prism Armor, Self-Sufficient and Whiplash.',
+	calderacore: 'Drought + Magma Armor.',
+	razorcurrent: 'Summons rain; gains Speed each full active turn.',
+});
 
 AbilityDisplaySummaries.solartrap = 'Automatic Stockpiles/releases; draining moves hurt their user.';
 
-import {SelectedAbilityDescriptions} from './selected-mega-simplification-data';
-for (const [id, details] of Object.entries(SelectedAbilityDescriptions)) AbilityDisplaySummaries[id] = details.shortDesc;
+import { SelectedAbilityDescriptions } from './selected-mega-simplification-data';
+for (const [id, details] of Object.entries(SelectedAbilityDescriptions))
+	AbilityDisplaySummaries[id] = details.shortDesc;
 
-import {GmaxRedesignDescriptions} from './gmax-passive-data';
-for (const [id, details] of Object.entries(GmaxRedesignDescriptions)) AbilityDisplaySummaries[id] = details.shortDesc;
+import { GmaxRedesignDescriptions } from './gmax-passive-data';
+for (const [id, details] of Object.entries(GmaxRedesignDescriptions))
+	AbilityDisplaySummaries[id] = details.shortDesc;
 
-import {GrapplingClawsDescription} from './targeted-passive-reworks';
+import { GrapplingClawsDescription } from './targeted-passive-reworks';
 AbilityDisplaySummaries.grapplingclaws = GrapplingClawsDescription.shortDesc;
 
-AbilityDisplaySummaries.pressure = 'Entry: -1 foe Def/SpD once per foe per user per battle; Cold Eclipse repeats -2. Extra PP cost.';
+AbilityDisplaySummaries.pressure =
+	'Entry: -1 foe Def/SpD once per foe per user per battle; Cold Eclipse repeats -2. Extra PP cost.';
 
-import {ShelterDescriptions} from './shelter-audit-reworks';
+import { ShelterDescriptions } from './shelter-audit-reworks';
 AbilityDisplaySummaries.scaleshelter = ShelterDescriptions.scaleshelter.shortDesc;
 AbilityDisplaySummaries.roughscale = ShelterDescriptions.roughscale.shortDesc;
 
 AbilityDisplaySummaries.baitedbloom = ShelterDescriptions.baitedbloom.shortDesc;
 
-import {BurningRageDescription} from './burning-rage-display';
+import { BurningRageDescription } from './burning-rage-display';
 AbilityDisplaySummaries.burningrage = BurningRageDescription.shortDesc;
-import {SovereignDescriptions} from './sovereign-approved-data';
-for (const [id, details] of Object.entries(SovereignDescriptions)) AbilityDisplaySummaries[id] = details.shortDesc;
+import { SovereignDescriptions } from './sovereign-approved-data';
+for (const [id, details] of Object.entries(SovereignDescriptions))
+	AbilityDisplaySummaries[id] = details.shortDesc;
 
-import {UltraInstinctDescription, BurningSpiritDescription} from './ultra-instinct-description';
+import { UltraInstinctDescription, BurningSpiritDescription } from './ultra-instinct-description';
 AbilityDisplaySummaries.ultrainstinct = UltraInstinctDescription.shortDesc;
 AbilityDisplaySummaries.burningspirit = BurningSpiritDescription.shortDesc;
-import {PassiveCleanupDescriptions} from './passive-cleanup-approved';
-for (const [id, details] of Object.entries(PassiveCleanupDescriptions)) AbilityDisplaySummaries[id] = details.shortDesc;
+import { PassiveCleanupDescriptions } from './passive-cleanup-approved';
+for (const [id, details] of Object.entries(PassiveCleanupDescriptions))
+	AbilityDisplaySummaries[id] = details.shortDesc;
 
 AbilityDisplaySummaries.ragingstorm += ' Rampages last one turn without ending confusion.';
 
 AbilityDisplaySummaries.toxicspines += ' Iron Barbs adds 1/8 contact damage.';
 
-import {CastformDescriptions} from './castform-split';
-for (const [id, details] of Object.entries(CastformDescriptions)) AbilityDisplaySummaries[id] = details.shortDesc;
+import { CastformDescriptions } from './castform-split';
+for (const [id, details] of Object.entries(CastformDescriptions))
+	AbilityDisplaySummaries[id] = details.shortDesc;
 
-import {IllusionDescriptions} from './illusion-split';
-for (const [id, details] of Object.entries(IllusionDescriptions)) AbilityDisplaySummaries[id] = details.shortDesc;
+import { IllusionDescriptions } from './illusion-split';
+for (const [id, details] of Object.entries(IllusionDescriptions))
+	AbilityDisplaySummaries[id] = details.shortDesc;
 
-import {NidoDescriptions} from './nido-approved';
-for (const [id, details] of Object.entries(NidoDescriptions)) AbilityDisplaySummaries[id] = details.shortDesc;
+import { NidoDescriptions } from './nido-approved';
+for (const [id, details] of Object.entries(NidoDescriptions))
+	AbilityDisplaySummaries[id] = details.shortDesc;
 
-for (const id of ['relentlesshunt', 'voidomen', 'venombastion']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+for (const id of ['relentlesshunt', 'voidomen', 'venombastion'])
+	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 
-for (const id of ['heatcoil', 'inversion', 'ironmountain']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+for (const id of ['heatcoil', 'inversion', 'ironmountain'])
+	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 
-import {FinalPassiveDescriptions} from './final-passive-migrations';
-import {FamilyReplacementDescriptions} from './family-replacements';
-for (const [id, details] of Object.entries({...FinalPassiveDescriptions, ...FamilyReplacementDescriptions})) AbilityDisplaySummaries[id] = details.shortDesc;
+import { FinalPassiveDescriptions } from './final-passive-migrations';
+import { FamilyReplacementDescriptions } from './family-replacements';
+for (const [id, details] of Object.entries({
+	...FinalPassiveDescriptions,
+	...FamilyReplacementDescriptions,
+}))
+	AbilityDisplaySummaries[id] = details.shortDesc;
 
-for (const id of ['encorearia', 'marvelscale', 'tidalvoice']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+for (const id of ['encorearia', 'marvelscale', 'tidalvoice'])
+	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 
-for (const id of ['voidomen', 'inversion', 'heatcoil', 'ironmountain', 'venombastion', 'relentlesshunt']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+for (const id of [
+	'voidomen',
+	'inversion',
+	'heatcoil',
+	'ironmountain',
+	'venombastion',
+	'relentlesshunt',
+])
+	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 
-AbilityDisplaySummaries.knightsguard = "Entry heals adjacent allies 1/4 HP (1/3 Fairy Tale); once per entry intercepts an ally attack, takes 25% less and gains +1 Atk if hit.";
+AbilityDisplaySummaries.knightsguard =
+	'Entry heals adjacent allies 1/4 HP (1/3 Fairy Tale); once per entry intercepts an ally attack, takes 25% less and gains +1 Atk if hit.';
 
-for (const id of ['bloomingsun','skywarden','steelwingescort','crescentrend','badseeds','wintersmalice']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+for (const id of [
+	'bloomingsun',
+	'skywarden',
+	'steelwingescort',
+	'crescentrend',
+	'badseeds',
+	'wintersmalice',
+])
+	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 AbilityDisplaySummaries.solareruption = AbilityDescriptionOverrides.solareruption.shortDesc;
 
 AbilityDisplaySummaries.swiftvenom = AbilityDescriptionOverrides.swiftvenom.shortDesc;
@@ -661,151 +816,195 @@ AbilityDisplaySummaries.sweetsanctuary = AbilityDescriptionOverrides.sweetsanctu
 
 AbilityDisplaySummaries.silenthunter = 'Biting moves gain another critical-hit stage.';
 
-import {DissonantEchoDescriptions} from './dissonant-echo';
-for (const [id, details] of Object.entries(DissonantEchoDescriptions)) AbilityDisplaySummaries[id] = details.shortDesc;
+import { DissonantEchoDescriptions } from './dissonant-echo';
+for (const [id, details] of Object.entries(DissonantEchoDescriptions))
+	AbilityDisplaySummaries[id] = details.shortDesc;
 
-import {PrimarinaApprovedDescriptions} from "./primarina-approved";
-for (const [id, text] of Object.entries(PrimarinaApprovedDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { PrimarinaApprovedDescriptions } from './primarina-approved';
+for (const [id, text] of Object.entries(PrimarinaApprovedDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {QueuedAbilityDescriptions} from "./queued-abilities-approved";
-for (const [id, text] of Object.entries(QueuedAbilityDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { QueuedAbilityDescriptions } from './queued-abilities-approved';
+for (const [id, text] of Object.entries(QueuedAbilityDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {SwalotVespiquenDescriptions} from './swalot-vespiquen-approved';
-for (const [id, text] of Object.entries(SwalotVespiquenDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { SwalotVespiquenDescriptions } from './swalot-vespiquen-approved';
+for (const [id, text] of Object.entries(SwalotVespiquenDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {FairyEclipseDescriptions} from './fairy-eclipse-approved';
-for (const [id, text] of Object.entries(FairyEclipseDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { FairyEclipseDescriptions } from './fairy-eclipse-approved';
+for (const [id, text] of Object.entries(FairyEclipseDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {RivalSupportDescriptions} from './rival-support-descriptions';
-for (const [id,text] of Object.entries(RivalSupportDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { RivalSupportDescriptions } from './rival-support-descriptions';
+for (const [id, text] of Object.entries(RivalSupportDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {PearlHydraulicDescriptions} from './pearl-hydraulic-approved';
-for (const [id,text] of Object.entries(PearlHydraulicDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { PearlHydraulicDescriptions } from './pearl-hydraulic-approved';
+for (const [id, text] of Object.entries(PearlHydraulicDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {CalculatedTrajectoryDescriptions} from './calculated-trajectory-approved';
-for (const [id,text] of Object.entries(CalculatedTrajectoryDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { CalculatedTrajectoryDescriptions } from './calculated-trajectory-approved';
+for (const [id, text] of Object.entries(CalculatedTrajectoryDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {BoneSpoilsInfernalDescriptions} from './bone-spoils-infernal-approved';
-for (const [id,text] of Object.entries(BoneSpoilsInfernalDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { BoneSpoilsInfernalDescriptions } from './bone-spoils-infernal-approved';
+for (const [id, text] of Object.entries(BoneSpoilsInfernalDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {StarterFinishDescriptions} from './starter-finish-approved';
-for (const [id,text] of Object.entries(StarterFinishDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { StarterFinishDescriptions } from './starter-finish-approved';
+for (const [id, text] of Object.entries(StarterFinishDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {AuraGazeDescriptions} from './aura-gaze-approved';
-for (const [id,text] of Object.entries(AuraGazeDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { AuraGazeDescriptions } from './aura-gaze-approved';
+for (const [id, text] of Object.entries(AuraGazeDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {WeatherChoiceDescriptions} from './weather-choice-approved';
-for (const [id,text] of Object.entries(WeatherChoiceDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { WeatherChoiceDescriptions } from './weather-choice-approved';
+for (const [id, text] of Object.entries(WeatherChoiceDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {ChampionMeteorDescriptions} from './champion-meteor-approved';
-for (const [id,text] of Object.entries(ChampionMeteorDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { ChampionMeteorDescriptions } from './champion-meteor-approved';
+for (const [id, text] of Object.entries(ChampionMeteorDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {AdaptiveArsenalDescriptions} from './adaptive-arsenal-approved';
-for (const [id,text] of Object.entries(AdaptiveArsenalDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { AdaptiveArsenalDescriptions } from './adaptive-arsenal-approved';
+for (const [id, text] of Object.entries(AdaptiveArsenalDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {GarchompPoiseDescriptions} from './garchomp-poise-approved';
-for (const [id,text] of Object.entries(GarchompPoiseDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { GarchompPoiseDescriptions } from './garchomp-poise-approved';
+for (const [id, text] of Object.entries(GarchompPoiseDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {CramorantGoodraKommoDescriptions} from './cramorant-goodra-kommo-approved';
-for (const [id,text] of Object.entries(CramorantGoodraKommoDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { CramorantGoodraKommoDescriptions } from './cramorant-goodra-kommo-approved';
+for (const [id, text] of Object.entries(CramorantGoodraKommoDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {LostFourDescriptions} from './lost-four-approved';
-for (const [id,text] of Object.entries(LostFourDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { LostFourDescriptions } from './lost-four-approved';
+for (const [id, text] of Object.entries(LostFourDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {ConciseAbilityDescriptions} from './concise-ability-descriptions';
-for (const [id,text] of Object.entries(ConciseAbilityDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { ConciseAbilityDescriptions } from './concise-ability-descriptions';
+for (const [id, text] of Object.entries(ConciseAbilityDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
 AbilityDisplaySummaries.racingspirit = 'Rock Head + Limber.';
 
-import {AlcremieDescriptions} from './alcremie-approved';
-for(const[id,text]of Object.entries(AlcremieDescriptions)) AbilityDisplaySummaries[id]=text.shortDesc;
+import { AlcremieDescriptions } from './alcremie-approved';
+for (const [id, text] of Object.entries(AlcremieDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
 AbilityDisplaySummaries.matriarchsvigil = NidoDescriptions.matriarchsvigil.shortDesc;
 
-AbilityDisplaySummaries.tirelessmuscle = "Inner Focus; end-turn heals 1/16 HP after surviving opposing attack HP damage.";
+AbilityDisplaySummaries.tirelessmuscle =
+	'Inner Focus; end-turn heals 1/16 HP after surviving opposing attack HP damage.';
 
-import {FossilDescriptions} from './fossil-drain-approved';
-for(const[id,text]of Object.entries(FossilDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+import { FossilDescriptions } from './fossil-drain-approved';
+for (const [id, text] of Object.entries(FossilDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-AbilityDisplaySummaries.crystalward = "Blocks opposing ball/bomb moves for itself and adjacent allies.";
+AbilityDisplaySummaries.crystalward = 'Blocks opposing ball/bomb moves for itself and adjacent allies.';
 
-AbilityDisplaySummaries.barbharvest = "Suction Cups; removes own-side Stealth Rock before taking entry damage.";
+AbilityDisplaySummaries.barbharvest =
+	'Suction Cups; removes own-side Stealth Rock before taking entry damage.';
 
-AbilityDisplaySummaries.rimeboundspirit = "Heatproof; immune to wind moves.";
+AbilityDisplaySummaries.rimeboundspirit = 'Heatproof; immune to wind moves.';
 
-import {StunfiskDescriptions} from './stunfisk-approved';
-for(const[id,text]of Object.entries(StunfiskDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+import { StunfiskDescriptions } from './stunfisk-approved';
+for (const [id, text] of Object.entries(StunfiskDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {LoreEntryDescriptions} from './lore-entry-approved';
-for (const [id, text] of Object.entries(LoreEntryDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { LoreEntryDescriptions } from './lore-entry-approved';
+for (const [id, text] of Object.entries(LoreEntryDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {ApprovedReworkDescriptions} from './approved-ability-reworks';
-for(const[id,text]of Object.entries(ApprovedReworkDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
-delete AbilityDisplaySummaries.armoredadvance; delete AbilityDisplaySummaries.trailbreaker;
+import { ApprovedReworkDescriptions } from './approved-ability-reworks';
+for (const [id, text] of Object.entries(ApprovedReworkDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
+delete AbilityDisplaySummaries.armoredadvance;
+delete AbilityDisplaySummaries.trailbreaker;
 
-import {SandslashDescriptions} from './sandslash-rework';
-for(const[id,text]of Object.entries(SandslashDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
-for(const id of ['bedrockclaw','rimeclaw','dunerunner','frostrunner'])delete AbilityDisplaySummaries[id];
+import { SandslashDescriptions } from './sandslash-rework';
+for (const [id, text] of Object.entries(SandslashDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
+for (const id of ['bedrockclaw', 'rimeclaw', 'dunerunner', 'frostrunner'])
+	delete AbilityDisplaySummaries[id];
 
-import {StanceDisguiseDescriptions} from './stance-disguise-aggron';
-for(const[id,text]of Object.entries(StanceDisguiseDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+import { StanceDisguiseDescriptions } from './stance-disguise-aggron';
+for (const [id, text] of Object.entries(StanceDisguiseDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {HydreigonDescriptions} from './hydreigon-approved';
-for(const[id,text]of Object.entries(HydreigonDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+import { HydreigonDescriptions } from './hydreigon-approved';
+for (const [id, text] of Object.entries(HydreigonDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-AbilityDisplaySummaries.solarmimicry="Bug STAB and resistances. Always treated as sunny. Solar Blade lowers Speed by 1.";
+AbilityDisplaySummaries.solarmimicry =
+	'Bug STAB and resistances. Always treated as sunny. Solar Blade lowers Speed by 1.';
 
-import {MeloettaDescriptions} from './meloetta-encore';
-for(const[id,text]of Object.entries(MeloettaDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+import { MeloettaDescriptions } from './meloetta-encore';
+for (const [id, text] of Object.entries(MeloettaDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {AbilityProseAudit} from './ability-prose-audit';
-for(const[id,text]of Object.entries(AbilityProseAudit))AbilityDisplaySummaries[id]=text.shortDesc;
+import { AbilityProseAudit } from './ability-prose-audit';
+for (const [id, text] of Object.entries(AbilityProseAudit))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {MewtwoDescriptions} from './mewtwo-approved';
-for(const[id,text]of Object.entries(MewtwoDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+import { MewtwoDescriptions } from './mewtwo-approved';
+for (const [id, text] of Object.entries(MewtwoDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {SeasonalBirdDescriptions} from './seasonal-birds';
-for(const[id,text]of Object.entries(SeasonalBirdDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+import { SeasonalBirdDescriptions } from './seasonal-birds';
+for (const [id, text] of Object.entries(SeasonalBirdDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {JirachiDescriptions} from './jirachi-approved';
-for(const[id,text]of Object.entries(JirachiDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+import { JirachiDescriptions } from './jirachi-approved';
+for (const [id, text] of Object.entries(JirachiDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {RegiDescriptions} from './regi-approved';
-for(const[id,text]of Object.entries(RegiDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+import { RegiDescriptions } from './regi-approved';
+for (const [id, text] of Object.entries(RegiDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {EjectDescription} from './rotom-eject';
-AbilityDisplaySummaries.eject=EjectDescription.shortDesc;
+import { EjectDescription } from './rotom-eject';
+AbilityDisplaySummaries.eject = EjectDescription.shortDesc;
 
-import {ShortDescriptionAudit} from './short-description-audit';
-Object.assign(AbilityDisplaySummaries,ShortDescriptionAudit);
+import { ShortDescriptionAudit } from './short-description-audit';
+Object.assign(AbilityDisplaySummaries, ShortDescriptionAudit);
 
-import {RipenSeedDescriptions} from './ripen-seeds';
-for (const [id, text] of Object.entries(RipenSeedDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { RipenSeedDescriptions } from './ripen-seeds';
+for (const [id, text] of Object.entries(RipenSeedDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {PrimordialDescriptions} from './primordial-approved';
-for (const [id, text] of Object.entries(PrimordialDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { PrimordialDescriptions } from './primordial-approved';
+for (const [id, text] of Object.entries(PrimordialDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {PowerDrillBatchDescriptions} from './power-drill-batch';
-for(const[id,text]of Object.entries(PowerDrillBatchDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+import { PowerDrillBatchDescriptions } from './power-drill-batch';
+for (const [id, text] of Object.entries(PowerDrillBatchDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-import {AuditCleanupDescriptions} from './audit-cleanup-approved';
-for (const [id, text] of Object.entries(AuditCleanupDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { AuditCleanupDescriptions } from './audit-cleanup-approved';
+for (const [id, text] of Object.entries(AuditCleanupDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
 import { CurrentAbilityDescriptionCleanup } from './current-ability-description-cleanup';
-for (const [id, text] of Object.entries(CurrentAbilityDescriptionCleanup)) AbilityDisplaySummaries[id] = text.shortDesc;
+for (const [id, text] of Object.entries(CurrentAbilityDescriptionCleanup))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-for (const id of ['aevianking', 'serratedscales']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+for (const id of ['aevianking', 'serratedscales'])
+	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 
 AbilityDisplaySummaries.aevianascendance = AbilityDescriptionOverrides.aevianascendance.shortDesc;
 
 AbilityDisplaySummaries.aevianweb = AbilityDescriptionOverrides.aevianweb.shortDesc;
 
 AbilityDisplaySummaries.longreach = 'Moves do not make contact.';
-AbilityDisplaySummaries.canopyarcher = 'Flying STAB/resistances; accurate arrows; Scrappy + Long Reach.';
+AbilityDisplaySummaries.canopyarcher =
+	'Flying STAB/resistances; accurate arrows; Scrappy + Long Reach.';
 
 AbilityDisplaySummaries.razorreach = 'Sharpness + Long Reach + Keen Eye.';
 
-AbilityDisplaySummaries.silentflight = "Levitate; immune to entry hazards; first HP hit each entry deals 25% less.";
+AbilityDisplaySummaries.silentflight =
+	'Levitate; immune to entry hazards; first HP hit each entry deals 25% less.';
 
 AbilityDisplaySummaries.toxicsink = AbilityDescriptionOverrides.toxicsink.shortDesc;
 AbilityDisplaySummaries.toxicbloom = AbilityDescriptionOverrides.toxicbloom.shortDesc;
@@ -815,54 +1014,77 @@ AbilityDisplaySummaries.siegelauncher = AbilityDescriptionOverrides.siegelaunche
 AbilityDisplaySummaries.livinglegend = 'Flash Fire + Download; stronger Extreme Speed.';
 
 // Approved Cud Chew second-bite guard, inherited by Rousing Feast.
-AbilityDisplaySummaries.cudchew = "Repeats a Berry next turn, then guards the next damaging move by 25%.";
-AbilityDisplaySummaries.rousingfeast = "Gluttony + Cud Chew guard; eating a Berry clears negative Attack and Speed.";
+AbilityDisplaySummaries.cudchew =
+	'Repeats a Berry next turn, then guards the next damaging move by 25%.';
+AbilityDisplaySummaries.rousingfeast =
+	'Gluttony + Cud Chew guard; eating a Berry clears negative Attack and Speed.';
 
 // Explicit approved Gale Bloom Shield Dust and Twin Fang Rivalry additions.
-AbilityDisplaySummaries.galebloom = "Shield Dust; first Flying HP hit per entry boosts an adjacent ally's Sp. Atk.";
-AbilityDisplaySummaries.twinfang = "Rivalry; Sp. Atk copies unboosted Attack; eligible contact attacks gain a 30% second hit.";
+AbilityDisplaySummaries.galebloom =
+	"Shield Dust; first Flying HP hit per entry boosts an adjacent ally's Sp. Atk.";
+AbilityDisplaySummaries.twinfang =
+	'Rivalry; Sp. Atk copies unboosted Attack; eligible contact attacks gain a 30% second hit.';
 
-import {DustoxAbilityDescriptions} from './dustox-approved';
-for (const [id, text] of Object.entries(DustoxAbilityDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { DustoxAbilityDescriptions } from './dustox-approved';
+for (const [id, text] of Object.entries(DustoxAbilityDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-AbilityDisplaySummaries.mothborn = "Bug attacks gain STAB without stacking; Shield Dust.";
-AbilityDisplaySummaries.prismwings = "Tinted Lens; first resisted foe HP hit after activation gives +1 Speed.";
+AbilityDisplaySummaries.mothborn = 'Bug attacks gain STAB without stacking; Shield Dust.';
+AbilityDisplaySummaries.prismwings =
+	'Tinted Lens; first resisted foe HP hit after activation gives +1 Speed.';
 
-AbilityDisplaySummaries.causticscales = "Once per entry, first opposing contact HP hit poisons attacker and lowers Sp. Def.";
+AbilityDisplaySummaries.causticscales =
+	'Once per entry, first opposing contact HP hit poisons attacker and lowers Sp. Def.';
 
-import {BeautiflyCarrionDescriptions} from './beautifly-carrion-approved';
-for (const [id, text] of Object.entries(BeautiflyCarrionDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { BeautiflyCarrionDescriptions } from './beautifly-carrion-approved';
+for (const [id, text] of Object.entries(BeautiflyCarrionDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;
 
-AbilityDisplaySummaries.moonlitprowl = "Infiltrator + full local Limber: paralysis immunity/cure and external Speed-drop protection.";
+AbilityDisplaySummaries.moonlitprowl =
+	'Infiltrator + full local Limber: paralysis immunity/cure and external Speed-drop protection.';
 
-for (const id of ["duskdrive","twilightinstinct","forsakensleeper","coldexpertise","oldnorth","glacialprime","dreepyvanguard"]) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+for (const id of [
+	'duskdrive',
+	'twilightinstinct',
+	'forsakensleeper',
+	'coldexpertise',
+	'oldnorth',
+	'glacialprime',
+	'dreepyvanguard',
+])
+	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 
 Object.assign(AbilityDisplaySummaries, {
-	atrocity: "Blazing Monarch + Fire Ward + Tough Claws; all moves have 1.1x accuracy.",
+	atrocity: 'Blazing Monarch + Fire Ward + Tough Claws; all moves have 1.1x accuracy.',
 	fireward: 'Defense and Sp. Def 1.3x; 1.5x on Cold Eclipse or Dragon’s Den.',
 	witheringshell: 'Crumbling Shell + Rain Dish + Sticky Hold.',
 	apexpredator: 'Wind Rider + Tough Claws.',
 });
 
 Object.assign(AbilityDisplaySummaries, {
-	"knightsguard": "Sworn Duty; opposing HP damage earns an adjacent ally a 25% attack guard once per turn.",
-	"dreamsickness": "Insomnia + Sworn Duty; once per battle rescues an adjacent ally from a lethal attack.",
-	"voidveil": "Levitate + Telepathy; Gravity does not ground it or disable its airborne moves."
+	knightsguard:
+		'Sworn Duty; opposing HP damage earns an adjacent ally a 25% attack guard once per turn.',
+	dreamsickness:
+		'Insomnia + Sworn Duty; once per battle rescues an adjacent ally from a lethal attack.',
+	voidveil: 'Levitate + Telepathy; Gravity does not ground it or disable its airborne moves.',
 });
 
 AbilityDisplaySummaries.venomarmor = 'Dual Wield + Run Away on regular Zangoose.';
 
-import {ReadableAbilitySummaries} from './ability-readability';
+import { ReadableAbilitySummaries } from './ability-readability';
 Object.assign(AbilityDisplaySummaries, ReadableAbilitySummaries);
-
 
 AbilityDisplaySummaries.imperialedge = AbilityDisplaySummaries.exalt;
 delete AbilityDisplaySummaries.exalt;
 
-for (const id of ['serenegrace', 'fortunatewing', 'voidomen']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
-AbilityDisplaySummaries.safeharbor = 'Switching out heals its immediate replacement by 1/8 HP after hazards.';
-AbilityDisplaySummaries.oceanlullaby = 'Successful sound moves heal active allies and itself by 1/16 HP and clear confusion once per turn.';
-AbilityDisplaySummaries.auroraresonance = 'Water/Ice hits cure its active side’s status; 30% more power during Aurora Veil.';
+for (const id of ['serenegrace', 'fortunatewing', 'voidomen'])
+	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+AbilityDisplaySummaries.safeharbor =
+	'Switching out heals its immediate replacement by 1/8 HP after hazards.';
+AbilityDisplaySummaries.oceanlullaby =
+	'Successful sound moves heal active allies and itself by 1/16 HP and clear confusion once per turn.';
+AbilityDisplaySummaries.auroraresonance =
+	'Water/Ice hits cure its active side’s status; 30% more power during Aurora Veil.';
 AbilityDisplaySummaries.ange = AbilityDescriptionOverrides.ange.shortDesc;
 
 for (const id of [
@@ -873,7 +1095,8 @@ for (const id of [
 	'freshplumage',
 	'burningquake',
 	'voidcommand',
-]) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+])
+	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 
 for (const id of ['hotstreak', 'falsesalvation', 'divineintervention']) {
 	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
@@ -881,7 +1104,8 @@ for (const id of ['hotstreak', 'falsesalvation', 'divineintervention']) {
 
 AbilityDisplaySummaries.greatmarsh = AbilityDescriptionOverrides.greatmarsh.shortDesc;
 
-for (const id of ['armortail', 'twinfocus']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+for (const id of ['armortail', 'twinfocus'])
+	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 
 AbilityDisplaySummaries.astralwitchcraft = AbilityDescriptionOverrides.astralwitchcraft.shortDesc;
 
@@ -889,7 +1113,8 @@ AbilityDisplaySummaries.lunarorbit = AbilityDescriptionOverrides.lunarorbit.shor
 
 AbilityDisplaySummaries.cosmicanalysis = AbilityDescriptionOverrides.cosmicanalysis.shortDesc;
 
-for (const id of ['evergreen', 'scavenger']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+for (const id of ['evergreen', 'scavenger'])
+	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 
 AbilityDisplaySummaries.dreadpresence = 'Dark Aura + Unnerve.';
 
@@ -907,7 +1132,8 @@ for (const id of [
 	'grandrhythm',
 	'grandmarksman',
 	'calculatedshot',
-]) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+])
+	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 
 for (const id of ['convergence', 'misalignedstars', 'frameperfect', 'insight', 'coldlogic']) {
 	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
@@ -917,5 +1143,6 @@ for (const id of ['keenlight', 'ironmaiden', 'siegegrip', 'astralcore', 'woolyco
 	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 }
 
-import {November16BalanceDescriptions} from './nov16-balance-descriptions';
-for (const [id, text] of Object.entries(November16BalanceDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { November16BalanceDescriptions } from './nov16-balance-descriptions';
+for (const [id, text] of Object.entries(November16BalanceDescriptions))
+	AbilityDisplaySummaries[id] = text.shortDesc;

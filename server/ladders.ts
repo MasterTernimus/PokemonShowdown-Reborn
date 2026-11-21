@@ -1,4 +1,4 @@
-import {officialMovesValidationFormat} from './official-moves';
+import { officialMovesValidationFormat } from './official-moves';
 import { currentBattleEngineIntent, assertBattleEngineIntent, pendingBattleEngineIntent } from './battle-engine-guard';
 /**
  * Matchmaker

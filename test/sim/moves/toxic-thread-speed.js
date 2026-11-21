@@ -6,8 +6,8 @@ describe('Toxic Thread Speed reduction', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 	for (const protect of [false, true]) it(`lowers each unprotected foe by one stage; Protect=${protect}`, () => {
-		const mon = moves => ({species: 'Mew', ability: 'No Ability', moves});
-		battle = common.createBattle({gameType: 'doubles'}, [
+		const mon = moves => ({ species: 'Mew', ability: 'No Ability', moves });
+		battle = common.createBattle({ gameType: 'doubles' }, [
 			[mon(['toxicthread']), mon(['splash'])],
 			[mon(['splash']), mon([protect ? 'protect' : 'splash'])],
 		]);

@@ -5,24 +5,24 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Inverse Battle', function () {
-	afterEach(function () {
+describe('Inverse Battle', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should change natural resistances into weaknesses`, function () {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['vitalthrow']},
+	it(`should change natural resistances into weaknesses`, () => {
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['vitalthrow'] },
 		], [
-			{species: 'scyther', moves: ['sleeptalk']},
+			{ species: 'scyther', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 	});
 
-	it(`should change natural weaknesses into resistances`, function () {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['vitalthrow']},
+	it(`should change natural weaknesses into resistances`, () => {
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['vitalthrow'] },
 		], [
 			{ species: 'umbreon', moves: ['sleeptalk'] },
 		]]);
@@ -30,9 +30,9 @@ describe('Inverse Battle', function () {
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
 	});
 
-	it(`should negate natural immunities and make them weaknesses`, function () {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['vitalthrow']},
+	it(`should negate natural immunities and make them weaknesses`, () => {
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['vitalthrow'] },
 		], [
 			{ species: 'duskull', moves: ['sleeptalk'] },
 		]]);
@@ -41,16 +41,16 @@ describe('Inverse Battle', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should affect Stealth Rock damage`, function () {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['stealthrock', 'snore']},
+	it(`should affect Stealth Rock damage`, () => {
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['stealthrock', 'snore'] },
 		], [
-			{species: 'ninjask', moves: ['sleeptalk']},
-			{species: 'steelix', moves: ['sleeptalk']},
+			{ species: 'ninjask', moves: ['sleeptalk'] },
+			{ species: 'steelix', moves: ['sleeptalk'] },
 			{ species: 'machop', moves: ['sleeptalk'] },
-			{species: 'chansey', moves: ['sleeptalk']},
-			{species: 'staraptor', moves: ['sleeptalk']},
-			{species: 'volcarona', moves: ['sleeptalk']},
+			{ species: 'chansey', moves: ['sleeptalk'] },
+			{ species: 'staraptor', moves: ['sleeptalk'] },
+			{ species: 'volcarona', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		let pokemon;
@@ -58,68 +58,68 @@ describe('Inverse Battle', function () {
 		for (let i = 2; i <= 6; i++) {
 			battle.makeChoices('move snore', 'switch ' + i);
 			pokemon = battle.p2.active[0];
-			expectedDamage = Math.floor(pokemon.maxhp * Math.pow(0.5, i - 1));
+			expectedDamage = Math.floor(pokemon.maxhp * 0.5 ** (i - 1));
 			assert.equal(pokemon.maxhp - pokemon.hp, expectedDamage, `${pokemon.name} should take ${expectedDamage} damage`);
 		}
 	});
 
-	it(`should affect the resistance of Delta Stream`, function () {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['hiddenpowerbug']},
+	it(`should affect the resistance of Delta Stream`, () => {
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['hiddenpowerbug'] },
 		], [
-			{species: 'rayquazamega', ability: 'deltastream', moves: ['sleeptalk']},
+			{ species: 'rayquazamega', ability: 'deltastream', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 	});
 
-	it(`should make Ghost/Grass types take neutral damage from Flying Press`, function () {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'hawlucha', moves: ['flyingpress']},
+	it(`should make Ghost/Grass types take neutral damage from Flying Press`, () => {
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'hawlucha', moves: ['flyingpress'] },
 		], [
-			{species: 'gourgeist', moves: ['sleeptalk']},
+			{ species: 'gourgeist', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 	});
 
-	it(`should not affect ability-based immunities`, function () {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['earthquake']},
+	it(`should not affect ability-based immunities`, () => {
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['earthquake'] },
 		], [
-			{species: 'mismagius', ability: 'levitate', moves: ['sleeptalk']},
+			{ species: 'mismagius', ability: 'levitate', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not affect move-based immunities`, function () {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['earthquake']},
+	it(`should not affect move-based immunities`, () => {
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['earthquake'] },
 		], [
-			{species: 'klefki', moves: ['magnetrise']},
+			{ species: 'klefki', moves: ['magnetrise'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not affect the type effectiveness of Freeze Dry on Water-type Pokemon`, function () {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['freezedry']},
+	it(`should not affect the type effectiveness of Freeze Dry on Water-type Pokemon`, () => {
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['freezedry'] },
 		], [
-			{species: 'floatzel', moves: ['sleeptalk']},
+			{ species: 'floatzel', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 	});
 
-	it(`should not affect the "ungrounded" state of Flying-type Pokemon`, function () {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['spore']},
+	it(`should not affect the "ungrounded" state of Flying-type Pokemon`, () => {
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['spore'] },
 		], [
-			{species: 'talonflame', moves: ['mistyterrain']},
+			{ species: 'talonflame', moves: ['mistyterrain'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p2.active[0].status, 'slp');

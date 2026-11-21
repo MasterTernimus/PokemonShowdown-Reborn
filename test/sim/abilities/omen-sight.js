@@ -1,13 +1,13 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const mon = (species = 'Mew', moves = ['splash'], ability = 'No Ability') => ({species, moves, ability});
+const mon = (species = 'Mew', moves = ['splash'], ability = 'No Ability') => ({ species, moves, ability });
 
 describe('Omen Sight', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
 	function start(teams, format = 'gen9nofielddoublesbattle') {
-		battle = common.createBattle({formatid: format}, teams);
+		battle = common.createBattle({ formatid: format }, teams);
 		battle.makeChoices(...teams.map(team => 'team ' + team.map((_, i) => i + 1).join('')));
 		return battle.p1.active[0];
 	}
@@ -56,7 +56,7 @@ describe('Omen Sight', () => {
 	});
 	it('ignores ally switches and clears warning memory when the holder leaves', () => {
 		const p = start([[mon('Absol'), mon(), mon()], [mon('Mew', ['moonblast', 'splash']), mon()]]);
-		let mark = battle.log.length;
+		const mark = battle.log.length;
 		battle.makeChoices('move splash, switch 3', 'move splash, move splash');
 		assert.equal(reports(mark).length, 0);
 		battle.makeChoices('switch 3, move splash', 'move splash, move splash');
@@ -88,7 +88,7 @@ describe('Omen Sight', () => {
 		assert.equal(reports().length, 0);
 	});
 	it('checks all three foes in FFA and rechecks repeat entries', () => {
-		start([[mon('Absol')], ...Array.from({length: 3}, () => [mon('Mew', ['moonblast', 'splash']), mon('Mew', ['moonblast', 'splash'])])], 'gen9freeforall4pmistyfieldadrienn');
+		start([[mon('Absol')], ...Array.from({ length: 3 }, () => [mon('Mew', ['moonblast', 'splash']), mon('Mew', ['moonblast', 'splash'])])], 'gen9freeforall4pmistyfieldadrienn');
 		assert.equal(reports().length, 3);
 		for (let i = 0; i < 2; i++) {
 			const mark = battle.log.length;
@@ -99,7 +99,7 @@ describe('Omen Sight', () => {
 	it('preserves both Psychic Terrain bonuses without duplicate announcements', () => {
 		const p = start([[mon('Absol', ['splash'], 'Anticipation')], [mon('Mew', ['tackle', 'splash']), mon('Mew', ['moonblast', 'splash'])]], 'gen9nofieldsinglesgame');
 		battle.field.terrain = 'psychicterrain';
-		const {checkOmenSight} = require('../../../dist/data/warned-moves');
+		const { checkOmenSight } = require('../../../dist/data/warned-moves');
 		p.boosts.spa = 0;
 		checkOmenSight(battle, p, battle.p2.active[0]);
 		assert.equal(p.boosts.spa, 4);
@@ -112,8 +112,8 @@ describe('Omen Sight', () => {
 	it('reveals Illusion and does not give learned-move protection against OHKO moves', () => {
 		const p = start([[mon('Absol')], [mon('Zoroark', ['fissure', 'splash'], 'Illusion'), mon('Snorlax')]], 'gen9nofieldsinglesgame');
 		assert.equal(battle.p2.active[0].illusion, null);
-		const {protectsWarnedMove} = require('../../../dist/data/warned-moves');
-		assert.equal(protectsWarnedMove(p, battle.p2.active[0], {...battle.dex.getActiveMove('fissure'), ohko: true}), false);
+		const { protectsWarnedMove } = require('../../../dist/data/warned-moves');
+		assert.equal(protectsWarnedMove(p, battle.p2.active[0], { ...battle.dex.getActiveMove('fissure'), ohko: true }), false);
 		assert.equal(reports().length, 1);
 	});
 });

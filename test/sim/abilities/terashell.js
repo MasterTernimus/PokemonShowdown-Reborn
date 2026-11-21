@@ -5,13 +5,13 @@ const common = require('../../common');
 
 let battle;
 
-describe('Tera Shell', function () {
+describe('Tera Shell', () => {
 	afterEach(() => battle.destroy());
 
-	it(`should take not very effective damage when it is at full health`, function () {
+	it(`should take not very effective damage when it is at full health`, () => {
 		battle = common.createBattle([
-			[{species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk']}],
-			[{species: 'Wynaut', moves: ['wickedblow']}],
+			[{ species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk'] }],
+			[{ species: 'Wynaut', moves: ['wickedblow'] }],
 		]);
 
 		battle.makeChoices();
@@ -24,10 +24,10 @@ describe('Tera Shell', function () {
 	});
 
 	// confirmed here: https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9893603
-	it(`should not take precedence over immunities`, function () {
+	it(`should not take precedence over immunities`, () => {
 		battle = common.createBattle([
-			[{species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk']}],
-			[{species: 'Wynaut', moves: ['shadowball']}],
+			[{ species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk'] }],
+			[{ species: 'Wynaut', moves: ['shadowball'] }],
 		]);
 
 		battle.makeChoices();
@@ -37,10 +37,10 @@ describe('Tera Shell', function () {
 
 	// kinda confirmed here: https://youtu.be/-nerhfXrmCM?si=hLzfrfzVDdfNFMbv&t=314
 	// confirmed here: https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9893781
-	it('All hits of multi-hit move should be not very effective', function () {
+	it('All hits of multi-hit move should be not very effective', () => {
 		battle = common.createBattle([
-			[{species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk']}],
-			[{species: 'Wynaut', moves: ['surgingstrikes']}],
+			[{ species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk'] }],
+			[{ species: 'Wynaut', moves: ['surgingstrikes'] }],
 		]);
 
 		battle.makeChoices();
@@ -50,10 +50,10 @@ describe('Tera Shell', function () {
 	});
 
 	// confirmed here: https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9893651
-	it(`should be suppressed by Gastro Acid`, function () {
+	it(`should be suppressed by Gastro Acid`, () => {
 		battle = common.createBattle([
-			[{species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk']}],
-			[{species: 'Wynaut', moves: ['gastroacid', 'wickedblow']}],
+			[{ species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk'] }],
+			[{ species: 'Wynaut', moves: ['gastroacid', 'wickedblow'] }],
 		]);
 
 		battle.makeChoices('move sleeptalk', 'move gastroacid');

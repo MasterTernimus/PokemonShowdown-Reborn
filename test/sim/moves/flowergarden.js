@@ -4,9 +4,9 @@ const common = require('../../common');
 let battle;
 
 function setup(move = 'splash', ability = 'No Ability', species = 'Mew', item = '') {
-	battle = common.createBattle({formatid: 'gen9flowergarden'}, [
-		[{species, ability, item, moves: [move, 'splash'], evs: {spe: 252}}],
-		[{species: 'Tangrowth', ability: 'No Ability', moves: ['splash']}],
+	battle = common.createBattle({ formatid: 'gen9flowergarden' }, [
+		[{ species, ability, item, moves: [move, 'splash'], evs: { spe: 252 } }],
+		[{ species: 'Tangrowth', ability: 'No Ability', moves: ['splash'] }],
 	]);
 	battle.makeChoices('team 1', 'team 1');
 	return [battle.p1.active[0], battle.p2.active[0]];

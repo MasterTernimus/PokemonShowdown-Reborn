@@ -69,7 +69,7 @@ describe('Approved custom-only signature passives', () => {
 	});
 	for (const ability of ['No Ability', 'Unyielding', 'Stamina']) it('Mudsdale keeps passive Stamina under suppression with ' + ability, () => {
 		const [p, q] = setup('Mudsdale', ability); p.addVolatile('gastroacid'); p.hp = 2000;
-		hit(q, p, 'tackle', {damage: 100}); assert.equal(p.hp, 2150); assert.equal(p.boosts.def, 1);
+		hit(q, p, 'tackle', { damage: 100 }); assert.equal(p.hp, 2150); assert.equal(p.boosts.def, 1);
 		assert.notEqual(battle.runEvent('DragOut', p, q, Dex.moves.get('roar')), null);
 	});
 	for (const ability of ['No Ability', 'Mire Chorus', 'Liquid Voice', 'Poison Touch'])it('Mire Chorus converts sound and boosts once under ' + ability, () => {

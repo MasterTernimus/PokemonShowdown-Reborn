@@ -2,7 +2,7 @@
 
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
+const { Dex } = require('../../../dist/sim');
 
 let battle;
 describe('Eeveelution ability order, Verdant Edge, and Permafrost', () => {
@@ -25,12 +25,12 @@ describe('Eeveelution ability order, Verdant Edge, and Permafrost', () => {
 	});
 
 	it('applies Verdant Edge speed, slicing, and Defense without Invigorate healing', () => {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Leafeon', ability: 'Verdant Edge', moves: ['splash', 'leafblade']},
-			{species: 'Mew', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Leafeon', ability: 'Verdant Edge', moves: ['splash', 'leafblade'] },
+			{ species: 'Mew', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['splash']},
-			{species: 'Mew', moves: ['splash']},
+			{ species: 'Mew', moves: ['splash'] },
+			{ species: 'Mew', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1, 2', 'team 1, 2');
 		const leafeon = battle.p1.active[0];
@@ -53,10 +53,10 @@ describe('Eeveelution ability order, Verdant Edge, and Permafrost', () => {
 	});
 
 	it('applies Permafrost special defense, Refrigerate, and Ice Body healing', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Glaceon', ability: 'Permafrost', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Glaceon', ability: 'Permafrost', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['splash']},
+			{ species: 'Mew', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const glaceon = battle.p1.active[0];
@@ -78,7 +78,7 @@ describe('Eeveelution ability order, Verdant Edge, and Permafrost', () => {
 	});
 
 	for (const species of ['Leafeon', 'Glaceon']) it(species + ' Technician boosts weaker moves without setting weather or terrain', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 			{ species, ability: 'Technician', moves: ['tackle'] },
 		], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');

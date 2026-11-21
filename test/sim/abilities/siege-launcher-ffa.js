@@ -2,15 +2,15 @@
 
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
+const { Dex } = require('../../../dist/sim');
 
 describe('Siege Launcher Free-for-All power', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
 	function setup(mode) {
 		battle = common.createBattle({}, [
-			[{species: 'Mew', ability: 'Siege Launcher', moves: ['metalclaw']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+			[{ species: 'Mew', ability: 'Siege Launcher', moves: ['metalclaw'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.gameType = mode;
 		for (const pokemon of battle.getAllActive()) pokemon.getPassives = () => [];

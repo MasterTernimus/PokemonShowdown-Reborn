@@ -1,22 +1,22 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
+const { Dex } = require('../../../dist/sim');
 
 describe('Hydreigon selected Berserk ownership', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
 	function setup(ability, species = 'Hydreigon') {
 		battle = common.createBattle({}, [
-			[{species, ability, moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['tackle']}],
+			[{ species, ability, moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['tackle'] }],
 		]);
 		const p = battle.p1.active[0], q = battle.p2.active[0];
 		p.hp = 600; p.maxhp = p.baseMaxhp = 1000;
 		return [p, q];
 	}
 	function hit(p, q) {
-		const move = Object.assign(Dex.getActiveMove('tackle'), {damage: 150, accuracy: true, willCrit: false});
+		const move = Object.assign(Dex.getActiveMove('tackle'), { damage: 150, accuracy: true, willCrit: false });
 		battle.actions.runMove(move, q, q.getLocOf(p));
 	}
 	for (const ability of ['Dark Aura', 'Strings of Ruin', 'False Liberation', 'Berserk']) {
@@ -26,7 +26,7 @@ describe('Hydreigon selected Berserk ownership', () => {
 				if (suppressed) p.addVolatile('gastroacid', q);
 				assert.deepEqual(p.getPassives(), ['hydraflight']);
 				const expected = !suppressed && ['Strings of Ruin', 'Berserk'].includes(ability) ? 1 : 0;
-                assert.equal(p.hasAbilityOrPassive('berserk'), !!expected);
+				assert.equal(p.hasAbilityOrPassive('berserk'), !!expected);
 				hit(p, q);
 				assert.equal(p.hp, 450);
 				assert.equal(p.boosts.atk, expected);

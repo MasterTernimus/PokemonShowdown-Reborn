@@ -1,8 +1,8 @@
 'use strict';
 
 const assert = require('assert').strict;
-const {Dex} = require('../../dist/sim');
-const {TeamValidator} = require('../../dist/sim/team-validator');
+const { Dex } = require('../../dist/sim');
+const { TeamValidator } = require('../../dist/sim/team-validator');
 
 describe('Standalone Aevian Gastrodon profiles', () => {
 	it('keeps regular Gastrodon separate and gives West and East 500 BST', () => {
@@ -19,9 +19,9 @@ describe('Standalone Aevian Gastrodon profiles', () => {
 			assert.equal(species.baseSpecies, name);
 			assert.equal(species.isCosmeticForme, undefined);
 			assert.deepEqual(species.types, ['Ground', 'Fairy']);
-			assert.deepEqual(species.baseStats, {hp: 118, atk: 83, def: 77, spa: 92, spd: 91, spe: 39});
+			assert.deepEqual(species.baseStats, { hp: 118, atk: 83, def: 77, spa: 92, spd: 91, spe: 39 });
 			assert.equal(species.bst, 500);
-			assert.deepEqual(species.abilities, {'0': 'Storm Drain', '1': 'Liquid Ooze', H: hidden});
+			assert.deepEqual(species.abilities, { '0': 'Storm Drain', '1': 'Liquid Ooze', H: hidden });
 		}
 	});
 
@@ -45,14 +45,14 @@ describe('Standalone Aevian Gastrodon profiles', () => {
 		for (const name of ['Gastrodon-Aevian', 'Gastrodon-East-Aevian']) {
 			for (const ability of Object.values(Dex.species.get(name).abilities)) {
 				assert.equal(validator.validateTeam([
-					{species: name, ability, moves: ['Arenite Wall', 'Hidden Power', 'Strange Steam', 'Earth Power']},
-					{species: 'Mew', moves: ['Splash']},
+					{ species: name, ability, moves: ['Arenite Wall', 'Hidden Power', 'Strange Steam', 'Earth Power'] },
+					{ species: 'Mew', moves: ['Splash'] },
 				]), null, `${name}: ${ability}`);
 			}
 		}
 		assert(validator.validateTeam([
-			{species: 'Gastrodon', moves: ['Hidden Power']},
-			{species: 'Mew', moves: ['Splash']},
+			{ species: 'Gastrodon', moves: ['Hidden Power'] },
+			{ species: 'Mew', moves: ['Splash'] },
 		]).some(error => error.includes('Hidden Power is unavailable')));
 	});
 });

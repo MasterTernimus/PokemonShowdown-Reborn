@@ -1,4 +1,4 @@
-import {adaptiveIgnoresAbility} from '../sim/adaptive-cycle';
+import { adaptiveIgnoresAbility } from '../sim/adaptive-cycle';
 import { AbilityComponents } from './ability-components';
 import type { AbilityData, AbilityDataTable } from '../sim/dex-abilities';
 
@@ -30,7 +30,12 @@ function budget(pokemon: Pokemon): EntryBudget {
 function foeHit(damage: number, target: Pokemon, source: Pokemon) {
 	return damage > 0 && !target.isAlly(source);
 }
-function primevalHungerHit(battle: Battle, target: Pokemon, source: Pokemon, state = battle.effectState) {
+function primevalHungerHit(
+	battle: Battle,
+	target: Pokemon,
+	source: Pokemon,
+	state = battle.effectState,
+) {
 	if (!target.hp || target.isAlly(source)) return;
 	state.hungerTargets?.add(target);
 }
@@ -43,7 +48,8 @@ function grantSteam(pokemon: Pokemon) {
 function breakScreens(move: ActiveMove, screens: string[]) {
 	const original = move.onTryHit;
 	move.onTryHit = function (target, source, activeMove) {
-		const result = typeof original === 'function' ? original.call(this, target, source, activeMove) : original;
+		const result =
+			typeof original === 'function' ? original.call(this, target, source, activeMove) : original;
 		if (result === false || result === null) return result;
 		for (const screen of screens) target.side.removeSideCondition(screen);
 		return result;
@@ -64,8 +70,12 @@ function graveHeal(battle: Battle, holder: Pokemon, amount: number, source: Poke
 	if (remaining <= 0) return;
 	holder.m.graveHungerHealing = remaining;
 	try {
-		const healed = battle.heal(Math.min(amount, remaining), holder, source,
-			drain ? 'drain' : battle.dex.abilities.get('gravehunger'));
+		const healed = battle.heal(
+			Math.min(amount, remaining),
+			holder,
+			source,
+			drain ? 'drain' : battle.dex.abilities.get('gravehunger'),
+		);
 		if (typeof healed === 'number' && healed > 0) holder.m.graveHungerHealed += healed;
 	} finally {
 		delete holder.m.graveHungerHealing;
@@ -73,12 +83,24 @@ function graveHeal(battle: Battle, holder: Pokemon, amount: number, source: Poke
 }
 
 /** Runs after ordinary healing blockers, while the recipient is still active. */
-export function reduceGraveHungerHealing(battle: Battle, amount: number, target: Pokemon, effect: Effect | null) {
+export function reduceGraveHungerHealing(
+	battle: Battle,
+	amount: number,
+	target: Pokemon,
+	effect: Effect | null,
+) {
 	if (effect?.id === 'regenerator' || target.m.graveHungerHealing !== undefined) return amount;
 	for (const foe of target.foes()) {
-		if (!foe.hp || !foe.isActive || adaptiveIgnoresAbility(target, foe) || !foe.hasAbility('gravehunger')) continue;
+		if (
+			!foe.hp ||
+			!foe.isActive ||
+			adaptiveIgnoresAbility(target, foe) ||
+			!foe.hasAbility('gravehunger')
+		)
+			continue;
 		const reduced = Math.floor(amount / 2);
-		const prevented = Math.min(amount, target.maxhp - target.hp) - Math.min(reduced, target.maxhp - target.hp);
+		const prevented =
+			Math.min(amount, target.maxhp - target.hp) - Math.min(reduced, target.maxhp - target.hp);
 		amount = reduced;
 		if (prevented > 0) graveHeal(battle, foe, prevented, target);
 	}
@@ -113,7 +135,10 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 	add('toxicsignature', 'Toxic Signature', {
 		...base.unnerve,
 		onSourceModifyAccuracy(accuracy, target, source, move) {
-			const marked = move as ActiveMove & { signatureAccuracy?: boolean, signatureEvasion?: boolean };
+			const marked = move as ActiveMove & {
+				signatureAccuracy?: boolean,
+				signatureEvasion?: boolean,
+			};
 			marked.signatureAccuracy ??= !!move.ignoreAccuracy;
 			marked.signatureEvasion ??= !!move.ignoreEvasion;
 			const poisoned = move.category !== 'Status' && ['psn', 'tox'].includes(target.status);
@@ -121,7 +146,11 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 			move.ignoreEvasion = marked.signatureEvasion || poisoned;
 		},
 		onSourceDamagingHit(damage, target, source, move) {
-			if (move.type === 'Poison' && foeHit(damage, target, source) && !target.side.sideConditions['toxicspikes']) {
+			if (
+				move.type === 'Poison' &&
+				foeHit(damage, target, source) &&
+				!target.side.sideConditions['toxicspikes']
+			) {
 				target.side.addSideCondition('toxicspikes', source, this.effect);
 			}
 		},
@@ -134,14 +163,21 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 			}
 		},
 		onSourceDamagingHit(damage, target, source, move) {
-			if (!source.volatiles['wickedweave'] || !foeHit(damage, target, source) ||
-				!this.checkMoveMakesContact(move, source, target)) return;
+			if (
+				!source.volatiles['wickedweave'] ||
+				!foeHit(damage, target, source) ||
+				!this.checkMoveMakesContact(move, source, target)
+			)
+				return;
 			source.removeVolatile('wickedweave');
 			if (target.hp) this.boost({ spe: -1 }, target, source, this.effect);
 		},
 		condition: {
-			duration: 2, noCopy: true,
-			onRestart() { this.effectState.duration = 2; },
+			duration: 2,
+			noCopy: true,
+			onRestart() {
+				this.effectState.duration = 2;
+			},
 		},
 	});
 	add('vaultkeeper', 'Vault Keeper', {
@@ -162,7 +198,10 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 		onSourceDamagingHit: undefined,
 		onModifyMove(move) {
 			if (move.type !== 'Electric') return;
-			move.ignoreImmunity = { ...typeof move.ignoreImmunity === 'object' ? move.ignoreImmunity : {}, Electric: true };
+			move.ignoreImmunity = {
+				...(typeof move.ignoreImmunity === 'object' ? move.ignoreImmunity : {}),
+				Electric: true,
+			};
 			move.recoil = undefined;
 			const original = move.onEffectiveness;
 			move.onEffectiveness = function (typeMod, target, type, activeMove) {
@@ -182,8 +221,12 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 		},
 		condition: {
 			noCopy: true,
-			onStart() { this.effectState.until = this.turn + 1; },
-			onRestart() { this.effectState.until = this.turn + 1; },
+			onStart() {
+				this.effectState.until = this.turn + 1;
+			},
+			onRestart() {
+				this.effectState.until = this.turn + 1;
+			},
 			onResidualOrder: 9,
 			onResidual(target) {
 				this.damage(target.baseMaxhp / 16, target, this.effectState.source);
@@ -200,7 +243,11 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 			this.effectState.feastLowered = new Set<Pokemon>();
 		},
 		onAnyAfterEachBoost(boost, target, source, effect) {
-			if (source === this.effectState.target && effect === this.effectState.feastMove && (boost.spe || 0) < 0) {
+			if (
+				source === this.effectState.target &&
+				effect === this.effectState.feastMove &&
+				(boost.spe || 0) < 0
+			) {
 				this.effectState.feastLowered.add(target);
 			}
 		},
@@ -221,7 +268,9 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 		},
 	});
 	add('cinderscales', 'Cinder Scales', {
-		...base.flamebody, ...base.swarm, ...base.shielddust,
+		...base.flamebody,
+		...base.swarm,
+		...base.shielddust,
 		flags: {},
 		onModifySecondaries(secondaries, target, source, move) {
 			if (this.suppressingAbility(target)) return;
@@ -238,15 +287,22 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 		...base.skilllink,
 		...base.owntempo,
 		onModifyCritRatio(ratio, source, target, move) {
-			if (typeof move.multihit === 'number' && move.multihit >= 3 && move.hit === move.multihit) return 4;
+			if (typeof move.multihit === 'number' && move.multihit >= 3 && move.hit === move.multihit)
+				return 4;
 		},
 	});
 	add('rimebreaker', 'Rimebreaker', {
 		...base.refrigerate,
 		onSourceDamagingHit(damage, target, source, move) {
-			if (move.type !== 'Ice' || !foeHit(damage, target, source) || source.m.rimebreakerTurn === this.turn) return;
+			if (
+				move.type !== 'Ice' ||
+				!foeHit(damage, target, source) ||
+				source.m.rimebreakerTurn === this.turn
+			)
+				return;
 			source.m.rimebreakerTurn = this.turn;
-			if (source.side.removeSideCondition('stealthrock')) this.add('-sideend', source.side, 'Stealth Rock');
+			if (source.side.removeSideCondition('stealthrock'))
+				this.add('-sideend', source.side, 'Stealth Rock');
 			const spikes = source.side.sideConditions['spikes'];
 			if (!spikes) return;
 			if (spikes.layers <= 1) {
@@ -259,25 +315,42 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 		},
 	});
 	base.twilightinstinct = {
-		name: 'Twilight Instinct', num: base.twilightinstinct.num, rating: 4, flags: { breakable: 1 },
+		name: 'Twilight Instinct',
+		num: base.twilightinstinct.num,
+		rating: 4,
+		flags: { breakable: 1 },
 		onDamage(damage, target, source, effect) {
-			if (effect.effectType !== 'Move' || !source || target.isAlly(source) || budget(target).twilightGuardUsed) return;
+			if (
+				effect.effectType !== 'Move' ||
+				!source ||
+				target.isAlly(source) ||
+				budget(target).twilightGuardUsed
+			)
+				return;
 			return this.modifyAbilityGuard(damage, 0.75);
 		},
 		onDamagingHit(damage, target, source) {
 			if (!foeHit(damage, target, source)) return;
 			budget(target).twilightGuardUsed = true;
-			if (this.queue.willMove(target) &&
-				(budget(target).twilightTurn || 0) < this.turn) budget(target).twilightTurn = this.turn + 1;
+			if (this.queue.willMove(target) && (budget(target).twilightTurn || 0) < this.turn)
+				budget(target).twilightTurn = this.turn + 1;
 		},
 		onModifyPriority(priority, source, target, move) {
-			if (budget(source).twilightTurn === this.turn && move.category !== 'Status' && move.priority === 0) {
+			if (
+				budget(source).twilightTurn === this.turn &&
+				move.category !== 'Status' &&
+				move.priority === 0
+			) {
 				return priority + 1;
 			}
 		},
 		onBeforeMovePriority: 100,
 		onBeforeMove(source, target, move) {
-			if (budget(source).twilightTurn === this.turn && move.category !== 'Status' && move.priority === 0) {
+			if (
+				budget(source).twilightTurn === this.turn &&
+				move.category !== 'Status' &&
+				move.priority === 0
+			) {
 				delete budget(source).twilightTurn;
 			}
 		},
@@ -287,8 +360,13 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 	};
 	const dusk = base.duskdrive;
 	base.duskdrive = {
-		...base.battlefervor, ...base.precision, ...base.opportunist,
-		name: dusk.name, num: dusk.num, rating: dusk.rating, flags: dusk.flags,
+		...base.battlefervor,
+		...base.precision,
+		...base.opportunist,
+		name: dusk.name,
+		num: dusk.num,
+		rating: dusk.rating,
+		flags: dusk.flags,
 		// This engine does not fall back to onStart when an onAnySwitchIn hook exists.
 		onSwitchIn: base.battlefervor.onStart,
 		onEnd(pokemon) {
@@ -304,11 +382,13 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 		onTryHit(target, source, move) {
 			const hook = base.dryskin.onTryHit;
 			const result = typeof hook === 'function' ? hook.call(this, target, source, move) : hook;
-			if (result === null && target !== source && this.movehasType(move, 'Water')) grantSteam(target);
+			if (result === null && target !== source && this.movehasType(move, 'Water'))
+				grantSteam(target);
 			return result;
 		},
 		onDamage(damage, target, source, effect) {
-			if (effect.effectType !== 'Move' || effect.category !== 'Special' || !budget(target).steamVeil) return;
+			if (effect.effectType !== 'Move' || effect.category !== 'Special' || !budget(target).steamVeil)
+				return;
 			budget(target).steamVeil = false;
 			return this.modifyAbilityGuard(damage, 0.75);
 		},
@@ -316,11 +396,14 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 	add('pressurekiln', 'Pressure Kiln', {
 		onDamagingHit(damage, target, source) {
 			if (!foeHit(damage, target, source)) return;
-			budget(target).pressure = Math.min(Math.floor(target.maxhp / 4),
-				(budget(target).pressure || 0) + Math.floor(damage / 2));
+			budget(target).pressure = Math.min(
+				Math.floor(target.maxhp / 4),
+				(budget(target).pressure || 0) + Math.floor(damage / 2),
+			);
 		},
 		onSourceDamagingHit(damage, target, source, move) {
-			if (move.type !== 'Fire' || !foeHit(damage, target, source) || !budget(source).pressure) return;
+			if (move.type !== 'Fire' || !foeHit(damage, target, source) || !budget(source).pressure)
+				return;
 			const stored = budget(source).pressure!;
 			budget(source).pressure = 0;
 			this.heal(stored, source, source, this.effect);
@@ -329,13 +412,24 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 	add('shattercrust', 'Shattercrust', {
 		...base.crumblingshell,
 		onDamage(damage, target, source, effect) {
-			if (effect.effectType !== 'Move' || effect.category !== 'Physical' || !source || target.isAlly(source) ||
-				budget(target).shellBroken) return;
+			if (
+				effect.effectType !== 'Move' ||
+				effect.category !== 'Physical' ||
+				!source ||
+				target.isAlly(source) ||
+				budget(target).shellBroken
+			)
+				return;
 			return this.modifyAbilityGuard(damage, 0.5);
 		},
 		onDamagingHit(damage, target, source, move) {
 			base.crumblingshell.onDamagingHit?.call(this, damage, target, source, move);
-			if (move.category !== 'Physical' || !foeHit(damage, target, source) || budget(target).shellBroken) return;
+			if (
+				move.category !== 'Physical' ||
+				!foeHit(damage, target, source) ||
+				budget(target).shellBroken
+			)
+				return;
 			budget(target).shellBroken = true;
 			if (target.hp) source.side.addSideCondition('spikes', target, this.effect);
 		},
@@ -347,8 +441,13 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 			}
 		},
 		onAfterMove(source, target, move) {
-			if (!source.hp || !move.flags.sound || source.moveThisTurnResult !== true ||
-				source.m.restorativeSoundTurn === this.turn) return;
+			if (
+				!source.hp ||
+				!move.flags.sound ||
+				source.moveThisTurnResult !== true ||
+				source.m.restorativeSoundTurn === this.turn
+			)
+				return;
 			source.m.restorativeSoundTurn = this.turn;
 			this.heal(source.baseMaxhp / 8, source, source, this.effect);
 		},
@@ -362,7 +461,8 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 			}
 		},
 		onSourceDamagingHit(damage, target, source, move) {
-			if (!move.flags.sound || !foeHit(damage, target, source) || budget(source).dissonantUsed) return;
+			if (!move.flags.sound || !foeHit(damage, target, source) || budget(source).dissonantUsed)
+				return;
 			let removed = false;
 			for (const stat of Object.keys(target.boosts) as BoostID[]) {
 				if (target.boosts[stat] <= 0) continue;
@@ -394,14 +494,25 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 			const unseeded = new Set<Pokemon>();
 			const state = this.effectState;
 			move.onTryHit = function (defender, attacker, activeMove) {
-				const result = typeof originalTryHit === 'function' ? originalTryHit.call(this, defender, attacker, activeMove) : originalTryHit;
+				const result =
+					typeof originalTryHit === 'function' ?
+						originalTryHit.call(this, defender, attacker, activeMove) :
+						originalTryHit;
 				if (!defender.volatiles['leechseed']) unseeded.add(defender);
 				return result;
 			};
 			move.onHit = function (defender, attacker, activeMove) {
-				const result = typeof original === 'function' ? original.call(this, defender, attacker, activeMove) : original;
-				if (unseeded.delete(defender) && attacker === source && !activeMove.hasBounced && defender.volatiles['leechseed']?.source === source &&
-					source.hasAbility('primevalhunger')) {
+				const result =
+					typeof original === 'function' ?
+						original.call(this, defender, attacker, activeMove) :
+						original;
+				if (
+					unseeded.delete(defender) &&
+					attacker === source &&
+					!activeMove.hasBounced &&
+					defender.volatiles['leechseed']?.source === source &&
+					source.hasAbility('primevalhunger')
+				) {
 					primevalHungerHit(this, defender, source, state);
 				}
 				return result;
@@ -422,7 +533,8 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 		},
 	});
 	base.razorreach = {
-		...base.longreach, ...base.sharpness,
+		...base.longreach,
+		...base.sharpness,
 		onBasePower(power, source, target, move) {
 			base.longreach.onBasePower?.call(this, power, source, target, move);
 			return base.sharpness.onBasePower?.call(this, power, source, target, move);
@@ -433,16 +545,21 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 			base.keeneye.onModifyMove?.call(this, move, source, target);
 			base.longreach.onModifyMove?.call(this, move, source, target);
 		},
-		name: 'Razor Reach', num: 11229,
+		name: 'Razor Reach',
+		num: 11229,
 	};
 	base.witheringtouch = {
-		...base.poisontouch, ...base.corrosion,
+		...base.poisontouch,
+		...base.corrosion,
 		onAnyAfterDamageApplied: base.witheringtouch.onAnyAfterDamageApplied,
-		name: 'Withering Touch', num: 11230,
+		name: 'Withering Touch',
+		num: 11230,
 	};
 	base.anchorbridge = {
-		...base.sturdy, ...base.solidrock,
-		name: 'Anchor Bridge', num: base.anchorbridge.num,
+		...base.sturdy,
+		...base.solidrock,
+		name: 'Anchor Bridge',
+		num: base.anchorbridge.num,
 	};
 	base.railsight = {
 		...base.innerfocus,
@@ -456,9 +573,11 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 			if (this.suppressingAbility(target, this.dex.abilities.get('innerfocus'))) return;
 			return base.innerfocus.onTryBoost!.call(this, boost, target, source, effect);
 		},
-		name: 'Rail Sight', num: base.railsight.num,
+		name: 'Rail Sight',
+		num: base.railsight.num,
 		onDamagingHit(damage, target, source, move) {
-			if (foeHit(damage, target, source) && !budget(target).railGranted) this.effectState.railHitMove = move;
+			if (foeHit(damage, target, source) && !budget(target).railGranted)
+				this.effectState.railHitMove = move;
 		},
 		onAnyAfterMove(source, target, move) {
 			if (this.effectState.railHitMove !== move) return;
@@ -470,11 +589,16 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 			this.add('-activate', holder, 'ability: Rail Sight');
 		},
 		onBasePower(power, source, target, move) {
-			if (budget(source).railCharge && this.movehasType(move, 'Electric')) return this.chainModify(1.5);
+			if (budget(source).railCharge && this.movehasType(move, 'Electric'))
+				return this.chainModify(1.5);
 		},
 		onAfterMove(pokemon, target, move) {
-			if (move.category === 'Status' || !this.movehasType(move, 'Electric') ||
-				(move.flags.charge && pokemon.volatiles[move.id])) return;
+			if (
+				move.category === 'Status' ||
+				!this.movehasType(move, 'Electric') ||
+				(move.flags.charge && pokemon.volatiles[move.id])
+			)
+				return;
 			budget(pokemon).railCharge = false;
 		},
 	};
@@ -493,33 +617,54 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 	base.greatmarsh.onSourceDamagingHit = base.toxicchain.onSourceDamagingHit;
 
 	base.dawnherald = {
-		...base.drought, ...base.friendguard,
-		name: 'Dawn Herald', num: num++,
+		...base.drought,
+		...base.friendguard,
+		name: 'Dawn Herald',
+		num: num++,
 	};
 	base.aeviantoxin.onModifyCritRatio = base.merciless.onModifyCritRatio;
 
 	base.venomignition = {
 		onModifyDamage(damage, source, target, move) {
-			if (move.category !== 'Status' && this.movehasType(move, 'Fire') && ['psn', 'tox'].includes(target.status)) {
+			if (
+				move.category !== 'Status' &&
+				this.movehasType(move, 'Fire') &&
+				['psn', 'tox'].includes(target.status)
+			) {
 				return this.chainModify(1.2);
 			}
 		},
-		flags: {}, name: 'Venom Ignition', rating: 3, num: num++,
+		flags: {},
+		name: 'Venom Ignition',
+		rating: 3,
+		num: num++,
 	};
 	base.corrosiveburn = {
-		...base.corrosion, ...base.oblivious, ...base.venomignition,
-		flags: { breakable: 1 }, name: 'Corrosive Burn', rating: 5, num: 10406,
+		...base.corrosion,
+		...base.oblivious,
+		...base.venomignition,
+		flags: { breakable: 1 },
+		name: 'Corrosive Burn',
+		rating: 5,
+		num: 10406,
 	};
 	base.transfixinggaze = {
 		...base.frisk,
 		onAnyAfterMove(source, target, move) {
 			const holder = this.effectState.target;
-			if (!holder.hp || !holder.isActive || source.isAlly(holder) ||
-				!move.selfSwitch || source.switchFlag !== move.id) return;
+			if (
+				!holder.hp ||
+				!holder.isActive ||
+				source.isAlly(holder) ||
+				!move.selfSwitch ||
+				source.switchFlag !== move.id
+			)
+				return;
 			source.switchFlag = false;
 			this.add('-activate', holder, 'ability: Transfixing Gaze');
 		},
-		name: 'Transfixing Gaze', num: num++,
+		name: 'Transfixing Gaze',
+		num: num++,
 	};
 
 	base.freshplumage = {
@@ -547,7 +692,9 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 				}
 				const species = curPoke.species;
 				// pokemon can't get Natural Cure
-				if (!Object.values(species.abilities).some(name => includesNaturalCure(this.dex.toID(name)))) {
+				if (
+					!Object.values(species.abilities).some(name => includesNaturalCure(this.dex.toID(name)))
+				) {
 					// this.add('-message', "" + curPoke + " skipped: no Natural Cure");
 					continue;
 				}
@@ -580,7 +727,10 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 				// It's not possible to know what pokemon were cured
 
 				// Unlike a -hint, this is real information that battlers need, so we use a -message
-				this.add('-message', `(${cureList.length} of ${pokemon.side.name}'s pokemon ${cureList.length === 1 ? "was" : "were"} cured by Natural Cure.)`);
+				this.add(
+					'-message',
+					`(${cureList.length} of ${pokemon.side.name}'s pokemon ${cureList.length === 1 ? 'was' : 'were'} cured by Natural Cure.)`,
+				);
 
 				for (const pkmn of cureList) {
 					pkmn.showCure = false;
@@ -596,7 +746,8 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 				this.add('-fail', target, 'unboost', 'accuracy', '[from] ability: Fresh Plumage');
 			}
 		},
-		name: 'Fresh Plumage', num: num++,
+		name: 'Fresh Plumage',
+		num: num++,
 	};
 	// Compound Eyes already supplies the same Mirror Arena entry reward as Keen Eye.
 	base.silksights.onStart = base.keeneye.onStart;

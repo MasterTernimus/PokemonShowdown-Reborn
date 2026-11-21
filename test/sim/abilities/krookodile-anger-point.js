@@ -1,4 +1,8 @@
-'use strict'; const assert = require('assert').strict, common = require('../../common'), { Dex } = require('../../../dist/sim'); describe('Krookodile Controlled Fury passive', () => {
+'use strict';
+const assert = require('assert').strict,
+	common = require('../../common'),
+	{ Dex } = require('../../../dist/sim');
+describe('Krookodile Controlled Fury passive', () => {
 	let b;
 	afterEach(() => {
 		b?.destroy();
@@ -6,9 +10,12 @@
 	});
 	function setup(ability = 'No Ability') {
 		const m = { species: 'Mew', ability: 'No Ability', moves: ['splash', 'tackle'] };
-		b = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[{ ...m, species: 'Krookodile', ability }, m], [m, m]]);
+		b = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ ...m, species: 'Krookodile', ability }, m],
+			[m, m],
+		]);
 		b.makeChoices('team 12', 'team 12');
-		for (const s of b.sides) for (const p of s.pokemon)p.hp = p.maxhp = p.baseMaxhp = 4800;
+		for (const s of b.sides) for (const p of s.pokemon) p.hp = p.maxhp = p.baseMaxhp = 4800;
 		return [b.p1.active[0], b.p2.active[0]];
 	}
 	it('uses Controlled Fury with the current Dune Hunter option', () => {
@@ -17,8 +24,38 @@
 		assert.deepEqual(p.species.abilities, { 0: 'Intimidate', 1: 'Dread Jaw', H: 'Dune Hunter' });
 		assert(Dex.abilities.get('vendetta').onDamagingHit);
 	});
-for(const suppressed of [false,true])it('first hit gains one Attack under suppression='+suppressed,()=>{const[p,q]=setup();if(suppressed)p.addVolatile('gastroacid');const m=Object.assign(Dex.getActiveMove('tackle'),{accuracy:true,willCrit:false});b.actions.runMove(m,q,q.getLocOf(p));assert.equal(p.boosts.atk,1);b.actions.runMove(m,q,q.getLocOf(p));assert.equal(p.boosts.atk,1);});
-it('surviving critical hit reaches Attack cap',()=>{const[p,q]=setup();p.boosts.atk=-6;b.actions.runMove(Object.assign(Dex.getActiveMove('tackle'),{accuracy:true,willCrit:true}),q,q.getLocOf(p));assert.equal(p.boosts.atk,6);});
-it('selected Anger Point does not double first-hit gain',()=>{const[p,q]=setup('Anger Point');b.actions.runMove(Object.assign(Dex.getActiveMove('tackle'),{accuracy:true,willCrit:false}),q,q.getLocOf(p));assert.equal(p.boosts.atk,1);});
-it('no longer blocks accuracy loss through Keen Eye',()=>{const[p,q]=setup();b.boost({accuracy:-1},p,q);assert.equal(p.boosts.accuracy,-1);});
+	for (const suppressed of [false, true])
+		it('first hit gains one Attack under suppression=' + suppressed, () => {
+			const [p, q] = setup();
+			if (suppressed) p.addVolatile('gastroacid');
+			const m = Object.assign(Dex.getActiveMove('tackle'), { accuracy: true, willCrit: false });
+			b.actions.runMove(m, q, q.getLocOf(p));
+			assert.equal(p.boosts.atk, 1);
+			b.actions.runMove(m, q, q.getLocOf(p));
+			assert.equal(p.boosts.atk, 1);
+		});
+	it('surviving critical hit reaches Attack cap', () => {
+		const [p, q] = setup();
+		p.boosts.atk = -6;
+		b.actions.runMove(
+			Object.assign(Dex.getActiveMove('tackle'), { accuracy: true, willCrit: true }),
+			q,
+			q.getLocOf(p)
+		);
+		assert.equal(p.boosts.atk, 6);
+	});
+	it('selected Anger Point does not double first-hit gain', () => {
+		const [p, q] = setup('Anger Point');
+		b.actions.runMove(
+			Object.assign(Dex.getActiveMove('tackle'), { accuracy: true, willCrit: false }),
+			q,
+			q.getLocOf(p)
+		);
+		assert.equal(p.boosts.atk, 1);
+	});
+	it('no longer blocks accuracy loss through Keen Eye', () => {
+		const [p, q] = setup();
+		b.boost({ accuracy: -1 }, p, q);
+		assert.equal(p.boosts.accuracy, -1);
+	});
 });

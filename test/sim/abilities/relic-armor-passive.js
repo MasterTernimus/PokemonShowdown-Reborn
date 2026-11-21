@@ -1,6 +1,6 @@
 'use strict';
 const assert = require('assert').strict, common = require('../../common'), { Dex } = require('../../../dist/sim');
-const { SpeciesPassives, RelicArmorPassiveForms } = require('../../../dist/data/species-passives');
+const { RelicArmorPassiveForms } = require('../../../dist/data/species-passives');
 const { getAbilityDisplayComponents } = require('../../../dist/data/ability-display');
 const { calculatorMetadata, calculateScenario } = require('../../../dist/sim/custom-calculator');
 let battle;
@@ -18,8 +18,8 @@ function mod(p, t, crit = false) {
 describe('Exact Relic Armor species passive migration', () => {
 	for (const species of RelicArmorPassiveForms) {
 		it(species + ' receives only one field-entry bonus with Aurora Current', () => {
-			const mon = (name, ability) => ({species: name, ability, moves: ['splash']});
-			battle = common.createBattle({formatid: 'gen9volcanic'}, [
+			const mon = (name, ability) => ({ species: name, ability, moves: ['splash'] });
+			battle = common.createBattle({ formatid: 'gen9volcanic' }, [
 				[mon(species, 'Aurora Current'), mon('Mew', 'No Ability')],
 				[mon('Mew', 'No Ability'), mon('Mew', 'No Ability')],
 			]);

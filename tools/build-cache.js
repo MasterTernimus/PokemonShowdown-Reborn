@@ -13,8 +13,8 @@ const publishLock = (source, destination) => {
 		require('child_process').execFileSync(
 			path.join(process.env.SystemRoot, 'System32/WindowsPowerShell/v1.0/powershell.exe'),
 			['-NoLogo', '-NoProfile', '-NonInteractive', '-Command', command],
-			{windowsHide: true, stdio: 'pipe', env: {...process.env,
-				SHOWDOWN_BUILD_LOCK_SOURCE: source, SHOWDOWN_BUILD_LOCK_DESTINATION: destination}},
+			{ windowsHide: true, stdio: 'pipe', env: { ...process.env,
+				SHOWDOWN_BUILD_LOCK_SOURCE: source, SHOWDOWN_BUILD_LOCK_DESTINATION: destination } }
 		);
 	} catch (error) {
 		if (error.status === 17) error.code = 'EEXIST';

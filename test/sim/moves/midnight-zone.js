@@ -3,9 +3,9 @@ const assert = require('../../assert');
 const common = require('../../common');
 let battle;
 function start(ability = 'noability', species = 'Mew', foeAbility = 'noability', item = '', moves = ['splash', 'dive', 'darkpulse', 'flash']) {
-	battle = common.createBattle({formatid: 'gen9midnightzone'}, [[
-		{species, ability, item, moves},
-	], [{species: 'Mew', ability: foeAbility, moves: ['splash', 'tackle', 'thunder', 'fissure']}]]);
+	battle = common.createBattle({ formatid: 'gen9midnightzone' }, [[
+		{ species, ability, item, moves },
+	], [{ species: 'Mew', ability: foeAbility, moves: ['splash', 'tackle', 'thunder', 'fissure'] }]]);
 	battle.makeChoices('team 1', 'team 1');
 	return battle.p1.active[0];
 }
@@ -208,7 +208,7 @@ describe('Midnight Zone', () => {
 		assert(battle.log.some(l => l.includes('|Anchor Shot|')));
 	});
 	it('Whirlpool traps for 1/6 HP and Secret Power uses Dark Void animation', () => {
-		const p = start('magicguard', 'Mew', 'noability', '', ['whirlpool', 'secretpower']);
+		start('magicguard', 'Mew', 'noability', '', ['whirlpool', 'secretpower']);
 		battle.makeChoices('move whirlpool', 'move splash');
 		assert.equal(battle.p2.active[0].volatiles.partiallytrapped.boundDivisor, 6);
 		battle.makeChoices('move secretpower', 'move splash');
@@ -227,9 +227,9 @@ describe('Midnight Zone', () => {
 		assert.equal(battle.runEvent('ModifySpA', p, foe, normal, 100), 100);
 	});
 	it('removes existing weather on entry', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Mew', ability: 'noability', moves: ['splash']},
-		], [{species: 'Mew', ability: 'noability', moves: ['splash']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Mew', ability: 'noability', moves: ['splash'] },
+		], [{ species: 'Mew', ability: 'noability', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		const p = battle.p1.active[0];
 		battle.field.setWeather('raindance', p);
@@ -238,12 +238,12 @@ describe('Midnight Zone', () => {
 		assert.equal(battle.field.weather, '');
 	});
 	it('Fortress Shell redirects an Electric attack aimed at its partner', () => {
-		battle = common.createBattle({formatid: 'gen9doublesmidnightzone'}, [[
-			{species: 'Mew', ability: 'fortressshell', moves: ['splash']},
-			{species: 'Mew', ability: 'magicguard', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9doublesmidnightzone' }, [[
+			{ species: 'Mew', ability: 'fortressshell', moves: ['splash'] },
+			{ species: 'Mew', ability: 'magicguard', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'noability', moves: ['thunderbolt']},
-			{species: 'Mew', ability: 'noability', moves: ['splash']},
+			{ species: 'Mew', ability: 'noability', moves: ['thunderbolt'] },
+			{ species: 'Mew', ability: 'noability', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 12', 'team 12');
 		battle.makeChoices('move splash, move splash', 'move thunderbolt 2, move splash');

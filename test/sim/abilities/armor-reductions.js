@@ -6,8 +6,8 @@ describe('Armor damage reductions', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 	function setup(ability, allyAbility = 'Friend Guard') {
-		const set = ability => ({species: 'Mew', ability, moves: ['splash', 'tackle', 'doubleedge']});
-		battle = common.createBattle({gameType: 'doubles'}, [[set(ability), set(allyAbility)], [set('No Ability'), set('No Ability')]]);
+		const set = ability => ({ species: 'Mew', ability, moves: ['splash', 'tackle', 'doubleedge'] });
+		battle = common.createBattle({ gameType: 'doubles' }, [[set(ability), set(allyAbility)], [set('No Ability'), set('No Ability')]]);
 		if (battle.requestState === 'teampreview') battle.makeChoices('team 12', 'team 12');
 		return [battle.p1.active[0], battle.p2.active[0]];
 	}
@@ -19,7 +19,7 @@ describe('Armor damage reductions', () => {
 			const damage = () => battle.runEvent('ModifyDamage', foe, holder, move, 1000);
 			assert.equal(damage(), 750);
 			holder.getMoveHitData(move).typeMod = 1;
-			const reduced=armor==='Prism Armor'?600:675;
+			const reduced = armor === 'Prism Armor' ? 600 : 675;
 			assert.equal(damage(), reduced);
 			holder.side.addSideCondition('reflect', holder);
 			assert(damage() < reduced, 'Reflect still works');
@@ -27,7 +27,7 @@ describe('Armor damage reductions', () => {
 		});
 	}
 	for (const terrain of ['newworldterrain', 'dragonsdenterrain', 'mountainterrain', 'holyterrain',
-		'hauntedterrain', 'starlightarenaterrain', 'snowymountainterrain', ...[1,2,3,4,5].map(n => 'flowergarden' + n)]) {
+		'hauntedterrain', 'starlightarenaterrain', 'snowymountainterrain', ...[1, 2, 3, 4, 5].map(n => 'flowergarden' + n)]) {
 		it('disables just the armor damage reductions on ' + terrain, () => {
 			const [holder, foe] = setup('Shell Armor', 'No Ability');
 			battle.field.terrain = terrain;
@@ -52,8 +52,8 @@ describe('Armor damage reductions', () => {
 		holder.maxhp = holder.baseMaxhp = holder.hp = 5000;
 		const hit = () => {
 			holder.hp = holder.maxhp;
-			const move = Object.assign(battle.dex.getActiveMove('tackle'), {willCrit:false, accuracy:true, multihit:2});
-			battle.actions.useMove(move, foe, {target:holder});
+			const move = Object.assign(battle.dex.getActiveMove('tackle'), { willCrit: false, accuracy: true, multihit: 2 });
+			battle.actions.useMove(move, foe, { target: holder });
 			return holder.maxhp - holder.hp;
 		};
 		const guarded = hit();

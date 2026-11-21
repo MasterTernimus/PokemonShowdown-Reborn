@@ -3,19 +3,19 @@
 const assert = require('./../../assert');
 const common = require('./../../common');
 
-describe('Moon Veil', function () {
+describe('Moon Veil', () => {
 	let battle;
-	afterEach(function () {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('replaces Clefable’s first ability and sets Misty Terrain on entry', function () {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'clefable', ability: 'moonveil', moves: ['protect']},
-			{species: 'crobat', moves: ['protect']},
+	it('replaces Clefable’s first ability and sets Misty Terrain on entry', () => {
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'clefable', ability: 'moonveil', moves: ['protect'] },
+			{ species: 'crobat', moves: ['protect'] },
 		], [
-			{species: 'arbok', moves: ['toxic']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'arbok', moves: ['toxic'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('team 12', 'team 12');
 		battle.makeChoices('move protect, move protect', 'move toxic 2, move sleeptalk');
@@ -28,13 +28,13 @@ describe('Moon Veil', function () {
 		assert.equal(battle.p2.active[0].boosts.spa, -1);
 	});
 
-	it('sets Misty Aura over a compatible existing field', function () {
-		battle = common.createBattle({formatid: 'gen9doubleswatersurface'}, [[
-			{species: 'clefable', ability: 'moonveil', moves: ['protect']},
-			{species: 'crobat', moves: ['protect']},
+	it('sets Misty Aura over a compatible existing field', () => {
+		battle = common.createBattle({ formatid: 'gen9doubleswatersurface' }, [[
+			{ species: 'clefable', ability: 'moonveil', moves: ['protect'] },
+			{ species: 'crobat', moves: ['protect'] },
 		], [
-			{species: 'arbok', moves: ['protect']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'arbok', moves: ['protect'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('team 12', 'team 12');
 		assert.equal(battle.field.terrain, 'watersurfaceterrain');

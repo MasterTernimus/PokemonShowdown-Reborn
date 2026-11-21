@@ -1,13 +1,13 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
+const { Dex } = require('../../../dist/sim');
 describe('Download and Defragment targeting effects', () => {
 	let battle;
 	function start(ability, doubles = false, species = 'Mew') {
-		const mon = a => ({species: 'Mew', ability: a, moves: ['splash', 'zapcannon', 'tackle', 'protect']});
+		const mon = a => ({ species: 'Mew', ability: a, moves: ['splash', 'zapcannon', 'tackle', 'protect'] });
 		const team = [mon(ability), mon('No Ability'), mon('No Ability')]; team[0].species = species;
-		battle = common.createBattle({formatid: doubles ? 'gen9nofielddoublesbattle' : 'gen9nofieldsinglesgame'},
+		battle = common.createBattle({ formatid: doubles ? 'gen9nofielddoublesbattle' : 'gen9nofieldsinglesgame' },
 			[team, [mon('No Ability'), mon('No Ability'), mon('No Ability')]]);
 		battle.makeChoices('team 123', 'team 123');
 		return [battle.p1.active[0], battle.p2.active[0]];
@@ -36,9 +36,9 @@ describe('Download and Defragment targeting effects', () => {
 		for (const target of [foe, other]) assert.equal(battle.runEvent('Accuracy', target, p, move, 50), true);
 		assert.equal(battle.runEvent('Accuracy', battle.p2.pokemon[2], p, move, 50), 50);
 		foe.addVolatile('protect'); const hp = foe.hp;
-		battle.actions.useMove('zapcannon', p, {target: foe}); assert.equal(foe.hp, hp);
+		battle.actions.useMove('zapcannon', p, { target: foe }); assert.equal(foe.hp, hp);
 		foe.removeVolatile('protect'); foe.setType('Ground');
-		battle.actions.useMove('zapcannon', p, {target: foe}); assert.equal(foe.hp, hp);
+		battle.actions.useMove('zapcannon', p, { target: foe }); assert.equal(foe.hp, hp);
 	});
 	it('caps each defensive entry boost at +1 on formerly enhanced fields', () => {
 		const [p, foe] = start('Defragment');

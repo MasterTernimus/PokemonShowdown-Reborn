@@ -1,216 +1,93 @@
-import {getRKSSystemMemoryAbilities} from './rks-system-memory';
-import {PerfectForecastForms} from './castform-split';
-import {AbilityComponentExclusions, getAbilityComponentAdditions, getAbilityComponentExclusions} from './passive-ability-cleanup';
-import {AbilityDisplaySummaries} from './ability-display-summaries';
+import { getRKSSystemMemoryAbilities } from './rks-system-memory';
+import { PerfectForecastForms } from './castform-split';
+import {
+	AbilityComponentExclusions,
+	getAbilityComponentAdditions,
+	getAbilityComponentExclusions,
+} from './passive-ability-cleanup';
+import { AbilityDisplaySummaries } from './ability-display-summaries';
 import { Aliases } from './aliases';
-import {AbilityComponents} from './ability-components';
+import { AbilityComponents } from './ability-components';
 
 /** Break long player text into readable points without dropping rules or splitting stat names. */
 export function abilityDescriptionLines(description: string): string[] {
-	return description.replace(/\b(Sp|No|Mr|Mrs)\.\s/g, '$1\u0001 ')
+	return description
+		.replace(/\b(Sp|No|Mr|Mrs)\.\s/g, '$1\u0001 ')
 		.split(/\.\s+(?=[A-Z0-9])|;\s+/)
-		.map(line => line.replace(/\u0001/g, '.').trim()).filter(Boolean);
+		.map(line => line.split('\u0001').join('.').trim())
+		.filter(Boolean);
 }
 
 // Display-only additions confirmed by named descriptions and active implementation.
 // Do not alter battle identity when filling omissions in the mechanical registry.
-const AdditionalDisplayComponents: {[id: string]: string[]} = {
-	"selfrepair": [
-		"naturalcure",
-		"selfsufficient"
-	],
-	"scarecrow": [
-		"windrider",
-		"steelworker",
-		"stakeout"
-	],
-	"bruteforce": [
-		"reckless",
-		"rockhead"
-	],
-	"fightingfiend": [
-		"vitalspirit",
-		"multiscale"
-	],
-	"kickfiend": [
-		"striker",
-		"violentrush",
-		"limber"
-	],
-	"punchfiend": [
-		"keeneye",
-		"innerfocus",
-		"unseenfist"
-	],
-	"spinfiend": [
-		"technician",
-		"vitalspirit"
-	],
-	"aevianoath": [
-		"swornduty",
-		"dualwield",
-		"battlearmor"
-	],
-	"cruelshell": [
-		"hypercutter",
-		"shellarmor",
-		"angershell"
-	],
-	"unleashedego": [
-		"ultraego",
-		"levitate",
-		"ragingstorm"
-	],
-	"asoneglastrier": [
-		"unnerve",
-		"chillingneigh"
-	],
-	"asonespectrier": [
-		"unnerve",
-		"grimneigh"
-	],
-	"mourningvessel": [
-		"prankster",
-		"magicguard"
-	],
-	"apexcleave": [
-		"sharpness",
-		"dualwield",
-		"moxie"
-	],
-	"voidcommand": [
-		"insomnia",
-		"superluck"
-	],
-	"tyrantstream": [
-		"sandstream",
-		"bruteforce"
-	],
-	"adaptivepower": [
-		"hugepower",
-		"magicguard",
-		"regenerator"
-	],
-	"caverndrake": [
-		"eartheater",
-		"solidrock",
-		"moldbreaker"
-	],
-	"orchardbond": [
-		"hydrabond",
-		"harvest"
-	],
-	"blademastery": [
-		"sharpness",
-		"superluck"
-	],
-	"goldentalons": [
-		"stalwart",
-		"goodasgold",
-		"sharpness"
-	],
-	"venomheal": [
-		"hypercutter",
-		"poisonheal",
-		"poisonpoint"
-	],
-	"blackfang": [
-		"strongjaw",
-		"insomnia",
-		"moxie"
-	],
-	"fluffycraft": [
-		"fluffy",
-		"technician"
-	],
-	"surgeconduit": [
-		"bruteforce",
-		"shadowshield"
-	],
-	"duskdrive": [
-		"precision",
-		"opportunist",
-		"battlefervor"
-	],
-	"layeredcoat": [
-		"furcoat",
-		"overcoat"
-	],
-	"empress": [
-		"queenlymajesty",
-		"royaldecree"
-	],
-	"imperialprincess": [
-		"striker",
-		"vitalspirit",
-		"moxie"
-	],
-	"loyalguard": [
-		"friendguard",
-		"guarddog",
-		"intimidate"
-	],
-	"frostsiren": [
-		"refrigerate",
-		"forewarn",
-		"dryskin"
-	],
-	"amethystglow": [
-		"icebody",
-		"refrigerate"
-	],
-	"islandcurrent": [
-		"swiftswim",
-		"windrider"
-	],
-	"oceanicwings": [
-		"waterabsorb",
-		"hydration",
-		"friendguard"
-	],
-	"ruinjaw": [
-		"strongjaw",
-		"eartheater"
-	],
-	"triplethreat": [
-		"innerfocus",
-		"keeneye",
-		"earlybird"
-	],
-	"strikerfrenzy": [
-		"striker",
-		"vitalspirit"
-	],
-	"venomveil": [
-		"liquidooze",
-		"corrosion",
-		"waterveil"
-	],
-	"rebornflower": [
-		"invigorate",
-		"flowerveil"
-	]
+const AdditionalDisplayComponents: { [id: string]: string[] } = {
+	selfrepair: ['naturalcure', 'selfsufficient'],
+	scarecrow: ['windrider', 'steelworker', 'stakeout'],
+	bruteforce: ['reckless', 'rockhead'],
+	fightingfiend: ['vitalspirit', 'multiscale'],
+	kickfiend: ['striker', 'violentrush', 'limber'],
+	punchfiend: ['keeneye', 'innerfocus', 'unseenfist'],
+	spinfiend: ['technician', 'vitalspirit'],
+	aevianoath: ['swornduty', 'dualwield', 'battlearmor'],
+	cruelshell: ['hypercutter', 'shellarmor', 'angershell'],
+	unleashedego: ['ultraego', 'levitate', 'ragingstorm'],
+	asoneglastrier: ['unnerve', 'chillingneigh'],
+	asonespectrier: ['unnerve', 'grimneigh'],
+	mourningvessel: ['prankster', 'magicguard'],
+	apexcleave: ['sharpness', 'dualwield', 'moxie'],
+	voidcommand: ['insomnia', 'superluck'],
+	tyrantstream: ['sandstream', 'bruteforce'],
+	adaptivepower: ['hugepower', 'magicguard', 'regenerator'],
+	caverndrake: ['eartheater', 'solidrock', 'moldbreaker'],
+	orchardbond: ['hydrabond', 'harvest'],
+	blademastery: ['sharpness', 'superluck'],
+	goldentalons: ['stalwart', 'goodasgold', 'sharpness'],
+	venomheal: ['hypercutter', 'poisonheal', 'poisonpoint'],
+	blackfang: ['strongjaw', 'insomnia', 'moxie'],
+	fluffycraft: ['fluffy', 'technician'],
+	surgeconduit: ['bruteforce', 'shadowshield'],
+	duskdrive: ['precision', 'opportunist', 'battlefervor'],
+	layeredcoat: ['furcoat', 'overcoat'],
+	empress: ['queenlymajesty', 'royaldecree'],
+	imperialprincess: ['striker', 'vitalspirit', 'moxie'],
+	loyalguard: ['friendguard', 'guarddog', 'intimidate'],
+	frostsiren: ['refrigerate', 'forewarn', 'dryskin'],
+	amethystglow: ['icebody', 'refrigerate'],
+	islandcurrent: ['swiftswim', 'windrider'],
+	oceanicwings: ['waterabsorb', 'hydration', 'friendguard'],
+	ruinjaw: ['strongjaw', 'eartheater'],
+	triplethreat: ['innerfocus', 'keeneye', 'earlybird'],
+	strikerfrenzy: ['striker', 'vitalspirit'],
+	venomveil: ['liquidooze', 'corrosion', 'waterveil'],
+	rebornflower: ['invigorate', 'flowerveil'],
 };
 
 // The legacy identity registry is not always an exact implementation summary.
 // Burning Crown uses flat damage reduction, not Filter; its other delegates remain active.
-const DisplayComponentOverrides: {[id: string]: string[]} = {
- mourningvessel: [],
- burningrage: ['bruteforce', 'ironfist'],
- // These packages retain custom effects; Includes names only their full components.
- astralwatcher: ['frisk'],
- roughscale: ['roughskin', 'toughclaws'],
- templechime: [],
- safeharbor: ['waterabsorb', 'hydration'],
- oceanlullaby: ['shellarmor', 'icebody'],
- auroraresonance: [],
- blazingmane: ['flashfire'],
- cruelshell: [],
+const DisplayComponentOverrides: { [id: string]: string[] } = {
+	mourningvessel: [],
+	burningrage: ['bruteforce', 'ironfist'],
+	// These packages retain custom effects; Includes names only their full components.
+	astralwatcher: ['frisk'],
+	roughscale: ['roughskin', 'toughclaws'],
+	templechime: [],
+	safeharbor: ['waterabsorb', 'hydration'],
+	oceanlullaby: ['shellarmor', 'icebody'],
+	auroraresonance: [],
+	blazingmane: ['flashfire'],
+	cruelshell: [],
 	pollenbloom: ['thickfat', 'aromaveil'],
 	atrocity: ['unboundblaze', 'fireward'],
- unboundblaze: ['dragonize', 'magmaarmor', 'proficient'],
- soulcremation: ['soulsiphon', 'soulpyre', 'malicewell'],
- burningcrown: ['intimidate', 'whitesmoke', 'moldbreaker', 'unboundblaze', 'selfsufficient', 'proficient'],
+	unboundblaze: ['dragonize', 'magmaarmor', 'proficient'],
+	soulcremation: ['soulsiphon', 'soulpyre', 'malicewell'],
+	burningcrown: [
+		'intimidate',
+		'whitesmoke',
+		'moldbreaker',
+		'unboundblaze',
+		'selfsufficient',
+		'proficient',
+	],
 };
 
 /** Canonical display identities only; never installs or dispatches battle callbacks. */
@@ -226,9 +103,13 @@ export function canonicalAbilityDisplayID(name: string): string {
 
 function directDisplayComponents(id: string): string[] {
 	id = canonicalAbilityDisplayID(id);
-	const parts = DisplayComponentOverrides[id] ||
-		(AbilityComponents[id]?.length ? AbilityComponents[id] : AdditionalDisplayComponents[id]) || [];
-	return [...new Set(parts.map(canonicalAbilityDisplayID))].filter(part => !AbilityComponentExclusions[id]?.includes(part));
+	const parts =
+		DisplayComponentOverrides[id] ||
+		(AbilityComponents[id]?.length ? AbilityComponents[id] : AdditionalDisplayComponents[id]) ||
+		[];
+	return [...new Set(parts.map(canonicalAbilityDisplayID))].filter(
+		part => !AbilityComponentExclusions[id]?.includes(part),
+	);
 }
 
 export function getAbilityDisplayClosure(id: string, seen = new Set<string>()): Set<string> {
@@ -239,34 +120,66 @@ export function getAbilityDisplayClosure(id: string, seen = new Set<string>()): 
 	return seen;
 }
 
-export function getAbilityDisplayComponents(id: string, passives: readonly string[] = [], species = '', item?: string): string[] {
-	
-	if (id === 'rkssystem' && /^silvally(?:bug|dark|dragon|electric|fairy|fighting|fire|flying|ghost|grass|ground|ice|poison|psychic|rock|steel|water)?$/.test(canonicalAbilityDisplayID(species))) {
+export function getAbilityDisplayComponents(
+	id: string,
+	passives: readonly string[] = [],
+	species = '',
+	item?: string,
+): string[] {
+	if (
+		id === 'rkssystem' &&
+		/^silvally(?:bug|dark|dragon|electric|fairy|fighting|fire|flying|ghost|grass|ground|ice|poison|psychic|rock|steel|water)?$/.test(
+			canonicalAbilityDisplayID(species),
+		)
+	) {
 		return item === undefined ? [] : getRKSSystemMemoryAbilities(canonicalAbilityDisplayID(item));
 	}
 	if (id === 'voidvoice') return ['queenlymajesty', 'voidveil'];
-	if (id === 'perfectforecast') return PerfectForecastForms[canonicalAbilityDisplayID(species)]?.components || [];
-	if ((!species || species === 'gardevoir') && id === 'dreamsickness') return ['insomnia', 'swornduty'];
+	if (id === 'perfectforecast')
+		return PerfectForecastForms[canonicalAbilityDisplayID(species)]?.components || [];
+	if ((!species || species === 'gardevoir') && id === 'dreamsickness')
+		return ['insomnia', 'swornduty'];
 	if ((!species || species === 'gardevoir') && id === 'voidveil') return ['levitate', 'telepathy'];
 	if (id === 'venomarmor' && (!species || species === 'zangoose')) return ['dualwield', 'runaway'];
 	const excluded = getAbilityComponentExclusions(id, passives, species);
-	const parts = Array.from(new Set([...directDisplayComponents(id), ...getAbilityComponentAdditions(id, passives)].map(canonicalAbilityDisplayID)))
-		.filter(part => !passives.includes(part) && !excluded.includes(part));
+	const parts = Array.from(
+		new Set(
+			[...directDisplayComponents(id), ...getAbilityComponentAdditions(id, passives)].map(
+				canonicalAbilityDisplayID,
+			),
+		),
+	).filter(part => !passives.includes(part) && !excluded.includes(part));
 	// A component already included by another named package needs no second display entry.
-	return parts.filter((part, index) => part !== 'proficient' && !parts.some((other, otherIndex) => other !== part &&
-		getAbilityDisplayClosure(other).has(part) && (!getAbilityDisplayClosure(part).has(other) || otherIndex < index)));
+	return parts.filter(
+		(part, index) =>
+			part !== 'proficient' &&
+			!parts.some(
+				(other, otherIndex) =>
+					other !== part &&
+					getAbilityDisplayClosure(other).has(part) &&
+					(!getAbilityDisplayClosure(part).has(other) || otherIndex < index),
+			),
+	);
 }
 
 /** Short effects and component names are separate display fields. */
-export function getAbilitySelectorSummary(id: string, summary: string, _nameOf: (id: string) => string): string {
- id = canonicalAbilityDisplayID(id);
- if (AbilityDisplaySummaries[id] && AbilityDisplaySummaries[id] !== 'Combines the listed abilities.') return AbilityDisplaySummaries[id];
- if (id === 'proficient') return summary;
- const closure = getAbilityDisplayClosure(id);
- const clauses = summary.split(/;\s*/).filter(clause => {
-  const parts = clause.trim().replace(/\.$/, '').split(/\s*\+\s*|,\s*(?:and\s+)?|\s+and\s+/);
-  return !parts.every(part => closure.has(canonicalAbilityDisplayID(part)));
- });
- const result = clauses.join('; ').replace(/\bProficient\b/gi, '1.3x same-type move power');
- return result ? result.replace(/^[a-z]/, letter => letter.toUpperCase()) : summary;
+export function getAbilitySelectorSummary(
+	id: string,
+	summary: string,
+	_nameOf: (id: string) => string,
+): string {
+	id = canonicalAbilityDisplayID(id);
+	if (AbilityDisplaySummaries[id] && AbilityDisplaySummaries[id] !== 'Combines the listed abilities.')
+		return AbilityDisplaySummaries[id];
+	if (id === 'proficient') return summary;
+	const closure = getAbilityDisplayClosure(id);
+	const clauses = summary.split(/;\s*/).filter(clause => {
+		const parts = clause
+			.trim()
+			.replace(/\.$/, '')
+			.split(/\s*\+\s*|,\s*(?:and\s+)?|\s+and\s+/);
+		return !parts.every(part => closure.has(canonicalAbilityDisplayID(part)));
+	});
+	const result = clauses.join('; ').replace(/\bProficient\b/gi, '1.3x same-type move power');
+	return result ? result.replace(/^[a-z]/, letter => letter.toUpperCase()) : summary;
 }

@@ -7,9 +7,9 @@ const composites = require('./starter-proficient-ids.json');
 // three selected abilities retain an explicit Proficient component.
 const retained = new Set(['mightyjaw', 'terragift', 'fallenstar']);
 function setup(ability) {
-	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-		[{species: 'Mew', ability, moves: ['psychic', 'splash']}],
-		[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+		[{ species: 'Mew', ability, moves: ['psychic', 'splash'] }],
+		[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 	]);
 	battle.makeChoices('team 1', 'team 1');
 	return [battle.p1.active[0], battle.p2.active[0]];

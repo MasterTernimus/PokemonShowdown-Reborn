@@ -2,7 +2,7 @@
 const assert = require('assert').strict;
 const common = require('../../common');
 const { Dex } = require('../../../dist/sim');
-const approved = {...require('./hoenn-mega-approved.json'), ...require('./sinnoh-unova-mega-approved.json'), sevipermega: 'rivalmalice', haxorusmega: 'twinfang'};
+const approved = { ...require('./hoenn-mega-approved.json'), ...require('./sinnoh-unova-mega-approved.json'), sevipermega: 'rivalmalice', haxorusmega: 'twinfang' };
 let battle;
 function setup(species, ability, doubles = false) {
 	const set = (species = 'Mew', ability = 'No Ability') => ({ species, ability, moves: ['splash', 'tackle', 'protect', 'poisonfang'] });
@@ -23,7 +23,7 @@ describe('Approved nine Hoenn Mega passive migrations', () => {
 		for (const old of require('./hoenn-mega-before.json')) {
 			const now = Dex.species.get(old.id);
 			assert.deepEqual(now.passives, require('./passive-approval-overlays').current(old.id, old.passives), old.id);
-			assert.deepEqual(now.abilities, require('./passive-approval-overlays').abilities(old.id, {...old.abilities}), old.id);
+			assert.deepEqual(now.abilities, require('./passive-approval-overlays').abilities(old.id, { ...old.abilities }), old.id);
 		}
 	});
 	for (const [id, passive] of Object.entries(approved)) it(id + ' gains its passive through real Mega evolution and Transform', () => {

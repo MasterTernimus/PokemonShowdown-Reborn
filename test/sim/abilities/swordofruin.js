@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Sword of Ruin`, function () {
-	afterEach(function () {
+describe(`Sword of Ruin`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should lower the Defense of all other Pokemon`, function () {
+	it(`should lower the Defense of all other Pokemon`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk']},
+			{ species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk'] },
 		], [
-			{species: 'chienpao', ability: 'swordofruin', moves: ['aerialace']},
+			{ species: 'chienpao', ability: 'swordofruin', moves: ['aerialace'] },
 		]]);
 		battle.randomizer = damage => damage;
 		const attacker = battle.p2.active[0];
@@ -27,11 +27,11 @@ describe(`Sword of Ruin`, function () {
 		assert.bounded(damage / baseline, [1.28, 1.38]);
 	});
 
-	it(`should not lower the Defense of other Pokemon with the Sword of Ruin Ability`, function () {
-		battle = common.createBattle({forceRandomChance: false}, [[
-			{species: 'wynaut', ability: 'swordofruin', moves: ['sleeptalk']},
+	it(`should not lower the Defense of other Pokemon with the Sword of Ruin Ability`, () => {
+		battle = common.createBattle({ forceRandomChance: false }, [[
+			{ species: 'wynaut', ability: 'swordofruin', moves: ['sleeptalk'] },
 		], [
-			{species: 'chienpao', ability: 'swordofruin', moves: ['aerialace']},
+			{ species: 'chienpao', ability: 'swordofruin', moves: ['aerialace'] },
 		]]);
 		battle.randomizer = damage => damage;
 		const attacker = battle.p2.active[0];

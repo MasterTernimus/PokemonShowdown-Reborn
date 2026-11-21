@@ -3,15 +3,15 @@
 const assert = require('../../assert');
 const common = require('../../common');
 
-describe('Lucky Chant custom effect', function () {
+describe('Lucky Chant custom effect', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 
-	it('lasts five turns at +3 priority, blocks enemy critical hits, and reduces incoming damage by 10%', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Clefable', ability: 'Magic Guard', moves: ['luckychant', 'tackle']},
+	it('lasts five turns at +3 priority, blocks enemy critical hits, and reduces incoming damage by 10%', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Clefable', ability: 'Magic Guard', moves: ['luckychant', 'tackle'] },
 		], [
-			{species: 'Eevee', ability: 'Run Away', moves: ['tackle']},
+			{ species: 'Eevee', ability: 'Run Away', moves: ['tackle'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const move = battle.dex.moves.get('luckychant');

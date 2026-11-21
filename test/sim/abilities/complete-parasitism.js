@@ -3,10 +3,10 @@ const assert = require('assert').strict;
 const common = require('../../common');
 let battle;
 function setup(ability = 'Parasitism') {
-	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-		[{species: 'Parasect', ability, item: 'Parasectite', moves: ['splash']},
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
-		[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+		[{ species: 'Parasect', ability, item: 'Parasectite', moves: ['splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+		[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 	]);
 	battle.makeChoices('team 12', 'team 1');
 	return battle.p1.active[0];
@@ -24,9 +24,9 @@ function lethal(pokemon) {
 describe('Mega Parasect and Complete Parasitism', () => {
 	afterEach(() => { battle?.destroy(); });
 	it('cannot Mega Evolve again after starting directly as Mega and reviving', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Parasect-Mega', ability: 'Complete Parasitism', item: 'Parasectite', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Parasect-Mega', ability: 'Complete Parasitism', item: 'Parasectite', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const pokemon = battle.p1.active[0];
@@ -42,7 +42,7 @@ describe('Mega Parasect and Complete Parasitism', () => {
 		battle.makeChoices('move splash mega', 'move splash');
 		assert.equal(pokemon.species.id, 'parasectmega');
 		assert.equal(pokemon.ability, 'completeparasitism');
-		assert.deepEqual(pokemon.species.baseStats, {hp: 90, atk: 140, def: 130, spa: 30, spd: 130, spe: 60});
+		assert.deepEqual(pokemon.species.baseStats, { hp: 90, atk: 140, def: 130, spa: 30, spd: 130, spe: 60 });
 		assert.deepEqual(pokemon.getTypes(), ['Ghost', 'Bug']);
 		lethal(pokemon);
 		assert.deepEqual(pokemon.getTypes(), ['Ghost', 'Grass']);

@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Fake Out', function () {
-	afterEach(function () {
+describe('Fake Out', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should flinch on the first turn out', function () {
+	it('should flinch on the first turn out', () => {
 		battle = common.createBattle([[
 			{ species: 'Chansey', ability: 'naturalcure', moves: ['fakeout', 'splash'] },
 		], [
-			{species: 'Venusaur', ability: 'overgrow', moves: ['swift']},
+			{ species: 'Venusaur', ability: 'overgrow', moves: ['swift'] },
 		]]);
 		battle.makeChoices('move fakeout', 'move swift');
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
@@ -24,7 +24,7 @@ describe('Fake Out', function () {
 		battle = common.createBattle([[
 			{ species: 'Chansey', ability: 'naturalcure', moves: ['fakeout', 'splash'] },
 		], [
-			{species: 'Venusaur', ability: 'overgrow', moves: ['swift']},
+			{ species: 'Venusaur', ability: 'overgrow', moves: ['swift'] },
 		]]);
 		battle.makeChoices('move fakeout', 'move swift');
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
@@ -33,12 +33,12 @@ describe('Fake Out', function () {
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it('should flinch after switching out and back in to refresh the move', function () {
+	it('should flinch after switching out and back in to refresh the move', () => {
 		battle = common.createBattle([[
 			{ species: 'Chansey', ability: 'naturalcure', moves: ['fakeout', 'splash'] },
 			{ species: 'Blissey', ability: 'naturalcure', moves: ['fakeout', 'splash'] },
 		], [
-			{species: 'Venusaur', ability: 'overgrow', moves: ['swift', 'sleeptalk']},
+			{ species: 'Venusaur', ability: 'overgrow', moves: ['swift', 'sleeptalk'] },
 		]]);
 		battle.makeChoices('move fakeout', 'move swift');
 		battle.makeChoices('switch 2', 'move sleeptalk');
@@ -47,12 +47,12 @@ describe('Fake Out', function () {
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it('should not flinch if the user has already used a Dancer move first', function () {
+	it('should not flinch if the user has already used a Dancer move first', () => {
 		battle = common.createBattle([[
 			{ species: 'Chansey', ability: 'naturalcure', moves: ['fakeout', 'splash'] },
 			{ species: 'Oricorio', ability: 'dancer', moves: ['fakeout', 'splash'] },
 		], [
-			{species: 'Venusaur', ability: 'overgrow', moves: ['swift', 'quiverdance']},
+			{ species: 'Venusaur', ability: 'overgrow', moves: ['swift', 'quiverdance'] },
 		]]);
 		battle.makeChoices('switch 2', 'move quiverdance');
 		assert.throws(() => battle.choose('p1', 'move fakeout'));
@@ -60,11 +60,11 @@ describe('Fake Out', function () {
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it('should not flinch if the target had prepared to Focus Punch', function () {
+	it('should not flinch if the target had prepared to Focus Punch', () => {
 		battle = common.createBattle([[
 			{ species: 'Hitmontop', ability: 'steadfast', moves: ['fakeout', 'splash'] },
 		], [
-			{species: 'Gallade', ability: 'steadfast', moves: ['focuspunch']},
+			{ species: 'Gallade', ability: 'steadfast', moves: ['focuspunch'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p2.active[0].boosts.spe, 0);

@@ -17,12 +17,12 @@ describe('Water field move interactions', () => {
 		]) {
 			for (const stormDrainSide of ['ally', 'foe']) {
 				const ally = stormDrainSide === 'ally';
-				battle = common.createBattle({formatid: 'gen9doubleswatersurface'}, [[
-					{species: 'Mew', ability: 'No Ability', moves: ['dive']},
-					{species: ally ? 'Gastrodon' : 'Mew', ability: ally ? 'Storm Drain' : 'No Ability', moves: ['splash']},
+				battle = common.createBattle({ formatid: 'gen9doubleswatersurface' }, [[
+					{ species: 'Mew', ability: 'No Ability', moves: ['dive'] },
+					{ species: ally ? 'Gastrodon' : 'Mew', ability: ally ? 'Storm Drain' : 'No Ability', moves: ['splash'] },
 				], [
-					{species: 'Mew', ability: 'No Ability', moves: ['splash']},
-					{species: ally ? 'Mew' : 'Gastrodon', ability: ally ? 'No Ability' : 'Storm Drain', moves: ['splash']},
+					{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+					{ species: ally ? 'Mew' : 'Gastrodon', ability: ally ? 'No Ability' : 'Storm Drain', moves: ['splash'] },
 				]]);
 				battle.makeChoices('team 1', 'team 1');
 				battle.field.changeTerrain(field, battle.p1.active[0]);

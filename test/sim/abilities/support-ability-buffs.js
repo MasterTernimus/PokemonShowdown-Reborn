@@ -3,10 +3,10 @@ const assert = require('assert').strict;
 const common = require('../../common');
 let battle;
 function setup(ability, format = 'gen9nofielddoublesbattle') {
-	const mon = ability => ({species: 'Mew', ability, moves: ['splash', 'tackle', 'swordsdance', 'toxic']});
+	const mon = ability => ({ species: 'Mew', ability, moves: ['splash', 'tackle', 'swordsdance', 'toxic'] });
 	const teams = [[mon(ability), mon('No Ability')], [mon('No Ability'), mon('No Ability')]];
 	if (format.includes('freeforall')) teams.push([mon('No Ability')], [mon('No Ability')]);
-	battle = common.createBattle({formatid: format}, teams);
+	battle = common.createBattle({ formatid: format }, teams);
 	battle.makeChoices(...teams.map(team => `team ${team.map((_, i) => i + 1).join('')}`));
 	battle.field.terrain = '';
 	// Isolate these selected abilities from Mew's native Synchronize passive.
@@ -35,11 +35,11 @@ describe('Approved support ability buffs', () => {
 		const hp = holder.hp;
 		battle.damage(50, holder, holder, battle.dex.conditions.get('brn'));
 		assert.equal(holder.hp, hp);
-		battle.actions.useMove('toxic', foe, {target: holder});
+		battle.actions.useMove('toxic', foe, { target: holder });
 		assert.equal(holder.status, 'tox'); assert.equal(foe.status, '');
 		holder.cureStatus();
 		foe.cureStatus();
-		battle.actions.useMove('toxic', foe, {target: holder});
+		battle.actions.useMove('toxic', foe, { target: holder });
 		assert.equal(holder.status, 'tox');
 		holder.addVolatile('gastroacid', foe);
 		battle.damage(50, holder, holder, battle.dex.conditions.get('brn'));

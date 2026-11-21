@@ -5,10 +5,10 @@
 const common = require('../common');
 
 const assert = require('../assert');
-const {testTeam, testNotBothMoves, testSet, testHiddenPower, testAlwaysHasMove, validateLearnset} = require('./tools');
+const { testTeam, testNotBothMoves, testSet, testHiddenPower, testAlwaysHasMove, validateLearnset } = require('./tools');
 
 common.describeGen(6, '[Gen 6] Random Battle (slow)', () => {
-	const options = {format: 'gen6randombattle'};
+	const options = { format: 'gen6randombattle' };
 	let setsJSON;
 	before(() => { setsJSON = require(`../../dist/data/mods/gen6/random-sets.json`); });
 	const dex = Dex.forFormat(options.format);
@@ -31,7 +31,7 @@ common.describeGen(6, '[Gen 6] Random Battle (slow)', () => {
 						const dexMove = Dex.moves.get(move);
 						assert(dexMove.exists, `${species.name} has invalid move: ${move}`);
 						assert(move === dexMove.id || move.startsWith('hiddenpower'), `${species.name} has misformatted move: ${move}`);
-						assert(validateLearnset(dexMove, {species}, 'anythinggoes', 'gen6'), `${species.name} can't learn ${move}`);
+						assert(validateLearnset(dexMove, { species }, 'anythinggoes', 'gen6'), `${species.name} can't learn ${move}`);
 					}
 					for (let i = 0; i < set.movepool.length - 1; i++) {
 						assert(set.movepool[i + 1] > set.movepool[i], `${species} movepool should be sorted alphabetically`);
@@ -51,14 +51,14 @@ common.describeGen(6, '[Gen 6] Random Battle (slow)', () => {
 		});
 	});
 
-	it('all Pokemon should have 4 moves, except for Ditto and Unown', function () {
+	it('all Pokemon should have 4 moves, except for Ditto and Unown', () => {
 		// This test takes more than 2000ms
-		testTeam({...options, rounds: 100}, team => {
+		testTeam({ ...options, rounds: 100 }, team => {
 			for (const pokemon of team) assert(pokemon.name === 'Ditto' || pokemon.name === 'Unown' || pokemon.moves.length === 4);
 		});
 	});
 
-	it('all moves on all sets should be obtainable', function () {
+	it('all moves on all sets should be obtainable', () => {
 		const generator = Teams.getGenerator(options.format);
 		const rounds = 100;
 		for (const pokemon of Object.keys(setsJSON)) {
@@ -85,7 +85,7 @@ common.describeGen(6, '[Gen 6] Random Battle (slow)', () => {
 						const defog = i % 2;
 						const stealthRock = Math.floor(i / 2) % 2;
 						const stickyWeb = Math.floor(i / 4) % 2;
-						teamDetails = {defog, stealthRock, stickyWeb};
+						teamDetails = { defog, stealthRock, stickyWeb };
 						// randomMoveset() deletes moves from the movepool, so recreate it every time
 						const movePool = set.movepool.map(m => dex.moves.get(m).id);
 						const moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, movePool, preferredType, role);
@@ -100,7 +100,7 @@ common.describeGen(6, '[Gen 6] Random Battle (slow)', () => {
 	});
 
 	it('should not give mega evolution abilities to base formes', () => {
-		testSet('manectricmega', {rounds: 1, ...options}, set => {
+		testSet('manectricmega', { rounds: 1, ...options }, set => {
 			assert(set.ability !== 'Intimidate', 'Mega Manectric should not have Intimidate before it mega evolves');
 		});
 	});

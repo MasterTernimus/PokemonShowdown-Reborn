@@ -6,11 +6,11 @@ describe('Silken Decoy Cocoon indicator', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
 	function setup() {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Ariados', ability: 'Insomnia', item: 'Aridiate', moves: ['splash']},
-				{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash', 'tackle', 'willowisp']},
-				{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Ariados', ability: 'Insomnia', item: 'Aridiate', moves: ['splash'] },
+				{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash', 'tackle', 'willowisp'] },
+				{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 12', 'team 12');
 		assert(!battle.p1.active[0].volatiles.cocoonactive);

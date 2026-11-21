@@ -2,7 +2,7 @@
 
 const assert = require('../../assert');
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
+const { Dex } = require('../../../dist/sim');
 
 let battle;
 describe('Requested ability changes', () => {
@@ -34,9 +34,9 @@ describe('Requested ability changes', () => {
 	});
 
 	it('keeps regional ability transformations while changing their components', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Breloom', ability: 'Aevian Spark', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Breloom', ability: 'Aevian Spark', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const mon = battle.p1.active[0];
@@ -46,9 +46,9 @@ describe('Requested ability changes', () => {
 	});
 
 	it('lets Safe Harbor absorb Water but not Ice', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mew', ability: 'Safe Harbor', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['watergun', 'icebeam']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Mew', ability: 'Safe Harbor', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['watergun', 'icebeam'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const mon = battle.p1.active[0];
@@ -59,23 +59,23 @@ describe('Requested ability changes', () => {
 	});
 
 	it('Astral Ward permits ally spread damage and protects accuracy instead', () => {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [
-			[{species: 'Espeon', ability: 'Astral Ward', moves: ['splash']}, {species: 'Mew', ability: 'No Ability', moves: ['surf']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
+			[{ species: 'Espeon', ability: 'Astral Ward', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['surf'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 12', 'team 12');
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move splash, move surf', 'move splash, move splash');
 		assert(holder.hp < holder.maxhp);
-		battle.boost({accuracy:-1},holder,battle.p2.active[0],Dex.moves.get('sandattack'));
-		assert.equal(holder.boosts.accuracy,0);
+		battle.boost({ accuracy: -1 }, holder, battle.p2.active[0], Dex.moves.get('sandattack'));
+		assert.equal(holder.boosts.accuracy, 0);
 		assert(battle.p2.active.some(foe => foe.hp < foe.maxhp));
 	});
 
 	it('redirects Electric moves with Railgun Circuit’s Lightning Rod', () => {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [
-			[{species: 'Mew', ability: 'Railgun Circuit', moves: ['splash']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
-			[{species: 'Pikachu', ability: 'No Ability', moves: ['thunderbolt']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
+			[{ species: 'Mew', ability: 'Railgun Circuit', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+			[{ species: 'Pikachu', ability: 'No Ability', moves: ['thunderbolt'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 12', 'team 12');
 		const holder = battle.p1.active[0], ally = battle.p1.active[1];
@@ -86,9 +86,9 @@ describe('Requested ability changes', () => {
 	});
 
 	it('keeps Ground immunity in the native Levitate passive and Mythic Scale poison without confusion', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mew', ability: 'Mythic Scale', moves: ['toxic']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Mew', ability: 'Mythic Scale', moves: ['toxic'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const holder = battle.p1.active[0], foe = battle.p2.active[0];
@@ -107,9 +107,9 @@ describe('Requested ability changes', () => {
 			['Freezer Burn', 'icefang', 100], // Strong Jaw was removed by the later approved simplification.
 			['Paradox Engine', 'brickbreak', 130],
 		]) {
-			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-				[{species: 'Mew', ability, moves: [moveId]}],
-				[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+				[{ species: 'Mew', ability, moves: [moveId] }],
+				[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 			]);
 			battle.makeChoices('team 1', 'team 1');
 			const holder = battle.p1.active[0], foe = battle.p2.active[0];
@@ -120,9 +120,9 @@ describe('Requested ability changes', () => {
 	});
 
 	it('sets changeable Strong Winds without Windy Surge', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mew', ability: 'Storm Sovereign', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['raindance']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Mew', ability: 'Storm Sovereign', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['raindance'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		assert.equal(battle.field.weather, 'deltastream');
@@ -132,9 +132,9 @@ describe('Requested ability changes', () => {
 	});
 
 	it('gives Wrecking Ball Sturdy and Crumbling Shell', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Golem', ability: 'Wrecking Ball', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['closecombat']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Golem', ability: 'Wrecking Ball', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['closecombat'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const mon = battle.p1.active[0];
@@ -147,33 +147,33 @@ describe('Requested ability changes', () => {
 	});
 
 	it('does not save Battle Bond users from lethal damage', () => {
-		battle = common.createBattle({formatid: 'gen9doublescustomgame'}, [
-			[{species: 'Greninja', ability: 'Battle Bond', moves: ['splash']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9doublescustomgame' }, [
+			[{ species: 'Greninja', ability: 'Battle Bond', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		const mon = battle.p1.active[0];
 		assert.equal(battle.runEvent('Damage', mon, battle.p2.active[0], battle.dex.getActiveMove('tackle'), mon.hp), mon.hp);
 	});
 
 	it('reduces damage to an Arena Trap holder from a trapped grounded foe', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Victreebel', ability: 'Arena Trap', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['tackle']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Victreebel', ability: 'Arena Trap', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['tackle'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const holder = battle.p1.active[0], attacker = battle.p2.active[0];
 		assert(attacker.trapped, 'Arena Trap should actually trap this grounded foe');
 		const tackle = battle.dex.getActiveMove('tackle');
 		assert.equal(battle.runEvent('ModifyDamage', attacker, holder, tackle, 100), 80,
-			JSON.stringify({trapped: attacker.trapped, grounded: attacker.isGrounded(), adjacent: attacker.isAdjacent(holder), ability: holder.ability}));
+			JSON.stringify({ trapped: attacker.trapped, grounded: attacker.isGrounded(), adjacent: attacker.isAdjacent(holder), ability: holder.ability }));
 		attacker.trapped = false;
 		assert.equal(battle.runEvent('ModifyDamage', attacker, holder, tackle, 100), 100);
 	});
 
 	it('Long Reach removes contact without adding critical-hit bonuses', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Decidueye', ability: 'Long Reach', moves: ['tackle']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Decidueye', ability: 'Long Reach', moves: ['tackle'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const holder = battle.p1.active[0], foe = battle.p2.active[0];
@@ -185,9 +185,9 @@ describe('Requested ability changes', () => {
 	});
 
 	it('uses the revised Mega domain farewell gifts without creating fields', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
 			[{ species: 'Tyrantrum-Mega', ability: 'Tyrant Domain', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.p1.active[0].faint();
@@ -199,9 +199,9 @@ describe('Requested ability changes', () => {
 		assert.equal(battle.p1.active[0].boosts.atk, 1);
 		assert(!battle.p1.slotConditions[0].tyrantlegacy);
 		battle.destroy();
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Aurorus-Mega', ability: 'Aurora Domain', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Aurorus-Mega', ability: 'Aurora Domain', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const aurorus = battle.p1.active[0];

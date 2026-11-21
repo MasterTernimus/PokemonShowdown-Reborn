@@ -13,16 +13,16 @@ function baselineDamage(attacker, defender, move) {
 	return battle.actions.getDamage(attacker, defender, move);
 }
 
-describe('Unaware', function () {
-	afterEach(function () {
+describe('Unaware', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should ignore attack stage changes when Pokemon with it are attacked`, function () {
+	it(`should ignore attack stage changes when Pokemon with it are attacked`, () => {
 		battle = common.createBattle([[
-			{species: 'Clefable', ability: 'unaware', moves: ['softboiled']},
+			{ species: 'Clefable', ability: 'unaware', moves: ['softboiled'] },
 		], [
-			{species: 'Wynaut', moves: ['bellydrum', 'wickedblow']},
+			{ species: 'Wynaut', moves: ['bellydrum', 'wickedblow'] },
 		]]);
 
 		const baseline = baselineDamage(battle.p2.active[0], battle.p1.active[0], 'wickedblow');
@@ -33,9 +33,9 @@ describe('Unaware', function () {
 		assert.equal(damage, baseline);
 	});
 
-	it(`should not ignore attack stage changes when Pokemon with it attack`, function () {
+	it(`should not ignore attack stage changes when Pokemon with it attack`, () => {
 		battle = common.createBattle([[
-			{species: 'Clefable', ability: 'unaware', moves: ['moonblast', 'nastyplot']},
+			{ species: 'Clefable', ability: 'unaware', moves: ['moonblast', 'nastyplot'] },
 		], [
 			// Registeel's native Self Repair heals at turn end and obscures direct damage.
 			{ species: 'Mew', ability: 'shellarmor', moves: ['sleeptalk'] },
@@ -49,9 +49,9 @@ describe('Unaware', function () {
 		assert.bounded(damage / baseline, [1.9, 2.1]);
 	});
 
-	it(`should ignore defense stage changes when Pokemon with it attack`, function () {
+	it(`should ignore defense stage changes when Pokemon with it attack`, () => {
 		battle = common.createBattle([[
-			{species: 'Clefable', ability: 'unaware', item: 'laggingtail', moves: ['moonblast']},
+			{ species: 'Clefable', ability: 'unaware', item: 'laggingtail', moves: ['moonblast'] },
 		], [
 			{ species: 'Mew', ability: 'shellarmor', moves: ['amnesia'] },
 		]]);
@@ -63,11 +63,11 @@ describe('Unaware', function () {
 		assert.equal(damage, baseline);
 	});
 
-	it(`should not ignore defense stage changes when Pokemon with it are attacked`, function () {
+	it(`should not ignore defense stage changes when Pokemon with it are attacked`, () => {
 		battle = common.createBattle([[
-			{species: 'Clefable', ability: 'unaware', moves: ['luckychant', 'irondefense']},
+			{ species: 'Clefable', ability: 'unaware', moves: ['luckychant', 'irondefense'] },
 		], [
-			{species: 'Registeel', moves: ['sleeptalk', 'payday']},
+			{ species: 'Registeel', moves: ['sleeptalk', 'payday'] },
 		]]);
 
 		battle.makeChoices(); // Apply Lucky Chant's custom damage reduction before measuring.
@@ -78,11 +78,11 @@ describe('Unaware', function () {
 		assert.bounded(damage / baseline, [0.45, 0.55]);
 	});
 
-	it(`should be suppressed by Mold Breaker`, function () {
+	it(`should be suppressed by Mold Breaker`, () => {
 		battle = common.createBattle([[
-			{species: 'Clefable', ability: 'unaware', moves: ['softboiled']},
+			{ species: 'Clefable', ability: 'unaware', moves: ['softboiled'] },
 		], [
-			{species: 'Wynaut', ability: 'moldbreaker', moves: ['bellydrum', 'wickedblow']},
+			{ species: 'Wynaut', ability: 'moldbreaker', moves: ['bellydrum', 'wickedblow'] },
 		]]);
 
 		const baseline = baselineDamage(battle.p2.active[0], battle.p1.active[0], 'wickedblow');
@@ -93,13 +93,13 @@ describe('Unaware', function () {
 		assert.bounded(damage / baseline, [3.5, 4.1]);
 	});
 
-	it(`should only apply to targets with Unaware in battles with multiple Pokemon`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'manaphy', moves: ['tailglow', 'surf']},
-			{species: 'slowbro', ability: 'unaware', moves: ['sleeptalk']},
+	it(`should only apply to targets with Unaware in battles with multiple Pokemon`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'manaphy', moves: ['tailglow', 'surf'] },
+			{ species: 'slowbro', ability: 'unaware', moves: ['sleeptalk'] },
 		], [
-			{species: 'clobbopus', ability: 'sturdy', moves: ['sleeptalk']},
-			{species: 'clobbopus', ability: 'sturdy', moves: ['sleeptalk']},
+			{ species: 'clobbopus', ability: 'sturdy', moves: ['sleeptalk'] },
+			{ species: 'clobbopus', ability: 'sturdy', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move tailglow, auto', 'auto');
 		battle.makeChoices('move surf, auto', 'auto');
@@ -107,11 +107,11 @@ describe('Unaware', function () {
 		assert.equal(battle.p2.active[1].hp, 1);
 	});
 
-	it(`should ignore attack stage changes when Pokemon with it are attacked with Foul Play`, function () {
+	it(`should ignore attack stage changes when Pokemon with it are attacked with Foul Play`, () => {
 		battle = common.createBattle([[
-			{species: 'Clefable', ability: 'unaware', moves: ['bellydrum']},
+			{ species: 'Clefable', ability: 'unaware', moves: ['bellydrum'] },
 		], [
-			{species: 'Wynaut', ability: 'superluck', moves: ['focusenergy', 'foulplay']},
+			{ species: 'Wynaut', ability: 'superluck', moves: ['focusenergy', 'foulplay'] },
 		]]);
 
 		const baseline = baselineDamage(battle.p2.active[0], battle.p1.active[0], 'foulplay');

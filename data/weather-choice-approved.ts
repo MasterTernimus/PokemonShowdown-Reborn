@@ -1,4 +1,4 @@
-import type {AbilityDataTable} from '../sim/dex-abilities';
+import type { AbilityDataTable } from '../sim/dex-abilities';
 
 export const WeatherChoiceDescriptions = {
 	mountainhide: {
@@ -13,13 +13,13 @@ export const WeatherChoiceDescriptions = {
 
 export function installWeatherChoices(abilities: AbilityDataTable) {
 	abilities.mountainhide = {
-  ...abilities.innerfocus, name: 'Mountain Hide', num: 11497, rating: 4,
-  onSourceModifyDamage(damage, source, target, move) {
-   if (move.category === 'Physical' && target.effectiveWeather() === 'sandstorm') return this.chainModify(0.75);
-  },
- };
+		...abilities.innerfocus, name: 'Mountain Hide', num: 11497, rating: 4,
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.category === 'Physical' && target.effectiveWeather() === 'sandstorm') return this.chainModify(0.75);
+		},
+	};
 	// Both components share only hail immunity; Ice Body preserves that identical immunity.
-	abilities.rimebark = {...abilities.thickfat, ...abilities.icebody, name: 'Rimebark', num: 11498, rating: 4};
+	abilities.rimebark = { ...abilities.thickfat, ...abilities.icebody, name: 'Rimebark', num: 11498, rating: 4 };
 }
 
 export const SoulCremationBypassDescription = ' Mega Chandelure with active Soul Cremation bypasses Soul Fire\'s Fire/Ghost attack absorption only. Ordinary type effectiveness and type immunities remain; this grants neither general Mold Breaker nor a damage multiplier. Will-O-Wisp and Soul Fire redirection are unchanged.';

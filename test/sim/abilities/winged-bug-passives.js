@@ -42,7 +42,7 @@ describe('Exact five winged bug passive forms', () => {
 		assert.deepEqual(Dex.species.get('butterfree').abilities, { '0': 'Gentle Scales', '1': 'Tinted Lens', H: 'Magic Guard' });
 	});
 	for (const id of WingedBugPassiveForms) {
-        const pair = traits(id);
+		const pair = traits(id);
 		it(id + ' keeps its single passive through suppression and active ability replacement', () => {
 			const [p, t] = setup(id);
 			for (const state of ['normal', 'gastroacid', 'meridianseal', 'gas', 'replacement']) {
@@ -54,7 +54,7 @@ describe('Exact five winged bug passive forms', () => {
 					p.addVolatile(state);
 				}
 				assert.deepEqual(p.getPassives(), pair); assert(!p.isGrounded());
-				attack('thunderbolt', t, p, true); assert.equal(p.status, id === 'butterfree' || (state === 'normal' && p.hasAbility('shielddust')) ? '' : 'par');p.cureStatus();
+				attack('thunderbolt', t, p, true); assert.equal(p.status, id === 'butterfree' || (state === 'normal' && p.hasAbility('shielddust')) ? '' : 'par'); p.cureStatus();
 				if (state === 'gastroacid' || state === 'meridianseal') p.removeVolatile(state);
 			}
 			t.setAbility('Pressure'); battle.actions.useMove('skillswap', p, { target: t });
@@ -93,7 +93,7 @@ describe('Exact five winged bug passive forms', () => {
 	for (const id of ['toxicevolution', 'mythicscale']) it(id + ' restores selected Shield Dust without copying passive Levitate', () => {
 		const a = Dex.abilities.get(id); assert(!a.onImmunity); assert(a.onModifySecondaries);
 		const [p, t] = setup('Mew', a.name); assert.equal(p.isGrounded(), true);
-		assert(p.hasAbility('shielddust'));assert(!p.hasAbility('levitate'));
+		assert(p.hasAbility('shielddust')); assert(!p.hasAbility('levitate'));
 		const hp = p.hp; attack('earthquake', t, p); assert(p.hp < hp);
 		attack('thunderbolt', t, p, true); assert.equal(p.status, '');
 	});

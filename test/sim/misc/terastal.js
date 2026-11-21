@@ -144,7 +144,7 @@ describe('Reborn Terastallization', () => {
 	});
 
 	it('allows hacked Mega and Ultra forms to use Stellar while retaining their types', () => {
-		battle = common.createBattle({formatid: 'gen9purehackmons@@@!teampreview'}, [[
+		battle = common.createBattle({ formatid: 'gen9purehackmons@@@!teampreview' }, [[
 			{ species: 'Mewtwo-Mega-X', moves: ['splash'], teraType: 'Fairy' },
 		], [{ species: 'Necrozma-Ultra', moves: ['splash'], teraType: 'Normal' }]]);
 		const p = battle.p1.active[0], q = battle.p2.active[0];

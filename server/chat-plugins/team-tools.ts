@@ -7,7 +7,8 @@ function selectedFormat(value: unknown) {
 	if (typeof value !== 'string' || !value.trim()) throw new Error('No format selected.');
 	const id = Dex.formats.validate(value);
 	const format = Dex.formats.get(id);
-	if (!format.exists || format.effectType !== 'Format') throw new Error('Selected format is unavailable on this server.');
+	if (!format.exists || format.effectType !== 'Format')
+		throw new Error('Selected format is unavailable on this server.');
 	return format;
 }
 
@@ -24,15 +25,31 @@ export function previewForms(formatName: unknown, packed: unknown) {
 		battle.setPlayer('p1', { name: 'Preview', team: JSON.parse(JSON.stringify(team)) });
 		const pokemon = battle.p1.pokemon[0];
 		const options: {
-			id: string, name: string, kind: string, baseStats: StatsTable, types: string[], ability: string, passives: readonly string[],
+			id: string,
+			name: string,
+			kind: string,
+			baseStats: StatsTable,
+			types: string[],
+			ability: string,
+			passives: readonly string[],
 		}[] = [];
 		const add = (name: string | false | null | undefined, kind: string) => {
 			if (!name) return;
 			const species = battle.dex.species.get(name);
-			if (!species.exists || options.some(option => option.id === species.id) || species.id === pokemon.species.id) return;
+			if (
+				!species.exists ||
+				options.some(option => option.id === species.id) ||
+				species.id === pokemon.species.id
+			)
+				return;
 			options.push({
-				id: species.id, name: species.name, kind, baseStats: species.baseStats,
-				types: species.types, ability: species.abilities['0'], passives: species.passives,
+				id: species.id,
+				name: species.name,
+				kind,
+				baseStats: species.baseStats,
+				types: species.types,
+				ability: species.abilities['0'],
+				passives: species.passives,
 			});
 		};
 		if (battle.gimmickLimit > 0) {
@@ -43,9 +60,13 @@ export function previewForms(formatName: unknown, packed: unknown) {
 				add(pokemon.canDynamax, 'G-Max');
 			}
 		}
-		return { format: format.name, options,
-			note: 'Form/stat preview only. Saved set unchanged. Local G-Max uses form stats without a temporary HP multiplier. ' +
-				'Team legality and spent battle gimmicks are not checked here.' };
+		return {
+			format: format.name,
+			options,
+			note:
+				'Form/stat preview only. Saved set unchanged. Local G-Max uses form stats without a temporary HP multiplier. ' +
+				'Team legality and spent battle gimmicks are not checked here.',
+		};
 	} finally {
 		battle.destroy();
 	}
@@ -57,31 +78,52 @@ export function validateSavedTeams(input: unknown, owner?: string) {
 	}
 	return input.map((entry, index) => {
 		const base = {
-			index, name: String(entry?.name || `Team ${index + 1}`).slice(0, 100), format: String(entry?.format || ''),
+			index,
+			name: String(entry?.name || `Team ${index + 1}`).slice(0, 100),
+			format: String(entry?.format || ''),
 		};
 		try {
 			const format = selectedFormat(entry?.format);
-			if (typeof entry?.team !== 'string' || entry.team.length > 16000) throw new Error('Team data is missing or too large.');
+			if (typeof entry?.team !== 'string' || entry.team.length > 16000)
+				throw new Error('Team data is missing or too large.');
 			const team = Teams.unpack(entry.team);
 			if (!team?.length) throw new Error('Team roster is missing.');
 			// Validator may normalize its input. Always give it a fresh unpacked copy.
-			const problems = attributeZeroEVProblems(TeamValidator.get(format).validateTeam(team) || [], owner);
+			const problems = attributeZeroEVProblems(
+				TeamValidator.get(format).validateTeam(team) || [],
+				owner,
+			);
 			const suggestions = new Set<string>();
 			for (const problem of problems) {
-				if (/move|learn/i.test(problem)) suggestions.add('Choose a move allowed for this species and format.');
+				if (/move|learn/i.test(problem))
+					suggestions.add('Choose a move allowed for this species and format.');
 				if (/EV|IV|stat/i.test(problem)) suggestions.add('Review the listed EV/IV or stat limit.');
 				if (/ability/i.test(problem)) suggestions.add('Select an ability allowed for this form.');
-				if (/item/i.test(problem)) suggestions.add('Review the held item and its format restrictions.');
+				if (/item/i.test(problem))
+					suggestions.add('Review the held item and its format restrictions.');
 				if (/species|Pok.mon|banned/i.test(problem)) {
 					suggestions.add('Review the named restriction or choose another permitted set.');
 				}
 			}
-			return { ...base, format: format.name, status: problems.length ? 'invalid' : 'valid', problems,
-				suggestions: [...suggestions], permissive: /custom game/i.test(format.name) || format.id.includes('customgame'),
-				matchup: 'Not checked: opponent roster and matchup-specific rule definitions were not supplied.' };
+			return {
+				...base,
+				format: format.name,
+				status: problems.length ? 'invalid' : 'valid',
+				problems,
+				suggestions: [...suggestions],
+				permissive: /custom game/i.test(format.name) || format.id.includes('customgame'),
+				matchup:
+					'Not checked: opponent roster and matchup-specific rule definitions were not supplied.',
+			};
 		} catch (error) {
-			return { ...base, status: 'not checked', problems: [(error as Error).message], suggestions: [], permissive: false,
-				matchup: 'Not checked: no authoritative matchup validation was performed.' };
+			return {
+				...base,
+				status: 'not checked',
+				problems: [(error as Error).message],
+				suggestions: [],
+				permissive: false,
+				matchup: 'Not checked: no authoritative matchup validation was performed.',
+			};
 		}
 	});
 }
@@ -98,10 +140,12 @@ export const commands: Chat.ChatCommands = {
 			const payload = JSON.parse(target);
 			requestId = String(payload.requestId || '').slice(0, 64);
 			const now = Date.now();
-			if (now - (recentRequests.get(user) || 0) < 300) throw new Error('Please wait briefly before retrying.');
+			if (now - (recentRequests.get(user) || 0) < 300)
+				throw new Error('Please wait briefly before retrying.');
 			recentRequests.set(user, now);
 			if (payload.action === 'preview') return respond(previewForms(payload.format, payload.team));
-			if (payload.action === 'validate') return respond({ results: validateSavedTeams(payload.teams, user.name) });
+			if (payload.action === 'validate')
+				return respond({ results: validateSavedTeams(payload.teams, user.name) });
 			throw new Error('Unknown team tool action.');
 		} catch (error) {
 			return respond({ error: (error as Error).message });

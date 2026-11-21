@@ -1,4 +1,4 @@
-import type {AbilityDataTable} from '../sim/dex-abilities';
+import type { AbilityDataTable } from '../sim/dex-abilities';
 
 export const PrimevalFossilDescriptions = {
 	primevalskull: {

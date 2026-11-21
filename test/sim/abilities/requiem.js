@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Requiem', function () {
-	afterEach(function () {
+describe('Requiem', () => {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
 	it('should disable the damaging move instead of applying a Perish Song mark', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Dusknoir', ability: 'requiem', moves: ['splash', 'shadowpunch']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Dusknoir', ability: 'requiem', moves: ['splash', 'shadowpunch'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['bite', 'crunch']},
+			{ species: 'Mew', ability: 'noguard', moves: ['bite', 'crunch'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const foe = battle.p2.active[0];
@@ -29,10 +29,10 @@ describe('Requiem', function () {
 	});
 
 	it('should not apply a mark when Dusknoir damages a foe', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Dusknoir', ability: 'requiem', moves: ['shadowpunch']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Dusknoir', ability: 'requiem', moves: ['shadowpunch'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['splash']},
+			{ species: 'Mew', ability: 'noguard', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const foe = battle.p2.active[0];
@@ -43,11 +43,11 @@ describe('Requiem', function () {
 	});
 
 	it('should clear the inflicted Disable when the foe switches out', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Dusknoir', ability: 'requiem', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Dusknoir', ability: 'requiem', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['bite']},
-			{species: 'Celebi', ability: 'naturalcure', moves: ['splash']},
+			{ species: 'Mew', ability: 'noguard', moves: ['bite'] },
+			{ species: 'Celebi', ability: 'naturalcure', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1, 2');
 		const markedFoe = battle.p2.active[0];
@@ -61,10 +61,10 @@ describe('Requiem', function () {
 	});
 
 	it('should not heal when an opposing Pokemon faints', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Dusknoir', ability: 'requiem', moves: ['shadowpunch']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Dusknoir', ability: 'requiem', moves: ['shadowpunch'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['splash']},
+			{ species: 'Mew', ability: 'noguard', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const dusknoir = battle.p1.active[0];
@@ -78,11 +78,11 @@ describe('Requiem', function () {
 	});
 
 	it('should not create a field or curse active Pokemon when it faints', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Dusknoir', ability: 'requiem', moves: ['splash']},
-			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Dusknoir', ability: 'requiem', moves: ['splash'] },
+			{ species: 'Magikarp', ability: 'swiftswim', moves: ['splash'] },
 		], [
-			{species: 'Mewtwo', ability: 'pressure', moves: ['shadowball']},
+			{ species: 'Mewtwo', ability: 'pressure', moves: ['shadowball'] },
 		]]);
 		battle.makeChoices('team 1, 2', 'team 1');
 		const dusknoir = battle.p1.active[0];
@@ -94,16 +94,16 @@ describe('Requiem', function () {
 	});
 });
 
-describe("Reaper's Grip", function () {
-	afterEach(function () {
+describe("Reaper's Grip", () => {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
-	it('omits selected Iron Fist and retains the independently assigned Pressure passive', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Dusknoir', ability: 'reapersgrip', moves: ['splash']},
+	it('omits selected Iron Fist and retains the independently assigned Pressure passive', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Dusknoir', ability: 'reapersgrip', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['tackle']},
+			{ species: 'Mew', ability: 'noguard', moves: ['tackle'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const dusknoir = battle.p1.active[0];

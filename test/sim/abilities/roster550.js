@@ -1,7 +1,7 @@
-'use strict';const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim');let battle;
+'use strict'; const assert = require('assert').strict, { Dex } = require('../../../dist/sim'); let battle;
 const stats = { mightyena: [90, 115, 80, 75, 80, 110], mightyenadeso: [90, 115, 80, 75, 80, 110], mightyenagrim: [90, 115, 80, 75, 80, 110], mightyenamega: [90, 140, 105, 85, 100, 130], mightyenamegagrim: [90, 140, 105, 85, 100, 130], cinccino: [75, 110, 85, 70, 85, 125], cinccinodeso: [75, 110, 85, 70, 85, 125], toxicroak: [83, 121, 70, 111, 70, 95], toxicroakdeso: [83, 121, 70, 111, 70, 95] };
-describe('Approved 550/650 roster and passives',()=>{
- afterEach(()=>{battle?.destroy();battle=null;});
+describe('Approved 550/650 roster and passives', () => {
+	afterEach(() => { battle?.destroy(); battle = null; });
 	for (const [id, values] of Object.entries(stats))it(id + ' exact spread and passive', () => {
 		const s = Dex.species.get(id);
 		assert.deepEqual(Object.values(s.baseStats), values);

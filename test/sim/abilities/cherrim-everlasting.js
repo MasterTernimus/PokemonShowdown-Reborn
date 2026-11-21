@@ -1,19 +1,19 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex, TeamValidator} = require('../../../dist/sim');
+const { Dex, TeamValidator } = require('../../../dist/sim');
 
 describe('Cherrim passive Flower Gift and personal sunlight', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 	function setup(ability = 'Everlasting Bloom', item = '') {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Cherrim', ability, item, moves: ['splash', 'solarbeam', 'synthesis']},
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Cherrim', ability, item, moves: ['splash', 'solarbeam', 'synthesis'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
 		]]);
 		return [battle.p1.active[0], battle.p1.active[1], battle.p2.active[0]];
 	}
@@ -23,10 +23,10 @@ describe('Cherrim passive Flower Gift and personal sunlight', () => {
 	it('assigns both forms and accepts all three choices, including pasted Sunshine sets', () => {
 		for (const species of ['Cherrim', 'Cherrim-Sunshine']) {
 			const data = Dex.species.get(species);
-			assert.deepEqual(data.abilities, {0: 'Chlorophyll', 1: 'Everlasting Bloom', H: 'Flower Veil'});
+			assert.deepEqual(data.abilities, { 0: 'Chlorophyll', 1: 'Everlasting Bloom', H: 'Flower Veil' });
 			assert(!data.requiredAbility);
 			for (const ability of Object.values(data.abilities)) {
-				assert.equal(new TeamValidator('gen9dragonsden').validateTeam([{species, ability, moves: ['solarbeam']}]), null);
+				assert.equal(new TeamValidator('gen9dragonsden').validateTeam([{ species, ability, moves: ['solarbeam'] }]), null);
 			}
 		}
 	});
@@ -57,7 +57,7 @@ describe('Cherrim passive Flower Gift and personal sunlight', () => {
 		const hp = p.hp;
 		battle.actions.useMove('synthesis', p);
 		assert.equal(p.hp - hp, Math.round(p.maxhp * 2 / 3));
-		battle.actions.useMove('solarbeam', p, {target: foe});
+		battle.actions.useMove('solarbeam', p, { target: foe });
 		assert(!p.volatiles.twoturnmove);
 		assert(foe.hp < foe.maxhp);
 	});
@@ -144,7 +144,7 @@ describe('Cherrim passive Flower Gift and personal sunlight', () => {
 	});
 	it('retains selectable Flower Veil protections', () => {
 		const [p, , foe] = setup('Flower Veil');
-		battle.boost({atk: -1}, p, foe);
+		battle.boost({ atk: -1 }, p, foe);
 		assert.equal(p.boosts.atk, 0);
 		assert(!p.trySetStatus('par', foe, Dex.moves.get('thunderwave')));
 	});

@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Protean', function () {
-	afterEach(function () {
+describe('Protean', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should change the user's type when using a move`, function () {
+	it(`should change the user's type when using a move`, () => {
 		battle = common.createBattle([[
-			{species: 'Cinderace', ability: 'protean', moves: ['highjumpkick']},
+			{ species: 'Cinderace', ability: 'protean', moves: ['highjumpkick'] },
 		], [
-			{species: 'Gengar', moves: ['sleeptalk']},
+			{ species: 'Gengar', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -22,13 +22,13 @@ describe('Protean', function () {
 		assert(cinder.hasType('Fighting'));
 	});
 
-	it(`should not change the user's type when using moves that fail earlier than Protean will activate`, function () {
+	it(`should not change the user's type when using moves that fail earlier than Protean will activate`, () => {
 		battle = common.createBattle([[
-			{species: 'Kecleon', ability: 'protean', moves: ['fling', 'suckerpunch', 'steelroller', 'aurawheel']},
-			{species: 'Kecleon', ability: 'protean', moves: ['counter', 'metalburst']},
-			{species: 'Kecleon', ability: 'protean', moves: ['magnetrise', 'ingrain', 'burnup', 'auroraveil']},
+			{ species: 'Kecleon', ability: 'protean', moves: ['fling', 'suckerpunch', 'steelroller', 'aurawheel'] },
+			{ species: 'Kecleon', ability: 'protean', moves: ['counter', 'metalburst'] },
+			{ species: 'Kecleon', ability: 'protean', moves: ['magnetrise', 'ingrain', 'burnup', 'auroraveil'] },
 		], [
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 
 		let kecleon = battle.p1.active[0];
@@ -70,14 +70,14 @@ describe('Protean', function () {
 		// More examples: https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/post-8548957
 	});
 
-	it(`should not change the user's type when abilities that activate earlier than Protean will cause the user's moves to fail`, function () {
+	it(`should not change the user's type when abilities that activate earlier than Protean will cause the user's moves to fail`, () => {
 		battle = common.createBattle([[
-			{species: 'Kecleon', ability: 'protean', moves: ['aquajet', 'mindblown']},
+			{ species: 'Kecleon', ability: 'protean', moves: ['aquajet', 'mindblown'] },
 		], [
-			{species: 'Kyogre', ability: 'primordialsea', moves: ['sleeptalk']},
-			{species: 'Groudon', ability: 'desolateland', moves: ['powder']},
-			{species: 'Tsareena', ability: 'dazzling', moves: ['sleeptalk']},
-			{species: 'Golduck', ability: 'damp', moves: ['sleeptalk']},
+			{ species: 'Kyogre', ability: 'primordialsea', moves: ['sleeptalk'] },
+			{ species: 'Groudon', ability: 'desolateland', moves: ['powder'] },
+			{ species: 'Tsareena', ability: 'dazzling', moves: ['sleeptalk'] },
+			{ species: 'Golduck', ability: 'damp', moves: ['sleeptalk'] },
 		]]);
 
 		const kecleon = battle.p1.active[0];
@@ -100,20 +100,20 @@ describe('Protean', function () {
 		// More examples: https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/post-8548957
 	});
 
-	describe('Gen 6-8', function () {
-		common.itGen(8, `should activate on both turns of a charge move`, function () {
+	describe('Gen 6-8', () => {
+		common.itGen(8, `should activate on both turns of a charge move`, () => {
 			battle = common.gen(8).createBattle([[
-				{species: 'Wynaut', ability: 'protean', moves: ['bounce']},
+				{ species: 'Wynaut', ability: 'protean', moves: ['bounce'] },
 			], [
-				{species: 'Helioptile', ability: 'noguard', moves: ['soak']},
+				{ species: 'Helioptile', ability: 'noguard', moves: ['soak'] },
 			]]);
 			const wynaut = battle.p1.active[0];
 
-			//Turn 1 of Bounce
+			// Turn 1 of Bounce
 			battle.makeChoices();
 			assert(wynaut.hasType('Flying'));
 
-			//Turn 2 of Bounce
+			// Turn 2 of Bounce
 			battle.makeChoices();
 			assert(wynaut.hasType('Flying'));
 		});

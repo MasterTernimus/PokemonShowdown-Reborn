@@ -1,5 +1,5 @@
-import type {ModdedMoveData} from '../../../sim/dex-moves';
-export const Moves: {[k: string]: ModdedMoveData} = {
+import type { ModdedMoveData } from '../../../sim/dex-moves';
+export const Moves: { [k: string]: ModdedMoveData } = {
 	"10000000voltthunderbolt": {
 		inherit: true,
 		isNonstandard: null,
@@ -127,7 +127,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onHit(target, source, move) {
 			let success = false;
-			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
+			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({ evasion: -1 });
 			const removeTarget = [
 				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
 			];
@@ -135,13 +135,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
-					this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Defog', '[of] ' + source);
+					this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Defog', `[of] ${source}`);
 					success = true;
 				}
 			}
 			for (const sideCondition of removeAll) {
 				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Defog', '[of] ' + source);
+					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Defog', `[of] ${source}`);
 					success = true;
 				}
 			}
@@ -172,7 +172,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	dragonhammer: {
 		inherit: true,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 	},
 	dragonrage: {
 		inherit: true,
@@ -411,7 +411,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	howl: {
 		inherit: true,
-		flags: {snatch: 1, metronome: 1},
+		flags: { snatch: 1, metronome: 1 },
 		boosts: {
 			atk: 1,
 		},
@@ -486,13 +486,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					if (this.field.terrain === 'fairytaleterrain') {
 						this.boost({ spa: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
 					}
-					this.boost({atk: -2}, source, target, this.dex.getActiveMove("King's Shield"));
+					this.boost({ atk: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
 				}
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
 				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-					this.boost({atk: -2}, source, target, this.dex.getActiveMove("King's Shield"));
+					this.boost({ atk: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
 				}
 			},
 		},
@@ -573,7 +573,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	moongeistbeam: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
 	},
 	moonlight: {
 		inherit: true,
@@ -640,7 +640,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	naturesmadness: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
 	},
 	needlearm: {
 		inherit: true,
@@ -668,7 +668,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	pollenpuff: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
 		onHit(target, source) {
 			if (source.isAlly(target)) {
 				if (!this.heal(Math.floor(target.baseMaxhp * 0.5))) {
@@ -720,7 +720,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onFieldStart(field, source, effect) {
 				if (effect && effect.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Psychic Terrain', '[from] ability: ' + effect, '[of] ' + source);
+					this.add('-fieldstart', 'move: Psychic Terrain', `[from] ability: ${effect}`, `[of] ${source}`);
 				} else {
 					this.add('-fieldstart', 'move: Psychic Terrain');
 				}
@@ -944,7 +944,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sunsteelstrike: {
 		inherit: true,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 	},
 	supersonicskystrike: {
 		inherit: true,
@@ -978,7 +978,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (myItem) source.item = myItem.id;
 				return false;
 			}
-			this.add('-activate', source, 'move: Trick', '[of] ' + target);
+			this.add('-activate', source, 'move: Trick', `[of] ${target}`);
 			if (myItem) {
 				target.setItem(myItem);
 				this.add('-item', target, myItem, '[from] move: Switcheroo');
@@ -1078,7 +1078,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (myItem) source.item = myItem.id;
 				return false;
 			}
-			this.add('-activate', source, 'move: Trick', '[of] ' + target);
+			this.add('-activate', source, 'move: Trick', `[of] ${target}`);
 			if (myItem) {
 				target.setItem(myItem);
 				this.add('-item', target, myItem, '[from] move: Trick');

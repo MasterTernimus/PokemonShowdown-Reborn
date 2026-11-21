@@ -1,5 +1,5 @@
 'use strict';
-const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim');let battle;
+const assert = require('assert').strict, common = require('../../common'), { Dex } = require('../../../dist/sim'); let battle;
 describe('Toxic Spines contact damage after Iron Barbs removal', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	for (const attack of ['tackle', 'watergun']) for (const defense of ['normal', 'gastroacid', 'moldbreaker', 'protectivepads'])it(attack + '/' + defense, () => {

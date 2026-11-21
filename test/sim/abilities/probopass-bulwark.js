@@ -1,17 +1,35 @@
 'use strict';
-const assert=require('assert').strict,common=require('../../common'),{Dex,TeamValidator}=require('../../../dist/sim');
+const assert = require('assert').strict,
+	common = require('../../common'),
+	{ Dex, TeamValidator } = require('../../../dist/sim');
 describe('Probopass Filter, Magnetic Flux and Nose Formation', () => {
- let battle;afterEach(()=>{battle?.destroy();battle=null;});
- const ally=(ability='No Ability')=>({species:'Mew',ability,moves:['splash']});
+	let battle;
+	afterEach(() => {
+		battle?.destroy();
+		battle = null;
+	});
+	const ally = (ability = 'No Ability') => ({ species: 'Mew', ability, moves: ['splash'] });
 	function setup(options = {}) {
-		const p = { species: 'Probopass', ability: 'Filter', nature: 'Modest', evs: { spa: 252 }, moves: ['splash', 'magneticflux', 'falseswipe', 'powergem'], ...options };
-		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[p, ally(), ally()], [ally(), ally(), ally()]]);
+		const p = {
+			species: 'Probopass',
+			ability: 'Filter',
+			nature: 'Modest',
+			evs: { spa: 252 },
+			moves: ['splash', 'magneticflux', 'falseswipe', 'powergem'],
+			...options,
+		};
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
+			[p, ally(), ally()],
+			[ally(), ally(), ally()],
+		]);
 		battle.makeChoices();
 		battle.randomizer = x => x;
 		battle.randomChance = (n, d) => n >= d;
 		return [battle.p1.active[0], battle.p1.active[1], battle.p2.active[0]];
 	}
- function flux(p){battle.actions.useMove('magneticflux',p);}
+	function flux(p) {
+		battle.actions.useMove('magneticflux', p);
+	}
 	it('exact stats, legal slots and component metadata', () => {
 		const p = Dex.species.get('probopass');
 		assert.deepEqual(p.baseStats, { hp: 75, atk: 35, def: 150, spa: 110, spd: 155, spe: 25 });
@@ -28,20 +46,41 @@ describe('Probopass Filter, Magnetic Flux and Nose Formation', () => {
 		assert(v.validateSet({ ...s, ability: 'Heavy Metal' }));
 		assert(v.validateSet({ ...s, ability: 'Magnetic Bulwark' }));
 	});
- for(const ability of ['Magnet Pull','Magnetic Command','Magnetic Bulwark','Filter'])it('Filter active only when selected: '+ability,()=>{const[p,a,q]=setup({ability});const m=Dex.getActiveMove('watergun');for(const typeMod of [0,1]){p.getMoveHitData(m).typeMod=typeMod;assert.equal(battle.runEvent('ModifyDamage',q,p,m,100),['Magnetic Bulwark','Filter'].includes(ability)?typeMod?67:90:100);}assert.equal(p.isGrounded(),null);p.addVolatile('gastroacid',q);assert.equal(battle.runEvent('ModifyDamage',q,p,m,100),100);assert.equal(p.isGrounded(),null);});
+	for (const ability of ['Magnet Pull', 'Magnetic Command', 'Magnetic Bulwark', 'Filter'])
+		it('Filter active only when selected: ' + ability, () => {
+			const [p, a, q] = setup({ ability });
+			const m = Dex.getActiveMove('watergun');
+			for (const typeMod of [0, 1]) {
+				p.getMoveHitData(m).typeMod = typeMod;
+				assert.equal(
+					battle.runEvent('ModifyDamage', q, p, m, 100),
+					['Magnetic Bulwark', 'Filter'].includes(ability) ? (typeMod ? 67 : 90) : 100
+				);
+			}
+			assert.equal(p.isGrounded(), null);
+			p.addVolatile('gastroacid', q);
+			assert.equal(battle.runEvent('ModifyDamage', q, p, m, 100), 100);
+			assert.equal(p.isGrounded(), null);
+		});
 	it('spends normal PP but Filter does not extend Magnetic Flux eligibility', () => {
 		const [p, a] = setup();
-		const slot = p.moveSlots.find(m => m.id === 'magneticflux'), pp = slot.pp;
+		const slot = p.moveSlots.find(m => m.id === 'magneticflux'),
+			pp = slot.pp;
 		battle.makeChoices('move magneticflux, move splash', 'move splash, move splash');
 		assert.equal(slot.pp, pp - 1);
-		for (const t of [p, a])assert.deepEqual([t.boosts.def, t.boosts.spd], [0, 0]);
+		for (const t of [p, a]) assert.deepEqual([t.boosts.def, t.boosts.spd], [0, 0]);
 		a.setAbility('Plus');
 		flux(p);
 		flux(p);
 		assert.deepEqual([a.boosts.def, a.boosts.spd], [2, 2]);
 		assert.equal(p.boosts.def, 0);
 	});
- it('Plus/Minus users receive one boost, not both bonus and ordinary branches',()=>{const[p,a]=setup();a.setAbility('Minus');flux(p);assert.deepEqual([a.boosts.def,a.boosts.spd],[1,1]);});
+	it('Plus/Minus users receive one boost, not both bonus and ordinary branches', () => {
+		const [p, a] = setup();
+		a.setAbility('Minus');
+		flux(p);
+		assert.deepEqual([a.boosts.def, a.boosts.spd], [1, 1]);
+	});
 	it('eligible capped targets cannot overflow; partial boosts still succeed', () => {
 		const [p, a] = setup();
 		a.setAbility('Plus');
@@ -79,24 +118,88 @@ describe('Probopass Filter, Magnetic Flux and Nose Formation', () => {
 		battle.makeChoices('switch 3, move splash', 'move splash, move splash');
 		assert.equal(battle.p1.active[0], p);
 		flux(p);
-		for (const t of [p, a])assert.equal(t.boosts.def, 0);
+		for (const t of [p, a]) assert.equal(t.boosts.def, 0);
 	});
 	it('Electric Field grants the ordinary +2 on every use', () => {
 		const [p, a] = setup();
 		battle.field.setTerrain('electricterrain', p);
 		flux(p);
-		for (const t of [p, a])assert.equal(t.boosts.def, 2);
+		for (const t of [p, a]) assert.equal(t.boosts.def, 2);
 		flux(p);
-		for (const t of [p, a])assert.equal(t.boosts.def, 4);
+		for (const t of [p, a]) assert.equal(t.boosts.def, 4);
 	});
- for(const[level,expected]of [[50,[170,178,175]],[100,[336,350,346]]])it('actual main-move KO selects SpA at level '+level+' despite stages and Assault Vest',()=>{const[p,a,q]=setup({level,item:'Assault Vest'});assert.deepEqual(['def','spa','spd'].map(s=>p.getStat(s,true,true)),expected);p.boosts.def=p.boosts.spd=6;p.boosts.spa=-6;q.hp=1;const before=p.boosts.spa;battle.actions.useMove(Object.assign(Dex.getActiveMove('powergem'),{accuracy:true,willCrit:false}),p,{target:q});battle.faintMessages();assert.equal(p.boosts.spa,before+1);});
- for(const[nature,evs,stat]of [['Hardy',{spa:252},'spd'],['Modest',{},'spd'],['Bold',{def:252},'def'],['Calm',{spd:252},'spd']])it('actual KO preserves appropriate selection for '+nature+JSON.stringify(evs),()=>{const[p,a,q]=setup({nature,evs});q.hp=1;battle.actions.useMove('powergem',p,{target:q});battle.faintMessages();assert.equal(p.boosts[stat],1);});
- it('three 30BP Special Mini-Noses select the strongest type without recursion',()=>{const[p,a,q]=setup();q.setType('Water');q.hp=q.maxhp=10000;const seen=[],use=battle.actions.useMove.bind(battle.actions);battle.actions.useMove=(m,...args)=>{if(m.name==='Mini-Nose')seen.push([m.basePower,m.category,m.type]);return use(m,...args);};use(Object.assign(Dex.getActiveMove('falseswipe'),{willCrit:false}),p,{target:q});assert.deepEqual(seen,Array.from({length:3},()=>[30,'Special','Electric']));});
- it('Mini-Nose KO triggers Elevate once and chains to a living foe',()=>{const[p,a,q]=setup();q.hp=2;const foe=battle.p2.active[1];foe.hp=foe.maxhp=10000;battle.actions.useMove('falseswipe',p,{target:q});battle.faintMessages();assert.equal(p.boosts.spa,1);assert(foe.hp<10000);assert.equal(battle.log.filter(l=>l.startsWith('|move|')&&l.includes('|Mini-Nose|')).length,3);});
+	for (const [level, expected] of [
+		[50, [170, 178, 175]],
+		[100, [336, 350, 346]],
+	])
+		it(
+			'actual main-move KO selects SpA at level ' + level + ' despite stages and Assault Vest',
+			() => {
+				const [p, a, q] = setup({ level, item: 'Assault Vest' });
+				assert.deepEqual(
+					['def', 'spa', 'spd'].map(s => p.getStat(s, true, true)),
+					expected
+				);
+				p.boosts.def = p.boosts.spd = 6;
+				p.boosts.spa = -6;
+				q.hp = 1;
+				const before = p.boosts.spa;
+				battle.actions.useMove(
+					Object.assign(Dex.getActiveMove('powergem'), { accuracy: true, willCrit: false }),
+					p,
+					{ target: q }
+				);
+				battle.faintMessages();
+				assert.equal(p.boosts.spa, before + 1);
+			}
+		);
+	for (const [nature, evs, stat] of [
+		['Hardy', { spa: 252 }, 'spd'],
+		['Modest', {}, 'spd'],
+		['Bold', { def: 252 }, 'def'],
+		['Calm', { spd: 252 }, 'spd'],
+	])
+		it('actual KO preserves appropriate selection for ' + nature + JSON.stringify(evs), () => {
+			const [p, a, q] = setup({ nature, evs });
+			q.hp = 1;
+			battle.actions.useMove('powergem', p, { target: q });
+			battle.faintMessages();
+			assert.equal(p.boosts[stat], 1);
+		});
+	it('three 30BP Special Mini-Noses select the strongest type without recursion', () => {
+		const [p, a, q] = setup();
+		q.setType('Water');
+		q.hp = q.maxhp = 10000;
+		const seen = [],
+			use = battle.actions.useMove.bind(battle.actions);
+		battle.actions.useMove = (m, ...args) => {
+			if (m.name === 'Mini-Nose') seen.push([m.basePower, m.category, m.type]);
+			return use(m, ...args);
+		};
+		use(Object.assign(Dex.getActiveMove('falseswipe'), { willCrit: false }), p, { target: q });
+		assert.deepEqual(
+			seen,
+			Array.from({ length: 3 }, () => [30, 'Special', 'Electric'])
+		);
+	});
+	it('Mini-Nose KO triggers Elevate once and chains to a living foe', () => {
+		const [p, a, q] = setup();
+		q.hp = 2;
+		const foe = battle.p2.active[1];
+		foe.hp = foe.maxhp = 10000;
+		battle.actions.useMove('falseswipe', p, { target: q });
+		battle.faintMessages();
+		assert.equal(p.boosts.spa, 1);
+		assert(foe.hp < 10000);
+		assert.equal(
+			battle.log.filter(l => l.startsWith('|move|') && l.includes('|Mini-Nose|')).length,
+			3
+		);
+	});
 	it('legacy Magnetic Bulwark also has no retired Flux extension', () => {
 		const [p, a] = setup({ ability: 'Magnetic Bulwark' });
 		flux(p);
-		for (const t of [p, a])assert.deepEqual([t.boosts.def, t.boosts.spd], [0, 0]);
+		for (const t of [p, a]) assert.deepEqual([t.boosts.def, t.boosts.spd], [0, 0]);
 		a.setAbility('Minus');
 		flux(p);
 		assert.equal(a.boosts.def, 1);
@@ -110,7 +213,10 @@ describe('Probopass Filter, Magnetic Flux and Nose Formation', () => {
 	});
 	it('ordinary Magnetic Flux reaches eligible distant allies in triples', () => {
 		const p = { species: 'Probopass', ability: 'Filter', moves: ['splash', 'magneticflux'] };
-		battle = common.createBattle({ gameType: 'triples' }, [[p, ally(), ally('Plus')], [ally(), ally(), ally()]]);
+		battle = common.createBattle({ gameType: 'triples' }, [
+			[p, ally(), ally('Plus')],
+			[ally(), ally(), ally()],
+		]);
 		flux(battle.p1.active[0]);
 		assert.equal(battle.p1.active[0].boosts.def, 0);
 		assert.equal(battle.p1.active[1].boosts.def, 0);

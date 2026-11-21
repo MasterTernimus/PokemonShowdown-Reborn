@@ -2,8 +2,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const {Dex} = require('../dist/sim');
-const {AbilitiesText} = require('../dist/data/text/abilities');
+const { Dex } = require('../dist/sim');
+const { AbilitiesText } = require('../dist/data/text/abilities');
 
 Dex.includeData();
 

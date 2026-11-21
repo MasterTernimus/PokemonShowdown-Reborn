@@ -2,7 +2,7 @@
 
 const assert = require('assert').strict;
 const common = require('../common');
-const {Dex} = require('../../dist/sim');
+const { Dex } = require('../../dist/sim');
 
 describe('Torterra and Torterra-Mega-Y', () => {
 	let battle;
@@ -11,12 +11,12 @@ describe('Torterra and Torterra-Mega-Y', () => {
 	it('registers the revised base form and a separate Mega Y', () => {
 		const base = Dex.species.get('Torterra');
 		const mega = Dex.species.get('Torterra-Mega-Y');
-		assert.deepEqual(base.baseStats, {hp: 95, atk: 109, def: 105, spa: 75, spd: 85, spe: 66});
+		assert.deepEqual(base.baseStats, { hp: 95, atk: 109, def: 105, spa: 75, spd: 85, spe: 66 });
 		assert.equal(base.bst, 535);
-		assert.deepEqual(base.abilities, {'0': 'Stamina', '1': 'Shell Armor', H: 'Terra Legacy'});
+		assert.deepEqual(base.abilities, { '0': 'Stamina', '1': 'Shell Armor', H: 'Terra Legacy' });
 		assert.deepEqual(base.otherFormes, ['Torterra-Mega-X', 'Torterra-Mega-Y', 'Torterra-Rift', 'Torterra-Rift-Shatter']);
 		assert.deepEqual(mega.types, ['Grass', 'Rock']);
-		assert.deepEqual(mega.baseStats, {hp: 95, atk: 105, def: 130, spa: 144, spd: 105, spe: 56});
+		assert.deepEqual(mega.baseStats, { hp: 95, atk: 105, def: 130, spa: 144, spd: 105, spe: 56 });
 		assert.equal(mega.bst, 635);
 		assert.equal(mega.abilities[0], 'Terra Eternal');
 		assert.equal(mega.requiredItem, 'Torterranite');
@@ -26,9 +26,9 @@ describe('Torterra and Torterra-Mega-Y', () => {
 	});
 
 	it('Mega Evolves with Terra Eternal and the Proficient passive', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Torterra', item: 'Torterranite', moves: ['splash', 'energyball', 'rockslide']},
-		], [{species: 'Mew', moves: ['tackle']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Torterra', item: 'Torterranite', moves: ['splash', 'energyball', 'rockslide'] },
+		], [{ species: 'Mew', moves: ['tackle'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		assert.equal(battle.p1.active[0].canMegaEvo, 'Torterra-Mega-X');
 		assert.equal(battle.p1.active[0].canMegaEvoY, 'Torterra-Mega-Y');
@@ -56,9 +56,9 @@ describe('Torterra and Torterra-Mega-Y', () => {
 	});
 
 	it('removes Solid Rock from Terra Legacy', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Torterra', ability: 'Terra Legacy', moves: ['splash']},
-		], [{species: 'Mew', moves: ['splash']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Torterra', ability: 'Terra Legacy', moves: ['splash'] },
+		], [{ species: 'Mew', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		assert(!battle.p1.active[0].hasAbility('solidrock'));
 		assert(battle.p1.active[0].hasAbility('proficient'));

@@ -1,5 +1,5 @@
 import { officialReports } from './official-report-outbox';
-import {MoveSheetConsent} from './move-sheet-consent';
+import { MoveSheetConsent } from './move-sheet-consent';
 /**
  * Room Battle
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -13,19 +13,36 @@ import {MoveSheetConsent} from './move-sheet-consent';
  * @license MIT
  */
 
-import { execSync } from "child_process";
+import { execSync } from 'child_process';
 import { FS, ProcessManager, Utils, type Streams } from '../lib';
-import { BattleStream } from "../sim/battle-stream";
-import { RoomGamePlayer, RoomGame } from "./room-game";
+import { BattleStream } from '../sim/battle-stream';
+import { RoomGamePlayer, RoomGame } from './room-game';
 import * as ConfigLoader from './config-loader';
 import * as path from 'path';
-import {captureEngineSnapshot, type EngineSnapshot, type EngineIdentity} from './battle-engine-snapshot';
-import {BattleEngineStreamControl} from './battle-engine-stream';
-import {configureBattleEngineGuard, battleEngineGeneration, invalidateBattleEngineGuards, currentBattleEngineIntent,
- assertBattleEngineIntent, getBattleEngineExpected, type BattleEngineIntent} from './battle-engine-guard';
+import {
+	captureEngineSnapshot,
+	type EngineSnapshot,
+	type EngineIdentity,
+} from './battle-engine-snapshot';
+import { BattleEngineStreamControl } from './battle-engine-stream';
+import {
+	configureBattleEngineGuard,
+	battleEngineGeneration,
+	invalidateBattleEngineGuards,
+	currentBattleEngineIntent,
+	assertBattleEngineIntent,
+	getBattleEngineExpected,
+	type BattleEngineIntent,
+} from './battle-engine-guard';
 let workerSnapshot: EngineSnapshot | null = null;
-const workerIdentities = new WeakMap<ProcessManager.StreamProcessWrapper, Readonly<EngineIdentity> | null>();
-const streamWorkers = new WeakMap<Streams.ObjectReadWriteStream<string>, ProcessManager.StreamProcessWrapper>();
+const workerIdentities = new WeakMap<
+	ProcessManager.StreamProcessWrapper,
+	Readonly<EngineIdentity> | null
+>();
+const streamWorkers = new WeakMap<
+	Streams.ObjectReadWriteStream<string>,
+	ProcessManager.StreamProcessWrapper
+>();
 import type { Tournament } from './tournaments/index';
 import type { RoomSettings } from './rooms';
 import type { BestOfGame } from './room-battle-bestof';
@@ -103,7 +120,7 @@ export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 	 *
 	 * Mostly exists so impatient players don't have to wait the full
 	 * 150 seconds against a disconnected opponent.
- 	*/
+	 */
 	dcSecondsLeft: number;
 	/**
 	 * Is the user actually in the room?
@@ -150,7 +167,12 @@ export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 			user.updateSearch();
 			for (const connection of user.connections) {
 				if (connection.inRooms.has(game.roomid)) {
-					Sockets.channelMove(connection.worker, this.game.roomid, this.channelIndex, connection.socketid);
+					Sockets.channelMove(
+						connection.worker,
+						this.game.roomid,
+						this.channelIndex,
+						connection.socketid,
+					);
 				}
 			}
 		}
@@ -164,7 +186,7 @@ export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 		this.active = false;
 	}
 	updateChannel(user: User | Connection, channel = this.channelIndex) {
-		for (const connection of (user.connections || [user])) {
+		for (const connection of user.connections || [user]) {
 			Sockets.channelMove(connection.worker, this.game.roomid, channel, connection.socketid);
 		}
 	}
@@ -191,7 +213,7 @@ export class RoomBattleTimer {
 
 		const format = Dex.formats.get(battle.format, true);
 		const hasLongTurns = format.gameType !== 'singles';
-		const isChallenge = (battle.challengeType === 'challenge');
+		const isChallenge = battle.challengeType === 'challenge';
 		const ruleTable = Dex.formats.getRuleTable(format);
 		const timerSettings = ruleTable.timer?.[0];
 
@@ -219,33 +241,48 @@ export class RoomBattleTimer {
 			if (this.battle.soloMulti && player === this.battle.p3) continue;
 			player.secondsLeft = this.settings.starting + this.settings.grace;
 			player.turnSecondsLeft = player.secondsLeft;
-			player.dcSecondsLeft = this.settings.dcTimerBank ? DISCONNECTION_BANK_TIME : DISCONNECTION_TIME;
+			player.dcSecondsLeft = this.settings.dcTimerBank ?
+				DISCONNECTION_BANK_TIME :
+				DISCONNECTION_TIME;
 		}
 	}
 	start(requester?: User) {
-		const userid = requester ? requester.id : 'staff' as ID;
+		const userid = requester ? requester.id : ('staff' as ID);
 		if (this.timerRequesters.has(userid)) return false;
 		if (this.battle.ended) {
-			requester?.sendTo(this.battle.roomid, `|inactiveoff|The timer can't be enabled after a battle has ended.`);
+			requester?.sendTo(
+				this.battle.roomid,
+				`|inactiveoff|The timer can't be enabled after a battle has ended.`,
+			);
 			return false;
 		}
 		if (this.timerRequesters.size) {
-			this.battle.room.add(`|inactive|${requester ? requester.name : userid} also wants the timer to be on.`).update();
+			this.battle.room
+				.add(`|inactive|${requester ? requester.name : userid} also wants the timer to be on.`)
+				.update();
 			this.timerRequesters.add(userid);
 			return false;
 		}
-		if (requester && this.battle.playerTable[requester.id] && this.lastDisabledByUser === requester.id) {
+		if (
+			requester &&
+			this.battle.playerTable[requester.id] &&
+			this.lastDisabledByUser === requester.id
+		) {
 			const remainingCooldownMs = (this.lastDisabledTime || 0) + TIMER_COOLDOWN - Date.now();
 			if (remainingCooldownMs > 0) {
 				this.battle.playerTable[requester.id].sendRoom(
-					`|inactiveoff|The timer can't be re-enabled so soon after disabling it (${Math.ceil(remainingCooldownMs / SECONDS)} seconds remaining).`
+					`|inactiveoff|The timer can't be re-enabled so soon after disabling it (${Math.ceil(remainingCooldownMs / SECONDS)} seconds remaining).`,
 				);
 				return false;
 			}
 		}
 		this.timerRequesters.add(userid);
 		const requestedBy = requester ? ` (requested by ${requester.name})` : ``;
-		this.battle.room.add(`|inactive|Battle timer is ON: inactive players will automatically lose when time's up.${requestedBy}`).update();
+		this.battle.room
+			.add(
+				`|inactive|Battle timer is ON: inactive players will automatically lose when time's up.${requestedBy}`,
+			)
+			.update();
 
 		this.checkActivity();
 		for (const player of this.battle.players) {
@@ -264,7 +301,11 @@ export class RoomBattleTimer {
 			this.timerRequesters.clear();
 		}
 		if (this.timerRequesters.size) {
-			this.battle.room.add(`|inactive|${requester!.name} no longer wants the timer on, but the timer is staying on because ${[...this.timerRequesters].join(', ')} still does.`).update();
+			this.battle.room
+				.add(
+					`|inactive|${requester!.name} no longer wants the timer on, but the timer is staying on because ${[...this.timerRequesters].join(', ')} still does.`,
+				)
+				.update();
 			return false;
 		}
 		if (this.end()) {
@@ -323,7 +364,10 @@ export class RoomBattleTimer {
 	nextRequest(player: RoomBattlePlayer) {
 		if (this.battle.soloMulti && player === this.battle.p3) return;
 		if (player.secondsLeft <= 0) return;
-		if (player.request.isWait && !(this.battle.soloMulti && player === this.battle.p1 && !this.battle.p3.request.isWait)) {
+		if (
+			player.request.isWait &&
+			!(this.battle.soloMulti && player === this.battle.p1 && !this.battle.p3.request.isWait)
+		) {
 			player.turnSecondsLeft = this.settings.maxPerTurn;
 			return;
 		}
@@ -338,18 +382,24 @@ export class RoomBattleTimer {
 
 		const room = this.battle.room;
 		this.updateTurn();
-		const maxTurnTime = (this.isFirstRequest ? this.settings.maxFirstTurn : 0) || this.settings.maxPerTurn;
+		const maxTurnTime =
+			(this.isFirstRequest ? this.settings.maxFirstTurn : 0) || this.settings.maxPerTurn;
 		player.turnSecondsLeft = Math.min(player.secondsLeft, maxTurnTime);
 
 		const secondsLeft = player.turnSecondsLeft;
 		let grace = player.secondsLeft - this.settings.starting;
 		if (grace < 0) grace = 0;
-		player.sendRoom(`|inactive|Time left: ${secondsLeft} sec this turn | ${player.secondsLeft - grace} sec total` + (grace ? ` | ${grace} sec grace` : ``));
+		player.sendRoom(
+			`|inactive|Time left: ${secondsLeft} sec this turn | ${player.secondsLeft - grace} sec total` +
+			(grace ? ` | ${grace} sec grace` : ``),
+		);
 		if (secondsLeft <= 30 && secondsLeft < this.settings.starting) {
 			room.add(`|inactive|${player.name} has ${secondsLeft} seconds left this turn.`);
 		}
 		if (this.debug) {
-			room.add(`||${player.name} | Time left: ${secondsLeft} sec this turn | ${player.secondsLeft} sec total`);
+			room.add(
+				`||${player.name} | Time left: ${secondsLeft} sec this turn | ${player.secondsLeft} sec total`,
+			);
 		}
 		room.update();
 		this.lastTick = Date.now();
@@ -364,7 +414,11 @@ export class RoomBattleTimer {
 		const room = this.battle.room;
 		for (const player of this.battle.players) {
 			if (this.battle.soloMulti && player === this.battle.p3) continue;
-			if (player.request.isWait && !(this.battle.soloMulti && player === this.battle.p1 && !this.battle.p3.request.isWait)) continue;
+			if (
+				player.request.isWait &&
+				!(this.battle.soloMulti && player === this.battle.p1 && !this.battle.p3.request.isWait)
+			)
+				continue;
 			if (player.knownActive) {
 				player.secondsLeft -= TICK_TIME;
 				player.turnSecondsLeft -= TICK_TIME;
@@ -395,7 +449,9 @@ export class RoomBattleTimer {
 				}
 			}
 			if (this.debug) {
-				room.add(`||[${player.name} has ${player.turnSecondsLeft}s this turn / ${player.secondsLeft}s total]`);
+				room.add(
+					`||[${player.name} has ${player.turnSecondsLeft}s this turn / ${player.secondsLeft}s total]`,
+				);
 			}
 		}
 		room.update();
@@ -453,7 +509,9 @@ export class RoomBattleTimer {
 		}
 	}
 	checkTimeout() {
-		const players = this.battle.soloMulti ? this.battle.players.filter(player => player !== this.battle.p3) : this.battle.players;
+		const players = this.battle.soloMulti ?
+			this.battle.players.filter(player => player !== this.battle.p3) :
+			this.battle.players;
 		if (players.every(player => player.turnSecondsLeft <= 0)) {
 			if (!this.settings.timeoutAutoChoose || players.every(player => player.secondsLeft <= 0)) {
 				this.battle.room.add(`|-message|All players are inactive.`).update();
@@ -487,7 +545,7 @@ export interface RoomBattlePlayerOptions {
 }
 
 export interface RoomBattleOptions {
- engineGuardIntent?: BattleEngineIntent;
+	engineGuardIntent?: BattleEngineIntent;
 	challengeOptions?: import('../sim/challenge-options').ChallengeOptions;
 	format: string;
 	/**
@@ -518,31 +576,61 @@ export interface RoomBattleOptions {
 }
 
 export class RoomBattle extends RoomGame<RoomBattlePlayer> {
- readonly moveSheetConsent = new MoveSheetConsent();
- moveSheets(user: User, action = '', token = '') {
-  const player = this.playerTable[user.id];
-  if (!player) throw new Error('Only battle players can use move sheets.');
-  if (this.ended) throw new Error('This battle has ended.');
-  if (!['singles', 'doubles', 'triples', 'rotation'].includes(this.gameType || '') || this.players.length !== 2 || this.players.some(p => !p.id)) {
-   throw new Error('Optional move sheets require two players; Multi and Free-for-All are not supported.');
-  }
-  const state = this.moveSheetConsent;
-  state.sync(this.players.map(p => p.id));
-  if (action && state.decide(player.id, this.players.map(p => p.id), action, Number(token))) {
-   void this.stream.write('>show-movesheets ' + state.generation);
-  } else if (!action && state.enabled) {
-   void this.stream.write('>show-movesheets ' + state.generation + ' ' + player.slot);
-  }
-  for (const recipient of action ? this.players : [player]) {
-   const button = (verb: string, label: string) => '<button class="button" name="send" value="/movesheets ' + verb + ' ' + state.generation + '" style="min-height:44px;margin:4px">' + label + '</button>';
-   let body = '<strong>Open Team Sheet — moves only</strong><br />';
-   if (state.enabled) body += 'Both players agreed. Moves are shared privately for this battle.';
-   else if (!state.accepted.size) body += 'Off. Share team species and original moves only after both players agree. ' + button('request', 'Request move sheets');
-   else if (state.accepted.has(recipient.id)) body += 'Waiting for your opponent. No moves shared yet. ' + button('cancel', 'Cancel request');
-   else body += 'Your opponent requests move sheets. Species and original moves will be shared with both players. ' + button('accept', 'Agree and share moves') + button('decline', 'Decline');
-   recipient.sendRoom('|uhtml|movesheet-consent|<div class="infobox">' + body + '</div>');
-  }
- }
+	readonly moveSheetConsent = new MoveSheetConsent();
+	moveSheets(user: User, action = '', token = '') {
+		const player = this.playerTable[user.id];
+		if (!player) throw new Error('Only battle players can use move sheets.');
+		if (this.ended) throw new Error('This battle has ended.');
+		if (
+			!['singles', 'doubles', 'triples', 'rotation'].includes(this.gameType || '') ||
+			this.players.length !== 2 ||
+			this.players.some(p => !p.id)
+		) {
+			throw new Error(
+				'Optional move sheets require two players; Multi and Free-for-All are not supported.',
+			);
+		}
+		const state = this.moveSheetConsent;
+		state.sync(this.players.map(p => p.id));
+		if (
+			action &&
+			state.decide(
+				player.id,
+				this.players.map(p => p.id),
+				action,
+				Number(token),
+			)
+		) {
+			void this.stream.write('>show-movesheets ' + String(state.generation));
+		} else if (!action && state.enabled) {
+			void this.stream.write('>show-movesheets ' + String(state.generation) + ' ' + player.slot);
+		}
+		for (const recipient of action ? this.players : [player]) {
+			const button = (verb: string, label: string) =>
+				'<button class="button" name="send" value="/movesheets ' +
+				verb +
+				' ' +
+				String(state.generation) +
+				'" style="min-height:44px;margin:4px">' +
+				label +
+				'</button>';
+			let body = '<strong>Open Team Sheet — moves only</strong><br />';
+			if (state.enabled) body += 'Both players agreed. Moves are shared privately for this battle.';
+			else if (!state.accepted.size)
+				body +=
+					'Off. Share team species and original moves only after both players agree. ' +
+					button('request', 'Request move sheets');
+			else if (state.accepted.has(recipient.id))
+				body +=
+					'Waiting for your opponent. No moves shared yet. ' + button('cancel', 'Cancel request');
+			else
+				body +=
+					'Your opponent requests move sheets. Species and original moves will be shared with both players. ' +
+					button('accept', 'Agree and share moves') +
+					button('decline', 'Decline');
+			recipient.sendRoom('|uhtml|movesheet-consent|<div class="infobox">' + body + '</div>');
+		}
+	}
 
 	override readonly gameid = 'battle' as ID;
 	override readonly room!: GameRoom;
@@ -565,11 +653,11 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	 */
 	readonly allowExtraction: { [k: string]: Set<ID> } = {};
 	readonly stream: Streams.ObjectReadWriteStream<string>;
- engineIdentity: Readonly<EngineIdentity> | null = null;
+	engineIdentity: Readonly<EngineIdentity> | null = null;
 	override readonly timer: RoomBattleTimer;
 	started = false;
 	active = false;
-	password = "";
+	password = '';
 	replaySaved: boolean | 'auto' = false;
 	forcedSettings: { modchat?: string | null, privacy?: string | null } = {};
 	p1: RoomBattlePlayer = null!;
@@ -590,14 +678,15 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	soloControlsShown = false;
 	options: RoomBattleOptions;
 	frozen?: boolean;
-	dataResolvers?: [((args: string[]) => void), ((error: Error) => void)][];
+	dataResolvers?: [(args: string[]) => void, (error: Error) => void][];
 	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
 		const format = Dex.formats.get(options.format, true);
 		this.title = format.name;
 		this.options = options;
-		if (!this.title.endsWith(" Battle")) this.title += " Battle";
-		this.allowRenames = options.allowRenames !== undefined ? !!options.allowRenames : (!options.rated && !options.tour);
+		if (!this.title.endsWith(' Battle')) this.title += ' Battle';
+		this.allowRenames =
+			options.allowRenames !== undefined ? !!options.allowRenames : !options.rated && !options.tour;
 
 		this.format = options.format;
 		this.gameType = format.gameType;
@@ -607,10 +696,10 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		this.ladder = typeof format.rated === 'string' ? toID(format.rated) : options.format;
 		this.playerCap = format.playerCount;
 
-  const expected = getBattleEngineExpected(options.engineGuardIntent);
-  this.stream = expected ? PM.createExpectedStream(expected) : PM.createStream();
-  const selectedWorker = streamWorkers.get(this.stream);
-  const selectedIdentity = selectedWorker ? workerIdentities.get(selectedWorker) : null;
+		const expected = getBattleEngineExpected(options.engineGuardIntent);
+		this.stream = expected ? PM.createExpectedStream(expected) : PM.createStream();
+		const selectedWorker = streamWorkers.get(this.stream);
+		const selectedIdentity = selectedWorker ? workerIdentities.get(selectedWorker) : null;
 
 		let ratedMessage = options.ratedMessage || '';
 		if (this.rated) {
@@ -631,14 +720,20 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		if (options.inputLog) {
 			void this.stream.write(options.inputLog);
 		} else {
-   const start = '>start ' + JSON.stringify(battleOptions);
-   void this.stream.write(expected && selectedIdentity ? '>engineguard ' + JSON.stringify({identity: selectedIdentity, command: start}) : start);
+			const startCommand = '>start ' + JSON.stringify(battleOptions);
+			void this.stream.write(
+				expected && selectedIdentity ?
+					'>engineguard ' + JSON.stringify({ identity: selectedIdentity, command: startCommand }) :
+					startCommand,
+			);
 		}
 
 		void this.listen();
 
 		if (options.players.length > this.playerCap) {
-			throw new Error(`${options.players.length} players passed to battle ${room.roomid} but ${this.playerCap} players expected`);
+			throw new Error(
+				`${options.players.length} players passed to battle ${room.roomid} but ${this.playerCap} players expected`,
+			);
 		}
 		for (let i = 0; i < this.playerCap; i++) {
 			const p = options.players[i];
@@ -652,10 +747,13 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			if (!team || team.length !== 6) throw new Error('Multi 1v2 requires a six-Pokémon solo team.');
 			this.p3.name = this.p1.name;
 			this.p3.hasTeam = true;
-			void this.stream.write(`>player p3 ${JSON.stringify({
-				name: this.p1.name, avatar: `${options.players[0].user.avatar}`,
-				team: Teams.pack(team.slice(3)),
-			})}`);
+			void this.stream.write(
+				`>player p3 ${JSON.stringify({
+					name: this.p1.name,
+					avatar: `${options.players[0].user.avatar}`,
+					team: Teams.pack(team.slice(3)),
+				})}`,
+			);
 		}
 		if (options.inputLog) {
 			let scanIndex = 0;
@@ -675,7 +773,10 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	}
 
 	checkActive() {
-		const active = (this.started && !this.ended && this.players.every(p => (this.soloMulti && p === this.p3) || p.active));
+		const active =
+			this.started &&
+			!this.ended &&
+			this.players.every(p => (this.soloMulti && p === this.p3) || p.active);
 		Rooms.global.battleCount += (active ? 1 : 0) - (this.active ? 1 : 0);
 		this.room.active = active;
 		this.active = active;
@@ -707,24 +808,43 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			return;
 		}
 		const allPlayersWait = this.players.every(p => !!p.request.isWait);
-		if (allPlayersWait || // too late
-			(rqid && rqid !== `${request.rqid}`)) { // WAY too late
+		if (
+			allPlayersWait || // too late
+			(rqid && rqid !== `${request.rqid}`)
+		) {
+			// WAY too late
 			sendError(`Sorry, too late to make a different move; the next turn has already started`);
 			return;
 		}
 		request.isWait = true;
 		request.choice = choice;
 
-  const intent = currentBattleEngineIntent();
-  if (intent) {
-   assertBattleEngineIntent(intent);
-   if (intent.scope !== this.roomid || intent.lease.rqid !== request.rqid || intent.lease.slot !== player.slot ||
-    (rqid && rqid !== String(intent.lease.rqid)) || !this.engineIdentity || !intent.lease.requestToken) {
-    request.isWait = false; request.choice = ''; sendError('Battle request changed; verify again.'); return;
-   }
-   void this.stream.write('>engineguard ' + JSON.stringify({identity: this.engineIdentity, command: '>' + player.slot + ' ' + choice,
-    slot: player.slot, requestToken: intent.lease.requestToken}));
-  } else void this.stream.write('>' + player.slot + ' ' + choice);
+		const intent = currentBattleEngineIntent();
+		if (intent) {
+			assertBattleEngineIntent(intent);
+			if (
+				intent.scope !== this.roomid ||
+				intent.lease.rqid !== request.rqid ||
+				intent.lease.slot !== player.slot ||
+				(rqid && rqid !== String(intent.lease.rqid)) ||
+				!this.engineIdentity ||
+				!intent.lease.requestToken
+			) {
+				request.isWait = false;
+				request.choice = '';
+				sendError('Battle request changed; verify again.');
+				return;
+			}
+			void this.stream.write(
+				'>engineguard ' +
+				JSON.stringify({
+					identity: this.engineIdentity,
+					command: '>' + player.slot + ' ' + choice,
+					slot: player.slot,
+					requestToken: intent.lease.requestToken,
+				}),
+			);
+		} else void this.stream.write('>' + player.slot + ' ' + choice);
 		if (this.soloMulti && player === this.p3) this.sendSoloControls();
 	}
 	override undo(user: User, data: string) {
@@ -743,22 +863,39 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			return;
 		}
 		const allPlayersWait = this.players.every(p => !!p.request.isWait);
-		if (allPlayersWait || // too late
-			(rqid && rqid !== `${request.rqid}`)) { // WAY too late
+		if (
+			allPlayersWait || // too late
+			(rqid && rqid !== `${request.rqid}`)
+		) {
+			// WAY too late
 			sendError(`Sorry, too late to cancel; the next turn has already started`);
 			return;
 		}
 		request.isWait = false;
 
-  const intent = currentBattleEngineIntent();
-  if (intent) {
-   assertBattleEngineIntent(intent);
-   if (intent.scope !== this.roomid || intent.lease.rqid !== request.rqid || !this.engineIdentity || !intent.lease.requestToken) {
-    request.isWait = true; sendError('Battle request changed; verify again.'); return;
-   }
-   void this.stream.write('>engineguard ' + JSON.stringify({identity: this.engineIdentity, command: '>' + player.slot + ' undo',
-    slot: player.slot, requestToken: intent.lease.requestToken}));
-  } else void this.stream.write('>' + player.slot + ' undo');
+		const intent = currentBattleEngineIntent();
+		if (intent) {
+			assertBattleEngineIntent(intent);
+			if (
+				intent.scope !== this.roomid ||
+				intent.lease.rqid !== request.rqid ||
+				!this.engineIdentity ||
+				!intent.lease.requestToken
+			) {
+				request.isWait = true;
+				sendError('Battle request changed; verify again.');
+				return;
+			}
+			void this.stream.write(
+				'>engineguard ' +
+				JSON.stringify({
+					identity: this.engineIdentity,
+					command: '>' + player.slot + ' undo',
+					slot: player.slot,
+					requestToken: intent.lease.requestToken,
+				}),
+			);
+		} else void this.stream.write('>' + player.slot + ' undo');
 		if (this.soloMulti && player === this.p3) this.sendSoloControls();
 	}
 	/** The solo player's second slot has its own simulator request and private controls. */
@@ -769,48 +906,77 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		const tracker = this.p3.request;
 		if (!tracker.request) return;
 		const request = JSON.parse(tracker.request);
-		const button = (label: string, choice: string) => (
+		const button = (label: string, choice: string) =>
 			`<form data-submitsend="/msgroom ${this.roomid},/solochoice ${choice}|${tracker.rqid}" style="display:inline-block;margin:2px">` +
-			`<button class="button" type="submit">${Utils.escapeHTML(label)}</button></form>`
-		);
+			`<button class="button" type="submit">${Utils.escapeHTML(label)}</button></form>`;
 		let controls = '';
 		if (request.teamPreview) {
 			const team = request.side.pokemon;
-			controls = team.map((pokemon: { details: string }, i: number) => {
-				const order = [i + 1, ...team.map((_: unknown, index: number) => index + 1).filter((slot: number) => slot !== i + 1)];
-				return button(`Lead ${pokemon.details}`, `team ${order.join(',')}`);
-			}).join('');
+			controls = team
+				.map((pokemon: { details: string }, i: number) => {
+					const order = [
+						i + 1,
+						...team
+							.map((_: unknown, index: number) => index + 1)
+							.filter((slot: number) => slot !== i + 1),
+					];
+					return button(`Lead ${pokemon.details}`, `team ${order.join(',')}`);
+				})
+				.join('');
 		} else if (request.forceSwitch) {
-			controls = request.side.pokemon.map((pokemon: { details: string, condition: string, active: boolean }, i: number) => (
-				!pokemon.active && !pokemon.condition.includes(' fnt') && !pokemon.condition.startsWith('0 ') ?
-					button(`Switch to ${pokemon.details}`, `switch ${i + 1}`) : ''
-			)).join('');
+			controls = request.side.pokemon
+				.map((pokemon: { details: string, condition: string, active: boolean }, i: number) =>
+					!pokemon.active &&
+					!pokemon.condition.includes(' fnt') &&
+					!pokemon.condition.startsWith('0 ') ?
+						button(`Switch to ${pokemon.details}`, `switch ${i + 1}`) :
+						'',
+				)
+				.join('');
 		} else if (request.active?.[0]) {
 			const active = request.active[0];
-			controls = active.moves.map((move: { move: string, disabled?: boolean, target?: string }, i: number) => {
-				if (move.disabled) return '';
-				const name = move.move;
-				const choice = `move ${i + 1}`;
-				if (['normal', 'adjacentFoe', 'any'].includes(move.target || '')) {
-					return button(`${name} → ${this.p2.name}`, `${choice} +1`) +
-						button(`${name} → ${this.p4.name}`, `${choice} +2`) +
-						(move.target === 'any' ? button(`${name} → ally`, `${choice} -1`) : '');
-				}
-				if (['adjacentAlly', 'adjacentAllyOrSelf'].includes(move.target || '')) {
-					return button(`${name} → ally`, `${choice} -1`) +
-						(move.target === 'adjacentAllyOrSelf' ? button(`${name} → self`, `${choice} -2`) : '');
-				}
-				return button(name, choice);
-			}).join('');
-			controls += request.side.pokemon.map((pokemon: { details: string, condition: string, active: boolean }, i: number) => (
-				!pokemon.active && !pokemon.condition.includes(' fnt') && !pokemon.condition.startsWith('0 ') ?
-					button(`Switch to ${pokemon.details}`, `switch ${i + 1}`) : ''
-			)).join('');
+			controls = active.moves
+				.map((move: { move: string, disabled?: boolean, target?: string }, i: number) => {
+					if (move.disabled) return '';
+					const name = move.move;
+					const choice = `move ${i + 1}`;
+					if (['normal', 'adjacentFoe', 'any'].includes(move.target || '')) {
+						return (
+							button(`${name} → ${this.p2.name}`, `${choice} +1`) +
+							button(`${name} → ${this.p4.name}`, `${choice} +2`) +
+							(move.target === 'any' ? button(`${name} → ally`, `${choice} -1`) : '')
+						);
+					}
+					if (['adjacentAlly', 'adjacentAllyOrSelf'].includes(move.target || '')) {
+						return (
+							button(`${name} → ally`, `${choice} -1`) +
+							(move.target === 'adjacentAllyOrSelf' ?
+								button(`${name} → self`, `${choice} -2`) :
+								'')
+						);
+					}
+					return button(name, choice);
+				})
+				.join('');
+			controls += request.side.pokemon
+				.map((pokemon: { details: string, condition: string, active: boolean }, i: number) =>
+					!pokemon.active &&
+					!pokemon.condition.includes(' fnt') &&
+					!pokemon.condition.startsWith('0 ') ?
+						button(`Switch to ${pokemon.details}`, `switch ${i + 1}`) :
+						'',
+				)
+				.join('');
 		}
-		const status = tracker.isWait === true ? 'Choice sent. Waiting for the other players.' :
-			tracker.isWait ? 'Waiting for the battle.' : controls;
+		const status =
+			tracker.isWait === true ?
+				'Choice sent. Waiting for the other players.' :
+				tracker.isWait ?
+					'Waiting for the battle.' :
+					controls;
 		const undo = tracker.isWait === true ? button('Change second-slot choice', 'undo') : '';
-		const html = `<div class="broadcast broadcast-blue"><strong>Your second Pokémon (p3)</strong><br />` +
+		const html =
+			`<div class="broadcast broadcast-blue"><strong>Your second Pokémon (p3)</strong><br />` +
 			`${status}${undo}<br /><small>For Mega, Z, Max, or Tera choices, use /solochoice move [number] [target] [mega|zmove|dynamax|terastallize].</small></div>`;
 		const command = connection || !this.soloControlsShown ? 'uhtml' : 'uhtmlchange';
 		recipient.sendTo(this.roomid, `|${command}|solomulti-${this.roomid}|${html}`);
@@ -822,7 +988,9 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			return false;
 		}
 
-		const validSlots = this.players.filter(player => !player.id && !(this.soloMulti && player === this.p3)).map(player => player.slot);
+		const validSlots = this.players
+			.filter(player => !player.id && !(this.soloMulti && player === this.p3))
+			.map(player => player.slot);
 
 		if (slot && !validSlots.includes(slot)) {
 			user.popup(`This battle already has a user in slot ${slot}.`);
@@ -836,7 +1004,9 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 
 		slot ??= this.players.find(player => player.invite === user.id)?.slot;
 		if (!slot && validSlots.length > 1) {
-			user.popup(`Which slot would you like to join into? Use something like \`/joingame ${validSlots[0]}\``);
+			user.popup(
+				`Which slot would you like to join into? Use something like \`/joingame ${validSlots[0]}\``,
+			);
 			return false;
 		}
 		slot ??= validSlots[0];
@@ -844,12 +1014,14 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		if (this[slot].invite === user.id) {
 			this.room.auth.set(user.id, Users.PLAYER_SYMBOL);
 		} else if (!user.can('joinbattle', null, this.room)) {
-			user.popup(`You must be set as a player to join a battle you didn't start. Ask a player to use /addplayer on you to join this battle.`);
+			user.popup(
+				`You must be set as a player to join a battle you didn't start. Ask a player to use /addplayer on you to join this battle.`,
+			);
 			return false;
 		}
 
 		this.setPlayerUser(this[slot], user, playerOpts);
-		if (this.players.every(player => player.id || this.soloMulti && player === this.p3)) {
+		if (this.players.every(player => player.id || (this.soloMulti && player === this.p3))) {
 			// all players have joined, start the battle
 			// onCreateBattleRoom crashes if some users are unavailable at start of battle
 			// what do we do??? no clue but I guess just exclude them from the array for now
@@ -879,7 +1051,9 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	override leaveGame(user: User) {
 		if (!user) return false; // ...
 		if (this.room.rated || this.room.tour) {
-			user.popup(`Players can't be swapped out in a ${this.room.tour ? "tournament" : "rated"} battle.`);
+			user.popup(
+				`Players can't be swapped out in a ${this.room.tour ? 'tournament' : 'rated'} battle.`,
+			);
 			return false;
 		}
 		const player = this.playerTable[user.id];
@@ -915,7 +1089,9 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			}
 		}
 		if (!this.ended) {
-			this.room.add(`|bigerror|The simulator process crashed. We've been notified and will fix this ASAP.`);
+			this.room.add(
+				`|bigerror|The simulator process crashed. We've been notified and will fix this ASAP.`,
+			);
 			if (!disconnected) Monitor.crashlog(new Error(`Sim stream interrupted`), `A sim stream`);
 			this.setEnded();
 		}
@@ -933,17 +1109,25 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		for (const player of this.players) player.wantsTie = false;
 
 		switch (lines[0]) {
-  case 'engineidentity': {
-   const actual = JSON.parse(lines[1] || '{}');
-   const worker = streamWorkers.get(this.stream);
-   const expected = worker && workerIdentities.get(worker);
-   if (!expected || actual.algorithm !== expected.algorithm || actual.mechanicsSHA256 !== expected.mechanicsSHA256 || actual.generation !== expected.generation) {
-    this.engineIdentity = null;
-    invalidateBattleEngineGuards();
-    if (!this.ended) {this.room.add('|bigerror|Guarded battle engine is unavailable.'); this.setEnded();}
-   } else this.engineIdentity = Object.freeze(actual);
-   break;
-  }
+		case 'engineidentity': {
+			const actual = JSON.parse(lines[1] || '{}');
+			const worker = streamWorkers.get(this.stream);
+			const expected = worker && workerIdentities.get(worker);
+			if (
+				!expected ||
+				actual.algorithm !== expected.algorithm ||
+				actual.mechanicsSHA256 !== expected.mechanicsSHA256 ||
+				actual.generation !== expected.generation
+			) {
+				this.engineIdentity = null;
+				invalidateBattleEngineGuards();
+				if (!this.ended) {
+					this.room.add('|bigerror|Guarded battle engine is unavailable.');
+					this.setEnded();
+				}
+			} else this.engineIdentity = Object.freeze(actual);
+			break;
+		}
 		case 'requesteddata':
 			lines = lines.slice(1);
 			const [resolver] = this.dataResolvers!.shift()!;
@@ -956,7 +1140,11 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 					this.turn = parseInt(line.slice(6));
 				}
 				this.room.add(line);
-				if (line.startsWith(`|bigerror|You will auto-tie if `) && Config.allowrequestingties && !this.room.tour) {
+				if (
+					line.startsWith(`|bigerror|You will auto-tie if `) &&
+					Config.allowrequestingties &&
+					!this.room.tour
+				) {
 					this.room.add(`|-hint|If you want to tie earlier, consider using \`/offertie\`.`);
 				}
 			}
@@ -967,14 +1155,18 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		case 'sideupdate': {
 			const slot = lines[1] as SideID;
 			const player = this[slot];
-   if (lines[2].startsWith('|movesheetprivate|')) {
-    this.moveSheetConsent.sync(this.players.map(p => p.id));
-    const [, , generation, ...html] = lines[2].split('|');
-    if (!this.ended && this.moveSheetConsent.enabled && Number(generation) === this.moveSheetConsent.generation) {
-     player?.sendRoom('|uhtml|movesheet-data|' + html.join('|'));
-    }
-    break;
-   }
+			if (lines[2].startsWith('|movesheetprivate|')) {
+				this.moveSheetConsent.sync(this.players.map(p => p.id));
+				const [, , generation, ...html] = lines[2].split('|');
+				if (
+					!this.ended &&
+					this.moveSheetConsent.enabled &&
+					Number(generation) === this.moveSheetConsent.generation
+				) {
+					player?.sendRoom('|uhtml|movesheet-data|' + html.join('|'));
+				}
+				break;
+			}
 			if (lines[2].startsWith(`|error|[Invalid choice] Can't do anything`)) {
 				// ... should not happen
 			} else if (lines[2].startsWith(`|error|[Invalid choice]`)) {
@@ -1045,7 +1237,12 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		} else {
 			this.endType = 'draw';
 		}
-		Chat.runHandlers('onBattleEnd', this, winnerid, this.players.map(p => p.id));
+		Chat.runHandlers(
+			'onBattleEnd',
+			this,
+			winnerid,
+			this.players.map(p => p.id),
+		);
 		if (this.room.rated && !this.options.isBestOfSubBattle) {
 			void this.updateLadder(p1score, winnerid);
 		} else if (Config.logchallenges) {
@@ -1086,17 +1283,29 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		let p1rating = null;
 		let p2rating = null;
 		try {
-			[score, p1rating, p2rating] = await Ladders(this.ladder).updateRating(p1, p2, p1score, this.room);
+			[score, p1rating, p2rating] = await Ladders(this.ladder).updateRating(
+				p1,
+				p2,
+				p1score,
+				this.room,
+			);
 		} catch (error: any) {
 			Monitor.crashlog(error, 'Battle rating update');
-			this.room.addRaw(`Ratings could not be updated. The battle result will still be logged.`).update();
+			this.room
+				.addRaw(`Ratings could not be updated. The battle result will still be logged.`)
+				.update();
 		}
-		await this.logBattle(score, p1rating, p2rating).catch(error => Monitor.crashlog(error, 'Battle log persistence'));
+		await this.logBattle(score, p1rating, p2rating).catch(error =>
+			Monitor.crashlog(error, 'Battle log persistence'),
+		);
 		Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [p1, p2].map(toID));
 	}
 	async logBattle(
-		p1score: number, p1rating: AnyObject | null = null, p2rating: AnyObject | null = null,
-		p3rating: AnyObject | null = null, p4rating: AnyObject | null = null
+		p1score: number,
+		p1rating: AnyObject | null = null,
+		p2rating: AnyObject | null = null,
+		p3rating: AnyObject | null = null,
+		p4rating: AnyObject | null = null,
 	) {
 		if (Dex.formats.get(this.format, true).noLog) return;
 		const logData = this.logData;
@@ -1135,7 +1344,9 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		const logpath = `${logfolder}/${tier}/${logsubfolder}/`;
 
 		await Monitor.logPath(logpath).mkdirp();
-		await Monitor.logPath(`${logpath}${this.room.getReplayData().id}.log.json`).write(JSON.stringify(logData));
+		await Monitor.logPath(`${logpath}${this.room.getReplayData().id}.log.json`).write(
+			JSON.stringify(logData),
+		);
 		if (logData.official && !Config.nofswriting) {
 			await officialReports.enqueue(logData as { roomid: string });
 		}
@@ -1153,9 +1364,15 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		const player = this.playerTable[user.id];
 		if (!player) return;
 		player.updateChannel(connection || user);
-  if (!this.ended && this.players.length === 2 && ['singles', 'doubles', 'triples', 'rotation'].includes(this.gameType || '')) {
-   try { this.moveSheets(user); } catch {}
-  }
+		if (
+			!this.ended &&
+			this.players.length === 2 &&
+			['singles', 'doubles', 'triples', 'rotation'].includes(this.gameType || '')
+		) {
+			try {
+				this.moveSheets(user);
+			} catch {}
+		}
 		const request = player.request;
 		if (request.request) {
 			let data = `|request|${request.request}`;
@@ -1186,7 +1403,9 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		if (!this.allowRenames) {
 			const player = this.playerTable[oldUserid];
 			if (player) {
-				const message = isForceRenamed ? " lost by having an inappropriate name." : " forfeited by changing their name.";
+				const message = isForceRenamed ?
+					' lost by having an inappropriate name.' :
+					' forfeited by changing their name.';
 				this.forfeitPlayer(player, message);
 			}
 			if (!(user.id in this.playerTable)) {
@@ -1318,14 +1537,18 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			if (this.forcedSettings.privacy) {
 				room.setPrivate(false);
 				room.settings.modjoin = null;
-				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${this.forcedSettings.privacy}'.</div>`);
-			} else if (!options.tour || (room.tour?.allowModjoin)) {
+				room.add(
+					`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${this.forcedSettings.privacy}'.</div>`,
+				);
+			} else if (!options.tour || room.tour?.allowModjoin) {
 				room.setPrivate('hidden');
 				if (inviteOnly) room.settings.modjoin = '%';
 				room.privacySetter = privacySetter;
 				if (inviteOnly) {
 					room.settings.modjoin = '%';
-					room.add(`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be invited with <code>/invite</code> (or be staff) to join</div>`);
+					room.add(
+						`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be invited with <code>/invite</code> (or be staff) to join</div>`,
+					);
 				}
 			}
 		}
@@ -1334,7 +1557,9 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	checkForcedUserSettings(user: User) {
 		this.forcedSettings = {
 			modchat: this.forcedSettings.modchat || RoomBattle.battleForcedSetting(user, 'modchat'),
-			privacy: !!this.options.rated && (this.forcedSettings.privacy || RoomBattle.battleForcedSetting(user, 'privacy')),
+			privacy:
+				!!this.options.rated &&
+				(this.forcedSettings.privacy || RoomBattle.battleForcedSetting(user, 'privacy')),
 		};
 		if (
 			this.players.some(p => p.getUser()?.battleSettings.special) ||
@@ -1364,9 +1589,12 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	}
 
 	override setPlayerUser(player: RoomBattlePlayer, user: User | null, playerOpts?: { team?: string }) {
-  if (player.id !== user?.id || playerOpts?.team) this.moveSheetConsent.reset();
+		if (player.id !== user?.id || playerOpts?.team) this.moveSheetConsent.reset();
 		if (this.soloMulti && player === this.p4 && playerOpts?.team) {
-			playerOpts = { ...playerOpts, team: Teams.pack((Teams.unpack(playerOpts.team) || []).slice(0, 3)) };
+			playerOpts = {
+				...playerOpts,
+				team: Teams.pack((Teams.unpack(playerOpts.team) || []).slice(0, 3)),
+			};
 		}
 		if (user === null && this.room.auth.get(player.id) === Users.PLAYER_SYMBOL) {
 			this.room.auth.set(player.id, '+');
@@ -1410,14 +1638,17 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			this.room.title = `${this.p1.name} vs. ${this.p2.name}`;
 		}
 		this.room.send(`|title|${this.room.title}`);
-		const suspectTest = Chat.plugins['suspect-tests']?.suspectTests[this.format] ||
+		const suspectTest =
+			Chat.plugins['suspect-tests']?.suspectTests[this.format] ||
 			Chat.plugins['suspect-tests']?.suspectTests.suspects[this.format];
 		if (suspectTest) {
 			const format = Dex.formats.get(this.format);
-			this.room.add(
-				`|html|<div class="broadcast-blue"><strong>${format.name} is currently suspecting ${suspectTest.suspect}! ` +
-				`For information on how to participate check out the <a href="${suspectTest.url}">suspect thread</a>.</strong></div>`
-			).update();
+			this.room
+				.add(
+					`|html|<div class="broadcast-blue"><strong>${format.name} is currently suspecting ${suspectTest.suspect}! ` +
+					`For information on how to participate check out the <a href="${suspectTest.url}">suspect thread</a>.</strong></div>`,
+				)
+				.update();
 		}
 
 		// run onCreateBattleRoom handlers
@@ -1438,12 +1669,16 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			Rooms.global.onCreateBattleRoom(users as User[], this.room, { rated: this.rated });
 			this.started = true;
 		} else if (delayStart === 'multi') {
-			this.room.add(`|uhtml|invites|<div class="broadcast broadcast-blue"><strong>This is a ${this.soloMulti ? '1 vs 2' : '4-player'} challenge battle</strong><br />The players will need to add more players before the battle can start.</div>`);
+			this.room.add(
+				`|uhtml|invites|<div class="broadcast broadcast-blue"><strong>This is a ${this.soloMulti ? '1 vs 2' : '4-player'} challenge battle</strong><br />The players will need to add more players before the battle can start.</div>`,
+			);
 		}
 	}
 
 	invitesFull() {
-		return this.players.every(player => player.id || player.invite || this.soloMulti && player === this.p3);
+		return this.players.every(
+			player => player.id || player.invite || (this.soloMulti && player === this.p3),
+		);
 	}
 	/** true = send to every player; falsy = send to no one */
 	sendInviteForm(connection: Connection | User | null | boolean) {
@@ -1453,24 +1688,22 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		}
 		if (!connection) return;
 
-		const playerForms = this.players.map(player => (
-			this.soloMulti && player === this.p3 ? (
-				`<form><label>Player 3: <strong>${Utils.escapeHTML(this.p1.name)}</strong> (solo player's second Pokémon)</label></form>`
-			) : player.id ? (
-				`<form><label>Player ${player.num}: <strong>${player.name}</strong></label></form>`
-			) : player.invite ? (
-				`<form data-submitsend="/msgroom ${this.roomid},/uninvitebattle ${player.invite}"><label>Player ${player.num}: <strong>${player.invite}</strong> (invited) <button type="submit">Uninvite</button></label></form>`
-			) : (
-				`<form data-submitsend="/msgroom ${this.roomid},/invitebattle {username}, p${player.num}"><label>Player ${player.num}: <input name="username" class="textbox" placeholder="Username" /></label> <button class="button" type="submit">Add Player</button></form>`
-			)
-		));
+		const playerForms = this.players.map(player =>
+			this.soloMulti && player === this.p3 ?
+				`<form><label>Player 3: <strong>${Utils.escapeHTML(this.p1.name)}</strong> (solo player's second Pokémon)</label></form>` :
+				player.id ?
+					`<form><label>Player ${player.num}: <strong>${player.name}</strong></label></form>` :
+					player.invite ?
+						`<form data-submitsend="/msgroom ${this.roomid},/uninvitebattle ${player.invite}"><label>Player ${player.num}: <strong>${player.invite}</strong> (invited) <button type="submit">Uninvite</button></label></form>` :
+						`<form data-submitsend="/msgroom ${this.roomid},/invitebattle {username}, p${player.num}"><label>Player ${player.num}: <input name="username" class="textbox" placeholder="Username" /></label> <button class="button" type="submit">Add Player</button></form>`,
+		);
 		if (this.gameType === 'multi') {
 			[playerForms[1], playerForms[2]] = [playerForms[2], playerForms[1]];
 			playerForms.splice(2, 0, '&mdash; vs &mdash;');
 		}
 		connection.sendTo(
 			this.room,
-			`|uhtmlchange|invites|<div class="broadcast broadcast-blue"><strong>This battle needs more players to start</strong><br /><br />${playerForms.join(``)}</div>`
+			`|uhtmlchange|invites|<div class="broadcast broadcast-blue"><strong>This battle needs more players to start</strong><br /><br />${playerForms.join(``)}</div>`,
 		);
 	}
 
@@ -1537,7 +1770,12 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		const result = await logPromise;
 		return result;
 	}
-	async getFieldInfo(): Promise<{field: string, fieldTurns: number | null, aura: string, auraTurns: number | null} | null> {
+	async getFieldInfo(): Promise<{
+		field: string,
+		fieldTurns: number | null,
+		aura: string,
+		auraTurns: number | null,
+	} | null> {
 		const response = new Promise<string[]>((resolve, reject) => {
 			if (!this.dataResolvers) this.dataResolvers = [];
 			this.dataResolvers.push([resolve, reject]);
@@ -1549,21 +1787,32 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 }
 
 export class RoomBattleStream extends BattleStream {
- override _destroy() {
-  if (this.engineControl.destroy()) {(this as any).battle = null; return;}
-  super._destroy();
- }
+	override _destroy() {
+		if (this.engineControl.destroy()) {
+			(this as any).battle = null;
+			return;
+		}
+		super._destroy();
+	}
 	override readonly battle: Battle;
- private readonly engineControl: BattleEngineStreamControl;
- constructor() {
-  super({keepAlive: true});
-  this.battle = null!;
-  this.engineControl = new BattleEngineStreamControl(workerSnapshot, value => this.push(value),
-   battle => {(this as any).battle = battle;}, () => {process.send?.('CALLBACK\nENGINE\nnull');});
- }
+	private readonly engineControl: BattleEngineStreamControl;
+	constructor() {
+		super({ keepAlive: true });
+		this.battle = null!;
+		this.engineControl = new BattleEngineStreamControl(
+			workerSnapshot,
+			value => this.push(value),
+			battle => {
+				(this as any).battle = battle;
+			},
+			() => {
+				process.send?.('CALLBACK\nENGINE\nnull');
+			},
+		);
+	}
 
 	override _write(chunk: string) {
-  if (this.engineControl.handle(chunk)) return;
+		if (this.engineControl.handle(chunk)) return;
 		const startTime = Date.now();
 		if (this.battle && Config.debugsimprocesses && process.send) {
 			process.send('DEBUG\n' + this.battle.inputLog.join('\n') + '\n' + chunk);
@@ -1578,7 +1827,9 @@ export class RoomBattleStream extends BattleStream {
 				log: battle ? '\n' + battle.getDebugLog() : '',
 			});
 
-			this.push(`update\n|html|<div class="broadcast-red"><b>The battle crashed</b><br />Don't worry, we're working on fixing it.</div>`);
+			this.push(
+				`update\n|html|<div class="broadcast-red"><b>The battle crashed</b><br />Don't worry, we're working on fixing it.</div>`,
+			);
 			if (battle) {
 				for (const side of battle.sides) {
 					if (side?.requestState) {
@@ -1592,7 +1843,7 @@ export class RoomBattleStream extends BattleStream {
 		if (this.battle) this.battle.sendUpdates();
 		const deltaTime = Date.now() - startTime;
 		if (deltaTime > 1000) {
-			Monitor.slow(`[slow battle] ${deltaTime}ms - ${chunk.replace(/\n/ig, ' | ')}`);
+			Monitor.slow(`[slow battle] ${deltaTime}ms - ${chunk.replace(/\n/gi, ' | ')}`);
 		}
 	}
 }
@@ -1602,77 +1853,134 @@ export class RoomBattleStream extends BattleStream {
  *********************************************************/
 
 export class GuardedSimulatorProcessManager extends ProcessManager.StreamProcessManager {
- override createProcess() {
-  let wrapper: ProcessManager.StreamProcessWrapper;
-  wrapper = new ProcessManager.StreamProcessWrapper(this.filename, message => {
-   if (message.startsWith('ENGINE\n')) {
-    let identity: EngineIdentity | null = null;
-    try {
-     if (message.length > 600) throw new Error('Invalid identity');
-     const value = JSON.parse(message.slice(7));
-     if (value && value.algorithm === 'sha256-json-canonical-runtime-files-v1' && /^[a-f0-9]{64}$/.test(value.mechanicsSHA256) && /^[a-f0-9]{32}$/.test(value.generation)) identity = Object.freeze(value);
-    } catch {}
-    workerIdentities.set(wrapper, identity); invalidateBattleEngineGuards();
-   } else this.messageCallback?.(message);
-  });
-  workerIdentities.set(wrapper, null);
-  wrapper.process.on('disconnect', () => {workerIdentities.delete(wrapper); invalidateBattleEngineGuards();});
-  invalidateBattleEngineGuards();
-  return wrapper;
- }
- override destroyProcess(wrapper: ProcessManager.StreamProcessWrapper) {
-  // Draining workers retain their actual immutable identity until disconnect.
-  // They leave the eligible pool immediately, but their existing battles can reverify.
-  invalidateBattleEngineGuards();
- }
- createExpectedStream(expected: EngineIdentity) {
-  const scope = simulatorPoolScope();
-  if (!scope.identity || scope.identity.mechanicsSHA256 !== expected.mechanicsSHA256 || scope.identity.generation !== expected.generation) throw new Error('Battle engine pool changed');
-  const candidates = this.processes.filter(worker => worker.getProcess().connected && workerIdentities.get(worker)?.mechanicsSHA256 === expected.mechanicsSHA256);
-  candidates.sort((a, b) => a.getLoad() - b.getLoad());
-  const worker = candidates[0];
-  if (!worker) throw new Error('No attested simulator worker is available');
-  const stream = worker.createStream(); streamWorkers.set(stream, worker); return stream;
- }
+	override createProcess() {
+		const wrapper = new ProcessManager.StreamProcessWrapper(this.filename, message => {
+			if (message.startsWith('ENGINE\n')) {
+				let identity: EngineIdentity | null = null;
+				try {
+					if (message.length > 600) throw new Error('Invalid identity');
+					const value = JSON.parse(message.slice(7));
+					if (
+						value &&
+						value.algorithm === 'sha256-json-canonical-runtime-files-v1' &&
+						/^[a-f0-9]{64}$/.test(value.mechanicsSHA256) &&
+						/^[a-f0-9]{32}$/.test(value.generation)
+					)
+						identity = Object.freeze(value);
+				} catch {}
+				workerIdentities.set(wrapper, identity);
+				invalidateBattleEngineGuards();
+			} else this.messageCallback?.(message);
+		});
+		workerIdentities.set(wrapper, null);
+		wrapper.process.on('disconnect', () => {
+			workerIdentities.delete(wrapper);
+			invalidateBattleEngineGuards();
+		});
+		invalidateBattleEngineGuards();
+		return wrapper;
+	}
+	override destroyProcess(wrapper: ProcessManager.StreamProcessWrapper) {
+		// Draining workers retain their actual immutable identity until disconnect.
+		// They leave the eligible pool immediately, but their existing battles can reverify.
+		invalidateBattleEngineGuards();
+	}
+	createExpectedStream(expected: EngineIdentity) {
+		const scope = simulatorPoolScope();
+		if (
+			!scope.identity ||
+			scope.identity.mechanicsSHA256 !== expected.mechanicsSHA256 ||
+			scope.identity.generation !== expected.generation
+		)
+			throw new Error('Battle engine pool changed');
+		const candidates = this.processes.filter(
+			worker =>
+				worker.getProcess().connected &&
+				workerIdentities.get(worker)?.mechanicsSHA256 === expected.mechanicsSHA256,
+		);
+		candidates.sort((a, b) => a.getLoad() - b.getLoad());
+		const worker = candidates[0];
+		if (!worker) throw new Error('No attested simulator worker is available');
+		const stream = worker.createStream();
+		streamWorkers.set(stream, worker);
+		return stream;
+	}
 }
 function simulatorPoolScope() {
- if (!PM.processes.length) return {identity: null};
- const identities = PM.processes.map(worker => worker.getProcess().connected ? workerIdentities.get(worker) : null);
- const identity = identities[0];
- if (!identity || identities.some(value => !value || value.mechanicsSHA256 !== identity.mechanicsSHA256 || value.algorithm !== identity.algorithm)) return {identity: null};
- return {identity: {...identity, generation: battleEngineGeneration()}};
+	if (!PM.processes.length) return { identity: null };
+	const identities = PM.processes.map(worker =>
+		worker.getProcess().connected ? workerIdentities.get(worker) : null,
+	);
+	const identity = identities[0];
+	if (
+		!identity ||
+		identities.some(
+			value =>
+				!value ||
+				value.mechanicsSHA256 !== identity.mechanicsSHA256 ||
+				value.algorithm !== identity.algorithm,
+		)
+	)
+		return { identity: null };
+	return { identity: { ...identity, generation: battleEngineGeneration() } };
 }
-export const PM = new GuardedSimulatorProcessManager('sim', module, () => new RoomBattleStream(), message => {
-	if (message.startsWith(`SLOW\n`)) {
-		Monitor.slow(message.slice(5));
-	}
-});
+export const PM = new GuardedSimulatorProcessManager(
+	'sim',
+	module,
+	() => new RoomBattleStream(),
+	message => {
+		if (message.startsWith(`SLOW\n`)) {
+			Monitor.slow(message.slice(5));
+		}
+	},
+);
 
-configureBattleEngineGuard({pool: simulatorPoolScope, room(connection, roomid) {
- const room = Rooms.get(roomid as RoomID);
- const battle = room?.battle;
- const player = battle?.playerTable[connection.user?.id];
- if (!battle || battle.ended || !player || !connection.user?.games.has(roomid as RoomID)) return {identity: null};
- const worker = streamWorkers.get(battle.stream);
- const current = worker && worker.getProcess().connected && workerIdentities.get(worker);
- if (!current || !battle.engineIdentity || current.generation !== battle.engineIdentity.generation) return {identity: null};
- let request: any;
- try {request = JSON.parse(player.request.request);} catch {return {identity: null};}
- if (!request?.engineRequestToken) return {identity: null};
- return {identity: battle.engineIdentity, rqid: player.request.rqid, requestToken: request.engineRequestToken, slot: player.slot};
-}});
+configureBattleEngineGuard({
+	pool: simulatorPoolScope,
+	room(connection, roomid) {
+		const room = Rooms.get(roomid as RoomID);
+		const battle = room?.battle;
+		const player = battle?.playerTable[connection.user?.id];
+		if (!battle || battle.ended || !player || !connection.user?.games.has(roomid as RoomID))
+			return { identity: null };
+		const worker = streamWorkers.get(battle.stream);
+		const current = worker && worker.getProcess().connected && workerIdentities.get(worker);
+		if (!current || !battle.engineIdentity || current.generation !== battle.engineIdentity.generation)
+			return { identity: null };
+		let request: any;
+		try {
+			request = JSON.parse(player.request.request);
+		} catch {
+			return { identity: null };
+		}
+		if (!request?.engineRequestToken) return { identity: null };
+		return {
+			identity: battle.engineIdentity,
+			rqid: player.request.rqid,
+			requestToken: request.engineRequestToken,
+			slot: player.slot,
+		};
+	},
+});
 
 export function start(processCount: ConfigLoader.SubProcessesConfig) {
 	PM.spawn(processCount['simulator'] ?? 1);
 }
 
 if (!PM.isParentProcess) {
- ConfigLoader.ensureLoaded();
- try {
-  if (Config.potd || (Config as any).usesqliteleveling) throw new Error('Unsupported external mechanics configuration');
-  workerSnapshot = captureEngineSnapshot(FS.ROOT_PATH, path.join(FS.ROOT_PATH, 'config/battle-engine-identity.json'));
-  process.send?.('CALLBACK\nENGINE\n' + JSON.stringify(workerSnapshot.identity));
- } catch {workerSnapshot = null; process.send?.('CALLBACK\nENGINE\nnull');}
+	ConfigLoader.ensureLoaded();
+	try {
+		if (Config.potd || (Config as any).usesqliteleveling)
+			throw new Error('Unsupported external mechanics configuration');
+		workerSnapshot = captureEngineSnapshot(
+			FS.ROOT_PATH,
+			path.join(FS.ROOT_PATH, 'config/battle-engine-identity.json'),
+		);
+		process.send?.('CALLBACK\nENGINE\n' + JSON.stringify(workerSnapshot.identity));
+	} catch {
+		workerSnapshot = null;
+		process.send?.('CALLBACK\nENGINE\nnull');
+	}
 	try {
 		require('source-map-support').install();
 	} catch {}
@@ -1705,7 +2013,7 @@ if (!PM.isParentProcess) {
 			Monitor.crashlog(err, 'A simulator process');
 		});
 		process.on('unhandledRejection', err => {
-			Monitor.crashlog(err as any || {}, 'A simulator process Promise');
+			Monitor.crashlog((err as any) || {}, 'A simulator process Promise');
 		});
 	}
 

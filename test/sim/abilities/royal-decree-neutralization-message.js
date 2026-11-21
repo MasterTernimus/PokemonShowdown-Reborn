@@ -3,21 +3,21 @@
 const assert = require('./../../assert');
 const common = require('./../../common');
 
-describe('Royal Decree and Neutralization messages', function () {
+describe('Royal Decree and Neutralization messages', () => {
 	const royalUsers = [
-		{species: 'Tsareena', ability: 'Empress'},
-		{species: 'Nidoking', ability: 'Royal Decree'},
+		{ species: 'Tsareena', ability: 'Empress' },
+		{ species: 'Nidoking', ability: 'Royal Decree' },
 	];
 
 	for (const royalUser of royalUsers) {
-		it(`explains why ${royalUser.ability}'s entry reset failed`, function () {
-			const battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-				{species: 'Mew', moves: ['splash']},
-				{species: 'Magikarp', moves: ['splash']},
-				{...royalUser, moves: ['splash']},
+		it(`explains why ${royalUser.ability}'s entry reset failed`, () => {
+			const battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+				{ species: 'Mew', moves: ['splash'] },
+				{ species: 'Magikarp', moves: ['splash'] },
+				{ ...royalUser, moves: ['splash'] },
 			], [
-				{species: 'Cofagrigus', ability: 'Neutralization', moves: ['splash']},
-				{species: 'Magikarp', moves: ['splash']},
+				{ species: 'Cofagrigus', ability: 'Neutralization', moves: ['splash'] },
+				{ species: 'Magikarp', moves: ['splash'] },
 			]]);
 			try {
 				battle.makeChoices('team 1,2,3', 'team 1,2');
@@ -34,14 +34,14 @@ describe('Royal Decree and Neutralization messages', function () {
 		});
 	}
 
-	it('announces when Neutralization starts suppressing an active Empress', function () {
-		const battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Tsareena', ability: 'Empress', moves: ['splash']},
-			{species: 'Mew', moves: ['splash']},
+	it('announces when Neutralization starts suppressing an active Empress', () => {
+		const battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Tsareena', ability: 'Empress', moves: ['splash'] },
+			{ species: 'Mew', moves: ['splash'] },
 		], [
-			{species: 'Cofagrigus', ability: 'Mummy', moves: ['splash']},
-			{species: 'Magikarp', moves: ['splash']},
-			{species: 'Cofagrigus', ability: 'Neutralization', moves: ['splash']},
+			{ species: 'Cofagrigus', ability: 'Mummy', moves: ['splash'] },
+			{ species: 'Magikarp', moves: ['splash'] },
+			{ species: 'Cofagrigus', ability: 'Neutralization', moves: ['splash'] },
 		]]);
 		try {
 			battle.makeChoices('team 1,2', 'team 1,2,3');
@@ -53,13 +53,13 @@ describe('Royal Decree and Neutralization messages', function () {
 		}
 	});
 
-	it('does not duplicate the message when both abilities enter together', function () {
-		const battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Tsareena', ability: 'Empress', moves: ['splash']},
-			{species: 'Mew', moves: ['splash']},
+	it('does not duplicate the message when both abilities enter together', () => {
+		const battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Tsareena', ability: 'Empress', moves: ['splash'] },
+			{ species: 'Mew', moves: ['splash'] },
 		], [
-			{species: 'Cofagrigus', ability: 'Neutralization', moves: ['splash']},
-			{species: 'Magikarp', moves: ['splash']},
+			{ species: 'Cofagrigus', ability: 'Neutralization', moves: ['splash'] },
+			{ species: 'Magikarp', moves: ['splash'] },
 		]]);
 		try {
 			battle.makeChoices('team 1,2', 'team 1,2');

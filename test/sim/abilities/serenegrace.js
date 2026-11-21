@@ -5,21 +5,21 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Serene Grace`, function () {
-	afterEach(function () {
+describe(`Serene Grace`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should not stack with Pledge Rainbow for flinches`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'wynaut', ability: 'serenegrace', moves: ['bite', 'waterpledge']},
-			{species: 'wobbuffet', moves: ['sleeptalk', 'firepledge']},
+	it(`should not stack with Pledge Rainbow for flinches`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'wynaut', ability: 'serenegrace', moves: ['bite', 'waterpledge'] },
+			{ species: 'wobbuffet', moves: ['sleeptalk', 'firepledge'] },
 		], [
-			{species: 'pyukumuku', moves: ['sleeptalk']},
-			{species: 'feebas', moves: ['sleeptalk']},
+			{ species: 'pyukumuku', moves: ['sleeptalk'] },
+			{ species: 'feebas', moves: ['sleeptalk'] },
 		]]);
 
-		battle.onEvent('ModifyMove', battle.format, -99, function (move) {
+		battle.onEvent('ModifyMove', battle.format, -99, move => {
 			if (move.id === 'bite') {
 				for (const secondary of move.secondaries) {
 					assert.equal(secondary.chance, 60, `Bite should not have a quadrupled flinch chance`);
@@ -32,17 +32,17 @@ describe(`Serene Grace`, function () {
 	});
 
 	common.itGen(8, `[Gen 8] custom Pledge Rainbow Field does not quadruple stat effects`, () => {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'wynaut', ability: 'serenegrace', moves: ['poweruppunch', 'waterpledge']},
-			{species: 'wobbuffet', ability: 'serenegrace', moves: ['acidspray', 'firepledge']},
+		battle = common.gen(8).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'wynaut', ability: 'serenegrace', moves: ['poweruppunch', 'waterpledge'] },
+			{ species: 'wobbuffet', ability: 'serenegrace', moves: ['acidspray', 'firepledge'] },
 		], [
-			{species: 'magikarp', moves: ['sleeptalk']},
-			{species: 'feebas', moves: ['sleeptalk']},
+			{ species: 'magikarp', moves: ['sleeptalk'] },
+			{ species: 'feebas', moves: ['sleeptalk'] },
 		]]);
 
 		// Modding secondary chances so it will either always apply or never apply
 		// Rainbow does not stack with Serene Grace; the shared helper caps 64 × 2 at 100%.
-		battle.onEvent('ModifyMove', battle.format, 1, function (move) {
+		battle.onEvent('ModifyMove', battle.format, 1, move => {
 			if (move.secondaries) {
 				for (const secondary of move.secondaries) {
 					secondary.chance = 64;
@@ -65,18 +65,18 @@ describe(`Serene Grace`, function () {
 		assert.statStage(feebas, 'spd', -2);
 	});
 
-	it(`should not overflow when quadrupling a status effect with Pledge Rainbow`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'wynaut', ability: 'serenegrace', moves: ['nuzzle', 'waterpledge']},
-			{species: 'wobbuffet', ability: 'serenegrace', moves: ['flamethrower', 'firepledge']},
+	it(`should not overflow when quadrupling a status effect with Pledge Rainbow`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'wynaut', ability: 'serenegrace', moves: ['nuzzle', 'waterpledge'] },
+			{ species: 'wobbuffet', ability: 'serenegrace', moves: ['flamethrower', 'firepledge'] },
 		], [
-			{species: 'magikarp', moves: ['sleeptalk']},
-			{species: 'feebas', moves: ['sleeptalk']},
+			{ species: 'magikarp', moves: ['sleeptalk'] },
+			{ species: 'feebas', moves: ['sleeptalk'] },
 		]]);
 
 		// Modding secondary chances so it will either always apply or never apply
 		// (64 * 2 * 2) % 256 === 0
-		battle.onEvent('ModifyMove', battle.format, 1, function (move) {
+		battle.onEvent('ModifyMove', battle.format, 1, move => {
 			if (move.secondaries) {
 				for (const secondary of move.secondaries) {
 					secondary.chance = 64;

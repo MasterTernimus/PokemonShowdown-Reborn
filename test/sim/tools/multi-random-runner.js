@@ -2,9 +2,9 @@
 
 const assert = require('assert').strict;
 
-const {MultiRandomRunner} = require('../../../dist/sim/tools/multi-random-runner');
+const { MultiRandomRunner } = require('../../../dist/sim/tools/multi-random-runner');
 
-describe('MultiRandomRunner (slow)', async function () {
+describe('MultiRandomRunner (slow)', async () => {
 	it('should run successfully', async function () {
 		this.timeout(0);
 		// The runner's upstream defaults name formats this fork does not register.

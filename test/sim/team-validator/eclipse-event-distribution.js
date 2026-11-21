@@ -1,6 +1,6 @@
 'use strict';
 const assert = require('assert').strict;
-const {Dex, TeamValidator, Teams} = require('../../../dist/sim');
+const { Dex, TeamValidator, Teams } = require('../../../dist/sim');
 const common = require('../../common');
 
 const holders = [
@@ -24,17 +24,17 @@ describe('Eclipse Special Event ability distribution', () => {
 			const species = Dex.species.get(name);
 			assert.equal(species.abilities.S, ability);
 			assert.deepEqual(species.passives, passives);
-			assert.equal(validator.checkCanLearn(Dex.moves.get(move), species, undefined, {level: 100}), null);
+			assert.equal(validator.checkCanLearn(Dex.moves.get(move), species, undefined, { level: 100 }), null);
 			const [set] = Teams.import(Teams.export([{
-				species: name, ability, moves: [move], nature: 'Hardy', evs: {hp: 1}, level: 100,
+				species: name, ability, moves: [move], nature: 'Hardy', evs: { hp: 1 }, level: 100,
 			}]));
 			assert.equal(set.ability, ability);
 			assert.equal(validator.validateSet(set), null);
 		});
 		it(`${name}'s selected event ability creates its field without replacing its passive`, () => {
-			const battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-				[{species: name, ability, moves: [move]}],
-				[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+			const battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+				[{ species: name, ability, moves: [move] }],
+				[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 			]);
 			try {
 				battle.makeChoices('team 1', 'team 1');
@@ -67,10 +67,10 @@ describe('Eclipse Special Event ability distribution', () => {
 
 	it('makes the two approved moves learnable without granting them to pre-evolutions or Alolan Ninetales', () => {
 		for (const [name, move] of [['Weavile', 'sheercold'], ['Weavile-Mega', 'sheercold'], ['Ninetales', 'eruption']]) {
-			assert.equal(validator.checkCanLearn(Dex.moves.get(move), Dex.species.get(name), undefined, {level: 100}), null);
+			assert.equal(validator.checkCanLearn(Dex.moves.get(move), Dex.species.get(name), undefined, { level: 100 }), null);
 		}
 		for (const [name, move] of [['Sneasel', 'sheercold'], ['Vulpix', 'eruption'], ['Ninetales-Alola', 'eruption']]) {
-			assert(validator.checkCanLearn(Dex.moves.get(move), Dex.species.get(name), undefined, {level: 100}), name);
+			assert(validator.checkCanLearn(Dex.moves.get(move), Dex.species.get(name), undefined, { level: 100 }), name);
 		}
 	});
 });

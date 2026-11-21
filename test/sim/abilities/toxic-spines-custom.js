@@ -2,7 +2,7 @@
 
 const assert = require('./../../assert');
 const common = require('./../../common');
-const {Dex} = require('./../../../dist/sim');
+const { Dex } = require('./../../../dist/sim');
 
 let battle;
 
@@ -13,16 +13,16 @@ describe('Toxic Spines custom effects', () => {
 
 	it('should expose Toxapex stats and abilities', () => {
 		const toxapex = Dex.species.get('Toxapex');
-		assert.deepEqual(toxapex.baseStats, {hp: 85, atk: 73, def: 152, spa: 63, spd: 142, spe: 35});
+		assert.deepEqual(toxapex.baseStats, { hp: 85, atk: 73, def: 152, spa: 63, spd: 142, spe: 35 });
 		assert.equal(Object.values(toxapex.baseStats).reduce((sum, stat) => sum + stat, 0), 550);
-		assert.deepEqual(toxapex.abilities, {0: 'Battle Armor', 1: 'Toxic Spines', H: 'Regenerator'});
+		assert.deepEqual(toxapex.abilities, { 0: 'Battle Armor', 1: 'Toxic Spines', H: 'Regenerator' });
 	});
 
 	it('retains Toxic Debris poison bypass and native Merciless without Corrosion', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Toxapex', ability: 'Toxic Spines', moves: ['toxic', 'surf']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Toxapex', ability: 'Toxic Spines', moves: ['toxic', 'surf'] },
 		], [
-			{species: 'Registeel', ability: 'Clear Body', moves: ['tackle']},
+			{ species: 'Registeel', ability: 'Clear Body', moves: ['tackle'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const toxapex = battle.p1.active[0];

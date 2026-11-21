@@ -3,9 +3,9 @@ const assert = require('assert').strict;
 const common = require('../../common');
 let battle;
 function start(ability, item = '') {
-	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-		{species: 'Mew', ability, item, moves: ['splash', 'tackle']},
-	], [{species: 'Mew', ability: 'No Ability', moves: ['splash']}]]);
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+		{ species: 'Mew', ability, item, moves: ['splash', 'tackle'] },
+	], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
 	battle.makeChoices('team 1', 'team 1');
 	const holder = battle.p1.active[0];
 	holder.hp = Math.floor(holder.maxhp / 2);
@@ -31,9 +31,9 @@ describe('Relic Armor residual recovery removal and Mind\'s Eye no-healing bound
 		assert.equal(holder.hp, before + Math.floor(holder.maxhp / 16));
 	});
 	it('removes Mind\'s Eye recovery from Bloodmoon\'s passive too', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Ursaluna-Bloodmoon', ability: 'No Ability', moves: ['splash', 'tackle']},
-		], [{species: 'Mew', ability: 'No Ability', moves: ['splash']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Ursaluna-Bloodmoon', ability: 'No Ability', moves: ['splash', 'tackle'] },
+		], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		const holder = battle.p1.active[0];
 		holder.hp = Math.floor(holder.maxhp / 2);

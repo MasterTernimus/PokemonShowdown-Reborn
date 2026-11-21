@@ -2,7 +2,7 @@
 
 const assert = require('../../assert');
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
+const { Dex } = require('../../../dist/sim');
 
 let battle;
 
@@ -31,10 +31,10 @@ describe('Eeveelution event abilities', () => {
 	});
 
 	it('uses Divineon mechanics with Umbreon-Perfect appearance for Umbreon Ascendance', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Umbreon', ability: 'Ascendance', moves: ['radiantassault', 'tackle']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Umbreon', ability: 'Ascendance', moves: ['radiantassault', 'tackle'] },
 		], [
-			{species: 'Mew', level: 1, moves: ['splash']},
+			{ species: 'Mew', level: 1, moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const umbreon = battle.p1.active[0];
@@ -57,21 +57,21 @@ describe('Eeveelution event abilities', () => {
 		assert.equal(Dex.moves.get('Radiant Assault').target, 'allAdjacentFoes');
 		assert.equal(Dex.moves.get('Radiant Assault').type, '???');
 
-		const evs = {hp: 12, atk: 34, def: 56, spa: 78, spd: 90, spe: 111};
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Eevee-Starter', ability: 'Z Protean', evs: {...evs}, moves: ['tackle']},
+		const evs = { hp: 12, atk: 34, def: 56, spa: 78, spd: 90, spe: 111 };
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Eevee-Starter', ability: 'Z Protean', evs: { ...evs }, moves: ['tackle'] },
 		], [
-			{species: 'Mew', moves: ['splash']},
+			{ species: 'Mew', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		assert.deepEqual(battle.p1.active[0].set.evs, evs);
 		battle.destroy();
 		battle = null;
 
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Eevee-Starter', ability: 'Ascendance', moves: ['radiantassault']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Eevee-Starter', ability: 'Ascendance', moves: ['radiantassault'] },
 		], [
-			{species: 'Mew', level: 1, moves: ['splash']},
+			{ species: 'Mew', level: 1, moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move radiantassault', 'move splash');
@@ -88,10 +88,10 @@ describe('Eeveelution event abilities', () => {
 			['Umbreon', 'Eclipse', 'soluneon'],
 		];
 		for (const [species, ability, expectedForme] of cases) {
-			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-				{species, ability, moves: ['splash']},
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+				{ species, ability, moves: ['splash'] },
 			], [
-				{species: 'Mew', moves: ['splash']},
+				{ species: 'Mew', moves: ['splash'] },
 			]]);
 			battle.makeChoices('team 1', 'team 1');
 			assert.equal(battle.p1.active[0].species.id, expectedForme);

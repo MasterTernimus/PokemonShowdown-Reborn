@@ -2,7 +2,7 @@
 const assert = require('assert').strict;
 const common = require('../../common');
 const { Dex } = require('../../../dist/sim');
-const approved = {...require('./sinnoh-unova-mega-approved.json'), haxorusmega: 'twinfang'};
+const approved = { ...require('./sinnoh-unova-mega-approved.json'), haxorusmega: 'twinfang' };
 let battle;
 function setup(species, ability) {
 	const set = (species = 'Mew', ability = 'No Ability') => ({ species, ability, moves: ['splash', 'tackle', 'protect', 'coil'] });
@@ -22,7 +22,7 @@ describe('Approved thirteen Sinnoh Unova Mega passive migrations', () => {
 	it('matches the historical cohort with explicit later roster approvals', () => {
 		for (const old of require('./sinnoh-unova-mega-before.json')) {
 			const s = Dex.species.get(old.id);
-			assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, {...old.abilities}), old.id);
+			assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, { ...old.abilities }), old.id);
 			assert.deepEqual(s.passives, require('./passive-approval-overlays').current(old.id, old.passives), old.id);
 		}
 		// Exact per-species comparisons above replace the obsolete global change count.

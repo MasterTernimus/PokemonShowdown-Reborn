@@ -1,5 +1,5 @@
-import type {AbilityDataTable} from '../sim/dex-abilities';
-import {composeSelectedAbility} from './selected-mega-simplifications';
+import type { AbilityDataTable } from '../sim/dex-abilities';
+import { composeSelectedAbility } from './selected-mega-simplifications';
 
 export const AwakeningDragonDescriptions = {
 	exaltedaether: {

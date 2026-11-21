@@ -6,19 +6,19 @@ describe('Anger Point holder ownership', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 	function setup(ability = 'Intimidate') {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Krookodile', ability, moves: ['protect']},
-			{species: 'Camerupt', ability: 'Anger Point', moves: ['protect']},
-			{species: 'Chansey', ability: 'No Ability', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Krookodile', ability, moves: ['protect'] },
+			{ species: 'Camerupt', ability: 'Anger Point', moves: ['protect'] },
+			{ species: 'Chansey', ability: 'No Ability', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'Synchronize', moves: ['pound']},
-			{species: 'Snorlax', ability: 'Thick Fat', moves: ['tackle']},
+			{ species: 'Mew', ability: 'Synchronize', moves: ['pound'] },
+			{ species: 'Snorlax', ability: 'Thick Fat', moves: ['tackle'] },
 		]]);
 		battle.makeChoices('team 123', 'team 12');
 		return [...battle.p1.active, ...battle.p2.active];
 	}
 	function hit(source, target, crit = false) {
-		const move = Object.assign(battle.dex.getActiveMove(source.moveSlots[0].id), {basePower: 10, accuracy: true, willCrit: crit});
+		const move = Object.assign(battle.dex.getActiveMove(source.moveSlots[0].id), { basePower: 10, accuracy: true, willCrit: crit });
 		battle.actions.runMove(move, source, source.getLocOf(target));
 	}
 	it('gives each holder its own first-hit boost regardless of attacker', () => {

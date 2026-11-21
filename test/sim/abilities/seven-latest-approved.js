@@ -1,17 +1,65 @@
 'use strict';
-const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim/dex');let battle;
-function start(ability,mode='singles',foeAbility='No Ability') {const p={species:'Mew',ability,moves:['splash','swagger','willowisp','tailwind']},t={species:'Mew',ability:foeAbility,moves:['splash','tackle']};const team=[p,{...t,ability:'No Ability'},{...t,ability:'No Ability'}],other=[t,{...t},{...t}];battle=common.createBattle(mode==='multi'?{gameType:'multi'}:{formatid:mode==='ffa'?'gen9freeforall4pmistyfieldadrienn':mode==='doubles'?'gen9nofielddoublesbattle':'gen9nofieldsinglesgame'},['ffa','multi'].includes(mode)?[team,other,other,other]:[team,other]);if(battle.requestState==='teampreview')battle.makeChoices(...battle.sides.map(()=> 'team 123'));battle.field.terrain='';battle.randomizer=d=>d;for(const s of battle.sides)for(const p of s.active)p.hp=p.maxhp=p.baseMaxhp=4000;return[battle.p1.active[0],battle.p2.active[0]];}
-function hit(p,t,id,extra={}){battle.clearActiveMove();const m=battle.dex.getActiveMove(id);Object.assign(m,{accuracy:true,willCrit:false,secondaries:null},extra);if(id==='mudslap')m.multihit=1;battle.actions.useMove(m,p,{target:t});battle.clearActiveMove();}
-describe('Seven latest approved species abilities',()=>{
- afterEach(()=>{battle?.destroy();battle=null;});
+const assert = require('assert').strict,
+	common = require('../../common'),
+	{ Dex } = require('../../../dist/sim/dex');
+let battle;
+function start(ability, mode = 'singles', foeAbility = 'No Ability') {
+	const p = { species: 'Mew', ability, moves: ['splash', 'swagger', 'willowisp', 'tailwind'] },
+		t = { species: 'Mew', ability: foeAbility, moves: ['splash', 'tackle'] };
+	const team = [p, { ...t, ability: 'No Ability' }, { ...t, ability: 'No Ability' }],
+		other = [t, { ...t }, { ...t }];
+	battle = common.createBattle(
+		mode === 'multi' ?
+			{ gameType: 'multi' } :
+			{
+				formatid:
+						mode === 'ffa' ?
+							'gen9freeforall4pmistyfieldadrienn' :
+							mode === 'doubles' ?
+								'gen9nofielddoublesbattle' :
+								'gen9nofieldsinglesgame',
+			},
+		['ffa', 'multi'].includes(mode) ? [team, other, other, other] : [team, other]
+	);
+	if (battle.requestState === 'teampreview') battle.makeChoices(...battle.sides.map(() => 'team 123'));
+	battle.field.terrain = '';
+	battle.randomizer = d => d;
+	for (const s of battle.sides) for (const p of s.active) p.hp = p.maxhp = p.baseMaxhp = 4000;
+	return [battle.p1.active[0], battle.p2.active[0]];
+}
+function hit(p, t, id, extra = {}) {
+	battle.clearActiveMove();
+	const m = battle.dex.getActiveMove(id);
+	Object.assign(m, { accuracy: true, willCrit: false, secondaries: null }, extra);
+	if (id === 'mudslap') m.multihit = 1;
+	battle.actions.useMove(m, p, { target: t });
+	battle.clearActiveMove();
+}
+describe('Seven latest approved species abilities', () => {
+	afterEach(() => {
+		battle?.destroy();
+		battle = null;
+	});
 	it('uses exact slots, preserves other slots and Galar Rapidash, and exports calculator identities', () => {
-		const slots = { abomasnow: { 0: 'Rimebark', 1: 'Evergreen', H: 'Soundproof' }, heracross: { 0: 'Violent Rush', 1: 'Guts', H: 'Moxie' }, slurpuff: { 0: 'Unburden', 1: 'Violent Rush', H: 'Scent Scout' }, mudsdale: { 0: 'Unyielding', 1: 'Battle Armor', H: 'Surefoot' }, victreebel: { 0: 'Chlorophyll', 1: 'Corrosion', H: 'Baited Bloom' }, rapidash: { 0: 'Fire Mane', 1: 'Speed Boost', H: 'Power Drill' }, mandibuzz: { 0: 'Scavenger', 1: 'Stamina', H: 'Carrion Watch' } };
+		const slots = {
+			abomasnow: { 0: 'Rimebark', 1: 'Evergreen', H: 'Soundproof' },
+			heracross: { 0: 'Violent Rush', 1: 'Guts', H: 'Moxie' },
+			slurpuff: { 0: 'Unburden', 1: 'Violent Rush', H: 'Scent Scout' },
+			mudsdale: { 0: 'Unyielding', 1: 'Battle Armor', H: 'Surefoot' },
+			victreebel: { 0: 'Chlorophyll', 1: 'Corrosion', H: 'Baited Bloom' },
+			rapidash: { 0: 'Fire Mane', 1: 'Speed Boost', H: 'Power Drill' },
+			mandibuzz: { 0: 'Scavenger', 1: 'Stamina', H: 'Carrion Watch' },
+		};
 		const m = require('../../../dist/sim/custom-calculator').calculatorMetadata();
 		for (const [id, a] of Object.entries(slots)) {
 			assert.deepEqual(Dex.species.get(id).abilities, a);
 			assert.deepEqual(m.species.find(p => p.name === Dex.species.get(id).name).abilities, a);
 		}
-		assert.deepEqual(Dex.species.get('rapidashgalar').abilities, { 0: 'Psychic Surge', 1: 'Speed Boost', H: 'Rapid Response' });
+		assert.deepEqual(Dex.species.get('rapidashgalar').abilities, {
+			0: 'Psychic Surge',
+			1: 'Speed Boost',
+			H: 'Rapid Response',
+		});
 		assert.deepEqual(m.abilityComponents.evergreen, []);
 	});
 	it('Evergreen restores consumed Berries in snow without Ripen', () => {
@@ -33,21 +81,144 @@ describe('Seven latest approved species abilities',()=>{
 		assert.equal(p.boosts.atk, 1);
 		assert(!p.hasAbility('ripen'));
 	});
- it('Battle Grip retains Moxie and clears confusion/negative accuracy on opposing move KO',()=>{const[p,t]=start('Battle Grip');p.boosts.accuracy=-2;p.boosts.def=-1;p.addVolatile('confusion',t);t.hp=1;hit(p,t,'tackle');battle.faintMessages();assert.equal(p.boosts.atk,1);assert.equal(p.boosts.accuracy,0);assert.equal(p.boosts.def,-1);assert(!p.volatiles.confusion);});
- it('Battle Grip preserves positive accuracy and does not cleanse after non-KO or allied KO',()=>{const[p,t]=start('Battle Grip','doubles');p.boosts.accuracy=-2;hit(p,t,'tackle');assert.equal(p.boosts.accuracy,-2);const a=p.allies()[0];a.hp=1;hit(p,a,'tackle');battle.faintMessages();assert.equal(p.boosts.accuracy,-2);p.boosts.accuracy=3;t.hp=1;hit(p,t,'tackle');battle.faintMessages();assert.equal(p.boosts.accuracy,3);});
+	it('Battle Grip retains Moxie and clears confusion/negative accuracy on opposing move KO', () => {
+		const [p, t] = start('Battle Grip');
+		p.boosts.accuracy = -2;
+		p.boosts.def = -1;
+		p.addVolatile('confusion', t);
+		t.hp = 1;
+		hit(p, t, 'tackle');
+		battle.faintMessages();
+		assert.equal(p.boosts.atk, 1);
+		assert.equal(p.boosts.accuracy, 0);
+		assert.equal(p.boosts.def, -1);
+		assert(!p.volatiles.confusion);
+	});
+	it('Battle Grip preserves positive accuracy and does not cleanse after non-KO or allied KO', () => {
+		const [p, t] = start('Battle Grip', 'doubles');
+		p.boosts.accuracy = -2;
+		hit(p, t, 'tackle');
+		assert.equal(p.boosts.accuracy, -2);
+		const a = p.allies()[0];
+		a.hp = 1;
+		hit(p, a, 'tackle');
+		battle.faintMessages();
+		assert.equal(p.boosts.accuracy, -2);
+		p.boosts.accuracy = 3;
+		t.hp = 1;
+		hit(p, t, 'tackle');
+		battle.faintMessages();
+		assert.equal(p.boosts.accuracy, 3);
+	});
 	it('Scent Scout reveals the item using its composite identity at initial battle entry', () => {
-		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[{ species: 'Slurpuff', ability: 'Scent Scout', moves: ['splash'] }], [{ species: 'Mew', ability: 'No Ability', item: 'leftovers', moves: ['splash'] }]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Slurpuff', ability: 'Scent Scout', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', item: 'leftovers', moves: ['splash'] }],
+		]);
 		battle.makeChoices('team 1', 'team 1');
-		assert(battle.log.some(l => l.includes('|-item|') && l.includes('Leftovers') && l.includes('Scent Scout')));
+		assert(
+			battle.log.some(
+				l => l.includes('|-item|') && l.includes('Leftovers') && l.includes('Scent Scout')
+			)
+		);
 		assert(!battle.p1.active[0].volatiles.scentscoutspent);
 	});
- it('Scent Scout initial entry retains full Frisk without spending the extra observation',()=>{const[p,t]=start('Scent Scout');assert(!p.volatiles.scentscoutspent);t.setItem('leftovers');t.illusion=t.side.pokemon[2];battle.randomChance=()=>true;battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert(!t.illusion);assert(t.volatiles.embargo);assert(!p.volatiles.scentscoutspent);});
- it('Scent Scout reveals only the first later opponent and does not repeat Embargo or Illusion breaking',()=>{const[p,t]=start('Scent Scout');const incoming=t.side.pokemon[1];incoming.item='leftovers';incoming.setAbility('Illusion');battle.randomChance=()=>true;const before=battle.log.length;battle.makeChoices('move splash','switch 2');assert(p.volatiles.scentscoutspent);assert(incoming.illusion);assert(!incoming.volatiles.embargo);assert(battle.log.slice(before).some(l=>l.includes('|-item|')&&l.includes('Scent Scout')));const next=t.side.pokemon[2];next.item='lumberry';const second=battle.log.length;battle.makeChoices('move splash','switch 3');assert(!battle.log.slice(second).some(l=>l.includes('|-item|')&&l.includes('Scent Scout')));});
- it('Scent Scout spends an empty first observation without fabricating an item, and reentry resets',()=>{const[p,t]=start('Scent Scout');const before=battle.log.length;battle.makeChoices('move splash','switch 2');assert(p.volatiles.scentscoutspent);assert(!battle.log.slice(before).some(l=>l.includes('|-item|')&&l.includes('Scent Scout')));battle.makeChoices('switch 2','move splash');battle.makeChoices('switch 2','move splash');assert(!p.volatiles.scentscoutspent);});
- for(const mode of ['ffa','multi'])it('Scent Scout handles opponents and allies correctly in '+mode,()=>{const[p,t]=start('Scent Scout',mode);const other=battle.sides[2];other.pokemon[1].item='leftovers';const before=battle.log.length;battle.makeChoices('move splash','move splash','switch 2','move splash');assert.equal(!!p.volatiles.scentscoutspent,mode==='ffa');assert.equal(battle.log.slice(before).some(l=>l.includes('|-item|')&&l.includes('Scent Scout')),mode==='ffa');if(mode==='multi'){t.side.pokemon[1].item='leftovers';battle.makeChoices('move splash','switch 2','move splash','move splash');assert(p.volatiles.scentscoutspent);}});
- it('Surefoot has no Inner Focus and boosts Ground only while Defense is raised',()=>{const[p,t]=start('Surefoot');assert(!p.hasAbility('innerfocus'));for(const def of [0,1,-1]){p.boosts.def=def;assert.equal(battle.runEvent('BasePower',p,t,Dex.getActiveMove('earthquake'),100),def>0?130:100);}});
- it('Surefoot respects both positive Defense and SpD',()=>{const[p,t]=start('Surefoot');for(const category of ['Physical','Special']){t.boosts.def=t.boosts.spd=0;let hp=t.hp;hit(p,t,'mudslap',{category});const plain=hp-t.hp;t.boosts.def=t.boosts.spd=6;hp=t.hp;hit(p,t,'mudslap',{category});assert(hp-t.hp<plain);}});
- it('Surefoot does not bypass Levitate or screens or alter non-Ground moves',()=>{const[p,t]=start('Surefoot','singles','Levitate');const hp=t.hp;hit(p,t,'earthquake');assert.equal(t.hp,hp);t.setAbility('No Ability');t.boosts.def=0;let before=t.hp;hit(p,t,'earthquake');const plain=before-t.hp;t.side.addSideCondition('reflect',t);before=t.hp;hit(p,t,'earthquake');assert(before-t.hp<plain);});
+	it('Scent Scout initial entry retains full Frisk without spending the extra observation', () => {
+		const [p, t] = start('Scent Scout');
+		assert(!p.volatiles.scentscoutspent);
+		t.setItem('leftovers');
+		t.illusion = t.side.pokemon[2];
+		battle.randomChance = () => true;
+		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
+		assert(!t.illusion);
+		assert(t.volatiles.embargo);
+		assert(!p.volatiles.scentscoutspent);
+	});
+	it('Scent Scout reveals only the first later opponent and does not repeat Embargo or Illusion breaking', () => {
+		const [p, t] = start('Scent Scout');
+		const incoming = t.side.pokemon[1];
+		incoming.item = 'leftovers';
+		incoming.setAbility('Illusion');
+		battle.randomChance = () => true;
+		const before = battle.log.length;
+		battle.makeChoices('move splash', 'switch 2');
+		assert(p.volatiles.scentscoutspent);
+		assert(incoming.illusion);
+		assert(!incoming.volatiles.embargo);
+		assert(battle.log.slice(before).some(l => l.includes('|-item|') && l.includes('Scent Scout')));
+		const next = t.side.pokemon[2];
+		next.item = 'lumberry';
+		const second = battle.log.length;
+		battle.makeChoices('move splash', 'switch 3');
+		assert(!battle.log.slice(second).some(l => l.includes('|-item|') && l.includes('Scent Scout')));
+	});
+	it('Scent Scout spends an empty first observation without fabricating an item, and reentry resets', () => {
+		const [p, t] = start('Scent Scout');
+		const before = battle.log.length;
+		battle.makeChoices('move splash', 'switch 2');
+		assert(p.volatiles.scentscoutspent);
+		assert(!battle.log.slice(before).some(l => l.includes('|-item|') && l.includes('Scent Scout')));
+		battle.makeChoices('switch 2', 'move splash');
+		battle.makeChoices('switch 2', 'move splash');
+		assert(!p.volatiles.scentscoutspent);
+	});
+	for (const mode of ['ffa', 'multi'])
+		it('Scent Scout handles opponents and allies correctly in ' + mode, () => {
+			const [p, t] = start('Scent Scout', mode);
+			const other = battle.sides[2];
+			other.pokemon[1].item = 'leftovers';
+			const before = battle.log.length;
+			battle.makeChoices('move splash', 'move splash', 'switch 2', 'move splash');
+			assert.equal(!!p.volatiles.scentscoutspent, mode === 'ffa');
+			assert.equal(
+				battle.log.slice(before).some(l => l.includes('|-item|') && l.includes('Scent Scout')),
+				mode === 'ffa'
+			);
+			if (mode === 'multi') {
+				t.side.pokemon[1].item = 'leftovers';
+				battle.makeChoices('move splash', 'switch 2', 'move splash', 'move splash');
+				assert(p.volatiles.scentscoutspent);
+			}
+		});
+	it('Surefoot has no Inner Focus and boosts Ground only while Defense is raised', () => {
+		const [p, t] = start('Surefoot');
+		assert(!p.hasAbility('innerfocus'));
+		for (const def of [0, 1, -1]) {
+			p.boosts.def = def;
+			assert.equal(
+				battle.runEvent('BasePower', p, t, Dex.getActiveMove('earthquake'), 100),
+				def > 0 ? 130 : 100
+			);
+		}
+	});
+	it('Surefoot respects both positive Defense and SpD', () => {
+		const [p, t] = start('Surefoot');
+		for (const category of ['Physical', 'Special']) {
+			t.boosts.def = t.boosts.spd = 0;
+			let hp = t.hp;
+			hit(p, t, 'mudslap', { category });
+			const plain = hp - t.hp;
+			t.boosts.def = t.boosts.spd = 6;
+			hp = t.hp;
+			hit(p, t, 'mudslap', { category });
+			assert(hp - t.hp < plain);
+		}
+	});
+	it('Surefoot does not bypass Levitate or screens or alter non-Ground moves', () => {
+		const [p, t] = start('Surefoot', 'singles', 'Levitate');
+		const hp = t.hp;
+		hit(p, t, 'earthquake');
+		assert.equal(t.hp, hp);
+		t.setAbility('No Ability');
+		t.boosts.def = 0;
+		let before = t.hp;
+		hit(p, t, 'earthquake');
+		const plain = before - t.hp;
+		t.side.addSideCondition('reflect', t);
+		before = t.hp;
+		hit(p, t, 'earthquake');
+		assert(before - t.hp < plain);
+	});
 	it('Baited Bloom retains Gluttony and Regenerator without Sticky Hold', () => {
 		const [p, t] = start('Baited Bloom');
 		assert(p.hasAbility('gluttony'));
@@ -61,10 +232,54 @@ describe('Seven latest approved species abilities',()=>{
 		battle.runEvent('Update', p);
 		assert.equal(p.item, '');
 	});
- it('Guiding Gallop successful ally Swagger clears only negative Speed with full Pastel Veil',()=>{const[p,t]=start('Guiding Gallop','doubles');const a=p.allies()[0];a.boosts.spe=-2;a.boosts.def=-1;hit(p,a,'swagger');assert.equal(a.boosts.spe,0);assert.equal(a.boosts.def,-1);assert.equal(a.boosts.atk,2);assert(p.hasAbility('pastelveil'));assert(!a.trySetStatus('psn',t));a.boosts.spe=2;a.removeVolatile('confusion');hit(p,a,'swagger');assert.equal(a.boosts.spe,2);});
- it('Guiding Gallop ignores failed ally moves, self targets, opponent targets and Tailwind',()=>{const[p,t]=start('Guiding Gallop','doubles');const a=p.allies()[0];a.boosts.spe=-2;a.setStatus('brn');hit(p,a,'willowisp');assert.equal(a.boosts.spe,-2);p.boosts.spe=-2;hit(p,p,'splash');assert.equal(p.boosts.spe,-2);t.boosts.spe=-2;hit(p,t,'swagger');assert.equal(t.boosts.spe,-2);hit(p,p,'tailwind');assert.equal(a.boosts.spe,-2);});
- it('Guiding Gallop retains poison-move offense drops and Fairy Tale entry reward',()=>{const[p,t]=start('Guiding Gallop');hit(t,p,'poisonsting');assert.equal(t.boosts.atk,-1);assert.equal(t.boosts.spa,-1);battle.field.terrain='fairytaleterrain';battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.boosts.spd,1);});
- it('Rapidash has usable Swagger and Will-O-Wisp ally combinations but no invented support moves',()=>{const l=Dex.species.getLearnsetData('rapidash').learnset;assert(l.swagger);assert(l.willowisp);assert(!l.helpinghand);assert(!l.healpulse);});
+	it('Guiding Gallop successful ally Swagger clears only negative Speed with full Pastel Veil', () => {
+		const [p, t] = start('Guiding Gallop', 'doubles');
+		const a = p.allies()[0];
+		a.boosts.spe = -2;
+		a.boosts.def = -1;
+		hit(p, a, 'swagger');
+		assert.equal(a.boosts.spe, 0);
+		assert.equal(a.boosts.def, -1);
+		assert.equal(a.boosts.atk, 2);
+		assert(p.hasAbility('pastelveil'));
+		assert(!a.trySetStatus('psn', t));
+		a.boosts.spe = 2;
+		a.removeVolatile('confusion');
+		hit(p, a, 'swagger');
+		assert.equal(a.boosts.spe, 2);
+	});
+	it('Guiding Gallop ignores failed ally moves, self targets, opponent targets and Tailwind', () => {
+		const [p, t] = start('Guiding Gallop', 'doubles');
+		const a = p.allies()[0];
+		a.boosts.spe = -2;
+		a.setStatus('brn');
+		hit(p, a, 'willowisp');
+		assert.equal(a.boosts.spe, -2);
+		p.boosts.spe = -2;
+		hit(p, p, 'splash');
+		assert.equal(p.boosts.spe, -2);
+		t.boosts.spe = -2;
+		hit(p, t, 'swagger');
+		assert.equal(t.boosts.spe, -2);
+		hit(p, p, 'tailwind');
+		assert.equal(a.boosts.spe, -2);
+	});
+	it('Guiding Gallop retains poison-move offense drops and Fairy Tale entry reward', () => {
+		const [p, t] = start('Guiding Gallop');
+		hit(t, p, 'poisonsting');
+		assert.equal(t.boosts.atk, -1);
+		assert.equal(t.boosts.spa, -1);
+		battle.field.terrain = 'fairytaleterrain';
+		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
+		assert.equal(p.boosts.spd, 1);
+	});
+	it('Rapidash has usable Swagger and Will-O-Wisp ally combinations but no invented support moves', () => {
+		const l = Dex.species.getLearnsetData('rapidash').learnset;
+		assert(l.swagger);
+		assert(l.willowisp);
+		assert(!l.helpinghand);
+		assert(!l.healpulse);
+	});
 	it('Carrion Watch runs Frisk and Overcoat without removed Unnerve effects', () => {
 		const [p, t] = start('Carrion Watch');
 		t.setItem('leftovers');

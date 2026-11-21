@@ -159,7 +159,7 @@ describe('Approved fourth roster pass', () => {
 		foe.side.addSideCondition('reflect', foe);
 		const move = hit('doublehit', p, foe);
 		assert(move.ignorePositiveDefensive && move.ignoreScreens);
-		assert.equal(p.m.coldOpenEntry,p.previouslySwitchedIn);
+		assert.equal(p.m.coldOpenEntry, p.previouslySwitchedIn);
 		const next = modify('tackle', p, foe);
 		assert(!next.ignorePositiveDefensive && !next.ignoreScreens);
 		start(p);
@@ -175,7 +175,7 @@ describe('Approved fourth roster pass', () => {
 	it('Quarry Cannon preserves normal Rock Blast hit counts and separate Solid Rock', () => {
 		const [p, , foe] = make('Quarry Cannon', 'Rhyperior');
 		assert.deepEqual(modify('rockblast', p, foe).multihit, [2, 5]);
-		assert.equal(p.getAbility().onSourceModifyDamage, undefined);assert(p.getPassives().includes('solidrock'));
+		assert.equal(p.getAbility().onSourceModifyDamage, undefined); assert(p.getPassives().includes('solidrock'));
 		hit('rockblast', p, foe);
 		assert(battle.log.some(line => /\|-hitcount\|.*\|[2-5]$/.test(line)));
 	});

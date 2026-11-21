@@ -1,4 +1,4 @@
-import {adaptiveEnvironment} from './adaptive-cycle';
+import { adaptiveEnvironment } from './adaptive-cycle';
 /**
  * Simulator Field
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -36,16 +36,24 @@ export class Field {
 		this.weather = '';
 		this.weatherState = this.battle.initEffectState({ id: '' });
 		this.terrain = '';
-		this.terrainState = this.battle.initEffectState({ id: '', terrainChanges: new Map<string, number>(), prevTerrain: '' });
+		this.terrainState = this.battle.initEffectState({
+			id: '',
+			terrainChanges: new Map<string, number>(),
+			prevTerrain: '',
+		});
 		this.pseudoWeather = {};
 		this.terrainStack = [];
-		this.auraState = this.battle.initEffectState({id: 'terrainaura'});
+		this.auraState = this.battle.initEffectState({ id: 'terrainaura' });
 	}
 
-	get baseField() { return this.terrain; }
+	get baseField() {
+		return this.terrain;
+	}
 
 	isEclipse() {
-		return ['coldeclipseterrain', 'rifteclipseterrain', 'infernaleclipseterrain'].includes(this.terrain);
+		return ['coldeclipseterrain', 'rifteclipseterrain', 'infernaleclipseterrain'].includes(
+			this.terrain,
+		);
 	}
 
 	/** Rift Opening prepares an Aura over a field; a later use develops that Aura. */
@@ -87,59 +95,126 @@ export class Field {
 
 	/** A prepared opposing Aura lets these attacks skip the intermediate Rift. */
 	shiftEclipseWithAura(source: Pokemon, move: ActiveMove) {
-		if (source.moveThisTurnResult !== true || source.volatiles.twoturnmove || this.auraTurns < 1 ||
-			this.moveTransitionBlocked(source, move)) return false;
-		const ignite = this.terrain === 'coldeclipseterrain' && this.isAura('ashenaura') && move.id === 'eruption';
-		const freeze = this.terrain === 'infernaleclipseterrain' && this.isAura('frozenaura') && ['glaciate', 'sheercold'].includes(move.id);
+		if (
+			source.moveThisTurnResult !== true ||
+			source.volatiles.twoturnmove ||
+			this.auraTurns < 1 ||
+			this.moveTransitionBlocked(source, move)
+		)
+			return false;
+		const ignite =
+			this.terrain === 'coldeclipseterrain' && this.isAura('ashenaura') && move.id === 'eruption';
+		const freeze =
+			this.terrain === 'infernaleclipseterrain' &&
+			this.isAura('frozenaura') &&
+			['glaciate', 'sheercold'].includes(move.id);
 		if (!ignite && !freeze) return false;
-		if (!this.changeTerrain(ignite ? 'infernaleclipseterrain' : 'coldeclipseterrain', source, move)) return false;
+		if (!this.changeTerrain(ignite ? 'infernaleclipseterrain' : 'coldeclipseterrain', source, move))
+			return false;
 		this.clearAura();
-		this.battle.add('-message', ignite ? 'Eruption ignited the Ashen Aura into an Infernal Eclipse!' :
-			`${move.name} crystallized the Frozen Aura into a Cold Eclipse!`);
+		this.battle.add(
+			'-message',
+			ignite ?
+				'Eruption ignited the Ashen Aura into an Infernal Eclipse!' :
+				`${move.name} crystallized the Frozen Aura into a Cold Eclipse!`,
+		);
 		return true;
 	}
 
 	eclipseAfterMove(source: Pokemon, move: ActiveMove) {
 		// A completed charge move retains twoturnmove until its AfterMove cleanup.
 		// Its successful result distinguishes completion from the charge-only turn.
-		if (!this.isEclipse() || source.moveThisTurnResult !== true ||
-			this.moveTransitionBlocked(source, move)) return;
+		if (
+			!this.isEclipse() ||
+			source.moveThisTurnResult !== true ||
+			this.moveTransitionBlocked(source, move)
+		)
+			return;
 		if (this.shiftEclipseWithAura(source, move)) return;
-		if ((this.terrain === 'rifteclipseterrain' && move.id === 'seedflare') ||
-			(this.terrain === 'infernaleclipseterrain' && ['judgment', 'originpulse'].includes(move.id))) {
+		if (
+			(this.terrain === 'rifteclipseterrain' && move.id === 'seedflare') ||
+			(this.terrain === 'infernaleclipseterrain' && ['judgment', 'originpulse'].includes(move.id))
+		) {
 			this.purifyEclipse(source, move);
 			return;
 		}
-		if (['coldeclipseterrain', 'infernaleclipseterrain'].includes(this.terrain) && ['geomancy', 'lightofruin'].includes(move.id)) {
+		if (
+			['coldeclipseterrain', 'infernaleclipseterrain'].includes(this.terrain) &&
+			['geomancy', 'lightofruin'].includes(move.id)
+		) {
 			if (this.changeTerrain('starlightarenaterrain', source, move)) {
 				this.setTerrainDuration(undefined);
 				this.battle.add('-message', 'Starlight broke through the eclipse!');
 			}
 			return;
 		}
-		const heatOne = ['heatwave', 'lavaplume', 'firepledge', 'infernalparade', 'ragingfury', 'flameburst',
-			'incinerate', 'burningjealousy', 'mysticalfire', 'searingshot'];
-		const heatTwo = ['precipiceblades', 'eruption', 'magmastorm', 'infernooverdrive', 'blastburn', 'mindblown'];
-		const freezeOne = ['blizzard', 'coldtruth', 'sheercold', 'avalanche', 'freezingglare', 'coldsnap'];
+		const heatOne = [
+			'heatwave',
+			'lavaplume',
+			'firepledge',
+			'infernalparade',
+			'ragingfury',
+			'flameburst',
+			'incinerate',
+			'burningjealousy',
+			'mysticalfire',
+			'searingshot',
+		];
+		const heatTwo = [
+			'precipiceblades',
+			'eruption',
+			'magmastorm',
+			'infernooverdrive',
+			'blastburn',
+			'mindblown',
+		];
+		const freezeOne = [
+			'blizzard',
+			'coldtruth',
+			'sheercold',
+			'avalanche',
+			'freezingglare',
+			'coldsnap',
+		];
 		const freezeTwo = ['glaciate', 'freezeshock', 'iceburn', 'subzeroslammer'];
-		const coolOne = ['surf', 'muddywater', 'sparklingaria', 'waterpledge', 'blizzard', 'chillingwater', 'hydropump', 'sheercold'];
+		const coolOne = [
+			'surf',
+			'muddywater',
+			'sparklingaria',
+			'waterpledge',
+			'blizzard',
+			'chillingwater',
+			'hydropump',
+			'sheercold',
+		];
 		const coolTwo = ['glaciate', 'waterspout', 'hydrovortex', 'oceanicoperetta', 'subzeroslammer'];
 		if (this.terrain === 'coldeclipseterrain') {
 			if (heatOne.includes(move.id) || heatTwo.includes(move.id)) {
-				if (this.changeTerrain('rifteclipseterrain', source, move)) this.battle.add('-message', 'The frozen dimension thawed into a Rift Eclipse!');
+				if (this.changeTerrain('rifteclipseterrain', source, move))
+					this.battle.add('-message', 'The frozen dimension thawed into a Rift Eclipse!');
 			}
 			return;
 		}
 		const heat = heatTwo.includes(move.id) ? 2 : heatOne.includes(move.id) ? 1 : 0;
-		const cold = this.terrain === 'infernaleclipseterrain' ?
-			(coolTwo.includes(move.id) ? 2 : coolOne.includes(move.id) ? 1 : 0) :
-			(freezeTwo.includes(move.id) ? 2 : freezeOne.includes(move.id) ? 1 : 0);
+		const cold =
+			this.terrain === 'infernaleclipseterrain' ?
+				coolTwo.includes(move.id) ?
+					2 :
+					coolOne.includes(move.id) ?
+						1 :
+						0 :
+				freezeTwo.includes(move.id) ?
+					2 :
+					freezeOne.includes(move.id) ?
+						1 :
+						0;
 		if (!heat && !cold) return;
 		const changes = this.terrainState.terrainChanges;
 		if (this.terrain === 'infernaleclipseterrain') {
 			const cooling = Math.max(0, (changes.get('eclipseCooling') || 0) + cold - heat);
 			if (cooling >= 2) {
-				if (this.changeTerrain('rifteclipseterrain', source, move)) this.battle.add('-message', 'The infernal flames were extinguished!');
+				if (this.changeTerrain('rifteclipseterrain', source, move))
+					this.battle.add('-message', 'The infernal flames were extinguished!');
 			} else {
 				changes.set('eclipseCooling', cooling);
 				this.battle.add('-message', `Infernal Eclipse cooling: ${cooling}/2.`);
@@ -148,17 +223,30 @@ export class Field {
 			const temperature = (changes.get('eclipseTemperature') || 0) + heat - cold;
 			if (Math.abs(temperature) >= 2) {
 				const next = temperature > 0 ? 'infernaleclipseterrain' : 'coldeclipseterrain';
-				if (this.changeTerrain(next, source, move)) this.battle.add('-message', temperature > 0 ? 'The rift erupted into an Infernal Eclipse!' : 'The rift froze into a Cold Eclipse!');
+				if (this.changeTerrain(next, source, move))
+					this.battle.add(
+						'-message',
+						temperature > 0 ?
+							'The rift erupted into an Infernal Eclipse!' :
+							'The rift froze into a Cold Eclipse!',
+					);
 			} else {
 				changes.set('eclipseTemperature', temperature);
-				this.battle.add('-message', `Rift Eclipse: ${temperature < 0 ? 'Freezing' : 'Heat'} ${Math.abs(temperature)}/2.`);
+				this.battle.add(
+					'-message',
+					`Rift Eclipse: ${temperature < 0 ? 'Freezing' : 'Heat'} ${Math.abs(temperature)}/2.`,
+				);
 			}
 		}
 	}
 
 	setTerrainDuration(duration: number | undefined, announce = true) {
 		const previous = this.terrainState.duration;
-		const extendingPermanent = this.terrainState.permanent && previous !== undefined && duration !== undefined && duration >= previous;
+		const extendingPermanent =
+			this.terrainState.permanent &&
+			previous !== undefined &&
+			duration !== undefined &&
+			duration >= previous;
 		this.terrainState.permanent = duration === undefined || duration >= 9999 || !!extendingPermanent;
 		this.terrainState.duration = duration;
 		if (announce && this.terrain) {
@@ -167,46 +255,95 @@ export class Field {
 		}
 	}
 
+	getAura() {
+		return Auras[this.auraField];
+	}
 
-	getAura() { return Auras[this.auraField]; }
+	isAura(id: string) {
+		return this.auraField === toID(id);
+	}
 
-	isAura(id: string) { return this.auraField === toID(id); }
-
-	isTerrainOrAura(id: string) { return this.isTerrain(id) || this.isAura(id); }
+	isTerrainOrAura(id: string) {
+		return this.isTerrain(id) || this.isAura(id);
+	}
 
 	canSupportAura(id: string, allowEmptyField = false) {
-		if ((!this.terrain && !allowEmptyField && !['frozenaura', 'ashenaura', 'riftaura', 'hauntedaura', 'bewitchedaura'].includes(id)) || this.terrain === id || this.isFlowerGardenBase()) return false;
-		if (['newworldterrain', 'underwaterterrain', 'midnightzoneterrain', 'dragonsdenterrain'].includes(this.terrain)) return false;
+		if (
+			(!this.terrain &&
+				!allowEmptyField &&
+				!['frozenaura', 'ashenaura', 'riftaura', 'hauntedaura', 'bewitchedaura'].includes(id)) ||
+				this.terrain === id ||
+				this.isFlowerGardenBase()
+		)
+			return false;
+		if (
+			['newworldterrain', 'underwaterterrain', 'midnightzoneterrain', 'dragonsdenterrain'].includes(
+				this.terrain,
+			)
+		)
+			return false;
 		if (this.terrain === 'corrosivemistterrain' && id === 'mistyterrain') return false;
 		return true;
 	}
 
-	setAura(id: string, turns: number, source: Pokemon | null = null, sourceEffect: Effect | null = null) {
+	setAura(
+		id: string,
+		turns: number,
+		source: Pokemon | null = null,
+		sourceEffect: Effect | null = null,
+	) {
 		const aura = Auras[toID(id)];
 		if (!sourceEffect) sourceEffect = this.battle.effect;
-		const fromElectricMove = aura?.id === 'electricterrain' && sourceEffect?.effectType === 'Move' &&
+		const fromElectricMove =
+			aura?.id === 'electricterrain' &&
+			sourceEffect?.effectType === 'Move' &&
 			['iondeluge', 'plasmafists'].includes(sourceEffect.id);
 		// Same-Aura refreshes cannot launder move-created Aura provenance into a promotable Aura.
-		const noTerrainPromotion = fromElectricMove ||
-			(this.auraField === aura?.id && !!this.auraState.noTerrainPromotion);
-		if (!this.aurasEnabled || !aura || !Number.isFinite(turns) || turns < 1 ||
-			!this.canSupportAura(aura.id, noTerrainPromotion)) return false;
+		const noTerrainPromotion =
+			fromElectricMove || (this.auraField === aura?.id && !!this.auraState.noTerrainPromotion);
+		if (
+			!this.aurasEnabled ||
+			!aura ||
+			!Number.isFinite(turns) ||
+			turns < 1 ||
+			!this.canSupportAura(aura.id, noTerrainPromotion)
+		)
+			return false;
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
-  if (['frozenaura', 'ashenaura', 'riftaura', 'hauntedaura', 'bewitchedaura'].includes(aura.id) && this.pulseBlockadeHolder(source, sourceEffect)) return false;
-  const previousSource = this.auraState.sourceEffect?.id;
+		if (
+			['frozenaura', 'ashenaura', 'riftaura', 'hauntedaura', 'bewitchedaura'].includes(aura.id) &&
+			this.pulseBlockadeHolder(source, sourceEffect)
+		)
+			return false;
+		const previousSource = this.auraState.sourceEffect?.id;
 		// Forest Surge installs its companion Aura without promoting an older Grassy Aura over Forest.
-		const forestCompanion = this.terrain === 'forestterrain' && aura.id === 'grassyterrain' && [
-			'forestsurge',
-			'grandrhythm',
-		].includes(sourceEffect?.id || '');
-		if (!['frozenaura', 'ashenaura', 'riftaura', 'hauntedaura', 'bewitchedaura'].includes(aura.id) && !noTerrainPromotion && !forestCompanion && this.auraField === aura.id && source && sourceEffect?.id && previousSource &&
+		const forestCompanion =
+			this.terrain === 'forestterrain' &&
+			aura.id === 'grassyterrain' &&
+			['forestsurge', 'grandrhythm'].includes(sourceEffect?.id || '');
+		if (
+			!['frozenaura', 'ashenaura', 'riftaura', 'hauntedaura', 'bewitchedaura'].includes(aura.id) &&
+			!noTerrainPromotion &&
+			!forestCompanion &&
+			this.auraField === aura.id &&
+			source &&
+			sourceEffect?.id &&
+			previousSource &&
 			!['raindance', 'sunnyday'].includes(sourceEffect.id) &&
-			sourceEffect.id !== previousSource && this.promoteAura(source, sourceEffect)) return true;
+			sourceEffect.id !== previousSource &&
+			this.promoteAura(source, sourceEffect)
+		)
+			return true;
 		if (this.auraField) this.clearAura(false);
 		this.auraField = toID(aura.id);
 		this.auraTurns = Math.floor(turns);
 		this.auraRoll = null;
-		this.auraState = this.battle.initEffectState({id: 'terrainaura', source, sourceEffect, noTerrainPromotion});
+		this.auraState = this.battle.initEffectState({
+			id: 'terrainaura',
+			source,
+			sourceEffect,
+			noTerrainPromotion,
+		});
 		this.battle.add('-fieldstart', aura.name, `[aura] ${this.auraTurns}`);
 		this.refreshAuraAbilities();
 		if (this.getPseudoWeather('gravity') && source) {
@@ -216,59 +353,121 @@ export class Field {
 	}
 
 	promoteAura(source: Pokemon, sourceEffect: Effect, gravity = false) {
-		if (!this.auraField || this.auraState.noTerrainPromotion ||
+		if (
+			!this.auraField ||
+			this.auraState.noTerrainPromotion ||
 			['frozenaura', 'ashenaura', 'riftaura'].includes(this.auraField) ||
-			(!gravity && ['hauntedaura', 'bewitchedaura'].includes(this.auraField))) return false;
+			(!gravity && ['hauntedaura', 'bewitchedaura'].includes(this.auraField))
+		)
+			return false;
 		// Aura permission does not remove full-field replacement restrictions.
-		if (this.isFlowerGardenBase() || ['chessboardterrain', 'glitchterrain', 'bewitchedwoodsterrain',
-			'newworldterrain', 'underwaterterrain', 'midnightzoneterrain', 'dragonsdenterrain'].includes(this.terrain)) return false;
+		if (
+			this.isFlowerGardenBase() ||
+			[
+				'chessboardterrain',
+				'glitchterrain',
+				'bewitchedwoodsterrain',
+				'newworldterrain',
+				'underwaterterrain',
+				'midnightzoneterrain',
+				'dragonsdenterrain',
+			].includes(this.terrain)
+		)
+			return false;
 		if (this.terrain === 'hauntedterrain' && this.auraField !== 'rainbowterrain') return false;
-		if (this.auraField === 'electricterrain' && ['factoryterrain', 'shortcircuitterrain'].includes(this.terrain)) return false;
+		if (
+			this.auraField === 'electricterrain' &&
+			['factoryterrain', 'shortcircuitterrain'].includes(this.terrain)
+		)
+			return false;
 		if (this.auraField === 'mistyterrain' && this.terrain === 'corrosivemistterrain') return false;
 		const duration = source.hasItem('amplifieldrock') ? 8 : 5;
-		const destination = this.auraField === 'hauntedaura' ? 'hauntedterrain' :
-			this.auraField === 'bewitchedaura' ? 'bewitchedwoodsterrain' : this.auraField;
+		const destination =
+			this.auraField === 'hauntedaura' ?
+				'hauntedterrain' :
+				this.auraField === 'bewitchedaura' ?
+					'bewitchedwoodsterrain' :
+					this.auraField;
 		const success = this.setFieldOrAura(destination, duration, source, sourceEffect, true);
 		if (success && this.auraField) this.clearAura();
-  return success;
+		return success;
 	}
 
+	/** The elemental Seeds develop after a successful move; Rift Opening resolves on hit. */
+	promoteSeedAura(source: Pokemon, move: ActiveMove) {
+		if (source.moveThisTurnResult !== true || source.volatiles.twoturnmove || this.auraTurns < 1)
+			return false;
+		// Use the shared Eclipse clock even when a seed holder triggers the direct swap first.
+		if (this.shiftEclipseWithAura(source, move)) return true;
+		return this.developSeedAura(source, move);
+	}
 
- /** The elemental Seeds develop after a successful move; Rift Opening resolves on hit. */
- promoteSeedAura(source: Pokemon, move: ActiveMove) {
-  if (source.moveThisTurnResult !== true || source.volatiles.twoturnmove || this.auraTurns < 1) return false;
-  // Use the shared Eclipse clock even when a seed holder triggers the direct swap first.
-  if (this.shiftEclipseWithAura(source, move)) return true;
-  return this.developSeedAura(source, move);
- }
+	private developSeedAura(source: Pokemon, move: ActiveMove) {
+		if (this.auraTurns < 1) return false;
+		const frozen =
+			this.isAura('frozenaura') &&
+			source.hasAbility('badseeds') &&
+			['blizzard', 'glaciate', 'sheercold'].includes(move.id);
+		const ashen =
+			this.isAura('ashenaura') &&
+			source.hasAbility('ashenseeds') &&
+			['infernalparade', 'eruption'].includes(move.id);
+		const rift = this.isAura('riftaura') && move.id === 'riftopening';
+		if ((!frozen && !ashen && !rift) || this.moveTransitionBlocked(source, move)) return false;
+		// Match ordinary Aura conversion restrictions even where a direct field setter has exceptions.
+		if (
+			this.isFlowerGardenBase() ||
+			[
+				'chessboardterrain',
+				'glitchterrain',
+				'bewitchedwoodsterrain',
+				'hauntedterrain',
+				'newworldterrain',
+				'underwaterterrain',
+				'midnightzoneterrain',
+				'dragonsdenterrain',
+			].includes(this.terrain)
+		)
+			return false;
+		if ((frozen || ashen) && !this.isEclipse()) {
+			if (this.auraState.seedDevelopmentMove === move) return false;
+			this.auraState.seedDevelopmentMove = move;
+			this.auraState.seedAttacks = (this.auraState.seedAttacks || 0) + 1;
+			if (this.auraState.seedAttacks < 2) {
+				this.battle.add(
+					'-message',
+					frozen ?
+						'The Frozen Aura began to develop! (1/2)' :
+						'The Ashen Aura began to develop! (1/2)',
+				);
+				return false;
+			}
+		}
+		const aura = this.auraField,
+			duration = this.auraTurns;
+		if (
+			!this.setFieldOrAura(
+				frozen ? 'coldeclipseterrain' : ashen ? 'infernaleclipseterrain' : 'rifteclipseterrain',
+				duration,
+				source,
+				move,
+				true,
+			)
+		)
+			return false;
+		if (this.auraField === aura) this.clearAura();
+		this.battle.add(
+			'-message',
+			frozen ?
+				'Bad Seeds developed the Frozen Aura into Cold Eclipse!' :
+				ashen ?
+					'Ashen Seeds developed the Ashen Aura into Infernal Eclipse!' :
+					'Rift Opening developed the Rift Aura into Rift Eclipse!',
+		);
+		return true;
+	}
 
- private developSeedAura(source: Pokemon, move: ActiveMove) {
-  if (this.auraTurns < 1) return false;
-  const frozen = this.isAura('frozenaura') && source.hasAbility('badseeds') && ['blizzard', 'glaciate', 'sheercold'].includes(move.id);
-  const ashen = this.isAura('ashenaura') && source.hasAbility('ashenseeds') && ['infernalparade', 'eruption'].includes(move.id);
-  const rift = this.isAura('riftaura') && move.id === 'riftopening';
-  if ((!frozen && !ashen && !rift) || this.moveTransitionBlocked(source, move)) return false;
-  // Match ordinary Aura conversion restrictions even where a direct field setter has exceptions.
-  if (this.isFlowerGardenBase() || ['chessboardterrain', 'glitchterrain', 'bewitchedwoodsterrain',
-   'hauntedterrain', 'newworldterrain', 'underwaterterrain', 'midnightzoneterrain', 'dragonsdenterrain'].includes(this.terrain)) return false;
-  if ((frozen || ashen) && !this.isEclipse()) {
-   if (this.auraState.seedDevelopmentMove === move) return false;
-   this.auraState.seedDevelopmentMove = move;
-   this.auraState.seedAttacks = (this.auraState.seedAttacks || 0) + 1;
-   if (this.auraState.seedAttacks < 2) {
-    this.battle.add('-message', frozen ? 'The Frozen Aura began to develop! (1/2)' : 'The Ashen Aura began to develop! (1/2)');
-    return false;
-   }
-  }
-  const aura = this.auraField, duration = this.auraTurns;
-  if (!this.setFieldOrAura(frozen ? 'coldeclipseterrain' : ashen ? 'infernaleclipseterrain' : 'rifteclipseterrain', duration, source, move, true)) return false;
-  if (this.auraField === aura) this.clearAura();
-  this.battle.add('-message', frozen ? 'Bad Seeds developed the Frozen Aura into Cold Eclipse!' : ashen ?
-   'Ashen Seeds developed the Ashen Aura into Infernal Eclipse!' : 'Rift Opening developed the Rift Aura into Rift Eclipse!');
-  return true;
- }
-
- clearAura(refresh = true) {
+	clearAura(refresh = true) {
 		const aura = this.getAura();
 		if (!aura) return false;
 		this.auraField = '' as ID;
@@ -286,22 +485,34 @@ export class Field {
 		for (const pokemon of this.battle.getAllActive()) {
 			for (const id of ['mimicry', 'quarkdrive']) {
 				if (!pokemon.hasAbilityOrPassive(id)) continue;
-				this.battle.singleEvent('TerrainChange', this.battle.dex.abilities.get(id), pokemon.abilityState, pokemon);
+				this.battle.singleEvent(
+					'TerrainChange',
+					this.battle.dex.abilities.get(id),
+					pokemon.abilityState,
+					pokemon,
+				);
 			}
 		}
 	}
 
 	reconcileAura() {
-		if (this.auraField && !this.canSupportAura(this.auraField, !!this.auraState.noTerrainPromotion)) this.clearAura();
-		else if (this.auraField) this.battle.add('-fieldstart', this.getAura().name, `[aura] ${this.auraTurns}`);
+		if (this.auraField && !this.canSupportAura(this.auraField, !!this.auraState.noTerrainPromotion))
+			this.clearAura();
+		else if (this.auraField)
+			this.battle.add('-fieldstart', this.getAura().name, `[aura] ${this.auraTurns}`);
 	}
 
 	tickAura() {
 		if (this.auraField && --this.auraTurns <= 0) this.clearAura();
 	}
 
-	setFieldOrAura(status: string | Effect, duration: number, source: Pokemon | null = null,
-		sourceEffect: Effect | null = null, ignoreAuras = false) {
+	setFieldOrAura(
+		status: string | Effect,
+		duration: number,
+		source: Pokemon | null = null,
+		sourceEffect: Effect | null = null,
+		ignoreAuras = false,
+	) {
 		const id = toID(typeof status === 'string' ? status : status.id);
 		if (this.aurasEnabled && Auras[id] && duration > 0 && this.terrain && !ignoreAuras) {
 			return this.setAura(id, duration, source, sourceEffect);
@@ -315,14 +526,32 @@ export class Field {
 	baseAuraTypeBoost(move: ActiveMove, source: Pokemon, target: Pokemon) {
 		if (adaptiveEnvironment(target, 'fields')) return 1;
 		const type = move.type;
-		if (type === 'Ice' && ['icyterrain', 'snowymountainterrain', 'snowyterrain'].includes(this.terrain)) return 1.5;
+		if (
+			type === 'Ice' &&
+			['icyterrain', 'snowymountainterrain', 'snowyterrain'].includes(this.terrain)
+		)
+			return 1.5;
 		if (type === 'Ice' && this.terrain === 'coldeclipseterrain') return 1.2;
-		if (type === 'Fire' && ['burningterrain', 'volcanicterrain', 'infernaleclipseterrain'].includes(this.terrain)) return 1.5;
-		if (type === 'Dark' && ['coldeclipseterrain', 'rifteclipseterrain', 'infernaleclipseterrain'].includes(this.terrain)) return 1.5;
+		if (
+			type === 'Fire' &&
+			['burningterrain', 'volcanicterrain', 'infernaleclipseterrain'].includes(this.terrain)
+		)
+			return 1.5;
+		if (
+			type === 'Dark' &&
+			['coldeclipseterrain', 'rifteclipseterrain', 'infernaleclipseterrain'].includes(this.terrain)
+		)
+			return 1.5;
 		if (type === 'Ghost' && this.terrain === 'rifteclipseterrain') return 1.2;
 		if (type === 'Ghost' && this.terrain === 'hauntedterrain') return 1.5;
 		if (type === 'Dark' && this.terrain === 'bewitchedwoodsterrain') return 1.3;
-		if (move.id === 'deiludicium' && this.isTerrain('rainbowterrain') && type === 'Normal' && move.category === 'Special') return 1.5;
+		if (
+			move.id === 'deiludicium' &&
+			this.isTerrain('rainbowterrain') &&
+			type === 'Normal' &&
+			move.category === 'Special'
+		)
+			return 1.5;
 		if (this.terrain === 'bewitchedwoodsterrain' && ['Fairy', 'Grass'].includes(type)) return 1.5;
 		if (this.terrain === 'glitchterrain' && type === 'Psychic') return 1.2;
 		if (this.terrain === 'factoryterrain' && type === 'Electric') return 1.2;
@@ -348,53 +577,100 @@ export class Field {
 		if (this.isAura('hauntedaura') || this.isAura('bewitchedaura')) {
 			const haunted = this.isAura('hauntedaura');
 			if (this.isTerrain(haunted ? 'hauntedterrain' : 'bewitchedwoodsterrain')) return 1;
-			if ((move.types || [move.type]).some(type => (haunted ? ['Ghost'] : ['Psychic','Fairy']).includes(type))) {this.battle.add('-message', this.getAura().typeMessage);return 1.2;}
+			if (
+				(move.types || [move.type]).some(type =>
+					(haunted ? ['Ghost'] : ['Psychic', 'Fairy']).includes(type),
+				)
+			) {
+				this.battle.add('-message', this.getAura().typeMessage);
+				return 1.2;
+			}
 			return 1;
 		}
 		const aura = this.getAura();
 		if (!aura || move.category === 'Status') return 1;
 		let multiplier = aura.damageMultipliers[move.id] || 1;
 		// The matching field already applies Dei Ludicium's named Rainbow boost.
-		if (move.id === 'deiludicium' && this.isAura('rainbowterrain') && this.isTerrain('rainbowterrain')) multiplier = 1;
+		if (
+			move.id === 'deiludicium' &&
+			this.isAura('rainbowterrain') &&
+			this.isTerrain('rainbowterrain')
+		)
+			multiplier = 1;
 		if (this.isAura('frozenaura') && !adaptiveEnvironment(target, 'fields')) {
-   let shared = 1;
-   if (['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'].includes(this.terrain) && move.id === 'bittermalice') shared = 1.5;
-   if (['icyterrain', 'snowyterrain'].includes(this.terrain) && move.id === 'chillingwater') shared = 2;
-   if (this.terrain === 'coldeclipseterrain') {
-    if (['fierywrath', 'freezingglare', 'lashout', 'outrage', 'ragingfury', 'rage', 'roaroftime', 'stompingtantrum', 'thrash', 'bittermalice'].includes(move.id)) shared = 1.5;
-   }
-   if (shared > 1) multiplier = Math.max(shared, multiplier) / shared;
-  }
-  if (multiplier !== 1) this.battle.add('-message', aura.moveMessages[move.id] || aura.typeMessage);
+			let shared = 1;
+			if (
+				['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'].includes(this.terrain) &&
+				move.id === 'bittermalice'
+			)
+				shared = 1.5;
+			if (['icyterrain', 'snowyterrain'].includes(this.terrain) && move.id === 'chillingwater')
+				shared = 2;
+			if (this.terrain === 'coldeclipseterrain') {
+				if (
+					[
+						'fierywrath',
+						'freezingglare',
+						'lashout',
+						'outrage',
+						'ragingfury',
+						'rage',
+						'roaroftime',
+						'stompingtantrum',
+						'thrash',
+						'bittermalice',
+					].includes(move.id)
+				)
+					shared = 1.5;
+			}
+			if (shared > 1) multiplier = Math.max(shared, multiplier) / shared;
+		}
+		if (multiplier !== 1) this.battle.add('-message', aura.moveMessages[move.id] || aura.typeMessage);
 		const types = move.types || [move.type];
 		const grounded = source.canBenefitFromTerrain() && !source.isSemiInvulnerable();
-		const typeAllowed = aura.typeCondition === 'none' ||
+		const typeAllowed =
+			aura.typeCondition === 'none' ||
 			(aura.typeCondition === 'special' ? move.category === 'Special' : grounded);
-		if (!typeAllowed || (this.auraField === 'electricterrain' && this.terrain === 'shortcircuitterrain')) return multiplier;
+		if (
+			!typeAllowed ||
+			(this.auraField === 'electricterrain' && this.terrain === 'shortcircuitterrain')
+		)
+			return multiplier;
 		for (const [type, boost] of Object.entries(aura.typeMultipliers)) {
 			if (!types.includes(type)) continue;
 			if (this.isAura('riftaura') && type === 'Fairy') {
 				// Share the stronger Fairy penalty; Adaptive Cycle can ignore the base
 				// field's reduction, but the independent Aura still applies its own.
-				const basePenalty = adaptiveEnvironment(source, 'fields') ? 1 :
-					this.terrain === 'rifteclipseterrain' ? 0.5 :
-					this.terrain === 'infernaleclipseterrain' && move.id !== 'spiritbreak' ? 0.5 : 1;
+				const basePenalty = adaptiveEnvironment(source, 'fields') ?
+					1 :
+					this.terrain === 'rifteclipseterrain' ?
+						0.5 :
+						this.terrain === 'infernaleclipseterrain' && move.id !== 'spiritbreak' ?
+							0.5 :
+							1;
 				multiplier *= Math.min(basePenalty, boost) / basePenalty;
 				this.battle.add('-message', aura.typeMessage);
 				continue;
 			}
 			let baseBoost = move.type === type ? this.baseAuraTypeBoost(move, source, target) : 1;
 			// Infernal Eclipse also boosts added Fire effectiveness types; Ashen Aura shares that type bonus.
-			if (this.isAura('ashenaura') && type === 'Fire') baseBoost = this.baseAuraTypeBoost({...move, type: 'Fire'}, source, target);
+			if (this.isAura('ashenaura') && type === 'Fire')
+				baseBoost = this.baseAuraTypeBoost({ ...move, type: 'Fire' }, source, target);
 			// Cold Eclipse likewise boosts added Ice typing, so Frozen Aura must share that bonus.
 			if (this.isAura('frozenaura') && this.terrain === 'coldeclipseterrain' && type === 'Ice') {
 				baseBoost = this.baseAuraTypeBoost({ ...move, type: 'Ice' }, source, target);
 			}
-			if (this.isAura('riftaura') && ['coldeclipseterrain', 'rifteclipseterrain', 'infernaleclipseterrain'].includes(this.terrain)) {
-				baseBoost = this.baseAuraTypeBoost({...move, type}, source, target);
+			if (
+				this.isAura('riftaura') &&
+				['coldeclipseterrain', 'rifteclipseterrain', 'infernaleclipseterrain'].includes(
+					this.terrain,
+				)
+			) {
+				baseBoost = this.baseAuraTypeBoost({ ...move, type }, source, target);
 			}
 			const overlapFloor = this.isAura('riftaura') ? 1 : 1.5;
-			multiplier *= baseBoost > 1 && boost > 1 ? Math.max(overlapFloor, baseBoost, boost) / baseBoost : boost;
+			multiplier *=
+				baseBoost > 1 && boost > 1 ? Math.max(overlapFloor, baseBoost, boost) / baseBoost : boost;
 			this.battle.add('-message', aura.typeMessage);
 		}
 		return multiplier;
@@ -404,13 +680,20 @@ export class Field {
 		return State.serializeField(this);
 	}
 
-	setWeather(status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+	setWeather(
+		status: string | Condition,
+		source: Pokemon | 'debug' | null = null,
+		sourceEffect: Effect | null = null,
+	) {
 		status = this.battle.dex.conditions.get(status);
 		if (this.terrain === 'dragonsdenterrain' && ['hail', 'snow', 'snowscape'].includes(status.id)) {
 			this.battle.add('-message', 'The ice melted in the heat!');
 			return false;
 		}
-		if (this.terrain === 'infernaleclipseterrain' && ['raindance', 'primordialsea', 'hail'].includes(status.id)) {
+		if (
+			this.terrain === 'infernaleclipseterrain' &&
+			['raindance', 'primordialsea', 'hail'].includes(status.id)
+		) {
 			this.battle.add('-message', 'The infernal heat consumed the rain or hail!');
 			return false;
 		}
@@ -432,7 +715,10 @@ export class Field {
 			return false;
 		}
 		if (this.isTerrain('underwaterterrain') || this.isTerrain('newworldterrain')) {
-			this.battle.add('-message', 'The weather was annihilated by the crushing weight of the field!');
+			this.battle.add(
+				'-message',
+				'The weather was annihilated by the crushing weight of the field!',
+			);
 			return false;
 		}
 		// Automatic field weather has no Pokemon source, but must still consult
@@ -461,9 +747,16 @@ export class Field {
 			this.weatherState.duration = status.duration;
 		}
 		if (status.durationCallback) {
-			this.weatherState.duration = status.durationCallback.call(this.battle, source as Pokemon, source as Pokemon, sourceEffect);
+			this.weatherState.duration = status.durationCallback.call(
+				this.battle,
+				source!,
+				source!,
+				sourceEffect,
+			);
 		}
-		if (!this.battle.singleEvent('FieldStart', status, this.weatherState, this, source, sourceEffect)) {
+		if (
+			!this.battle.singleEvent('FieldStart', status, this.weatherState, this, source, sourceEffect)
+		) {
 			this.weather = prevWeather;
 			this.weatherState = prevWeatherState;
 			return false;
@@ -476,13 +769,20 @@ export class Field {
 		return true;
 	}
 
-	changeWeather(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+	changeWeather(
+		status: string | Effect,
+		source: Pokemon | 'debug' | null = null,
+		sourceEffect: Effect | null = null,
+	) {
 		status = this.battle.dex.conditions.get(status);
 		if (this.terrain === 'dragonsdenterrain' && ['hail', 'snow', 'snowscape'].includes(status.id)) {
 			this.battle.add('-message', 'The ice melted in the heat!');
 			return false;
 		}
-		if (this.terrain === 'infernaleclipseterrain' && ['raindance', 'primordialsea', 'hail'].includes(status.id)) {
+		if (
+			this.terrain === 'infernaleclipseterrain' &&
+			['raindance', 'primordialsea', 'hail'].includes(status.id)
+		) {
 			this.battle.add('-message', 'The infernal heat consumed the rain or hail!');
 			return false;
 		}
@@ -502,7 +802,7 @@ export class Field {
 		});
 		this.battle.singleEvent('FieldStart', status, this.weatherState, this, source, sourceEffect);
 		this.battle.add('-fieldstart', status.name);
-  if (this.isAura('frozenaura') && this.weather !== 'hail') this.auraState.hailTurns = 0;
+		if (this.isAura('frozenaura') && this.weather !== 'hail') this.auraState.hailTurns = 0;
 		this.battle.eachEvent('WeatherChange', sourceEffect);
 	}
 
@@ -511,7 +811,7 @@ export class Field {
 		const prevWeather = this.getWeather();
 		this.battle.singleEvent('FieldEnd', prevWeather, this.weatherState, this);
 		this.weather = '';
-  if (this.isAura('frozenaura')) this.auraState.hailTurns = 0;
+		if (this.isAura('frozenaura')) this.auraState.hailTurns = 0;
 		this.battle.clearEffectState(this.weatherState);
 		this.battle.eachEvent('WeatherChange');
 		this.restoreFormatHail();
@@ -529,9 +829,13 @@ export class Field {
 	}
 
 	getFormatHailTerrain() {
-		if (this.terrain === 'coldeclipseterrain' && this.terrainState.startingField) return 'coldeclipseterrain';
-		if (this.battle.format.terrain === 'adriennterrain' && this.terrain === 'fairytaleterrain' &&
-			!(this.battle as any).adriennFairyTaleHailStarted) {
+		if (this.terrain === 'coldeclipseterrain' && this.terrainState.startingField)
+			return 'coldeclipseterrain';
+		if (
+			this.battle.format.terrain === 'adriennterrain' &&
+			this.terrain === 'fairytaleterrain' &&
+			!(this.battle as any).adriennFairyTaleHailStarted
+		) {
 			return 'fairytaleterrain';
 		}
 		return '';
@@ -564,9 +868,13 @@ export class Field {
 				const ability = pokemon.getAbility();
 				if (ability.suppressWeather) return true;
 				if (ability.id === 'rkssystem' && pokemon.hasAbilityOrPassive('airlock')) return true;
-				if (['perfectforesight'].includes(ability.id) &&
-					pokemon.m.perfectForesightAbility && !pokemon.m.perfectForesightAbilityState?.ending &&
-					this.battle.dex.abilities.get(pokemon.m.perfectForesightAbility).suppressWeather) return true;
+				if (
+					['perfectforesight'].includes(ability.id) &&
+					pokemon.m.perfectForesightAbility &&
+					!pokemon.m.perfectForesightAbilityState?.ending &&
+					this.battle.dex.abilities.get(pokemon.m.perfectForesightAbility).suppressWeather
+				)
+					return true;
 			}
 		}
 		return false;
@@ -587,10 +895,17 @@ export class Field {
 	createBaseTerrainState(id: string, startingField = false) {
 		// Restoring an underlying field must not replay its entry effects.
 		return this.battle.initEffectState({
-			id, startingField, permanent: true, terrain_type: 'Base',
-			terrainChanges: new Map<string, number>(), turn: this.battle.turn, duration: 9999,
+			id,
+			startingField,
+			permanent: true,
+			terrain_type: 'Base',
+			terrainChanges: new Map<string, number>(),
+			turn: this.battle.turn,
+			duration: 9999,
 			durationUpdatedTurn: Math.max(0, this.battle.turn - 1),
-			...(id === 'wastelandterrain' ? { toxicspikes: [], spikes: [], stickyweb: [], stealthrock: [] } : {}),
+			...(id === 'wastelandterrain' ?
+				{ toxicspikes: [], spikes: [], stickyweb: [], stealthrock: [] } :
+				{}),
 		});
 	}
 
@@ -608,18 +923,35 @@ export class Field {
 
 	/** Read-only lock check for power granted by a Cave/Icy move transition. */
 	moveTransitionBlocked(source: Pokemon, move: ActiveMove) {
-		return this.neutralizingTerrainEffects() || !!this.pulseBlockadeHolder(source, move) || this.badSeedsLocksField();
+		return (
+			this.neutralizingTerrainEffects() ||
+			!!this.pulseBlockadeHolder(source, move) ||
+			this.badSeedsLocksField()
+		);
 	}
 
 	badSeedsLocksField() {
-		const ability = this.terrain === 'coldeclipseterrain' ? 'badseeds' : this.terrain === 'infernaleclipseterrain' ? 'ashenseeds' : '';
-  return !!ability && this.battle.getAllActive().some(p => p.hp > 0 && p.isActive && p.hasAbility(ability));
+		const ability =
+			this.terrain === 'coldeclipseterrain' ?
+				'badseeds' :
+				this.terrain === 'infernaleclipseterrain' ?
+					'ashenseeds' :
+					'';
+		return (
+			!!ability &&
+			this.battle.getAllActive().some(p => p.hp > 0 && p.isActive && p.hasAbility(ability))
+		);
 	}
 
 	private pulseBlockadeHolder(source: Pokemon | 'debug' | null, sourceEffect: Effect | null) {
 		for (const pokemon of this.battle.getAllActive()) {
-			if (!pokemon.hp || !pokemon.isActive || !pokemon.hasAbilityOrPassive('pulseblockade') ||
-				this.battle.suppressingAbility(pokemon)) continue;
+			if (
+				!pokemon.hp ||
+				!pokemon.isActive ||
+				!pokemon.hasAbilityOrPassive('pulseblockade') ||
+				this.battle.suppressingAbility(pokemon)
+			)
+				continue;
 			if (pokemon === source && sourceEffect?.id === 'pulseblockade') continue;
 			return pokemon;
 		}
@@ -627,8 +959,12 @@ export class Field {
 	}
 
 	applyIcySpikesDamage(pokemon: Pokemon) {
-		if (this.terrain !== 'icyterrain' || !pokemon.isGrounded() ||
-			pokemon.hasAbilityOrPassive('magicguard')) return false;
+		if (
+			this.terrain !== 'icyterrain' ||
+			!pokemon.isGrounded() ||
+			pokemon.hasAbilityOrPassive('magicguard')
+		)
+			return false;
 		const layers = Math.min(pokemon.side.sideConditions.spikes?.layers ?? 0, 3);
 		const damageFractions = [1 / 8, 1 / 8, 1 / 6, 1 / 4];
 		const damage = pokemon.maxhp * damageFractions[layers];
@@ -636,7 +972,11 @@ export class Field {
 		return this.battle.damage(damage, pokemon, pokemon, this.battle.effect);
 	}
 
-	canSetTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+	canSetTerrain(
+		status: string | Effect,
+		source: Pokemon | 'debug' | null = null,
+		sourceEffect: Effect | null = null,
+	) {
 		if (this.badSeedsLocksField()) return false;
 		if (this.isFlowerGardenBase()) return false;
 		status = this.battle.dex.conditions.get(status);
@@ -645,15 +985,34 @@ export class Field {
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 		if (!source) throw new Error(`setting terrain without a source`);
 		if (this.terrain === status.id) return false;
-		if (!(this.aurasEnabled && this.terrain && Auras[status.id]) && this.pulseBlockadeHolder(source, sourceEffect)) return false;
-		if (this.isTerrain(['underwaterterrain', 'midnightzoneterrain']) || this.isTerrain('newworldterrain') || this.isTerrain('dragonsdenterrain')) {
-			this.battle.add('-message', 'The new field was annihilated by the crushing weight of the existing one!');
+		if (
+			!(this.aurasEnabled && this.terrain && Auras[status.id]) &&
+			this.pulseBlockadeHolder(source, sourceEffect)
+		)
+			return false;
+		if (
+			this.isTerrain(['underwaterterrain', 'midnightzoneterrain']) ||
+			this.isTerrain('newworldterrain') ||
+			this.isTerrain('dragonsdenterrain')
+		) {
+			this.battle.add(
+				'-message',
+				'The new field was annihilated by the crushing weight of the existing one!',
+			);
 			return false;
 		}
 		const hauntedBlockedTerrains = [
-			'electricterrain', 'grassyterrain', 'mistyterrain', 'psychicterrain', 'coldeclipseterrain',
+			'electricterrain',
+			'grassyterrain',
+			'mistyterrain',
+			'psychicterrain',
+			'coldeclipseterrain',
 		];
-		if (this.terrain === 'hauntedterrain' && hauntedBlockedTerrains.includes(status.id) && !Auras[status.id]) {
+		if (
+			this.terrain === 'hauntedterrain' &&
+			hauntedBlockedTerrains.includes(status.id) &&
+			!Auras[status.id]
+		) {
 			this.battle.add('-message', 'The evil spirits prevent the new field from forming!');
 			return false;
 		}
@@ -661,24 +1020,36 @@ export class Field {
 	}
 
 	neutralizeTerrainChange() {
-		const neutralizer = this.battle.getAllActive().find(pokemon =>
-			pokemon?.isActive && !pokemon.fainted && pokemon.hasAbilityOrPassive('neutralization')
-		);
+		const neutralizer = this.battle
+			.getAllActive()
+			.find(
+				pokemon =>
+					pokemon?.isActive && !pokemon.fainted && pokemon.hasAbilityOrPassive('neutralization'),
+			);
 		if (!neutralizer) return false;
 		this.battle.add('-message', `${neutralizer.side.name}'s Pokemon neutralizes the field change`);
 		return true;
 	}
 
 	neutralizingTerrainEffects() {
-		return this.battle.getAllActive().some(pokemon =>
-			pokemon?.isActive && !pokemon.fainted && pokemon.hasAbilityOrPassive('neutralization')
-		);
+		return this.battle
+			.getAllActive()
+			.some(
+				pokemon =>
+					pokemon?.isActive && !pokemon.fainted && pokemon.hasAbilityOrPassive('neutralization'),
+			);
 	}
 
 	neutralizingTerrainEffectsExcept(excluded: Pokemon) {
-		return this.battle.getAllActive().some(pokemon =>
-			pokemon !== excluded && pokemon?.isActive && !pokemon.fainted && pokemon.hasAbilityOrPassive('neutralization')
-		);
+		return this.battle
+			.getAllActive()
+			.some(
+				pokemon =>
+					pokemon !== excluded &&
+					pokemon?.isActive &&
+					!pokemon.fainted &&
+					pokemon.hasAbilityOrPassive('neutralization'),
+			);
 	}
 
 	releaseNeutralizedTerrain(excluded: Pokemon) {
@@ -689,7 +1060,8 @@ export class Field {
 
 	canBypassNeutralizationForTerrainChange(statusid: ID) {
 		const waterDepthTerrains = ['watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain'];
-		if (waterDepthTerrains.includes(this.terrain) && waterDepthTerrains.includes(statusid)) return true;
+		if (waterDepthTerrains.includes(this.terrain) && waterDepthTerrains.includes(statusid))
+			return true;
 		if (statusid === 'bewitchedwoodsterrain') return true;
 		return false;
 	}
@@ -706,18 +1078,32 @@ export class Field {
 		if (this.isTerrain('corrosivemistterrain')) {
 			return this.changeTerrain('corrosiveterrain', source, sourceEffect);
 		}
-		if (sourceEffect && ['gravity', 'lunarorbit', 'gravitywell', 'gmaxgravitas'].includes(sourceEffect.id) && this.auraField) {
+		if (
+			sourceEffect &&
+			['gravity', 'lunarorbit', 'gravitywell', 'gmaxgravitas'].includes(sourceEffect.id) &&
+			this.auraField
+		) {
 			return this.promoteAura(source, sourceEffect, true);
 		}
 		return false;
 	}
 
-	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null, ignoreNeutralization = false, ignoreAuras = false) {
+	setTerrain(
+		status: string | Effect,
+		source: Pokemon | 'debug' | null = null,
+		sourceEffect: Effect | null = null,
+		ignoreNeutralization = false,
+		ignoreAuras = false,
+	) {
 		if (this.badSeedsLocksField()) return false;
 		const gardenSource = source && source !== 'debug' ? source : this.battle.event?.target;
 		const gardenEffect = sourceEffect || this.battle.effect;
-		if (this.flowerGardenStage() && ['grassyterrain', 'forestterrain'].includes(toID(status)) &&
-			gardenSource && ['grassyterrain', 'grassysurge', 'seedsower', 'forestsurge'].includes(gardenEffect?.id)) {
+		if (
+			this.flowerGardenStage() &&
+			['grassyterrain', 'forestterrain'].includes(toID(status)) &&
+			gardenSource &&
+			['grassyterrain', 'grassysurge', 'seedsower', 'forestsurge'].includes(gardenEffect?.id)
+		) {
 			if (this.pulseBlockadeHolder(gardenSource, gardenEffect)) return false;
 			// Move growth is applied after successful execution; entry abilities grow after SwitchIn.
 			if (gardenEffect.id === 'seedsower') this.growFlowerGarden(gardenSource, gardenEffect);
@@ -735,14 +1121,18 @@ export class Field {
 		if (this.terrain === status.id) return false;
 		// Pledge rainbows and terrain-setting Z-Moves replace the base field.
 		// Rainbow Auras are reserved for transitions between rain and sunlight.
-		if (['stokedsparksurfer', 'bloomdoom', 'genesissupernova'].includes(sourceEffect?.id || '') ||
-			(status.id === 'rainbowterrain' && !['raindance', 'sunnyday'].includes(sourceEffect?.id || ''))) {
+		if (
+			['stokedsparksurfer', 'bloomdoom', 'genesissupernova'].includes(sourceEffect?.id || '') ||
+			(status.id === 'rainbowterrain' && !['raindance', 'sunnyday'].includes(sourceEffect?.id || ''))
+		) {
 			ignoreAuras = true;
 		}
 		if (this.aurasEnabled && this.terrain && Auras[status.id] && !ignoreAuras) {
 			const duration = status.durationCallback ?
-				status.durationCallback.call(this.battle, source, source, sourceEffect) : status.duration;
-			if (duration && duration < 9999) return this.setAura(status.id, duration, source, sourceEffect);
+				status.durationCallback.call(this.battle, source, source, sourceEffect) :
+				status.duration;
+			if (duration && duration < 9999)
+				return this.setAura(status.id, duration, source, sourceEffect);
 		}
 		const blockade = this.pulseBlockadeHolder(source, sourceEffect);
 		if (blockade) {
@@ -758,41 +1148,64 @@ export class Field {
 			return false;
 		}
 		const bewitchedBlockedTerrains = [
-			'electricterrain', 'grassyterrain', 'psychicterrain', 'mistyterrain',
-			'forestterrain', 'rainbowterrain', 'coldeclipseterrain',
+			'electricterrain',
+			'grassyterrain',
+			'psychicterrain',
+			'mistyterrain',
+			'forestterrain',
+			'rainbowterrain',
+			'coldeclipseterrain',
 		];
 		if (this.terrain === 'bewitchedwoodsterrain' && bewitchedBlockedTerrains.includes(status.id)) {
 			this.battle.add('-message', 'The fields magic prevents it');
 			return false;
 		}
 		const hauntedBlockedTerrains = [
-			'electricterrain', 'grassyterrain', 'mistyterrain', 'psychicterrain', 'coldeclipseterrain',
+			'electricterrain',
+			'grassyterrain',
+			'mistyterrain',
+			'psychicterrain',
+			'coldeclipseterrain',
 		];
 		if (this.terrain === 'hauntedterrain' && hauntedBlockedTerrains.includes(status.id)) {
 			this.battle.add('-message', 'The evil spirits prevent the new field from forming!');
 			return false;
 		}
 		if (ignoreNeutralization) {
-			if (this.neutralizingTerrainEffects()) this.battle.add('-message', 'you cant neutralize this evil spirit');
+			if (this.neutralizingTerrainEffects())
+				this.battle.add('-message', 'you cant neutralize this evil spirit');
 		} else if (this.neutralizeTerrainChange()) {
 			return false;
 		}
-		if (this.isTerrain(['underwaterterrain', 'midnightzoneterrain', 'newworldterrain', 'dragonsdenterrain'])) {
-			this.battle.add('-message', 'The new field was annihilated by the crushing weight of the existing one!');
+		if (
+			this.isTerrain([
+				'underwaterterrain',
+				'midnightzoneterrain',
+				'newworldterrain',
+				'dragonsdenterrain',
+			])
+		) {
+			this.battle.add(
+				'-message',
+				'The new field was annihilated by the crushing weight of the existing one!',
+			);
 			return false;
 		}
 		if (status.id === 'mistyterrain' && this.terrain === 'corrosivemistterrain') {
 			this.battle.add('-message', 'The additional mist also became toxic!');
 			return false;
 		}
-		let new_terrain_type = "";
+		let new_terrain_type = '';
 
-		const core_terrains = ["mistyterrain", "psychicterrain", "grassyterrain", "electricterrain"];
+		const core_terrains = ['mistyterrain', 'psychicterrain', 'grassyterrain', 'electricterrain'];
 		if (core_terrains.includes(status.id)) {
-			new_terrain_type = "Core";
+			new_terrain_type = 'Core';
 		}
-		if (status.id === 'rainbowterrain' && (sourceEffect?.id === 'raindance' || sourceEffect?.id === 'sunnyday')) {
-			new_terrain_type = "Temp";
+		if (
+			status.id === 'rainbowterrain' &&
+			(sourceEffect?.id === 'raindance' || sourceEffect?.id === 'sunnyday')
+		) {
+			new_terrain_type = 'Temp';
 		}
 		// Preserve suspended-field counters when placing an overlay.
 		const prevTerrain = this.terrain;
@@ -803,9 +1216,16 @@ export class Field {
 			terrain_type: new_terrain_type,
 			origin: sourceEffect,
 			...(status.id === 'icyterrain' && prevTerrain ? { underlyingTerrain: prevTerrain } : {}),
-			...(['dragonsdenterrain', 'fairytaleterrain', 'crystalcavernterrain', 'darkcrystalcavernterrain',
-				'burningterrain', 'swampterrain'].includes(status.id) && prevTerrain ?
-				{ previousTerrainState: prevTerrainState } : {}),
+			...([
+				'dragonsdenterrain',
+				'fairytaleterrain',
+				'crystalcavernterrain',
+				'darkcrystalcavernterrain',
+				'burningterrain',
+				'swampterrain',
+			].includes(status.id) && prevTerrain ?
+				{ previousTerrainState: prevTerrainState } :
+				{}),
 			source,
 			sourceSlot: source.getSlot(),
 			terrainChanges: new Map<string, number>(),
@@ -815,9 +1235,14 @@ export class Field {
 			permanent: status.duration === undefined || status.duration >= 9999,
 		});
 		if (status.durationCallback) {
-			this.setTerrainDuration(status.durationCallback.call(this.battle, source, source, sourceEffect), false);
+			this.setTerrainDuration(
+				status.durationCallback.call(this.battle, source, source, sourceEffect),
+				false,
+			);
 		}
-		if (!this.battle.singleEvent('FieldStart', status, this.terrainState, this, source, sourceEffect)) {
+		if (
+			!this.battle.singleEvent('FieldStart', status, this.terrainState, this, source, sourceEffect)
+		) {
 			this.terrain = prevTerrain;
 			this.terrainState = prevTerrainState;
 			return false;
@@ -836,10 +1261,18 @@ export class Field {
 	}
 
 	private tyrantMaintainsDen() {
-		return this.terrain === 'dragonsdenterrain' && this.battle.getAllActive().some(p => p.hp && p.hasAbilityOrPassive('tyrantdomain'));
+		return (
+			this.terrain === 'dragonsdenterrain' &&
+			this.battle.getAllActive().some(p => p.hp && p.hasAbilityOrPassive('tyrantdomain'))
+		);
 	}
 
-	changeTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null, gardenTransition = false) {
+	changeTerrain(
+		status: string | Effect,
+		source: Pokemon | 'debug' | null = null,
+		sourceEffect: Effect | null = null,
+		gardenTransition = false,
+	) {
 		if (this.badSeedsLocksField()) return false;
 		status = this.battle.dex.conditions.get(status);
 		if (this.tyrantMaintainsDen()) return false;
@@ -863,33 +1296,52 @@ export class Field {
 			return false;
 		}
 		const bewitchedBlockedTerrains = [
-			'electricterrain', 'grassyterrain', 'psychicterrain', 'mistyterrain',
-			'forestterrain', 'rainbowterrain', 'coldeclipseterrain',
+			'electricterrain',
+			'grassyterrain',
+			'psychicterrain',
+			'mistyterrain',
+			'forestterrain',
+			'rainbowterrain',
+			'coldeclipseterrain',
 		];
 		if (this.terrain === 'bewitchedwoodsterrain' && bewitchedBlockedTerrains.includes(status.id)) {
 			this.battle.add('-message', 'The fields magic prevents it');
 			return false;
 		}
 		const hauntedBlockedTerrains = [
-			'electricterrain', 'grassyterrain', 'mistyterrain', 'psychicterrain', 'coldeclipseterrain',
+			'electricterrain',
+			'grassyterrain',
+			'mistyterrain',
+			'psychicterrain',
+			'coldeclipseterrain',
 		];
 		if (this.terrain === 'hauntedterrain' && hauntedBlockedTerrains.includes(status.id)) {
 			this.battle.add('-message', 'The evil spirits prevent the new field from forming!');
 			return false;
 		}
-		if (!this.canBypassNeutralizationForTerrainChange(status.id) && this.neutralizeTerrainChange()) return false;
+		if (!this.canBypassNeutralizationForTerrainChange(status.id) && this.neutralizeTerrainChange())
+			return false;
 		const prevTerrain = this.terrain;
 		const prevTerrainState = this.terrainState;
-		const mistBallOverlay = prevTerrain === 'dragonsdenterrain' && status.id === 'fairytaleterrain' && sourceEffect?.id === 'mistball';
+		const mistBallOverlay =
+			prevTerrain === 'dragonsdenterrain' &&
+			status.id === 'fairytaleterrain' &&
+			sourceEffect?.id === 'mistball';
 		const eclipseTransition = this.isEclipse() || !!prevTerrainState.purifiedEclipse;
 		const zMoveTerrain = !!prevTerrainState.zMoveTerrain;
 		const gardenBase = this.isFlowerGardenBase();
-		const riftGardenTransition = !!prevTerrainState.riftGarden && gardenTransition &&
+		const riftGardenTransition =
+			!!prevTerrainState.riftGarden &&
+			gardenTransition &&
 			(/^flowergarden[1-5]$/.test(status.id) || status.id === 'burningterrain');
-		const oldGardenStage = /^flowergarden[1-5]$/.test(prevTerrain) ? Number(prevTerrain.slice(-1)) : 0;
+		const oldGardenStage = /^flowergarden[1-5]$/.test(prevTerrain) ?
+			Number(prevTerrain.slice(-1)) :
+			0;
 		const newGardenStage = /^flowergarden[1-5]$/.test(status.id) ? Number(status.id.slice(-1)) : 0;
-		const riftGrowthTurns = riftGardenTransition && oldGardenStage && newGardenStage ?
-			Math.max(0, newGardenStage - oldGardenStage) : 0;
+		const riftGrowthTurns =
+			riftGardenTransition && oldGardenStage && newGardenStage ?
+				Math.max(0, newGardenStage - oldGardenStage) :
+				0;
 		// Preserve the field actually frozen, even when older history remains below it.
 		const underlyingTerrain = status.id === 'icyterrain' ? this.terrain : undefined;
 		this.terrain = status.id;
@@ -898,42 +1350,70 @@ export class Field {
 			terrainChanges: new Map<string, number>(),
 			terrain_type: prevTerrainState.terrain_type,
 			// Natural transitions keep their base-field identity even when timed (Mist Ball).
-			baseFieldTransition: prevTerrainState.terrain_type === 'Base' || !!prevTerrainState.baseFieldTransition,
+			baseFieldTransition:
+				prevTerrainState.terrain_type === 'Base' || !!prevTerrainState.baseFieldTransition,
 			origin: sourceEffect,
-			duration: prevTerrainState.zMoveExpired ? 1 : (prevTerrainState.duration === undefined ? undefined :
-				prevTerrainState.duration + (!prevTerrainState.permanent && prevTerrainState.duration > 0 &&
-				prevTerrainState.duration < 9999 ? Math.max(1, riftGrowthTurns) : riftGrowthTurns)),
+			duration: prevTerrainState.zMoveExpired ?
+				1 :
+				prevTerrainState.duration === undefined ?
+					undefined :
+					prevTerrainState.duration +
+					(!prevTerrainState.permanent &&
+						prevTerrainState.duration > 0 &&
+						prevTerrainState.duration < 9999 ?
+						Math.max(1, riftGrowthTurns) :
+						riftGrowthTurns),
 			durationUpdatedTurn: prevTerrainState.durationUpdatedTurn ?? this.battle.turn - 1,
 			permanent: !prevTerrainState.zMoveExpired && !!prevTerrainState.permanent,
 			turn: this.battle.turn,
 			prevTerrain: prevTerrainState.id,
-			...(['dragonsdenterrain', 'fairytaleterrain', 'crystalcavernterrain', 'darkcrystalcavernterrain',
-				'burningterrain', 'swampterrain'].includes(status.id) && prevTerrain ?
-				{ previousTerrainState: prevTerrainState } : {}),
+			...([
+				'dragonsdenterrain',
+				'fairytaleterrain',
+				'crystalcavernterrain',
+				'darkcrystalcavernterrain',
+				'burningterrain',
+				'swampterrain',
+			].includes(status.id) && prevTerrain ?
+				{ previousTerrainState: prevTerrainState } :
+				{}),
 			gardenBase,
-			...(riftGardenTransition ? {riftGarden: true} : {}),
-			...(prevTerrainState.purifiedEclipse ? {purifiedEclipse: true} : {}),
-			...(gardenTransition && status.id === 'burningterrain' ? {
-				gardenBurnStage: Number(prevTerrain.slice(-1)), gardenBurnTurns: 0,
-			} : {}),
+			...(riftGardenTransition ? { riftGarden: true } : {}),
+			...(prevTerrainState.purifiedEclipse ? { purifiedEclipse: true } : {}),
+			...(gardenTransition && status.id === 'burningterrain' ?
+				{
+					gardenBurnStage: Number(prevTerrain.slice(-1)),
+					gardenBurnTurns: 0,
+				} :
+				{}),
 			...(underlyingTerrain ? { underlyingTerrain } : {}),
 		});
 		if (mistBallOverlay) {
-			Object.assign(this.terrainState, {terrain_type: 'Temp', permanent: false, duration: 5, durationUpdatedTurn: this.battle.turn - 1});
+			Object.assign(this.terrainState, {
+				terrain_type: 'Temp',
+				permanent: false,
+				duration: 5,
+				durationUpdatedTurn: this.battle.turn - 1,
+			});
 		} else if (zMoveTerrain) {
 			this.terrainState.zMoveTerrain = true;
 			this.terrainState.zMoveExpired = !!prevTerrainState.zMoveExpired;
 		}
 		// Changes need the same initialization as newly set fields: weather cleanup,
 		// per-field counters, entry effects, and rejection checks live in FieldStart.
-		if (!this.battle.singleEvent('FieldStart', status, this.terrainState, this, source, sourceEffect)) {
+		if (
+			!this.battle.singleEvent('FieldStart', status, this.terrainState, this, source, sourceEffect)
+		) {
 			this.terrain = prevTerrain;
 			this.terrainState = prevTerrainState;
 			return false;
 		}
 		// Rift Garden stages share one lifetime instead of stacking obsolete stages.
 		if (mistBallOverlay) this.setTerrainDuration(5);
-		if (!mistBallOverlay && (prevTerrainState.terrain_type === 'Base' || prevTerrainState.riftGarden || eclipseTransition)) {
+		if (
+			!mistBallOverlay &&
+			(prevTerrainState.terrain_type === 'Base' || prevTerrainState.riftGarden || eclipseTransition)
+		) {
 			this.terrainStack[0] = this.terrainState;
 		} else {
 			this.terrainStack.unshift(this.terrainState);
@@ -948,24 +1428,38 @@ export class Field {
 	}
 
 	private clearDepartedWaterFieldEffects(previousTerrain: ID) {
-		if (previousTerrain === this.terrain || ![
-			'watersurfaceterrain', 'underwaterterrain', 'murkwatersurfaceterrain', 'midnightzoneterrain',
-		].includes(previousTerrain)) return;
+		if (
+			previousTerrain === this.terrain ||
+			![
+				'watersurfaceterrain',
+				'underwaterterrain',
+				'murkwatersurfaceterrain',
+				'midnightzoneterrain',
+			].includes(previousTerrain)
+		)
+			return;
 		for (const side of this.battle.sides) side.removeSideCondition('tailwind');
 		for (const room of ['trickroom', 'magicroom', 'wonderroom']) this.removePseudoWeather(room);
 	}
 
 	private clearWaterHazards() {
 		const submerged = ['underwaterterrain', 'midnightzoneterrain'].includes(this.terrain);
-		if (!submerged && !['watersurfaceterrain', 'murkwatersurfaceterrain'].includes(this.terrain)) return;
+		if (!submerged && !['watersurfaceterrain', 'murkwatersurfaceterrain'].includes(this.terrain))
+			return;
 		const hazards = submerged ?
-			['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'] : ['spikes', 'toxicspikes', 'stealthrock'];
+			['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'] :
+			['spikes', 'toxicspikes', 'stealthrock'];
 		for (const side of this.battle.sides) {
 			for (const sideCondition of hazards) {
 				if (!side.removeSideCondition(sideCondition)) continue;
-				this.battle.add('-message', submerged ? 'The hazards were swept away into the depths!' :
-					sideCondition === 'stealthrock' ? '...The pointed stones sank into the water and vanished!' :
-					'...The spikes sank into the water and vanished!');
+				this.battle.add(
+					'-message',
+					submerged ?
+						'The hazards were swept away into the depths!' :
+						sideCondition === 'stealthrock' ?
+							'...The pointed stones sank into the water and vanished!' :
+							'...The spikes sank into the water and vanished!',
+				);
 				this.battle.add('-sideend', side, this.battle.dex.conditions.get(sideCondition).name);
 			}
 		}
@@ -978,15 +1472,23 @@ export class Field {
 	}
 
 	clearTerrain(power: string | null = null) {
-		if (power === 'mid' && this.auraField && !this.terrainState.purifiedEclipse) return this.clearAura();
-		if ((power === 'mid' || power === 'move' || power === 'terraform') &&
-			(this.terrainState.terrain_type === 'Base' || this.terrainState.baseFieldTransition)) return false;
+		if (power === 'mid' && this.auraField && !this.terrainState.purifiedEclipse)
+			return this.clearAura();
+		if (
+			(power === 'mid' || power === 'move' || power === 'terraform') &&
+			(this.terrainState.terrain_type === 'Base' || this.terrainState.baseFieldTransition)
+		)
+			return false;
 		if (this.tyrantMaintainsDen()) {
 			if (this.terrainState.duration === 0) this.setTerrainDuration(1, false);
 			return false;
 		}
 		// Ordinary duration expiry remains allowed; this lock is not permanence.
-		if (this.badSeedsLocksField() && !((power === null || power === this.terrain) && this.terrainState.duration === 0)) return false;
+		if (
+			this.badSeedsLocksField() &&
+			!((power === null || power === this.terrain) && this.terrainState.duration === 0)
+		)
+			return false;
 		if (this.isFlowerGardenBase()) return false;
 		if (!this.terrain || this.terrain === 'newworldterrain') return false;
 		const clearedTerrain = this.terrain;
@@ -1008,14 +1510,15 @@ export class Field {
 			} else if (this.terrainState?.terrain_type === 'Core') {
 				const prevTerrain = this.getTerrain();
 				this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
-				while (this.terrainStack.length > 0 && this.terrainStack[0]?.terrain_type !== "Base") {
+				while (this.terrainStack.length > 0 && this.terrainStack[0]?.terrain_type !== 'Base') {
 					this.terrainStack.shift();
 				}
-			} else if (this.terrainState?.zMoveTerrain || (
-				typeof this.terrainState?.duration === 'number' &&
-				this.terrainState.duration < 9999 &&
-				this.terrainState.terrain_type !== 'Base'
-			)) {
+			} else if (
+				this.terrainState?.zMoveTerrain ||
+				(typeof this.terrainState?.duration === 'number' &&
+					this.terrainState.duration < 9999 &&
+					this.terrainState.terrain_type !== 'Base')
+			) {
 				const prevTerrain = this.getTerrain();
 				this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 				if (this.terrainState.zMoveTerrain) {
@@ -1032,7 +1535,11 @@ export class Field {
 			const prevTerrain = this.getTerrain();
 			this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 			this.terrainStack.shift();
-			while (this.terrainStack.length > 0 && this.terrainStack[0]?.terrain_type === 'Base' && this.terrainStack[0].id === this.battle.format.terrain) {
+			while (
+				this.terrainStack.length > 0 &&
+				this.terrainStack[0]?.terrain_type === 'Base' &&
+				this.terrainStack[0].id === this.battle.format.terrain
+			) {
 				this.terrainStack.shift();
 			}
 		} else if (power === 'terraform') {
@@ -1057,20 +1564,27 @@ export class Field {
 		// A transformed base can replace its stack entry. Restore the exact saved
 		// state rather than falling through to an older field or a default.
 		const previous = clearedTerrainState.previousTerrainState;
-		if (previous?.id && !clearedTerrainState.zMoveTerrain &&
+		if (
+			previous?.id &&
+			!clearedTerrainState.zMoveTerrain &&
 			(power === null || power === clearedTerrain || power === 'restoreprevious') &&
-			this.terrainStack[0] !== previous) {
+			this.terrainStack[0] !== previous
+		) {
 			this.terrainStack.unshift(previous);
 		}
-		const updateThroughTurn = clearedTerrainState.durationUpdatedTurn === this.battle.turn ?
-			this.battle.turn : this.battle.turn - 1;
+		const updateThroughTurn =
+			clearedTerrainState.durationUpdatedTurn === this.battle.turn ?
+				this.battle.turn :
+				this.battle.turn - 1;
 		while (this.terrainStack.length) {
 			const terrainState = this.terrainStack[0];
 			if (!terrainState.permanent && terrainState.duration !== undefined) {
 				// Each suspended field was last active at a different time. Age it from
 				// its own last tick, including this turn only if its replacement ticked.
-				const elapsedTurns = Math.max(0, updateThroughTurn -
-					(terrainState.durationUpdatedTurn ?? clearedTerrainState.turn - 1));
+				const elapsedTurns = Math.max(
+					0,
+					updateThroughTurn - (terrainState.durationUpdatedTurn ?? clearedTerrainState.turn - 1),
+				);
 				terrainState.duration = Math.max(0, terrainState.duration - elapsedTurns);
 				terrainState.durationUpdatedTurn = updateThroughTurn;
 				if (!terrainState.duration) {
@@ -1084,15 +1598,30 @@ export class Field {
 			this.terrain = this.terrainStack[0].id as ID;
 			this.terrainState = this.terrainStack[0];
 			const current_terrain = this.battle.dex.conditions.get(this.terrain);
-			this.battle.add('-fieldstart', current_terrain.id === 'icyterrain' ? 'Icy Field' : current_terrain.name,
-				...(this.terrain === 'crystalcavernterrain' ? ['[crystal] ' + ['Fire', 'Water', 'Grass', 'Psychic'][this.battle.CrystalCavernCounter]] : []));
+			this.battle.add(
+				'-fieldstart',
+				current_terrain.id === 'icyterrain' ? 'Icy Field' : current_terrain.name,
+				...(this.terrain === 'crystalcavernterrain' ?
+					[
+						'[crystal] ' +
+						['Fire', 'Water', 'Grass', 'Psychic'][this.battle.CrystalCavernCounter],
+					] :
+					[]),
+			);
 		} else {
 			this.terrain = '';
-			this.terrainState = this.battle.initEffectState({ id: '', terrainChanges: new Map<string, number>(), prevTerrain: '' });
+			this.terrainState = this.battle.initEffectState({
+				id: '',
+				terrainChanges: new Map<string, number>(),
+				prevTerrain: '',
+			});
 		}
 		this.clearDepartedWaterFieldEffects(clearedTerrain);
 		// Restored fields do not replay FieldStart, but Infernal's weather restriction remains active.
-		if (this.terrain === 'infernaleclipseterrain' && ['raindance', 'primordialsea', 'hail'].includes(this.weather)) {
+		if (
+			this.terrain === 'infernaleclipseterrain' &&
+			['raindance', 'primordialsea', 'hail'].includes(this.weather)
+		) {
 			this.clearWeather();
 		}
 		this.reconcileAura();
@@ -1108,14 +1637,24 @@ export class Field {
 	}
 
 	isFlowerGardenBase() {
-		return !!this.terrainState.gardenBase || this.terrainStack.some(state => state.terrain_type === 'Base' && /^flowergarden[1-5]$/.test(state.id));
+		return (
+			!!this.terrainState.gardenBase ||
+			this.terrainStack.some(
+				state => state.terrain_type === 'Base' && /^flowergarden[1-5]$/.test(state.id),
+			)
+		);
 	}
 
 	growFlowerGarden(source: Pokemon, effect: Effect) {
 		const stage = this.flowerGardenStage();
 		if (!stage || stage >= 5) return false;
 		const amount = stage <= 3 && source.hasAbilityOrPassive('ripen') ? 2 : 1;
-		const changed = this.changeTerrain(`flowergarden${Math.min(5, stage + amount)}`, source, effect, true);
+		const changed = this.changeTerrain(
+			`flowergarden${Math.min(5, stage + amount)}`,
+			source,
+			effect,
+			true,
+		);
 		if (changed) this.battle.add('-message', 'The garden grew a little!');
 		return changed;
 	}
@@ -1123,8 +1662,24 @@ export class Field {
 	flowerGardenSwitchIn(pokemon: Pokemon) {
 		if (!pokemon.hp || !this.flowerGardenStage()) return;
 		// One growth per entrant, not per component of a composite ability such as Ancient Bloom.
-		if (pokemon.hasAbilityOrPassive(['drizzle', 'drought', 'flowergift', 'flowerveil', 'orichalcumpulse',
-			'megasol', 'searingpetals', 'seedsower', 'grassysurge', 'forestsurge', 'grandrhythm', 'pollenbloom', 'toxicbloom', 'ancientbloom'])) {
+		if (
+			pokemon.hasAbilityOrPassive([
+				'drizzle',
+				'drought',
+				'flowergift',
+				'flowerveil',
+				'orichalcumpulse',
+				'megasol',
+				'searingpetals',
+				'seedsower',
+				'grassysurge',
+				'forestsurge',
+				'grandrhythm',
+				'pollenbloom',
+				'toxicbloom',
+				'ancientbloom',
+			])
+		) {
 			this.growFlowerGarden(pokemon, pokemon.getAbility());
 		}
 	}
@@ -1139,23 +1694,78 @@ export class Field {
 
 	flowerGardenAfterMove(source: Pokemon, move: ActiveMove) {
 		if (this.terrainState.gardenBurnStage) {
-			const dousing = ['raindance', 'waterspout', 'watersport', 'defog', 'gust', 'winddance', 'airstreamassault', 'hurricane', 'muddywater',
-				'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'hydrovortex',
-				'tailwind', 'twister', 'whirlwind', 'oceanicoperetta', 'continentalcrush', 'supersonicskystrike', 'gmaxwindrage'];
-			if (dousing.includes(move.id)) this.douseFlowerGarden(source, ['raindance', 'waterspout', 'watersport'].includes(move.id));
+			const dousing = [
+				'raindance',
+				'waterspout',
+				'watersport',
+				'defog',
+				'gust',
+				'winddance',
+				'airstreamassault',
+				'hurricane',
+				'muddywater',
+				'sandtomb',
+				'razorwind',
+				'sludgewave',
+				'sparklingaria',
+				'surf',
+				'waterpledge',
+				'hydrovortex',
+				'tailwind',
+				'twister',
+				'whirlwind',
+				'oceanicoperetta',
+				'continentalcrush',
+				'supersonicskystrike',
+				'gmaxwindrage',
+			];
+			if (dousing.includes(move.id))
+				this.douseFlowerGarden(source, ['raindance', 'waterspout', 'watersport'].includes(move.id));
 			return;
 		}
 		const stage = this.flowerGardenStage();
 		if (!stage) return;
-		if (['growth', 'flowershield', 'raindance', 'sunnyday', 'rototiller', 'ingrain', 'grassyterrain', 'watersport', 'bloomdoom'].includes(move.id)) {
+		if (
+			[
+				'growth',
+				'flowershield',
+				'raindance',
+				'sunnyday',
+				'rototiller',
+				'ingrain',
+				'grassyterrain',
+				'watersport',
+				'bloomdoom',
+			].includes(move.id)
+		) {
 			this.growFlowerGarden(source, move);
 		} else if (['cut', 'xscissor', 'aciddownpour'].includes(move.id)) {
-			this.changeTerrain(`flowergarden${move.id === 'aciddownpour' ? 1 : Math.max(1, stage - 1)}`, source, move, true);
-		} else if (stage >= 3 && ['heatwave', 'eruption', 'searingshot', 'flameburst', 'lavaplume', 'firepledge',
-			'mindblown', 'incinerate', 'burningjealousy', 'infernooverdrive'].includes(move.id) &&
-			!this.isWeather(['raindance', 'primordialsea']) && !this.pseudoWeather.watersport &&
-			!this.battle.getAllActive().some(pokemon => pokemon.volatiles.watersport)) {
-			if (this.changeTerrain('burningterrain', source, move, true)) this.battle.add('-message', 'The garden caught fire!');
+			this.changeTerrain(
+				`flowergarden${move.id === 'aciddownpour' ? 1 : Math.max(1, stage - 1)}`,
+				source,
+				move,
+				true,
+			);
+		} else if (
+			stage >= 3 &&
+			[
+				'heatwave',
+				'eruption',
+				'searingshot',
+				'flameburst',
+				'lavaplume',
+				'firepledge',
+				'mindblown',
+				'incinerate',
+				'burningjealousy',
+				'infernooverdrive',
+			].includes(move.id) &&
+			!this.isWeather(['raindance', 'primordialsea']) &&
+			!this.pseudoWeather.watersport &&
+			!this.battle.getAllActive().some(pokemon => pokemon.volatiles.watersport)
+		) {
+			if (this.changeTerrain('burningterrain', source, move, true))
+				this.battle.add('-message', 'The garden caught fire!');
 		}
 	}
 
@@ -1179,13 +1789,17 @@ export class Field {
 	addPseudoWeather(
 		status: string | Condition,
 		source: Pokemon | 'debug' | null = null,
-		sourceEffect: Effect | null = null
+		sourceEffect: Effect | null = null,
 	): boolean {
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 		status = this.battle.dex.conditions.get(status);
 
-		if (this.isTerrain('coldeclipseterrain') && ['trickroom', 'magicroom', 'wonderroom', 'gravity'].includes(status.id)) return false;
+		if (
+			this.isTerrain('coldeclipseterrain') &&
+			['trickroom', 'magicroom', 'wonderroom', 'gravity'].includes(status.id)
+		)
+			return false;
 		let state = this.pseudoWeather[status.id];
 		if (state) {
 			if (!(status as any).onFieldRestart) return false;
@@ -1201,17 +1815,38 @@ export class Field {
 			if (!source) throw new Error(`setting fieldcond without a source`);
 			state.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
 		}
-		if (this.isTerrain('rifteclipseterrain') && ['trickroom', 'magicroom', 'wonderroom', 'gravity'].includes(status.id)) state.duration = 8;
+		if (
+			this.isTerrain('rifteclipseterrain') &&
+			['trickroom', 'magicroom', 'wonderroom', 'gravity'].includes(status.id)
+		)
+			state.duration = 8;
 		if (!this.battle.singleEvent('FieldStart', status, state, this, source, sourceEffect)) {
 			delete this.pseudoWeather[status.id];
 			return false;
 		}
-		if (this.isTerrain('rifteclipseterrain') && ['trickroom', 'magicroom', 'wonderroom', 'gravity'].includes(status.id)) {
-			this.battle.add('-fieldstart', `move: ${status.name}`, `[turns] ${state.duration}`, '[silent]');
+		if (
+			this.isTerrain('rifteclipseterrain') &&
+			['trickroom', 'magicroom', 'wonderroom', 'gravity'].includes(status.id)
+		) {
+			this.battle.add(
+				'-fieldstart',
+				`move: ${status.name}`,
+				`[turns] ${state.duration}`,
+				'[silent]',
+			);
 		}
-		if (source && sourceEffect?.effectType === 'Move' && ['trickroom', 'magicroom'].includes(status.id) && !this.isEclipse()) {
+		if (
+			source &&
+			sourceEffect?.effectType === 'Move' &&
+			['trickroom', 'magicroom'].includes(status.id) &&
+			!this.isEclipse()
+		) {
 			this.terrainState.terrainChanges.set(`riftRoom:${status.id}`, 1);
-			if (this.terrainState.terrainChanges.get('riftRoom:trickroom') && this.terrainState.terrainChanges.get('riftRoom:magicroom')) this.openRiftEclipse(source, sourceEffect);
+			if (
+				this.terrainState.terrainChanges.get('riftRoom:trickroom') &&
+				this.terrainState.terrainChanges.get('riftRoom:magicroom')
+			)
+				this.openRiftEclipse(source, sourceEffect);
 		}
 		this.battle.runEvent('PseudoWeatherChange', source, source, status);
 		return true;

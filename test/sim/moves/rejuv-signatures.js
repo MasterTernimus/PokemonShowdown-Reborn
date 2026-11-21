@@ -192,7 +192,6 @@ describe('Signature execution boundaries', () => {
 	});
 });
 
-
 describe('Scented Geyser immunity overrides', () => {
 	for (const [item, field, suppressed, hit, typeMod] of [
 		['', '', false, false, 0],

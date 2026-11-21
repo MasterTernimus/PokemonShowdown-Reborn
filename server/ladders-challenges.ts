@@ -1,4 +1,4 @@
-import type {BattleEngineIntent} from './battle-engine-guard';
+import type { BattleEngineIntent } from './battle-engine-guard';
 import type { ChallengeType } from './room-battle';
 import type { ChallengeOptions } from '../sim/challenge-options';
 
@@ -12,7 +12,7 @@ import type { ChallengeOptions } from '../sim/challenge-options';
  * To start a battle, you need one of these for every player.
  */
 export class BattleReady {
- engineGuardIntent?: BattleEngineIntent;
+	engineGuardIntent?: BattleEngineIntent;
 	challengeOptions?: Readonly<ChallengeOptions>;
 	readonly userid: ID;
 	readonly formatid: string;

@@ -1,8 +1,8 @@
 'use strict';
 const assert = require('assert').strict;
-const {Dex} = require('../../dist/sim');
-const {SharedPassiveAbilityDescriptions, SignaturePassiveDescriptions} = require('../../dist/data/passive-ability-cleanup');
-const {getAbilityMechanicsHTML} = require('../../dist/server/ability-lookup');
+const { Dex } = require('../../dist/sim');
+const { SharedPassiveAbilityDescriptions, SignaturePassiveDescriptions } = require('../../dist/data/passive-ability-cleanup');
+const { getAbilityMechanicsHTML } = require('../../dist/server/ability-lookup');
 
 describe('Current-effect ability wording', () => {
 	const obsolete = /no longer (?:includes|cures|blocked)|Mind's Eye gives no healing|This passive does not include|Replaces Shield Dust|No (?:Merciless critical-hit bonus|Berserk boosts|Wind Rider boosts)|(?:is supplied (?:separately )?by|is a separate species passive)/i;

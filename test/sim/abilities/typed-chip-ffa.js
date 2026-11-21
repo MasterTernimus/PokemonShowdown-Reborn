@@ -6,16 +6,16 @@ const common = require('../../common');
 let battle;
 
 describe('Removed starter chip across battle types', () => {
-	afterEach(function () {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
 	it('Unbound Blaze does not chip any matchup in Free-for-All', () => {
-		battle = common.createBattle({formatid: 'gen9freeforall4pfactoryfield'}, [
-			[{species: 'Charizard', ability: 'unboundblaze', moves: ['tailwind']}],
-			[{species: 'Scizor', moves: ['splash']}],
-			[{species: 'Swampert', moves: ['splash']}],
-			[{species: 'Arcanine', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9freeforall4pfactoryfield' }, [
+			[{ species: 'Charizard', ability: 'unboundblaze', moves: ['tailwind'] }],
+			[{ species: 'Scizor', moves: ['splash'] }],
+			[{ species: 'Swampert', moves: ['splash'] }],
+			[{ species: 'Arcanine', moves: ['splash'] }],
 		]);
 		if (battle.turn === 0) battle.makeChoices();
 		const [scizor, swampert, arcanine] = battle.sides.slice(1).map(side => side.active[0]);
@@ -27,25 +27,25 @@ describe('Removed starter chip across battle types', () => {
 	});
 
 	it('Unbound Blaze does not chip in singles or doubles', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Charizard', ability: 'unboundblaze', moves: ['tailwind']}],
-			[{species: 'Scizor', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Charizard', ability: 'unboundblaze', moves: ['tailwind'] }],
+			[{ species: 'Scizor', moves: ['splash'] }],
 		]);
 		if (battle.turn === 0) battle.makeChoices();
-		let target = battle.p2.active[0];
+		const target = battle.p2.active[0];
 		let before = target.hp;
 		battle.makeChoices('move tailwind', 'move splash');
 		assert.equal(before - target.hp, 0);
 		battle.destroy();
 
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
 			[
-				{species: 'Charizard', ability: 'unboundblaze', moves: ['tailwind']},
-				{species: 'Mew', moves: ['splash']},
+				{ species: 'Charizard', ability: 'unboundblaze', moves: ['tailwind'] },
+				{ species: 'Mew', moves: ['splash'] },
 			],
 			[
-				{species: 'Scizor', moves: ['splash']},
-				{species: 'Swampert', moves: ['splash']},
+				{ species: 'Scizor', moves: ['splash'] },
+				{ species: 'Swampert', moves: ['splash'] },
 			],
 		]);
 		if (battle.turn === 0) battle.makeChoices();
@@ -57,11 +57,11 @@ describe('Removed starter chip across battle types', () => {
 	});
 
 	it('Pollen Bloom neither chips nor drains in Free-for-All', () => {
-		battle = common.createBattle({formatid: 'gen9freeforall4pfactoryfield'}, [
-			[{species: 'Venusaur', ability: 'pollenbloom', moves: ['splash']}],
-			[{species: 'Swampert', moves: ['splash']}],
-			[{species: 'Charizard', moves: ['splash']}],
-			[{species: 'Leafeon', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9freeforall4pfactoryfield' }, [
+			[{ species: 'Venusaur', ability: 'pollenbloom', moves: ['splash'] }],
+			[{ species: 'Swampert', moves: ['splash'] }],
+			[{ species: 'Charizard', moves: ['splash'] }],
+			[{ species: 'Leafeon', moves: ['splash'] }],
 		]);
 		if (battle.turn === 0) battle.makeChoices();
 		const source = battle.p1.active[0];
@@ -77,9 +77,9 @@ describe('Removed starter chip across battle types', () => {
 	});
 
 	it('Pollen Bloom does not drain a Grass-weak target in singles', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Venusaur', ability: 'pollenbloom', moves: ['splash']}],
-			[{species: 'Swampert', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Venusaur', ability: 'pollenbloom', moves: ['splash'] }],
+			[{ species: 'Swampert', moves: ['splash'] }],
 		]);
 		if (battle.turn === 0) battle.makeChoices();
 		const source = battle.p1.active[0];
@@ -92,11 +92,11 @@ describe('Removed starter chip across battle types', () => {
 	});
 
 	it('Water Barrage does not chip on consecutive turns in Free-for-All', () => {
-		battle = common.createBattle({formatid: 'gen9freeforall4pfactoryfield'}, [
-			[{species: 'Blastoise', ability: 'waterbarrage', moves: ['splash']}],
-			[{species: 'Arcanine', moves: ['splash']}],
-			[{species: 'Dragonite', moves: ['splash']}],
-			[{species: 'Jolteon', ability: 'waterabsorb', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9freeforall4pfactoryfield' }, [
+			[{ species: 'Blastoise', ability: 'waterbarrage', moves: ['splash'] }],
+			[{ species: 'Arcanine', moves: ['splash'] }],
+			[{ species: 'Dragonite', moves: ['splash'] }],
+			[{ species: 'Jolteon', ability: 'waterabsorb', moves: ['splash'] }],
 		]);
 		if (battle.turn === 0) battle.makeChoices();
 		const [arcanine, dragonite, jolteon] = battle.sides.slice(1).map(side => side.active[0]);

@@ -3,9 +3,9 @@ const assert = require('assert').strict;
 const common = require('../../common');
 let battle;
 function setup(stage, move = 'splash', ability = 'No Ability', foe = 'Mew') {
-	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-		[{species: 'Mew', ability, moves: [move, 'splash'], evs: {spe: 252}}],
-		[{species: foe, ability: 'No Ability', moves: ['splash'], evs: {hp: 252, spd: 252}}],
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+		[{ species: 'Mew', ability, moves: [move, 'splash'], evs: { spe: 252 } }],
+		[{ species: foe, ability: 'No Ability', moves: ['splash'], evs: { hp: 252, spd: 252 } }],
 	]);
 	battle.makeChoices('team 1', 'team 1');
 	battle.field.startTerrain(`flowergarden${stage}`);
@@ -16,10 +16,10 @@ describe('Flower Garden stage effects and transitions', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	for (const ability of ['Pollen Bloom', 'Ancient Bloom', 'Toxic Bloom']) {
 		it(`${ability} grows once per entry even when it delegates to Pollen Bloom`, () => {
-			battle = common.createBattle({formatid: 'gen9flowergarden'}, [
-				[{species: 'Mew', ability, moves: ['splash']},
-					{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
-				[{species: 'Blissey', ability: 'No Ability', moves: ['splash']}],
+			battle = common.createBattle({ formatid: 'gen9flowergarden' }, [
+				[{ species: 'Mew', ability, moves: ['splash'] },
+					{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+				[{ species: 'Blissey', ability: 'No Ability', moves: ['splash'] }],
 			]);
 			battle.makeChoices('team 12', 'team 1');
 			const growthCount = () => battle.log.filter(line => line === '|-message|The garden grew a little!').length;
@@ -33,9 +33,9 @@ describe('Flower Garden stage effects and transitions', () => {
 		});
 	}
 	function doubles(n, move, ability = 'No Ability') {
-		const mon = (moves = ['splash']) => ({species: 'Mew', ability: 'No Ability', moves, evs: {hp: 252}});
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [
-			[{...mon([move, 'splash']), ability}, mon()], [mon(), mon()],
+		const mon = (moves = ['splash']) => ({ species: 'Mew', ability: 'No Ability', moves, evs: { hp: 252 } });
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
+			[{ ...mon([move, 'splash']), ability }, mon()], [mon(), mon()],
 		]);
 		battle.makeChoices('team 12', 'team 12');
 		battle.field.startTerrain(`flowergarden${n}`);
@@ -109,10 +109,10 @@ describe('Flower Garden stage effects and transitions', () => {
 		assert.equal(battle.field.flowerGardenStage(), 4);
 	});
 	it('Drizzle entry extinguishes and grows the remaining garden on entry and again at turn end', () => {
-		battle = common.createBattle({formatid: 'gen9flowergarden'}, [
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']},
-				{species: 'Mew', ability: 'Drizzle', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9flowergarden' }, [
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+				{ species: 'Mew', ability: 'Drizzle', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 12', 'team 1');
 		assert.equal(battle.field.terrainStack.length, 1);
@@ -174,9 +174,9 @@ describe('Flower Garden stage effects and transitions', () => {
 	for (const ability of ['Drizzle', 'Drought', 'Flower Gift', 'Flower Veil', 'Orichalcum Pulse', 'Mega Sol',
 		'Grassy Surge', 'Forest Surge', 'Seed Sower', 'Pollen Bloom', 'Toxic Bloom', 'Ancient Bloom']) {
 		it(`${ability} grows on entry without replacing the field`, () => {
-			battle = common.createBattle({formatid: 'gen9flowergarden'}, [
-				[{species: 'Mew', ability, moves: ['splash']}],
-				[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+			battle = common.createBattle({ formatid: 'gen9flowergarden' }, [
+				[{ species: 'Mew', ability, moves: ['splash'] }],
+				[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 			]);
 			battle.makeChoices('team 1', 'team 1');
 			assert.equal(battle.field.terrain, 'flowergarden2');

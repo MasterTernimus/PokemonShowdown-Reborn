@@ -7,7 +7,7 @@ const before = require('./passive-overlap-before.json');
 const replacements = require('./approved-passive-replacements.json');
 describe('Approved 38 standalone passive-slot replacements', () => {
 	it('keeps the reviewed passive holders and starter-family assignments', () => {
-		const expectedPassives = require('./passive-approval-overlays').passives({...require('./latest-passives-approved.json').previousPassives});
+		const expectedPassives = require('./passive-approval-overlays').passives({ ...require('./latest-passives-approved.json').previousPassives });
 		assert.deepEqual(SpeciesPassives, expectedPassives);
 		assert.equal(Object.keys(SpeciesPassives).length, Object.keys(expectedPassives).length);
 		assert.equal(Object.values(SpeciesPassives).filter(p => p.length).length, Object.values(expectedPassives).filter(p => p.length).length);

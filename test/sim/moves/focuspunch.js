@@ -5,58 +5,58 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Focus Punch', function () {
-	afterEach(function () {
+describe('Focus Punch', () => {
+	afterEach(() => {
 		battle?.destroy();
 		battle = null;
 	});
 
-	it(`should fail if hit by an attacking move without Focus Energy`, function () {
+	it(`should fail if hit by an attacking move without Focus Energy`, () => {
 		battle = common.createBattle([[
-			{species: 'Chansey', moves: ['focuspunch']},
+			{ species: 'Chansey', moves: ['focuspunch'] },
 		], [
-			{species: 'Venusaur', moves: ['magicalleaf']},
+			{ species: 'Venusaur', moves: ['magicalleaf'] },
 		]]);
 		battle.makeChoices();
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not lose focus to a status move`, function () {
+	it(`should not lose focus to a status move`, () => {
 		battle = common.createBattle([[
-			{species: 'Chansey', moves: ['focuspunch']},
+			{ species: 'Chansey', moves: ['focuspunch'] },
 		], [
-			{species: 'Venusaur', moves: ['growl']},
+			{ species: 'Venusaur', moves: ['growl'] },
 		]]);
 		battle.makeChoices();
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not lose focus when the hit is absorbed by a substitute`, function () {
+	it(`should not lose focus when the hit is absorbed by a substitute`, () => {
 		battle = common.createBattle([[
-			{species: 'Chansey', moves: ['substitute', 'focuspunch']},
+			{ species: 'Chansey', moves: ['substitute', 'focuspunch'] },
 		], [
-			{species: 'Venusaur', moves: ['magicalleaf']},
+			{ species: 'Venusaur', moves: ['magicalleaf'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('move focuspunch', 'auto');
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should fail if hit by a move called by Nature Power`, function () {
+	it(`should fail if hit by a move called by Nature Power`, () => {
 		battle = common.createBattle([[
-			{species: 'Chansey', moves: ['focuspunch']},
+			{ species: 'Chansey', moves: ['focuspunch'] },
 		], [
-			{species: 'Venusaur', moves: ['naturepower']},
+			{ species: 'Venusaur', moves: ['naturepower'] },
 		]]);
 		battle.makeChoices();
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should use full power on later uses after an interrupted Focus Punch`, function () {
+	it(`should use full power on later uses after an interrupted Focus Punch`, () => {
 		battle = common.createBattle([[
-			{species: 'Chansey', moves: ['focuspunch']},
+			{ species: 'Chansey', moves: ['focuspunch'] },
 		], [
-			{species: 'Venusaur', moves: ['magicalleaf', 'growl']},
+			{ species: 'Venusaur', moves: ['magicalleaf', 'growl'] },
 		]]);
 		battle.makeChoices();
 		assert.fullHP(battle.p2.active[0]);
@@ -64,21 +64,21 @@ describe('Focus Punch', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should fail after being interrupted in doubles`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [
-			[{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}, {species: 'Blissey', ability: 'naturalcure', moves: ['softboiled']}],
-			[{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf']}, {species: 'Ivysaur', ability: 'overgrow', moves: ['growl']}],
+	it(`should fail after being interrupted in doubles`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [
+			[{ species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch'] }, { species: 'Blissey', ability: 'naturalcure', moves: ['softboiled'] }],
+			[{ species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf'] }, { species: 'Ivysaur', ability: 'overgrow', moves: ['growl'] }],
 		]);
 		battle.makeChoices('move focuspunch 1, move softboiled', 'move magicalleaf 1, move growl');
 		assert.fullHP(battle.p2.active[0]);
 		assert(battle.log.some(line => line.includes('|cant|p1a: Chansey|Focus Punch')));
 	});
 
-	it(`should deduct PP only when Focus Punch is executed`, function () {
+	it(`should deduct PP only when Focus Punch is executed`, () => {
 		battle = common.createBattle([[
-			{species: 'Chansey', moves: ['focuspunch']},
+			{ species: 'Chansey', moves: ['focuspunch'] },
 		], [
-			{species: 'Venusaur', moves: ['magicalleaf', 'growl']},
+			{ species: 'Venusaur', moves: ['magicalleaf', 'growl'] },
 		]]);
 		const move = battle.p1.active[0].getMoveData(battle.dex.moves.get('focuspunch'));
 		battle.makeChoices();
@@ -87,11 +87,11 @@ describe('Focus Punch', function () {
 		assert.equal(move.pp, move.maxpp - 1);
 	});
 
-	common.itGen(4, `should deduct PP if the user lost focus before Gen 5`, function () {
+	common.itGen(4, `should deduct PP if the user lost focus before Gen 5`, () => {
 		battle = common.gen(4).createBattle([[
-			{species: 'Chansey', moves: ['focuspunch']},
+			{ species: 'Chansey', moves: ['focuspunch'] },
 		], [
-			{species: 'Venusaur', moves: ['magicalleaf', 'growl']},
+			{ species: 'Venusaur', moves: ['magicalleaf', 'growl'] },
 		]]);
 		const move = battle.p1.active[0].getMoveData(battle.dex.moves.get('focuspunch'));
 		battle.makeChoices();
@@ -100,11 +100,11 @@ describe('Focus Punch', function () {
 		assert.equal(move.pp, move.maxpp - 2);
 	});
 
-	it(`should display a message indicating the Pokemon is tightening focus`, function () {
+	it(`should display a message indicating the Pokemon is tightening focus`, () => {
 		battle = common.createBattle([[
-			{species: 'Chansey', moves: ['focuspunch']},
+			{ species: 'Chansey', moves: ['focuspunch'] },
 		], [
-			{species: 'Venusaur', moves: ['magicalleaf']},
+			{ species: 'Venusaur', moves: ['magicalleaf'] },
 		]]);
 
 		battle.makeChoices();
@@ -116,7 +116,7 @@ describe('Focus Punch', function () {
 		battle = common.createBattle({ formatid: 'gen9factoryfield' }, [[
 			{ species: 'Machamp', gigantamax: true, moves: ['focuspunch'] },
 		], [
-			{species: 'Venusaur', moves: ['magicalleaf']},
+			{ species: 'Venusaur', moves: ['magicalleaf'] },
 		]]);
 
 		battle.makeChoices('team 1', 'team 1');
@@ -128,12 +128,12 @@ describe('Focus Punch', function () {
 		assert.equal(battle.log.filter(line => line.startsWith('|move|') && line.includes('|G-Max Chi Strike|')).length, 2);
 	});
 
-	it(`should tighten focus after switches in Gen 5+`, function () {
+	it(`should tighten focus after switches in Gen 5+`, () => {
 		battle = common.createBattle([[
-			{species: 'salamence', moves: ['focuspunch']},
+			{ species: 'salamence', moves: ['focuspunch'] },
 		], [
-			{species: 'mew', moves: ['sleeptalk']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'mew', moves: ['sleeptalk'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move focuspunch', 'switch 2');
@@ -143,12 +143,12 @@ describe('Focus Punch', function () {
 		assert(focusPunchChargeIndex > switchIndex, `Focus Punch's charge message should occur after switches in Gen 5+`);
 	});
 
-	common.itGen(4, `should tighten focus before switches in Gens 3-4`, function () {
+	common.itGen(4, `should tighten focus before switches in Gens 3-4`, () => {
 		battle = common.gen(4).createBattle([[
-			{species: 'salamence', moves: ['focuspunch']},
+			{ species: 'salamence', moves: ['focuspunch'] },
 		], [
-			{species: 'mew', moves: ['sleeptalk']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'mew', moves: ['sleeptalk'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move focuspunch', 'switch 2');

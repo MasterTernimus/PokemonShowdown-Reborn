@@ -5,23 +5,23 @@ const common = require('./../common');
 
 let battle;
 
-describe('Feraligatr custom data', function () {
-	afterEach(function () {
+describe('Feraligatr custom data', () => {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
-	it('uses the requested base, Mega, and G-Max stats and learnset cleanup', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Feraligatr', moves: ['splash']},
+	it('uses the requested base, Mega, and G-Max stats and learnset cleanup', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Feraligatr', moves: ['splash'] },
 		], [
-			{species: 'Wynaut', moves: ['splash']},
+			{ species: 'Wynaut', moves: ['splash'] },
 		]]);
 		const feraligatr = battle.dex.species.get('Feraligatr');
 		const mega = battle.dex.species.get('Feraligatr-Mega');
 		const gmax = battle.dex.species.get('Feraligatr-Gmax');
-		assert.deepEqual(feraligatr.baseStats, {hp: 100, atk: 109, def: 100, spa: 59, spd: 89, spe: 78});
-		assert.deepEqual(mega.baseStats, {hp: 100, atk: 164, def: 125, spa: 59, spd: 104, spe: 83});
-		assert.deepEqual(gmax.baseStats, {hp: 150, atk: 109, def: 100, spa: 59, spd: 93, spe: 78});
+		assert.deepEqual(feraligatr.baseStats, { hp: 100, atk: 109, def: 100, spa: 59, spd: 89, spe: 78 });
+		assert.deepEqual(mega.baseStats, { hp: 100, atk: 164, def: 125, spa: 59, spd: 104, spe: 83 });
+		assert.deepEqual(gmax.baseStats, { hp: 150, atk: 109, def: 100, spa: 59, spd: 93, spe: 78 });
 		assert.equal(feraligatr.canGigantamax, 'G-Max Death Roll');
 		assert.equal(gmax.abilities[0], 'Tidal Jaw');
 
@@ -46,11 +46,11 @@ describe('Feraligatr custom data', function () {
 		assert(!inheritedLearnset.has('gmaxdeathroll'), 'G-Max Death Roll should be a battle-time signature move');
 	});
 
-	it('only gives Mighty Jaw priority to biting moves on its first action', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Feraligatr', ability: 'mightyjaw', moves: ['bite', 'surf']},
+	it('only gives Mighty Jaw priority to biting moves on its first action', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Feraligatr', ability: 'mightyjaw', moves: ['bite', 'surf'] },
 		], [
-			{species: 'Wynaut', moves: ['splash']},
+			{ species: 'Wynaut', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const feraligatr = battle.p1.active[0];
@@ -63,13 +63,13 @@ describe('Feraligatr custom data', function () {
 		assert.equal(ability.onModifyPriority?.call(battle, 0, feraligatr, null, bite), undefined);
 	});
 
-	it('selects a single-target G-Max Death Roll with a field-wide flinch chance', function () {
-		battle = common.createBattle({formatid: 'gen9doublesmistyfieldadrienn'}, [[
-			{species: 'Feraligatr', gigantamax: true, moves: ['bite']},
-			{species: 'Wynaut', moves: ['splash']},
+	it('selects a single-target G-Max Death Roll with a field-wide flinch chance', () => {
+		battle = common.createBattle({ formatid: 'gen9doublesmistyfieldadrienn' }, [[
+			{ species: 'Feraligatr', gigantamax: true, moves: ['bite'] },
+			{ species: 'Wynaut', moves: ['splash'] },
 		], [
-			{species: 'Wynaut', moves: ['splash']},
-			{species: 'Wynaut', moves: ['splash']},
+			{ species: 'Wynaut', moves: ['splash'] },
+			{ species: 'Wynaut', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1, 2', 'team 1, 2');
 		const feraligatr = battle.p1.active[0];
@@ -92,10 +92,10 @@ describe('Feraligatr custom data', function () {
 		assert(battle.log.some(line => line.includes('G-Max Death Roll')));
 	});
 
-	it('damages only the selected foe but rolls flinch for both foes', function () {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Feraligatr', gigantamax: true, moves: ['bite']},
-			{species: 'Wynaut', moves: ['splash']},
+	it('damages only the selected foe but rolls flinch for both foes', () => {
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Feraligatr', gigantamax: true, moves: ['bite'] },
+			{ species: 'Wynaut', moves: ['splash'] },
 		], [
 			{ species: 'Blissey', ability: 'No Ability', moves: ['splash'] },
 			{ species: 'Blissey', ability: 'No Ability', moves: ['splash'] },
@@ -119,13 +119,13 @@ describe('Feraligatr custom data', function () {
 		assert(battle.log.some(line => line.includes('p2b: Blissey') && line.includes('flinch')));
 	});
 
-	it('keeps Water Veil Aqua Ring healing through G-Max', function () {
-		battle = common.createBattle({formatid: 'gen9doublesmistyfieldadrienn'}, [[
-			{species: 'Feraligatr', ability: 'waterveil', gigantamax: true, moves: ['bite', 'splash']},
-			{species: 'Wynaut', moves: ['splash']},
+	it('keeps Water Veil Aqua Ring healing through G-Max', () => {
+		battle = common.createBattle({ formatid: 'gen9doublesmistyfieldadrienn' }, [[
+			{ species: 'Feraligatr', ability: 'waterveil', gigantamax: true, moves: ['bite', 'splash'] },
+			{ species: 'Wynaut', moves: ['splash'] },
 		], [
-			{species: 'Wynaut', moves: ['splash']},
-			{species: 'Wynaut', moves: ['splash']},
+			{ species: 'Wynaut', moves: ['splash'] },
+			{ species: 'Wynaut', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1, 2', 'team 1, 2');
 		const feraligatr = battle.p1.active[0];

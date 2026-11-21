@@ -10,9 +10,9 @@ describe("Opportunist", () => {
 
 	it("should not cause an infinite loop with itself", () => {
 		battle = common.createBattle([[
-			{species: 'Espathra', ability: 'Opportunist', moves: ['calmmind']},
+			{ species: 'Espathra', ability: 'Opportunist', moves: ['calmmind'] },
 		], [
-			{species: 'Espathra', ability: 'Opportunist', moves: ['sleeptalk']},
+			{ species: 'Espathra', ability: 'Opportunist', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.statStage(battle.p1.active[0], 'spa', 1);
@@ -21,21 +21,21 @@ describe("Opportunist", () => {
 
 	it("should copy Anger Point", () => {
 		battle = common.createBattle([[
-			{species: 'Espathra', ability: 'Opportunist', moves: ['stormthrow']},
+			{ species: 'Espathra', ability: 'Opportunist', moves: ['stormthrow'] },
 		], [
-			{species: 'Primeape', ability: 'Anger Point', moves: ['sleeptalk']},
+			{ species: 'Primeape', ability: 'Anger Point', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.statStage(battle.p1.active[0], 'atk', 6);
 	});
 
 	it("should only copy the effective boost after the +6 cap", () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Espathra', ability: 'Opportunist', moves: ['sleeptalk']},
-			{species: 'Froslass', ability: 'Snow Cloak', moves: ['frostbreath']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Espathra', ability: 'Opportunist', moves: ['sleeptalk'] },
+			{ species: 'Froslass', ability: 'Snow Cloak', moves: ['frostbreath'] },
 		], [
-			{species: 'Primeape', ability: 'Anger Point', moves: ['sleeptalk']},
-			{species: 'Gyarados', ability: 'Intimidate', moves: ['sleeptalk']},
+			{ species: 'Primeape', ability: 'Anger Point', moves: ['sleeptalk'] },
+			{ species: 'Gyarados', ability: 'Intimidate', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.statStage(battle.p1.active[0], 'atk', -1 + 6);
@@ -43,9 +43,9 @@ describe("Opportunist", () => {
 
 	it("should not copy boosts back through an Opportunist composite or on later turns", () => {
 		battle = common.createBattle([[
-			{species: 'Mew', ability: 'Opportunist', moves: ['calmmind', 'splash']},
+			{ species: 'Mew', ability: 'Opportunist', moves: ['calmmind', 'splash'] },
 		], [
-			{species: 'Mew', ability: 'Twilight Instinct', moves: ['splash']},
+			{ species: 'Mew', ability: 'Twilight Instinct', moves: ['splash'] },
 		]]);
 		battle.makeChoices('move calmmind', 'move splash');
 		battle.makeChoices('move splash', 'move splash');
@@ -57,10 +57,10 @@ describe("Opportunist", () => {
 	});
 
 	it("base Infernape copies every positive No Retreat boost with Opportunist", () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Infernape', ability: 'Opportunist', moves: ['sleeptalk']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Infernape', ability: 'Opportunist', moves: ['sleeptalk'] },
 		], [
-			{species: 'Falinks', moves: ['noretreat']},
+			{ species: 'Falinks', moves: ['noretreat'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move sleeptalk', 'move noretreat');

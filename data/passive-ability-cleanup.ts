@@ -1,200 +1,163 @@
-import {November16BalanceDescriptions} from './nov16-balance-descriptions';
-import {SignaturePassiveComponents, SignaturePassiveRemovedComponents, SignaturePassiveDescriptions} from './signature-passive-data';
-export {SignaturePassiveComponents, SignaturePassiveRemovedComponents, SignaturePassiveDescriptions};
+import { November16BalanceDescriptions } from './nov16-balance-descriptions';
+import {
+	SignaturePassiveComponents,
+	SignaturePassiveRemovedComponents,
+	SignaturePassiveDescriptions,
+} from './signature-passive-data';
+export { SignaturePassiveComponents, SignaturePassiveRemovedComponents, SignaturePassiveDescriptions };
 /** Components moved out of exclusive selected packages into existing species passives. */
 export const AbilityComponentExclusions: { [id: string]: readonly string[] } = {
- uncheckedassault: ['limber'], cinderscales: ['shielddust'],
- cursedkeepsake: ['frisk'], curseddoll: ['frisk'], cursedmarionette: ['frisk'], cursedarmament: ['frisk'],
- voidvoice: ['insomnia', 'magicguard'],
- guidinglight: ['illuminate'],
- stormsovereign: ['keeneye'],
- chargedtail: ['static'],
- reservoir: ['damp'],
- baitedbloom: ['stickyhold'],
- invisiblewall: ['soundproof'],
- stormsong: ['soundproof'],
+	uncheckedassault: ['limber'],
+	cinderscales: ['shielddust'],
+	cursedkeepsake: ['frisk'],
+	curseddoll: ['frisk'],
+	cursedmarionette: ['frisk'],
+	cursedarmament: ['frisk'],
+	voidvoice: ['insomnia', 'magicguard'],
+	guidinglight: ['illuminate'],
+	stormsovereign: ['keeneye'],
+	chargedtail: ['static'],
+	reservoir: ['damp'],
+	baitedbloom: ['stickyhold'],
+	invisiblewall: ['soundproof'],
+	stormsong: ['soundproof'],
 	nobledance: ['owntempo'],
 	conductivity: ['soundproof'],
 	anchoredbattery: ['suctioncups'],
 	spiralevolution: ['levitate', 'infiltrator'],
 	toxicevolution: ['levitate'],
 	mythicscale: ['levitate'],
-	"toxicbloom": [
-		"proficient",
-	],
-	"ancientbloom": [
-		"proficient",
-	],
-	"bloomingsun": [
-		"proficient",
-	],
-	"verdantdrake": [
-		"proficient",
-	],
-	"primalego": [
-		"proficient",
-	],
-	"terraresolve": [
-		"proficient",
-	],
-	"queensguard": [
-		"proficient",
-	],
-	"wrathshield": [
-		"proficient",
-	],
-	"forestsurge": [
-		"proficient",
-	],
-	"atrocity": [
-		"proficient",
-	],
-	"sunsovereign": [
-		"proficient",
-	],
-	"burningcrown": [
-		"proficient",
-	],
+	toxicbloom: ['proficient'],
+	ancientbloom: ['proficient'],
+	bloomingsun: ['proficient'],
+	verdantdrake: ['proficient'],
+	primalego: ['proficient'],
+	terraresolve: ['proficient'],
+	queensguard: ['proficient'],
+	wrathshield: ['proficient'],
+	forestsurge: ['proficient'],
+	atrocity: ['proficient'],
+	sunsovereign: ['proficient'],
+	burningcrown: ['proficient'],
 
-	"blazingtempo": [
-		"proficient",
-	],
-	"burningspirit": [
-		"proficient",
-	'selfsufficient',
-	],
-	"burningego": [
-		"proficient",
-	],
-	"astralwitchcraft": [
-		"proficient",
-	],
-	"strikersmomentum": [
-		"proficient",
-	],
-	"perfectstriker": [
-		"proficient",
-	],
-	"siegelauncher": [
-		"proficient",
-	],
-	"fortressshell": [
-		"proficient",
-		"stalwart",
-	],
-	"draconicforce": [
-		"proficient",
-	],
-	"tidaljaw": [
-		"proficient",
-	],
-	"ragingcurrent": [
-		"proficient",
-	],
-	"emperorsresolve": [
-		"proficient",
-	],
-	"shadowbond": [
-		"proficient",
-	],
-	"shadowcurrent": [
-		"proficient",
-	],
-	"highnoon": [
-		"proficient",
-	],
-	"titanpincer": [
-		"hypercutter",
-	],
-	"lockinggrip": [
-		"hypercutter",
-	],
-	"cruelshell": [
-		"hypercutter",
-	],
-	"scaleshelter": [
-		"shielddust",
-	],
-	"lancepoint": [
-		"keeneye",
-	],
-	"nightwatch": [
-		"keeneye",
-	],
-	"royalescort": [
-		"sweetveil",
-	],
-	"templechime": [
-		"levitate",
-	],
-	"voiddrift": [
-		"levitate",
-	],
-	"solaridol": [
-		"levitate",
-	],
-	"lunaridol": [
-		"levitate",
-	],
+	blazingtempo: ['proficient'],
+	burningspirit: ['proficient', 'selfsufficient'],
+	burningego: ['proficient'],
+	astralwitchcraft: ['proficient'],
+	strikersmomentum: ['proficient'],
+	perfectstriker: ['proficient'],
+	siegelauncher: ['proficient'],
+	fortressshell: ['proficient', 'stalwart'],
+	draconicforce: ['proficient'],
+	tidaljaw: ['proficient'],
+	ragingcurrent: ['proficient'],
+	emperorsresolve: ['proficient'],
+	shadowbond: ['proficient'],
+	shadowcurrent: ['proficient'],
+	highnoon: ['proficient'],
+	titanpincer: ['hypercutter'],
+	lockinggrip: ['hypercutter'],
+	cruelshell: ['hypercutter'],
+	scaleshelter: ['shielddust'],
+	lancepoint: ['keeneye'],
+	nightwatch: ['keeneye'],
+	royalescort: ['sweetveil'],
+	templechime: ['levitate'],
+	voiddrift: ['levitate'],
+	solaridol: ['levitate'],
+	lunaridol: ['levitate'],
 };
 
 for (const id of ['apexpredator', 'tyrantdomain', 'auroradomain']) {
- AbilityComponentExclusions[id] = [...(AbilityComponentExclusions[id] || []), 'relicarmor', 'selfsufficient'];
+	AbilityComponentExclusions[id] = [
+		...(AbilityComponentExclusions[id] || []),
+		'relicarmor',
+		'selfsufficient',
+	];
 }
 
 /** Shared packages retain the component for users without the matching species passive. */
 export const SharedPassiveComponents: { [id: string]: readonly string[] } = {
-prismscale: ['friendguard'],
-royalscales: ['marvelscale'],
-"parasitism": ["dryskin"],
-"safeharbor": ["hydration"],
-"witheringshell": ["naturalcure"],
-"cinderscales": ["shielddust"],
-"vaultkeeper": ["stickyhold"],
-"cursedkeepsake": ["frisk"],
-"curseddoll": ["frisk"],
-"cursedmarionette": ["frisk"],
-"cursedarmament": ["frisk"],
-"razorreach": ["keeneye"],
-"slipstream": ["keeneye"],
-"evergreen": ["overcoat"],
-"scavenger": ["overcoat"],
-"uncheckedassault": ["limber"],
-"echofiend": ["soundproof"],
-"mourningsnow": ["cursedbody"],
- abysslure: ['illuminate'],
- orchardbond: ['harvest'],
-	"venomheal": [
-		"hypercutter",
-	],
-	"venomveil": [
-		"liquidooze",
-	],
-	"elevate": [
-		"levitate",
-	],
+	prismscale: ['friendguard'],
+	royalscales: ['marvelscale'],
+	parasitism: ['dryskin'],
+	safeharbor: ['hydration'],
+	witheringshell: ['naturalcure'],
+	cinderscales: ['shielddust'],
+	vaultkeeper: ['stickyhold'],
+	cursedkeepsake: ['frisk'],
+	curseddoll: ['frisk'],
+	cursedmarionette: ['frisk'],
+	cursedarmament: ['frisk'],
+	razorreach: ['keeneye'],
+	slipstream: ['keeneye'],
+	evergreen: ['overcoat'],
+	scavenger: ['overcoat'],
+	uncheckedassault: ['limber'],
+	echofiend: ['soundproof'],
+	mourningsnow: ['cursedbody'],
+	abysslure: ['illuminate'],
+	orchardbond: ['harvest'],
+	venomheal: ['hypercutter'],
+	venomveil: ['liquidooze'],
+	elevate: ['levitate'],
 };
 
-export function getAbilityComponentExclusions(id: string, passives: readonly string[] = [], species = ''): readonly string[] {
-	return [...(AbilityComponentExclusions[id] || []),
+export function getAbilityComponentExclusions(
+	id: string,
+	passives: readonly string[] = [],
+	species = '',
+): readonly string[] {
+	return [
+		...(AbilityComponentExclusions[id] || []),
 		...(species === 'gardevoir' && id === 'dreamsickness' ? ['telepathy'] : []),
-		...(species === 'gardevoir' && id === 'voidveil' ? ['insomnia','magicguard'] : []),
-		...(id === 'empress' && ['tsareena', 'tsareenaalt'].includes(species) && passives.includes('queenlymajesty') ? ['queenlymajesty'] : []),
+		...(species === 'gardevoir' && id === 'voidveil' ? ['insomnia', 'magicguard'] : []),
+		...(id === 'empress' &&
+			['tsareena', 'tsareenaalt'].includes(species) &&
+			passives.includes('queenlymajesty') ?
+			['queenlymajesty'] :
+			[]),
 		...(passives.includes(id) ? SignaturePassiveRemovedComponents[id] || [] : []),
 		...passives.flatMap(passive => SignaturePassiveComponents[passive] || []),
-		...(id === 'stormsovereign' && species === 'pidgeotmega' && passives.includes('noguard') ? ['galewings'] : []),
-		...(SharedPassiveComponents[id] || []).filter(p => passives.includes(p))];
+		...(id === 'stormsovereign' && species === 'pidgeotmega' && passives.includes('noguard') ?
+			['galewings'] :
+			[]),
+		...(SharedPassiveComponents[id] || []).filter(p => passives.includes(p)),
+	];
 }
 
 /** Primitive delegates consult the outer package, including copied packages, before applying an effect. */
-export function skipPassiveComponent(battle: Battle, pokemon: Pokemon | undefined, component: string): boolean {
-	if (pokemon?.ability === 'carryon' && battle.effect.id === pokemon.m.carryOnAbility && ['innerfocus', 'healer'].includes(component)) return true;
+export function skipPassiveComponent(
+	battle: Battle,
+	pokemon: Pokemon | undefined,
+	component: string,
+): boolean {
+	if (
+		pokemon?.ability === 'carryon' &&
+		battle.effect.id === pokemon.m.carryOnAbility &&
+		['innerfocus', 'healer'].includes(component)
+	)
+		return true;
 	const passive = battle.effectState?.speciesPassive;
 	if (SignaturePassiveRemovedComponents[passive]?.includes(component)) return true;
-	if (passive === component || SignaturePassiveComponents[passive]?.includes(component) || battle.effect.id === 'starterpassives') return false;
-	if (pokemon?.getPassives().some(id => id === component || SignaturePassiveComponents[id]?.includes(component))) return true;
-	const ids = [battle.effect.id, passive, pokemon?.ability,
-		pokemon?.ability === 'perfectforesight' ? pokemon.m.perfectForesightAbility : ''];
+	if (
+		passive === component ||
+		SignaturePassiveComponents[passive]?.includes(component) ||
+		battle.effect.id === 'starterpassives'
+	)
+		return false;
+	if (
+		pokemon
+			?.getPassives()
+			.some(id => id === component || SignaturePassiveComponents[id]?.includes(component))
+	)
+		return true;
+	const ids = [
+		battle.effect.id,
+		passive,
+		pokemon?.ability,
+		pokemon?.ability === 'perfectforesight' ? pokemon.m.perfectForesightAbility : '',
+	];
 	return ids.some(id => id && AbilityComponentExclusions[id]?.includes(component));
 }
 
@@ -202,247 +165,258 @@ export function skipPassiveComponent(battle: Battle, pokemon: Pokemon | undefine
 export const SharedPassiveAbilityDescriptions: {
 	[id: string]: { passive: string, desc: string, shortDesc: string },
 } = {
- orchardbond: {"passive":"harvest","desc":"Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den.","shortDesc":"Eligible attacks hit three times; Free-for-All attacks hit all foes."},
-	"venomheal": {
-		"passive": "hypercutter",
-		"desc": "Poison damage instead heals 1/8 max HP. Also heals 1/8 each turn on Corrosive Mist and Murkwater Surface, or while grounded on Corrosive and Wasteland. Contact attackers have a 30% poison chance, or 60% on Wasteland. Its Poison-type moves have 1.5x STAB.",
-		"shortDesc": "Poison moves get 1.5x STAB.",
+	orchardbond: {
+		passive: 'harvest',
+		desc: "Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den.",
+		shortDesc: 'Eligible attacks hit three times; Free-for-All attacks hit all foes.',
 	},
-	"venomveil": {
-		"passive": "liquidooze",
-		"desc": "Prevents and cures burns; immune to sandstorm and hail damage. Gains Aqua Ring on entry. Cures status each turn on Water Surface and Underwater. Moves can poison Steel- and Poison-type foes. Poisoning does not lower their defenses.",
-		"shortDesc": "Can poison Steel/Poison foes; burn/weather protection and Aqua Ring.",
+	venomheal: {
+		passive: 'hypercutter',
+		desc: 'Poison damage instead heals 1/8 max HP. Also heals 1/8 each turn on Corrosive Mist and Murkwater Surface, or while grounded on Corrosive and Wasteland. Contact attackers have a 30% poison chance, or 60% on Wasteland. Its Poison-type moves have 1.5x STAB.',
+		shortDesc: 'Poison moves get 1.5x STAB.',
 	},
-	"elevate": {
-		"passive": "levitate",
-		"desc": "Move KOs raise its highest stat by 1, ignoring stat stages when choosing the stat.",
-		"shortDesc": "Move KOs raise its highest stat.",
+	venomveil: {
+		passive: 'liquidooze',
+		desc: 'Prevents and cures burns; immune to sandstorm and hail damage. Gains Aqua Ring on entry. Cures status each turn on Water Surface and Underwater. Moves can poison Steel- and Poison-type foes. Poisoning does not lower their defenses.',
+		shortDesc: 'Can poison Steel/Poison foes; burn/weather protection and Aqua Ring.',
+	},
+	elevate: {
+		passive: 'levitate',
+		desc: 'Move KOs raise its highest stat by 1, ignoring stat stages when choosing the stat.',
+		shortDesc: 'Move KOs raise its highest stat.',
 	},
 };
 
 /** New component granted only when the package's original component became a species passive. */
-export const SharedPassiveComponentAdditions: {[id: string]: {passive: string, component: string}} = {
- orchardbond: {passive: 'harvest', component: 'stickyhold'},
- abysslure: {passive: 'illuminate', component: 'suctioncups'},
-};
+export const SharedPassiveComponentAdditions: { [id: string]: { passive: string, component: string } } =
+	{
+		orchardbond: { passive: 'harvest', component: 'stickyhold' },
+		abysslure: { passive: 'illuminate', component: 'suctioncups' },
+	};
 export function getAbilityComponentAdditions(id: string, passives: readonly string[] = []): string[] {
- const replacement = SharedPassiveComponentAdditions[id];
- return replacement && passives.includes(replacement.passive) ? [replacement.component] : [];
+	const replacement = SharedPassiveComponentAdditions[id];
+	return replacement && passives.includes(replacement.passive) ? [replacement.component] : [];
 }
 
-SharedPassiveAbilityDescriptions.orchardbond.desc += ' Other Pokemon cannot remove its held item while it survives, except Sticky Barb.';
-SharedPassiveAbilityDescriptions.orchardbond.shortDesc = 'Eligible attacks hit three times; protects its held item.';
+SharedPassiveAbilityDescriptions.orchardbond.desc +=
+	' Other Pokemon cannot remove its held item while it survives, except Sticky Barb.';
+SharedPassiveAbilityDescriptions.orchardbond.shortDesc =
+	'Eligible attacks hit three times; protects its held item.';
 SharedPassiveAbilityDescriptions.abysslure = {
- passive: 'illuminate',
- desc: "Absorbs Electric and Water attacks, healing 1/4 max HP and raising Attack and Special Attack by 1. Does not redirect attacks. Prevents forced switching. Heals 1/16 max HP each turn on Underwater, grounded on Water Surface, or grounded and Poison-type on Murkwater Surface. Heals 1/16 max HP on Electric Terrain and Short-Circuit.",
- shortDesc: 'Absorbs Electric/Water attacks for healing and boosts; prevents forced switching; field healing.',
+	passive: 'illuminate',
+	desc: 'Absorbs Electric and Water attacks, healing 1/4 max HP and raising Attack and Special Attack by 1. Does not redirect attacks. Prevents forced switching. Heals 1/16 max HP each turn on Underwater, grounded on Water Surface, or grounded and Poison-type on Murkwater Surface. Heals 1/16 max HP on Electric Terrain and Short-Circuit.',
+	shortDesc:
+		'Absorbs Electric/Water attacks for healing and boosts; prevents forced switching; field healing.',
 };
 
 Object.assign(SharedPassiveAbilityDescriptions, {
-  "parasitism": {
-    "passive": "dryskin",
-    "desc": "While above 50% HP, its weaknesses are neutralized, Magic Guard is active, opposing status moves fail, and opposing attack secondary effects are blocked. The first time Parasect would faint, it fake-faints at 1 HP, then becomes Parasect-Parasite at the end of the turn and revives at full HP. This Ability cannot be suppressed and is immune to Neutralization.",
-    "shortDesc": "Above half HP, guards weaknesses, indirect damage, status moves and secondaries; one revival."
-  },
-  "safeharbor": {
-    "passive": "hydration",
-    "desc": "Contact attackers have a 30% chance of frostbite. Heals 1/16 max HP each turn in hail or snow, or on Icy, Snowy Mountain and Cold Eclipse without those weathers; hail on Cold Eclipse heals 1/8 instead. Immune to hail damage. Absorbs other Pokemon's Water moves, healing 1/4 max HP instead of being hit. Heals 1/16 max HP each turn on Underwater, grounded on Water Surface, or grounded and Poison-type on Murkwater Surface.",
-    "shortDesc": "Contact frostbite chance; Ice Body, Water Absorb and field healing."
-  },
-  "witheringshell": {
-    "passive": "naturalcure",
-    "desc": "Physical hits set Stealth Rock on the attacker's side except in water fields. Switching out restores exactly 1/3 max HP, sharing this recovery with passive Natural Cure. At full HP, survives a hit with at least 1 HP; OHKO moves fail.",
-    "shortDesc": "Physical hits set opposing Stealth Rock; switch recovery; Sturdy."
-  },
-  "razorreach": {
-    "passive": "keeneye",
-    "desc": "Slicing moves have 1.5x power except on Cold Eclipse. Moves do not make contact and have one extra critical-hit stage. Entry raises accuracy by 1, sharing the Mirror Arena entry reward with passive Keen Eye. Move accuracy is 0.9x on Rocky or Grassy Field; moves have 1.5x power on Mountain or Snowy Mountain.",
-    "shortDesc": "Boosts slicing moves and critical-hit rate; no contact; entry accuracy and field bonuses."
-  },
-  "slipstream": {
-    "passive": "keeneye",
-    "desc": "Airborne: immune to Ground attacks, Spikes, Toxic Spikes, Sticky Web and Arena Trap unless grounded. Thousand Arrows can still hit. Once per switch-in, its first Flying-type attack to damage a foe sets Tailwind on its side for 3 turns. If Tailwind is already active, its duration is refreshed to 3 turns.",
-    "shortDesc": "Airborne; first damaging Flying attack each entry sets three-turn Tailwind."
-  },
-  "evergreen": {
-    "passive": "overcoat",
-    "desc": "Applicable Berry effects are doubled, including the full local Ripen behavior.",
-    "shortDesc": "Full Ripen."
-  },
-  "scavenger": {
-    "passive": "overcoat",
-    "desc": "Other Pokemon cannot lower its Defense. Heals 1/3 max HP on switching out.",
-    "shortDesc": "Defense-drop protection; heals 1/3 HP on switching out."
-  },
-  "echofiend": {
-    "passive": "soundproof",
-		"desc": "Sound moves become Flying, Fire on Volcanic Field, or Crystal on Crystal Cavern. Sound moves have 1.2x power, 1.5x on Mountain, Snowy Mountain, Cave, Volcanic and Crystal Cavern. Protects allies from allied damaging sound moves. This selected package cannot be suppressed.",
-    "shortDesc": "Converts and boosts sound attacks; protects allies from allied sound damage."
-  },
-  "vaultkeeper": {
-    "passive": "stickyhold",
-    "desc": "Status moves gain +1 priority. Opposing Dark types block these moves except on Bewitched Woods. While active, opposing moves cannot remove this side's Reflect, Light Screen or Aurora Veil. Normal expiration and damage bypass still work; applicable Mold Breaker effects bypass the protection.",
-    "shortDesc": "Prankster; protects this side's screens from opposing removal."
-  },
-  "mourningsnow": {
-    "passive": "cursedbody",
-    "desc": "On entry, it summons Hail for 8 turns, and Aurora Veil used by it lasts 8 turns. During Hail or Snow, it heals 1/16 max HP each turn. Its damaging moves of any type gain an additional 30% chance to inflict frostbite, preserving their effects; this does not require weather. It is immune to Hail damage. In Free-for-All only, when another Pokemon faints, it restores 1/8 max HP, or 1/4 if the faint was caused by an Ice move, Hail, Snow, or Curse. Damaging hits disable the attacker's move when possible.",
-    "shortDesc": "Extended Hail/Veil; frostbite attacks; weather healing; FFA faint healing; guaranteed eligible Disable."
-  }
+	parasitism: {
+		passive: 'dryskin',
+		desc: 'While above 50% HP, its weaknesses are neutralized, Magic Guard is active, opposing status moves fail, and opposing attack secondary effects are blocked. The first time Parasect would faint, it fake-faints at 1 HP, then becomes Parasect-Parasite at the end of the turn and revives at full HP. This Ability cannot be suppressed and is immune to Neutralization.',
+		shortDesc:
+			'Above half HP, guards weaknesses, indirect damage, status moves and secondaries; one revival.',
+	},
+	safeharbor: {
+		passive: 'hydration',
+		desc: "Contact attackers have a 30% chance of frostbite. Heals 1/16 max HP each turn in hail or snow, or on Icy, Snowy Mountain and Cold Eclipse without those weathers; hail on Cold Eclipse heals 1/8 instead. Immune to hail damage. Absorbs other Pokemon's Water moves, healing 1/4 max HP instead of being hit. Heals 1/16 max HP each turn on Underwater, grounded on Water Surface, or grounded and Poison-type on Murkwater Surface.",
+		shortDesc: 'Contact frostbite chance; Ice Body, Water Absorb and field healing.',
+	},
+	witheringshell: {
+		passive: 'naturalcure',
+		desc: "Physical hits set Stealth Rock on the attacker's side except in water fields. Switching out restores exactly 1/3 max HP, sharing this recovery with passive Natural Cure. At full HP, survives a hit with at least 1 HP; OHKO moves fail.",
+		shortDesc: 'Physical hits set opposing Stealth Rock; switch recovery; Sturdy.',
+	},
+	razorreach: {
+		passive: 'keeneye',
+		desc: 'Slicing moves have 1.5x power except on Cold Eclipse. Moves do not make contact and have one extra critical-hit stage. Entry raises accuracy by 1, sharing the Mirror Arena entry reward with passive Keen Eye. Move accuracy is 0.9x on Rocky or Grassy Field; moves have 1.5x power on Mountain or Snowy Mountain.',
+		shortDesc:
+			'Boosts slicing moves and critical-hit rate; no contact; entry accuracy and field bonuses.',
+	},
+	slipstream: {
+		passive: 'keeneye',
+		desc: 'Airborne: immune to Ground attacks, Spikes, Toxic Spikes, Sticky Web and Arena Trap unless grounded. Thousand Arrows can still hit. Once per switch-in, its first Flying-type attack to damage a foe sets Tailwind on its side for 3 turns. If Tailwind is already active, its duration is refreshed to 3 turns.',
+		shortDesc: 'Airborne; first damaging Flying attack each entry sets three-turn Tailwind.',
+	},
+	evergreen: {
+		passive: 'overcoat',
+		desc: 'Applicable Berry effects are doubled, including the full local Ripen behavior.',
+		shortDesc: 'Full Ripen.',
+	},
+	scavenger: {
+		passive: 'overcoat',
+		desc: 'Other Pokemon cannot lower its Defense. Heals 1/3 max HP on switching out.',
+		shortDesc: 'Defense-drop protection; heals 1/3 HP on switching out.',
+	},
+	echofiend: {
+		passive: 'soundproof',
+		desc: 'Sound moves become Flying, Fire on Volcanic Field, or Crystal on Crystal Cavern. Sound moves have 1.2x power, 1.5x on Mountain, Snowy Mountain, Cave, Volcanic and Crystal Cavern. Protects allies from allied damaging sound moves. This selected package cannot be suppressed.',
+		shortDesc: 'Converts and boosts sound attacks; protects allies from allied sound damage.',
+	},
+	vaultkeeper: {
+		passive: 'stickyhold',
+		desc: "Status moves gain +1 priority. Opposing Dark types block these moves except on Bewitched Woods. While active, opposing moves cannot remove this side's Reflect, Light Screen or Aurora Veil. Normal expiration and damage bypass still work; applicable Mold Breaker effects bypass the protection.",
+		shortDesc: "Prankster; protects this side's screens from opposing removal.",
+	},
+	mourningsnow: {
+		passive: 'cursedbody',
+		desc: "On entry, it summons Hail for 8 turns, and Aurora Veil used by it lasts 8 turns. During Hail or Snow, it heals 1/16 max HP each turn. Its damaging moves of any type gain an additional 30% chance to inflict frostbite, preserving their effects; this does not require weather. It is immune to Hail damage. In Free-for-All only, when another Pokemon faints, it restores 1/8 max HP, or 1/4 if the faint was caused by an Ice move, Hail, Snow, or Curse. Damaging hits disable the attacker's move when possible.",
+		shortDesc:
+			'Extended Hail/Veil; frostbite attacks; weather healing; FFA faint healing; guaranteed eligible Disable.',
+	},
 });
 
 // Latest exact recipient migrations; shared nonrecipients retain their components.
 Object.assign(SharedPassiveComponents, {
-  "hydroelectric": [
-    "dryskin"
-  ],
-  "doomwarning": [
-    "anticipation"
-  ],
-  "palmmastery": [
-    "thickfat"
-  ],
-  "glacialmass": [
-    "thickfat"
-  ],
-  "apexarmor": [
-    "roughskin"
-  ],
-  "smolderingshroud": [
-    "whitesmoke"
-  ],
-  "silksights": [
-    "compoundeyes"
-  ],
-  "lockjaw": [
-    "strongjaw"
-  ],
-  "freezerburn": [
-    "levitate"
-  ],
-  "voidomen": [
-    "serenegrace"
-  ],
-  "ragingstorm": [
-    "battlearmor"
-  ],
-  "mirechorus": [
-    "poisontouch"
-  ],
-  "undertow": [
-    "waterabsorb"
-  ],
-  "rechargerelay": [
-    "battery"
-  ],
-  "toxicspines": [
-    "merciless"
-  ],
-  "saltbastion": [
-    "sturdy"
-  ],
-  "roughscale": [
-    "roughskin"
-  ]
+	hydroelectric: ['dryskin'],
+	doomwarning: ['anticipation'],
+	palmmastery: ['thickfat'],
+	glacialmass: ['thickfat'],
+	apexarmor: ['roughskin'],
+	smolderingshroud: ['whitesmoke'],
+	silksights: ['compoundeyes'],
+	lockjaw: ['strongjaw'],
+	freezerburn: ['levitate'],
+	voidomen: ['serenegrace'],
+	ragingstorm: ['battlearmor'],
+	mirechorus: ['poisontouch'],
+	undertow: ['waterabsorb'],
+	rechargerelay: ['battery'],
+	toxicspines: ['merciless'],
+	saltbastion: ['sturdy'],
+	roughscale: ['roughskin'],
 });
 
 Object.assign(SharedPassiveAbilityDescriptions, {
-  "hydroelectric": {
-    "passive": "dryskin",
-    "desc": "Dealing HP damage with a Water move heals 1/8 max HP once per turn, without stacking across hits or targets. Normal healing restrictions apply.",
-    "shortDesc": "Dealing HP damage with a Water move heals 1/8 max HP once per turn, without stacking across hits or targets. Normal healing restrictions apply."
-  },
-  "doomwarning": {
-    "passive": "anticipation",
-    "desc": "Reflects eligible status moves and hazards once. On Mirror Arena, reflecting a directly targeted move gives its original user +1 evasion. Prevents indirect damage; HP costs, Pain Split, confusion and Struggle recoil still apply. On fainting, schedules a special, 140-power Steel Doom Desire against each foe. An existing delayed attack is delayed by another 2 turns instead.",
-    "shortDesc": "Reflects status moves; no indirect damage; reveals threats; Doom Desire against foes on fainting."
-  },
-  "palmmastery": {
-    "passive": "thickfat",
-    "desc": "Force Palm always inflicts paralysis when it lands, subject to status immunities. Its paralysis becomes a primary effect rather than a secondary roll.",
-    "shortDesc": "Force Palm always paralyzes when it lands."
-  },
-  "glacialmass": {
-    "passive": "thickfat",
-		"desc": "Doubles weight and halves physical attack damage. On entry to Factory Field, Defense rises one stage and Speed falls one stage.",
-    "shortDesc": "Halves physical and Fire/Ice damage; hail immunity."
-  },
-  "apexarmor": {
-    "passive": "roughskin",
-    "desc": "Blocks bullet, pulse, and Mega Launcher-boosted moves and takes 20% less attack damage. Moves ignore redirection. On New World, Starlight Arena, Fairy Tale and Chessboard entry, gains +1 Sp. Atk. Heals 1/16 max HP each turn and prevents sandstorm and hail damage.",
-    "shortDesc": "Combines the listed abilities."
-  },
-  "smolderingshroud": {
-    "passive": "whitesmoke",
-    "desc": "The first foe-caused stat-drop event prevented each entry raises Special Attack by 1. Shares White Smoke protection and Volcanic/Dragon's Den entry boosts with its passive without doubling them.",
-    "shortDesc": "First blocked opposing stat drop each entry raises Sp. Atk by 1."
-  },
-  "silksights": {
-    "passive": "compoundeyes",
-    "desc": "Ignores evasion boosts, prevents opposing accuracy drops and reveals opposing Illusions on entry. Mirror Arena entry grants +1 accuracy and Laser Focus, sharing this reward with passive Compound Eyes. Electric moves ignore positive defensive stages against foes with lowered Speed.",
-    "shortDesc": "No foe accuracy drops; Electric moves bypass boosts on slowed foes."
-  },
-  "lockjaw": {
-    "passive": "strongjaw",
-    "desc": "Biting hits inflict Torment on a surviving foe for 2 turns. Does not prevent switching.",
-    "shortDesc": "Biting hits inflict Torment on a surviving foe for 2 turns. Does not prevent switching."
-  },
-  "freezerburn": {
-    "passive": "levitate",
-    "desc": "Doubles Speed in hail, snow or on Icy, Snowy Mountain and Cold Eclipse. Biting moves have 1.5x power. Eligible Normal moves become Ice with 1.2x power.",
-    "shortDesc": "Double Speed in snow and supported fields; stronger biting moves; Normal moves become Ice."
-  },
-  "voidomen": {
-    "passive": "serenegrace",
-    "desc": "Mold Breaker + Friend Guard. Once per entry, actually applying a move secondary effect creates a ward that blocks the next opposing stat-drop event against the holder or an adjacent active ally. Positive changes and self-inflicted drops remain. The ward lasts until used or the holder leaves; further secondary effects do not refresh the spent entry reward.",
-    "shortDesc": "First applied secondary each entry wards the holder or an ally against one opposing stat-drop event."
-  },
-  "ragingstorm": {
-    "passive": "battlearmor",
-    "desc": "Moves ignore bypassable opposing abilities. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt. Magic Guard prevents this splash damage. Cannot be suppressed.",
-    "shortDesc": "Bypasses screens and defensive stages; halves priority damage; KOs damage other foes."
-  },
-  "mirechorus": {
-    "passive": "poisontouch",
-    "desc": "Sound moves become Water-type, or Ice-type on Icy Field, and have 1.2x power. Each foe damaged by a noncontact sound move also has an independent 20% chance to be poisoned. Shield Dust and Covert Cloak block this added poison chance.",
-    "shortDesc": "Noncontact sound hits have a 20% poison chance."
-  },
-  "undertow": {
-    "passive": "waterabsorb",
-    "desc": "Damaging Water hits ground surviving foes as with Smack Down. Does not trap them or bypass protection, Substitute or Water immunity.",
-    "shortDesc": "Damaging Water hits ground surviving foes as with Smack Down. Does not trap them or bypass protection, Substitute or Water immunity."
-  },
-  "rechargerelay": {
-    "passive": "battery",
-    "desc": "Switching with Volt Switch restores 1/8 of the incoming teammate's max HP.",
-    "shortDesc": "Switching with Volt Switch restores 1/8 of the incoming teammate's max HP."
-  },
-  "toxicspines": {
-    "passive": "merciless",
-    "desc": "Physical HP hits set one Toxic Spikes layer on the attacker's side, up to two; allied attacks use the opposing side. Contact attackers also lose 1/6 max HP. Can poison Poison and Steel types; Poison moves bypass Steel immunity. Newly poisoned foes lose 1 Defense and Sp. Def. On Wasteland, move secondary effects become separate 2.5% frostbite, burn, paralysis and poison chances. On Corrosive and Corrosive Mist, incoming damage is multiplied by 1.5.",
-    "shortDesc": "Combines the listed abilities."
-  },
-  "saltbastion": {
-    "passive": "sturdy",
-    "desc": "When passive Sturdy saves it from a direct hit, its side gains Safeguard for 5 turns.",
-    "shortDesc": "When passive Sturdy saves it from a direct hit, its side gains Safeguard for 5 turns."
-  },
-  "roughscale": {
-    "passive": "roughskin",
-    "desc": "Contact moves have 1.3x power.",
-    "shortDesc": "Contact moves have 1.3x power."
-  }
+	hydroelectric: {
+		passive: 'dryskin',
+		desc: 'Dealing HP damage with a Water move heals 1/8 max HP once per turn, without stacking across hits or targets. Normal healing restrictions apply.',
+		shortDesc:
+			'Dealing HP damage with a Water move heals 1/8 max HP once per turn, without stacking across hits or targets. Normal healing restrictions apply.',
+	},
+	doomwarning: {
+		passive: 'anticipation',
+		desc: 'Reflects eligible status moves and hazards once. On Mirror Arena, reflecting a directly targeted move gives its original user +1 evasion. Prevents indirect damage; HP costs, Pain Split, confusion and Struggle recoil still apply. On fainting, schedules a special, 140-power Steel Doom Desire against each foe. An existing delayed attack is delayed by another 2 turns instead.',
+		shortDesc:
+			'Reflects status moves; no indirect damage; reveals threats; Doom Desire against foes on fainting.',
+	},
+	palmmastery: {
+		passive: 'thickfat',
+		desc: 'Force Palm always inflicts paralysis when it lands, subject to status immunities. Its paralysis becomes a primary effect rather than a secondary roll.',
+		shortDesc: 'Force Palm always paralyzes when it lands.',
+	},
+	glacialmass: {
+		passive: 'thickfat',
+		desc: 'Doubles weight and halves physical attack damage. On entry to Factory Field, Defense rises one stage and Speed falls one stage.',
+		shortDesc: 'Halves physical and Fire/Ice damage; hail immunity.',
+	},
+	apexarmor: {
+		passive: 'roughskin',
+		desc: 'Blocks bullet, pulse, and Mega Launcher-boosted moves and takes 20% less attack damage. Moves ignore redirection. On New World, Starlight Arena, Fairy Tale and Chessboard entry, gains +1 Sp. Atk. Heals 1/16 max HP each turn and prevents sandstorm and hail damage.',
+		shortDesc: 'Combines the listed abilities.',
+	},
+	smolderingshroud: {
+		passive: 'whitesmoke',
+		desc: "The first foe-caused stat-drop event prevented each entry raises Special Attack by 1. Shares White Smoke protection and Volcanic/Dragon's Den entry boosts with its passive without doubling them.",
+		shortDesc: 'First blocked opposing stat drop each entry raises Sp. Atk by 1.',
+	},
+	silksights: {
+		passive: 'compoundeyes',
+		desc: 'Ignores evasion boosts, prevents opposing accuracy drops and reveals opposing Illusions on entry. Mirror Arena entry grants +1 accuracy and Laser Focus, sharing this reward with passive Compound Eyes. Electric moves ignore positive defensive stages against foes with lowered Speed.',
+		shortDesc: 'No foe accuracy drops; Electric moves bypass boosts on slowed foes.',
+	},
+	lockjaw: {
+		passive: 'strongjaw',
+		desc: 'Biting hits inflict Torment on a surviving foe for 2 turns. Does not prevent switching.',
+		shortDesc:
+			'Biting hits inflict Torment on a surviving foe for 2 turns. Does not prevent switching.',
+	},
+	freezerburn: {
+		passive: 'levitate',
+		desc: 'Doubles Speed in hail, snow or on Icy, Snowy Mountain and Cold Eclipse. Biting moves have 1.5x power. Eligible Normal moves become Ice with 1.2x power.',
+		shortDesc:
+			'Double Speed in snow and supported fields; stronger biting moves; Normal moves become Ice.',
+	},
+	voidomen: {
+		passive: 'serenegrace',
+		desc: 'Mold Breaker + Friend Guard. Once per entry, actually applying a move secondary effect creates a ward that blocks the next opposing stat-drop event against the holder or an adjacent active ally. Positive changes and self-inflicted drops remain. The ward lasts until used or the holder leaves; further secondary effects do not refresh the spent entry reward.',
+		shortDesc:
+			'First applied secondary each entry wards the holder or an ally against one opposing stat-drop event.',
+	},
+	ragingstorm: {
+		passive: 'battlearmor',
+		desc: 'Moves ignore bypassable opposing abilities. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt. Magic Guard prevents this splash damage. Cannot be suppressed.',
+		shortDesc:
+			'Bypasses screens and defensive stages; halves priority damage; KOs damage other foes.',
+	},
+	mirechorus: {
+		passive: 'poisontouch',
+		desc: 'Sound moves become Water-type, or Ice-type on Icy Field, and have 1.2x power. Each foe damaged by a noncontact sound move also has an independent 20% chance to be poisoned. Shield Dust and Covert Cloak block this added poison chance.',
+		shortDesc: 'Noncontact sound hits have a 20% poison chance.',
+	},
+	undertow: {
+		passive: 'waterabsorb',
+		desc: 'Damaging Water hits ground surviving foes as with Smack Down. Does not trap them or bypass protection, Substitute or Water immunity.',
+		shortDesc:
+			'Damaging Water hits ground surviving foes as with Smack Down. Does not trap them or bypass protection, Substitute or Water immunity.',
+	},
+	rechargerelay: {
+		passive: 'battery',
+		desc: "Switching with Volt Switch restores 1/8 of the incoming teammate's max HP.",
+		shortDesc: "Switching with Volt Switch restores 1/8 of the incoming teammate's max HP.",
+	},
+	toxicspines: {
+		passive: 'merciless',
+		desc: "Physical HP hits set one Toxic Spikes layer on the attacker's side, up to two; allied attacks use the opposing side. Contact attackers also lose 1/6 max HP. Can poison Poison and Steel types; Poison moves bypass Steel immunity. Newly poisoned foes lose 1 Defense and Sp. Def. On Wasteland, move secondary effects become separate 2.5% frostbite, burn, paralysis and poison chances. On Corrosive and Corrosive Mist, incoming damage is multiplied by 1.5.",
+		shortDesc: 'Combines the listed abilities.',
+	},
+	saltbastion: {
+		passive: 'sturdy',
+		desc: 'When passive Sturdy saves it from a direct hit, its side gains Safeguard for 5 turns.',
+		shortDesc:
+			'When passive Sturdy saves it from a direct hit, its side gains Safeguard for 5 turns.',
+	},
+	roughscale: {
+		passive: 'roughskin',
+		desc: 'Contact moves have 1.3x power.',
+		shortDesc: 'Contact moves have 1.3x power.',
+	},
 });
 
 SharedPassiveComponents.apexbond = ['roughskin'];
-SharedPassiveAbilityDescriptions.silksights = {passive: 'compoundeyes', ...{"desc":"Keen Eye prevents external accuracy drops, ignores evasion boosts and reveals opposing Illusions. Mirror Arena entry grants +1 accuracy and Laser Focus once, shared with passive Compound Eyes. Electric attacks ignore positive defensive stages against slowed foes. Once per entry, Bug attacks dealing opposing HP damage to a foe whose Speed was already lowered attempt to Disable its last move through the following turn. Normal Disable eligibility applies; only success consumes the use.","shortDesc":"Keen Eye; Electric bypasses slowed foes' boosts; once/entry Bug HP hit on slowed foe Disables its last move."}};
+SharedPassiveAbilityDescriptions.silksights = {
+	passive: 'compoundeyes',
+	...{
+		desc: 'Keen Eye prevents external accuracy drops, ignores evasion boosts and reveals opposing Illusions. Mirror Arena entry grants +1 accuracy and Laser Focus once, shared with passive Compound Eyes. Electric attacks ignore positive defensive stages against slowed foes. Once per entry, Bug attacks dealing opposing HP damage to a foe whose Speed was already lowered attempt to Disable its last move through the following turn. Normal Disable eligibility applies; only success consumes the use.',
+		shortDesc:
+			"Keen Eye; Electric bypasses slowed foes' boosts; once/entry Bug HP hit on slowed foe Disables its last move.",
+	},
+};
 
-SharedPassiveAbilityDescriptions.quarrycannon = {passive: 'solidrock', desc: "Full Mega Launcher: pulse and bullet moves gain 50% power. Damaging pulse and bullet moves become Physical, using Attack against Defense, except Z/Max moves. Accuracy, secondary effects, hit counts, and recharge rules are unchanged.", shortDesc: 'Mega Launcher; damaging pulse/bullet moves become Physical (except Z/Max).'};
-SharedPassiveAbilityDescriptions.voidomen = {passive: 'serenegrace', desc: 'Mold Breaker and Friend Guard. Its first successful attack secondary creates a ward against one opposing stat-drop event. Once per entry, either a successful attack secondary or successful non-damaging self-targeted move grants 3-turn Safeguard; both routes share one use and do not shorten or refresh longer Safeguard.', shortDesc: 'First successful secondary or self status move: 3-turn Safeguard once/entry; secondary also grants stat-drop ward.'};
+SharedPassiveAbilityDescriptions.quarrycannon = {
+	passive: 'solidrock',
+	desc: 'Full Mega Launcher: pulse and bullet moves gain 50% power. Damaging pulse and bullet moves become Physical, using Attack against Defense, except Z/Max moves. Accuracy, secondary effects, hit counts, and recharge rules are unchanged.',
+	shortDesc: 'Mega Launcher; damaging pulse/bullet moves become Physical (except Z/Max).',
+};
+SharedPassiveAbilityDescriptions.voidomen = {
+	passive: 'serenegrace',
+	desc: 'Mold Breaker and Friend Guard. Its first successful attack secondary creates a ward against one opposing stat-drop event. Once per entry, either a successful attack secondary or successful non-damaging self-targeted move grants 3-turn Safeguard; both routes share one use and do not shorten or refresh longer Safeguard.',
+	shortDesc:
+		'First successful secondary or self status move: 3-turn Safeguard once/entry; secondary also grants stat-drop ward.',
+};
 
-SharedPassiveAbilityDescriptions.hydroelectric = {passive: "dryskin", ...{"desc":"Dealing Water-move HP damage has the once-per-turn 1/8 max HP healing. Once per entry, after a Water attack finishes dealing actual opposing HP damage, gains +1 Speed. Multiple hits and targets grant only one boost; allies, Substitute-only damage, misses, protection and absorption do not qualify. Ability changes do not refresh the entry allowance.","shortDesc":"Water HP hits heal 1/8 once/turn; first Water attack dealing opposing HP damage grants +1 Speed after the move."}};
+SharedPassiveAbilityDescriptions.hydroelectric = {
+	passive: 'dryskin',
+	...{
+		desc: 'Dealing Water-move HP damage has the once-per-turn 1/8 max HP healing. Once per entry, after a Water attack finishes dealing actual opposing HP damage, gains +1 Speed. Multiple hits and targets grant only one boost; allies, Substitute-only damage, misses, protection and absorption do not qualify. Ability changes do not refresh the entry allowance.',
+		shortDesc:
+			'Water HP hits heal 1/8 once/turn; first Water attack dealing opposing HP damage grants +1 Speed after the move.',
+	},
+};
 
-SharedPassiveAbilityDescriptions.voidomen.desc = SharedPassiveAbilityDescriptions.voidomen.desc.replace('Mold Breaker and ', '');
+SharedPassiveAbilityDescriptions.voidomen.desc = SharedPassiveAbilityDescriptions.voidomen.desc.replace(
+	'Mold Breaker and ',
+	'',
+);
 
 AbilityComponentExclusions.parentalbond = ['friendguard'];
 AbilityComponentExclusions.ironwill = ['secondwind'];
@@ -453,19 +427,43 @@ AbilityComponentExclusions.razorcurrent = ['strongjaw'];
 SharedPassiveComponents.slowclamp = [...(SharedPassiveComponents.slowclamp || []), 'shellarmor'];
 SharedPassiveComponents.crueltag = [...(SharedPassiveComponents.crueltag || []), 'shadowtag'];
 SharedPassiveComponents.joyride = [...(SharedPassiveComponents.joyride || []), 'aerilate'];
-SharedPassiveComponents.relentlesslink = [...(SharedPassiveComponents.relentlesslink || []), 'skilllink'];
-SharedPassiveComponents.sandsovereign = [...(SharedPassiveComponents.sandsovereign || []), 'sandstream'];
+SharedPassiveComponents.relentlesslink = [
+	...(SharedPassiveComponents.relentlesslink || []),
+	'skilllink',
+];
+SharedPassiveComponents.sandsovereign = [
+	...(SharedPassiveComponents.sandsovereign || []),
+	'sandstream',
+];
 SharedPassiveComponents.mirrorgreed = [...(SharedPassiveComponents.mirrorgreed || []), 'magicbounce'];
 SharedPassiveComponents.dreadmaw = [...(SharedPassiveComponents.dreadmaw || []), 'hugepower'];
-SharedPassiveComponents.heavenlychorus = [...(SharedPassiveComponents.heavenlychorus || []), 'pixilate'];
-SharedPassiveComponents.cursedmarionette = [...(SharedPassiveComponents.cursedmarionette || []), 'prankster'];
+SharedPassiveComponents.heavenlychorus = [
+	...(SharedPassiveComponents.heavenlychorus || []),
+	'pixilate',
+];
+SharedPassiveComponents.cursedmarionette = [
+	...(SharedPassiveComponents.cursedmarionette || []),
+	'prankster',
+];
 SharedPassiveComponents.doomwarning = [...(SharedPassiveComponents.doomwarning || []), 'magicbounce'];
 SharedPassiveComponents.freezerburn = [...(SharedPassiveComponents.freezerburn || []), 'refrigerate'];
 SharedPassiveComponents.coldlogic = [...(SharedPassiveComponents.coldlogic || []), 'toughclaws'];
-SharedPassiveComponents.uncheckedassault = [...(SharedPassiveComponents.uncheckedassault || []), 'scrappy'];
-SharedPassiveComponents.aurainstinct = [...(SharedPassiveComponents.aurainstinct || []), 'adaptability'];
-SharedPassiveComponents.frostsovereign = [...(SharedPassiveComponents.frostsovereign || []), 'snowwarning'];
-SharedPassiveComponents.stormsovereign = [...(SharedPassiveComponents.stormsovereign || []), 'galewings'];
+SharedPassiveComponents.uncheckedassault = [
+	...(SharedPassiveComponents.uncheckedassault || []),
+	'scrappy',
+];
+SharedPassiveComponents.aurainstinct = [
+	...(SharedPassiveComponents.aurainstinct || []),
+	'adaptability',
+];
+SharedPassiveComponents.frostsovereign = [
+	...(SharedPassiveComponents.frostsovereign || []),
+	'snowwarning',
+];
+SharedPassiveComponents.stormsovereign = [
+	...(SharedPassiveComponents.stormsovereign || []),
+	'galewings',
+];
 SharedPassiveComponents.ironvise = [...(SharedPassiveComponents.ironvise || []), 'intimidate'];
 SharedPassiveComponents.sacrededge = [...(SharedPassiveComponents.sacrededge || []), 'sharpness'];
 SharedPassiveComponents.vitalsigns = [...(SharedPassiveComponents.vitalsigns || []), 'invigorate'];
@@ -476,322 +474,563 @@ SharedPassiveComponents.astralcore = [...(SharedPassiveComponents.astralcore || 
 AbilityComponentExclusions.uncheckedassault = [];
 AbilityComponentExclusions.cursedmarionette = [];
 Object.assign(SharedPassiveComponentAdditions, {
- dreadmaw: {passive: 'hugepower', component: 'strongjaw'},
- heavenlychorus: {passive: 'pixilate', component: 'naturalcure'},
- cursedmarionette: {passive: 'prankster', component: 'frisk'},
- doomwarning: {passive: 'magicbounce', component: 'anticipation'},
- freezerburn: {passive: 'refrigerate', component: 'levitate'},
- uncheckedassault: {passive: 'scrappy', component: 'limber'},
+	dreadmaw: { passive: 'hugepower', component: 'strongjaw' },
+	heavenlychorus: { passive: 'pixilate', component: 'naturalcure' },
+	cursedmarionette: { passive: 'prankster', component: 'frisk' },
+	doomwarning: { passive: 'magicbounce', component: 'anticipation' },
+	freezerburn: { passive: 'refrigerate', component: 'levitate' },
+	uncheckedassault: { passive: 'scrappy', component: 'limber' },
 });
 
 // Approved Mega selected/passive separation, used by client and calculator context.
 Object.assign(SharedPassiveAbilityDescriptions, {
-	"slowclamp": {
-		"passive": "shellarmor",
-		"desc": "Full local Own Tempo and Analytic. Shell Armor is supplied by the species passive.",
-		"shortDesc": "Full local Own Tempo and Analytic.",
+	slowclamp: {
+		passive: 'shellarmor',
+		desc: 'Full local Own Tempo and Analytic. Shell Armor is supplied by the species passive.',
+		shortDesc: 'Full local Own Tempo and Analytic.',
 	},
-	"crueltag": {
-		"passive": "shadowtag",
-		"desc": "Infiltrator and Bad Dreams. This selected package is retained pending approval of its replacement.",
-		"shortDesc": "Infiltrator and Bad Dreams.",
+	crueltag: {
+		passive: 'shadowtag',
+		desc: 'Infiltrator and Bad Dreams. This selected package is retained pending approval of its replacement.',
+		shortDesc: 'Infiltrator and Bad Dreams.',
 	},
-	"joyride": {
-		"passive": "aerilate",
-		"desc": "Violent Rush and Vital Spirit. Aerilate is supplied by the species passive.",
-		"shortDesc": "Violent Rush and Vital Spirit.",
+	joyride: {
+		passive: 'aerilate',
+		desc: 'Violent Rush and Vital Spirit. Aerilate is supplied by the species passive.',
+		shortDesc: 'Violent Rush and Vital Spirit.',
 	},
-	"stormsovereign": {
-		"passive": "noguard",
-		"desc": "Summons replaceable Strong Winds for 8 turns on entry. Keen Eye prevents opposing accuracy drops, ignores evasion boosts and reveals opposing Illusions; Mirror Arena entry grants +1 accuracy and Laser Focus. No Guard is supplied by the species passive, affecting both incoming and outgoing moves. This holder does not gain Gale Wings priority.",
-		"shortDesc": "8-turn Strong Winds and Keen Eye.",
+	stormsovereign: {
+		passive: 'noguard',
+		desc: 'Summons replaceable Strong Winds for 8 turns on entry. Keen Eye prevents opposing accuracy drops, ignores evasion boosts and reveals opposing Illusions; Mirror Arena entry grants +1 accuracy and Laser Focus. No Guard is supplied by the species passive, affecting both incoming and outgoing moves. This holder does not gain Gale Wings priority.',
+		shortDesc: '8-turn Strong Winds and Keen Eye.',
 	},
-	"lunarorbit": {
-		"passive": "magicbounce",
-		"desc": "Magic Guard, Serene Grace and Triage. Creates Gravity on entry.",
-		"shortDesc": "Magic Guard, Serene Grace and Triage.",
+	lunarorbit: {
+		passive: 'magicbounce',
+		desc: 'Magic Guard, Serene Grace and Triage. Creates Gravity on entry.',
+		shortDesc: 'Magic Guard, Serene Grace and Triage.',
 	},
-	"astralcore": {
-		"passive": "purepower",
-		"desc": "Natural Cure and Illuminate.",
-		"shortDesc": "Natural Cure and Illuminate.",
+	astralcore: {
+		passive: 'purepower',
+		desc: 'Natural Cure and Illuminate.',
+		shortDesc: 'Natural Cure and Illuminate.',
 	},
-	"relentlesslink": {
-		"passive": "skilllink",
-		"desc": "Mold Breaker and Power Drill.",
-		"shortDesc": "Mold Breaker and Power Drill.",
+	relentlesslink: {
+		passive: 'skilllink',
+		desc: 'Mold Breaker and Power Drill.',
+		shortDesc: 'Mold Breaker and Power Drill.',
 	},
-	"sandsovereign": {
-		"passive": "sandstream",
-		"desc": "Sets or refreshes Sandstorm for 8 turns. Includes Solid Rock. Damaging Rock moves use the better Rock or Ground type-chart matchup while remaining Rock-type; Ground-immune typings do not replace the Rock matchup. Manually used Arenite Wall lasts 8 turns. After a Rock or Dark attack damages opposing HP, removes Reflect and Light Screen from that side.",
-		"shortDesc": "Solid Rock; eight-turn sand; Rock/Ground matchup; Rock/Dark hits break screens.",
+	sandsovereign: {
+		passive: 'sandstream',
+		desc: 'Sets or refreshes Sandstorm for 8 turns. Includes Solid Rock. Damaging Rock moves use the better Rock or Ground type-chart matchup while remaining Rock-type; Ground-immune typings do not replace the Rock matchup. Manually used Arenite Wall lasts 8 turns. After a Rock or Dark attack damages opposing HP, removes Reflect and Light Screen from that side.',
+		shortDesc: 'Solid Rock; eight-turn sand; Rock/Ground matchup; Rock/Dark hits break screens.',
 	},
-	"ironvise": {
-		"passive": "intimidate",
-		"desc": "Contact moves have 1.3x power. Once per switch-in, the first opposing direct hit deals 25% less damage and lowers the attacker's Attack by 1 stage. Multi-hit moves spend this protection on the first hit.",
-		"shortDesc": "Tough Claws + Decoy Pincers.",
+	ironvise: {
+		passive: 'intimidate',
+		desc: "Contact moves have 1.3x power. Once per switch-in, the first opposing direct hit deals 25% less damage and lowers the attacker's Attack by 1 stage. Multi-hit moves spend this protection on the first hit.",
+		shortDesc: 'Tough Claws + Decoy Pincers.',
 	},
-	"mirrorgreed": {
-		"passive": "magicbounce",
-		"desc": "Analytic and Filter.",
-		"shortDesc": "Analytic and Filter.",
+	mirrorgreed: {
+		passive: 'magicbounce',
+		desc: 'Analytic and Filter.',
+		shortDesc: 'Analytic and Filter.',
 	},
-	"dreadmaw": {
-		"passive": "hugepower",
-		"desc": "Frisk, Invigorate and Strong Jaw. Huge Power is supplied by the species passive; its Attack multiplier applies once.",
-		"shortDesc": "Frisk, Invigorate and Strong Jaw.",
+	dreadmaw: {
+		passive: 'hugepower',
+		desc: 'Frisk, Invigorate and Strong Jaw. Huge Power is supplied by the species passive; its Attack multiplier applies once.',
+		shortDesc: 'Frisk, Invigorate and Strong Jaw.',
 	},
-	"heavenlychorus": {
-		"passive": "pixilate",
-		"desc": "Cloud Nine, Fluffy and Natural Cure, including its local field recovery.",
-		"shortDesc": "Cloud Nine, Fluffy and Natural Cure, including its local field recovery.",
+	heavenlychorus: {
+		passive: 'pixilate',
+		desc: 'Cloud Nine, Fluffy and Natural Cure, including its local field recovery.',
+		shortDesc: 'Cloud Nine, Fluffy and Natural Cure, including its local field recovery.',
 	},
-	"cursedmarionette": {
-		"passive": "prankster",
-		"desc": "Frisk. Has its curses, curse healing, Haunted Terrain effects and protection against cursed foes. Prankster is supplied by the species passive.",
-		"shortDesc": "Frisk.",
+	cursedmarionette: {
+		passive: 'prankster',
+		desc: 'Frisk. Has its curses, curse healing, Haunted Terrain effects and protection against cursed foes. Prankster is supplied by the species passive.',
+		shortDesc: 'Frisk.',
 	},
-	"doomwarning": {
-		"passive": "magicbounce",
-		"desc": "Magic Guard and Anticipation. On fainting, has its delayed Doom Desire against opposing slots.",
-		"shortDesc": "Magic Guard and Anticipation.",
+	doomwarning: {
+		passive: 'magicbounce',
+		desc: 'Magic Guard and Anticipation. On fainting, has its delayed Doom Desire against opposing slots.',
+		shortDesc: 'Magic Guard and Anticipation.',
 	},
-	"freezerburn": {
-		"passive": "refrigerate",
-		"desc": "Slush Rush, Strong Jaw and Levitate. Refrigerate is supplied by the species passive, including its field-dependent power boost.",
-		"shortDesc": "Slush Rush, Strong Jaw and Levitate.",
+	freezerburn: {
+		passive: 'refrigerate',
+		desc: 'Slush Rush, Strong Jaw and Levitate. Refrigerate is supplied by the species passive, including its field-dependent power boost.',
+		shortDesc: 'Slush Rush, Strong Jaw and Levitate.',
 	},
-	"coldlogic": {
-		"passive": "toughclaws",
-		"desc": "Aftermath, full Forewarn and opposing accuracy-drop immunity. Tough Claws is supplied by the species passive.",
-		"shortDesc": "Aftermath, Forewarn and opposing accuracy-drop immunity.",
+	coldlogic: {
+		passive: 'toughclaws',
+		desc: 'Aftermath, full Forewarn and opposing accuracy-drop immunity. Tough Claws is supplied by the species passive.',
+		shortDesc: 'Aftermath, Forewarn and opposing accuracy-drop immunity.',
 	},
-	"uncheckedassault": {
-		"passive": "scrappy",
-		"desc": "Striker, Opportunist and Limber. Has confusion prevention and cure. Scrappy is supplied by the species passive.",
-		"shortDesc": "Striker, Opportunist and Limber.",
+	uncheckedassault: {
+		passive: 'scrappy',
+		desc: 'Striker, Opportunist and Limber. Has confusion prevention and cure. Scrappy is supplied by the species passive.',
+		shortDesc: 'Striker, Opportunist and Limber.',
 	},
-	"aurainstinct": {
-		"passive": "adaptability",
-		"desc": "Dual Wield and Second Wind.",
-		"shortDesc": "Dual Wield and Second Wind.",
+	aurainstinct: {
+		passive: 'adaptability',
+		desc: 'Dual Wield and Second Wind.',
+		shortDesc: 'Dual Wield and Second Wind.',
 	},
-	"frostsovereign": {
-		"passive": "snowwarning",
-		"desc": "Sets Hail for 8 turns on entry. Includes Ice Body, Filter and Soundproof. Manually used Aurora Veil lasts 8 turns. Once per switch-in, its first Ice attack to damage opposing HP lowers each damaged foe's Speed by 1 stage, once per target. Normal stat-drop protections apply.",
-		"shortDesc": "Ice Body + Filter + Soundproof; eight-turn hail; first Ice attack lowers foe Speed.",
+	frostsovereign: {
+		passive: 'snowwarning',
+		desc: "Sets Hail for 8 turns on entry. Includes Ice Body, Filter and Soundproof. Manually used Aurora Veil lasts 8 turns. Once per switch-in, its first Ice attack to damage opposing HP lowers each damaged foe's Speed by 1 stage, once per target. Normal stat-drop protections apply.",
+		shortDesc: 'Ice Body + Filter + Soundproof; eight-turn hail; first Ice attack lowers foe Speed.',
 	},
-	"sacrededge": {
-		"passive": "sharpness",
-		"desc": "Dual Wield and entry healing for adjacent allies, including the Fairy Tale bonus.",
-		"shortDesc": "Dual Wield and entry healing for adjacent allies, including the Fairy Tale bonus.",
+	sacrededge: {
+		passive: 'sharpness',
+		desc: 'Dual Wield and entry healing for adjacent allies, including the Fairy Tale bonus.',
+		shortDesc: 'Dual Wield and entry healing for adjacent allies, including the Fairy Tale bonus.',
 	},
 });
-
 
 // Approved Kanto Mega recipients: keep shared packages intact on other species.
 Object.assign(SharedPassiveComponents, {
- neurotoxin: ['regenerator'], patternshift: ['shedskin'],
- surgeconduit: ['electricsurge'], railguncircuit: ['noguard'],
- completeparasitism: ['dryskin'],
+	neurotoxin: ['regenerator'],
+	patternshift: ['shedskin'],
+	surgeconduit: ['electricsurge'],
+	railguncircuit: ['noguard'],
+	completeparasitism: ['dryskin'],
 });
 Object.assign(SharedPassiveAbilityDescriptions, {
- neurotoxin: {passive: 'regenerator', shortDesc: 'Hydra Bond and full local Shed Skin.', desc: 'Hydra Bond and full local Shed Skin, including its recovery, cleansing and field effects. Regenerator is supplied by the species passive.'},
- patternshift: {passive: 'shedskin', shortDesc: 'Protean and Unaware.', desc: "Protean and Unaware, retaining their full local field interactions."},
- surgeconduit: {passive: 'electricsurge', shortDesc: 'Absorbs and redirects Electric attacks; recoil protection and damage reduction.', desc: "Redirects opposing Electric moves and absorbs Electric attacks for +1 Special Attack. Has Brute Force recoil protection and Shadow Shield damage reduction. Electric Surge is supplied by the species passive through the local field/Aura system."},
- railguncircuit: {passive: 'noguard', shortDesc: "Lightning Rod. Special Electric hits break Light Screen and Aurora Veil.", desc: "Redirects and absorbs Electric moves for +1 Attack and Sp. Atk. Electric Terrain entry grants both boosts. After a special Electric hit damages a foe’s HP, removes Light Screen and Aurora Veil from its side."},
- completeparasitism: {passive: 'dryskin', shortDesc: 'Parasitism revival and protection, Filter and Self Repair.', desc: "Has Parasitism revival and protection, Filter and Self Repair. All nested Dry Skin effects are supplied once by the species passive. Revival changes to Parasect-Parasite and its own ability/passive package."},
+	neurotoxin: {
+		passive: 'regenerator',
+		shortDesc: 'Hydra Bond and full local Shed Skin.',
+		desc: 'Hydra Bond and full local Shed Skin, including its recovery, cleansing and field effects. Regenerator is supplied by the species passive.',
+	},
+	patternshift: {
+		passive: 'shedskin',
+		shortDesc: 'Protean and Unaware.',
+		desc: 'Protean and Unaware, retaining their full local field interactions.',
+	},
+	surgeconduit: {
+		passive: 'electricsurge',
+		shortDesc: 'Absorbs and redirects Electric attacks; recoil protection and damage reduction.',
+		desc: 'Redirects opposing Electric moves and absorbs Electric attacks for +1 Special Attack. Has Brute Force recoil protection and Shadow Shield damage reduction. Electric Surge is supplied by the species passive through the local field/Aura system.',
+	},
+	railguncircuit: {
+		passive: 'noguard',
+		shortDesc: 'Lightning Rod. Special Electric hits break Light Screen and Aurora Veil.',
+		desc: 'Redirects and absorbs Electric moves for +1 Attack and Sp. Atk. Electric Terrain entry grants both boosts. After a special Electric hit damages a foe’s HP, removes Light Screen and Aurora Veil from its side.',
+	},
+	completeparasitism: {
+		passive: 'dryskin',
+		shortDesc: 'Parasitism revival and protection, Filter and Self Repair.',
+		desc: 'Has Parasitism revival and protection, Filter and Self Repair. All nested Dry Skin effects are supplied once by the species passive. Revival changes to Parasect-Parasite and its own ability/passive package.',
+	},
 });
 
 Object.assign(SharedPassiveComponents, {
- sacredpower: ['insomnia'], silkendecoy: ['selfsufficient'], solarhydra: ['solarpower'], goldentalons: ['stalwart'],
+	sacredpower: ['insomnia'],
+	silkendecoy: ['selfsufficient'],
+	solarhydra: ['solarpower'],
+	goldentalons: ['stalwart'],
 });
 Object.assign(SharedPassiveAbilityDescriptions, {
- sacredpower: {passive: 'insomnia', shortDesc: 'Duskilate and Magic Guard.', desc: "Duskilate and Magic Guard retain their full local effects."},
- silkendecoy: {passive: 'selfsufficient', shortDesc: 'Protective cocoon, Insomnia and Swarm; cocoon renews when another Pokemon faints.', desc: "Has its protective cocoon, renewal when another Pokemon faints, Insomnia and Swarm. Self Sufficient is supplied by the species passive: heals 1/16 max HP each turn and prevents sandstorm and hail damage."},
- solarhydra: {passive: 'solarpower', shortDesc: 'Hydra Bond, Grassy Surge and Solar Bud.', desc: 'Hydra Bond, Grassy Surge and Solar Bud retain their full local effects. Solar Power is supplied by the species passive: 1.5x Special Attack and 1/8 max HP cost in sun, both disabled on Cold Eclipse. Does not grant Self Repair.'},
- goldentalons: {passive: 'stalwart', shortDesc: 'Sharpness and Good as Gold.', desc: "Sharpness and Good as Gold retain their full local field effects."},
+	sacredpower: {
+		passive: 'insomnia',
+		shortDesc: 'Duskilate and Magic Guard.',
+		desc: 'Duskilate and Magic Guard retain their full local effects.',
+	},
+	silkendecoy: {
+		passive: 'selfsufficient',
+		shortDesc: 'Protective cocoon, Insomnia and Swarm; cocoon renews when another Pokemon faints.',
+		desc: 'Has its protective cocoon, renewal when another Pokemon faints, Insomnia and Swarm. Self Sufficient is supplied by the species passive: heals 1/16 max HP each turn and prevents sandstorm and hail damage.',
+	},
+	solarhydra: {
+		passive: 'solarpower',
+		shortDesc: 'Hydra Bond, Grassy Surge and Solar Bud.',
+		desc: 'Hydra Bond, Grassy Surge and Solar Bud retain their full local effects. Solar Power is supplied by the species passive: 1.5x Special Attack and 1/8 max HP cost in sun, both disabled on Cold Eclipse. Does not grant Self Repair.',
+	},
+	goldentalons: {
+		passive: 'stalwart',
+		shortDesc: 'Sharpness and Good as Gold.',
+		desc: 'Sharpness and Good as Gold retain their full local field effects.',
+	},
 });
 
 // Approved Hoenn extraction. Astral Engine and Haunted Chime deliberately retain
 // their complete Elevate component, including the allowed redundant Ground immunity.
 Object.assign(SharedPassiveComponents, {
- argentdevotion: ['armorize'], execution: ['duskilate'], corrosivetouch: ['technician'],
- desertspirit: ['levitate'], tremor: ['levitate'],
- windchime: ['levitate'],
+	argentdevotion: ['armorize'],
+	execution: ['duskilate'],
+	corrosivetouch: ['technician'],
+	desertspirit: ['levitate'],
+	tremor: ['levitate'],
+	windchime: ['levitate'],
 });
 Object.assign(SharedPassiveAbilityDescriptions, {
- argentdevotion: {passive: 'armorize', shortDesc: 'Sworn Duty, Serene Grace and Mold Breaker.', desc: "Sworn Duty, Serene Grace and Mold Breaker retain their full local effects."},
- execution: {passive: 'duskilate', shortDesc: "Double power against foes at half HP or less; has offense-drop limits, field Speed protection and KO healing.", desc: "Has Mold Breaker, double attack power against targets at half HP or less, limits to Attack and Special Attack drops, prevention of Speed drops while a field exists, and 1/8 max HP healing per move KO."},
- corrosivetouch: {passive: 'technician', shortDesc: 'Poison Touch, Corrosion and extra Grass STAB.', desc: 'Poison Touch and full local Corrosion remain selected, including their field effects. Grass attacks retain STAB. Technician is supplied by the species passive: 1.5x power at effective base power 60 or less, or 80 or less on Factory Terrain.'},
- desertspirit: {passive: 'levitate', shortDesc: 'Sand Stream + Overcoat + Tinted Lens; Ground STAB.', desc: "Summons sandstorm on entry for 5 turns, or 8 with Smooth Rock. Overcoat protects against powder effects and sandstorm/hail damage. Ground attacks receive STAB despite its Dragon/Bug typing. Tinted Lens doubles damage from resisted attacks."},
- tremor: {passive: 'levitate', shortDesc: 'Resonance Force, Sand Force and extra Bug STAB.', desc: "Own and allied damaging sound moves have 1.5x power. Its sound moves use its higher offensive stat without changing category; allied sound attacks do not damage allies. Does not bypass Soundproof. Rock, Ground and Steel attacks have 1.3x power in sandstorm or on Desert/Ashen Beach Terrain, and sandstorm damage is blocked. Bug attacks receive STAB."},
- sirius: {passive: 'venamskiss', shortDesc: 'Apex Venom, Dragon Poison Fang, Shed Skin and full tail effects.', desc: "Has full Sirius: Strong Jaw remains selected, and Poison Fang has Dragon conversion and the normal Strong Jaw bite boost. Poison Fang and Poison attacks retain their custom Poison/Steel matchups; biting attacks bypass protection and append a 30% toxic chance. Wasteland has its secondary replacement before the added biting toxic chance. Full Shed Skin, +1 entry accuracy, 1.5x tail power and first-tail-hit toxic remain. Venam's Kiss is a separate passive: Poison HP hits can poison Steel/Poison foes; pre-poisoned foes are drained and heal-blocked, and poisoned foes have 0.75x Speed. The overlapping Steel matchup applies once; Dragon Poison Fang does not trigger Poison-only passive effects."},
- windchime: {passive: 'levitate', shortDesc: 'Armorize and Punk Rock.', desc: "Full local Armorize and Punk Rock, including field interactions."},
- astralengine: {passive: 'levitate', shortDesc: "Elevate, Analytic and Power Spot.", desc: "Has complete Elevate, including its redundant Ground immunity and highest-stat increase on move KOs, plus Analytic and Power Spot. Levitate is also a species passive. The redundant immunity does not multiply effects or add another KO boost."},
- hauntedchime: {passive: 'levitate', shortDesc: "Elevate, Wind Power and Cursed Body.", desc: "Has complete Elevate, Wind Power and Cursed Body with all local field and fainting effects. Elevate still supplies Ground immunity and one highest-stat increase per move KO. Levitate is also a species passive; the allowed redundant immunity grants no additional KO boost."},
+	argentdevotion: {
+		passive: 'armorize',
+		shortDesc: 'Sworn Duty, Serene Grace and Mold Breaker.',
+		desc: 'Sworn Duty, Serene Grace and Mold Breaker retain their full local effects.',
+	},
+	execution: {
+		passive: 'duskilate',
+		shortDesc:
+			'Double power against foes at half HP or less; has offense-drop limits, field Speed protection and KO healing.',
+		desc: 'Has Mold Breaker, double attack power against targets at half HP or less, limits to Attack and Special Attack drops, prevention of Speed drops while a field exists, and 1/8 max HP healing per move KO.',
+	},
+	corrosivetouch: {
+		passive: 'technician',
+		shortDesc: 'Poison Touch, Corrosion and extra Grass STAB.',
+		desc: 'Poison Touch and full local Corrosion remain selected, including their field effects. Grass attacks retain STAB. Technician is supplied by the species passive: 1.5x power at effective base power 60 or less, or 80 or less on Factory Terrain.',
+	},
+	desertspirit: {
+		passive: 'levitate',
+		shortDesc: 'Sand Stream + Overcoat + Tinted Lens; Ground STAB.',
+		desc: 'Summons sandstorm on entry for 5 turns, or 8 with Smooth Rock. Overcoat protects against powder effects and sandstorm/hail damage. Ground attacks receive STAB despite its Dragon/Bug typing. Tinted Lens doubles damage from resisted attacks.',
+	},
+	tremor: {
+		passive: 'levitate',
+		shortDesc: 'Resonance Force, Sand Force and extra Bug STAB.',
+		desc: 'Own and allied damaging sound moves have 1.5x power. Its sound moves use its higher offensive stat without changing category; allied sound attacks do not damage allies. Does not bypass Soundproof. Rock, Ground and Steel attacks have 1.3x power in sandstorm or on Desert/Ashen Beach Terrain, and sandstorm damage is blocked. Bug attacks receive STAB.',
+	},
+	sirius: {
+		passive: 'venamskiss',
+		shortDesc: 'Apex Venom, Dragon Poison Fang, Shed Skin and full tail effects.',
+		desc: "Has full Sirius: Strong Jaw remains selected, and Poison Fang has Dragon conversion and the normal Strong Jaw bite boost. Poison Fang and Poison attacks retain their custom Poison/Steel matchups; biting attacks bypass protection and append a 30% toxic chance. Wasteland has its secondary replacement before the added biting toxic chance. Full Shed Skin, +1 entry accuracy, 1.5x tail power and first-tail-hit toxic remain. Venam's Kiss is a separate passive: Poison HP hits can poison Steel/Poison foes; pre-poisoned foes are drained and heal-blocked, and poisoned foes have 0.75x Speed. The overlapping Steel matchup applies once; Dragon Poison Fang does not trigger Poison-only passive effects.",
+	},
+	windchime: {
+		passive: 'levitate',
+		shortDesc: 'Armorize and Punk Rock.',
+		desc: 'Full local Armorize and Punk Rock, including field interactions.',
+	},
+	astralengine: {
+		passive: 'levitate',
+		shortDesc: 'Elevate, Analytic and Power Spot.',
+		desc: 'Has complete Elevate, including its redundant Ground immunity and highest-stat increase on move KOs, plus Analytic and Power Spot. Levitate is also a species passive. The redundant immunity does not multiply effects or add another KO boost.',
+	},
+	hauntedchime: {
+		passive: 'levitate',
+		shortDesc: 'Elevate, Wind Power and Cursed Body.',
+		desc: 'Has complete Elevate, Wind Power and Cursed Body with all local field and fainting effects. Elevate still supplies Ground immunity and one highest-stat increase per move KO. Levitate is also a species passive; the allowed redundant immunity grants no additional KO boost.',
+	},
 });
 // Approved Sinnoh/Unova migrations; pending redesigns remain unchanged.
 Object.assign(SharedPassiveComponents, {
- predator: ['contrary'], nighthunt: ['strongjaw'], voidcraft: ['elevate'],
- stormbell: ['mirrorarmor'], froststalker: ['stakeout'], reapersgrip: ['unaware'],
- streettyrant: ['shedskin'], adaptivepower: ['regenerator'], stormcircuit: ['elevate'],
- soulcremation: ['soulpyre'], phantomfist: ['noguard'],
+	predator: ['contrary'],
+	nighthunt: ['strongjaw'],
+	voidcraft: ['elevate'],
+	stormbell: ['mirrorarmor'],
+	froststalker: ['stakeout'],
+	reapersgrip: ['unaware'],
+	streettyrant: ['shedskin'],
+	adaptivepower: ['regenerator'],
+	stormcircuit: ['elevate'],
+	soulcremation: ['soulpyre'],
+	phantomfist: ['noguard'],
 });
 Object.assign(SharedPassiveAbilityDescriptions, {
- predator: {passive: 'contrary', shortDesc: 'Conditional power against newly switched, pending-action and authority foes.', desc: "Has its conditional power and field bonuses."},
- nighthunt: {passive: 'strongjaw', shortDesc: 'Intimidate, Infiltrator, Frisk and Illuminate.', desc: "Has Intimidate, Infiltrator, Frisk and Illuminate with their local effects. Strong Jaw is supplied by the species passive."},
- voidcraft: {passive: 'elevate', shortDesc: November16BalanceDescriptions.voidcraft.shortDesc, desc: November16BalanceDescriptions.voidcraft.desc},
- stormbell: {passive: 'mirrorarmor', shortDesc: 'Drizzle and full Elevate.', desc: "Has rain on entry and complete Elevate, including Ground immunity and KO boosts. Full local Mirror Armor is supplied by the species passive, including reflection, weather immunity and field bonuses."},
- froststalker: {passive: 'stakeout', shortDesc: 'Sharpness and Refrigerate.', desc: "Full local Sharpness and Refrigerate."},
- reapersgrip: {passive: 'unaware', shortDesc: 'Self Sufficient, Dark Aura and Haunted Terrain reactions.', desc: "Has Self Sufficient, Dark Aura and its unique Haunted Terrain triggers."},
- streettyrant: {passive: 'shedskin', shortDesc: 'Entry Attack reduction and ability bypass on damaging moves.', desc: "Has its opposing Attack reduction and ability bypass for damaging moves. Shed Skin is supplied by the species passive with Scrafty's 1/8 HP recovery, cleansing and Dragon's Den behavior."},
- adaptivepower: {passive: 'regenerator', shortDesc: 'Huge Power and Magic Guard.', desc: "Has Huge Power and Magic Guard. Regenerator is supplied by the species passive."},
- stormcircuit: {passive: 'elevate', shortDesc: 'Electric Surge, rain/water-field Speed and extra Special Attack from Coil.', desc: "Has Electric Surge, its rain and water-field Speed multiplier, and Coil's additional +1 Special Attack."},
- soulcremation: {passive: 'soulpyre', shortDesc: 'Soul Siphon and Malice Well.', desc: "Has full Soul Siphon and Malice Well, including their field effects."},
- phantomfist: {passive: 'noguard', shortDesc: 'Unseen Fist, Self Repair, Shadow Shield and Aftermath.', desc: "Has full Unseen Fist, Self Repair, Shadow Shield and Aftermath. The selected outgoing no-miss effect is replaced by full passive No Guard, affecting incoming and outgoing attacks and normal semi-invulnerability interactions."},
+	predator: {
+		passive: 'contrary',
+		shortDesc: 'Conditional power against newly switched, pending-action and authority foes.',
+		desc: 'Has its conditional power and field bonuses.',
+	},
+	nighthunt: {
+		passive: 'strongjaw',
+		shortDesc: 'Intimidate, Infiltrator, Frisk and Illuminate.',
+		desc: 'Has Intimidate, Infiltrator, Frisk and Illuminate with their local effects. Strong Jaw is supplied by the species passive.',
+	},
+	voidcraft: {
+		passive: 'elevate',
+		shortDesc: November16BalanceDescriptions.voidcraft.shortDesc,
+		desc: November16BalanceDescriptions.voidcraft.desc,
+	},
+	stormbell: {
+		passive: 'mirrorarmor',
+		shortDesc: 'Drizzle and full Elevate.',
+		desc: 'Has rain on entry and complete Elevate, including Ground immunity and KO boosts. Full local Mirror Armor is supplied by the species passive, including reflection, weather immunity and field bonuses.',
+	},
+	froststalker: {
+		passive: 'stakeout',
+		shortDesc: 'Sharpness and Refrigerate.',
+		desc: 'Full local Sharpness and Refrigerate.',
+	},
+	reapersgrip: {
+		passive: 'unaware',
+		shortDesc: 'Self Sufficient, Dark Aura and Haunted Terrain reactions.',
+		desc: 'Has Self Sufficient, Dark Aura and its unique Haunted Terrain triggers.',
+	},
+	streettyrant: {
+		passive: 'shedskin',
+		shortDesc: 'Entry Attack reduction and ability bypass on damaging moves.',
+		desc: "Has its opposing Attack reduction and ability bypass for damaging moves. Shed Skin is supplied by the species passive with Scrafty's 1/8 HP recovery, cleansing and Dragon's Den behavior.",
+	},
+	adaptivepower: {
+		passive: 'regenerator',
+		shortDesc: 'Huge Power and Magic Guard.',
+		desc: 'Has Huge Power and Magic Guard. Regenerator is supplied by the species passive.',
+	},
+	stormcircuit: {
+		passive: 'elevate',
+		shortDesc: 'Electric Surge, rain/water-field Speed and extra Special Attack from Coil.',
+		desc: "Has Electric Surge, its rain and water-field Speed multiplier, and Coil's additional +1 Special Attack.",
+	},
+	soulcremation: {
+		passive: 'soulpyre',
+		shortDesc: 'Soul Siphon and Malice Well.',
+		desc: 'Has full Soul Siphon and Malice Well, including their field effects.',
+	},
+	phantomfist: {
+		passive: 'noguard',
+		shortDesc: 'Unseen Fist, Self Repair, Shadow Shield and Aftermath.',
+		desc: 'Has full Unseen Fist, Self Repair, Shadow Shield and Aftermath. The selected outgoing no-miss effect is replaced by full passive No Guard, affecting incoming and outgoing attacks and normal semi-invulnerability interactions.',
+	},
 });
 SharedPassiveComponents.auramaster = ['auraguard'];
 SharedPassiveAbilityDescriptions.auramaster = {
- passive: 'auraguard', shortDesc: 'Dual Wield, Technician and Inner Focus.',
- desc: "Has its paired attacks, Technician power and Inner Focus.",
+	passive: 'auraguard',
+	shortDesc: 'Dual Wield, Technician and Inner Focus.',
+	desc: 'Has its paired attacks, Technician power and Inner Focus.',
 };
 SharedPassiveAbilityDescriptions.predator = {
- passive: 'contrary', shortDesc: "1.3x timing power; 1.5x on rocky fields or against authority/Ultra abilities; no stacking.",
- desc: "Against active Ultra Ego, Ultra Instinct or composites containing them, attacks have 1.5x power, ignore positive Defense/Sp. Def stages and bypass only Ultra incoming-damage reductions. Against Neutralization, or Royal Decree/Empress while no Neutralization is active, attacks have 1.5x power. Otherwise, newly switched or pending-action targets take 1.3x power, or 1.5x on Mountain, Snowy Mountain and Rocky. Fairy Tale, Dragon's Den and Big Top use 1.3x. These bonuses replace one another; Predator never adds more than 1.5x power. Negative defensive stages, unrelated ability effects, screens, Substitute, Protect, type immunities and post-hit healing remain. The Ultra matchup is disabled by ordinary component suppression and Bewitched Woods, Haunted or Holy Terrain.",
+	passive: 'contrary',
+	shortDesc:
+		'1.3x timing power; 1.5x on rocky fields or against authority/Ultra abilities; no stacking.',
+	desc: "Against active Ultra Ego, Ultra Instinct or composites containing them, attacks have 1.5x power, ignore positive Defense/Sp. Def stages and bypass only Ultra incoming-damage reductions. Against Neutralization, or Royal Decree/Empress while no Neutralization is active, attacks have 1.5x power. Otherwise, newly switched or pending-action targets take 1.3x power, or 1.5x on Mountain, Snowy Mountain and Rocky. Fairy Tale, Dragon's Den and Big Top use 1.3x. These bonuses replace one another; Predator never adds more than 1.5x power. Negative defensive stages, unrelated ability effects, screens, Substitute, Protect, type immunities and post-hit healing remain. The Ultra matchup is disabled by ordinary component suppression and Bewitched Woods, Haunted or Holy Terrain.",
 };
 // Approved Kalos/Alola recipients; unrelated holders retain their original packages.
 Object.assign(SharedPassiveComponents, {
- royalsun: ['unnerve'], ange: ['fairyaura'], inversion: ['contrary'],
- divinemockery: ['moldbreaker'], perfectego: ['noguard'], echosense: ['frisk'],
-	corrosiveburn: ['oblivious'], aquashell: ['toughclaws'], rainsovereign: ['drizzle'],
+	royalsun: ['unnerve'],
+	ange: ['fairyaura'],
+	inversion: ['contrary'],
+	divinemockery: ['moldbreaker'],
+	perfectego: ['noguard'],
+	echosense: ['frisk'],
+	corrosiveburn: ['oblivious'],
+	aquashell: ['toughclaws'],
+	rainsovereign: ['drizzle'],
 });
 Object.assign(SharedPassiveAbilityDescriptions, {
- royalsun: {passive: 'unnerve', shortDesc: 'Drought, Supreme Overlord and Flame Body.', desc: "Full local Drought, Supreme Overlord and Flame Body. Unnerve is supplied by the species passive, including opposing Berry and field-seed prevention and its Cold Eclipse entry Speed reduction."},
- ange: {passive: 'fairyaura', shortDesc: 'Ignores abilities and indirect damage; boosts Grass and Fairy Tale offense; weakens special forms.', desc: "Has ability bypass, indirect-damage immunity, double damage against Pulse forms, Grass power, Fairy Tale offense and accuracy, and Bewitched Woods on fainting. Opposing exact Mega, Gigantamax, Terastallized, Stellar and Ultra Beast forms have 0.7x stats; Rift and Pulse forms are excluded. Fairy Aura is supplied once by the species passive and does not stack with another Fairy Aura."},
- inversion: {passive: 'contrary', shortDesc: 'Sets Inverse Field on entry.', desc: 'Sets Inverse Field on entry. Stat-stage inversion is supplied once by the Contrary species passive, retaining its Z-Power exception.'},
- divinemockery: {passive: 'moldbreaker', shortDesc: 'Hydra Bond and extra Water STAB.', desc: "Full local Hydra Bond and extra Water STAB."},
- perfectego: {passive: 'noguard', shortDesc: November16BalanceDescriptions.perfectego.shortDesc, desc: November16BalanceDescriptions.perfectego.desc},
- echosense: {passive: 'frisk', shortDesc: 'Echo Fiend, Telepathy and Infiltrator.', desc: "Has full Echo Fiend, Telepathy and Infiltrator with their suppression rules and field effects."},
- corrosiveburn: {passive: 'oblivious', shortDesc: 'Corrosion and Venom Ignition.', desc: "Full local Corrosion and Venom Ignition: Fire attacks deal 1.2x damage against poisoned targets without consuming poison."},
-	aquashell: { passive: 'toughclaws', shortDesc: "Heatproof + Frisk.", desc: "Full local Heatproof and Frisk. Incoming Fire attacks use half the attacker’s Attack or Special Attack; burn damage is halved. On activation, reveals opposing active Illusions and held items; each opposing item holder independently has a 30% chance of five-turn Embargo." },
-	rainsovereign: { passive: 'drizzle',
-		shortDesc: "Eight-turn Rain; Electric/Water/Flying STAB; matching hits heal an ally once per turn.",
-		desc: "Sets Rain for 8 turns on entry. Electric, Water and Flying moves receive STAB. Once per turn, after one of those moves damages opposing HP, heals the living active ally with the lowest HP percentage by 1/16 max HP. Heals itself when no living active ally exists." },
+	royalsun: {
+		passive: 'unnerve',
+		shortDesc: 'Drought, Supreme Overlord and Flame Body.',
+		desc: 'Full local Drought, Supreme Overlord and Flame Body. Unnerve is supplied by the species passive, including opposing Berry and field-seed prevention and its Cold Eclipse entry Speed reduction.',
+	},
+	ange: {
+		passive: 'fairyaura',
+		shortDesc:
+			'Ignores abilities and indirect damage; boosts Grass and Fairy Tale offense; weakens special forms.',
+		desc: 'Has ability bypass, indirect-damage immunity, double damage against Pulse forms, Grass power, Fairy Tale offense and accuracy, and Bewitched Woods on fainting. Opposing exact Mega, Gigantamax, Terastallized, Stellar and Ultra Beast forms have 0.7x stats; Rift and Pulse forms are excluded. Fairy Aura is supplied once by the species passive and does not stack with another Fairy Aura.',
+	},
+	inversion: {
+		passive: 'contrary',
+		shortDesc: 'Sets Inverse Field on entry.',
+		desc: 'Sets Inverse Field on entry. Stat-stage inversion is supplied once by the Contrary species passive, retaining its Z-Power exception.',
+	},
+	divinemockery: {
+		passive: 'moldbreaker',
+		shortDesc: 'Hydra Bond and extra Water STAB.',
+		desc: 'Full local Hydra Bond and extra Water STAB.',
+	},
+	perfectego: {
+		passive: 'noguard',
+		shortDesc: November16BalanceDescriptions.perfectego.shortDesc,
+		desc: November16BalanceDescriptions.perfectego.desc,
+	},
+	echosense: {
+		passive: 'frisk',
+		shortDesc: 'Echo Fiend, Telepathy and Infiltrator.',
+		desc: 'Has full Echo Fiend, Telepathy and Infiltrator with their suppression rules and field effects.',
+	},
+	corrosiveburn: {
+		passive: 'oblivious',
+		shortDesc: 'Corrosion and Venom Ignition.',
+		desc: 'Full local Corrosion and Venom Ignition: Fire attacks deal 1.2x damage against poisoned targets without consuming poison.',
+	},
+	aquashell: {
+		passive: 'toughclaws',
+		shortDesc: 'Heatproof + Frisk.',
+		desc: 'Full local Heatproof and Frisk. Incoming Fire attacks use half the attacker’s Attack or Special Attack; burn damage is halved. On activation, reveals opposing active Illusions and held items; each opposing item holder independently has a 30% chance of five-turn Embargo.',
+	},
+	rainsovereign: {
+		passive: 'drizzle',
+		shortDesc:
+			'Eight-turn Rain; Electric/Water/Flying STAB; matching hits heal an ally once per turn.',
+		desc: 'Sets Rain for 8 turns on entry. Electric, Water and Flying moves receive STAB. Once per turn, after one of those moves damages opposing HP, heals the living active ally with the lowest HP percentage by 1/16 max HP. Heals itself when no living active ally exists.',
+	},
 });
 Object.assign(SharedPassiveComponents, {
- verdantsanctuary: ['grassysurge'], bogbody: ['levitate'], mastercourse: ['contrary'],
- glacialheart: ['thermalexchange'],
+	verdantsanctuary: ['grassysurge'],
+	bogbody: ['levitate'],
+	mastercourse: ['contrary'],
+	glacialheart: ['thermalexchange'],
 });
 Object.assign(SharedPassiveAbilityDescriptions, {
- verdantsanctuary: {passive: 'grassysurge', shortDesc: 'Hospitality and Friend Guard.', desc: "On entry, Hospitality heals each adjacent ally by 1/4 max HP. Friend Guard reduces damage to allies to 3/4."},
- bogbody: {passive: 'levitate', shortDesc: 'Thick Fat and Dry Skin.', desc: "Full local Thick Fat and Dry Skin: Fire and Ice offensive stats are halved, Water absorption, the Fire power penalty, rain healing, sun damage and all field recovery or damage."},
- mastercourse: {passive: 'contrary', shortDesc: 'Water/Dragon HP hits charge an ally, or itself alone, after the move.', desc: "Once per turn, dealing opposing HP damage with a Water or Dragon attack prepares a nonstacking +1 critical-hit-stage charge after the entire move finishes. Give it to the living adjacent ally with the lowest HP percentage, or to itself if none exists. The next executed damaging move consumes the charge even on a miss, protection or immunity; status moves preserve it, and switching clears it. A successful charged Water or Dragon move can prepare another charge afterward."},
- glacialheart: {passive: 'thermalexchange', shortDesc: 'Ice Body and Stalwart.', desc: "Full local Ice Body and Stalwart: contact frostbite, weather and cold-field healing, hail immunity, redirection bypass and field entry Special Attack. Thermal Exchange is supplied once by the species passive: Fire hits and hot-field turns give +1 Attack, and burns are prevented and cured."},
+	verdantsanctuary: {
+		passive: 'grassysurge',
+		shortDesc: 'Hospitality and Friend Guard.',
+		desc: 'On entry, Hospitality heals each adjacent ally by 1/4 max HP. Friend Guard reduces damage to allies to 3/4.',
+	},
+	bogbody: {
+		passive: 'levitate',
+		shortDesc: 'Thick Fat and Dry Skin.',
+		desc: 'Full local Thick Fat and Dry Skin: Fire and Ice offensive stats are halved, Water absorption, the Fire power penalty, rain healing, sun damage and all field recovery or damage.',
+	},
+	mastercourse: {
+		passive: 'contrary',
+		shortDesc: 'Water/Dragon HP hits charge an ally, or itself alone, after the move.',
+		desc: 'Once per turn, dealing opposing HP damage with a Water or Dragon attack prepares a nonstacking +1 critical-hit-stage charge after the entire move finishes. Give it to the living adjacent ally with the lowest HP percentage, or to itself if none exists. The next executed damaging move consumes the charge even on a miss, protection or immunity; status moves preserve it, and switching clears it. A successful charged Water or Dragon move can prepare another charge afterward.',
+	},
+	glacialheart: {
+		passive: 'thermalexchange',
+		shortDesc: 'Ice Body and Stalwart.',
+		desc: 'Full local Ice Body and Stalwart: contact frostbite, weather and cold-field healing, hail immunity, redirection bypass and field entry Special Attack. Thermal Exchange is supplied once by the species passive: Fire hits and hot-field turns give +1 Attack, and burns are prevented and cured.',
+	},
 });
 // Individually approved package cuts. These do not remove any species passive.
-import {SelectedComponentRemovals, SelectedAbilityDescriptions, SelectedPassiveSwaps} from './selected-mega-simplification-data';
+import {
+	SelectedComponentRemovals,
+	SelectedAbilityDescriptions,
+	SelectedPassiveSwaps,
+} from './selected-mega-simplification-data';
 for (const [id, removed] of Object.entries(SelectedComponentRemovals)) {
 	// Perfect Foresight may still legitimately copy an opposing Insomnia ability.
 	if (id === 'perfectforesight') continue;
-	AbilityComponentExclusions[id] = [...new Set([...(AbilityComponentExclusions[id] || []), ...removed])];
+	AbilityComponentExclusions[id] = [
+		...new Set([...(AbilityComponentExclusions[id] || []), ...removed]),
+	];
 }
 for (const [id, details] of Object.entries(SelectedAbilityDescriptions)) {
-	if (SharedPassiveAbilityDescriptions[id]) Object.assign(SharedPassiveAbilityDescriptions[id], details);
+	if (SharedPassiveAbilityDescriptions[id])
+		Object.assign(SharedPassiveAbilityDescriptions[id], details);
 }
-for (const [id, species] of Object.entries({neurotoxin: 'arbokmegax', enlightenment: 'medichammega',
-	solarhydra: 'sunfloramega', stormfright: 'manectricmega', royalsun: 'pyroarmega', toxicrenewal: 'dragalgemega'})) {
-	SharedPassiveAbilityDescriptions[id] = {passive: SelectedPassiveSwaps[species], ...SelectedAbilityDescriptions[id]};
+for (const [id, species] of Object.entries({
+	neurotoxin: 'arbokmegax',
+	enlightenment: 'medichammega',
+	solarhydra: 'sunfloramega',
+	stormfright: 'manectricmega',
+	royalsun: 'pyroarmega',
+	toxicrenewal: 'dragalgemega',
+})) {
+	SharedPassiveAbilityDescriptions[id] = {
+		passive: SelectedPassiveSwaps[species],
+		...SelectedAbilityDescriptions[id],
+	};
 }
 SharedPassiveComponents.neurotoxin = ['shedskin'];
 SharedPassiveComponents.enlightenment = ['purepower'];
 SharedPassiveComponents.stormfright = ['intimidate'];
 SharedPassiveComponents.royalsun = ['flamebody'];
 SharedPassiveComponents.toxicrenewal = ['regenerator'];
-SharedPassiveAbilityDescriptions.cursedmarionette.desc += ' Ordinary Ghost Curse costs 1/3 max HP; ability-applied curses retain their existing behavior.';
+SharedPassiveAbilityDescriptions.cursedmarionette.desc +=
+	' Ordinary Ghost Curse costs 1/3 max HP; ability-applied curses retain their existing behavior.';
 
 SharedPassiveComponents.solarhydra = ['solarbud'];
 
-import {GmaxExtractedComponents} from './gmax-passive-data';
-import {GmaxPassiveDescriptions} from './gmax-passive-descriptions';
+import { GmaxExtractedComponents } from './gmax-passive-data';
+import { GmaxPassiveDescriptions } from './gmax-passive-descriptions';
 Object.assign(SharedPassiveAbilityDescriptions, GmaxPassiveDescriptions);
-import {NativeSlipstreamDescription} from './targeted-passive-reworks';
+import { NativeSlipstreamDescription } from './targeted-passive-reworks';
 SharedPassiveComponents.slipstream = ['keeneye', 'levitate'];
 SharedPassiveAbilityDescriptions.slipstream = NativeSlipstreamDescription;
 for (const [id, components] of Object.entries(GmaxExtractedComponents)) {
 	SharedPassiveComponents[id] = [...new Set([...(SharedPassiveComponents[id] || []), ...components])];
 }
 
-import {PressureLimitText} from './pressure-memory';
+import { PressureLimitText } from './pressure-memory';
 for (const id of ['irondominion', 'royalescort']) {
-	if (SharedPassiveAbilityDescriptions[id]) SharedPassiveAbilityDescriptions[id].desc += ' ' + PressureLimitText;
+	if (SharedPassiveAbilityDescriptions[id])
+		SharedPassiveAbilityDescriptions[id].desc += ' ' + PressureLimitText;
 }
 
-import {ShelterDescriptions} from './shelter-audit-reworks';
-SharedPassiveAbilityDescriptions.scaleshelter = {passive: 'shielddust', ...ShelterDescriptions.scaleshelter};
-SharedPassiveAbilityDescriptions.roughscale = {passive: 'roughskin', ...ShelterDescriptions.roughscale};
-AbilityComponentExclusions.astralwatcher = [...(AbilityComponentExclusions.astralwatcher || []), 'defragment'];
-SharedPassiveAbilityDescriptions.glacialmass.shortDesc = 'Double weight and half physical attack damage; field effects.';
-SharedPassiveAbilityDescriptions.lunarorbit.desc = "Magic Guard prevents indirect damage; HP costs, Pain Split, confusion and Struggle recoil still apply. Fairy Tale entry gives +1 Sp. Def. On entry or Mega Evolution, sets Gravity for 5 turns. Water Surface sinks to Underwater, Underwater to Midnight Zone, and Corrosive Mist to Corrosive, except on New World.";
+import { ShelterDescriptions } from './shelter-audit-reworks';
+SharedPassiveAbilityDescriptions.scaleshelter = {
+	passive: 'shielddust',
+	...ShelterDescriptions.scaleshelter,
+};
+SharedPassiveAbilityDescriptions.roughscale = {
+	passive: 'roughskin',
+	...ShelterDescriptions.roughscale,
+};
+AbilityComponentExclusions.astralwatcher = [
+	...(AbilityComponentExclusions.astralwatcher || []),
+	'defragment',
+];
+SharedPassiveAbilityDescriptions.glacialmass.shortDesc =
+	'Double weight and half physical attack damage; field effects.';
+SharedPassiveAbilityDescriptions.lunarorbit.desc =
+	'Magic Guard prevents indirect damage; HP costs, Pain Split, confusion and Struggle recoil still apply. Fairy Tale entry gives +1 Sp. Def. On entry or Mega Evolution, sets Gravity for 5 turns. Water Surface sinks to Underwater, Underwater to Midnight Zone, and Corrosive Mist to Corrosive, except on New World.';
 
-import {BurningRagePassiveDescription} from './burning-rage-display';
+import { BurningRagePassiveDescription } from './burning-rage-display';
 SharedPassiveAbilityDescriptions.burningrage = BurningRagePassiveDescription;
-import {NativeStormDescription, SovereignDescriptions} from './sovereign-approved-data';
+import { NativeStormDescription, SovereignDescriptions } from './sovereign-approved-data';
 SharedPassiveAbilityDescriptions.stormsovereign = NativeStormDescription;
 for (const id of ['sandsovereign', 'frostsovereign']) {
-	if (SharedPassiveAbilityDescriptions[id]) Object.assign(SharedPassiveAbilityDescriptions[id], SovereignDescriptions[id]);
+	if (SharedPassiveAbilityDescriptions[id])
+		Object.assign(SharedPassiveAbilityDescriptions[id], SovereignDescriptions[id]);
 }
 
 SharedPassiveAbilityDescriptions.cursedmarionette = {
- passive: 'prankster',
- shortDesc: 'Curses opposing targets and attackers; cursed foes deal 20% less damage; Curse damage heals it.',
-	desc: "Full local Frisk reveals opposing held items on entry. Attacks and status moves curse opposing targets, and taking a damaging hit curses the attacker. Cursed foes deal 20% less damage to it. Its curses deal 1/8 max HP and restore half of that damage to it. After taking a hit at half HP or less, once per battle it creates Haunted Field for 3 turns or extends it to at least 3 turns. Fainting curses opposing Pokemon and creates Haunted Field for 5 turns, or extends an existing Haunted Field by 5 turns. Ordinary Ghost Curse costs 1/3 max HP; ability-applied curses do not pay that move cost.",
+	passive: 'prankster',
+	shortDesc:
+		'Curses opposing targets and attackers; cursed foes deal 20% less damage; Curse damage heals it.',
+	desc: 'Full local Frisk reveals opposing held items on entry. Attacks and status moves curse opposing targets, and taking a damaging hit curses the attacker. Cursed foes deal 20% less damage to it. Its curses deal 1/8 max HP and restore half of that damage to it. After taking a hit at half HP or less, once per battle it creates Haunted Field for 3 turns or extends it to at least 3 turns. Fainting curses opposing Pokemon and creates Haunted Field for 5 turns, or extends an existing Haunted Field by 5 turns. Ordinary Ghost Curse costs 1/3 max HP; ability-applied curses do not pay that move cost.',
 };
 
 if (SharedPassiveAbilityDescriptions.toxicspines) {
- SharedPassiveAbilityDescriptions.toxicspines.desc += ' Full local Iron Barbs additionally deals 1/8 of a contact attacker\'s base max HP, separate from Toxic Debris contact damage.';
- SharedPassiveAbilityDescriptions.toxicspines.shortDesc += ' Iron Barbs adds 1/8 contact damage.';
+	SharedPassiveAbilityDescriptions.toxicspines.desc +=
+		" Full local Iron Barbs additionally deals 1/8 of a contact attacker's base max HP, separate from Toxic Debris contact damage.";
+	SharedPassiveAbilityDescriptions.toxicspines.shortDesc += ' Iron Barbs adds 1/8 contact damage.';
 }
 
+import { LateDisplayClarifications } from './late-display-clarifications';
+for (const [id, details] of Object.entries(LateDisplayClarifications))
+	if (SharedPassiveAbilityDescriptions[id])
+		Object.assign(SharedPassiveAbilityDescriptions[id], details);
 
-import {LateDisplayClarifications} from './late-display-clarifications';
-for (const [id, details] of Object.entries(LateDisplayClarifications)) if (SharedPassiveAbilityDescriptions[id]) Object.assign(SharedPassiveAbilityDescriptions[id], details);
-
-import {UltraEgoRivalryDescription, UltraEgoRivalryAbilities} from "./ultra-rivalry-description";
-for (const id of UltraEgoRivalryAbilities) if (SharedPassiveAbilityDescriptions[id]) SharedPassiveAbilityDescriptions[id].desc += UltraEgoRivalryDescription;
+import { UltraEgoRivalryDescription, UltraEgoRivalryAbilities } from './ultra-rivalry-description';
+for (const id of UltraEgoRivalryAbilities)
+	if (SharedPassiveAbilityDescriptions[id])
+		SharedPassiveAbilityDescriptions[id].desc += UltraEgoRivalryDescription;
 
 delete SharedPassiveComponents.glacialheart;
-SharedPassiveAbilityDescriptions.glacialheart = {"passive":"thermalexchange","shortDesc":"Ice Body; alternating Ice/Dragon hits bypass positive defensive stages.","desc":"Full Ice Body: contact attackers have a 30% frostbite chance; heals 1/16 maximum HP in hail/snow or qualifying cold fields, 1/8 in hail on Cold Eclipse; immune to hail damage. After dealing positive opposing HP damage with an Ice attack, prepares Dragon; Dragon damage prepares Ice. The next successful attack of the prepared type ignores positive Defense or Special Defense stages for its whole move, including every hit; negative stages remain. Preparation updates only after the move finishes, never stacks, and clears on switching. Misses, protection, immunity, Substitute-only damage, status moves and unrelated types do not change preparation. Suppression disables both preparation and its benefit without consuming stored preparation."};
+SharedPassiveAbilityDescriptions.glacialheart = {
+	passive: 'thermalexchange',
+	shortDesc: 'Ice Body; alternating Ice/Dragon hits bypass positive defensive stages.',
+	desc: 'Full Ice Body: contact attackers have a 30% frostbite chance; heals 1/16 maximum HP in hail/snow or qualifying cold fields, 1/8 in hail on Cold Eclipse; immune to hail damage. After dealing positive opposing HP damage with an Ice attack, prepares Dragon; Dragon damage prepares Ice. The next successful attack of the prepared type ignores positive Defense or Special Defense stages for its whole move, including every hit; negative stages remain. Preparation updates only after the move finishes, never stacks, and clears on switching. Misses, protection, immunity, Substitute-only damage, status moves and unrelated types do not change preparation. Suppression disables both preparation and its benefit without consuming stored preparation.',
+};
 
-import {RivalSupportDescriptions} from './rival-support-descriptions';
-SharedPassiveAbilityDescriptions.sirius = {passive:'rivalmalice', desc:RivalSupportDescriptions.sirius.desc, shortDesc:RivalSupportDescriptions.sirius.shortDesc};
+import { RivalSupportDescriptions } from './rival-support-descriptions';
+SharedPassiveAbilityDescriptions.sirius = {
+	passive: 'rivalmalice',
+	desc: RivalSupportDescriptions.sirius.desc,
+	shortDesc: RivalSupportDescriptions.sirius.shortDesc,
+};
 
 AbilityComponentExclusions.venomarmor = ['poisonheal'];
 AbilityComponentExclusions.toxicarmor = ['poisonheal', 'battlearmor'];
 AbilityComponentExclusions.scrapbreaker = ['moldbreaker'];
 
-
 AbilityComponentExclusions.ragingstorm = [];
 
 AbilityComponentExclusions.bonewarrior = ['selfsufficient'];
 
-import {SoulCremationBypassDescription} from './weather-choice-approved';
+import { SoulCremationBypassDescription } from './weather-choice-approved';
 SharedPassiveAbilityDescriptions.soulcremation.desc += SoulCremationBypassDescription;
 
 AbilityComponentExclusions.ange = [];
-AbilityComponentExclusions.ragingcurrent = (AbilityComponentExclusions.ragingcurrent || []).filter(id => id !== 'stamina');
+AbilityComponentExclusions.ragingcurrent = (AbilityComponentExclusions.ragingcurrent || []).filter(
+	id => id !== 'stamina',
+);
 
 delete SharedPassiveComponents.ange;
 delete SharedPassiveAbilityDescriptions.ange;
 delete SharedPassiveComponents.silkendecoy;
 delete SharedPassiveAbilityDescriptions.silkendecoy;
 
-import {ContextualShortDescriptionAudit} from './short-description-audit';
-for(const[id,shortDesc]of Object.entries(ContextualShortDescriptionAudit))SharedPassiveAbilityDescriptions[id]={...SharedPassiveAbilityDescriptions[id],shortDesc};
+import { ContextualShortDescriptionAudit } from './short-description-audit';
+for (const [id, shortDesc] of Object.entries(ContextualShortDescriptionAudit))
+	SharedPassiveAbilityDescriptions[id] = { ...SharedPassiveAbilityDescriptions[id], shortDesc };
 
-import {AuditCleanupDescriptions, AuditCleanupRemovals} from './audit-cleanup-approved';
-for (const [id, parts] of Object.entries(AuditCleanupRemovals)) AbilityComponentExclusions[id] = [...new Set([...(AbilityComponentExclusions[id] || []), ...parts])];
-for (const [id, text] of Object.entries(AuditCleanupDescriptions)) if (SharedPassiveAbilityDescriptions[id]) Object.assign(SharedPassiveAbilityDescriptions[id], text);
+import { AuditCleanupDescriptions, AuditCleanupRemovals } from './audit-cleanup-approved';
+for (const [id, parts] of Object.entries(AuditCleanupRemovals))
+	AbilityComponentExclusions[id] = [...new Set([...(AbilityComponentExclusions[id] || []), ...parts])];
+for (const [id, text] of Object.entries(AuditCleanupDescriptions))
+	if (SharedPassiveAbilityDescriptions[id]) Object.assign(SharedPassiveAbilityDescriptions[id], text);
 
 SharedPassiveAbilityDescriptions.witheringshell.passive = 'naturalrecovery';
 
@@ -801,7 +1040,9 @@ delete SharedPassiveComponentAdditions.doomwarning;
 delete SharedPassiveAbilityDescriptions.doomwarning;
 
 // Full Tidal Monarch now contributes Stalwart to Fortress Shell; Dual Wield stays excluded.
-AbilityComponentExclusions.fortressshell = AbilityComponentExclusions.fortressshell.filter(id => id !== 'stalwart');
+AbilityComponentExclusions.fortressshell = AbilityComponentExclusions.fortressshell.filter(
+	id => id !== 'stalwart',
+);
 
 // The approved Marionette rework has Prankster only in its native passive slot.
 delete SharedPassiveComponentAdditions.cursedmarionette;

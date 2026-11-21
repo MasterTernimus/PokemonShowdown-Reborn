@@ -2,8 +2,8 @@
 
 const assert = require('assert').strict;
 const common = require('../common');
-const {Dex} = require('../../dist/sim');
-const {TeamValidator} = require('../../dist/sim/team-validator');
+const { Dex } = require('../../dist/sim');
+const { TeamValidator } = require('../../dist/sim/team-validator');
 
 describe('Torterra-Mega-X and Terra Ascendant', () => {
 	let battle;
@@ -12,7 +12,7 @@ describe('Torterra-Mega-X and Terra Ascendant', () => {
 	it('uses the requested spread and shares Torterranite with Mega Y', () => {
 		const mega = Dex.species.get('Torterra-Mega-X');
 		assert.deepEqual(mega.types, ['Grass', 'Ground']);
-		assert.deepEqual(mega.baseStats, {hp: 95, atk: 129, def: 130, spa: 90, spd: 105, spe: 86});
+		assert.deepEqual(mega.baseStats, { hp: 95, atk: 129, def: 130, spa: 90, spd: 105, spe: 86 });
 		assert.equal(mega.bst, 635);
 		assert.equal(mega.abilities[0], 'Terra Ascendant');
 		assert.equal(mega.requiredItem, 'Torterranite');
@@ -23,9 +23,9 @@ describe('Torterra-Mega-X and Terra Ascendant', () => {
 	});
 
 	it('offers both Mega choices and activates Ultra Ego, Hospitality, and Proficient', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Torterra', item: 'Torterranite', moves: ['splash', 'rockslide', 'energyball']},
-		], [{species: 'Mew', moves: ['tackle']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Torterra', item: 'Torterranite', moves: ['splash', 'rockslide', 'energyball'] },
+		], [{ species: 'Mew', moves: ['tackle'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		assert.equal(battle.p1.active[0].canMegaEvo, 'Torterra-Mega-X');
 		assert.equal(battle.p1.active[0].canMegaEvoY, 'Torterra-Mega-Y');
@@ -54,8 +54,8 @@ describe('Torterra-Mega-X and Terra Ascendant', () => {
 	it('lets regular Torterra learn the three Rock moves', () => {
 		const validator = TeamValidator.get('gen9nofieldsinglesgame');
 		assert.equal(validator.validateTeam([
-			{species: 'Torterra', item: 'Torterranite', moves: ['Power Gem', 'Ancient Power', 'Rock Wrecker', 'Rock Slide']},
-			{species: 'Mew', moves: ['Splash']},
+			{ species: 'Torterra', item: 'Torterranite', moves: ['Power Gem', 'Ancient Power', 'Rock Wrecker', 'Rock Slide'] },
+			{ species: 'Mew', moves: ['Splash'] },
 		]), null);
 	});
 });

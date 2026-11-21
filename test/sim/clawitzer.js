@@ -5,26 +5,26 @@ const common = require('./../common');
 
 let battle;
 
-describe('Clawitzer custom data', function () {
-	afterEach(function () {
+describe('Clawitzer custom data', () => {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
-	it('defines Clawitzer-Mega and removes Origin Pulse from the shared learnset', function () {
-		battle = common.createBattle({formatid: 'gen9doublesmistyfieldadrienn'}, [[
-			{species: 'Clawitzer', moves: ['splash']},
+	it('defines Clawitzer-Mega and removes Origin Pulse from the shared learnset', () => {
+		battle = common.createBattle({ formatid: 'gen9doublesmistyfieldadrienn' }, [[
+			{ species: 'Clawitzer', moves: ['splash'] },
 		], [
-			{species: 'Wynaut', moves: ['splash']},
+			{ species: 'Wynaut', moves: ['splash'] },
 		]]);
 		const clawitzer = battle.dex.species.get('Clawitzer');
 		const mega = battle.dex.species.get('Clawitzer-Mega');
 		assert.deepEqual(mega.types, ['Water', 'Dragon']);
-		assert.deepEqual(mega.baseStats, {hp: 71, atk: 93, def: 108, spa: 160, spd: 109, spe: 59});
+		assert.deepEqual(mega.baseStats, { hp: 71, atk: 93, def: 108, spa: 160, spd: 109, spe: 59 });
 		assert.equal(mega.abilities[0], 'Heavy Artillery');
 		assert.equal(mega.requiredItem, 'Clawitzerite');
 		assert.equal(mega.battleOnly, 'Clawitzer');
 		assert.deepEqual(clawitzer.otherFormes, ['Clawitzer-Mega']);
-		assert.deepEqual(clawitzer.abilities, {0: 'Mega Launcher', 1: 'Swift Swim', H: 'Quick Draw'});
+		assert.deepEqual(clawitzer.abilities, { 0: 'Mega Launcher', 1: 'Swift Swim', H: 'Quick Draw' });
 
 		const learnset = new Set();
 		for (const entry of battle.dex.species.getFullLearnset('clawitzer')) {
@@ -36,13 +36,13 @@ describe('Clawitzer custom data', function () {
 		assert(!learnset.has('originpulse'), 'Clawitzer should not learn Origin Pulse');
 	});
 
-	it('Mega Evolves and applies Heavy Artillery once per damaging move', function () {
-		battle = common.createBattle({formatid: 'gen9doublesmistyfieldadrienn'}, [[
-			{species: 'Clawitzer', item: 'Clawitzerite', moves: ['waterpulse']},
-			{species: 'Wynaut', moves: ['splash']},
+	it('Mega Evolves and applies Heavy Artillery once per damaging move', () => {
+		battle = common.createBattle({ formatid: 'gen9doublesmistyfieldadrienn' }, [[
+			{ species: 'Clawitzer', item: 'Clawitzerite', moves: ['waterpulse'] },
+			{ species: 'Wynaut', moves: ['splash'] },
 		], [
-			{species: 'Wynaut', moves: ['splash']},
-			{species: 'Wynaut', moves: ['splash']},
+			{ species: 'Wynaut', moves: ['splash'] },
+			{ species: 'Wynaut', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1, 2', 'team 1, 2');
 		battle.makeChoices('move waterpulse 1 mega, move splash', 'move splash, move splash');
@@ -62,13 +62,13 @@ describe('Clawitzer custom data', function () {
 		assert(battle.p2.active[1].hp < battle.p2.active[1].maxhp, 'Heavy Artillery should hit the second opposing slot');
 	});
 
-	it('hits every Free-for-All opponent at full spread power', function () {
-		battle = common.createBattle({formatid: 'gen9freeforall3pwatersurface'}, [[
-			{species: 'Clawitzer', item: 'Clawitzerite', moves: ['waterpulse']},
+	it('hits every Free-for-All opponent at full spread power', () => {
+		battle = common.createBattle({ formatid: 'gen9freeforall3pwatersurface' }, [[
+			{ species: 'Clawitzer', item: 'Clawitzerite', moves: ['waterpulse'] },
 		], [
-			{species: 'Wynaut', moves: ['splash']},
+			{ species: 'Wynaut', moves: ['splash'] },
 		], [
-			{species: 'Wynaut', moves: ['splash']},
+			{ species: 'Wynaut', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1', 'team 1');
 		battle.makeChoices('move waterpulse 1 mega', 'move splash', 'move splash');

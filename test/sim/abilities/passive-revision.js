@@ -24,10 +24,10 @@ describe('Final starter/insect revision and settled passive choices', () => {
 	});
 	it('uses only Proficient on exactly 28 explicit gimmick records and family traits on the remaining 49', () => {
 		const { StarterPassives, ProficientPassiveForms } = require('../../../dist/data/starter-passives'), rev = require('./passive-revision-approved.json');
-		assert.deepEqual([...ProficientPassiveForms].sort(), rev.proficientForms.flatMap(id => id === 'empoleonmega' ? ['empoleonmegax','empoleonmegay'] : [id]).sort());
+		assert.deepEqual([...ProficientPassiveForms].sort(), rev.proficientForms.flatMap(id => id === 'empoleonmega' ? ['empoleonmegax', 'empoleonmegay'] : [id]).sort());
 		assert.equal(Object.keys(StarterPassives).length, 77);
 		for (const [id, p] of Object.entries(StarterPassives))
-			assert.deepEqual(p, (rev.proficientForms.includes(id) || ['empoleonmegax','empoleonmegay'].includes(id)) ? ['proficient'] : [id.match(/^(charizard|typhlosion|blaziken|infernape|emboar|delphox|incineroar|cinderace|skeledirge)/) ? 'blaze' : id.match(/^(blastoise|feraligatr|swampert|empoleon|samurott|greninja|primarina|inteleon|quaquaval)/) ? 'torrent' : 'overgrow']);
+			assert.deepEqual(p, (rev.proficientForms.includes(id) || ['empoleonmegax', 'empoleonmegay'].includes(id)) ? ['proficient'] : [id.match(/^(charizard|typhlosion|blaziken|infernape|emboar|delphox|incineroar|cinderace|skeledirge)/) ? 'blaze' : id.match(/^(blastoise|feraligatr|swampert|empoleon|samurott|greninja|primarina|inteleon|quaquaval)/) ? 'torrent' : 'overgrow']);
 		for (const [id, p] of Object.entries(rev.overrides))
 			assert.deepEqual(Dex.species.get(id).passives, p, id);
 	});
@@ -70,7 +70,7 @@ describe('Final starter/insect revision and settled passive choices', () => {
 		});
 	for (const [passive, ids] of Object.entries(require('./settled-passives-approved.json').groups))
 		for (const id of ids)
-			it(id + ' receives its current approved passive', () => assert.deepEqual(Dex.species.get(id).passives, require('./passive-approval-overlays').current(id,[passive])));
+			it(id + ' receives its current approved passive', () => assert.deepEqual(Dex.species.get(id).passives, require('./passive-approval-overlays').current(id, [passive])));
 	it('Free Flight no longer bypasses binding traps, while binding damage and grounding remain', () => {
 		const [p, t] = setup('Salamence', 'No Ability');
 		p.addVolatile('partiallytrapped', t, Dex.moves.get('firespin'));

@@ -2,8 +2,8 @@
 
 const assert = require('assert').strict;
 const common = require('../common');
-const {Dex} = require('../../dist/sim');
-const {TeamValidator} = require('../../dist/sim/team-validator');
+const { Dex } = require('../../dist/sim');
+const { TeamValidator } = require('../../dist/sim/team-validator');
 
 describe('Torterra-Rift and Mountain Rift', () => {
 	let battle;
@@ -12,21 +12,21 @@ describe('Torterra-Rift and Mountain Rift', () => {
 	it('uses the requested stats, typing, and Anomaly Core', () => {
 		const rift = Dex.species.get('Torterra-Rift');
 		assert.deepEqual(rift.types, ['Ground', 'Ice']);
-		assert.deepEqual(rift.baseStats, {hp: 150, atk: 80, def: 100, spa: 70, spd: 110, spe: 40});
+		assert.deepEqual(rift.baseStats, { hp: 150, atk: 80, def: 100, spa: 70, spd: 110, spe: 40 });
 		assert.equal(rift.bst, 550);
 		assert.equal(rift.abilities[0], 'Mountain Rift');
 		assert.equal(Dex.items.get('Anomaly Core').megaStone.Torterra, rift.name);
 		assert(Dex.species.getLearnsetData('torterra').learnset.mountaingale.includes('9M'));
 		assert.equal(TeamValidator.get('gen9nofieldsinglesgame').validateTeam([
-			{species: 'Torterra', item: 'Anomaly Core', moves: ['Earthquake', 'Sand Tomb', 'Mountain Gale', 'Stone Edge']},
-			{species: 'Mew', moves: ['Splash']},
+			{ species: 'Torterra', item: 'Anomaly Core', moves: ['Earthquake', 'Sand Tomb', 'Mountain Gale', 'Stone Edge'] },
+			{ species: 'Mew', moves: ['Splash'] },
 		]), null);
 	});
 
 	it('locks all four moves and creates a five-turn Mountain on Rift Evolution', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Torterra', item: 'Anomaly Core', moves: ['splash', 'protect']},
-		], [{species: 'Mew', moves: ['splash']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Torterra', item: 'Anomaly Core', moves: ['splash', 'protect'] },
+		], [{ species: 'Mew', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		assert.equal(battle.p1.active[0].canMegaEvo, 'Torterra-Rift');
 		battle.makeChoices('move splash mega', 'move splash');
@@ -48,9 +48,9 @@ describe('Torterra-Rift and Mountain Rift', () => {
 	});
 
 	it('at half HP starts Gravity and resets Mountain to five turns once', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Torterra', item: 'Anomaly Core', moves: ['splash', 'protect', 'rockslide', 'earthquake']},
-		], [{species: 'Mew', moves: ['splash']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Torterra', item: 'Anomaly Core', moves: ['splash', 'protect', 'rockslide', 'earthquake'] },
+		], [{ species: 'Mew', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash mega', 'move splash');
 		const torterra = battle.p1.active[0];
@@ -71,9 +71,9 @@ describe('Torterra-Rift and Mountain Rift', () => {
 	});
 
 	it('responds to actual damage and heals through Self Sufficient', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Torterra', item: 'Anomaly Core', moves: ['splash', 'protect']},
-		], [{species: 'Mew', moves: ['tackle', 'splash', 'swordsdance']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Torterra', item: 'Anomaly Core', moves: ['splash', 'protect'] },
+		], [{ species: 'Mew', moves: ['tackle', 'splash', 'swordsdance'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash mega', 'move splash');
 		const torterra = battle.p1.active[0];

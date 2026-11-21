@@ -5,17 +5,17 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Slow Start`, function () {
-	afterEach(function () {
+describe(`Slow Start`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should not delay activation on switch-in, unlike Speed Boost`, function () {
+	it(`should not delay activation on switch-in, unlike Speed Boost`, () => {
 		battle = common.createBattle([[
-			{species: 'diglett', moves: ['sleeptalk']},
-			{species: 'regigigas', ability: 'slowstart', item: 'normaliumz', moves: ['sleeptalk']},
+			{ species: 'diglett', moves: ['sleeptalk'] },
+			{ species: 'regigigas', ability: 'slowstart', item: 'normaliumz', moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('switch 2', 'auto');
 		for (let i = 0; i < 4; i++) { battle.makeChoices(); }
@@ -24,11 +24,11 @@ describe(`Slow Start`, function () {
 		assert(slowStartEnd > -1, 'Slow Start should end in 5 turns, including the turn it switched in.');
 	});
 
-	common.itGen(7, `[Gen 7] should halve the user's Special Attack when using a special Z-move`, function () {
+	common.itGen(7, `[Gen 7] should halve the user's Special Attack when using a special Z-move`, () => {
 		battle = common.gen(7).createBattle([[
-			{species: 'regigigas', ability: 'slowstart', item: 'normaliumz', moves: ['hyperbeam']},
+			{ species: 'regigigas', ability: 'slowstart', item: 'normaliumz', moves: ['hyperbeam'] },
 		], [
-			{species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk']},
+			{ species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move hyperbeam zmove', 'auto');
 		const wynaut = battle.p2.active[0];
@@ -36,11 +36,11 @@ describe(`Slow Start`, function () {
 		assert.bounded(damage, [160, 189]);
 	});
 
-	common.itGen(7, `[Gen 7] should not halve the user's Attack when using physical Photon Geyser`, function () {
+	common.itGen(7, `[Gen 7] should not halve the user's Attack when using physical Photon Geyser`, () => {
 		// We are using Photon Geyser through Assist, because otherwise Photon Geyser would just ignore Slow Start
 		battle = common.gen(7).createBattle([[
-			{species: 'regigigas', ability: 'slowstart', moves: ['assist']},
-			{species: 'necrozma', moves: ['photongeyser']},
+			{ species: 'regigigas', ability: 'slowstart', moves: ['assist'] },
+			{ species: 'necrozma', moves: ['photongeyser'] },
 		], [
 			{ species: 'wynaut', ability: 'No Ability', moves: ['sleeptalk'] },
 		]]);

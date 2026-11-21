@@ -2,7 +2,7 @@
 
 const assert = require('./../../assert');
 const common = require('./../../common');
-const {Dex} = require('./../../../dist/sim');
+const { Dex } = require('./../../../dist/sim');
 
 let battle;
 
@@ -13,7 +13,7 @@ describe('Raging Beast and related species updates', () => {
 
 	it('should expose the requested species data on server', () => {
 		assert.deepEqual(Dex.species.get('Zangoose').types, ['Normal', 'Fighting']);
-		assert.deepEqual(Dex.species.get('Beartic').abilities, {0: 'Raging Beast', 1: 'Floe Hunter', H: 'Swift Swim'});
+		assert.deepEqual(Dex.species.get('Beartic').abilities, { 0: 'Raging Beast', 1: 'Floe Hunter', H: 'Swift Swim' });
 		assert.deepEqual(Dex.species.get('Beartic').baseStats, {
 			hp: 110, atk: 130, def: 90, spa: 55, spd: 85, spe: 75,
 		});
@@ -28,10 +28,10 @@ describe('Raging Beast and related species updates', () => {
 	});
 
 	it('should provide both Guts and Mold Breaker behavior', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Pangoro', ability: 'Raging Beast', moves: ['earthquake']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Pangoro', ability: 'Raging Beast', moves: ['earthquake'] },
 		], [
-			{species: 'Gengar', ability: 'Levitate', moves: ['splash']},
+			{ species: 'Gengar', ability: 'Levitate', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const pangoro = battle.p1.active[0];
@@ -46,10 +46,10 @@ describe('Raging Beast and related species updates', () => {
 	});
 
 	it('should remove Intimidate from Lunar Dread', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Ursaluna-Bloodmoon', ability: 'Lunar Dread', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Ursaluna-Bloodmoon', ability: 'Lunar Dread', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['splash']},
+			{ species: 'Mew', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const lunarDread = battle.p1.active[0];
@@ -65,10 +65,10 @@ describe('Raging Beast and related species updates', () => {
 	});
 
 	it('should not retain Territorial’s removed Unaware or Tough Claws effects', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Ursaluna', ability: 'Territorial', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Ursaluna', ability: 'Territorial', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['splash']},
+			{ species: 'Mew', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const territorial = battle.p1.active[0];
@@ -83,10 +83,10 @@ describe('Raging Beast and related species updates', () => {
 	});
 
 	it('should give Relentless Link Skill Link, Mold Breaker and Power Drill without Guts', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Heracross-Mega', ability: 'Relentless Link', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Heracross-Mega', ability: 'Relentless Link', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['splash']},
+			{ species: 'Mew', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const heracross = battle.p1.active[0];

@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Struggle', function () {
-	afterEach(function () {
+describe('Struggle', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
 	common.itGen(4, `should KO Shedinja in Gen 4 (and every other gen)`, () => {
 		battle = common.gen(4).createBattle([[
-			{species: 'Shedinja', moves: ['sleeptalk']},
+			{ species: 'Shedinja', moves: ['sleeptalk'] },
 		], [
-			{species: 'Salamence', moves: ['taunt']},
+			{ species: 'Salamence', moves: ['taunt'] },
 		]]);
 
 		battle.makeChoices();

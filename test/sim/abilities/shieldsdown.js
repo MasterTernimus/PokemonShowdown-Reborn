@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Shields Down', function () {
-	afterEach(function () {
+describe('Shields Down', () => {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
-	it(`should be immune to status until below 50%`, function () {
-		battle = common.createBattle({formatid: 'gen9customgame'}, [[
-			{species: 'Minior', ability: 'shieldsdown', moves: ['splash']},
+	it(`should be immune to status until below 50%`, () => {
+		battle = common.createBattle({ formatid: 'gen9customgame' }, [[
+			{ species: 'Minior', ability: 'shieldsdown', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['glare', 'superfang']},
+			{ species: 'Mew', ability: 'noguard', moves: ['glare', 'superfang'] },
 		]]);
 		const minior = battle.p1.active[0];
 		battle.makeChoices();
@@ -27,11 +27,11 @@ describe('Shields Down', function () {
 		assert.equal(minior.status, 'par');
 	});
 
-	it(`should be immune to status until below 50% in all formes`, function () {
-		battle = common.createBattle({formatid: 'gen9customgame'}, [[
-			{species: 'Minior-Blue', ability: 'shieldsdown', moves: ['splash']},
+	it(`should be immune to status until below 50% in all formes`, () => {
+		battle = common.createBattle({ formatid: 'gen9customgame' }, [[
+			{ species: 'Minior-Blue', ability: 'shieldsdown', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['glare', 'superfang']},
+			{ species: 'Mew', ability: 'noguard', moves: ['glare', 'superfang'] },
 		]]);
 		const minior = battle.p1.active[0];
 		battle.makeChoices();
@@ -45,10 +45,10 @@ describe('Shields Down', function () {
 	});
 
 	it(`keeps Crumbling Shell without removed Shell Armor or Self Repair`, () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Minior', ability: 'shieldsdown', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Minior', ability: 'shieldsdown', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'noability', moves: ['tackle']},
+			{ species: 'Mew', ability: 'noability', moves: ['tackle'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const minior = battle.p1.active[0];

@@ -1,4 +1,4 @@
-import type {AbilityData} from '../sim/dex-abilities';
+import type { AbilityData } from '../sim/dex-abilities';
 
 function clearHazards(this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) {
 	if (damage <= 0 || !source.hp || !move.flags.slicing || move.category === 'Status') return;
@@ -9,7 +9,7 @@ function clearHazards(this: Battle, damage: number, target: Pokemon, source: Pok
 }
 
 export const DuneCarver: AbilityData = {
-	name: 'Dune Carver', num: 12065, rating: 4, flags: {breakable: 1},
+	name: 'Dune Carver', num: 12065, rating: 4, flags: { breakable: 1 },
 	shortDesc: 'Takes 20% less physical damage. Slicing hits clear hazards from its side.',
 	desc: 'Physical attacks deal 20% less damage. Successful slicing attacks clear entry hazards from its side, including hits against a Substitute.',
 	onSourceModifyDamage(damage, source, target, move) {

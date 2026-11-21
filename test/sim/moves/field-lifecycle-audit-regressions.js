@@ -13,9 +13,9 @@ function setup(format = 'gen9nofieldsinglesgame', item = '', moves = ['grassyter
 }
 
 function coldOverlayTurn() {
- const p = battle.p1.active[0];
- battle.field.setTerrain('coldeclipseterrain', p, battle.dex.getActiveMove('snowscape'));
- turn();
+	const p = battle.p1.active[0];
+	battle.field.setTerrain('coldeclipseterrain', p, battle.dex.getActiveMove('snowscape'));
+	turn();
 }
 
 function turn(move = 'recover') {

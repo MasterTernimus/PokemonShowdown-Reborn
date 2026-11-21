@@ -1,5 +1,5 @@
 /** Approved species removals, including their existing combat and cosmetic variants. */
-export const November16MoveRemovals: {[id: string]: readonly string[]} = {
+export const November16MoveRemovals: { [id: string]: readonly string[] } = {
 	typhlosion: ['earthpower', 'endure'],
 	typhlosionalt: ['earthpower', 'endure'],
 	typhlosionhisui: ['earthpower', 'endure'],
@@ -13,129 +13,129 @@ export const November16MoveRemovals: {[id: string]: readonly string[]} = {
 	samurotthisui: ['endure'],
 	samurotthisuialt: ['endure'],
 	"poliwrath": [
-		"meteormash"
+		"meteormash",
 	],
 	"machamp": [
-		"meteormash"
+		"meteormash",
 	],
 	"machampalt": [
-		"meteormash"
+		"meteormash",
 	],
 	"machampgmax": [
-		"meteormash"
+		"meteormash",
 	],
 	"hitmonchan": [
-		"meteormash"
+		"meteormash",
 	],
 	"electabuzz": [
-		"meteormash"
+		"meteormash",
 	],
 	"scizor": [
-		"meteormash"
+		"meteormash",
 	],
 	"scizormega": [
-		"meteormash"
+		"meteormash",
 	],
 	"hitmontop": [
-		"meteormash"
+		"meteormash",
 	],
 	"banette": [
-		"meteormash"
+		"meteormash",
 	],
 	"banettemega": [
-		"meteormash"
+		"meteormash",
 	],
 	"banettemegaz": [
-		"meteormash"
+		"meteormash",
 	],
 	"garbodor": [
-		"meteormash"
+		"meteormash",
 	],
 	"garbodorgmax": [
-		"meteormash"
+		"meteormash",
 	],
 	"golurk": [
-		"meteormash"
+		"meteormash",
 	],
 	"golurkmega": [
-		"meteormash"
+		"meteormash",
 	],
 	"heatmor": [
-		"meteormash"
+		"meteormash",
 	],
 	"poliwrathrejuv": [
-		"meteormash"
+		"meteormash",
 	],
 	"magmortar": [
-		"meteorbeam"
+		"meteorbeam",
 	],
 	"hydreigon": [
-		"meteorbeam"
+		"meteorbeam",
 	],
 	"hydreigonmega": [
-		"meteorbeam"
+		"meteorbeam",
 	],
 	"vikavolt": [
-		"meteorbeam"
+		"meteorbeam",
 	],
 	"girafarig": [
-		"moonblast"
+		"moonblast",
 	],
 	"plusle": [
-		"moonblast"
+		"moonblast",
 	],
 	"claydol": [
-		"moonblast"
+		"moonblast",
 	],
 	"claydolmega": [
-		"moonblast"
+		"moonblast",
 	],
 	"absol": [
-		"moonblast"
+		"moonblast",
 	],
 	"absolmega": [
-		"moonblast"
+		"moonblast",
 	],
 	"absolmegaz": [
-		"moonblast"
+		"moonblast",
 	],
 	"cherrim": [
-		"moonblast"
+		"moonblast",
 	],
 	"cherrimsunshine": [
-		"moonblast"
+		"moonblast",
 	],
 	"lumineon": [
-		"moonblast"
+		"moonblast",
 	],
 	"chitwo": [
-		"moonblast"
+		"moonblast",
 	],
 	"lumineonalt": [
-		"moonblast"
+		"moonblast",
 	],
 	"froslassaevian": [
-		"moonblast"
+		"moonblast",
 	],
 	"froslassaevianmega": [
-		"moonblast"
+		"moonblast",
 	],
 	"lilligant": [
-		"moonblast"
+		"moonblast",
 	],
 	"sigilyph": [
-		"moonblast"
+		"moonblast",
 	],
 	"sigilyphrejuv": [
-		"moonblast"
+		"moonblast",
 	],
 	"zoroark": [
-		"moonblast"
+		"moonblast",
 	],
 	"zoroarkhisui": [
-		"moonblast"
+		"moonblast",
 	],
 	"farigiraf": [
-		"moonblast"
-	]
+		"moonblast",
+	],
 };

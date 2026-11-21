@@ -101,7 +101,7 @@ export function installJackpotSalvation(abilities: AbilityDataTable) {
 		if (move.effectType !== 'Move' || damage <= 0 || !source.hp || source.isAlly(target) || move.category === 'Status' ||
 			source.volatiles.jackpot || source.m.hotStreakRollTurn === this.turn) return;
 		source.m.hotStreakRollTurn = this.turn;
-		const grace = (move as ActiveMove & {sereneGraceFactor?: number}).sereneGraceFactor || 1;
+		const grace = (move as ActiveMove & { sereneGraceFactor?: number }).sereneGraceFactor || 1;
 		const boosted = grace > 1 || this.field.isTerrainOrAura('rainbowterrain');
 		if (this.randomChance(boosted ? 2 : 1, 5)) source.addVolatile('jackpot', source, this.effect);
 	};

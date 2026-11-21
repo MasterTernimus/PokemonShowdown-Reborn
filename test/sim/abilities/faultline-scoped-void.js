@@ -1,24 +1,119 @@
 'use strict';
-const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim/dex');let battle;
-function start(species='Garchomp',ability='Void Wrath',mode='singles',foeAbility='No Ability'){
- const p={species,ability,moves:['splash','sandtomb','earthpower']},t={species:'Mew',ability:foeAbility,moves:['splash','tackle']};const team=[p,{...t}],other=[t,{...t}];battle=common.createBattle({formatid:mode==='ffa'?'gen9freeforall4pmistyfieldadrienn':mode==='doubles'?'gen9nofielddoublesbattle':'gen9nofieldsinglesgame'},mode==='ffa'?[team,other,other,other]:[team,other]);battle.makeChoices(...battle.sides.map(()=> 'team 12'));battle.field.terrain='';battle.randomizer=d=>d;
- for(const side of battle.sides)for(const p of side.active)p.hp=p.maxhp=p.baseMaxhp=4000;
- return[battle.p1.active[0],battle.p2.active[0]];
+const assert = require('assert').strict,
+	common = require('../../common'),
+	{ Dex } = require('../../../dist/sim/dex');
+let battle;
+function start(
+	species = 'Garchomp',
+	ability = 'Void Wrath',
+	mode = 'singles',
+	foeAbility = 'No Ability'
+) {
+	const p = { species, ability, moves: ['splash', 'sandtomb', 'earthpower'] },
+		t = { species: 'Mew', ability: foeAbility, moves: ['splash', 'tackle'] };
+	const team = [p, { ...t }],
+		other = [t, { ...t }];
+	battle = common.createBattle(
+		{
+			formatid:
+				mode === 'ffa' ?
+					'gen9freeforall4pmistyfieldadrienn' :
+					mode === 'doubles' ?
+						'gen9nofielddoublesbattle' :
+						'gen9nofieldsinglesgame',
+		},
+		mode === 'ffa' ? [team, other, other, other] : [team, other]
+	);
+	battle.makeChoices(...battle.sides.map(() => 'team 12'));
+	battle.field.terrain = '';
+	battle.randomizer = d => d;
+	for (const side of battle.sides) for (const p of side.active) p.hp = p.maxhp = p.baseMaxhp = 4000;
+	return [battle.p1.active[0], battle.p2.active[0]];
 }
-function hit(p,t,id='sandtomb',extra={}){battle.clearActiveMove();const m=battle.dex.getActiveMove(id);Object.assign(m,{accuracy:true,willCrit:false,basePower:1},extra);battle.actions.useMove(m,p,{target:t});battle.clearActiveMove();}
-describe('Garchomp Void Wrath and scoped Gardevoir Void Veil',()=>{
- afterEach(()=>{battle?.destroy();battle=null;});
-	it('keeps current Garchomp and Gardevoir slots with Battle Bond in event S', () => {
-		assert.deepEqual(Dex.species.get('garchomp').abilities, { 0: 'Grounded Instinct', 1: 'Supreme Overlord', H: 'Void Wrath', S: 'Battle Bond' });
-		assert.deepEqual(Dex.species.get('gardevoir').abilities, { 0: 'Trace', 1: 'Dream Guardian', H: 'Void Veil' });
-		assert.deepEqual(Dex.species.all().filter(s => Object.values(s.abilities).includes('Void Veil')).map(s => s.name), ['Gardevoir', 'Iron Valiant']);
+function hit(p, t, id = 'sandtomb', extra = {}) {
+	battle.clearActiveMove();
+	const m = battle.dex.getActiveMove(id);
+	Object.assign(m, { accuracy: true, willCrit: false, basePower: 1 }, extra);
+	battle.actions.useMove(m, p, { target: t });
+	battle.clearActiveMove();
+}
+describe('Garchomp Void Wrath and scoped Gardevoir Void Veil', () => {
+	afterEach(() => {
+		battle?.destroy();
+		battle = null;
 	});
- for(const mode of ['singles','doubles','ffa'])it('Sand Tomb never adds hazards in '+mode,()=>{const[p,t]=start('Garchomp','Void Wrath',mode);hit(p,t);assert(t.volatiles.partiallytrapped);assert(!t.side.sideConditions.spikes);assert(!p.volatiles.faultlinespent);});
- for(const mode of ['miss','protect','substitute','immune','suppressed'])it('does not reward failed binding through '+mode,()=>{const[p,t]=start();if(mode==='protect'||mode==='substitute')t.addVolatile(mode,t);if(mode==='immune')t.setType('Flying');if(mode==='suppressed')p.addVolatile('gastroacid',t);hit(p,t,'sandtomb',mode==='miss'?{accuracy:0}:{});assert(!t.side.sideConditions.spikes);assert(!p.volatiles.faultlinespent);});
- it('does not reward already bound targets or other binding moves',()=>{const[p,t]=start();hit(p,t,'firespin');assert(!t.side.sideConditions.spikes);hit(p,t);assert(!t.side.sideConditions.spikes);assert(!p.volatiles.faultlinespent);});
- it('Mold Breaker bypasses Levitate and also applies outside Sand Tomb',()=>{const[p,t]=start('Garchomp','Void Wrath','singles','Levitate');hit(p,t,'earthpower');assert(t.hp<4000);hit(p,t);assert(t.volatiles.partiallytrapped);assert(!t.side.sideConditions.spikes);assert(p.hasAbility('moldbreaker'));});
- it('protects only ordinary Gardevoir from New World airborne defense penalties',()=>{const[p,t]=start('Gardevoir','Void Veil');t.setAbility('Levitate');battle.field.setTerrain('newworldterrain',p);assert(!p.isGrounded());assert.equal(battle.runEvent('ModifyDef',p,t,null,1000),1000);assert.equal(battle.runEvent('ModifySpD',p,t,null,1000),1000);assert.equal(battle.runEvent('ModifyDef',t,p,null,1000),900);assert.equal(battle.runEvent('ModifySpD',t,p,null,1000),900);});
- it('Mismagius retains its original penalty and Void Veil package',()=>{const[p,t]=start('Mismagius','Void Veil');battle.field.setTerrain('newworldterrain',p);assert.equal(battle.runEvent('ModifyDef',p,t,null,1000),900);assert.equal(battle.runEvent('ModifySpD',p,t,null,1000),900);for(const a of ['levitate','magicguard','insomnia'])assert(p.hasAbility(a));});
+	it('keeps current Garchomp and Gardevoir slots with Battle Bond in event S', () => {
+		assert.deepEqual(Dex.species.get('garchomp').abilities, {
+			0: 'Grounded Instinct',
+			1: 'Supreme Overlord',
+			H: 'Void Wrath',
+			S: 'Battle Bond',
+		});
+		assert.deepEqual(Dex.species.get('gardevoir').abilities, {
+			0: 'Trace',
+			1: 'Dream Guardian',
+			H: 'Void Veil',
+		});
+		assert.deepEqual(
+			Dex.species
+				.all()
+				.filter(s => Object.values(s.abilities).includes('Void Veil'))
+				.map(s => s.name),
+			['Gardevoir', 'Iron Valiant']
+		);
+	});
+	for (const mode of ['singles', 'doubles', 'ffa'])
+		it('Sand Tomb never adds hazards in ' + mode, () => {
+			const [p, t] = start('Garchomp', 'Void Wrath', mode);
+			hit(p, t);
+			assert(t.volatiles.partiallytrapped);
+			assert(!t.side.sideConditions.spikes);
+			assert(!p.volatiles.faultlinespent);
+		});
+	for (const mode of ['miss', 'protect', 'substitute', 'immune', 'suppressed'])
+		it('does not reward failed binding through ' + mode, () => {
+			const [p, t] = start();
+			if (mode === 'protect' || mode === 'substitute') t.addVolatile(mode, t);
+			if (mode === 'immune') t.setType('Flying');
+			if (mode === 'suppressed') p.addVolatile('gastroacid', t);
+			hit(p, t, 'sandtomb', mode === 'miss' ? { accuracy: 0 } : {});
+			assert(!t.side.sideConditions.spikes);
+			assert(!p.volatiles.faultlinespent);
+		});
+	it('does not reward already bound targets or other binding moves', () => {
+		const [p, t] = start();
+		hit(p, t, 'firespin');
+		assert(!t.side.sideConditions.spikes);
+		hit(p, t);
+		assert(!t.side.sideConditions.spikes);
+		assert(!p.volatiles.faultlinespent);
+	});
+	it('Mold Breaker bypasses Levitate and also applies outside Sand Tomb', () => {
+		const [p, t] = start('Garchomp', 'Void Wrath', 'singles', 'Levitate');
+		hit(p, t, 'earthpower');
+		assert(t.hp < 4000);
+		hit(p, t);
+		assert(t.volatiles.partiallytrapped);
+		assert(!t.side.sideConditions.spikes);
+		assert(p.hasAbility('moldbreaker'));
+	});
+	it('protects only ordinary Gardevoir from New World airborne defense penalties', () => {
+		const [p, t] = start('Gardevoir', 'Void Veil');
+		t.setAbility('Levitate');
+		battle.field.setTerrain('newworldterrain', p);
+		assert(!p.isGrounded());
+		assert.equal(battle.runEvent('ModifyDef', p, t, null, 1000), 1000);
+		assert.equal(battle.runEvent('ModifySpD', p, t, null, 1000), 1000);
+		assert.equal(battle.runEvent('ModifyDef', t, p, null, 1000), 900);
+		assert.equal(battle.runEvent('ModifySpD', t, p, null, 1000), 900);
+	});
+	it('Mismagius retains its original penalty and Void Veil package', () => {
+		const [p, t] = start('Mismagius', 'Void Veil');
+		battle.field.setTerrain('newworldterrain', p);
+		assert.equal(battle.runEvent('ModifyDef', p, t, null, 1000), 900);
+		assert.equal(battle.runEvent('ModifySpD', p, t, null, 1000), 900);
+		for (const a of ['levitate', 'magicguard', 'insomnia']) assert(p.hasAbility(a));
+	});
 	it('Gardevoir ignores Gravity while Void Veil is active but obeys grounding when suppressed', () => {
 		const [p, t] = start('Gardevoir', 'Void Veil');
 		battle.field.setTerrain('newworldterrain', p);

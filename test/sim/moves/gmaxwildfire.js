@@ -5,27 +5,27 @@ const common = require('./../../common');
 
 let battle;
 
-describe('G-Max Wildfire', function () {
-	afterEach(function () {
+describe('G-Max Wildfire', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should not damage Fire-types', function () {
-		battle = common.gen(8).createBattle({gameType: 'doubles'});
-		battle.setPlayer('p1', {team: [
-			{species: 'Charizard', moves: ['ember'], gigantamax: true},
-			{species: 'Wynaut', moves: ['sleeptalk']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: 'Wynaut', moves: ['sleeptalk']},
-			{species: 'Flareon', moves: ['sleeptalk']},
-		]});
+	it('should not damage Fire-types', () => {
+		battle = common.gen(8).createBattle({ gameType: 'doubles' });
+		battle.setPlayer('p1', { team: [
+			{ species: 'Charizard', moves: ['ember'], gigantamax: true },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+			{ species: 'Flareon', moves: ['sleeptalk'] },
+		] });
 		battle.makeChoices('move ember 1 dynamax, move sleeptalk', 'move sleeptalk, move sleeptalk');
 		assert.fullHP(battle.p2.active[1]);
 		assert(battle.p2.sideConditions.gmaxwildfire);
 	});
 
-	it('should deal damage for four turns, including the fourth turn', function () {
+	it('should deal damage for four turns, including the fourth turn', () => {
 		// Burning Crown has separate chip, and a Fire-immune target prevents move setup.
 		// Exercise Wildfire duration independently of those integration effects.
 		battle = common.gen(8).createBattle([[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);

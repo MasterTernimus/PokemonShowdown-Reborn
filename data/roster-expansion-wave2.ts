@@ -1,7 +1,8 @@
 import type { AbilityData, AbilityDataTable } from '../sim/dex-abilities';
 
 const hazards = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
-const foeHit = (damage: number, target: Pokemon, source: Pokemon) => damage > 0 && !target.isAlly(source);
+const foeHit = (damage: number, target: Pokemon, source: Pokemon) =>
+	damage > 0 && !target.isAlly(source);
 
 /** Follow-up designs explicitly approved after the first roster expansion. */
 export function applyRosterWave2(base: AbilityDataTable) {
@@ -22,22 +23,37 @@ export function applyRosterWave2(base: AbilityDataTable) {
 		},
 	});
 	const broodguard = base.broodguard;
-	base.broodguard = { ...broodguard,
-		onStart() { this.effectState.rallied = false; },
+	base.broodguard = {
+		...broodguard,
+		onStart() {
+			this.effectState.rallied = false;
+		},
 		onAllyDamagingHit(damage, target, source) {
 			const holder = this.effectState.target;
-			if (holder === target || !holder.isAdjacent(target) || this.effectState.rallied ||
-				!foeHit(damage, target, source) || !target.hp || target.hp > target.maxhp / 2 ||
-				target.hp + damage <= target.maxhp / 2) return;
+			if (
+				holder === target ||
+				!holder.isAdjacent(target) ||
+				this.effectState.rallied ||
+				!foeHit(damage, target, source) ||
+				!target.hp ||
+				target.hp > target.maxhp / 2 ||
+				target.hp + damage <= target.maxhp / 2
+			)
+				return;
 			this.effectState.rallied = true;
 			this.boost({ def: 1 }, holder, holder, this.effect);
 		},
 	};
 	const sun = base.suncharm;
-	base.suncharm = { ...sun,
-		onStart(pokemon) { sun.onStart!.call(this, pokemon); this.effectState.cursed = false; },
+	base.suncharm = {
+		...sun,
+		onStart(pokemon) {
+			sun.onStart!.call(this, pokemon);
+			this.effectState.cursed = false;
+		},
 		onSourceAfterSetStatus(status, target, source) {
-			if (status.id !== 'brn' || target.isAlly(source) || this.effectState.cursed || !target.hp) return;
+			if (status.id !== 'brn' || target.isAlly(source) || this.effectState.cursed || !target.hp)
+				return;
 			if (target.addVolatile('curse', source, this.effect)) {
 				this.effectState.cursed = true;
 				this.add('-activate', source, 'ability: Sun Charm');
@@ -47,10 +63,16 @@ export function applyRosterWave2(base: AbilityDataTable) {
 	};
 	add('pollenengine', 'Pollen Engine', {
 		...base.chlorophyll,
-		onStart() { this.effectState.healTurn = -1; },
+		onStart() {
+			this.effectState.healTurn = -1;
+		},
 		onSourceAfterMoveSecondary(target, source, move) {
-			if (source.isAlly(target) || this.effectState.healTurn === this.turn ||
-				!(move.flags['powder'] || (move.type === 'Grass' && move.category !== 'Status'))) return;
+			if (
+				source.isAlly(target) ||
+				this.effectState.healTurn === this.turn ||
+				!(move.flags['powder'] || (move.type === 'Grass' && move.category !== 'Status'))
+			)
+				return;
 			this.effectState.healTurn = this.turn;
 			const divisor = ['sunnyday', 'desolateland'].includes(source.effectiveWeather()) ? 8 : 16;
 			for (const ally of [source, ...source.adjacentAllies()]) {
@@ -61,15 +83,21 @@ export function applyRosterWave2(base: AbilityDataTable) {
 	add('titanpincer', 'Titan Pincer', {
 		...base.hypercutter,
 		onModifyMove(move, source) {
-			if ((move.id === 'crabhammer' || (move.type === 'Steel' && move.category === 'Physical')) &&
-				source.getStat('def') > source.getStat('atk')) move.overrideOffensiveStat = 'def';
+			if (
+				(move.id === 'crabhammer' || (move.type === 'Steel' && move.category === 'Physical')) &&
+				source.getStat('def') > source.getStat('atk')
+			)
+				move.overrideOffensiveStat = 'def';
 		},
 	});
 	add('shellcracker', 'Shellcracker', {
 		onStart: base.moldbreaker.onStart,
 		onModifyMove(move, source, target) {
 			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, source, target);
-			if (move.id === 'crabhammer') { move.accuracy = 100; move.willCrit = true; }
+			if (move.id === 'crabhammer') {
+				move.accuracy = 100;
+				move.willCrit = true;
+			}
 		},
 	});
 	add('tidaldominion', 'Tidal Dominion', {
@@ -82,17 +110,33 @@ export function applyRosterWave2(base: AbilityDataTable) {
 		},
 	});
 	add('tempestfury', 'Tempest Fury', {
-		onStart(pokemon) { this.effectState.charged = false; this.dex.abilities.get('angerpoint').onStart?.call(this, pokemon); },
-		onHit(target, source, move) { this.dex.abilities.getHandler('angerpoint', 'onHit')?.call(this, target, source, move); },
+		onStart(pokemon) {
+			this.effectState.charged = false;
+			this.dex.abilities.get('angerpoint').onStart?.call(this, pokemon);
+		},
+		onHit(target, source, move) {
+			this.dex.abilities.getHandler('angerpoint', 'onHit')?.call(this, target, source, move);
+		},
 		onDamagingHit(damage, target, source) {
-			if (!target.getPassives().includes('tempestfury') && target.hp && foeHit(damage, target, source)) this.effectState.charged = true;
+			if (
+				!target.getPassives().includes('tempestfury') &&
+				target.hp &&
+				foeHit(damage, target, source)
+			)
+				this.effectState.charged = true;
 		},
 		onModifyMove(move, pokemon) {
 			if (pokemon.getPassives().includes('tempestfury')) return;
-			if (this.effectState.charged && move.type === 'Water' && move.category !== 'Status') move.willCrit = true;
+			if (this.effectState.charged && move.type === 'Water' && move.category !== 'Status')
+				move.willCrit = true;
 		},
 		onSourceDamagingHit(damage, target, source, move) {
-			if (!source.getPassives().includes('tempestfury') && foeHit(damage, target, source) && move.type === 'Water') this.effectState.charged = false;
+			if (
+				!source.getPassives().includes('tempestfury') &&
+				foeHit(damage, target, source) &&
+				move.type === 'Water'
+			)
+				this.effectState.charged = false;
 		},
 		onSourceAfterSubDamage(damage, target, source, move) {
 			if (foeHit(damage, target, source) && move.type === 'Water') this.effectState.charged = false;
@@ -101,38 +145,59 @@ export function applyRosterWave2(base: AbilityDataTable) {
 	add('ironlash', 'Iron Lash', {
 		...base.whiplash,
 		onSourceDamagingHit(damage, target, source, move) {
-			if (!foeHit(damage, target, source) || !(move.flags['tail'] || move.flags['tailmove']) ||
-				this.effectState.boostTurn === this.turn) return;
+			if (
+				!foeHit(damage, target, source) ||
+				!(move.flags['tail'] || move.flags['tailmove']) ||
+				this.effectState.boostTurn === this.turn
+			)
+				return;
 			this.effectState.boostTurn = this.turn;
 			this.boost({ spd: 1 }, source, source, this.effect);
 		},
 	});
 	add('trailbreaker', 'Trailbreaker', {
-		onDamage(damage, target, source, effect) { if (hazards.includes(effect.id)) return false; },
-		onSetStatus(status, target, source, effect) { if (effect?.id === 'toxicspikes') return false; },
-		onTryBoost(boost, target, source, effect) { if (effect?.id === 'stickyweb') delete boost.spe; },
-		onModifyMove(move) { if (move.id === 'rapidspin') move.ignoreImmunity = true; },
+		onDamage(damage, target, source, effect) {
+			if (hazards.includes(effect.id)) return false;
+		},
+		onSetStatus(status, target, source, effect) {
+			if (effect?.id === 'toxicspikes') return false;
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (effect?.id === 'stickyweb') delete boost.spe;
+		},
+		onModifyMove(move) {
+			if (move.id === 'rapidspin') move.ignoreImmunity = true;
+		},
 	});
 	add('armoredadvance', 'Armored Advance', {
 		onTryBoost(boost, target, source, effect) {
-			if (target !== source || effect?.effectType !== 'Move' || (effect).category === 'Status') return;
+			if (target !== source || effect?.effectType !== 'Move' || effect.category === 'Status') return;
 			if (boost.def && boost.def < 0) delete boost.def;
 			if (boost.spd && boost.spd < 0) delete boost.spd;
 		},
-		onModifyMove(move) { if (move.type === 'Ground') move.ignoreNegativeOffensive = true; },
+		onModifyMove(move) {
+			if (move.type === 'Ground') move.ignoreNegativeOffensive = true;
+		},
 	});
 	add('gritgrappler', 'Grit Grappler', {
 		...base.guts,
 		onSourceDamagingHit(damage, target, source, move) {
-			if (!foeHit(damage, target, source) || !source.status || move.type !== 'Fighting' ||
-				this.effectState.healTurn === this.turn) return;
+			if (
+				!foeHit(damage, target, source) ||
+				!source.status ||
+				move.type !== 'Fighting' ||
+				this.effectState.healTurn === this.turn
+			)
+				return;
 			this.effectState.healTurn = this.turn;
 			this.heal(source.baseMaxhp / 16, source, source, this.effect);
 		},
 	});
 	add('dreadjaw', 'Dread Jaw', {
 		...base.moxie,
-		onStart() { this.effectState.charged = false; },
+		onStart() {
+			this.effectState.charged = false;
+		},
 		onSourceAfterFaint(length, target, source, effect) {
 			base.moxie.onSourceAfterFaint!.call(this, length, target, source, effect);
 			if (effect?.effectType === 'Move' && !source.isAlly(target)) this.effectState.charged = true;
@@ -147,21 +212,34 @@ export function applyRosterWave2(base: AbilityDataTable) {
 	add('floehunter', 'Floe Hunter', {
 		...base.slushrush,
 		onModifyDamage(damage, source, target, move) {
-			if (move.category === 'Physical' && !target.isAlly(source) && target.hasType('Water') && source.effectiveWeather() === 'hail') return this.chainModify(1.5);
+			if (
+				move.category === 'Physical' &&
+				!target.isAlly(source) &&
+				target.hasType('Water') &&
+				source.effectiveWeather() === 'hail'
+			)
+				return this.chainModify(1.5);
 		},
 	});
 	add('lanceguard', 'Lanceguard', {
 		...base.shellarmor,
 		onTryHitPriority: 4,
 		onTryHit(target, source, move) {
-			if (target.volatiles['protect'] && !this.checkMoveBypassesProtect(move, source, target) &&
-				this.checkMoveMakesContact(move, source, target)) this.boost({ def: -1 }, source, target, this.effect);
+			if (
+				target.volatiles['protect'] &&
+				!this.checkMoveBypassesProtect(move, source, target) &&
+				this.checkMoveMakesContact(move, source, target)
+			)
+				this.boost({ def: -1 }, source, target, this.effect);
 		},
 	});
 	add('headlongresolve', 'Headlong Resolve', {
-		onModifyMove(move) { if (move.recoil) move.ignorePositiveDefensive = true; },
+		onModifyMove(move) {
+			if (move.recoil) move.ignorePositiveDefensive = true;
+		},
 		onDamage(damage, target, source, effect) {
-			if (effect.id !== 'recoil' || target.hp <= damage || this.effectState.boostTurn === this.turn) return;
+			if (effect.id !== 'recoil' || target.hp <= damage || this.effectState.boostTurn === this.turn)
+				return;
 			this.effectState.boostTurn = this.turn;
 			this.boost({ def: 1 }, target, target, this.effect);
 		},
@@ -170,14 +248,22 @@ export function applyRosterWave2(base: AbilityDataTable) {
 		...base.soundproof,
 		onAllyTryHit(target, source, move) {
 			const holder = this.effectState.target;
-			if (target === holder || !holder.isAdjacent(target) || source.isAlly(target) ||
-				!move.flags['sound'] || move.category === 'Status') return;
+			if (
+				target === holder ||
+				!holder.isAdjacent(target) ||
+				source.isAlly(target) ||
+				!move.flags['sound'] ||
+				move.category === 'Status'
+			)
+				return;
 			this.add('-immune', target, '[from] ability: Herd Shelter', `[of] ${holder}`);
 			return null;
 		},
 	});
 	add('scorchsweep', 'Scorch Sweep', {
-		onStart() { this.effectState.used = false; },
+		onStart() {
+			this.effectState.used = false;
+		},
 		onSourceDamagingHit(damage, target, source, move) {
 			if (!foeHit(damage, target, source) || !move.recoil || this.effectState.used) return;
 			this.effectState.used = true;
@@ -186,29 +272,44 @@ export function applyRosterWave2(base: AbilityDataTable) {
 		},
 	});
 	add('opensky', 'Open Sky', {
-		onDamage(damage, target, source, effect) { if (!target.item && hazards.includes(effect.id)) return false; },
-		onSetStatus(status, target, source, effect) { if (!target.item && effect?.id === 'toxicspikes') return false; },
-		onTryBoost(boost, target, source, effect) { if (!target.item && effect?.id === 'stickyweb') delete boost.spe; },
-		onModifyMove(move, source) { if (!source.item && move.type === 'Flying') delete move.flags['contact']; },
+		onDamage(damage, target, source, effect) {
+			if (!target.item && hazards.includes(effect.id)) return false;
+		},
+		onSetStatus(status, target, source, effect) {
+			if (!target.item && effect?.id === 'toxicspikes') return false;
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (!target.item && effect?.id === 'stickyweb') delete boost.spe;
+		},
+		onModifyMove(move, source) {
+			if (!source.item && move.type === 'Flying') delete move.flags['contact'];
+		},
 	});
 	add('tidalvoice', 'Tidal Voice', {
 		...base.liquidvoice,
-		onBasePower(power, source, target, move) { if (move.flags['sound']) return this.chainModify(1.3); },
-		onStart() { this.effectState.used = false; },
+		onBasePower(power, source, target, move) {
+			if (move.flags['sound']) return this.chainModify(1.3);
+		},
+		onStart() {
+			this.effectState.used = false;
+		},
 		onModifyMove(move) {
 			if (!move.flags['sound']) return;
 			if (move.target === 'allAdjacent') move.target = 'allAdjacentFoes';
 			const previous = move.onTryHit;
 			move.onTryHit = function (target, source, activeMove) {
 				if (target !== source && target.isAlly(source)) return null;
-				return typeof previous === 'function' ? previous.call(this, target, source, activeMove) : previous;
+				return typeof previous === 'function' ?
+					previous.call(this, target, source, activeMove) :
+					previous;
 			};
 		},
 		onSourceDamagingHit(damage, target, source, move) {
 			if (!foeHit(damage, target, source) || !move.flags['sound'] || this.effectState.used) return;
 			this.effectState.used = true;
 			const boosts: SparseBoostsTable = {};
-			for (const stat of Object.keys(source.boosts) as BoostID[]) if (source.boosts[stat] < 0) boosts[stat] = 0;
+			for (const stat of Object.keys(source.boosts) as BoostID[])
+				if (source.boosts[stat] < 0) boosts[stat] = 0;
 			source.setBoost(boosts);
 			this.add('-clearnegativeboost', source, '[from] ability: Tidal Voice');
 		},
@@ -227,7 +328,12 @@ export function applyRosterWave2(base: AbilityDataTable) {
 		},
 		condition: {
 			onSwitchIn(pokemon) {
-				this.heal(pokemon.baseMaxhp / 8, pokemon, this.effectState.source, this.dex.abilities.get('rechargerelay'));
+				this.heal(
+					pokemon.baseMaxhp / 8,
+					pokemon,
+					this.effectState.source,
+					this.dex.abilities.get('rechargerelay'),
+				);
 				pokemon.side.removeSlotCondition(pokemon, 'rechargerelay');
 			},
 		},
@@ -252,35 +358,67 @@ export function applyRosterWave2(base: AbilityDataTable) {
 		},
 	});
 	add('bloodchallenge', 'Blood Challenge', {
-		onStart() { this.effectState.used = false; },
+		onStart() {
+			this.effectState.used = false;
+		},
 		onSourceModifyDamage(damage, source, target) {
 			if (!this.effectState.used && !source.isAlly(target)) return this.chainModify(0.75);
 		},
-		onDamagingHit(damage, target, source) { if (foeHit(damage, target, source)) this.effectState.used = true; },
+		onDamagingHit(damage, target, source) {
+			if (foeHit(damage, target, source)) this.effectState.used = true;
+		},
 	});
 	add('twilightinstinct', 'Twilight Instinct', {
-		onStart() { this.effectState.lastTarget = null; this.effectState.streak = 0; },
+		onStart() {
+			this.effectState.lastTarget = null;
+			this.effectState.streak = 0;
+		},
 		onModifyCritRatio(ratio, source, target) {
-			return ratio + (this.effectState.lastTarget === target ? Math.min(2, this.effectState.streak) : 0);
+			return (
+				ratio + (this.effectState.lastTarget === target ? Math.min(2, this.effectState.streak) : 0)
+			);
 		},
 		onAfterMove(source, target, move) {
 			if (move.category === 'Status') return;
 			if (!move.totalDamage || !target || source.isAlly(target)) {
-				this.effectState.lastTarget = null; this.effectState.streak = 0; return;
+				this.effectState.lastTarget = null;
+				this.effectState.streak = 0;
+				return;
 			}
-			this.effectState.streak = this.effectState.lastTarget === target ? Math.min(2, this.effectState.streak + 1) : 1;
+			this.effectState.streak =
+				this.effectState.lastTarget === target ? Math.min(2, this.effectState.streak + 1) : 1;
 			this.effectState.lastTarget = target;
 		},
 	});
-	for (const [id, name] of [['twincannons', 'Twin Cannons'], ['twinblades', 'Twin Blades']]) {
+	for (const [id, name] of [
+		['twincannons', 'Twin Cannons'],
+		['twinblades', 'Twin Blades'],
+	]) {
 		add(id, name, {
 			onModifyMove(move) {
-				if (move.category === 'Status' || move.multihit || move.isZ || move.isMax || move.damage || move.damageCallback ||
-					move.flags.charge || move.flags.futuremove || move.flags.noparentalbond || move.ohko ||
-					!['normal', 'any', 'adjacentFoe'].includes(move.target)) return;
+				if (
+					move.category === 'Status' ||
+					move.multihit ||
+					move.isZ ||
+					move.isMax ||
+					move.damage ||
+					move.damageCallback ||
+					move.flags.charge ||
+					move.flags.futuremove ||
+					move.flags.noparentalbond ||
+					move.ohko ||
+					!['normal', 'any', 'adjacentFoe'].includes(move.target)
+				)
+					return;
 				const cannons = id === 'twincannons';
-				if (cannons ? move.category !== 'Special' || !['Fire', 'Psychic'].includes(move.type) :
-					move.category !== 'Physical' || !move.flags['slicing'] || !['Fire', 'Ghost'].includes(move.type)) return;
+				if (
+					cannons ?
+						move.category !== 'Special' || !['Fire', 'Psychic'].includes(move.type) :
+						move.category !== 'Physical' ||
+						!move.flags['slicing'] ||
+						!['Fire', 'Ghost'].includes(move.type)
+				)
+					return;
 				move.multihit = 2;
 				move.multihitType = cannons ? 'twincannons' : 'twinblades';
 			},
@@ -298,8 +436,14 @@ export function applyRosterWave2(base: AbilityDataTable) {
 	}
 	add('heatreservoir', 'Heat Reservoir', {
 		onTryBoost(boost, target, source, effect) {
-			if (target !== source || effect?.id !== 'armorcannon' || !boost.spd || boost.spd >= 0 ||
-				target.volatiles['heatreservoirspent']) return;
+			if (
+				target !== source ||
+				effect?.id !== 'armorcannon' ||
+				!boost.spd ||
+				boost.spd >= 0 ||
+				target.volatiles['heatreservoirspent']
+			)
+				return;
 			target.addVolatile('heatreservoirspent', target, this.effect);
 			delete boost.spd;
 			this.add('-activate', target, 'ability: Heat Reservoir');
@@ -309,7 +453,10 @@ export function applyRosterWave2(base: AbilityDataTable) {
 		...base.fluffy,
 		onSourceModifyDamage(damage, source, target, move) {
 			let modifier = move.flags['contact'] ? 0.5 : 1;
-			if (this.movehasType(move, 'Fire') && !target.side.pokemon.some(p => p !== target && p.previouslyFainted)) {
+			if (
+				this.movehasType(move, 'Fire') &&
+				!target.side.pokemon.some(p => p !== target && p.previouslyFainted)
+			) {
 				modifier *= 2;
 			}
 			return this.chainModify(modifier);
@@ -319,7 +466,8 @@ export function applyRosterWave2(base: AbilityDataTable) {
 		...base.sandrush,
 		onStart(pokemon) {
 			if (!pokemon.replacedFainted) return;
-			if (this.field.setWeather('sandstorm', pokemon, this.effect)) this.field.weatherState.duration = 3;
+			if (this.field.setWeather('sandstorm', pokemon, this.effect))
+				this.field.weatherState.duration = 3;
 		},
 	});
 	add('dozinggiant', 'Dozing Giant', {
@@ -330,25 +478,37 @@ export function applyRosterWave2(base: AbilityDataTable) {
 	});
 	add('quillreservoir', 'Quill Reservoir', {
 		...base.waterabsorb,
-		onStart() { this.effectState.charged = false; },
+		onStart() {
+			this.effectState.charged = false;
+		},
 		onTryHit(target, source, move) {
 			const handler = base.waterabsorb.onTryHit;
-			const result = typeof handler === 'function' ? handler.call(this, target, source, move) : handler;
+			const result =
+				typeof handler === 'function' ? handler.call(this, target, source, move) : handler;
 			if (result === null) this.effectState.charged = true;
 			return result;
 		},
 		onSourceDamagingHit(damage, target, source, move) {
-			if (!foeHit(damage, target, source) || !this.effectState.charged || move.type !== 'Poison') return;
+			if (!foeHit(damage, target, source) || !this.effectState.charged || move.type !== 'Poison')
+				return;
 			this.effectState.charged = false;
 			if (target.hp) target.trySetStatus('psn', source, this.effect);
 		},
 	});
 	add('raisedquills', 'Raised Quills', {
-		onStart() { this.effectState.charged = false; },
-		onAfterMoveSecondarySelf(source, target, move) { if (move.category === 'Status') this.effectState.charged = true; },
+		onStart() {
+			this.effectState.charged = false;
+		},
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (move.category === 'Status') this.effectState.charged = true;
+		},
 		onDamagingHit(damage, target, source, move) {
-			if (!this.effectState.charged || !foeHit(damage, target, source) ||
-				!this.checkMoveMakesContact(move, source, target)) return;
+			if (
+				!this.effectState.charged ||
+				!foeHit(damage, target, source) ||
+				!this.checkMoveMakesContact(move, source, target)
+			)
+				return;
 			this.effectState.charged = false;
 			source.trySetStatus('psn', target, this.effect);
 		},

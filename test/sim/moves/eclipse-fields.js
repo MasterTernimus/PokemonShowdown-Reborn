@@ -3,9 +3,9 @@ const assert = require('../../assert');
 const common = require('../../common');
 let battle;
 function setup(moves = ['splash'], enemyMoves = ['splash'], extra = {}, enemy = {}) {
-	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-		[{species: 'Mew', ability: 'noability', moves, ...extra}],
-		[{species: 'Blissey', ability: 'noability', moves: enemyMoves, ...enemy}],
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+		[{ species: 'Mew', ability: 'noability', moves, ...extra }],
+		[{ species: 'Blissey', ability: 'noability', moves: enemyMoves, ...enemy }],
 	]);
 	battle.makeChoices('team 1', 'team 1');
 	return [battle.p1.active[0], battle.p2.active[0]];
@@ -18,7 +18,7 @@ describe('Eclipse field rework', () => {
 	for (const id of ['coldeclipseterrain', 'infernaleclipseterrain']) {
 		for (const [ability, defMod, spdMod] of [['icescales', 2, 1], ['prismarmor', 4 / 3, 4 / 3]]) {
 			it(`${ability} retains its defensive bonus on ${id}`, () => {
-				const [p] = setup(['splash'], ['splash'], {ability});
+				const [p] = setup(['splash'], ['splash'], { ability });
 				const def = p.getStat('def'), spd = p.getStat('spd'); field(id);
 				assert(Math.abs(p.getStat('def') - def * defMod) <= 1);
 				assert(Math.abs(p.getStat('spd') - spd * spdMod) <= 1);
@@ -30,14 +30,14 @@ describe('Eclipse field rework', () => {
 		});
 	}
 	it('stacks Ice/Ghost typing with Ice Scales once, without the old duplicate field multiplier', () => {
-		const [p] = setup(['splash'], ['splash'], {ability: 'icescales'}); p.setType(['Ice', 'Ghost']);
+		const [p] = setup(['splash'], ['splash'], { ability: 'icescales' }); p.setType(['Ice', 'Ghost']);
 		const def = p.getStat('def'), spd = p.getStat('spd'); field('coldeclipseterrain');
 		assert(Math.abs(p.getStat('def') - def * 2.88) <= 2);
 		assert(Math.abs(p.getStat('spd') - spd * 1.44) <= 1);
 	});
 	for (const [item, duration] of [['', 5], ['amplifieldrock', 8]]) {
 		it(`Rift Herald creates the field on entry for ${duration} turns and does not refresh it`, () => {
-			const [p] = setup(['splash'], ['splash'], {ability: 'riftherald', item});
+			const [p] = setup(['splash'], ['splash'], { ability: 'riftherald', item });
 			assert.equal(battle.field.terrain, 'rifteclipseterrain');
 			assert.equal(battle.field.terrainState.duration, duration);
 			battle.makeChoices('move splash', 'move splash');
@@ -46,7 +46,7 @@ describe('Eclipse field rework', () => {
 		});
 	}
 	it('Rift Herald preserves the Bad Seeds field lock while adding its Aura', () => {
-		const [p] = setup(['splash'], ['splash'], {ability: 'riftherald'}, {ability: 'badseeds'});
+		const [p] = setup(['splash'], ['splash'], { ability: 'riftherald' }, { ability: 'badseeds' });
 		battle.field.clearAura(); field('coldeclipseterrain');
 		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
 		assert.equal(battle.field.terrain, 'coldeclipseterrain');
@@ -69,7 +69,7 @@ describe('Eclipse field rework', () => {
 		assert.equal(battle.field.terrainState.duration, 4);
 	});
 	it('uses Amplifield Rock for Rift Opening', () => {
-		setup(['riftopening'], ['splash'], {item: 'amplifieldrock'});
+		setup(['riftopening'], ['splash'], { item: 'amplifieldrock' });
 		battle.makeChoices('move riftopening', 'move splash');
 		assert.equal(battle.field.terrainState.duration, 7);
 	});
@@ -178,7 +178,7 @@ describe('Eclipse field rework', () => {
 		assert.equal(battle.field.terrain, ''); assert.equal(battle.field.auraTurns, 5);
 	});
 	it('Cold Eclipse seed gives +2 Speed and Torment without changing typing', () => {
-		const [p] = setup(['splash'], ['splash'], {item: 'elementalseed'});
+		const [p] = setup(['splash'], ['splash'], { item: 'elementalseed' });
 		field('coldeclipseterrain');
 		assert.equal(p.item, ''); assert.equal(p.boosts.spe, 2); assert(p.volatiles.torment);
 		assert.deepEqual(p.getTypes(), ['Psychic']);
@@ -205,7 +205,7 @@ describe('Eclipse field rework', () => {
 	}
 	for (const ability of ['fullmetalbody', 'turboblaze', 'thickfat']) {
 		it(`${ability} no longer grants additional Cold Eclipse defenses`, () => {
-			const [p] = setup(['splash'], ['splash'], {ability}); const def = p.getStat('def'), spd = p.getStat('spd');
+			const [p] = setup(['splash'], ['splash'], { ability }); const def = p.getStat('def'), spd = p.getStat('spd');
 			field('coldeclipseterrain'); assert.equal(p.getStat('def'), def); assert.equal(p.getStat('spd'), spd);
 		});
 	}
@@ -219,7 +219,7 @@ describe('Eclipse field rework', () => {
 		assert.equal(battle.runEvent('BasePower', p, target, wind, 100), 100);
 	});
 	it('Snowy Field changes listed attacks to pure Ice and supports its seed and Veil', () => {
-		const [p, target] = setup(['auroraveil'], ['splash'], {item: 'elementalseed'}); field('snowyterrain');
+		const [p, target] = setup(['auroraveil'], ['splash'], { item: 'elementalseed' }); field('snowyterrain');
 		assert.equal(p.boosts.spd, 1); assert(p.side.sideConditions.safeguard); assert(p.side.slotConditions[0].wish);
 		const move = battle.dex.getActiveMove('ironhead');
 		battle.singleEvent('ModifyMove', battle.field.getTerrain(), battle.field.terrainState, move, p, target);
@@ -232,14 +232,14 @@ describe('Eclipse field rework', () => {
 		battle.makeChoices('move powdersnow', 'move splash'); assert.equal(battle.field.terrain, 'snowyterrain');
 	});
 	it('Infernal Hex doubles only once and its seed applies the four-turn trap', () => {
-		const [p, target] = setup(['splash'], ['splash'], {item: 'elementalseed'}); field('infernaleclipseterrain');
+		const [p, target] = setup(['splash'], ['splash'], { item: 'elementalseed' }); field('infernaleclipseterrain');
 		assert.equal(p.boosts.atk, 1); assert.equal(p.boosts.spa, 1); assert.equal(p.volatiles.partiallytrapped.duration, 4);
 		const hex = battle.dex.getActiveMove('hex');
 		assert.equal(hex.basePowerCallback.call(battle, p, target, hex), 130);
 		target.setStatus('brn'); assert.equal(hex.basePowerCallback.call(battle, p, target, hex), 130);
 	});
 	it('Rift Magical Seed grants Defense and eight-turn Trick Room', () => {
-		const [p] = setup(['splash'], ['splash'], {item: 'magicalseed'}); field('rifteclipseterrain');
+		const [p] = setup(['splash'], ['splash'], { item: 'magicalseed' }); field('rifteclipseterrain');
 		assert.equal(p.boosts.def, 1); assert.equal(p.item, ''); assert.equal(battle.field.pseudoWeather.trickroom.duration, 8);
 	});
 });

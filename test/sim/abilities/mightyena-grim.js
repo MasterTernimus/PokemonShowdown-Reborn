@@ -2,8 +2,8 @@
 
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim/dex');
-const {TeamValidator} = require('../../../dist/sim/team-validator');
+const { Dex } = require('../../../dist/sim/dex');
+const { TeamValidator } = require('../../../dist/sim/team-validator');
 
 describe('Mightyena Grim artwork variant', () => {
 	it('inherits the current base gameplay and keeps both artwork choices', () => {
@@ -18,7 +18,7 @@ describe('Mightyena Grim artwork variant', () => {
 	});
 
 	it('retains internal learnset data but rejects new teams and battles', () => {
-		const set = {species: 'Mightyena-Grim', ability: 'Intimidate', moves: ['Crunch', 'Protect']};
+		const set = { species: 'Mightyena-Grim', ability: 'Intimidate', moves: ['Crunch', 'Protect'] };
 		assert.deepEqual(Dex.species.getLearnsetData('mightyenagrim').learnset, Dex.species.getLearnsetData('mightyena').learnset);
 		assert(TeamValidator.get('gen9nofieldsinglesgame').validateTeam([set]).some(error => error.includes('Mightyena-Grim is disabled')));
 		assert.throws(() => common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [

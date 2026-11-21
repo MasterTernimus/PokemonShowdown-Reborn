@@ -3,7 +3,7 @@ const assert = require('assert').strict;
 const fs = require('fs');
 const path = require('path');
 const ts = require('typescript');
-const {Dex} = require('../../../dist/sim/dex');
+const { Dex } = require('../../../dist/sim/dex');
 const methods = new Set(['isTerrain', 'setTerrain', 'changeTerrain', 'canSetTerrain', 'startTerrain',
 	'addVolatile', 'addSideCondition', 'addPseudoWeather', 'setWeather', 'changeWeather', 'trySetStatus', 'setStatus']);
 describe('Field and condition data integrity', () => {

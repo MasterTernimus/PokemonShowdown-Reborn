@@ -1,225 +1,225 @@
 'use strict';
 const assert = require('assert').strict;
-const {Dex, TeamValidator} = require('../../../dist/sim');
+const { Dex, TeamValidator } = require('../../../dist/sim');
 const removed = {
 	"feraligatr": [
-		"aquastep"
+		"aquastep",
 	],
 	"feraligatrmega": [
-		"aquastep"
+		"aquastep",
 	],
 	"feraligatrgmax": [
-		"aquastep"
+		"aquastep",
 	],
 	"floatzel": [
-		"aquastep"
+		"aquastep",
 	],
 	"mimikyu": [
-		"astralbarrage"
+		"astralbarrage",
 	],
 	"mimikyubusted": [
-		"astralbarrage"
+		"astralbarrage",
 	],
 	"mimikyutotem": [
-		"astralbarrage"
+		"astralbarrage",
 	],
 	"mimikyubustedtotem": [
-		"astralbarrage"
+		"astralbarrage",
 	],
 	"breloommega": [
-		"barbbarrage"
+		"barbbarrage",
 	],
 	"breloom": [
-		"barbbarrage"
+		"barbbarrage",
 	],
 	"typhlosion": [
-		"bitterblade"
+		"bitterblade",
 	],
 	"typhlosionalt": [
-		"bitterblade"
+		"bitterblade",
 	],
 	"typhlosionmega": [
-		"bitterblade"
+		"bitterblade",
 	],
 	"typhlosionhisui": [
-		"bitterblade"
+		"bitterblade",
 	],
 	"altaria": [
-		"bleakwindstorm"
+		"bleakwindstorm",
 	],
 	"altariamega": [
-		"bleakwindstorm"
+		"bleakwindstorm",
 	],
 	"froslass": [
 		"bleakwindstorm",
-		"magicpowder"
+		"magicpowder",
 	],
 	"froslassmega": [
 		"bleakwindstorm",
-		"magicpowder"
+		"magicpowder",
 	],
 	"ninetales": [
-		"bleakwindstorm"
+		"bleakwindstorm",
 	],
 	"ninetalesalola": [
-		"bleakwindstorm"
+		"bleakwindstorm",
 	],
 	"delibird": [
-		"bleakwindstorm"
+		"bleakwindstorm",
 	],
 	"volcarona": [
-		"blueflare"
+		"blueflare",
 	],
 	"dragalge": [
-		"clangingscales"
+		"clangingscales",
 	],
 	"dragalgemega": [
-		"clangingscales"
+		"clangingscales",
 	],
 	"flygon": [
-		"clangingscales"
+		"clangingscales",
 	],
 	"flygonmega": [
-		"clangingscales"
+		"clangingscales",
 	],
 	"flygonmegaz": [
-		"clangingscales"
+		"clangingscales",
 	],
 	"noivernmega": [
-		"clangingscales"
+		"clangingscales",
 	],
 	"noivern": [
-		"clangingscales"
+		"clangingscales",
 	],
 	"gardevoir": [
-		"darkvoid"
+		"darkvoid",
 	],
 	"gardevoirmega": [
-		"darkvoid"
+		"darkvoid",
 	],
 	"gardevoirmegaalt": [
-		"darkvoid"
+		"darkvoid",
 	],
 	"gardevoirvoidmega": [
-		"darkvoid"
+		"darkvoid",
 	],
 	"gardevoirmegaz": [
-		"darkvoid"
+		"darkvoid",
 	],
 	"gardevoirvoid": [
-		"darkvoid"
+		"darkvoid",
 	],
 	"aurorus": [
-		"diamondstorm"
+		"diamondstorm",
 	],
 	"aurorusmega": [
-		"diamondstorm"
+		"diamondstorm",
 	],
 	"probopass": [
-		"diamondstorm"
+		"diamondstorm",
 	],
 	"drapion": [
-		"direclaw"
+		"direclaw",
 	],
 	"gliscor": [
-		"direclaw"
+		"direclaw",
 	],
 	"gliscoralt": [
-		"direclaw"
+		"direclaw",
 	],
 	"gligar": [
-		"direclaw"
+		"direclaw",
 	],
 	"gligaralt": [
-		"direclaw"
+		"direclaw",
 	],
 	"banette": [
 		"magicpowder",
-		"spectralthief"
+		"spectralthief",
 	],
 	"banettemega": [
 		"magicpowder",
-		"spectralthief"
+		"spectralthief",
 	],
 	"banettemegaz": [
 		"magicpowder",
-		"spectralthief"
+		"spectralthief",
 	],
 	"beautifly": [
-		"magicpowder"
+		"magicpowder",
 	],
 	"dustox": [
-		"magicpowder"
+		"magicpowder",
 	],
 	"florges": [
-		"magicpowder"
+		"magicpowder",
 	],
 	"florgesyellow": [
-		"magicpowder"
+		"magicpowder",
 	],
 	"florgesorange": [
-		"magicpowder"
+		"magicpowder",
 	],
 	"florgesblue": [
-		"magicpowder"
+		"magicpowder",
 	],
 	"florgeswhite": [
-		"magicpowder"
+		"magicpowder",
 	],
 	"meganium": [
-		"magicpowder"
+		"magicpowder",
 	],
 	"meganiummega": [
-		"magicpowder"
+		"magicpowder",
 	],
 	"meganiummegay": [
-		"magicpowder"
+		"magicpowder",
 	],
 	"venusaur": [
-		"magicpowder"
+		"magicpowder",
 	],
 	"venusaurmega": [
-		"magicpowder"
+		"magicpowder",
 	],
 	"venusaurgmax": [
-		"magicpowder"
+		"magicpowder",
 	],
 	"haxorus": [
-		"mightycleave"
+		"mightycleave",
 	],
 	"haxorusmega": [
-		"mightycleave"
+		"mightycleave",
 	],
 	"gengar": [
-		"spectralthief"
+		"spectralthief",
 	],
 	"gengarmega": [
-		"spectralthief"
+		"spectralthief",
 	],
 	"gengargmax": [
-		"spectralthief"
+		"spectralthief",
 	],
 	"absol": [
-		"tachyoncutter"
+		"tachyoncutter",
 	],
 	"absolmega": [
-		"tachyoncutter"
+		"tachyoncutter",
 	],
 	"absolmegaz": [
-		"tachyoncutter"
+		"tachyoncutter",
 	],
 	"aegislash": [
-		"tachyoncutter"
+		"tachyoncutter",
 	],
 	"aegislashblade": [
-		"tachyoncutter"
+		"tachyoncutter",
 	],
 	"aegislashgmax": [
-		"tachyoncutter"
+		"tachyoncutter",
 	],
 	"doublade": [
-		"tachyoncutter"
-	]
+		"tachyoncutter",
+	],
 };
 
 describe('Approved signature movepool removals', () => {
@@ -232,7 +232,7 @@ describe('Approved signature movepool removals', () => {
 				assert(!Dex.species.getFullLearnset(id).some(entry => entry.learnset[move]), id + ': inherited ' + move);
 				assert(!Dex.species.getMovePool(id, true).has(move), id + ': NatDex pool ' + move);
 				assert(validator.checkCanLearn(Dex.moves.get(move), species, undefined,
-					{ability: Object.values(species.abilities)[0], level: 100}), id + ': strict ' + move);
+					{ ability: Object.values(species.abilities)[0], level: 100 }), id + ': strict ' + move);
 			}
 		});
 	}
@@ -250,4 +250,3 @@ describe('Approved signature movepool removals', () => {
 		assert(dex.species.getFullLearnset('florges').some(entry => entry.learnset.magicpowder?.length));
 	});
 });
-

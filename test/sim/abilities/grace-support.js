@@ -1,22 +1,22 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
+const { Dex } = require('../../../dist/sim');
 
 describe('Serene Grace and Togekiss support', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
 	function setup(ability = 'Fortunate Wing', partner = 'No Ability', gameType = 'doubles') {
-		const mon = ability => ({species: 'Mew', ability, moves: ['skullbash', 'airslash', 'confuseray', 'splash']});
+		const mon = ability => ({ species: 'Mew', ability, moves: ['skullbash', 'airslash', 'confuseray', 'splash'] });
 		const teams = [[mon(ability), mon(partner)], [mon('No Ability'), mon('No Ability')]];
 		if (gameType === 'freeforall') teams.push([mon('No Ability')], [mon('No Ability')]);
-		battle = common.createBattle({gameType}, teams);
+		battle = common.createBattle({ gameType }, teams);
 		for (const side of battle.sides) for (const p of side.pokemon) p.getPassives = () => [];
 		return [battle.p1.active[0], battle.p1.active[1], battle.p2.active[0]];
 	}
 	function chance(source, target, chance = 30) {
 		const move = Dex.getActiveMove('airslash');
-		move.secondaries = [{chance, volatileStatus: 'flinch'}];
+		move.secondaries = [{ chance, volatileStatus: 'flinch' }];
 		battle.runEvent('ModifyMove', source, target, move, move);
 		return move.secondaries[0].chance;
 	}
@@ -106,7 +106,7 @@ describe('Serene Grace and Togekiss support', () => {
 	it('Fortunate Wing retains its critical-hit safeguard and confusion cure', () => {
 		const [p, ally, q] = setup(); ally.addVolatile('confusion', q);
 		const move = Dex.getActiveMove('airslash'); move.willCrit = true; move.accuracy = true;
-		battle.actions.useMove(move, p, {target:q});
+		battle.actions.useMove(move, p, { target: q });
 		assert(battle.p1.sideConditions.safeguard); assert(!ally.volatiles.confusion);
 	});
 	it('Void Omen keeps its independent one-use charge skip', () => {

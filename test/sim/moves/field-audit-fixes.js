@@ -1,12 +1,12 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
+const { Dex } = require('../../../dist/sim');
 let battle;
 function setup(format = 'gen9nofieldsinglesgame', set = {}) {
-	battle = common.createBattle({formatid: format}, [
-		[{species: 'Mew', ability: 'No Ability', moves: ['celebrate'], ...set}],
-		[{species: 'Mew', ability: 'No Ability', moves: ['celebrate']}],
+	battle = common.createBattle({ formatid: format }, [
+		[{ species: 'Mew', ability: 'No Ability', moves: ['celebrate'], ...set }],
+		[{ species: 'Mew', ability: 'No Ability', moves: ['celebrate'] }],
 	]);
 	battle.makeChoices('team 1', 'team 1');
 	for (const pokemon of battle.getAllActive()) pokemon.hp = pokemon.maxhp = pokemon.baseMaxhp = 10000;
@@ -40,7 +40,7 @@ describe('Field audit regressions', () => {
 	}
 	for (const stage of [3, 4, 5]) for (const [move, item] of [['surf', 'Waterium Z'], ['sparklingaria', 'Primarium Z']]) {
 		it(`${item} extinguishes a Stage ${stage} garden with its actual Z-Move`, () => {
-			const pokemon = setup('gen9flowergarden', {species: 'Primarina', moves: [move], item});
+			const pokemon = setup('gen9flowergarden', { species: 'Primarina', moves: [move], item });
 			battle.field.changeTerrain(`flowergarden${stage}`, pokemon, null, true);
 			battle.field.changeTerrain('burningterrain', pokemon, null, true);
 			const start = battle.log.length;

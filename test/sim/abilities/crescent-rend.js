@@ -1,18 +1,28 @@
 'use strict';
-const assert = require('assert').strict, common = require('../../common');
+const assert = require('assert').strict,
+	common = require('../../common');
 const { Dex } = require('../../../dist/sim');
 let battle;
 function setup(doubles = false) {
-	const set = (species = 'Mew', ability = 'No Ability') => ({ species, ability, moves: ['doubleedge', 'aerialace', 'protect', 'splash'] });
-	battle = common.createBattle(doubles ? { gameType: 'doubles' } : { formatid: 'gen9nofieldsinglesgame' }, [
-		[set('Salamence-Mega', 'Crescent Rend'), set()], [set(), set()],
-	]);
-	if (battle.requestState === 'teampreview')battle.makeChoices('team 12', 'team 12');
-	const p = battle.p1.active[0], q = battle.p2.active[0];
-	if (p.species.id !== 'salamencemega')p.formeChange('Salamence-Mega', null, true);
+	const set = (species = 'Mew', ability = 'No Ability') => ({
+		species,
+		ability,
+		moves: ['doubleedge', 'aerialace', 'protect', 'splash'],
+	});
+	battle = common.createBattle(
+		doubles ? { gameType: 'doubles' } : { formatid: 'gen9nofieldsinglesgame' },
+		[
+			[set('Salamence-Mega', 'Crescent Rend'), set()],
+			[set(), set()],
+		]
+	);
+	if (battle.requestState === 'teampreview') battle.makeChoices('team 12', 'team 12');
+	const p = battle.p1.active[0],
+		q = battle.p2.active[0];
+	if (p.species.id !== 'salamencemega') p.formeChange('Salamence-Mega', null, true);
 	battle.field.terrain = '';
 	battle.randomizer = n => n;
-	for (const side of battle.sides) for (const m of side.pokemon)m.hp = m.maxhp = m.baseMaxhp = 10000;
+	for (const side of battle.sides) for (const m of side.pokemon) m.hp = m.maxhp = m.baseMaxhp = 10000;
 	return [p, q];
 }
 function sub(q, hp) {
@@ -39,38 +49,47 @@ describe('Approved Crescent Rend', () => {
 	});
 	it('matches calculator damage without adding power, and bypasses only the approved screens', () => {
 		const { calculateScenario } = require('../../../dist/sim/custom-calculator');
-		const input = { format: 'gen9nofieldsinglesgame', move: 'Double-Edge', samples: 16, seed: 42,
-			actors: [{ species: 'Salamence-Mega', ability: 'Crescent Rend' },
-				...Array.from({ length: 3 }, () => ({ species: 'Mew', ability: 'No Ability' }))] };
+		const input = {
+			format: 'gen9nofieldsinglesgame',
+			move: 'Double-Edge',
+			samples: 16,
+			seed: 42,
+			actors: [
+				{ species: 'Salamence-Mega', ability: 'Crescent Rend' },
+				...Array.from({ length: 3 }, () => ({ species: 'Mew', ability: 'No Ability' })),
+			],
+		};
 		const plain = calculateScenario(input).results;
 		input.screens = ['reflect', 'auroraveil'];
 		assert.deepEqual(calculateScenario(input).results, plain);
-		input.screens = []; input.actors[0].ability = 'No Ability';
+		input.screens = [];
+		input.actors[0].ability = 'No Ability';
 		assert.deepEqual(calculateScenario(input).results, plain);
 	});
-	for (const screen of ['reflect', 'auroraveil'])it('ignores ' + screen + ' for damaging Flying attacks', () => {
-		const [p, q] = setup();
-		let hp = q.hp;
-		hit(p, q);
-		const normal = hp - q.hp;
-		q.hp = q.maxhp;
-		q.side.addSideCondition(screen, q, Dex.moves.get(screen));
-		hp = q.hp;
-		hit(p, q);
-		assert.equal(hp - q.hp, normal);
-		p.addVolatile('gastroacid');
-		q.hp = q.maxhp;
-		hit(p, q);
-		assert(q.maxhp - q.hp < normal);
-		p.removeVolatile('gastroacid');
-		q.hp = q.maxhp;
-		hit(p, q, 'airslash');
-		const special = q.maxhp - q.hp;
-		q.side.removeSideCondition(screen);
-		q.hp = q.maxhp;
-		hit(p, q, 'airslash');
-		assert.equal(q.maxhp - q.hp, special);
-	});
+	for (const screen of ['reflect', 'auroraveil'])
+		it('ignores ' + screen + ' for damaging Flying attacks', () => {
+			const [p, q] = setup();
+			let hp = q.hp;
+			hit(p, q);
+			const normal = hp - q.hp;
+			q.hp = q.maxhp;
+			q.side.addSideCondition(screen, q, Dex.moves.get(screen));
+			hp = q.hp;
+			hit(p, q);
+			assert.equal(hp - q.hp, normal);
+			p.addVolatile('gastroacid');
+			q.hp = q.maxhp;
+			hit(p, q);
+			assert(q.maxhp - q.hp < normal);
+			p.removeVolatile('gastroacid');
+			q.hp = q.maxhp;
+			hit(p, q, 'airslash');
+			const special = q.maxhp - q.hp;
+			q.side.removeSideCondition(screen);
+			q.hp = q.maxhp;
+			hit(p, q, 'airslash');
+			assert.equal(q.maxhp - q.hp, special);
+		});
 	it('makes converted attacks noncontact without bypassing Protect or immunity', () => {
 		const [p, q] = setup();
 		q.setItem('rockyhelmet');
@@ -137,12 +156,13 @@ describe('Approved Crescent Rend', () => {
 		let recoilEvents = 0;
 		const damage = battle.damage;
 		battle.damage = function (amount, target, source, effect, ...rest) {
-			if (effect === 'recoil')recoilEvents++;
+			if (effect === 'recoil') recoilEvents++;
 			return damage.call(this, amount, target, source, effect, ...rest);
 		};
 		const hp = p.hp;
 		hit(p, q, 'doubleedge');
-		const recoil = hp - p.hp, total = q.maxhp - q.hp;
+		const recoil = hp - p.hp,
+			total = q.maxhp - q.hp;
 		p.hp = p.maxhp;
 		q.hp = q.maxhp;
 		sub(q, 17);
@@ -162,23 +182,24 @@ describe('Approved Crescent Rend', () => {
 		let drainEvents = 0;
 		const heal = battle.heal;
 		battle.heal = function (amount, target, source, effect, ...rest) {
-			if (effect === 'drain')drainEvents++;
+			if (effect === 'drain') drainEvents++;
 			return heal.call(this, amount, target, source, effect, ...rest);
 		};
 		hit(p, q, 'tackle', { drain: [1, 2] });
 		assert.equal(p.hp - 5000, healing);
 		assert.equal(drainEvents, 1);
 	});
-	for (const protection of ['Focus Sash', 'Sturdy'])it('honors ' + protection + ' once on the actual HP portion', () => {
-		const [p, q] = setup();
-		q.hp = q.maxhp = q.baseMaxhp = 100;
-		if (protection === 'Sturdy')q.setAbility(protection);
-		else q.setItem(protection);
-		sub(q, 1);
-		hit(p, q, 'tackle', { basePower: 1000 });
-		assert.equal(q.hp, 1);
-		assert(!q.volatiles.substitute);
-	});
+	for (const protection of ['Focus Sash', 'Sturdy'])
+		it('honors ' + protection + ' once on the actual HP portion', () => {
+			const [p, q] = setup();
+			q.hp = q.maxhp = q.baseMaxhp = 100;
+			if (protection === 'Sturdy') q.setAbility(protection);
+			else q.setItem(protection);
+			sub(q, 1);
+			hit(p, q, 'tackle', { basePower: 1000 });
+			assert.equal(q.hp, 1);
+			assert(!q.volatiles.substitute);
+		});
 	it('continues multihits after breaking Substitute and stops at the actual target faint', () => {
 		const [p, q] = setup();
 		sub(q, 1);
@@ -193,13 +214,14 @@ describe('Approved Crescent Rend', () => {
 		assert(battle.log.slice(start).some(l => l.endsWith('|1') && l.startsWith('|-hitcount|')));
 	});
 	it('keeps overflow separate for each doubles target', () => {
-		const [p, q] = setup(true), r = battle.p2.active[1];
+		const [p, q] = setup(true),
+			r = battle.p2.active[1];
 		sub(q, 10);
 		sub(r, 30);
 		hit(p, q, 'tackle', { target: 'allAdjacentFoes' });
 		assert(!q.volatiles.substitute);
 		assert(!r.volatiles.substitute);
-		assert.equal((q.maxhp - q.hp) + 10, (r.maxhp - r.hp) + 30);
+		assert.equal(q.maxhp - q.hp + 10, r.maxhp - r.hp + 30);
 	});
 	it('retains Aerilate under suppression but disables all Crescent Rend effects', () => {
 		const [p, q] = setup();
@@ -228,9 +250,12 @@ describe('Approved Crescent Rend', () => {
 		assert.equal(q.ability, 'crescentrend');
 		assert.deepEqual(q.getPassives(), ['aerilate']);
 		q.setAbility('No Ability');
-		q.hp = 20; p.hp = 5000;
-		sub(q, 10); hit(p, q, 'tackle', { basePower: 1000, drain: [1, 2] });
-		assert.equal(q.hp, 0); assert.equal(p.hp, 5015);
+		q.hp = 20;
+		p.hp = 5000;
+		sub(q, 10);
+		hit(p, q, 'tackle', { basePower: 1000, drain: [1, 2] });
+		assert.equal(q.hp, 0);
+		assert.equal(p.hp, 5015);
 	});
 	it('runs HP Damage protection once and keeps a blocked overflow a successful Substitute hit', () => {
 		const [p, q] = setup();
@@ -250,15 +275,56 @@ describe('Approved Crescent Rend', () => {
 		assert.equal(q.boosts.spd, 0);
 		assert(!q.volatiles.substitute);
 		assert.equal(p.maxhp - p.hp, 10);
-		p.hp = 5000; sub(q, 30);
+		p.hp = 5000;
+		sub(q, 30);
 		hit(p, q, 'tackle', { drain: [1, 2] });
-		assert.equal(events, 2); assert.equal(p.hp, 5015);
+		assert.equal(events, 2);
+		assert.equal(p.hp, 5015);
 	});
 });
 
-describe('Crescent Rend special-category extension',()=>{
- afterEach(()=>{battle?.destroy();battle=null;});
- for(const id of ['airslash','hypervoice'])for(const screen of ['lightscreen','auroraveil'])it(id+' ignores '+screen+' without changing category',()=>{const[p,q]=setup();hit(p,q,id);const plain=q.maxhp-q.hp;q.hp=q.maxhp;q.side.addSideCondition(screen,q);hit(p,q,id);assert.equal(q.maxhp-q.hp,plain);assert.equal(Dex.moves.get(id).category,'Special');});
- it('special overflow and sound bypass do not duplicate damage',()=>{const[p,q]=setup();hit(p,q,'airslash');const plain=q.maxhp-q.hp;q.hp=q.maxhp;sub(q,10);hit(p,q,'airslash');assert.equal(q.maxhp-q.hp,plain-10);assert(!q.volatiles.substitute);q.hp=q.maxhp;hit(p,q,'hypervoice');const sound=q.maxhp-q.hp;q.hp=q.maxhp;sub(q,10);hit(p,q,'hypervoice');assert.equal(q.maxhp-q.hp,sound);assert.equal(q.volatiles.substitute.hp,10);});
- it('special multihits overflow once per original hit',()=>{const[p,q]=setup();hit(p,q,'airslash',{multihit:3});const plain=q.maxhp-q.hp;q.hp=q.maxhp;sub(q,10);hit(p,q,'airslash',{multihit:3});assert.equal(q.maxhp-q.hp,plain-10);});
+describe('Crescent Rend special-category extension', () => {
+	afterEach(() => {
+		battle?.destroy();
+		battle = null;
+	});
+	for (const id of ['airslash', 'hypervoice'])
+		for (const screen of ['lightscreen', 'auroraveil'])
+			it(id + ' ignores ' + screen + ' without changing category', () => {
+				const [p, q] = setup();
+				hit(p, q, id);
+				const plain = q.maxhp - q.hp;
+				q.hp = q.maxhp;
+				q.side.addSideCondition(screen, q);
+				hit(p, q, id);
+				assert.equal(q.maxhp - q.hp, plain);
+				assert.equal(Dex.moves.get(id).category, 'Special');
+			});
+	it('special overflow and sound bypass do not duplicate damage', () => {
+		const [p, q] = setup();
+		hit(p, q, 'airslash');
+		const plain = q.maxhp - q.hp;
+		q.hp = q.maxhp;
+		sub(q, 10);
+		hit(p, q, 'airslash');
+		assert.equal(q.maxhp - q.hp, plain - 10);
+		assert(!q.volatiles.substitute);
+		q.hp = q.maxhp;
+		hit(p, q, 'hypervoice');
+		const sound = q.maxhp - q.hp;
+		q.hp = q.maxhp;
+		sub(q, 10);
+		hit(p, q, 'hypervoice');
+		assert.equal(q.maxhp - q.hp, sound);
+		assert.equal(q.volatiles.substitute.hp, 10);
+	});
+	it('special multihits overflow once per original hit', () => {
+		const [p, q] = setup();
+		hit(p, q, 'airslash', { multihit: 3 });
+		const plain = q.maxhp - q.hp;
+		q.hp = q.maxhp;
+		sub(q, 10);
+		hit(p, q, 'airslash', { multihit: 3 });
+		assert.equal(q.maxhp - q.hp, plain - 10);
+	});
 });

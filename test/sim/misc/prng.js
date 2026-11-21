@@ -5,33 +5,33 @@ const assert = require('../../assert');
 
 const testSeed = [1, 2, 3, 4];
 
-describe(`PRNG`, function () {
-	describe(`randomChance(numerator=0, denominator=1)`, function () {
-		it(`should always return false`, function () {
+describe(`PRNG`, () => {
+	describe(`randomChance(numerator=0, denominator=1)`, () => {
+		it(`should always return false`, () => {
 			const prng = new PRNG(testSeed);
 			for (let i = 0; i < 100; ++i) {
 				assert.equal(prng.randomChance(0, 1), false);
 			}
 		});
 	});
-	describe(`randomChance(numerator=1, denominator=1)`, function () {
-		it(`should always return true`, function () {
+	describe(`randomChance(numerator=1, denominator=1)`, () => {
+		it(`should always return true`, () => {
 			const prng = new PRNG(testSeed);
 			for (let i = 0; i < 100; ++i) {
 				assert.equal(prng.randomChance(1, 1), true);
 			}
 		});
 	});
-	describe(`randomChance(numerator=256, denominator=256)`, function () {
-		it(`should always return true`, function () {
+	describe(`randomChance(numerator=256, denominator=256)`, () => {
+		it(`should always return true`, () => {
 			const prng = new PRNG(testSeed);
 			for (let i = 0; i < 100; ++i) {
 				assert.equal(prng.randomChance(256, 256), true);
 			}
 		});
 	});
-	describe(`randomChance(numerator=1, denominator=2)`, function () {
-		it(`should return true 45-55% of the time`, function () {
+	describe(`randomChance(numerator=1, denominator=2)`, () => {
+		it(`should return true 45-55% of the time`, () => {
 			const prng = new PRNG(testSeed);
 			let trueCount = 0;
 			for (let i = 0; i < 100; ++i) {
@@ -50,8 +50,8 @@ describe(`PRNG`, function () {
 			}
 		});
 	});
-	describe(`randomChance(numerator=217, denominator=256)`, function () {
-		it(`should return true 80%-90% of the time`, function () {
+	describe(`randomChance(numerator=217, denominator=256)`, () => {
+		it(`should return true 80%-90% of the time`, () => {
 			const prng = new PRNG(testSeed);
 			let trueCount = 0;
 			for (let i = 0; i < 100; ++i) {
@@ -70,13 +70,13 @@ describe(`PRNG`, function () {
 			}
 		});
 	});
-	describe(`sample`, function () {
-		it(`should throw for a zero-item array`, function () {
+	describe(`sample`, () => {
+		it(`should throw for a zero-item array`, () => {
 			const prng = new PRNG(testSeed);
 			const items = [];
 			assert.throws(() => prng.sample(items), RangeError);
 		});
-		it(`should eventually throw for a very sparse array`, function () {
+		it(`should eventually throw for a very sparse array`, () => {
 			const prng = new PRNG(testSeed);
 			const items = [];
 			items[30] = 'hello!';
@@ -86,7 +86,7 @@ describe(`PRNG`, function () {
 				}
 			});
 		});
-		it(`should eventually throw for a somewhat sparse array`, function () {
+		it(`should eventually throw for a somewhat sparse array`, () => {
 			const prng = new PRNG(testSeed);
 			const items = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
 			delete items[9];
@@ -96,7 +96,7 @@ describe(`PRNG`, function () {
 				}
 			});
 		});
-		it(`should return the only item in a single-item array`, function () {
+		it(`should return the only item in a single-item array`, () => {
 			const item = {};
 			const prng = new PRNG(testSeed);
 			for (let i = 0; i < 10; ++i) {
@@ -104,9 +104,9 @@ describe(`PRNG`, function () {
 				assert.equal(sample, item);
 			}
 		});
-		it(`should return items with equal probability for a five-item array`, function () {
+		it(`should return items with equal probability for a five-item array`, () => {
 			const items = ['a', 'b', 'c', 'd', 'e'];
-			const occurences = {a: 0, b: 0, c: 0, d: 0, e: 0};
+			const occurences = { a: 0, b: 0, c: 0, d: 0, e: 0 };
 			const prng = new PRNG(testSeed);
 			for (let i = 0; i < 1000; ++i) {
 				const sample = prng.sample(items);
@@ -118,9 +118,9 @@ describe(`PRNG`, function () {
 			assert.bounded(occurences.d, [170, 230]);
 			assert.bounded(occurences.e, [170, 230]);
 		});
-		it(`should return items with weighted probability for a three-item array with duplicates`, function () {
+		it(`should return items with weighted probability for a three-item array with duplicates`, () => {
 			const items = ['x', 'x', 'y'];
-			const occurences = {x: 0, y: 0};
+			const occurences = { x: 0, y: 0 };
 			const prng = new PRNG(testSeed);
 			for (let i = 0; i < 100; ++i) {
 				const sample = prng.sample(items);

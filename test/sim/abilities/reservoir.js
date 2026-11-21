@@ -1,16 +1,16 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim/dex');
-const {TeamValidator} = require('../../../dist/sim/team-validator');
+const { Dex } = require('../../../dist/sim/dex');
+const { TeamValidator } = require('../../../dist/sim/team-validator');
 
 describe('Poliwrath Reservoir', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
 	function setup(item = '', ability = 'Reservoir') {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame@@@!teampreview'}, [[
-			{species: 'Poliwrath', ability, item, moves: ['splash']},
-		], [{species: 'Mew', ability: 'No Ability', moves: ['splash', 'surf', 'explosion', 'flamethrower']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame@@@!teampreview' }, [[
+			{ species: 'Poliwrath', ability, item, moves: ['splash'] },
+		], [{ species: 'Mew', ability: 'No Ability', moves: ['splash', 'surf', 'explosion', 'flamethrower'] }]]);
 		return battle.getAllActive();
 	}
 	it('is unique, exposes all components and is legal with the mixed spread', () => {
@@ -23,7 +23,7 @@ describe('Poliwrath Reservoir', () => {
 		assert(!p.hasAbilityOrPassive('damp'));
 		assert.deepEqual(Dex.abilities.all().filter(a => a.num === 11233).map(a => a.id), ['reservoir']);
 		assert.equal(TeamValidator.get('gen9nofieldsinglesgame').validateTeam([
-			{species: 'Poliwrath', ability: 'Reservoir', moves: ['surf', 'drainpunch']},
+			{ species: 'Poliwrath', ability: 'Reservoir', moves: ['surf', 'drainpunch'] },
 		]), null);
 	});
 	it('absorbs Water attacks for 1/4 HP, with Heal Block preventing only recovery', () => {

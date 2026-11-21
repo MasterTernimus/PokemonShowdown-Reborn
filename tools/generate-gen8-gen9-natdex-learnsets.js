@@ -19,7 +19,7 @@ const compiled = ts.transpileModule(source, {
 	},
 }).outputText;
 
-const upstreamModule = {exports: {}};
+const upstreamModule = { exports: {} };
 const loadModule = new Function('exports', 'module', 'require', '__filename', '__dirname', compiled);
 loadModule(upstreamModule.exports, upstreamModule, require, inputPath, path.dirname(inputPath));
 
@@ -52,7 +52,7 @@ for (const [species, data] of Object.entries(upstreamLearnsets)) {
 	const encounters = (data.encounters || []).filter(event => event.generation === 8 || event.generation === 9);
 	if (!Object.keys(learnset).length && !eventData.length && !encounters.length) continue;
 
-	generatedLearnsets[species] = {learnset};
+	generatedLearnsets[species] = { learnset };
 	if (eventData.length) generatedLearnsets[species].eventData = eventData;
 	if (encounters.length) generatedLearnsets[species].encounters = encounters;
 }

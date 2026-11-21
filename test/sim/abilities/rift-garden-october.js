@@ -1,18 +1,163 @@
 'use strict';
-const assert=require('assert').strict,common=require('../../common');
-describe('Rift Garden lifetime and components',()=>{
- let battle;afterEach(()=>{battle?.destroy();battle=null;});
- function setup(species='Lilligant',format='gen9nofieldsinglesgame'){const p={species,ability:'No Ability',item:'Anomaly Core',moves:['splash','growth','quiverdance']},f={species:'Mew',ability:'No Ability',moves:['splash','quiverdance']};battle=common.createBattle({formatid:format},format.includes('freeforall')?[[p,f],[f],[f],[f]]:[[p,f],[f]]);battle.makeChoices(...battle.sides.map((s,i)=>i?'team 1':'team 12'));return[battle.p1.active[0],battle.p2.active[0]];}
- function activate(p){p.setAbility('Rift Dancer');return battle.field;}
- function grow(p){return battle.field.growFlowerGarden(p,battle.dex.moves.get('growth'));}
- for(const species of ['Lilligant','Lilligant-Hisui'])it(species+' creates a full garden on actual Rift transformation',()=>{const[p]=setup(species);battle.makeChoices('move splash mega','move splash');assert.equal(p.species.forme,'Rift');assert.equal(p.ability,'riftdancer');assert.equal(battle.field.terrain,'flowergarden2');assert.equal(battle.field.auraField,'');assert(p.m.riftGardenUsed);assert.equal(battle.field.terrainState.duration,5);});
- it('replaces an eligible full field rather than creating an aura, and restores it on expiry',()=>{const[p]=setup('Lilligant','gen9freeforall4pmistyfieldadrienn');const f=activate(p);assert.equal(f.terrain,'flowergarden1');assert.equal(f.auraField,'');assert.equal(f.terrainState.duration,5);assert(!f.terrainState.permanent);for(let i=0;i<9;i++)battle.makeChoices('move splash','move splash','move splash','move splash');assert.equal(f.terrain,'mistyterrain');});
- it('blocked activation spends the only attempt',()=>{const[p]=setup('Lilligant','gen9freeforall4pdragonsden');const f=activate(p);assert.equal(f.terrain,'dragonsdenterrain');assert(p.m.riftGardenUsed);f.terrain='';f.terrainStack=[];f.terrainState=battle.initEffectState({id:''});battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(f.terrain,'');assert(p.m.riftGardenUsed);});
- it('existing gardens do not grow or refresh but consume the entry attempt',()=>{const[p]=setup();battle.field.setTerrain('flowergarden2',p,battle.dex.moves.get('growth'),false,true);battle.field.terrainState.permanent=false;battle.field.setTerrainDuration(3);activate(p);assert.equal(battle.field.terrain,'flowergarden2');assert.equal(battle.field.terrainState.duration,3);assert(p.m.riftGardenUsed);});
-	it('adds stage gains or the standard one-turn transition bonus, without refreshing max stage', () => { const [p, t] = setup(); const f = activate(p); grow(p); assert.equal(f.terrainState.duration, 6); t.setAbility('Ripen'); grow(t); assert.equal(f.terrain, 'flowergarden4'); assert.equal(f.terrainState.duration, 8); grow(p); assert.equal(f.terrainState.duration, 9); assert.equal(grow(p), false); assert.equal(f.terrainState.duration, 9); f.changeTerrain('flowergarden3', p, null, true); assert.equal(f.terrainState.duration, 10); grow(p); assert.equal(f.terrainState.duration, 11); assert.equal(f.terrainStack.length, 1); });
- it('keeps the field-owned growth bonus after the setter leaves and never resets its creation budget',()=>{const[p,t]=setup();const f=activate(p);battle.makeChoices('switch 2','move splash');const before=f.terrainState.duration;grow(t);assert.equal(f.terrainState.duration,before+1);battle.makeChoices('switch 2','move splash');p.setAbility('No Ability');p.setAbility('Rift Dancer');assert(p.m.riftGardenUsed);f.clearTerrain();battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(f.terrain,'');});
- it('expires grown stages together instead of restoring an obsolete garden stage',()=>{const[p]=setup('Lilligant','gen9freeforall4pmistyfieldadrienn');const f=activate(p);grow(p);grow(p);assert.equal(f.terrainState.duration,7);assert.equal(f.terrainStack.filter(s=>s.riftGarden).length,1);for(let i=0;i<9;i++)battle.makeChoices('move splash','move splash','move splash','move splash');assert.equal(f.terrain,'mistyterrain');});
-	it('uses the standard transition bonus for unrelated gardens without leaking Rift ownership', () => { const [p] = setup(); const f = activate(p); grow(p); f.changeTerrain('burningterrain', p, null, false); assert(!f.terrainState.riftGarden); f.changeTerrain('flowergarden1', p, null, false); const before = f.terrainState.duration; grow(p); assert.equal(f.terrainState.duration, before + 1); assert(!f.terrainState.riftGarden); });
-	it('ignition and dousing each add the standard transition turn', () => { const [p] = setup(); const f = activate(p); grow(p); grow(p); const before = f.terrainState.duration; f.flowerGardenAfterMove(p, battle.dex.getActiveMove('heatwave')); assert.equal(f.terrain, 'burningterrain'); assert(f.terrainState.riftGarden); f.douseFlowerGarden(p); assert.equal(f.terrain, 'flowergarden3'); assert.equal(f.terrainState.duration, before + 2); grow(p); assert.equal(f.terrainState.duration, before + 3); });
- it('restores full Chlorophyll Speed conditions and retains Dancer copying without Opportunist',()=>{const[p,t]=setup();activate(p);assert(!p.hasAbility('opportunist'));assert.equal(battle.runEvent('ModifySpe',p,null,null,100),100);battle.field.setWeather('sunnyday',p);assert.equal(battle.runEvent('ModifySpe',p,null,null,100),200);battle.field.clearWeather();battle.field.changeTerrain('flowergarden4',p,null,true);assert.equal(battle.runEvent('ModifySpe',p,null,null,100),200);battle.makeChoices('move splash','move quiverdance');assert.equal(p.boosts.spa,1);assert.equal(p.boosts.spd,1);assert.equal(p.boosts.spe,1);});
+const assert = require('assert').strict,
+	common = require('../../common');
+describe('Rift Garden lifetime and components', () => {
+	let battle;
+	afterEach(() => {
+		battle?.destroy();
+		battle = null;
+	});
+	function setup(species = 'Lilligant', format = 'gen9nofieldsinglesgame') {
+		const p = {
+				species,
+				ability: 'No Ability',
+				item: 'Anomaly Core',
+				moves: ['splash', 'growth', 'quiverdance'],
+			},
+			f = { species: 'Mew', ability: 'No Ability', moves: ['splash', 'quiverdance'] };
+		battle = common.createBattle(
+			{ formatid: format },
+			format.includes('freeforall') ? [[p, f], [f], [f], [f]] : [[p, f], [f]]
+		);
+		battle.makeChoices(...battle.sides.map((s, i) => (i ? 'team 1' : 'team 12')));
+		return [battle.p1.active[0], battle.p2.active[0]];
+	}
+	function activate(p) {
+		p.setAbility('Rift Dancer');
+		return battle.field;
+	}
+	function grow(p) {
+		return battle.field.growFlowerGarden(p, battle.dex.moves.get('growth'));
+	}
+	for (const species of ['Lilligant', 'Lilligant-Hisui'])
+		it(species + ' creates a full garden on actual Rift transformation', () => {
+			const [p] = setup(species);
+			battle.makeChoices('move splash mega', 'move splash');
+			assert.equal(p.species.forme, 'Rift');
+			assert.equal(p.ability, 'riftdancer');
+			assert.equal(battle.field.terrain, 'flowergarden2');
+			assert.equal(battle.field.auraField, '');
+			assert(p.m.riftGardenUsed);
+			assert.equal(battle.field.terrainState.duration, 5);
+		});
+	it('replaces an eligible full field rather than creating an aura, and restores it on expiry', () => {
+		const [p] = setup('Lilligant', 'gen9freeforall4pmistyfieldadrienn');
+		const f = activate(p);
+		assert.equal(f.terrain, 'flowergarden1');
+		assert.equal(f.auraField, '');
+		assert.equal(f.terrainState.duration, 5);
+		assert(!f.terrainState.permanent);
+		for (let i = 0; i < 9; i++)
+			battle.makeChoices('move splash', 'move splash', 'move splash', 'move splash');
+		assert.equal(f.terrain, 'mistyterrain');
+	});
+	it('blocked activation spends the only attempt', () => {
+		const [p] = setup('Lilligant', 'gen9freeforall4pdragonsden');
+		const f = activate(p);
+		assert.equal(f.terrain, 'dragonsdenterrain');
+		assert(p.m.riftGardenUsed);
+		f.terrain = '';
+		f.terrainStack = [];
+		f.terrainState = battle.initEffectState({ id: '' });
+		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
+		assert.equal(f.terrain, '');
+		assert(p.m.riftGardenUsed);
+	});
+	it('existing gardens do not grow or refresh but consume the entry attempt', () => {
+		const [p] = setup();
+		battle.field.setTerrain('flowergarden2', p, battle.dex.moves.get('growth'), false, true);
+		battle.field.terrainState.permanent = false;
+		battle.field.setTerrainDuration(3);
+		activate(p);
+		assert.equal(battle.field.terrain, 'flowergarden2');
+		assert.equal(battle.field.terrainState.duration, 3);
+		assert(p.m.riftGardenUsed);
+	});
+	it('adds stage gains or the standard one-turn transition bonus, without refreshing max stage', () => {
+		const [p, t] = setup();
+		const f = activate(p);
+		grow(p);
+		assert.equal(f.terrainState.duration, 6);
+		t.setAbility('Ripen');
+		grow(t);
+		assert.equal(f.terrain, 'flowergarden4');
+		assert.equal(f.terrainState.duration, 8);
+		grow(p);
+		assert.equal(f.terrainState.duration, 9);
+		assert.equal(grow(p), false);
+		assert.equal(f.terrainState.duration, 9);
+		f.changeTerrain('flowergarden3', p, null, true);
+		assert.equal(f.terrainState.duration, 10);
+		grow(p);
+		assert.equal(f.terrainState.duration, 11);
+		assert.equal(f.terrainStack.length, 1);
+	});
+	it('keeps the field-owned growth bonus after the setter leaves and never resets its creation budget', () => {
+		const [p, t] = setup();
+		const f = activate(p);
+		battle.makeChoices('switch 2', 'move splash');
+		const before = f.terrainState.duration;
+		grow(t);
+		assert.equal(f.terrainState.duration, before + 1);
+		battle.makeChoices('switch 2', 'move splash');
+		p.setAbility('No Ability');
+		p.setAbility('Rift Dancer');
+		assert(p.m.riftGardenUsed);
+		f.clearTerrain();
+		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
+		assert.equal(f.terrain, '');
+	});
+	it('expires grown stages together instead of restoring an obsolete garden stage', () => {
+		const [p] = setup('Lilligant', 'gen9freeforall4pmistyfieldadrienn');
+		const f = activate(p);
+		grow(p);
+		grow(p);
+		assert.equal(f.terrainState.duration, 7);
+		assert.equal(f.terrainStack.filter(s => s.riftGarden).length, 1);
+		for (let i = 0; i < 9; i++)
+			battle.makeChoices('move splash', 'move splash', 'move splash', 'move splash');
+		assert.equal(f.terrain, 'mistyterrain');
+	});
+	it('uses the standard transition bonus for unrelated gardens without leaking Rift ownership', () => {
+		const [p] = setup();
+		const f = activate(p);
+		grow(p);
+		f.changeTerrain('burningterrain', p, null, false);
+		assert(!f.terrainState.riftGarden);
+		f.changeTerrain('flowergarden1', p, null, false);
+		const before = f.terrainState.duration;
+		grow(p);
+		assert.equal(f.terrainState.duration, before + 1);
+		assert(!f.terrainState.riftGarden);
+	});
+	it('ignition and dousing each add the standard transition turn', () => {
+		const [p] = setup();
+		const f = activate(p);
+		grow(p);
+		grow(p);
+		const before = f.terrainState.duration;
+		f.flowerGardenAfterMove(p, battle.dex.getActiveMove('heatwave'));
+		assert.equal(f.terrain, 'burningterrain');
+		assert(f.terrainState.riftGarden);
+		f.douseFlowerGarden(p);
+		assert.equal(f.terrain, 'flowergarden3');
+		assert.equal(f.terrainState.duration, before + 2);
+		grow(p);
+		assert.equal(f.terrainState.duration, before + 3);
+	});
+	it('restores full Chlorophyll Speed conditions and retains Dancer copying without Opportunist', () => {
+		const [p, t] = setup();
+		activate(p);
+		assert(!p.hasAbility('opportunist'));
+		assert.equal(battle.runEvent('ModifySpe', p, null, null, 100), 100);
+		battle.field.setWeather('sunnyday', p);
+		assert.equal(battle.runEvent('ModifySpe', p, null, null, 100), 200);
+		battle.field.clearWeather();
+		battle.field.changeTerrain('flowergarden4', p, null, true);
+		assert.equal(battle.runEvent('ModifySpe', p, null, null, 100), 200);
+		battle.makeChoices('move splash', 'move quiverdance');
+		assert.equal(p.boosts.spa, 1);
+		assert.equal(p.boosts.spd, 1);
+		assert.equal(p.boosts.spe, 1);
+	});
 });

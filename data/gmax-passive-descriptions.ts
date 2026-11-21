@@ -1,4 +1,4 @@
-import {November16BalanceDescriptions} from './nov16-balance-descriptions';
+import { November16BalanceDescriptions } from './nov16-balance-descriptions';
 /** Form-aware text; shared nonrecipient packages retain their original description. */
 export const GmaxPassiveDescriptions = {
 	"gigavolt": {
@@ -57,15 +57,15 @@ export const GmaxPassiveDescriptions = {
 		"desc": "Speed Boost raises Speed at the end of each full turn. Long Reach lets its moves attack without contact.",
 	},
 	"wickedsnare": {
-  "passive": "prankster",
-  "shortDesc": "Intimidate; damaging Dark moves lower each damaged foe's Defense after all hits.",
-  "desc": "Full Intimidate lowers adjacent foes' Attack by one stage on entry, respecting its normal protections. After a damaging Dark move finishes all hits, each opponent that took positive HP damage loses one Defense stage, once per target per move. Substitute-only damage, misses, protection and immunity do not trigger this effect. Native effects remain independent: Crunch can also cause its own Defense drop."
-},
+		"passive": "prankster",
+		"shortDesc": "Intimidate; damaging Dark moves lower each damaged foe's Defense after all hits.",
+		"desc": "Full Intimidate lowers adjacent foes' Attack by one stage on entry, respecting its normal protections. After a damaging Dark move finishes all hits, each opponent that took positive HP damage loses one Defense stage, once per target per move. Substitute-only damage, misses, protection and immunity do not trigger this effect. Native effects remain independent: Crunch can also cause its own Defense drop.",
+	},
 	"sweetsanctuary": {
-  "passive": "friendguard",
-  "shortDesc": "Ripen; successful Decorate heals its boosted target by 1/4 max HP.",
-  "desc": "Full local Ripen doubles HP restored and stat boosts from Berries, and doubles resistance Berries' damage reduction. When Decorate actually raises at least one stat, heals that target by 1/4 of its current maximum HP once after the move. Failed or blocked Decorate, or no actual positive boost, grants no healing. Normal healing restrictions apply. Ripen does not multiply this healing."
-},
+		"passive": "friendguard",
+		"shortDesc": "Ripen; successful Decorate heals its boosted target by 1/4 max HP.",
+		"desc": "Full local Ripen doubles HP restored and stat boosts from Berries, and doubles resistance Berries' damage reduction. When Decorate actually raises at least one stat, heals that target by 1/4 of its current maximum HP once after the move. Failed or blocked Decorate, or no actual positive boost, grants no healing. Normal healing restrictions apply. Ripen does not multiply this healing.",
+	},
 	"treasuretitan": {
 		"passive": "heavymetal",
 		"shortDesc": "Intimidate, super-effective reduction, Ground absorption and weight-move floor.",

@@ -1,5 +1,5 @@
-import type {AbilityDataTable} from '../sim/dex-abilities';
-import {composeSelectedAbility} from './selected-mega-simplifications';
+import type { AbilityDataTable } from '../sim/dex-abilities';
+import { composeSelectedAbility } from './selected-mega-simplifications';
 
 export const MegaHydreigonDescriptions = {
 	expiration: {
@@ -13,13 +13,16 @@ export const MegaHydreigonDescriptions = {
 };
 
 export function installMegaHydreigon(abilities: AbilityDataTable) {
-	abilities.expiration = {name: 'Expiration', num: 11980, rating: 5, flags: {}};
+	abilities.expiration = { name: 'Expiration', num: 11980, rating: 5, flags: {} };
 	composeSelectedAbility(abilities, 'expiration', ['stringsofruin'], true);
 	abilities.expiration.onEffectiveness = function (typeMod, target, type, move) {
 		if (move.type === 'Fairy') return 0;
 	};
 	abilities.abyssalrebirth = {
-		...abilities.hydraflight, name: 'Abyssal Rebirth', num: 11981,
+		...abilities.hydraflight,
+		name: 'Abyssal Rebirth',
+		num: 11981,
 	};
-	for (const [id, text] of Object.entries(MegaHydreigonDescriptions)) Object.assign(abilities[id as Lowercase<string>], text);
+	for (const [id, text] of Object.entries(MegaHydreigonDescriptions))
+		Object.assign(abilities[id as Lowercase<string>], text);
 }

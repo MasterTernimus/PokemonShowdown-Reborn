@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Abyss Lure', function () {
-	afterEach(function () {
+describe('Abyss Lure', () => {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
-	it('absorbs Electric- and Water-type moves while boosting both offenses', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Lanturn', ability: 'abysslure', moves: ['splash']},
+	it('absorbs Electric- and Water-type moves while boosting both offenses', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Lanturn', ability: 'abysslure', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['thunderbolt', 'surf']},
+			{ species: 'Mew', moves: ['thunderbolt', 'surf'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const lure = battle.p1.active[0];

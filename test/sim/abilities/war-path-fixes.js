@@ -6,9 +6,9 @@ describe('Legacy War Path resolves to Grand Strategy', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 	function setup() {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mew', ability: 'War Path', moves: ['splash', 'tackle']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash', 'tackle']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Mew', ability: 'War Path', moves: ['splash', 'tackle'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash', 'tackle'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		return [battle.p1.active[0], battle.p2.active[0]];

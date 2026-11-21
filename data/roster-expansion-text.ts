@@ -222,10 +222,10 @@ export const RosterExpansionShortDescriptions: { [id: string]: string } = {
 RosterExpansionDescriptions.dishearten = 'On entry, lowers adjacent opposing Pokemon Sp. Atk by 1 stage. Blocked by Substitute and normal stat-drop protection; normal stat-drop reflection and reactions apply. Intimidate-specific immunities and reactions do not apply.';
 RosterExpansionShortDescriptions.dishearten = "On entry, lowers adjacent foes Sp. Atk by 1 stage.";
 
-import {DustoxAbilityDescriptions} from './dustox-approved';
+import { DustoxAbilityDescriptions } from './dustox-approved';
 for (const [id, text] of Object.entries(DustoxAbilityDescriptions)) {
- RosterExpansionDescriptions[id] = text.desc;
- RosterExpansionShortDescriptions[id] = text.shortDesc;
+	RosterExpansionDescriptions[id] = text.desc;
+	RosterExpansionShortDescriptions[id] = text.shortDesc;
 }
 
 RosterExpansionDescriptions.prismwings = "Tinted Lens doubles calculated damage from resisted attacks. Its first resisted attack hit that deals positive damage to a foe's HP after ability activation raises its Speed by 1 stage immediately after that hit, once per activation, including only once during a multi-hit move. Misses, protection, immunity, Substitute-only hits and allied hits do not trigger the boost. Selected-ability suppression disables these effects. Entry, acquiring this ability, or restarting it after Neutralizing Gas renews the Speed boost; removing Gastro Acid without restarting the ability does not.";
@@ -234,5 +234,5 @@ RosterExpansionShortDescriptions.prismwings = "Tinted Lens; first resisted foe H
 RosterExpansionDescriptions.causticscales = "Once per actual switch-in, the first opposing contact attack to damage this Pokemon's HP attempts to poison the attacker and lowers that same attacker's Special Defense by 1 stage. Poison immunity does not prevent the stat drop; stat-drop prevention does not prevent the poison attempt. Normal status immunity, contact protection, stat-drop prevention, reflection and reactions apply. Substitute-only hits, allied hits and noncontact attacks do not spend the effect. Suppression disables it without renewing a spent trigger; losing and reacquiring the ability during the same entry does not renew it. Switching out and back in renews the trigger.";
 RosterExpansionShortDescriptions.causticscales = "Once per entry, first opposing contact HP hit poisons attacker and lowers Sp. Def.";
 
-import {BeautiflyCarrionDescriptions} from './beautifly-carrion-approved';
+import { BeautiflyCarrionDescriptions } from './beautifly-carrion-approved';
 for (const [id, text] of Object.entries(BeautiflyCarrionDescriptions)) RosterExpansionDescriptions[id] = text.desc;

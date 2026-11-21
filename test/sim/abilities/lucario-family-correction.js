@@ -67,18 +67,18 @@ describe('Corrected Lucario family ability release', () => {
 		assert.equal(p.getStat('spe'), speed);
 	});
 	it('charged Convergence bypasses both defenses while uncharged moves respect them', () => {
-		const [p,q] = start('Lucario-Mega');
+		const [p, q] = start('Lucario-Mega');
 		battle.randomizer = damage => damage;
 		assert(p.hasAbility('ultrainstinct'));
 		for (const id of ['tackle', 'aurasphere']) {
 			const damage = boosted => {
-				p.m.convergence = {entry: p.m.ultraRivalryEntryToken, Physical: true, Special: true};
+				p.m.convergence = { entry: p.m.ultraRivalryEntryToken, Physical: true, Special: true };
 				q.boosts.def = q.boosts.spd = boosted ? 6 : 0;
 				const move = Dex.getActiveMove(id); move.willCrit = false;
 				battle.runEvent('ModifyMove', p, q, move, move);
-				return battle.actions.getDamage(p,q,move);
+				return battle.actions.getDamage(p, q, move);
 			};
-			assert.equal(damage(true),damage(false),id);
+			assert.equal(damage(true), damage(false), id);
 		}
 		assert(!p.abilityState.auraReads);
 	});

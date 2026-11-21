@@ -1,29 +1,37 @@
-import {adaptiveZHit} from '../sim/adaptive-cycle';
+import { adaptiveZHit } from '../sim/adaptive-cycle';
 import { isUltraSuppressedTerrain } from '../sim/ultra-rivalry';
-import {updatePreparedIndicator} from './grand-strategy';
-import {updateRelicArmorIndicator} from './relic-armor';
-import {protectsWarnedMove} from './warned-moves';
-import {ShelterConditions} from './shelter-audit-reworks';
-import {JackpotConditions} from './jackpot-salvation';
-import {resolveForesight} from './foresight-memory';
-/* eslint-disable @stylistic/max-len */
-import {toID} from '../sim/dex-data';
+import { updatePreparedIndicator } from './grand-strategy';
+import { updateRelicArmorIndicator } from './relic-armor';
+import { protectsWarnedMove } from './warned-moves';
+import { ShelterConditions } from './shelter-audit-reworks';
+import { JackpotConditions } from './jackpot-salvation';
+import { resolveForesight } from './foresight-memory';
+
+import { toID } from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	...JackpotConditions,
 	ultraegocombat: {
-		name: 'Ultra Ego Combat', noCopy: true,
+		name: 'Ultra Ego Combat',
+		noCopy: true,
 		onResidualOrder: 26,
 		onResidual(holder) {
 			const state = this.effectState;
-			if (state.combatTurn !== this.turn || !holder.hp || isUltraSuppressedTerrain(this) ||
-				!holder.hasAbilityOrPassive('ultraego')) return;
+			if (
+				state.combatTurn !== this.turn ||
+				!holder.hp ||
+				isUltraSuppressedTerrain(this) ||
+				!holder.hasAbilityOrPassive('ultraego')
+			)
+				return;
 			delete state.combatTurn;
 			state.combatTurns = (state.combatTurns || 0) + 1;
-			if (state.combatTurns % 2 === 1) this.boost({ atk: 1, spa: 1 }, holder, holder, state.sourceEffect);
+			if (state.combatTurns % 2 === 1)
+				this.boost({ atk: 1, spa: 1 }, holder, holder, state.sourceEffect);
 		},
 	},
 	aimassistlock: {
-		name: 'Aim Assist Lock', noCopy: true,
+		name: 'Aim Assist Lock',
+		noCopy: true,
 		onStart(holder, target) {
 			this.effectState.expires = this.turn + 1;
 			this.add('-anim', holder, 'Lock-On', target);
@@ -44,103 +52,191 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				this.effectState.target.removeVolatile('aimassistlock');
 			}
 		},
-		onEnd(holder) { this.add('-end', holder, 'Aim Assist Lock', '[silent]'); },
+		onEnd(holder) {
+			this.add('-end', holder, 'Aim Assist Lock', '[silent]');
+		},
 	},
- activenoguard: {
-  name:'Active No Guard', noCopy:true,
-  onStart(pokemon) { this.add('-start', pokemon, 'Active No Guard'); },
-  onModifyMove(move) { move.accuracy = true; },
-  onAnyInvulnerability(target, source) { if (source === this.effectState.target) return 0; },
-  onEnd(pokemon) { this.add('-end', pokemon, 'Active No Guard'); },
- },
- prepared: {
-  name: 'Prepared', noCopy: true,
-  onStart(target, source) { this.effectState.owners = [source]; updatePreparedIndicator(this, target); },
-  onRestart(target, source) { if (!this.effectState.owners.includes(source)) this.effectState.owners.push(source); updatePreparedIndicator(this, target); },
-  onUpdate(target) { updatePreparedIndicator(this, target); },
-  onEnd(target) { if (this.effectState.visibleKey) this.add('-end', target, 'Prepared'); },
- },
+	activenoguard: {
+		name: 'Active No Guard',
+		noCopy: true,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'Active No Guard');
+		},
+		onModifyMove(move) {
+			move.accuracy = true;
+		},
+		onAnyInvulnerability(target, source) {
+			if (source === this.effectState.target) return 0;
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'Active No Guard');
+		},
+	},
+	prepared: {
+		name: 'Prepared',
+		noCopy: true,
+		onStart(target, source) {
+			this.effectState.owners = [source];
+			updatePreparedIndicator(this, target);
+		},
+		onRestart(target, source) {
+			if (!this.effectState.owners.includes(source)) this.effectState.owners.push(source);
+			updatePreparedIndicator(this, target);
+		},
+		onUpdate(target) {
+			updatePreparedIndicator(this, target);
+		},
+		onEnd(target) {
+			if (this.effectState.visibleKey) this.add('-end', target, 'Prepared');
+		},
+	},
 	moltenguard: {
-		name: 'Molten Guard', duration: 1, noCopy: true,
-		onStart(pokemon) { this.add('-start', pokemon, 'Molten Guard'); },
+		name: 'Molten Guard',
+		duration: 1,
+		noCopy: true,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'Molten Guard');
+		},
 		onTryHit(target, source, move) {
-			if (!target.hasAbility('infernaldominion') || target.isAlly(source) || move.category === 'Status' || !this.movehasType(move, 'Rock')) return;
+			if (
+				!target.hasAbility('infernaldominion') ||
+				target.isAlly(source) ||
+				move.category === 'Status' ||
+				!this.movehasType(move, 'Rock')
+			)
+				return;
 			target.removeVolatile('moltenguard');
 			this.add('-message', target.name + "'s heat melted the incoming rocks completely!");
 			this.add('-activate', target, 'Molten Guard');
 			return null;
 		},
-		onEnd(pokemon) { this.add('-end', pokemon, 'Molten Guard'); },
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'Molten Guard');
+		},
 	},
-	silentactready: {name: 'silentactready', noCopy: true},
-	ringmasterspent: {name: 'ringmasterspent', noCopy: true},
- dissonantechomark: {name: 'dissonantechomark',
-  onResidual() {
-   const state = this.effectState;
-   if (this.turn >= state.expires || !state.source?.hp || !state.source.isActive ||
-    !state.source.hasAbility('dissonantecho') || !state.marked?.hp || !state.marked.isActive) {
-    state.target.removeSideCondition('dissonantechomark');
-   }
-  },
- },
- venompincerspent: {name: 'venompincerspent', noCopy: true},
- glacialheartice: {name: 'glacialheartice', noCopy: true,
-  onStart(pokemon) {this.add('-start', pokemon, 'glacialheartice', '[silent]');},
-  onEnd(pokemon) {this.add('-end', pokemon, 'glacialheartice', '[silent]');},
- },
- glacialheartdragon: {name: 'glacialheartdragon', noCopy: true,
-  onStart(pokemon) {this.add('-start', pokemon, 'glacialheartdragon', '[silent]');},
-  onEnd(pokemon) {this.add('-end', pokemon, 'glacialheartdragon', '[silent]');},
- },
+	silentactready: { name: 'silentactready', noCopy: true },
+	ringmasterspent: { name: 'ringmasterspent', noCopy: true },
+	dissonantechomark: {
+		name: 'dissonantechomark',
+		onResidual() {
+			const state = this.effectState;
+			if (
+				this.turn >= state.expires ||
+				!state.source?.hp ||
+				!state.source.isActive ||
+				!state.source.hasAbility('dissonantecho') ||
+				!state.marked?.hp ||
+				!state.marked.isActive
+			) {
+				state.target.removeSideCondition('dissonantechomark');
+			}
+		},
+	},
+	venompincerspent: { name: 'venompincerspent', noCopy: true },
+	glacialheartice: {
+		name: 'glacialheartice',
+		noCopy: true,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'glacialheartice', '[silent]');
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'glacialheartice', '[silent]');
+		},
+	},
+	glacialheartdragon: {
+		name: 'glacialheartdragon',
+		noCopy: true,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'glacialheartdragon', '[silent]');
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'glacialheartdragon', '[silent]');
+		},
+	},
 	...ShelterConditions,
- shadowdoublespent: {name: 'Shadow Double spent', noCopy: true, onStart() { this.effectState.armed = true; }},
- crossfirecharge: {name: 'Crossfire charge', noCopy: true},
+	shadowdoublespent: {
+		name: 'Shadow Double spent',
+		noCopy: true,
+		onStart() {
+			this.effectState.armed = true;
+		},
+	},
+	crossfirecharge: { name: 'Crossfire charge', noCopy: true },
 
- dredgerturn: {name: 'Dredger turn', noCopy: true, duration: 1},
-	venamskissturn: {name: 'venamskissturn', noCopy: true, duration: 1},
+	dredgerturn: { name: 'Dredger turn', noCopy: true, duration: 1 },
+	venamskissturn: { name: 'venamskissturn', noCopy: true, duration: 1 },
 	relicarmoractive: {
-		name: 'relicarmoractive', noCopy: true,
-		onStart(pokemon) { this.add('-start', pokemon, 'relicarmoractive', '[silent]'); },
-		onEnd(pokemon) { this.add('-end', pokemon, 'relicarmoractive', '[silent]'); },
-		onUpdate(pokemon) { updateRelicArmorIndicator(this, pokemon); },
+		name: 'relicarmoractive',
+		noCopy: true,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'relicarmoractive', '[silent]');
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'relicarmoractive', '[silent]');
+		},
+		onUpdate(pokemon) {
+			updateRelicArmorIndicator(this, pokemon);
+		},
 	},
 	relicarmorfield: {
-		name: 'relicarmorfield', noCopy: true,
-		onStart(pokemon) { this.add('-start', pokemon, 'relicarmorfield', '[silent]'); },
-		onEnd(pokemon) { this.add('-end', pokemon, 'relicarmorfield', '[silent]'); },
-		onUpdate(pokemon) { updateRelicArmorIndicator(this, pokemon); },
+		name: 'relicarmorfield',
+		noCopy: true,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'relicarmorfield', '[silent]');
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'relicarmorfield', '[silent]');
+		},
+		onUpdate(pokemon) {
+			updateRelicArmorIndicator(this, pokemon);
+		},
 	},
 	cocoonactive: {
-		name: 'Cocoon active', noCopy: true,
-		onStart(pokemon) { this.add('-start', pokemon, 'cocoonactive', '[silent]'); },
-		onEnd(pokemon) { this.add('-end', pokemon, 'cocoonactive', '[silent]'); },
+		name: 'Cocoon active',
+		noCopy: true,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'cocoonactive', '[silent]');
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'cocoonactive', '[silent]');
+		},
 	},
 	blazeactive: {
-		name: 'Blaze active', noCopy: true,
+		name: 'Blaze active',
+		noCopy: true,
 		onStart(pokemon) {
 			this.add('-start', pokemon, 'blazeactive', '[silent]');
 			this.add('-message', `${pokemon.name}'s Blaze is active!`);
 		},
-		onEnd(pokemon) { this.add('-end', pokemon, 'blazeactive', '[silent]'); },
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'blazeactive', '[silent]');
+		},
 	},
 	torrentactive: {
-		name: 'Torrent active', noCopy: true,
+		name: 'Torrent active',
+		noCopy: true,
 		onStart(pokemon) {
 			this.add('-start', pokemon, 'torrentactive', '[silent]');
 			this.add('-message', `${pokemon.name}'s Torrent is active!`);
 		},
-		onEnd(pokemon) { this.add('-end', pokemon, 'torrentactive', '[silent]'); },
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'torrentactive', '[silent]');
+		},
 	},
 	overgrowactive: {
-		name: 'Overgrow active', noCopy: true,
+		name: 'Overgrow active',
+		noCopy: true,
 		onStart(pokemon) {
 			this.add('-start', pokemon, 'overgrowactive', '[silent]');
 			this.add('-message', `${pokemon.name}'s Overgrow is active!`);
 		},
-		onEnd(pokemon) { this.add('-end', pokemon, 'overgrowactive', '[silent]'); },
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'overgrowactive', '[silent]');
+		},
 	},
 	warnedmoves: {
-		name: 'Warned Moves', noCopy: true,
+		name: 'Warned Moves',
+		noCopy: true,
 		// Resolve the actual damage before Endure, Sturdy, and Focus Sash inspect it.
 		onDamagePriority: 0,
 		onDamage(damage, target, source, effect) {
@@ -153,59 +249,79 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return this.modifyAbilityGuard(damage, 0.75);
 		},
 	},
-    artilleryreload: {
-        name: 'artilleryreload', noCopy: true,
-        onStart(pokemon) { this.add('-start', pokemon, 'artilleryreload', '[silent]'); },
-        onEnd(pokemon) { this.add('-end', pokemon, 'artilleryreload', '[silent]'); },
-        onModifyBoostPriority: 10,
-        onModifyBoost(boosts, pokemon) {
-            if (!pokemon.hasAbility('heavyartillery') || this.suppressingAbility(pokemon)) return;
-            for (const stat of ['def', 'spd'] as const) if (boosts[stat] !== undefined) boosts[stat] = Math.min(6, boosts[stat]! + 1);
-        },
-        onTryMovePriority: -100,
-        onTryMove(pokemon, target, move) {
-            if (move.category === 'Status') return;
-            pokemon.m.heavyArtilleryFiredTurn = this.turn;
-            pokemon.removeVolatile('artilleryreload');
-            pokemon.addVolatile('artilleryfired', pokemon, this.effect);
-        },
-        onUpdate(pokemon) { if (pokemon.ability !== 'heavyartillery') pokemon.removeVolatile('artilleryreload'); },
-    },
-    artilleryfired: {
-        name: 'artilleryfired', noCopy: true,
-        onStart(pokemon) { this.add('-start', pokemon, 'artilleryfired', '[silent]'); },
-        onEnd(pokemon) { this.add('-end', pokemon, 'artilleryfired', '[silent]'); },
-        onModifyBoostPriority: 10,
-        onModifyBoost(boosts, pokemon) {
-            if (!pokemon.hasAbility('heavyartillery') || this.suppressingAbility(pokemon)) return;
-            for (const stat of ['def', 'spd'] as const) if (boosts[stat] !== undefined) boosts[stat] = Math.max(-6, boosts[stat]! - 1);
-        },
-        onTryMovePriority: -100,
-        onTryMove(pokemon, target, move) {
-            if (move.category === 'Status') return;
-            pokemon.m.heavyArtilleryFiredTurn = this.turn;
-        },
-        onUpdate(pokemon) { if (pokemon.ability !== 'heavyartillery') pokemon.removeVolatile('artilleryfired'); },
-    },
+	artilleryreload: {
+		name: 'artilleryreload',
+		noCopy: true,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'artilleryreload', '[silent]');
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'artilleryreload', '[silent]');
+		},
+		onModifyBoostPriority: 10,
+		onModifyBoost(boosts, pokemon) {
+			if (!pokemon.hasAbility('heavyartillery') || this.suppressingAbility(pokemon)) return;
+			for (const stat of ['def', 'spd'] as const)
+				if (boosts[stat] !== undefined) boosts[stat] = Math.min(6, boosts[stat] + 1);
+		},
+		onTryMovePriority: -100,
+		onTryMove(pokemon, target, move) {
+			if (move.category === 'Status') return;
+			pokemon.m.heavyArtilleryFiredTurn = this.turn;
+			pokemon.removeVolatile('artilleryreload');
+			pokemon.addVolatile('artilleryfired', pokemon, this.effect);
+		},
+		onUpdate(pokemon) {
+			if (pokemon.ability !== 'heavyartillery') pokemon.removeVolatile('artilleryreload');
+		},
+	},
+	artilleryfired: {
+		name: 'artilleryfired',
+		noCopy: true,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'artilleryfired', '[silent]');
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'artilleryfired', '[silent]');
+		},
+		onModifyBoostPriority: 10,
+		onModifyBoost(boosts, pokemon) {
+			if (!pokemon.hasAbility('heavyartillery') || this.suppressingAbility(pokemon)) return;
+			for (const stat of ['def', 'spd'] as const)
+				if (boosts[stat] !== undefined) boosts[stat] = Math.max(-6, boosts[stat] - 1);
+		},
+		onTryMovePriority: -100,
+		onTryMove(pokemon, target, move) {
+			if (move.category === 'Status') return;
+			pokemon.m.heavyArtilleryFiredTurn = this.turn;
+		},
+		onUpdate(pokemon) {
+			if (pokemon.ability !== 'heavyartillery') pokemon.removeVolatile('artilleryfired');
+		},
+	},
 	starterpassives: {
 		name: 'Starter Passives',
 		onBasePowerPriority: 22,
 		onBasePower(power, source, target, move) {
 			if (source.getPassives().includes('proficient')) {
-				return this.dex.abilities.get('proficient').onBasePower?.call(this, power, source, target, move);
+				return this.dex.abilities
+					.get('proficient')
+					.onBasePower?.call(this, power, source, target, move);
 			}
 		},
 
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, source, target, move) {
 			for (const id of source.getPassives()) {
-				if (id !== 'proficient') this.dex.abilities.getHandler(id, 'onModifyAtk')?.call(this, atk, source, target, move);
+				if (id !== 'proficient')
+					this.dex.abilities.getHandler(id, 'onModifyAtk')?.call(this, atk, source, target, move);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, source, target, move) {
 			for (const id of source.getPassives()) {
-				if (id !== 'proficient') this.dex.abilities.getHandler(id, 'onModifySpA')?.call(this, atk, source, target, move);
+				if (id !== 'proficient')
+					this.dex.abilities.getHandler(id, 'onModifySpA')?.call(this, atk, source, target, move);
 			}
 		},
 	},
@@ -228,39 +344,66 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	foresightmemory: {
 		name: 'Foresight Memory',
 		onFieldResidualOrder: -100,
-		onFieldResidual() { resolveForesight(this); },
+		onFieldResidual() {
+			resolveForesight(this);
+		},
 	},
 	megaenergy: {
 		name: 'Mega Energy',
 	},
 	terrainaura: {
 		name: 'Terrain Aura',
-  onSetStatus(status, target) {
-   if (!target.hasGravityExemption() || target.isSemiInvulnerable()) return;
-   if (this.field.isAura('mistyterrain') || (this.field.isAura('electricterrain') && status.id === 'slp')) return false;
-  },
-  onTryAddVolatile(status, target) {
-   if (!target.hasGravityExemption() || target.isSemiInvulnerable()) return;
-   if ((this.field.isAura('mistyterrain') && status.id === 'confusion') || (this.field.isAura('electricterrain') && status.id === 'yawn')) return null;
-  },
-  onTryHitPriority: 4,
-  onTryHit(target, source, move) {
-   if (!target.hasGravityExemption() || target.isSemiInvulnerable() || !this.field.isAura('psychicterrain') ||
-    !source || target.isAlly(source) || !move || move.priority <= 0.1 || move.target === 'self' ||
-    ['followme', 'ragepowder', 'spotlight'].includes(move.id)) return;
-   this.add('-activate', target, 'move: Psychic Terrain');
-   return null;
-  },
-  onAfterDamageApplied(damage, target, source, move) {
-   if (damage > 0 && source && !target.isAlly(source) && move?.effectType === 'Move' && this.field.isAura('frozenaura')) {
-    (move as any).frozenAuraDamage = true;
-   }
-  },
-  onAfterSubDamage(damage, target, source, move) {
-   if (damage > 0 && source && !target.isAlly(source) && this.field.isAura('frozenaura')) (move as any).frozenAuraDamage = true;
-  },
+		onSetStatus(status, target) {
+			if (!target.hasGravityExemption() || target.isSemiInvulnerable()) return;
+			if (
+				this.field.isAura('mistyterrain') ||
+				(this.field.isAura('electricterrain') && status.id === 'slp')
+			)
+				return false;
+		},
+		onTryAddVolatile(status, target) {
+			if (!target.hasGravityExemption() || target.isSemiInvulnerable()) return;
+			if (
+				(this.field.isAura('mistyterrain') && status.id === 'confusion') ||
+				(this.field.isAura('electricterrain') && status.id === 'yawn')
+			)
+				return null;
+		},
+		onTryHitPriority: 4,
+		onTryHit(target, source, move) {
+			if (
+				!target.hasGravityExemption() ||
+				target.isSemiInvulnerable() ||
+				!this.field.isAura('psychicterrain') ||
+				!source ||
+				target.isAlly(source) ||
+				!move ||
+				move.priority <= 0.1 ||
+				move.target === 'self' ||
+				['followme', 'ragepowder', 'spotlight'].includes(move.id)
+			)
+				return;
+			this.add('-activate', target, 'move: Psychic Terrain');
+			return null;
+		},
+		onAfterDamageApplied(damage, target, source, move) {
+			if (
+				damage > 0 &&
+				source &&
+				!target.isAlly(source) &&
+				move?.effectType === 'Move' &&
+				this.field.isAura('frozenaura')
+			) {
+				(move as any).frozenAuraDamage = true;
+			}
+		},
+		onAfterSubDamage(damage, target, source, move) {
+			if (damage > 0 && source && !target.isAlly(source) && this.field.isAura('frozenaura'))
+				(move as any).frozenAuraDamage = true;
+		},
 		onModifySpD(spd, pokemon) {
-			if (this.field.isAura('mistyterrain') && pokemon.hasType('Fairy')) return this.chainModify(1.5);
+			if (this.field.isAura('mistyterrain') && pokemon.hasType('Fairy'))
+				return this.chainModify(1.5);
 		},
 		onModifyMovePriority: -100,
 		onModifyMove(move) {
@@ -287,20 +430,30 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (this.field.isAura('grassyterrain') && pokemon.canBenefitFromTerrain() && !pokemon.isSemiInvulnerable()) {
+			if (
+				this.field.isAura('grassyterrain') &&
+				pokemon.canBenefitFromTerrain() &&
+				!pokemon.isSemiInvulnerable()
+			) {
 				this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 			}
 		},
 		onFieldResidualOrder: 27,
 		onFieldResidualSubOrder: 8,
-		onFieldResidual() { this.field.tickAura(); },
+		onFieldResidual() {
+			this.field.tickAura();
+		},
 	},
 	soulsiphonblock: {
 		name: 'Soul Siphon Block',
 		duration: 2,
 		noCopy: true,
-		onStart(pokemon) { this.add('-start', pokemon, 'move: Heal Block', '[from] ability: Soul Siphon'); },
-		onRestart() { this.effectState.duration = 2; },
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'move: Heal Block', '[from] ability: Soul Siphon');
+		},
+		onRestart() {
+			this.effectState.duration = 2;
+		},
 		onDisableMove(pokemon) {
 			for (const slot of pokemon.moveSlots) {
 				if (this.dex.moves.get(slot.id).flags['heal']) pokemon.disableMove(slot.id);
@@ -313,9 +466,13 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				return false;
 			}
 		},
-		onTryHeal() { return false; },
+		onTryHeal() {
+			return false;
+		},
 		onResidualOrder: 28,
-		onEnd(pokemon) { this.add('-end', pokemon, 'move: Heal Block'); },
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'move: Heal Block');
+		},
 	},
 	ghostresistance: {
 		name: 'Ghost Resistance',
@@ -410,14 +567,19 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onBasePower(basePower, source, target, move) {
 			if (source.m.perfectIllusion && source.ability !== 'perfectillusion') {
-				return this.dex.abilities.get('perfectillusion').onBasePower?.call(this, basePower, source, target, move);
+				return this.dex.abilities
+					.get('perfectillusion')
+					.onBasePower?.call(this, basePower, source, target, move);
 			}
 		},
 		onImmunity(type, pokemon) {
-			if (pokemon.m.perfectIllusion && type === 'hail' && this.field.isTerrain('coldeclipseterrain')) return false;
+			if (pokemon.m.perfectIllusion && type === 'hail' && this.field.isTerrain('coldeclipseterrain'))
+				return false;
 		},
 		onModifyMove(move, pokemon) {
-			if (pokemon.illusion && pokemon.illusion.getTypes().some(type => this.movehasType(move, type))) {
+			if (
+				pokemon.illusion?.getTypes().some(type => this.movehasType(move, type))
+			) {
 				move.forceSTAB = true;
 			}
 		},
@@ -425,13 +587,24 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (target.illusion) {
 				// The copied ability owns this volatile, so explicitly run Illusion's
 				// cleanup hook to reveal the real Pokemon and preserve the damage dealt.
-				this.singleEvent('End', this.dex.abilities.get('illusion'), target.abilityState, target, source, move);
+				this.singleEvent(
+					'End',
+					this.dex.abilities.get('illusion'),
+					target.abilityState,
+					target,
+					source,
+					move,
+				);
 			}
 		},
 		onEnd(pokemon) {
 			delete pokemon.m.perfectIllusion;
 			const originalAbility = this.effectState.originalAbility;
-			if (originalAbility && pokemon.ability !== originalAbility && pokemon.ability === this.effectState.copiedAbility) {
+			if (
+				originalAbility &&
+				pokemon.ability !== originalAbility &&
+				pokemon.ability === this.effectState.copiedAbility
+			) {
 				const copiedAbility = pokemon.getAbility();
 				this.singleEvent('End', copiedAbility, pokemon.abilityState, pokemon, pokemon);
 				pokemon.ability = originalAbility;
@@ -445,7 +618,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				this.add('-end', pokemon, 'Illusion');
 				this.add('-damage', pokemon, pokemon.getHealth, '[silent]');
 				if (this.ruleTable.has('illusionlevelmod')) {
-					this.hint("Illusion Level Mod is active, so this Pokemon's true level was hidden.", true);
+					this.hint(
+						"Illusion Level Mod is active, so this Pokemon's true level was hidden.",
+						true,
+					);
 				}
 			}
 		},
@@ -457,7 +633,13 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (sourceEffect && sourceEffect.id === 'flameorb') {
 				this.add('-status', target, 'brn', '[from] item: Flame Orb');
 			} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
-				this.add('-status', target, 'brn', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
+				this.add(
+					'-status',
+					target,
+					'brn',
+					'[from] ability: ' + sourceEffect.name,
+					`[of] ${source}`,
+				);
 			} else {
 				this.add('-status', target, 'brn');
 			}
@@ -478,7 +660,12 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 			const burnDamage = pokemon.baseMaxhp / damageDivisor;
 			if (pokemon.hasAbility('sinisterblaze')) {
-				const healed = this.heal(burnDamage, pokemon, pokemon, this.dex.abilities.get('sinisterblaze'));
+				const healed = this.heal(
+					burnDamage,
+					pokemon,
+					pokemon,
+					this.dex.abilities.get('sinisterblaze'),
+				);
 				if (healed && this.field.isTerrain('icyterrain')) {
 					this.add('-message', `${pokemon.name} is healed by the flames!`);
 				}
@@ -496,7 +683,12 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (typeof damage === 'number' && damage > 0) {
 				for (const foe of pokemon.foes()) {
 					if (!foe.fainted && foe.hp && foe.hasAbility('sinisterblaze')) {
-						const healed = this.heal(damage, foe, pokemon, this.dex.abilities.get('sinisterblaze'));
+						const healed = this.heal(
+							damage,
+							foe,
+							pokemon,
+							this.dex.abilities.get('sinisterblaze'),
+						);
 						if (healed && this.field.isTerrain('icyterrain')) {
 							this.add('-message', `${foe.name} is healed by the flames!`);
 						}
@@ -510,7 +702,13 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
-				this.add('-status', target, 'par', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
+				this.add(
+					'-status',
+					target,
+					'par',
+					'[from] ability: ' + sourceEffect.name,
+					`[of] ${source}`,
+				);
 			} else {
 				this.add('-status', target, 'par');
 			}
@@ -520,7 +718,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			// Paralysis occurs after all other Speed modifiers, so evaluate all modifiers up to this point first
 			spe = this.finalModify(spe);
 			if (!pokemon.hasAbilityOrPassive('quickfeet') && !pokemon.hasAbility('livewire')) {
-				spe = Math.floor(spe * 50 / 100);
+				spe = Math.floor((spe * 50) / 100);
 			}
 			return spe;
 		},
@@ -537,7 +735,13 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
-				this.add('-status', target, 'slp', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
+				this.add(
+					'-status',
+					target,
+					'slp',
+					'[from] ability: ' + sourceEffect.name,
+					`[of] ${source}`,
+				);
 			} else if (sourceEffect && sourceEffect.effectType === 'Move') {
 				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
@@ -568,7 +772,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 			return false;
 		},
-
 	},
 	frz: {
 		name: 'frz',
@@ -577,7 +780,13 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (this.field.isTerrain('coldeclipseterrain') && target.hasType('Dragon')) return false;
 			this.effectState.stage = 0;
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
-				this.add('-status', target, 'frz', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
+				this.add(
+					'-status',
+					target,
+					'frz',
+					'[from] ability: ' + sourceEffect.name,
+					`[of] ${source}`,
+				);
 			} else {
 				this.add('-status', target, 'frz');
 			}
@@ -617,7 +826,13 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
-				this.add('-status', target, 'psn', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
+				this.add(
+					'-status',
+					target,
+					'psn',
+					'[from] ability: ' + sourceEffect.name,
+					`[of] ${source}`,
+				);
 			} else {
 				this.add('-status', target, 'psn');
 			}
@@ -635,7 +850,13 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (sourceEffect && sourceEffect.id === 'toxicorb') {
 				this.add('-status', target, 'tox', '[from] item: Toxic Orb');
 			} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
-				this.add('-status', target, 'tox', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
+				this.add(
+					'-status',
+					target,
+					'tox',
+					'[from] ability: ' + sourceEffect.name,
+					`[of] ${source}`,
+				);
 			} else {
 				this.add('-status', target, 'tox');
 			}
@@ -658,7 +879,13 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (sourceEffect?.id === 'lockedmove') {
 				this.add('-start', target, 'confusion', '[fatigue]');
 			} else if (sourceEffect?.effectType === 'Ability') {
-				this.add('-start', target, 'confusion', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
+				this.add(
+					'-start',
+					target,
+					'confusion',
+					'[from] ability: ' + sourceEffect.name,
+					`[of] ${source}`,
+				);
 			} else {
 				this.add('-start', target, 'confusion');
 			}
@@ -681,7 +908,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 			this.activeTarget = pokemon;
 			const damage = this.actions.getConfusionDamage(pokemon, 40);
-			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
+			if (typeof damage !== 'number') throw new Error('Confusion damage not dealt');
 			const activeMove = { id: this.toID('confused'), effectType: 'Move', type: '???' };
 			this.damage(damage, pokemon, pokemon, activeMove as ActiveMove);
 			return false;
@@ -698,16 +925,27 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 	},
 	nightwatchstate: {
-		name: 'nightwatchstate', noCopy: true,
+		name: 'nightwatchstate',
+		noCopy: true,
 	},
 	soulanchortether: {
-		name: 'soulanchortether', noCopy: true,
-		onStart(holder, target) { this.effectState.foe = target; },
+		name: 'soulanchortether',
+		noCopy: true,
+		onStart(holder, target) {
+			this.effectState.foe = target;
+		},
 		onResidualOrder: 8,
 		onResidual(holder) {
 			const target = this.effectState.foe;
-			if (!holder.hp || !holder.isActive || !target?.hp || !target.isActive ||
-				target.volatiles['trapped']?.source !== holder || !target.runStatusImmunity('trapped') || target.hasItem('shedshell')) {
+			if (
+				!holder.hp ||
+				!holder.isActive ||
+				!target?.hp ||
+				!target.isActive ||
+				target.volatiles['trapped']?.source !== holder ||
+				!target.runStatusImmunity('trapped') ||
+				target.hasItem('shedshell')
+			) {
 				holder.removeVolatile('soulanchortether');
 				return;
 			}
@@ -718,15 +956,25 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 	},
 	guidinglightguard: {
-		name: 'guidinglightguard', noCopy: true, duration: 1,
+		name: 'guidinglightguard',
+		noCopy: true,
+		duration: 1,
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(0.8);
 		},
 	},
 	voidcrossingcurse: {
-		name: 'Void Crossing curse', noCopy: true, duration: 2,
+		name: 'Void Crossing curse',
+		noCopy: true,
+		duration: 2,
 		onStart(target, source) {
-			this.add('-start', target, 'Void Crossing curse', '[from] ability: Void Crossing', `[of] ${source}`);
+			this.add(
+				'-start',
+				target,
+				'Void Crossing curse',
+				'[from] ability: Void Crossing',
+				`[of] ${source}`,
+			);
 		},
 		onRestart() {
 			this.effectState.duration = 2;
@@ -735,70 +983,86 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (move.category !== 'Status') this.effectState.cursedMove = this.activeMove;
 		},
 		onModifyDamage(damage, source, target, move) {
-			if (move.category !== 'Status' && this.effectState.cursedMove === this.activeMove) return this.chainModify(0.8);
+			if (move.category !== 'Status' && this.effectState.cursedMove === this.activeMove)
+				return this.chainModify(0.8);
 		},
 		onAfterMove(pokemon) {
 			if (this.effectState.cursedMove) pokemon.removeVolatile('voidcrossingcurse');
 		},
 		onAfterMoveSecondarySelf(pokemon) {
-			if (this.effectState.cursedMove === this.activeMove) pokemon.removeVolatile('voidcrossingcurse');
+			if (this.effectState.cursedMove === this.activeMove)
+				pokemon.removeVolatile('voidcrossingcurse');
 		},
 		onResidualOrder: 100,
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Void Crossing curse');
 		},
 	},
-	royalescortspent: {name: 'royalescortspent', noCopy: true},
+	royalescortspent: { name: 'royalescortspent', noCopy: true },
 	royalescortshield: {
-		name: 'royalescortshield', noCopy: true, duration: 2,
+		name: 'royalescortshield',
+		noCopy: true,
+		duration: 2,
 		onDamagePriority: -1,
 		onDamage(damage, target, source, effect) {
-			if (damage <= 0 || effect?.effectType !== 'Move' || (effect as ActiveMove).category === 'Status') return;
+			if (damage <= 0 || effect?.effectType !== 'Move' || effect.category === 'Status') return;
 			target.removeVolatile('royalescortshield');
 			return this.modifyAbilityGuard(damage, 0.75);
 		},
 		onResidualOrder: 100,
 	},
-	knightsreprisalcharge: {name: 'knightsreprisalcharge', noCopy: true},
-	stancechangereprisalspent: {name: 'stancechangereprisalspent', noCopy: true},
-	stancechangereprisalpending: {name: 'stancechangereprisalpending', noCopy: true, duration: 1},
-	faultlinespent: {name: 'faultlinespent', noCopy: true},
-	creepingbloomspent: {name: 'creepingbloomspent', noCopy: true},
-	demolitiontrunkspent: {name: 'demolitiontrunkspent', noCopy: true},
-	siegemagnetspent: {name: 'siegemagnetspent', noCopy: true},
-	dreamrefugespent: {name: 'dreamrefugespent', noCopy: true},
-	wideguardrewardspent: {name: 'wideguardrewardspent', noCopy: true},
-	gentlegiantspent: {name: 'gentlegiantspent', noCopy: true},
-	ringcraftspent: {name: 'ringcraftspent', noCopy: true},
-	gritreprisalcharge: {name: 'gritreprisalcharge', noCopy: true},
-	scentscoutspent: {name: 'scentscoutspent', noCopy: true},
-	crushingvenomspent: {name: 'crushingvenomspent', noCopy: true},
-	crosswirecharge: {name: 'crosswirecharge', noCopy: true},
-	deepchillspent: {name: 'deepchillspent', noCopy: true},
-	climatereservespent: {name: 'climatereservespent', noCopy: true},
-	bloodchallengespent: {name: 'bloodchallengespent', noCopy: true},
-	buriedcoilspent: {name: 'buriedcoilspent', noCopy: true},
-	staticreservespent: {name: 'staticreservespent', noCopy: true},
-	lockinggripspent: {name: 'lockinggripspent', noCopy: true},
-	garlandgiftspent: {name: 'garlandgiftspent', noCopy: true},
-	riotstancespent: {name: 'riotstancespent', noCopy: true},
-	riotstancecharge: {name: 'riotstancecharge', noCopy: true},
-	drumguardspent: {name: 'drumguardspent', noCopy: true},
-	raincourierspent: {name: 'raincourierspent', noCopy: true},
-	lastlaughtormentspent: {name: 'lastlaughtormentspent', noCopy: true},
-	disorientingmindspent: {name: 'disorientingmindspent', noCopy: true},
-	wisecounselspent: {name: 'wisecounselspent', noCopy: true},
-	mindcurrentspent: {name: 'mindcurrentspent', noCopy: true},
-	fortunatewingspent: {name: 'fortunatewingspent', noCopy: true},
- infernalburnup: {
-  name: 'Infernal Burn Up', noCopy: true, duration: 1,
-  onResidualOrder: 28,
-  onEnd(pokemon) {
-   if (!this.field.isTerrain('infernaleclipseterrain') ||
-    pokemon.getTypes(true).join('/') !== this.effectState.burnedTypes?.join('/')) return;
-   if (pokemon.setType(this.effectState.originalTypes)) this.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'), '[from] move: Burn Up');
-  },
- },
+	knightsreprisalcharge: { name: 'knightsreprisalcharge', noCopy: true },
+	stancechangereprisalspent: { name: 'stancechangereprisalspent', noCopy: true },
+	stancechangereprisalpending: { name: 'stancechangereprisalpending', noCopy: true, duration: 1 },
+	faultlinespent: { name: 'faultlinespent', noCopy: true },
+	creepingbloomspent: { name: 'creepingbloomspent', noCopy: true },
+	demolitiontrunkspent: { name: 'demolitiontrunkspent', noCopy: true },
+	siegemagnetspent: { name: 'siegemagnetspent', noCopy: true },
+	dreamrefugespent: { name: 'dreamrefugespent', noCopy: true },
+	wideguardrewardspent: { name: 'wideguardrewardspent', noCopy: true },
+	gentlegiantspent: { name: 'gentlegiantspent', noCopy: true },
+	ringcraftspent: { name: 'ringcraftspent', noCopy: true },
+	gritreprisalcharge: { name: 'gritreprisalcharge', noCopy: true },
+	scentscoutspent: { name: 'scentscoutspent', noCopy: true },
+	crushingvenomspent: { name: 'crushingvenomspent', noCopy: true },
+	crosswirecharge: { name: 'crosswirecharge', noCopy: true },
+	deepchillspent: { name: 'deepchillspent', noCopy: true },
+	climatereservespent: { name: 'climatereservespent', noCopy: true },
+	bloodchallengespent: { name: 'bloodchallengespent', noCopy: true },
+	buriedcoilspent: { name: 'buriedcoilspent', noCopy: true },
+	staticreservespent: { name: 'staticreservespent', noCopy: true },
+	lockinggripspent: { name: 'lockinggripspent', noCopy: true },
+	garlandgiftspent: { name: 'garlandgiftspent', noCopy: true },
+	riotstancespent: { name: 'riotstancespent', noCopy: true },
+	riotstancecharge: { name: 'riotstancecharge', noCopy: true },
+	drumguardspent: { name: 'drumguardspent', noCopy: true },
+	raincourierspent: { name: 'raincourierspent', noCopy: true },
+	lastlaughtormentspent: { name: 'lastlaughtormentspent', noCopy: true },
+	disorientingmindspent: { name: 'disorientingmindspent', noCopy: true },
+	wisecounselspent: { name: 'wisecounselspent', noCopy: true },
+	mindcurrentspent: { name: 'mindcurrentspent', noCopy: true },
+	fortunatewingspent: { name: 'fortunatewingspent', noCopy: true },
+	infernalburnup: {
+		name: 'Infernal Burn Up',
+		noCopy: true,
+		duration: 1,
+		onResidualOrder: 28,
+		onEnd(pokemon) {
+			if (
+				!this.field.isTerrain('infernaleclipseterrain') ||
+				pokemon.getTypes(true).join('/') !== this.effectState.burnedTypes?.join('/')
+			)
+				return;
+			if (pokemon.setType(this.effectState.originalTypes))
+				this.add(
+					'-start',
+					pokemon,
+					'typechange',
+					pokemon.getTypes().join('/'),
+					'[from] move: Burn Up',
+				);
+		},
+	},
 	trapped: {
 		name: 'trapped',
 		noCopy: true,
@@ -815,8 +1079,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		noCopy: true,
 		onDamagePriority: -1,
 		onDamage(damage, target, source, effect) {
-			if (damage <= 0 || !source || source.isAlly(target) || effect?.effectType !== 'Move' ||
-				(effect as ActiveMove).category === 'Status') return;
+			if (
+				damage <= 0 ||
+				!source ||
+				source.isAlly(target) ||
+				effect?.effectType !== 'Move' ||
+				effect.category === 'Status'
+			)
+				return;
 			target.removeVolatile('lifeguardguard');
 			return this.modifyAbilityGuard(damage, 0.75);
 		},
@@ -826,38 +1096,56 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'breakwaterspent',
 		noCopy: true,
 	},
-	gentlescalesspent: {name: 'gentlescalesspent', noCopy: true, duration: 1},
-	anchoredbatteryspent: {name: 'anchoredbatteryspent', noCopy: true},
-	hivecourierspent: {name: 'hivecourierspent', noCopy: true},
-	deepchillturnspent: {name: 'deepchillturnspent', noCopy: true, duration: 1},
+	gentlescalesspent: { name: 'gentlescalesspent', noCopy: true, duration: 1 },
+	anchoredbatteryspent: { name: 'anchoredbatteryspent', noCopy: true },
+	hivecourierspent: { name: 'hivecourierspent', noCopy: true },
+	deepchillturnspent: { name: 'deepchillturnspent', noCopy: true, duration: 1 },
 	heatreservoirspent: { name: 'heatreservoirspent', noCopy: true },
 	petalrhythmspent: { name: 'petalrhythmspent', noCopy: true },
-	nobledancespent: {name: 'nobledancespent', noCopy: true},
+	nobledancespent: { name: 'nobledancespent', noCopy: true },
 	nobledanceward: {
-		name: 'nobledanceward', noCopy: true, duration: 2,
+		name: 'nobledanceward',
+		noCopy: true,
+		duration: 2,
 		onDamagePriority: -1,
 		onDamage(damage, target, source, effect) {
-			if (damage <= 0 || !source || source.isAlly(target) || effect?.effectType !== 'Move' ||
-				(effect as ActiveMove).category === 'Status') return;
+			if (
+				damage <= 0 ||
+				!source ||
+				source.isAlly(target) ||
+				effect?.effectType !== 'Move' ||
+				effect.category === 'Status'
+			)
+				return;
 			this.effectState.guardedMove ||= effect;
 			if (this.effectState.guardedMove === effect) return this.modifyAbilityGuard(damage, 0.8);
 		},
 		onAnyAfterAttackResolved(source, target, move) {
-			if (this.effectState.guardedMove === move) this.effectState.target.removeVolatile('nobledanceward');
+			if (this.effectState.guardedMove === move)
+				this.effectState.target.removeVolatile('nobledanceward');
 		},
 		onResidualOrder: 100,
 	},
 	hivecourierguard: {
-		name: 'hivecourierguard', noCopy: true, duration: 2,
+		name: 'hivecourierguard',
+		noCopy: true,
+		duration: 2,
 		onDamagePriority: -1,
 		onDamage(damage, target, source, effect) {
-			if (damage <= 0 || !source || source === target || effect?.effectType !== 'Move' ||
-				(effect as ActiveMove).category === 'Status') return;
+			if (
+				damage <= 0 ||
+				!source ||
+				source === target ||
+				effect?.effectType !== 'Move' ||
+				effect.category === 'Status'
+			)
+				return;
 			this.effectState.guardedMove ||= effect;
 			if (this.effectState.guardedMove === effect) return this.modifyAbilityGuard(damage, 0.75);
 		},
 		onAnyAfterAttackResolved(source, target, move) {
-			if (this.effectState.guardedMove === move) this.effectState.target.removeVolatile('hivecourierguard');
+			if (this.effectState.guardedMove === move)
+				this.effectState.target.removeVolatile('hivecourierguard');
 		},
 		onResidualOrder: 100,
 	},
@@ -876,13 +1164,25 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		noCopy: true,
 		onRestart(target, source) {
 			// Keep ownership and links intact; another source cannot steal or refresh this trap.
-			if (source !== this.effectState.source || !source?.hp || !source.isActive ||
-				!target.runStatusImmunity('trapped') || target.hasItem('shedshell')) return false;
+			if (
+				source !== this.effectState.source ||
+				!source?.hp ||
+				!source.isActive ||
+				!target.runStatusImmunity('trapped') ||
+				target.hasItem('shedshell')
+			)
+				return false;
 			this.effectState.duration = 2;
 		},
 		onStart(target, source) {
-			if (!source?.hp || !source.isActive || !target.runStatusImmunity('trapped') || target.hasItem('shedshell')) return false;
-			this.add('-activate', target, 'trapped', '[from] ability: Void Hex', '[of] ' + source);
+			if (
+				!source?.hp ||
+				!source.isActive ||
+				!target.runStatusImmunity('trapped') ||
+				target.hasItem('shedshell')
+			)
+				return false;
+			this.add('-activate', target, 'trapped', '[from] ability: Void Hex', `[of] ${source}`);
 		},
 		onTrapPokemon(pokemon) {
 			if (this.effectState.source?.hp && this.effectState.source.isActive) pokemon.tryTrap();
@@ -905,7 +1205,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (this.effectState.source?.isActive && this.effectState.source.hp) pokemon.tryTrap();
 		},
 		onAnySwitchOut(pokemon) {
-			if (pokemon === this.effectState.source) this.effectState.target.removeVolatile('apexflytraptrapped');
+			if (pokemon === this.effectState.source)
+				this.effectState.target.removeVolatile('apexflytraptrapped');
 		},
 		onStart(target, source) {
 			this.add('-message', `${target.name} was caught by ${source.name}'s Apex Flytrap!`);
@@ -918,7 +1219,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'trapper',
 		noCopy: true,
 	},
-	vendettaspent: {name: 'vendettaspent', noCopy: true},
+	vendettaspent: { name: 'vendettaspent', noCopy: true },
 	partiallytrapped: {
 		name: 'partiallytrapped',
 		duration: 5,
@@ -930,10 +1231,20 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return this.random(5, 7);
 		},
 		onStart(pokemon, source, effect) {
-			const shortTrap = ['desertsmark', 'barbedweb', 'swarmsnare'].includes(effect.id) ||
-				(effect as ActiveMove & {approvedShortTrap?: boolean}).approvedShortTrap;
-			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, `[of] ${source}`,
-				...(shortTrap ? [`[until] ${this.turn + (effect.id === 'swarmsnare' && (effect as ActiveMove & {yang?: {eligible: boolean}}).yang?.eligible ? 2 : 1)}`] : []));
+			const shortTrap =
+				['desertsmark', 'barbedweb', 'swarmsnare'].includes(effect.id) ||
+				(effect as ActiveMove & { approvedShortTrap?: boolean }).approvedShortTrap;
+			this.add(
+				'-activate',
+				pokemon,
+				'move: ' + this.effectState.sourceEffect,
+				`[of] ${source}`,
+				...(shortTrap ?
+					[
+						`[until] ${this.turn + (effect.id === 'swarmsnare' && (effect as ActiveMove & { yang?: { eligible: boolean } }).yang?.eligible ? 2 : 1)}`,
+					] :
+					[]),
+			);
 			this.effectState.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
 
 			const moveBoosts: Record<string, readonly string[]> = {
@@ -956,44 +1267,88 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onResidualOrder: 13,
 		onResidual(pokemon) {
 			const source = this.effectState.source;
-			if (this.effectState.constrictingHeatTurns && (!source?.hasAbility('constrictingheat') || source.volatiles['dynamax'])) {
-				pokemon.removeVolatile('partiallytrapped'); return;
+			if (
+				this.effectState.constrictingHeatTurns &&
+				(!source?.hasAbility('constrictingheat') || source.volatiles['dynamax'])
+			) {
+				pokemon.removeVolatile('partiallytrapped');
+				return;
 			}
-			if (this.effectState.infernalDominionTurns && (!source?.hasAbility('infernaldominion') || source.species.isMega)) {
-				pokemon.removeVolatile('partiallytrapped'); return;
+			if (
+				this.effectState.infernalDominionTurns &&
+				(!source?.hasAbility('infernaldominion') || source.species.isMega)
+			) {
+				pokemon.removeVolatile('partiallytrapped');
+				return;
 			}
 			// G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
-			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectState.sourceEffect.id);
+			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(
+				this.effectState.sourceEffect.id,
+			);
 			if (source && !gmaxEffect && (!source.isActive || source.hp <= 0 || !source.activeTurns)) {
-				if (pokemon !== source || ['elementalseed', 'telluricseed'].includes(this.effectState.sourceEffect.id)) {
+				if (
+					pokemon !== source ||
+					['elementalseed', 'telluricseed'].includes(this.effectState.sourceEffect.id)
+				) {
 					delete pokemon.volatiles['partiallytrapped'];
-					this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]', '[silent]');
+					this.add(
+						'-end',
+						pokemon,
+						this.effectState.sourceEffect,
+						'[partiallytrapped]',
+						'[silent]',
+					);
 					return;
 				} else {
 					return;
 				}
 			}
 			const stage = this.field.flowerGardenStage();
-			const divisor = this.effectState.sourceEffect.id === 'infestation' && stage >= 3 ?
-				({3: 6, 4: 4, 5: 3} as Record<number, number>)[stage] : this.effectState.boundDivisor;
+			const divisor =
+				this.effectState.sourceEffect.id === 'infestation' && stage >= 3 ?
+					({ 3: 6, 4: 4, 5: 3 } as Record<number, number>)[stage] :
+					this.effectState.boundDivisor;
 			const bindingDamage = this.damage(pokemon.baseMaxhp / divisor);
-			if (this.effectState.sourceEffect.id === 'swarmsnare' && (this.field.isTerrain('forestterrain') || stage) && typeof bindingDamage === 'number' && bindingDamage > 0 && source?.hp && source.isActive && !source.isAlly(pokemon)) {
-				if (this.heal(bindingDamage / 2, source, pokemon, 'drain')) this.add('-message', 'The swarm carried stolen strength back to its keeper!');
+			if (
+				this.effectState.sourceEffect.id === 'swarmsnare' &&
+				(this.field.isTerrain('forestterrain') || stage) &&
+				typeof bindingDamage === 'number' &&
+				bindingDamage > 0 &&
+				source?.hp &&
+				source.isActive &&
+				!source.isAlly(pokemon)
+			) {
+				if (this.heal(bindingDamage / 2, source, pokemon, 'drain'))
+					this.add('-message', 'The swarm carried stolen strength back to its keeper!');
 			}
-			if (typeof bindingDamage === 'number' && bindingDamage > 0 && source?.hp && source.isActive && source.hasAbilityOrPassive('constrictingcoils')) {
+			if (
+				typeof bindingDamage === 'number' &&
+				bindingDamage > 0 &&
+				source?.hp &&
+				source.isActive &&
+				source.hasAbilityOrPassive('constrictingcoils')
+			) {
 				this.heal(bindingDamage, source, pokemon, 'drain');
 			}
-			if (pokemon.hp && this.effectState.sourceEffect.id === 'desertsmark' && this.field.isTerrain('ashenbeachterrain')) {
-				this.boost({accuracy: -1}, pokemon, source, this.effectState.sourceEffect);
+			if (
+				pokemon.hp &&
+				this.effectState.sourceEffect.id === 'desertsmark' &&
+				this.field.isTerrain('ashenbeachterrain')
+			) {
+				this.boost({ accuracy: -1 }, pokemon, source, this.effectState.sourceEffect);
 			}
-			if (this.effectState.infernalDominionTurns && --this.effectState.infernalDominionTurns === 0) pokemon.removeVolatile('partiallytrapped');
-			if (this.effectState.constrictingHeatTurns && --this.effectState.constrictingHeatTurns === 0) pokemon.removeVolatile('partiallytrapped');
+			if (this.effectState.infernalDominionTurns && --this.effectState.infernalDominionTurns === 0)
+				pokemon.removeVolatile('partiallytrapped');
+			if (this.effectState.constrictingHeatTurns && --this.effectState.constrictingHeatTurns === 0)
+				pokemon.removeVolatile('partiallytrapped');
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]');
 		},
 		onTrapPokemon(pokemon) {
-			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectState.sourceEffect.id);
+			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(
+				this.effectState.sourceEffect.id,
+			);
 			if (this.effectState.source?.isActive || gmaxEffect) pokemon.tryTrap();
 		},
 	},
@@ -1011,7 +1366,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onStart(target, source, effect) {
 			this.effectState.trueDuration = this.random(2, 4);
 			this.effectState.move = effect.id;
-			this.effectState.ragingHeartThrash = !!(effect as ActiveMove & {ragingHeartThrash?: boolean}).ragingHeartThrash;
+			this.effectState.ragingHeartThrash = !!(effect as ActiveMove & { ragingHeartThrash?: boolean })
+				.ragingHeartThrash;
 		},
 		onRestart() {
 			if (this.effectState.trueDuration >= 2) {
@@ -1025,7 +1381,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onEnd(target) {
 			if (this.effectState.trueDuration > 1) return;
-			if (this.field.isTerrain(['burningterrain', 'volcanicterrain']) && this.effectState.move === 'ragingfury') return;
+			if (
+				this.field.isTerrain(['burningterrain', 'volcanicterrain']) &&
+				this.effectState.move === 'ragingfury'
+			)
+				return;
 			if (this.effectState.ragingHeartThrash && target.hasAbility('ragingheart')) return;
 			target.addVolatile('confusion');
 		},
@@ -1075,9 +1435,13 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'choicelock',
 		noCopy: true,
 		onStart(pokemon) {
-			if (!this.activeMove) throw new Error("Battle.activeMove is null");
-			if (!this.activeMove.id || this.activeMove.hasBounced ||
-				['snatch', 'checkhook'].includes(this.activeMove.sourceEffect || '')) return false;
+			if (!this.activeMove) throw new Error('Battle.activeMove is null');
+			if (
+				!this.activeMove.id ||
+				this.activeMove.hasBounced ||
+				['snatch', 'checkhook'].includes(this.activeMove.sourceEffect || '')
+			)
+				return false;
 			this.effectState.move = this.activeMove.id;
 		},
 		onBeforeMove(pokemon, target, move) {
@@ -1086,13 +1450,15 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				return;
 			}
 			if (
-				!pokemon.ignoringItem() && !pokemon.volatiles['dynamax'] &&
-				move.id !== this.effectState.move && move.id !== 'struggle'
+				!pokemon.ignoringItem() &&
+				!pokemon.volatiles['dynamax'] &&
+				move.id !== this.effectState.move &&
+				move.id !== 'struggle'
 			) {
 				// Fails unless the Choice item is being ignored, and no PP is lost
 				this.addMove('move', pokemon, move.name);
 				this.attrLastMove('[still]');
-				this.debug("Disabled by Choice item lock");
+				this.debug('Disabled by Choice item lock');
 				this.add('-fail', pokemon);
 				return false;
 			}
@@ -1135,18 +1501,28 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'futuremove',
 		onStart(target) {
 			this.effectState.targetSlot = target.getSlot();
-			this.effectState.endingTurn = (this.turn - 1) + 2;
+			this.effectState.endingTurn = this.turn - 1 + 2;
 			if (this.effectState.endingTurn >= 254) {
-				this.hint(`In Gen 8+, Future attacks will never resolve when used on the 255th turn or later.`);
+				this.hint(
+					`In Gen 8+, Future attacks will never resolve when used on the 255th turn or later.`,
+				);
 			}
 		},
 		onResidualOrder: 3,
 		onResidual(target: Pokemon) {
 			if (this.getOverflowedTurnCount() < this.effectState.endingTurn) return;
 			const slotTarget = this.getAtSlot(this.effectState.targetSlot);
-			if (slotTarget.fainted && (this.effectState.moveData?.perfectForesight || this.effectState.moveData?.grandmasterForesight || this.effectState.moveData?.temporalShiftHex)) {
+			if (
+				slotTarget.fainted &&
+				(this.effectState.moveData?.perfectForesight ||
+					this.effectState.moveData?.grandmasterForesight ||
+					this.effectState.moveData?.temporalShiftHex)
+			) {
 				this.effectState.endingTurn = this.turn + 1;
-				this.add('-message', `${this.effectState.moveData.name} has no target and was delayed to turn ${this.effectState.endingTurn}.`);
+				this.add(
+					'-message',
+					`${this.effectState.moveData.name} has no target and was delayed to turn ${this.effectState.endingTurn}.`,
+				);
 				return;
 			}
 			target.side.removeSlotCondition(this.getAtSlot(this.effectState.targetSlot), 'futuremove');
@@ -1155,27 +1531,59 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const data = this.effectState;
 			// time's up; time to hit! :D
 			const move = this.dex.moves.get(data.move);
-			if (data.moveData?.temporalShiftHex && data.source && (target === data.source || target.isAlly(data.source))) {
-				const enemies = data.source.foes().filter((foe: Pokemon) => foe.hp && !foe.fainted && foe !== data.source && !foe.isAlly(data.source));
+			if (
+				data.moveData?.temporalShiftHex &&
+				data.source &&
+				(target === data.source || target.isAlly(data.source))
+			) {
+				const enemies = data.source
+					.foes()
+					.filter(
+						(foe: Pokemon) =>
+							foe.hp && !foe.fainted && foe !== data.source && !foe.isAlly(data.source),
+					);
 				if (!enemies.length) {
 					data.endingTurn = this.turn + 1;
-					this.add('-message', `${move.name} has no enemy target and was delayed to turn ${data.endingTurn}.`);
-					target.side.addSlotCondition(target, 'futuremove', data.source, this.dex.conditions.get('futuremove'));
+					this.add(
+						'-message',
+						`${move.name} has no enemy target and was delayed to turn ${data.endingTurn}.`,
+					);
+					target.side.addSlotCondition(
+						target,
+						'futuremove',
+						data.source,
+						this.dex.conditions.get('futuremove'),
+					);
 					Object.assign(target.side.slotConditions[target.position]['futuremove'], data);
 					return;
 				}
 				target = this.sample(enemies);
 				this.add('-message', `${move.name} shifted to ${target.name}.`);
 			}
-			if ((target.fainted || target === data.source) && (data.moveData?.perfectForesight || data.moveData?.grandmasterForesight || data.moveData?.temporalShiftHex)) {
+			if (
+				(target.fainted || target === data.source) &&
+				(data.moveData?.perfectForesight ||
+					data.moveData?.grandmasterForesight ||
+					data.moveData?.temporalShiftHex)
+			) {
 				data.endingTurn = this.turn + 1;
-				this.add('-message', `${move.name} has no target and was delayed to turn ${data.endingTurn}.`);
-				target.side.addSlotCondition(target, 'futuremove', data.source, this.dex.conditions.get('futuremove'));
+				this.add(
+					'-message',
+					`${move.name} has no target and was delayed to turn ${data.endingTurn}.`,
+				);
+				target.side.addSlotCondition(
+					target,
+					'futuremove',
+					data.source,
+					this.dex.conditions.get('futuremove'),
+				);
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], data);
 				return;
 			}
 			if (target.fainted || target === data.source) {
-				this.hint(`${move.name} did not hit because the target is ${(target.fainted ? 'fainted' : 'the user')}.`);
+				this.hint(
+					`${move.name} did not hit because the target is ${target.fainted ? 'fainted' : 'the user'}.`,
+				);
 				return;
 			}
 
@@ -1197,21 +1605,42 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const hitResult = this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
 			if (!hitResult && data.moveData?.roarOfTimeFuture) {
 				data.endingTurn = this.turn + 2;
-				this.add('-message', `${move.name} missed and was sent further into the future, to turn ${data.endingTurn}.`);
-				target.side.addSlotCondition(target, 'futuremove', data.source, this.dex.conditions.get('futuremove'));
+				this.add(
+					'-message',
+					`${move.name} missed and was sent further into the future, to turn ${data.endingTurn}.`,
+				);
+				target.side.addSlotCondition(
+					target,
+					'futuremove',
+					data.source,
+					this.dex.conditions.get('futuremove'),
+				);
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], data);
 				return;
 			}
 			if (!hitResult && data.moveData?.temporalShiftHex) {
 				data.endingTurn = this.turn + 1;
-				this.add('-message', `${move.name} failed to hit and was delayed to turn ${data.endingTurn}.`);
-				target.side.addSlotCondition(target, 'futuremove', data.source, this.dex.conditions.get('futuremove'));
+				this.add(
+					'-message',
+					`${move.name} failed to hit and was delayed to turn ${data.endingTurn}.`,
+				);
+				target.side.addSlotCondition(
+					target,
+					'futuremove',
+					data.source,
+					this.dex.conditions.get('futuremove'),
+				);
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], data);
 				return;
 			}
 			let requeuedFutureMove = false;
 			if (data.moveData?.roarOfTimeFuture && data.roarOfTimeQueued > 1) {
-				target.side.addSlotCondition(target, 'futuremove', data.source, this.dex.conditions.get('futuremove'));
+				target.side.addSlotCondition(
+					target,
+					'futuremove',
+					data.source,
+					this.dex.conditions.get('futuremove'),
+				);
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 					...data,
 					endingTurn: this.turn + 1,
@@ -1220,8 +1649,18 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				requeuedFutureMove = true;
 				this.add('-message', `${move.name} will strike again on turn ${this.turn + 1}.`);
 			}
-			if ((data.moveData?.perfectForesight || data.moveData?.grandmasterForesight || data.moveData?.temporalShiftHex) && data.perfectForesightQueued > 1) {
-				target.side.addSlotCondition(target, 'futuremove', data.source, this.dex.conditions.get('futuremove'));
+			if (
+				(data.moveData?.perfectForesight ||
+					data.moveData?.grandmasterForesight ||
+					data.moveData?.temporalShiftHex) &&
+					data.perfectForesightQueued > 1
+			) {
+				target.side.addSlotCondition(
+					target,
+					'futuremove',
+					data.source,
+					this.dex.conditions.get('futuremove'),
+				);
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 					...data,
 					endingTurn: this.turn + 1,
@@ -1235,7 +1674,12 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 					const requeued = target.side.slotConditions[target.position]['futuremove'];
 					if (requeued) requeued.pendingRoarOfTime = data.pendingRoarOfTime;
 				} else {
-					target.side.addSlotCondition(target, 'futuremove', data.pendingRoarOfTime.source, this.dex.conditions.get('futuremove'));
+					target.side.addSlotCondition(
+						target,
+						'futuremove',
+						data.pendingRoarOfTime.source,
+						this.dex.conditions.get('futuremove'),
+					);
 					Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 						move: 'roaroftime',
 						source: data.pendingRoarOfTime.source,
@@ -1247,7 +1691,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				}
 			}
 			if (data.source.isActive && data.source.hasItem('lifeorb') && this.gen >= 5) {
-				this.singleEvent('AfterMoveSecondarySelf', data.source.getItem(), data.source.itemState, data.source, target, data.source.getItem());
+				this.singleEvent(
+					'AfterMoveSecondarySelf',
+					data.source.getItem(),
+					data.source.itemState,
+					data.source,
+					target,
+					data.source.getItem(),
+				);
 			}
 			this.activeMove = null;
 
@@ -1264,7 +1715,13 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onSwitchIn(target) {
 			if (!target.fainted) {
 				target.heal(target.maxhp);
-				this.add('-heal', target, target.getHealth, '[from] move: ' + this.effectState.sourceEffect, '[zeffect]');
+				this.add(
+					'-heal',
+					target,
+					target.getHealth,
+					'[from] move: ' + this.effectState.sourceEffect,
+					'[zeffect]',
+				);
 				target.side.removeSlotCondition(target, 'healreplacement');
 			}
 		},
@@ -1393,7 +1850,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		duration: 5,
 		durationCallback(source, target, effect) {
 			if (effect?.id === 'climatereserve' && effect.effectType === 'Ability') return 5;
-			if (source?.hasItem('heatrock') || this.field.isTerrain(['desertterrain', 'mountainterrain', 'snowymountainterrain'])) {
+			if (
+				source?.hasItem('heatrock') ||
+				this.field.isTerrain(['desertterrain', 'mountainterrain', 'snowymountainterrain'])
+			) {
 				return 8;
 			}
 			return 5;
@@ -1484,7 +1944,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		duration: 5,
 		durationCallback(source, target, effect) {
 			if (effect?.id === 'climatereserve' && effect.effectType === 'Ability') return 5;
-			if (source?.hasItem('smoothrock') || this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeachterrain')) {
+			if (
+				source?.hasItem('smoothrock') ||
+				this.field.isTerrain('desertterrain') ||
+				this.field.isTerrain('ashenbeachterrain')
+			) {
 				return 8;
 			}
 			return 5;
@@ -1532,14 +1996,38 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (effect?.id === 'climatereserve' && effect.effectType === 'Ability') return 5;
 			if (this.field.isTerrain('fairytaleterrain')) return 0;
 			if (effect?.id === 'mourningsnow') return 8;
-			if (source?.hasItem('icyrock') || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain', 'snowyterrain'])) {
+			if (
+				source?.hasItem('icyrock') ||
+				this.field.isTerrain([
+					'icyterrain',
+					'snowymountainterrain',
+					'coldeclipseterrain',
+					'snowyterrain',
+				])
+			) {
 				return 8;
 			}
 			return 5;
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && !this.field.isTerrain('coldeclipseterrain') && pokemon.hasAbilityOrPassive(['monarchofice', 'mindfreeze', 'icebody', 'thickfat', 'execution', 'argentdevotion', 'unboundblaze', 'waterbarrage', 'atrocity', 'siegelauncher', 'fortressshell']));
+			const iceBeneficiary =
+				pokemon.hasType('Ice') ||
+				(!pokemon.hasType('Ice') &&
+					!this.field.isTerrain('coldeclipseterrain') &&
+					pokemon.hasAbilityOrPassive([
+						'monarchofice',
+						'mindfreeze',
+						'icebody',
+						'thickfat',
+						'execution',
+						'argentdevotion',
+						'unboundblaze',
+						'waterbarrage',
+						'atrocity',
+						'siegelauncher',
+						'fortressshell',
+					]));
 			if (iceBeneficiary && this.field.isWeather('hail')) {
 				if (this.field.isTerrain('snowymountainterrain')) {
 					return this.modify(def, 2.25);
@@ -1574,7 +2062,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onWeather(target) {
 			if (target.hasType('Ghost')) return;
-			if (this.field.isTerrain('fairytaleterrain') && target.hasType(['Steel', 'Dragon', 'Fire'])) return;
+			if (this.field.isTerrain('fairytaleterrain') && target.hasType(['Steel', 'Dragon', 'Fire']))
+				return;
 			if (this.field.isTerrain('coldeclipseterrain')) {
 				this.damage(target.baseMaxhp / 8);
 			} else {
@@ -1597,7 +2086,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			if ((pokemon.hasType('Ice') || pokemon.hasAbilityOrPassive('monarchofice')) && this.field.isWeather('snowscape')) {
+			if (
+				(pokemon.hasType('Ice') || pokemon.hasAbilityOrPassive('monarchofice')) &&
+				this.field.isWeather('snowscape')
+			) {
 				return this.modify(def, 1.5);
 			}
 		},
@@ -1633,7 +2125,20 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onBasePower(basePower, source, target, move) {
 			if (!this.field.isWeather('deltastream')) return;
 			let modifier = 1;
-			if (['fairywind', 'gust', 'icywind', 'ominouswind', 'razorwind', 'silverwind', 'twister', 'heavenlywing', 'airstreamassault'].includes(move.id)) modifier *= 1.5;
+			if (
+				[
+					'fairywind',
+					'gust',
+					'icywind',
+					'ominouswind',
+					'razorwind',
+					'silverwind',
+					'twister',
+					'heavenlywing',
+					'airstreamassault',
+				].includes(move.id)
+			)
+				modifier *= 1.5;
 			if (move.category === 'Special' && move.type === 'Flying') modifier *= 1.5;
 			if (modifier !== 1) {
 				this.add('-message', 'The wind strengthened the attack!');
@@ -1642,14 +2147,25 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onEffectivenessPriority: -1,
 		onEffectiveness(typeMod, target, type, move) {
-			if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Flying' && typeMod > 0) {
+			if (
+				move &&
+				move.effectType === 'Move' &&
+				move.category !== 'Status' &&
+				type === 'Flying' &&
+				typeMod > 0
+			) {
 				this.add('-fieldactivate', 'Delta Stream');
 				return 0;
 			}
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'DeltaStream', '[from] ' + (effect.effectType === 'Move' ? 'move: ' : 'ability: ') + effect.name, `[of] ${source}`,
-				...(effect.id === 'supersonicskystrike' ? ['[turns] 3'] : []));
+			this.add(
+				'-weather',
+				'DeltaStream',
+				'[from] ' + (effect.effectType === 'Move' ? 'move: ' : 'ability: ') + effect.name,
+				`[of] ${source}`,
+				...(effect.id === 'supersonicskystrike' ? ['[turns] 3'] : []),
+			);
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
@@ -1667,14 +2183,19 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onStart(pokemon) {
 			for (const foe of this.getAllActive()) {
 				const trap = foe.volatiles['partiallytrapped'];
-				if (trap?.source === pokemon && trap.constrictingHeatTurns) foe.removeVolatile('partiallytrapped');
+				if (trap?.source === pokemon && trap.constrictingHeatTurns)
+					foe.removeVolatile('partiallytrapped');
 			}
 			this.effectState.turns = 0;
 			if (pokemon.gigantamax || pokemon.species.forme?.includes('Gmax')) {
 				// Switching removes the volatile but keeps the Gmax form and its spent PP.
 				// Only initialize the signature allowance on the first transformation.
 				if (!(pokemon as any).gmaxOriginalMoveSlots) {
-					(pokemon as any).gmaxOriginalMoveSlots = pokemon.moveSlots.map(slot => ({ pp: slot.pp, maxpp: slot.maxpp, gmaxpp: null as number | null }));
+					(pokemon as any).gmaxOriginalMoveSlots = pokemon.moveSlots.map(slot => ({
+						pp: slot.pp,
+						maxpp: slot.maxpp,
+						gmaxpp: null as number | null,
+					}));
 					for (const [i, moveSlot] of pokemon.moveSlots.entries()) {
 						const move = this.dex.moves.get(moveSlot.id);
 						const maxMove = this.actions.getMaxMove(move, pokemon);
@@ -1685,7 +2206,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 					}
 				}
 				for (const volatile of Object.keys(pokemon.volatiles)) {
-					if (volatile === 'dynamax' || (volatile === 'stellarhealing' && pokemon.terastallized === 'Stellar')) continue;
+					if (
+						volatile === 'dynamax' ||
+						(volatile === 'stellarhealing' && pokemon.terastallized === 'Stellar')
+					)
+						continue;
 					pokemon.removeVolatile(volatile);
 				}
 				if (!(pokemon as any).gmaxTransformHealed) {
@@ -1699,7 +2224,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				delete pokemon.volatiles['torment'];
 				this.add('-end', pokemon, 'Torment', '[silent]');
 			}
-			if (['cramorantgulping', 'cramorantgorging'].includes(pokemon.species.id) && !pokemon.transformed) {
+			if (
+				['cramorantgulping', 'cramorantgorging'].includes(pokemon.species.id) &&
+				!pokemon.transformed
+			) {
 				pokemon.formeChange('cramorant');
 			}
 			if (pokemon.baseSpecies.name === 'Shedinja') return;
@@ -1727,7 +2255,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			for (const [i, originalSlot] of originalMoveSlots.entries()) {
 				if (!pokemon.moveSlots[i]) continue;
 				if (originalSlot.gmaxpp === null) continue;
-				const spentPP = this.clampIntRange(originalSlot.gmaxpp - pokemon.moveSlots[i].pp, 0, originalSlot.gmaxpp);
+				const spentPP = this.clampIntRange(
+					originalSlot.gmaxpp - pokemon.moveSlots[i].pp,
+					0,
+					originalSlot.gmaxpp,
+				);
 				const restoredPP = this.clampIntRange(originalSlot.pp - spentPP, 0, originalSlot.maxpp);
 				pokemon.moveSlots[i].pp = restoredPP;
 				pokemon.moveSlots[i].maxpp = originalSlot.maxpp;
@@ -1743,7 +2275,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	// Commander needs two conditions so they are implemented here
 	// Dondozo
 	commanded: {
-		name: "Commanded",
+		name: 'Commanded',
 		noCopy: true,
 		onStart(pokemon) {
 			this.boost({ atk: 2, spa: 2, spe: 2, def: 2, spd: 2 }, pokemon);
@@ -1760,7 +2292,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	},
 	// Tatsugiri
 	commanding: {
-		name: "Commanding",
+		name: 'Commanding',
 		noCopy: true,
 		onDragOutPriority: 2,
 		onDragOut() {
@@ -1790,18 +2322,63 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onTypePriority: 1,
 		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('newworldterrain') && pokemon.ability === 'multitype') {
-				const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
+				const types = [
+					'Grass',
+					'Fire',
+					'Water',
+					'Electric',
+					'Ice',
+					'Dragon',
+					'Psychic',
+					'Normal',
+					'Fighting',
+					'Ghost',
+					'Poison',
+					'Bug',
+					'Flying',
+					'Ground',
+					'Rock',
+					'Dark',
+					'Steel',
+					'Fairy',
+				];
 				const new_type = this.sample(types);
 				pokemon.setType(new_type, true);
 				this.add('-start', pokemon, 'typechange', new_type);
 			}
 		},
 		onType(types, pokemon) {
-			if (pokemon.transformed || pokemon.ability !== 'multitype' && this.gen >= 8 || this.field.isTerrain('glitchterrain') || this.field.isTerrain('holyterrain') || this.field.isTerrain('newworldterrain')) return types;
+			if (
+				pokemon.transformed ||
+				(pokemon.ability !== 'multitype' && this.gen >= 8) ||
+				this.field.isTerrain('glitchterrain') ||
+				this.field.isTerrain('holyterrain') ||
+				this.field.isTerrain('newworldterrain')
+			)
+				return types;
 			let type: string | undefined = 'Normal';
 			if (pokemon.ability === 'multitype') {
 				if (this.field.isTerrain('newworldterrain')) {
-					const existingTypes = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
+					const existingTypes = [
+						'Grass',
+						'Fire',
+						'Water',
+						'Electric',
+						'Ice',
+						'Dragon',
+						'Psychic',
+						'Normal',
+						'Fighting',
+						'Ghost',
+						'Poison',
+						'Bug',
+						'Flying',
+						'Ground',
+						'Rock',
+						'Dark',
+						'Steel',
+						'Fairy',
+					];
 					type = this.sample(existingTypes);
 				} else {
 					type = pokemon.getItem().onPlate;
@@ -1814,7 +2391,26 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onResidual(pokemon) {
 			if (this.field.isTerrain('newworldterrain')) {
-				const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
+				const types = [
+					'Grass',
+					'Fire',
+					'Water',
+					'Electric',
+					'Ice',
+					'Dragon',
+					'Psychic',
+					'Normal',
+					'Fighting',
+					'Ghost',
+					'Poison',
+					'Bug',
+					'Flying',
+					'Ground',
+					'Rock',
+					'Dark',
+					'Steel',
+					'Fairy',
+				];
 				const new_type = this.sample(types);
 				pokemon.setType(new_type, true);
 				this.add('-start', pokemon, 'typechange', new_type);
@@ -1843,7 +2439,26 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 					this.add('-start', pokemon, 'typechange', 'Dark');
 					(this.effect as Condition).updateSilvallyForme?.call(this, pokemon, 'Dark');
 				} else if (this.field.isTerrain('newworldterrain')) {
-					const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
+					const types = [
+						'Grass',
+						'Fire',
+						'Water',
+						'Electric',
+						'Ice',
+						'Dragon',
+						'Psychic',
+						'Normal',
+						'Fighting',
+						'Ghost',
+						'Poison',
+						'Bug',
+						'Flying',
+						'Ground',
+						'Rock',
+						'Dark',
+						'Steel',
+						'Fairy',
+					];
 					const new_type = this.sample(types);
 					pokemon.setType(new_type, true);
 					this.add('-start', pokemon, 'typechange', new_type);
@@ -1855,7 +2470,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onType(types, pokemon) {
-			if (pokemon.transformed || pokemon.ability !== 'rkssystem' || this.field.isTerrain('glitchterrain') || this.field.isTerrain('holyterrain') || this.field.isTerrain('newworldterrain')) return types;
+			if (
+				pokemon.transformed ||
+				pokemon.ability !== 'rkssystem' ||
+				this.field.isTerrain('glitchterrain') ||
+				this.field.isTerrain('holyterrain') ||
+				this.field.isTerrain('newworldterrain')
+			)
+				return types;
 			let type: string | undefined = 'Normal';
 			if (pokemon.ability === 'rkssystem') {
 				const item = pokemon.getItem();
@@ -1873,7 +2495,26 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 					this.add('-start', pokemon, 'typechange', '???');
 					(this.effect as Condition).updateSilvallyForme?.call(this, pokemon, '???');
 				} else if (this.field.isTerrain('newworldterrain')) {
-					const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
+					const types = [
+						'Grass',
+						'Fire',
+						'Water',
+						'Electric',
+						'Ice',
+						'Dragon',
+						'Psychic',
+						'Normal',
+						'Fighting',
+						'Ghost',
+						'Poison',
+						'Bug',
+						'Flying',
+						'Ground',
+						'Rock',
+						'Dark',
+						'Steel',
+						'Fairy',
+					];
 					const new_type = this.sample(types);
 					pokemon.setType(new_type, true);
 					this.add('-start', pokemon, 'typechange', new_type);
@@ -1968,96 +2609,145 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 	},
 	tormented: {
-		name: "Tormented",
+		name: 'Tormented',
 		duration: 9999,
 		onResidual(target, source, effect) {
-			this.add('-message', 'Fell\'s Pokemon is feeling the same pain that he inflicted on Tern!');
+			this.add('-message', "Fell's Pokemon is feeling the same pain that he inflicted on Tern!");
 			this.damage(target.baseMaxhp / 24, target);
 		},
 	},
- hydroelectricspent: {noCopy: true},
- voidomensafeguardspent: {noCopy: true},
- silksightsspent: {noCopy: true},
- vendettatrap: {
-  name: 'Vendetta Trap', duration: 2, noCopy: true,
-  onTrapPokemon(pokemon) {
-   const source = this.effectState.source;
-   if (!source?.hp || !source.isActive || !source.hasAbility('vendetta')) {
-    pokemon.removeVolatile('vendettatrap'); return;
-   }
-   pokemon.tryTrap();
-  },
-  onAnySwitchOut(pokemon) { if (pokemon === this.effectState.source) this.effectState.target.removeVolatile('vendettatrap'); },
-  onUpdate(pokemon) {
-   const source = this.effectState.source;
-   if (!source?.hp || !source.isActive || !source.hasAbility('vendetta')) pokemon.removeVolatile('vendettatrap');
-  },
- },
+	hydroelectricspent: { noCopy: true },
+	voidomensafeguardspent: { noCopy: true },
+	silksightsspent: { noCopy: true },
+	vendettatrap: {
+		name: 'Vendetta Trap',
+		duration: 2,
+		noCopy: true,
+		onTrapPokemon(pokemon) {
+			const source = this.effectState.source;
+			if (!source?.hp || !source.isActive || !source.hasAbility('vendetta')) {
+				pokemon.removeVolatile('vendettatrap');
+				return;
+			}
+			pokemon.tryTrap();
+		},
+		onAnySwitchOut(pokemon) {
+			if (pokemon === this.effectState.source)
+				this.effectState.target.removeVolatile('vendettatrap');
+		},
+		onUpdate(pokemon) {
+			const source = this.effectState.source;
+			if (!source?.hp || !source.isActive || !source.hasAbility('vendetta'))
+				pokemon.removeVolatile('vendettatrap');
+		},
+	},
 };
 
 Conditions.steelwingescortentry = {
- name: 'Steelwing Escort Entry', noCopy: true,
- onDamage(damage, target, source, effect) {
-  if (effect && ['spikes', 'stealthrock', 'gmaxsteelsurge', 'dragonrend'].includes(effect.id)) return false;
- },
+	name: 'Steelwing Escort Entry',
+	noCopy: true,
+	onDamage(damage, target, source, effect) {
+		if (effect && ['spikes', 'stealthrock', 'gmaxsteelsurge', 'dragonrend'].includes(effect.id))
+			return false;
+	},
 };
 
-Conditions.voidomenchargespent = {name: 'voidomenchargespent', noCopy: true};
+Conditions.voidomenchargespent = { name: 'voidomenchargespent', noCopy: true };
 
-import {installLostFourConditions} from './lost-four-approved';
+import { installLostFourConditions } from './lost-four-approved';
 installLostFourConditions(Conditions);
 
-Conditions.ejecting={name:'Ejecting',noCopy:true,onStart(target){this.add('-start',target,'Ejecting');},onBeforeMovePriority:100,onBeforeMove(pokemon){this.add('cant',pokemon,'Ejecting');return false;},onDragOut(){return false;},onEnd(target){this.add('-end',target,'Ejecting');}};
+Conditions.ejecting = {
+	name: 'Ejecting',
+	noCopy: true,
+	onStart(target) {
+		this.add('-start', target, 'Ejecting');
+	},
+	onBeforeMovePriority: 100,
+	onBeforeMove(pokemon) {
+		this.add('cant', pokemon, 'Ejecting');
+		return false;
+	},
+	onDragOut() {
+		return false;
+	},
+	onEnd(target) {
+		this.add('-end', target, 'Ejecting');
+	},
+};
 
 // Vacated-slot token, consumed before the immediate replacement enters.
-Conditions.soulescort = {name: 'Soul Escort'};
+Conditions.soulescort = { name: 'Soul Escort' };
 
 Conditions.skullbashcooldown = {
-	name: 'Skull Bash cooldown', noCopy: true,
+	name: 'Skull Bash cooldown',
+	noCopy: true,
 	onDisableMove(pokemon) {
 		if (pokemon.volatiles['twoturnmove']?.move !== 'skullbash') pokemon.disableMove('skullbash');
 	},
 	onAfterMove(pokemon, target, move) {
-		if (move.id !== 'skullbash' && move.category !== 'Status' && !(move.flags.charge && pokemon.volatiles[move.id])) {
+		if (
+			move.id !== 'skullbash' &&
+			move.category !== 'Status' &&
+			!(move.flags.charge && pokemon.volatiles[move.id])
+		) {
 			pokemon.removeVolatile('skullbashcooldown');
 		}
 	},
 };
 
 Conditions.knightsguardearned = {
-	name: 'Knight’s Guard earned', duration: 2, noCopy: true,
+	name: 'Knight’s Guard earned',
+	duration: 2,
+	noCopy: true,
 	onSourceModifyDamage(damage, source, target, move) {
 		if (source === target || source.isAlly(target) || move.category === 'Status') return;
-		if (!this.effectState.protectedMove) { this.effectState.protectedMove = move; this.effectState.protectedSource = source; }
-		if (this.effectState.protectedMove === move && this.effectState.protectedSource === source) return this.chainModify(0.75);
+		if (!this.effectState.protectedMove) {
+			this.effectState.protectedMove = move;
+			this.effectState.protectedSource = source;
+		}
+		if (this.effectState.protectedMove === move && this.effectState.protectedSource === source)
+			return this.chainModify(0.75);
 	},
 	onAnyAfterMove(source, target, move) {
-		if (move === this.effectState.protectedMove && source === this.effectState.protectedSource) this.effectState.target.removeVolatile('knightsguardearned');
+		if (move === this.effectState.protectedMove && source === this.effectState.protectedSource)
+			this.effectState.target.removeVolatile('knightsguardearned');
 	},
 };
 Conditions.dreamsicknessrescueguard = {
-	name: 'Dream Sickness rescue guard', duration: 1, noCopy: true,
+	name: 'Dream Sickness rescue guard',
+	duration: 1,
+	noCopy: true,
 	onDamage(damage, target, source, effect) {
-		if (effect?.effectType === 'Move' && this.activeMove === this.effectState.protectedMove && source === this.effectState.protectedSource) return Math.min(damage, Math.max(0, target.hp - 1));
+		if (
+			effect?.effectType === 'Move' &&
+			this.activeMove === this.effectState.protectedMove &&
+			source === this.effectState.protectedSource
+		)
+			return Math.min(damage, Math.max(0, target.hp - 1));
 	},
 	onAnyAfterMove(source, target, move) {
-		if (move === this.effectState.protectedMove && source === this.effectState.protectedSource) this.effectState.target.removeVolatile('dreamsicknessrescueguard');
+		if (move === this.effectState.protectedMove && source === this.effectState.protectedSource)
+			this.effectState.target.removeVolatile('dreamsicknessrescueguard');
 	},
 };
 
-import {PlasmaConditions} from './plasma-eruption';
+import { PlasmaConditions } from './plasma-eruption';
 Object.assign(Conditions, PlasmaConditions);
 
-import {LoreConditions} from './lore-pairs';
+import { LoreConditions } from './lore-pairs';
 Object.assign(Conditions, LoreConditions);
 
-Conditions.lastbloom = {name: 'Last Bloom'};
-Conditions.tyrantlegacy = {name: 'Tyrant Legacy'};
-Conditions.harborpassage = {name: 'Harbor Passage'};
+Conditions.lastbloom = { name: 'Last Bloom' };
+Conditions.tyrantlegacy = { name: 'Tyrant Legacy' };
+Conditions.harborpassage = { name: 'Harbor Passage' };
 
 Conditions.risingmomentum = {
-	name: 'Rising Momentum', noCopy: true,
-	onModifyCritRatio(critRatio) { if (this.effectState.marksman) return critRatio + 1; },
+	name: 'Rising Momentum',
+	noCopy: true,
+	onModifyCritRatio(critRatio) {
+		if (this.effectState.marksman) return critRatio + 1;
+	},
 };
 
 import { StarterLinkConditions } from './starter-family-links';

@@ -42,7 +42,7 @@ describe('Additional exact Sticky Hold, Soundproof and Suction Cups passives', (
 		for (const id of ['grimer', 'muk']) {
 			assert.deepEqual(Dex.species.get(id).passives, ['liquidooze']);
 			const [p, t] = setup(id, 'Pressure');
-			use('knockoff', t, p, {basePower: 1}); assert.equal(p.item, '');
+			use('knockoff', t, p, { basePower: 1 }); assert.equal(p.item, '');
 			battle.destroy(); battle = null;
 		}
 	});
@@ -62,7 +62,7 @@ describe('Additional exact Sticky Hold, Soundproof and Suction Cups passives', (
 			for (const [id, slot, name] of before.replacement) if (id === old.id) abilities[slot] = name;
 			assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, abilities), old.id);
 			for (const k of ['baseStats', 'types', 'weightkg']) assert.deepEqual(s[k], old[k], old.id + '/' + k);
-			const expectedLearnset = {...old.learnset};
+			const expectedLearnset = { ...old.learnset };
 			// The later Corrosive Strike grant includes Alolan Muk as well as ordinary Muk.
 			if (old.id === 'mukalola') {
 				expectedLearnset.corrosivestrike = ['9L1'];
@@ -73,7 +73,7 @@ describe('Additional exact Sticky Hold, Soundproof and Suction Cups passives', (
 				expectedLearnset.mudbarrage = [...new Set([...(expectedLearnset.mudbarrage || []), ...expectedLearnset.mudslap])];
 				delete expectedLearnset.mudslap;
 			}
-			for (const [move, recipients] of Object.entries({...require('./rejuv-move-learnsets-approved.json'), ...require('./yang-move-learnsets-approved.json')})) {
+			for (const [move, recipients] of Object.entries({ ...require('./rejuv-move-learnsets-approved.json'), ...require('./yang-move-learnsets-approved.json') })) {
 				if (!recipients.includes(old.id)) continue;
 				assert(!Object.hasOwn(old.learnset, move), old.id + '/' + move + ' is an additive approved grant');
 				expectedLearnset[move] = ['9L1'];

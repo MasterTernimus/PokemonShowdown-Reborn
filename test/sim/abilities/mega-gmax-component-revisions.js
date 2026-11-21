@@ -5,9 +5,9 @@ const common = require('../../common');
 
 let battle;
 function start(species, ability, foe = 'Blissey') {
-	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-		{species, ability, moves: ['splash', 'tackle']},
-	], [{species: foe, ability: 'No Ability', moves: ['splash', 'tackle']}]]);
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+		{ species, ability, moves: ['splash', 'tackle'] },
+	], [{ species: foe, ability: 'No Ability', moves: ['splash', 'tackle'] }]]);
 	battle.makeChoices('team 1', 'team 1');
 	return [battle.p1.active[0], battle.p2.active[0]];
 }
@@ -50,7 +50,7 @@ describe('Mega and G-Max component revisions', () => {
 				if (foeAbility === 'Sturdy') foe.hp = foe.maxhp = foe.baseMaxhp = 1;
 				assert(holder.hasAbility('moldbreaker'));
 				assert.match(holder.getAbility().desc, /Moves ignore bypassable (?:opposing )?abilities/);
-				battle.actions.runMove(move, holder, 1, {externalMove: true});
+				battle.actions.runMove(move, holder, 1, { externalMove: true });
 				assert(foe.hp < foe.maxhp, `${ability} should bypass ${foeAbility}`);
 				if (foeAbility === 'Sturdy') assert.equal(foe.hp, 0);
 			});
@@ -59,7 +59,7 @@ describe('Mega and G-Max component revisions', () => {
 			const [holder, foe] = start('Mew', ability);
 			foe.setAbility('Levitate');
 			holder.addVolatile('gastroacid', foe);
-			battle.actions.runMove('earthquake', holder, 1, {externalMove: true});
+			battle.actions.runMove('earthquake', holder, 1, { externalMove: true });
 			assert.equal(foe.hp, foe.maxhp);
 		});
 	}
@@ -112,6 +112,6 @@ describe('Mega and G-Max component revisions', () => {
 		assert.equal(battle.runEvent('SourceModifyDamage', holder, foe, battle.dex.getActiveMove('tackle'), 100), 100);
 		const move = battle.dex.getActiveMove('dynamicpunch');
 		battle.singleEvent('ModifyMove', holder.getAbility(), holder.abilityState, move, holder, foe);
-		assert.equal(battle.runEvent('Accuracy',foe,holder,move,move.accuracy),true);
+		assert.equal(battle.runEvent('Accuracy', foe, holder, move, move.accuracy), true);
 	});
 });

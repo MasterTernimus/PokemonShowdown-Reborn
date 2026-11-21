@@ -22,7 +22,7 @@ describe('Approved Kalos Alola nine Mega migrations and Ultra damage removal', (
 		let count = 0;
 		for (const old of require('./kalos-alola-mega-before.json')) {
 			const s = Dex.species.get(old.id);
-			assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, {...old.abilities}), old.id);
+			assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, { ...old.abilities }), old.id);
 			assert.deepEqual(s.passives, require('./passive-approval-overlays').current(old.id, old.passives), old.id);
 			if (approved[old.id]) count++;
 		}

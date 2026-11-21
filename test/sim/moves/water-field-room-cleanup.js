@@ -6,9 +6,9 @@ let battle;
 const rooms = ['trickroom', 'magicroom', 'wonderroom'];
 
 function start(terrain) {
-	battle = common.createBattle({formatid: 'gen9customgame'}, [
-		[{species: 'Mew', ability: 'noability', moves: ['splash', 'flash', 'darkpulse']}],
-		[{species: 'Mew', ability: 'noability', moves: ['splash']}],
+	battle = common.createBattle({ formatid: 'gen9customgame' }, [
+		[{ species: 'Mew', ability: 'noability', moves: ['splash', 'flash', 'darkpulse'] }],
+		[{ species: 'Mew', ability: 'noability', moves: ['splash'] }],
 	]);
 	const source = battle.p1.active[0];
 	assert(battle.field.setTerrain(terrain, source));

@@ -1,5 +1,5 @@
 /** Shared single-ability runtime Memory effects; also exported to presentation clients. */
-export const RKSSystemMemoryAbilities: {[item: string]: string[]} = {
+export const RKSSystemMemoryAbilities: { [item: string]: string[] } = {
 	bugmemory: ['tintedlens'],
 	darkmemory: ['pressure'],
 	dragonmemory: ['marvelscale'],

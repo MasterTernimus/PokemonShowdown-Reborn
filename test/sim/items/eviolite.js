@@ -4,7 +4,7 @@ const assert = require('./../../assert');
 const common = require('./../../common');
 let battle;
 
-describe('Eviolite', function () {
+describe('Eviolite', () => {
 	afterEach(() => { battle.destroy(); });
 	for (const [species, multiplier] of [['Omanyte', 1.5], ['Omastar', 1], ['Geodude', 1.5]]) {
 		it(`should apply the correct defense multiplier for ${species}`, () => {

@@ -1,13 +1,13 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
-const {AbilityComponents} = require('../../../dist/data/ability-components');
-const {SpeciesPassives} = require('../../../dist/data/species-passives');
+const { Dex } = require('../../../dist/sim');
+const { AbilityComponents } = require('../../../dist/data/ability-components');
+const { SpeciesPassives } = require('../../../dist/data/species-passives');
 let battle;
 function start(ability, species = 'Mew', doubles = false) {
-	const mon = (s = 'Mew', a = 'No Ability') => ({species: s, ability: a, moves: ['splash', 'tackle', 'dragondarts', 'swordsdance']});
-	battle = common.createBattle({formatid: doubles ? 'gen9nofielddoublesbattle' : 'gen9nofieldsinglesgame'},
+	const mon = (s = 'Mew', a = 'No Ability') => ({ species: s, ability: a, moves: ['splash', 'tackle', 'dragondarts', 'swordsdance'] });
+	battle = common.createBattle({ formatid: doubles ? 'gen9nofielddoublesbattle' : 'gen9nofieldsinglesgame' },
 		[[mon(species, ability), mon()], [mon(), mon()]]);
 	battle.makeChoices('team 12', 'team 12');
 	battle.randomizer = n => n;
@@ -18,7 +18,7 @@ function power(p, q, move = 'dragondarts', bp = 60) {
 	return battle.runEvent('BasePower', p, q, Dex.getActiveMove(move), bp);
 }
 describe('Approved Darts, Drive and Mamoswine packages', () => {
-	afterEach(() => {battle?.destroy(); battle = null;});
+	afterEach(() => { battle?.destroy(); battle = null; });
 	it('sets 60 power per dart and applies Technician exactly once', () => {
 		const [p, q] = start('Dreepy Vanguard');
 		assert.equal(Dex.moves.get('dragondarts').basePower, 60);
@@ -30,7 +30,7 @@ describe('Approved Darts, Drive and Mamoswine packages', () => {
 	it('keeps the two darts split across the opposing active targets', () => {
 		const [p, q] = start('Dreepy Vanguard', 'Mew', true), ally = battle.p2.active[1];
 		for (const target of [q, ally]) target.hp = target.maxhp = target.baseMaxhp = 4000;
-		battle.actions.useMove('dragondarts', p, {target: q});
+		battle.actions.useMove('dragondarts', p, { target: q });
 		assert(q.hp < q.maxhp && ally.hp < ally.maxhp);
 		assert.equal(q.maxhp - q.hp, ally.maxhp - ally.hp);
 	});
@@ -47,7 +47,7 @@ describe('Approved Darts, Drive and Mamoswine packages', () => {
 	});
 	it('Dusk Ego rewards an opposing hit at turn end and respects suppression', () => {
 		const [p, q] = start('Dusk Ego');
-		battle.actions.useMove('tackle', q, {target: p});
+		battle.actions.useMove('tackle', q, { target: p });
 		assert.equal(p.boosts.atk, 0);
 		battle.fieldEvent('Residual');
 		assert.equal(p.boosts.atk, 1);
@@ -55,18 +55,18 @@ describe('Approved Darts, Drive and Mamoswine packages', () => {
 		p.addVolatile('gastroacid', q);
 		p.boosts.atk = p.boosts.spa = 0;
 		battle.turn++;
-		battle.actions.useMove('tackle', q, {target: p});
+		battle.actions.useMove('tackle', q, { target: p });
 		battle.fieldEvent('Residual');
 		assert.equal(p.boosts.atk, 0);
 	});
 	it('Twilight Instinct retains Ultra Instinct timing power without Battle Fervor', () => {
 		const [p, q] = start('Twilight Instinct');
 		p.storedStats.spe = 500; q.storedStats.spe = 100;
-		battle.queue.insertChoice({choice: 'move', pokemon: q, moveid: 'splash'});
+		battle.queue.insertChoice({ choice: 'move', pokemon: q, moveid: 'splash' });
 		assert.equal(power(p, q, 'tackle', 100), 130);
 	});
 	it('uses only the final Mamoswine slot layout and passive', () => {
-		assert.deepEqual(Dex.species.get('mamoswine').abilities, {0: 'Forsaken Sleeper', 1: 'Old North', H: 'Glacial Prime'});
+		assert.deepEqual(Dex.species.get('mamoswine').abilities, { 0: 'Forsaken Sleeper', 1: 'Old North', H: 'Glacial Prime' });
 		assert.deepEqual(SpeciesPassives.mamoswine, ['coldexpertise']);
 		assert.deepEqual(AbilityComponents.forsakensleeper, ['comatose', 'soundproof', 'rattled']);
 		assert.deepEqual(AbilityComponents.coldexpertise, ['oblivious', 'thickfat']);
@@ -78,9 +78,9 @@ describe('Approved Darts, Drive and Mamoswine packages', () => {
 		const [p, q] = start('Forsaken Sleeper', 'Mamoswine');
 		assert.equal(p.trySetStatus('brn', q), false);
 		const before = p.hp;
-		battle.actions.useMove('boomburst', q, {target: p});
+		battle.actions.useMove('boomburst', q, { target: p });
 		assert.equal(p.hp, before);
-		battle.actions.useMove('taunt', q, {target: p});
+		battle.actions.useMove('taunt', q, { target: p });
 		assert(!p.volatiles.taunt);
 	});
 	it('Old North supplies Technician without adding Intimidate', () => {

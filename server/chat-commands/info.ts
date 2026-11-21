@@ -9,7 +9,7 @@
  * @license MIT
  */
 import * as net from 'net';
-import {getAbilityMechanicsHTML} from '../ability-lookup';
+import { getAbilityMechanicsHTML } from '../ability-lookup';
 import { YouTube, Twitch } from '../chat-plugins/youtube';
 import { Net, Utils } from '../../lib';
 import { RoomSections } from './room-settings';

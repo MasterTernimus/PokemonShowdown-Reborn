@@ -8,7 +8,7 @@ describe('Bull Rush on Tauros forms', () => {
 	afterEach(() => { battle?.destroy(); });
 
 	it('gives each form Intimidate and its requested replacement ability', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		for (const [species, hidden] of [
 			['Tauros', 'Brute Force'],
 			['Tauros-Paldea-Combat', 'Ultra Ego'],
@@ -21,10 +21,10 @@ describe('Bull Rush on Tauros forms', () => {
 	});
 
 	it('raises Attack and Speed only on the first active turn', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Tauros', ability: 'Bull Rush', moves: ['tackle']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Tauros', ability: 'Bull Rush', moves: ['tackle'] },
 		], [
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const tauros = battle.p1.active[0];

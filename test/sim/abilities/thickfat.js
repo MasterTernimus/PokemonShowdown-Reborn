@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Thick Fat', function () {
-	afterEach(function () {
+describe('Thick Fat', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should halve damage from Fire- or Ice-type attacks`, function () {
+	it(`should halve damage from Fire- or Ice-type attacks`, () => {
 		battle = common.createBattle([[
-			{species: 'Miltank', ability: 'thickfat', item: 'lumberry', moves: ['splash', 'recover']},
+			{ species: 'Miltank', ability: 'thickfat', item: 'lumberry', moves: ['splash', 'recover'] },
 		], [
-			{species: 'Wynaut', moves: ['icebeam', 'flamethrower']},
+			{ species: 'Wynaut', moves: ['icebeam', 'flamethrower'] },
 		]]);
 		const miltank = battle.p1.active[0];
 		battle.randomizer = damage => damage;
@@ -29,22 +29,22 @@ describe('Thick Fat', function () {
 		assert.bounded(miltank.maxhp - miltank.hp, damageRange);
 	});
 
-	common.itGen(3, `should halve damage from Fire- or Ice-type attacks in past generations, even when holding a type-boosting item`, function () {
+	common.itGen(3, `should halve damage from Fire- or Ice-type attacks in past generations, even when holding a type-boosting item`, () => {
 		battle = common.gen(3).createBattle([[
-			{species: 'Miltank', ability: 'thickfat', moves: ['recover']},
+			{ species: 'Miltank', ability: 'thickfat', moves: ['recover'] },
 		], [
-			{species: 'Wynaut', item: 'nevermeltice', moves: ['icebeam']},
+			{ species: 'Wynaut', item: 'nevermeltice', moves: ['icebeam'] },
 		]]);
 		const miltank = battle.p1.active[0];
 		battle.makeChoices();
 		assert.bounded(miltank.maxhp - miltank.hp, [18, 22]);
 	});
 
-	it(`should be suppressed by Mold Breaker`, function () {
+	it(`should be suppressed by Mold Breaker`, () => {
 		battle = common.createBattle([[
-			{species: 'Miltank', ability: 'thickfat', item: 'lumberry', moves: ['splash', 'recover']},
+			{ species: 'Miltank', ability: 'thickfat', item: 'lumberry', moves: ['splash', 'recover'] },
 		], [
-			{species: 'Wynaut', ability: 'moldbreaker', moves: ['icebeam', 'flamethrower']},
+			{ species: 'Wynaut', ability: 'moldbreaker', moves: ['icebeam', 'flamethrower'] },
 		]]);
 		const miltank = battle.p1.active[0];
 		battle.randomizer = damage => damage;

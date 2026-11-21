@@ -101,13 +101,13 @@ describe('Reborn G-Max battle flow', () => {
 		assert.equal(r.moves[0].id, 'struggle'); assert(!r.maxMoves);
 	});
 
-	it.skip(`should not remove the variable to Dynamax on forced switches`, function () {
+	it.skip(`should not remove the variable to Dynamax on forced switches`, () => {
 		battle = common.gen(8).createBattle([[
-			{species: 'wynaut', item: 'ejectpack', moves: ['ironhead']},
-			{species: 'audino', item: 'ejectpack', moves: ['sleeptalk']},
+			{ species: 'wynaut', item: 'ejectpack', moves: ['ironhead'] },
+			{ species: 'audino', item: 'ejectpack', moves: ['sleeptalk'] },
 		], [
-			{species: 'vikavolt', moves: ['stickyweb']},
-			{species: 'incineroar', ability: 'intimidate', moves: ['sleeptalk']},
+			{ species: 'vikavolt', moves: ['stickyweb'] },
+			{ species: 'incineroar', ability: 'intimidate', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('move ironhead dynamax', 'switch 2');
@@ -118,12 +118,12 @@ describe('Reborn G-Max battle flow', () => {
 		assert(wynaut.volatiles['dynamax'], 'Wynaut should be currently Dynamaxed.');
 	});
 
-	describe(`Hacked Max Moves`, function () {
-		it(`should not activate Max Move side effects when used without Dynamaxing`, function () {
+	describe(`Hacked Max Moves`, () => {
+		it(`should not activate Max Move side effects when used without Dynamaxing`, () => {
 			battle = common.gen(8).createBattle([[
-				{species: 'wynaut', moves: ['maxflare', 'maxairstream']},
+				{ species: 'wynaut', moves: ['maxflare', 'maxairstream'] },
 			], [
-				{species: 'shuckle', moves: ['sleeptalk']},
+				{ species: 'shuckle', moves: ['sleeptalk'] },
 			]]);
 			battle.makeChoices('move maxflare', 'auto');
 			assert.equal(battle.field.weather, '');
@@ -132,11 +132,11 @@ describe('Reborn G-Max battle flow', () => {
 			assert.statStage(battle.p1.active[0], 'spe', 0);
 		});
 
-		it(`should treat Max Moves as 0 BP when used without Dynamaxing`, function () {
+		it(`should treat Max Moves as 0 BP when used without Dynamaxing`, () => {
 			battle = common.gen(8).createBattle([[
-				{species: 'wynaut', moves: ['maxflare', 'maxairstream']},
+				{ species: 'wynaut', moves: ['maxflare', 'maxairstream'] },
 			], [
-				{species: 'shuckle', ability: 'shellarmor', moves: ['sleeptalk']},
+				{ species: 'shuckle', ability: 'shellarmor', moves: ['sleeptalk'] },
 			]]);
 			battle.makeChoices('move maxflare', 'auto');
 			battle.makeChoices('move maxairstream', 'auto');
@@ -145,21 +145,21 @@ describe('Reborn G-Max battle flow', () => {
 			assert.bounded(shuckle.maxhp - shuckle.hp, [2, 4], `0 BP should cause the move's damage to only be 2 after base damage calculation, resulting in 1-2 final damage for each Max Move.`);
 		});
 
-		it(`should treat Max Moves as physical moves when used without Dynamaxing`, function () {
+		it(`should treat Max Moves as physical moves when used without Dynamaxing`, () => {
 			battle = common.gen(8).createBattle([[
-				{species: 'wynaut', moves: ['maxflare']},
+				{ species: 'wynaut', moves: ['maxflare'] },
 			], [
-				{species: 'shuckle', item: 'keeberry', moves: ['sleeptalk']},
+				{ species: 'shuckle', item: 'keeberry', moves: ['sleeptalk'] },
 			]]);
 			battle.makeChoices();
 			assert.statStage(battle.p2.active[0], 'def', 1);
 		});
 
-		it(`should prevent effects that affect regular Max Moves, like Sleep Talk and Instruct`, function () {
+		it(`should prevent effects that affect regular Max Moves, like Sleep Talk and Instruct`, () => {
 			battle = common.gen(8).createBattle([[
-				{species: 'wynaut', moves: ['maxflare', 'sleeptalk']},
+				{ species: 'wynaut', moves: ['maxflare', 'sleeptalk'] },
 			], [
-				{species: 'shuckle', moves: ['instruct', 'spore', 'roost']},
+				{ species: 'shuckle', moves: ['instruct', 'spore', 'roost'] },
 			]]);
 			battle.makeChoices();
 			const wynaut = battle.p1.active[0];

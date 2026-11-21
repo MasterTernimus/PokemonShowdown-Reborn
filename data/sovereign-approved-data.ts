@@ -2,7 +2,7 @@ import { SelectedAbilityDescriptions } from './selected-mega-simplification-data
 
 const updraft = "Full Updraft: Full Competitive: opposing stat drops raise Special Attack by 2 outside Chessboard; on Chessboard, instead boosts damage with missing HP up to 2x at 20% HP. Flying moves ignore evasion boosts. Once per switch-in, the first Flying attack dealing opposing HP damage raises the living adjacent ally with the lowest HP percentage by 1 Speed stage, or the holder if no such ally exists. Only one recipient is boosted; ability restarts and Mega Evolution do not reset the entry allowance.";
 export const SovereignDescriptions: { [id: string]: { shortDesc: string, desc: string } } = {
-	updraft: {shortDesc: "Competitive; Flying ignores evasion; one ally Speed boost per entry.", desc: updraft},
+	updraft: { shortDesc: "Competitive; Flying ignores evasion; one ally Speed boost per entry.", desc: updraft },
 	sunsovereign: {
 		shortDesc: "Eight-turn sun + Blazing Monarch; all moves have 1.1x accuracy.",
 		desc: SelectedAbilityDescriptions.sunsovereign.desc +

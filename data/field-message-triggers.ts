@@ -44,10 +44,10 @@ Object.assign(FieldMessageTriggers, {
 		"“En Passant!” — Fake Out, Feint, Feint Attack, First Impression, Shadow Sneak, Smart Strike or Sucker Punch receives the named 1.5x field modifier. Adaptive Cycle can alter the applied modifier.",
 	],
 	"coldeclipseterrain": [
-  '“The frozen reality cannot be changed!” — a new Room or Gravity use fails; existing timers remain paused.',
-  '“The frozen dimension thawed into a Rift Eclipse!” — a successful listed heating move transforms Cold Eclipse, subject to field locks.',
-  '“The eclipse was purified, leaving a permanent natural field!” — successful Purify leaves untimed Icy Field; normal Cave transitions still apply.',
- ],
+		'“The frozen reality cannot be changed!” — a new Room or Gravity use fails; existing timers remain paused.',
+		'“The frozen dimension thawed into a Rift Eclipse!” — a successful listed heating move transforms Cold Eclipse, subject to field locks.',
+		'“The eclipse was purified, leaving a permanent natural field!” — successful Purify leaves untimed Icy Field; normal Cave transitions still apply.',
+	],
 	"corrosivemistterrain": [
 		"“The toxic mist combusted!” — after Eruption, Explosion, Fire Pledge, Flame Burst, Heat Wave, Incinerate, Lava Plume, Mind Blown, Searing Shot, Self-Destruct, Inferno Overdrive or a Fire Max move, if no active Damp holder prevents it. Infernal Rage additionally requires its own successful field-clearing flag. Exposed active Pokémon receive explosion damage, then the field clears; Flash Fire, Well-Baked Body, semi-invulnerability, protection and Wide Guard are checked, with Sturdy/Endure handled separately.",
 	],

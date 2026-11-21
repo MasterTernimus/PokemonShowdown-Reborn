@@ -1,5 +1,5 @@
 import { isGroundBoneMove } from './ground-bone-moves';
-import {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';
+import { adaptiveFieldMultiplier } from '../sim/adaptive-cycle';
 import { type TerrainData } from '../sim/dex-terrains';
 
 /** The deepest stage of the water fields. */
@@ -20,7 +20,10 @@ export const MidnightZone: TerrainData = {
 			this.add('-fieldend', 'Midnight Zone Terrain');
 		},
 		onModifySpe(spe, pokemon) {
-			if (!pokemon.hasType('Water') && !pokemon.hasAbilityOrPassive(['steelworker', 'schooling', 'swiftswim', 'limber'])) {
+			if (
+				!pokemon.hasType('Water') &&
+				!pokemon.hasAbilityOrPassive(['steelworker', 'schooling', 'swiftswim', 'limber'])
+			) {
 				return this.chainModify(0.25);
 			}
 		},
@@ -29,11 +32,19 @@ export const MidnightZone: TerrainData = {
 				this.add('-message', '...But the attack was doused instantly!');
 				return false;
 			}
-			if (['sunnyday', 'raindance', 'sandstorm', 'hail', 'snowscape', 'chillyreception'].includes(move.id)) {
+			if (
+				['sunnyday', 'raindance', 'sandstorm', 'hail', 'snowscape', 'chillyreception'].includes(
+					move.id,
+				)
+			) {
 				this.add('-message', "You're too deep to notice the weather!");
 				return false;
 			}
-			if (['spikes', 'stealthrock', 'stickyweb', 'toxicspikes', 'stoneaxe', 'ceaselessedge'].includes(move.id)) {
+			if (
+				['spikes', 'stealthrock', 'stickyweb', 'toxicspikes', 'stoneaxe', 'ceaselessedge'].includes(
+					move.id,
+				)
+			) {
 				this.add('-message', 'But they sank into the trenches...');
 				return false;
 			}
@@ -48,11 +59,14 @@ export const MidnightZone: TerrainData = {
 			if (move.category === 'Status') return;
 			if (move.type === 'Dark') {
 				move.secondaries ||= [];
-				move.secondaries.push({chance: 30, onHit(target, source) {
-					if (this.boost({spa: -1}, target, source)) {
-						this.add('-message', `${target.name} became disorientated by the thick darkness!`);
-					}
-				}});
+				move.secondaries.push({
+					chance: 30,
+					onHit(target, source) {
+						if (this.boost({ spa: -1 }, target, source)) {
+							this.add('-message', `${target.name} became disorientated by the thick darkness!`);
+						}
+					},
+				});
 				if (move.category === 'Special') {
 					// Keep Dark STAB and field bonuses, but use Water's defensive matchups.
 					move.onEffectiveness = function (typeMod, target, type) {
@@ -75,12 +89,19 @@ export const MidnightZone: TerrainData = {
 		onBasePowerPriority: 6,
 		onBasePower(basePower, source, target, move) {
 			let modifier = 1;
-			const messages: {[type: string]: string} = {
-				Water: 'The water strengthened the attack!', Ice: 'Warmth has been eliminated...!',
-				Dark: 'Darkness gathers...!', Electric: 'The water super-conducted the attack!',
+			const messages: { [type: string]: string } = {
+				Water: 'The water strengthened the attack!',
+				Ice: 'Warmth has been eliminated...!',
+				Dark: 'Darkness gathers...!',
+				Electric: 'The water super-conducted the attack!',
 			};
 			if (messages[move.type]) {
-				modifier *= adaptiveFieldMultiplier(this, source, target, move.type === 'Electric' ? 1.2 : 1.5);
+				modifier *= adaptiveFieldMultiplier(
+					this,
+					source,
+					target,
+					move.type === 'Electric' ? 1.2 : 1.5,
+				);
 				this.add('-message', messages[move.type]);
 			}
 			if (move.midnightGround || move.type === 'Ground') {
@@ -95,15 +116,43 @@ export const MidnightZone: TerrainData = {
 				modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				this.add('-message', 'From the depths!');
 			}
-			if (['darkpulse', 'nightdaze', 'nightslash', 'shadowball', 'shadowforce', 'shadowclaw', 'shadowpunch', 'shadowbone'].includes(move.id)) {
+			if (
+				[
+					'darkpulse',
+					'nightdaze',
+					'nightslash',
+					'shadowball',
+					'shadowforce',
+					'shadowclaw',
+					'shadowpunch',
+					'shadowbone',
+				].includes(move.id)
+			) {
 				modifier *= adaptiveFieldMultiplier(this, source, target, 1.2);
 				this.add('-message', 'The lightless abyss boosted the attack.');
 			}
-			if (['signalbeam', 'doomdesire', 'flashcannon', 'lusterpurge', 'dazzlinggleam', 'mirrorshot', 'technoblast', 'powergem', 'moongeistbeam', 'menacingmoonrazemaelstrom'].includes(move.id)) {
+			if (
+				[
+					'signalbeam',
+					'doomdesire',
+					'flashcannon',
+					'lusterpurge',
+					'dazzlinggleam',
+					'mirrorshot',
+					'technoblast',
+					'powergem',
+					'moongeistbeam',
+					'menacingmoonrazemaelstrom',
+				].includes(move.id)
+			) {
 				modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				this.add('-message', 'The light disappeared in the dark...');
 			}
-			if (move.category === 'Physical' && !source.hasType('Water') && !source.hasAbilityOrPassive(['steelworker', 'schooling', 'swiftswim'])) {
+			if (
+				move.category === 'Physical' &&
+				!source.hasType('Water') &&
+				!source.hasAbilityOrPassive(['steelworker', 'schooling', 'swiftswim'])
+			) {
 				modifier *= adaptiveFieldMultiplier(this, source, target, 0.33);
 			}
 			return this.chainModify(modifier);
@@ -117,7 +166,17 @@ export const MidnightZone: TerrainData = {
 		},
 		onResidualOrder: 28,
 		onResidual(pokemon) {
-			if (!pokemon.hasType(['Water', 'Ghost']) && !pokemon.hasAbilityOrPassive(['waterveil', 'dryskin', 'stormdrain', 'steelworker', 'schooling', 'magicguard'])) {
+			if (
+				!pokemon.hasType(['Water', 'Ghost']) &&
+				!pokemon.hasAbilityOrPassive([
+					'waterveil',
+					'dryskin',
+					'stormdrain',
+					'steelworker',
+					'schooling',
+					'magicguard',
+				])
+			) {
 				const divisor = pokemon.hasType(['Steel', 'Ice', 'Fire', 'Rock']) ? 4 : 10;
 				if (this.damage(pokemon.baseMaxhp / divisor, pokemon)) {
 					this.add('-message', `The water pressure hurt ${pokemon.name}!`);
@@ -127,7 +186,10 @@ export const MidnightZone: TerrainData = {
 			if (pokemon.hasType('Water') && this.heal(pokemon.baseMaxhp / 16, pokemon)) {
 				this.add('-message', `The water healed ${pokemon.name}!`);
 			}
-			if (pokemon.hasAbilityOrPassive(['waterabsorb', 'dryskin']) && this.heal(pokemon.baseMaxhp / 10, pokemon)) {
+			if (
+				pokemon.hasAbilityOrPassive(['waterabsorb', 'dryskin']) &&
+				this.heal(pokemon.baseMaxhp / 10, pokemon)
+			) {
 				this.add('-message', `The intense water pressure healed ${pokemon.name}!`);
 			}
 		},

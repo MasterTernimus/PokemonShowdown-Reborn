@@ -1,8 +1,8 @@
 'use strict';
 
 const assert = require('assert').strict;
-const {Dex, toID} = require('../../../dist/sim/dex');
-const {Formats} = require('../../../dist/config/formats');
+const { Dex, toID } = require('../../../dist/sim/dex');
+const { Formats } = require('../../../dist/config/formats');
 
 describe('Configured format identities', () => {
 	it('keeps every display name uniquely addressable with valid rules and fields', () => {

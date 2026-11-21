@@ -5,17 +5,17 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Wonder Room', function () {
-	afterEach(function () {
+describe('Wonder Room', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('swaps raw defenses while retaining the original defensive stages and modifiers', function () {
-		battle = common.createBattle([[{species: 'Mew', ability: 'No Ability', moves: ['growl']}], [{species: 'Mew', ability: 'No Ability', moves: ['growl'] }]]);
+	it('swaps raw defenses while retaining the original defensive stages and modifiers', () => {
+		battle = common.createBattle([[{ species: 'Mew', ability: 'No Ability', moves: ['growl'] }], [{ species: 'Mew', ability: 'No Ability', moves: ['growl'] }]]);
 		const p = battle.p1.active[0], q = battle.p2.active[0];
 		q.storedStats.def = 100; q.storedStats.spd = 300;
 		battle.randomizer = damage => damage;
-		const damage = () => battle.actions.getDamage(p, q, {...battle.dex.getActiveMove('brickbreak'), willCrit: false});
+		const damage = () => battle.actions.getDamage(p, q, { ...battle.dex.getActiveMove('brickbreak'), willCrit: false });
 		const ordinary = damage();
 		battle.field.addPseudoWeather('wonderroom', p);
 		const swapped = damage(); assert(swapped < ordinary);
@@ -27,8 +27,8 @@ describe('Wonder Room', function () {
 		assert.equal(damage(), boosted, 'Physical damage must match the manually swapped raw Defense with its own boosts');
 	});
 
-	it('uses Sp. Def stages for Body Press under Wonder Room', function () {
-		battle = common.createBattle([[{species: 'Mew', ability: 'No Ability', moves: ['bodypress']}], [{species: 'Mew', ability: 'No Ability', moves: ['growl']}]]);
+	it('uses Sp. Def stages for Body Press under Wonder Room', () => {
+		battle = common.createBattle([[{ species: 'Mew', ability: 'No Ability', moves: ['bodypress'] }], [{ species: 'Mew', ability: 'No Ability', moves: ['growl'] }]]);
 		const p = battle.p1.active[0], q = battle.p2.active[0];
 		p.storedStats.def = 100; p.storedStats.spd = 300;
 		battle.randomizer = damage => damage;
@@ -44,12 +44,12 @@ describe('Wonder Room', function () {
 		p.boosts.def = 6; assert.equal(damage(), boosted);
 	});
 
-	it(`should be ignored by Download when determining raw stats, but not stat stage changes`, function () {
+	it(`should be ignored by Download when determining raw stats, but not stat stage changes`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', moves: ['wonderroom']},
-			{species: 'Porygon', ability: 'download', moves: ['sleeptalk']},
+			{ species: 'Wynaut', moves: ['wonderroom'] },
+			{ species: 'Porygon', ability: 'download', moves: ['sleeptalk'] },
 		], [
-			{species: 'Venusaur', moves: ['sleeptalk', 'amnesia']},
+			{ species: 'Venusaur', moves: ['sleeptalk', 'amnesia'] },
 		]]);
 
 		battle.makeChoices();

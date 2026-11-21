@@ -8,9 +8,19 @@ describe('Public official battle metadata', () => {
 	const format = 'gen9doublesrockyfield';
 	function battle(id, changes = {}) {
 		return {
-			roomid: `battle-${format}-${id}`, type: 'battle', format, active: true,
-			official: true, settings: {}, rated: 0,
-			battle: { started: true, ended: false, p1: { id: 'alice', name: 'Alice' }, p2: { id: 'bob', name: 'Bob' } },
+			roomid: `battle-${format}-${id}`,
+			type: 'battle',
+			format,
+			active: true,
+			official: true,
+			settings: {},
+			rated: 0,
+			battle: {
+				started: true,
+				ended: false,
+				p1: { id: 'alice', name: 'Alice' },
+				p2: { id: 'bob', name: 'Bob' },
+			},
 			...changes,
 		};
 	}
@@ -20,23 +30,42 @@ describe('Public official battle metadata', () => {
 	before(() => {
 		query = require('../../dist/server/chat-commands/core').crqHandlers.roomlist;
 	});
-	beforeEach(() => { originalRooms = Rooms.rooms; });
-	afterEach(() => { Rooms.rooms = originalRooms; });
+	beforeEach(() => {
+		originalRooms = Rooms.rooms;
+	});
+	afterEach(() => {
+		Rooms.rooms = originalRooms;
+	});
 
 	it('exposes explicit official status only for listed public battles', () => {
-		const official = battle(1), practice = battle(2, { official: false });
+		const official = battle(1),
+			practice = battle(2, { official: false });
 		const tournament = battle(3, { official: false, tour: {} });
-		install(official, practice, tournament,
+		install(
+			official,
+			practice,
+			tournament,
 			battle(4, { settings: { isPrivate: true } }),
 			battle(5, { settings: { isPrivate: 'hidden' } }),
 			battle(6, { settings: { isPrivate: 'voice' } }),
-			battle(7, { active: false }), battle(8, { type: 'chat' }));
+			battle(7, { active: false }),
+			battle(8, { type: 'chat' })
+		);
 		const response = query(',,,fresh_1', {}, true);
 		assert.equal(response.officialLiveVersion, 1);
 		assert.equal(response.requestId, 'fresh_1');
-		assert.deepEqual(Object.keys(response.rooms), [tournament.roomid, practice.roomid, official.roomid]);
+		assert.deepEqual(Object.keys(response.rooms), [
+			tournament.roomid,
+			practice.roomid,
+			official.roomid,
+		]);
 		assert.deepEqual(response.rooms[official.roomid], {
-			official: true, active: true, visibility: 'public', format, p1: 'Alice', p2: 'Bob',
+			official: true,
+			active: true,
+			visibility: 'public',
+			format,
+			p1: 'Alice',
+			p2: 'Bob',
 		});
 		assert.equal(response.rooms[practice.roomid].official, false);
 		assert.equal(response.rooms[tournament.roomid].official, false);
@@ -46,7 +75,9 @@ describe('Public official battle metadata', () => {
 	});
 
 	it('does not label ended or not-yet-started battles as ongoing even if active is stale', () => {
-		const ended = battle(1), waiting = battle(2), notOfficial = battle(3, { official: 'true' });
+		const ended = battle(1),
+			waiting = battle(2),
+			notOfficial = battle(3, { official: 'true' });
 		ended.battle.ended = true;
 		waiting.battle.started = false;
 		install(ended, waiting, notOfficial);
@@ -75,30 +106,58 @@ describe('Public official battle metadata', () => {
 		for (const nonce of ['a'.repeat(65), 'two words', 'bad|token', '<script>']) {
 			assert.equal(query(`,,,${nonce}`, {}, true), null);
 		}
-		const first = query(',,,request-1', {}, true), second = query(',,,request-2', {}, true);
+		const first = query(',,,request-1', {}, true),
+			second = query(',,,request-2', {}, true);
 		assert.equal(first.requestId, 'request-1');
 		assert.equal(second.requestId, 'request-2');
 	});
 });
 
 describe('Official Battle spectator access', () => {
-	const {makeUser, destroyUser} = require('../users-utils');
+	const { makeUser, destroyUser } = require('../users-utils');
 	it('discards hiding preferences and keeps the official room listed and joinable', async function () {
-		const users=['PublicWolf','PublicFox','WatchingOwl'].map((name,i)=>makeUser(name,'192.0.2.'+(i+1)));
+		const users = ['PublicWolf', 'PublicFox', 'WatchingOwl'].map((name, i) =>
+			makeUser(name, '192.0.2.' + (i + 1))
+		);
 		let room;
 		try {
-			room=Rooms.createBattle({format:'gen9nofieldsinglesgame',challengeType:'challengeofficial',
-				isPrivate:'hidden',modjoin:'%',players:users.slice(0,2).map(user=>({user,hidden:true,inviteOnly:true,team:'Mew||||splash|||||||'}))});
-			assert(room.official);assert(!room.settings.isPrivate);assert(!room.settings.modjoin);
-			const id=room.roomid;room.setPrivate('hidden');assert.equal(room.roomid,id);assert(!room.settings.isPrivate);
-			const commands=require('../../dist/server/chat-commands/room-settings').commands;
-			const ctx={requireRoom:()=>room,meansNo:()=>false,checkCan:()=>{}};
-			for(const cmd of ['hiddenroom','secretroom','unlistroom'])assert.throws(()=>commands.privateroom.call(ctx,'',room,users[0],null,cmd),/Official Battles are public/);
-			assert.throws(()=>commands.modjoin.call(ctx,'%',room,users[0]),/Official Battles are public/);
+			room = Rooms.createBattle({
+				format: 'gen9nofieldsinglesgame',
+				challengeType: 'challengeofficial',
+				isPrivate: 'hidden',
+				modjoin: '%',
+				players: users
+					.slice(0, 2)
+					.map(user => ({ user, hidden: true, inviteOnly: true, team: 'Mew||||splash|||||||' })),
+			});
+			assert(room.official);
+			assert(!room.settings.isPrivate);
+			assert(!room.settings.modjoin);
+			const id = room.roomid;
+			room.setPrivate('hidden');
+			assert.equal(room.roomid, id);
+			assert(!room.settings.isPrivate);
+			const commands = require('../../dist/server/chat-commands/room-settings').commands;
+			const ctx = { requireRoom: () => room, meansNo: () => false, checkCan: () => {} };
+			for (const cmd of ['hiddenroom', 'secretroom', 'unlistroom'])
+				assert.throws(
+					() => commands.privateroom.call(ctx, '', room, users[0], null, cmd),
+					/Official Battles are public/
+				);
+			assert.throws(
+				() => commands.modjoin.call(ctx, '%', room, users[0]),
+				/Official Battles are public/
+			);
 			this.timeout(10000);
-			for(let i=0;i<100 && !room.active;i++) await new Promise(resolve=>setTimeout(resolve,30));
+			for (let i = 0; i < 100 && !room.active; i++)
+				await new Promise(resolve => { setTimeout(resolve, 30); });
 			assert(Rooms.global.getBattles('')[id]?.official);
-			assert(room.checkModjoin(users[2]));users[2].joinRoom(room);assert(users[2].inRooms.has(id));
-		} finally {room?.destroy(); for(const user of users) destroyUser(user);}
+			assert(room.checkModjoin(users[2]));
+			users[2].joinRoom(room);
+			assert(users[2].inRooms.has(id));
+		} finally {
+			room?.destroy();
+			for (const user of users) destroyUser(user);
+		}
 	});
 });

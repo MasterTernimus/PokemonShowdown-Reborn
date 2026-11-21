@@ -6,9 +6,9 @@
 
 const assert = require('../assert');
 const common = require('../common');
-const {Utils} = require('../../dist/lib');
-const {testTeam, assertSetValidity, validateLearnset} = require('./tools');
-const {default: Dex} = require('../../dist/sim/dex');
+const { Utils } = require('../../dist/lib');
+const { testTeam, assertSetValidity, validateLearnset } = require('./tools');
+const { default: Dex } = require('../../dist/sim/dex');
 
 describe('value rule support (slow)', () => {
 	if (!Dex.formats.all().some(format => format.team)) {
@@ -16,14 +16,14 @@ describe('value rule support (slow)', () => {
 		return;
 	}
 	it('should generate teams of the proper length for the format (i.e. support Max Team Size)', () => {
-		testTeam({format: 'gen9randombattle', rounds: 100}, team => assert.equal(team.length, 6));
-		testTeam({format: 'gen9challengecup1v1', rounds: 100}, team => assert.equal(team.length, 6));
-		testTeam({format: 'gen9hackmonscup', rounds: 100}, team => assert.equal(team.length, 6));
+		testTeam({ format: 'gen9randombattle', rounds: 100 }, team => assert.equal(team.length, 6));
+		testTeam({ format: 'gen9challengecup1v1', rounds: 100 }, team => assert.equal(team.length, 6));
+		testTeam({ format: 'gen9hackmonscup', rounds: 100 }, team => assert.equal(team.length, 6));
 
-		testTeam({format: 'gen8multirandombattle', rounds: 100}, team => assert.equal(team.length, 3));
-		testTeam({format: 'gen8cap1v1', rounds: 100}, team => assert.equal(team.length, 3));
+		testTeam({ format: 'gen8multirandombattle', rounds: 100 }, team => assert.equal(team.length, 3));
+		testTeam({ format: 'gen8cap1v1', rounds: 100 }, team => assert.equal(team.length, 3));
 
-		testTeam({format: 'gen7randombattle', rounds: 100}, team => assert.equal(team.length, 6));
+		testTeam({ format: 'gen7randombattle', rounds: 100 }, team => assert.equal(team.length, 6));
 	});
 
 	for (let gen = 1; gen <= 9; gen++) {
@@ -47,7 +47,7 @@ describe('value rule support (slow)', () => {
 					// Load optional generation fixtures during the test, not collection.
 					// Missing data must fail this case without preventing unrelated suites from running.
 					const setsJSON = require(`../../dist/data/${gen === 9 ? '' : `mods/gen${gen}/`}random-sets.json`);
-					testTeam({format, rounds: 50}, team => {
+					testTeam({ format, rounds: 50 }, team => {
 						for (const set of team) {
 							let species = set.species;
 							// Formes make this test code really complicated, so we skip them
@@ -78,7 +78,7 @@ describe('value rule support (slow)', () => {
 			} else {
 				it(`${format.name} should support Max Move Count = ${count}`, () => {
 					const dataJSON = require(`../../dist/data/mods/gen${gen}/random-data.json`);
-					testTeam({format, rounds: 50}, team => {
+					testTeam({ format, rounds: 50 }, team => {
 						for (const set of team) {
 							let species = set.species;
 							// Formes make this test code really complicated, so we skip them
@@ -112,7 +112,7 @@ describe('value rule support (slow)', () => {
 
 		for (const level of [1, 99999]) {
 			it(`${format.name} should support Adjust Level = ${level}`, () => {
-				testTeam({format: `${format.id}@@@Adjust Level = ${level}`, rounds: 50}, team => {
+				testTeam({ format: `${format.id}@@@Adjust Level = ${level}`, rounds: 50 }, team => {
 					for (const set of team) {
 						assert.equal(set.level, level);
 					}
@@ -182,7 +182,7 @@ describe('randomly generated teams should be valid (slow)', () => {
 			this.timeout(0);
 
 			const targetTeamSize = Dex.formats.getRuleTable(format).maxTeamSize;
-			testTeam({format: format.id}, team => {
+			testTeam({ format: format.id }, team => {
 				assert.equal(team.length, targetTeamSize, `Team of incorrect size (should have ${targetTeamSize} Pokémon but actually has ${team.length} Pokémon): ${JSON.stringify(team)}`);
 
 				for (const set of team) {

@@ -1,8 +1,8 @@
 'use strict';
 
 const assert = require('./../assert');
-const {CustomLearnsetRemovals, Learnsets} = require('./../../dist/data/learnsets');
-const {Gen8Gen9NatDexLearnsets} = require('./../../dist/data/natdex-gen8-gen9-learnsets');
+const { CustomLearnsetRemovals, Learnsets } = require('./../../dist/data/learnsets');
+const { Gen8Gen9NatDexLearnsets } = require('./../../dist/data/natdex-gen8-gen9-learnsets');
 const { November16MoveRemovals } = require('../../dist/data/nov16-movepool-removals');
 
 function intentionallyRemoved(species, move) {
@@ -23,8 +23,8 @@ function hasImportedSource(localData, officialData, move, source) {
 	});
 }
 
-describe('Generation 8/9 NatDex learnset merge', function () {
-	it('should preserve every official source unless the move was intentionally removed', function () {
+describe('Generation 8/9 NatDex learnset merge', () => {
+	it('should preserve every official source unless the move was intentionally removed', () => {
 		let checkedSources = 0;
 		const missing = [];
 		for (const [species, officialData] of Object.entries(Gen8Gen9NatDexLearnsets)) {
@@ -47,7 +47,7 @@ describe('Generation 8/9 NatDex learnset merge', function () {
 		assert(checkedSources > 30_000, `expected a complete merge, checked only ${checkedSources} sources`);
 	});
 
-	it('should preserve official event and encounter metadata', function () {
+	it('should preserve official event and encounter metadata', () => {
 		for (const [species, officialData] of Object.entries(Gen8Gen9NatDexLearnsets)) {
 			if (['flox', 'obliteryx'].includes(species)) {
 				assert(!Dex.species.get(species).exists, 'Only absent upstream CAP entries are omitted');

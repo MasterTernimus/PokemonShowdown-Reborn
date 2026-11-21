@@ -36,8 +36,8 @@ describe('Icy Field interactions', () => {
 	}
 
 	function applyIcyField(source) {
-  if (!battle.field.isTerrain('icyterrain')) assert(battle.field.setTerrain('icyterrain', source));
- }
+		if (!battle.field.isTerrain('icyterrain')) assert(battle.field.setTerrain('icyterrain', source));
+	}
 
 	it('announces the Icy Field start text and preserves its internal id', () => {
 		const [source] = createBattle();
@@ -69,7 +69,7 @@ describe('Icy Field interactions', () => {
 	it('restores Cave through an actual Earthquake after a direct Icy overlay', () => {
 		const [source] = createBattle([
 			[{ species: 'Mew', moves: ['earthquake'] }],
-			[{species: 'Mew', moves: ['splash']}],
+			[{ species: 'Mew', moves: ['splash'] }],
 		]);
 		battle.field.changeTerrain('dragonsdenterrain', source);
 		battle.field.changeTerrain('caveterrain', source);
@@ -92,7 +92,7 @@ describe('Icy Field interactions', () => {
 	for (const underlying of ['watersurfaceterrain', 'murkwatersurfaceterrain', null]) {
 		it(`Anchor Shot breaks ice and restores ${underlying || 'Water Surface by default'}`, () => {
 			const [source, target] = createBattle([
-				[{species: 'Mew', moves: ['anchorshot']}],
+				[{ species: 'Mew', moves: ['anchorshot'] }],
 				[{ species: 'Mew', moves: ['splash'] }],
 			]);
 			if (underlying) battle.field.changeTerrain(underlying, source);
@@ -101,7 +101,7 @@ describe('Icy Field interactions', () => {
 			battle.makeChoices('move anchorshot', 'move splash');
 			assert(target.hp < hp);
 			assert(battle.field.isTerrain(underlying || 'watersurfaceterrain'));
-				assert.equal(battle.log.filter(line => line === '|-message|The Anchor broke past the Ice!').length, 1);
+			assert.equal(battle.log.filter(line => line === '|-message|The Anchor broke past the Ice!').length, 1);
 			assert(!battle.p1.sideConditions.spikes);
 			assert(!battle.p2.sideConditions.spikes);
 		});
@@ -142,9 +142,9 @@ describe('Icy Field interactions', () => {
 		]) {
 			const [source, target] = createBattle();
 			battle.field.changeTerrain(underlyingTerrain, source);
-			battle.actions.useMove('snowscape', source, {target});
+			battle.actions.useMove('snowscape', source, { target });
 			assert(battle.field.isTerrain('snowyterrain'));
-   assert(!battle.field.isAura('frozenaura'));
+			assert(!battle.field.isAura('frozenaura'));
 			battle.destroy();
 			battle = null;
 		}
@@ -158,7 +158,7 @@ describe('Icy Field interactions', () => {
 		battle.field.changeTerrain('crystalcavernterrain', source);
 		battle.makeChoices('move snowscape', 'move splash');
 		assert(battle.field.isTerrain('snowyterrain'));
-  assert(!battle.field.isAura('frozenaura'));
+		assert(!battle.field.isAura('frozenaura'));
 	});
 
 	it('Snowscape creates Snowy Field over Icy without creating Cold Eclipse', () => {

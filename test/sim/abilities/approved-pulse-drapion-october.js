@@ -5,9 +5,9 @@ const common = require('../../common');
 describe('Approved PULSE forms and Drapion abilities', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
-	function start(species, ability, moves = ['splash'], foe = {species: 'Mew', ability: 'No Ability', moves: ['splash']}) {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species, ability, item: 'Anomaly Core', moves},
+	function start(species, ability, moves = ['splash'], foe = { species: 'Mew', ability: 'No Ability', moves: ['splash'] }) {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species, ability, item: 'Anomaly Core', moves },
 		], [foe]]);
 		battle.makeChoices('team 1', 'team 1');
 		// Fixed PULSE kits attack instead of Splash; keep the field test opponent alive.
@@ -61,7 +61,7 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 		assert(battle.field.terrainState.duration <= 3);
 		for (const component of ['hydrabond', 'levitate', 'clearbody']) assert(magnezone.hasAbility(component));
 		assert.equal(magnezone.isGrounded(), null);
-		battle.boost({atk: -1}, magnezone, foe, battle.dex.moves.get('growl'));
+		battle.boost({ atk: -1 }, magnezone, foe, battle.dex.moves.get('growl'));
 		assert.equal(magnezone.boosts.atk, 0);
 		const move = battle.dex.getActiveMove('tackle');
 		battle.dex.abilities.get('pulsetriad').onModifyMove.call(battle, move, magnezone, foe);
@@ -98,7 +98,7 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 
 	it('Withering Touch inherits custom Corrosion poisoning and Poison damage against Steel', () => {
 		const [drapion, steel] = start('Mew', 'Withering Touch', ['toxic', 'gunkshot'],
-			{species: 'Registeel', ability: 'No Ability', moves: ['splash']});
+			{ species: 'Registeel', ability: 'No Ability', moves: ['splash'] });
 		battle.makeChoices('move toxic', 'move splash');
 		assert.equal(steel.status, 'tox');
 		const hp = steel.hp;
@@ -116,7 +116,7 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 		foe.setStatus('psn', drapion);
 		const stages = { ...foe.boosts };
 		const move = battle.dex.getActiveMove('sludgebomb');
-		Object.assign(move, {damage: 10, accuracy: true, willCrit: false, secondaries: undefined, multihit: 3});
+		Object.assign(move, { damage: 10, accuracy: true, willCrit: false, secondaries: undefined, multihit: 3 });
 		battle.actions.runMove(move, drapion, drapion.getLocOf(foe));
 		assert.deepEqual(foe.boosts, stages);
 		assert.equal(foe.boosts.atk, 0);
@@ -135,20 +135,20 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 		assert.equal(battle.dex.abilities.get('pulsebulwark').onModifyPriority.call(
 			battle, 0, mime, battle.p2.active[0], battle.dex.getActiveMove('reflect')), 1);
 		battle.field.changeTerrain('factoryterrain', mime);
-		battle.actions.runMove('discharge', mime, mime.getLocOf(battle.p2.active[0]), {externalMove: true});
+		battle.actions.runMove('discharge', mime, mime.getLocOf(battle.p2.active[0]), { externalMove: true });
 		assert.equal(battle.field.terrain, 'shortcircuitterrain');
 		assert(battle.field.terrainState.duration < 9999);
 		assert(battle.dex.species.getLearnsetData('mrmime').learnset.darkpulse.includes('9M'));
 	});
 
 	it('Pulse Bulwark cures only active major statuses on its first new screen per entry', () => {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Mr. Mime-Pulse', item: 'Anomaly Core', ability: 'Pulse Bulwark', moves: ['reflect', 'lightscreen', 'splash']},
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Mr. Mime-Pulse', item: 'Anomaly Core', ability: 'Pulse Bulwark', moves: ['reflect', 'lightscreen', 'splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1, 2, 3', 'team 1, 2');
 		const mime = battle.p1.active[0], ally = battle.p1.active[1], bench = battle.p1.pokemon[2];
@@ -185,31 +185,30 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 	});
 });
 
-
 describe('Pulse Blockade field duration protocol', () => {
- let battle;
- afterEach(() => battle?.destroy());
- it('announces creation without refreshing on re-entry', () => {
-  battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-   {species: 'Avalugg', ability: 'Own Tempo', item: 'Anomaly Core', moves: ['splash']},
-   {species: 'Mew', ability: 'No Ability', moves: ['splash']},
-  ], [{species: 'Mew', ability: 'No Ability', moves: ['splash']}]]);
-  battle.makeChoices('team 1,2', 'team 1');
+	let battle;
+	afterEach(() => battle?.destroy());
+	it('announces creation without refreshing on re-entry', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Avalugg', ability: 'Own Tempo', item: 'Anomaly Core', moves: ['splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+		], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
+		battle.makeChoices('team 1,2', 'team 1');
 		const foe = battle.p2.active[0]; foe.hp = foe.maxhp = foe.baseMaxhp = 5000;
 		battle.makeChoices('move 1 mega', 'move splash');
 		const announcement = '|-fieldstart|Snowy Mountain Terrain|[turns] 3|[silent]';
-  assert(battle.log.includes(announcement));
-  battle.makeChoices('switch 2', 'move splash');
-  const before = battle.log.length;
-  battle.makeChoices('switch 2', 'move splash');
+		assert(battle.log.includes(announcement));
+		battle.makeChoices('switch 2', 'move splash');
+		const before = battle.log.length;
+		battle.makeChoices('switch 2', 'move splash');
 		assert.equal(battle.field.terrain, '');
-  assert(!battle.log.slice(before).includes(announcement));
+		assert(!battle.log.slice(before).includes(announcement));
 	});
 	it('announces a manually extended field with the unlimited duration marker', () => {
 		battle = common.createBattle([[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
 		battle.field.setTerrain('snowymountainterrain', battle.p1.active[0]);
-  battle.field.setTerrainDuration(9999);
-  assert(battle.log.includes('|-fieldstart|Snowy Mountain Terrain|[turns] 0|[silent]'));
- });
+		battle.field.setTerrainDuration(9999);
+		assert(battle.log.includes('|-fieldstart|Snowy Mountain Terrain|[turns] 0|[silent]'));
+	});
 });

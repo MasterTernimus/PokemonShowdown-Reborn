@@ -1,15 +1,15 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../common');
-const {PULSE_FIXED_MOVES} = require('../../dist/data/pulse-fixed-moves');
+const { PULSE_FIXED_MOVES } = require('../../dist/data/pulse-fixed-moves');
 
 describe('Pulse evolution move selection', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 	function start(species) {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species, ability: 'No Ability', item: 'Anomaly Core', moves: ['splash', 'tackle', 'protect', 'toxic']},
-		], [{species: 'Blissey', ability: 'No Ability', moves: ['splash']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species, ability: 'No Ability', item: 'Anomaly Core', moves: ['splash', 'tackle', 'protect', 'toxic'] },
+		], [{ species: 'Blissey', ability: 'No Ability', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		return battle.p1.active[0];
 	}

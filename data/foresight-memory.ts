@@ -32,7 +32,7 @@ export function recordForesight(
 	mode: 'grandmaster' | 'perfectforesight'
 ) {
 	if (!holder || holder.fainted || !holder.isActive || damage <= 0 || !source || effect?.effectType !== 'Move') return;
-	const move = effect as ActiveMove;
+	const move = effect;
 	if (!directMove(move) || source.isAlly(target)) return;
 	const proactive = source === holder && ['normal', 'adjacentFoe', 'any'].includes(move.target);
 	const reactive = target === holder && move.category === 'Special';
@@ -48,8 +48,8 @@ export function recordForesight(
 	entries.push({
 		owner: holder, slot: opponent.getSlot(), opponent: opponent.side.n, turn,
 		type: proactive ? 'Psychic' : move.type,
-		set: {...holder.set, species: holder.species.name, name: holder.name, level: holder.level,
-			ability: 'No Ability', item: '', moves: ['psychic']},
+		set: { ...holder.set, species: holder.species.name, name: holder.name, level: holder.level,
+			ability: 'No Ability', item: '', moves: ['psychic'] },
 		spa: holder.storedStats.spa, boost: holder.boosts.spa, types: holder.getTypes().slice(),
 		baseTypes: holder.getTypes(false, true).slice(), tera: holder.terastallized,
 		stellar: holder.stellarBoostedTypes.slice(), position: holder.position,
@@ -91,26 +91,26 @@ export function resolveForesight(battle: Battle) {
 		entries.splice(entries.indexOf(entry), 1);
 		// The snapshot is a calculation context only: never use it for hits, retaliation or faint bookkeeping.
 		// The real owner remains the source, as for ordinary delayed attacks.
-		const offense: Pokemon = new (entry.owner.constructor as any)({...entry.set}, entry.owner.side);
+		const offense: Pokemon = new (entry.owner.constructor as any)({ ...entry.set }, entry.owner.side);
 		offense.storedStats.spa = entry.spa;
 		offense.boosts.spa = entry.boost;
 		offense.types = entry.baseTypes.slice();
 		offense.getTypes = (excludeAdded, preterastallized) => (preterastallized ? entry.baseTypes : entry.types).slice();
-		offense.baseSpecies = {...offense.baseSpecies, types: entry.baseTypes.slice()} as typeof offense.baseSpecies;
+		offense.baseSpecies = { ...offense.baseSpecies, types: entry.baseTypes.slice() } as typeof offense.baseSpecies;
 		offense.terastallized = entry.tera;
 		offense.stellarBoostedTypes = entry.stellar.slice();
 		offense.position = entry.position;
 		offense.isActive = true;
 		const move = battle.dex.getActiveMove('psychic');
-		Object.assign(move, {id: 'foresightmemory', name: 'Stored Foresight', type: entry.type,
-			basePower: 90, category: 'Special', accuracy: 100, priority: 0, flags: {protect: 1, futuremove: 1},
-			secondaries: undefined, secondary: undefined, foresightStored: true});
+		Object.assign(move, { id: 'foresightmemory', name: 'Stored Foresight', type: entry.type,
+			basePower: 90, category: 'Special', accuracy: 100, priority: 0, flags: { protect: 1, futuremove: 1 },
+			secondaries: undefined, secondary: undefined, foresightStored: true });
 		// A separate move object avoids recursing through damageCallback. Sharing hitData
 		// retains the resolved effectiveness/crit metadata for normal target reactions.
 		move.moveHitData = {};
-		const calculationMove = {...move};
+		const calculationMove = { ...move };
 		move.damageCallback = function (source, defender) {
-			Object.assign(calculationMove, move, {damageCallback: undefined});
+			Object.assign(calculationMove, move, { damageCallback: undefined });
 			return this.actions.getDamage(offense, defender, calculationMove) ?? false;
 		};
 		const source = entry.owner;

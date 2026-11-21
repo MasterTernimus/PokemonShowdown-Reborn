@@ -1,10 +1,10 @@
 'use strict';
 
 const assert = require('./../assert');
-const {Dex} = require('./../../dist/sim/dex');
-const {CustomLearnsetRemovals} = require('./../../dist/data/learnsets');
+const { Dex } = require('./../../dist/sim/dex');
+const { CustomLearnsetRemovals } = require('./../../dist/data/learnsets');
 
-describe('Custom learnset cleanup', function () {
+describe('Custom learnset cleanup', () => {
 	const requestedRemovals = {
 		claydol: ['lightofruin', 'shoreup', 'lusterpurge'], chimecho: ['lightofruin'],
 		gyarados: ['dragonascent'], archeops: ['dragonascent'], aerodactyl: ['dragonascent'],
@@ -42,13 +42,13 @@ describe('Custom learnset cleanup', function () {
 		omastar: ['shoreup'], simipour: ['slackoff'], simisage: ['slackoff'], simisear: ['slackoff'],
 		lapras: ['bouncybubble'], milotic: ['bouncybubble'],
 	};
-	const removals = {...CustomLearnsetRemovals, ...requestedRemovals};
+	const removals = { ...CustomLearnsetRemovals, ...requestedRemovals };
 
 	function canLearn(species, move) {
 		return Dex.species.getFullLearnset(species).some(data => data.learnset[move]?.length);
 	}
 
-	it('should remove every requested move from the complete evolutionary learnset', function () {
+	it('should remove every requested move from the complete evolutionary learnset', () => {
 		for (const [species, moves] of Object.entries(removals)) {
 			for (const move of moves) {
 				assert.false(canLearn(species, move), `${species} should not learn ${move}`);
@@ -56,7 +56,7 @@ describe('Custom learnset cleanup', function () {
 		}
 	});
 
-	it('should keep the requested replacement recovery and utility moves', function () {
+	it('should keep the requested replacement recovery and utility moves', () => {
 		assert(canLearn('omastar', 'recover'));
 		for (const species of ['goodra', 'goodrahisui']) {
 			assert(canLearn(species, 'allyswitch'));

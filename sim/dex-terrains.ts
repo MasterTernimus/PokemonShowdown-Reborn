@@ -12,8 +12,7 @@ export interface TerrainData extends Partial<DataTerrain>, EventMethods {
 	condition: ConditionData;
 }
 
-export interface Terrain extends Readonly<BasicEffect & TerrainData> {
-}
+export type Terrain = Readonly<BasicEffect & TerrainData>;
 
 export class DexTerrains {
 	readonly dex: ModdedDex;

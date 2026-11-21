@@ -39,7 +39,7 @@ describe('Politoed event Aevian King', () => {
 		try {
 			const p = b.p1.active[0];
 			p.hp -= 100;
-			let hp = p.hp;
+			const hp = p.hp;
 			b.makeChoices('move 1, move 1 1', 'move 2, move 1');
 			assert.equal(p.hp, hp);
 			assert.equal(b.log.filter(x => x.includes('-immune') && x.includes('Politoed')).length, 1);

@@ -8,12 +8,12 @@ describe('Dream Sickness ally rescue', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 
 	function start(ability = 'Dream Sickness') {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Gardevoir', ability, moves: ['splash']},
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Gardevoir', ability, moves: ['splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
 		], [
-			{species: 'Blissey', ability: 'No Ability', moves: ['splash']},
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
+			{ species: 'Blissey', ability: 'No Ability', moves: ['splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1, 2', 'team 1, 2');
 		return [battle.p1.active[0], battle.p1.active[1], battle.p2.active[0]];
@@ -46,7 +46,7 @@ describe('Dream Sickness ally rescue', () => {
 	it('Void Voice lets lethal damage reach an ally', () => {
 		const [holder, ally, foe] = start('Void Voice');
 		assert(!holder.hasAbility('dreamsickness'));
-		battle.boost({atk: -1}, holder, foe, battle.dex.getActiveMove('growl'));
+		battle.boost({ atk: -1 }, holder, foe, battle.dex.getActiveMove('growl'));
 		assert.equal(holder.boosts.atk, -1);
 		ally.hp = 10;
 		assert.equal(battle.damage(10, ally, foe, battle.dex.getActiveMove('tackle')), 10);

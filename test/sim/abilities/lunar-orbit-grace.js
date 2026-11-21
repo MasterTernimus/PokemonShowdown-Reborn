@@ -1,17 +1,105 @@
-'use strict';const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim'),{applySereneGrace}=require('../../../dist/data/ally-serene-grace');
-describe('Lunar Orbit and Void Omen shared Grace',()=>{let battle;afterEach(()=>{battle?.destroy();battle=null;});
-function setup(abilities=['Lunar Orbit','No Ability','No Ability'],species='Mew'){const m=(a,s='Mew')=>({species:s,ability:a,moves:['splash','skullbash','crunch']});battle=common.createBattle({gameType:'triples'},[[...abilities.map((a,i)=>m(a,i===0?species:'Mew')),m('No Ability')],[m('No Ability'),m('No Ability'),m('No Ability')]]);for(const p of battle.getAllActive())p.hp=p.maxhp=p.baseMaxhp=10000;return[battle.p1.active[0],battle.p1.active[1],battle.p1.active[2],battle.p2.active[1]];}
-function chance(p,q,n=20){const m=Object.assign(Dex.getActiveMove('crunch'),{secondaries:[{chance:n,boosts:{def:-1}}],self:{chance:n,boosts:{atk:1}}});battle.runEvent('ModifyMove',p,q,m,m);return[m.secondaries[0].chance,m.self.chance,m];}
-	for (const [n, single, both] of [[10, 20, 20], [20, 40, 40], [30, 60, 60], [50, 100, 100], [70, 100, 100], [100, 100, 100]]) for (const providers of [['Serene Grace'], ['Lunar Orbit'], ['Fortunate Wing'], ['Lunar Orbit', 'Fortunate Wing'], ['Fortunate Wing', 'Lunar Orbit', 'Serene Grace']])it(n + '% with ' + providers.join('+'), () => {
-		const m = Object.assign(Dex.getActiveMove('crunch'), { secondaries: [{ chance: n, boosts: { def: -1 } }], self: { chance: n, boosts: { atk: 1 } } });
-		for (const id of providers)applySereneGrace(m, Dex.toID(id));
-		assert.equal(m.secondaries[0].chance, providers.includes('Lunar Orbit') && providers.includes('Fortunate Wing') ? both : single);
-		assert.equal(m.self.chance, m.secondaries[0].chance);
+'use strict';
+const assert = require('assert').strict,
+	common = require('../../common'),
+	{ Dex } = require('../../../dist/sim'),
+	{ applySereneGrace } = require('../../../dist/data/ally-serene-grace');
+describe('Lunar Orbit and Void Omen shared Grace', () => {
+	let battle;
+	afterEach(() => {
+		battle?.destroy();
+		battle = null;
 	});
-	for (const providers of [['Lunar Orbit', 'Lunar Orbit', 'No Ability'], ['Void Omen', 'Void Omen', 'Serene Grace'], ['Lunar Orbit', 'Void Omen', 'Serene Grace']])it('actual holder/ally providers ' + providers.join('/'), () => { const [p, a, r, q] = setup(providers); for (const receiver of [p, a, r])assert.deepEqual(chance(receiver, q, 10).slice(0, 2), providers.includes('Lunar Orbit') || receiver.hasAbility('Serene Grace') ? [20, 20] : [10, 10]); });
-it('departure and suppression remove the grant without changing baseline chance',()=>{const[p,a,r,q]=setup();assert.equal(chance(a,q)[0],40);p.addVolatile('gastroacid');assert.equal(chance(a,q)[0],20);p.removeVolatile('gastroacid');battle.actions.switchIn(p.side.pokemon[3],0);assert.equal(chance(a,q)[0],20);});
-it('Lunar Orbit retains Gravity and Magic Guard; Clefable Mega Magic Bounce stays passive',()=>{const[p,a,r,q]=setup(['Lunar Orbit','No Ability','No Ability'],'Clefable-Mega');assert(battle.field.getPseudoWeather('gravity'));assert(p.getPassives().includes('magicbounce'));const hp=p.hp;battle.damage(100,p,q,'brn');assert.equal(p.hp,hp);});
-function charge(p,q){battle.clearActiveMove();battle.actions.runMove(Object.assign(Dex.getActiveMove('skullbash'),{accuracy:true,willCrit:false}),p,p.getLocOf(q));battle.clearActiveMove();}
+	function setup(abilities = ['Lunar Orbit', 'No Ability', 'No Ability'], species = 'Mew') {
+		const m = (a, s = 'Mew') => ({
+			species: s,
+			ability: a,
+			moves: ['splash', 'skullbash', 'crunch'],
+		});
+		battle = common.createBattle({ gameType: 'triples' }, [
+			[...abilities.map((a, i) => m(a, i === 0 ? species : 'Mew')), m('No Ability')],
+			[m('No Ability'), m('No Ability'), m('No Ability')],
+		]);
+		for (const p of battle.getAllActive()) p.hp = p.maxhp = p.baseMaxhp = 10000;
+		return [battle.p1.active[0], battle.p1.active[1], battle.p1.active[2], battle.p2.active[1]];
+	}
+	function chance(p, q, n = 20) {
+		const m = Object.assign(Dex.getActiveMove('crunch'), {
+			secondaries: [{ chance: n, boosts: { def: -1 } }],
+			self: { chance: n, boosts: { atk: 1 } },
+		});
+		battle.runEvent('ModifyMove', p, q, m, m);
+		return [m.secondaries[0].chance, m.self.chance, m];
+	}
+	for (const [n, single, both] of [
+		[10, 20, 20],
+		[20, 40, 40],
+		[30, 60, 60],
+		[50, 100, 100],
+		[70, 100, 100],
+		[100, 100, 100],
+	])
+		for (const providers of [
+			['Serene Grace'],
+			['Lunar Orbit'],
+			['Fortunate Wing'],
+			['Lunar Orbit', 'Fortunate Wing'],
+			['Fortunate Wing', 'Lunar Orbit', 'Serene Grace'],
+		])
+			it(n + '% with ' + providers.join('+'), () => {
+				const m = Object.assign(Dex.getActiveMove('crunch'), {
+					secondaries: [{ chance: n, boosts: { def: -1 } }],
+					self: { chance: n, boosts: { atk: 1 } },
+				});
+				for (const id of providers) applySereneGrace(m, Dex.toID(id));
+				assert.equal(
+					m.secondaries[0].chance,
+					providers.includes('Lunar Orbit') && providers.includes('Fortunate Wing') ?
+						both :
+						single
+				);
+				assert.equal(m.self.chance, m.secondaries[0].chance);
+			});
+	for (const providers of [
+		['Lunar Orbit', 'Lunar Orbit', 'No Ability'],
+		['Void Omen', 'Void Omen', 'Serene Grace'],
+		['Lunar Orbit', 'Void Omen', 'Serene Grace'],
+	])
+		it('actual holder/ally providers ' + providers.join('/'), () => {
+			const [p, a, r, q] = setup(providers);
+			for (const receiver of [p, a, r])
+				assert.deepEqual(
+					chance(receiver, q, 10).slice(0, 2),
+					providers.includes('Lunar Orbit') || receiver.hasAbility('Serene Grace') ?
+						[20, 20] :
+						[10, 10]
+				);
+		});
+	it('departure and suppression remove the grant without changing baseline chance', () => {
+		const [p, a, r, q] = setup();
+		assert.equal(chance(a, q)[0], 40);
+		p.addVolatile('gastroacid');
+		assert.equal(chance(a, q)[0], 20);
+		p.removeVolatile('gastroacid');
+		battle.actions.switchIn(p.side.pokemon[3], 0);
+		assert.equal(chance(a, q)[0], 20);
+	});
+	it('Lunar Orbit retains Gravity and Magic Guard; Clefable Mega Magic Bounce stays passive', () => {
+		const [p, a, r, q] = setup(['Lunar Orbit', 'No Ability', 'No Ability'], 'Clefable-Mega');
+		assert(battle.field.getPseudoWeather('gravity'));
+		assert(p.getPassives().includes('magicbounce'));
+		const hp = p.hp;
+		battle.damage(100, p, q, 'brn');
+		assert.equal(p.hp, hp);
+	});
+	function charge(p, q) {
+		battle.clearActiveMove();
+		battle.actions.runMove(
+			Object.assign(Dex.getActiveMove('skullbash'), { accuracy: true, willCrit: false }),
+			p,
+			p.getLocOf(q)
+		);
+		battle.clearActiveMove();
+	}
 	it('both aura sources share one charge skip per recipient, independent of doubled chance', () => {
 		const [p, a, r, q] = setup(['Lunar Orbit', 'Void Omen', 'No Ability']);
 		charge(r, q);
@@ -21,36 +109,81 @@ function charge(p,q){battle.clearActiveMove();battle.actions.runMove(Object.assi
 		assert(r.volatiles.twoturnmove);
 		assert.equal(chance(r, q, 10)[0], 20);
 	});
-it('provider entry/restart cannot refill; recipient switch does refill',()=>{const[p,a,r,q]=setup();charge(a,q);p.setAbility('No Ability');p.setAbility('Lunar Orbit');battle.actions.switchIn(p.side.pokemon[3],0);battle.actions.switchIn(p,0);charge(a,q);assert(a.volatiles.twoturnmove);battle.actions.switchIn(p.side.pokemon[3],1);battle.actions.switchIn(a,1);charge(a,q);assert(!a.volatiles.twoturnmove);});
-	for (const mode of ['powerherb', 'field'])it(mode + ' independent skip preserves aura allowance', () => {
-		const [p, a, r, q] = setup(['Lunar Orbit', mode === 'natural' ? 'Serene Grace' : 'No Ability', 'No Ability'], mode === 'passive' ? 'Togekiss' : 'Mew');
-		const receiver = mode === 'passive' ? p : a;
-		if (mode === 'powerherb')receiver.setItem('Power Herb');
-		if (mode === 'field') {
-			battle.field.startTerrain('hauntedterrain');
-			receiver.moveSlots.push({ id: 'phantomforce', move: 'Phantom Force', pp: 10, maxpp: 10, target: 'normal', disabled: false, used: false });
-			battle.actions.runMove('phantomforce', receiver, receiver.getLocOf(q));
-		} else charge(receiver, q);
-		assert(!receiver.volatiles.voidomenchargespent);
-		assert(!receiver.volatiles.twoturnmove);
+	it('provider entry/restart cannot refill; recipient switch does refill', () => {
+		const [p, a, r, q] = setup();
+		charge(a, q);
+		p.setAbility('No Ability');
+		p.setAbility('Lunar Orbit');
+		battle.actions.switchIn(p.side.pokemon[3], 0);
+		battle.actions.switchIn(p, 0);
+		charge(a, q);
+		assert(a.volatiles.twoturnmove);
+		battle.actions.switchIn(p.side.pokemon[3], 1);
+		battle.actions.switchIn(a, 1);
+		charge(a, q);
+		assert(!a.volatiles.twoturnmove);
 	});
-it('ordinary attacks do not spend charge allowance or bypass Protect',()=>{const[p,a,r,q]=setup();q.addVolatile('protect');const hp=q.hp;battle.actions.useMove('crunch',a,{target:q});assert.equal(q.hp,hp);assert(!a.volatiles.voidomenchargespent);});
-	for (const abilities of [['Void Omen', 'No Ability', 'No Ability'], ['Lunar Orbit', 'No Ability', 'No Ability'], ['Serene Grace', 'No Ability', 'No Ability'], ['Void Omen', 'Lunar Orbit', 'No Ability']]) for (const receiver of [0, 2])it('Kings Rock flinch ordering ' + abilities + '/' + receiver, () => {
-		const [p, a, r, q] = setup(abilities);
-		const source = receiver ? r : p;
-		source.setItem('Kings Rock');
-		const m = Dex.getActiveMove('tackle');
-		battle.runEvent('ModifyMove', source, q, m, m);
-		const flinch = m.secondaries.find(e => e.volatileStatus === 'flinch');
-		const boosted = abilities.includes('Lunar Orbit') || (receiver === 0 && abilities[0] === 'Serene Grace');
-		assert.equal(flinch.chance, boosted ? 20 : 10);
+	for (const mode of ['powerherb', 'field'])
+		it(mode + ' independent skip preserves aura allowance', () => {
+			const [p, a, r, q] = setup(
+				['Lunar Orbit', mode === 'natural' ? 'Serene Grace' : 'No Ability', 'No Ability'],
+				mode === 'passive' ? 'Togekiss' : 'Mew'
+			);
+			const receiver = mode === 'passive' ? p : a;
+			if (mode === 'powerherb') receiver.setItem('Power Herb');
+			if (mode === 'field') {
+				battle.field.startTerrain('hauntedterrain');
+				receiver.moveSlots.push({
+					id: 'phantomforce',
+					move: 'Phantom Force',
+					pp: 10,
+					maxpp: 10,
+					target: 'normal',
+					disabled: false,
+					used: false,
+				});
+				battle.actions.runMove('phantomforce', receiver, receiver.getLocOf(q));
+			} else charge(receiver, q);
+			assert(!receiver.volatiles.voidomenchargespent);
+			assert(!receiver.volatiles.twoturnmove);
+		});
+	it('ordinary attacks do not spend charge allowance or bypass Protect', () => {
+		const [p, a, r, q] = setup();
+		q.addVolatile('protect');
+		const hp = q.hp;
+		battle.actions.useMove('crunch', a, { target: q });
+		assert.equal(q.hp, hp);
+		assert(!a.volatiles.voidomenchargespent);
 	});
+	for (const abilities of [
+		['Void Omen', 'No Ability', 'No Ability'],
+		['Lunar Orbit', 'No Ability', 'No Ability'],
+		['Serene Grace', 'No Ability', 'No Ability'],
+		['Void Omen', 'Lunar Orbit', 'No Ability'],
+	])
+		for (const receiver of [0, 2])
+			it('Kings Rock flinch ordering ' + abilities + '/' + receiver, () => {
+				const [p, a, r, q] = setup(abilities);
+				const source = receiver ? r : p;
+				source.setItem('Kings Rock');
+				const m = Dex.getActiveMove('tackle');
+				battle.runEvent('ModifyMove', source, q, m, m);
+				const flinch = m.secondaries.find(e => e.volatileStatus === 'flinch');
+				const boosted =
+					abilities.includes('Lunar Orbit') || (receiver === 0 && abilities[0] === 'Serene Grace');
+				assert.equal(flinch.chance, boosted ? 20 : 10);
+			});
 	it('late/replaced secondaries are amplified once; absent/zero chances and removed effects stay intact', () => {
-		const m = Object.assign(Dex.getActiveMove('crunch'), { secondaries: [{ chance: 10, status: 'par' }, { chance: 0, status: 'brn' }, { status: 'psn' }] });
+		const m = Object.assign(Dex.getActiveMove('crunch'), {
+			secondaries: [{ chance: 10, status: 'par' }, { chance: 0, status: 'brn' }, { status: 'psn' }],
+		});
 		applySereneGrace(m, 'voidomen');
 		m.secondaries.push({ chance: 10, volatileStatus: 'flinch' });
 		applySereneGrace(m, 'voidomen');
-		assert.deepEqual(m.secondaries.map(s => s.chance), [20, 0, undefined, 20]);
+		assert.deepEqual(
+			m.secondaries.map(s => s.chance),
+			[20, 0, undefined, 20]
+		);
 		m.secondaries = [{ chance: 10, status: 'par' }];
 		applySereneGrace(m, 'lunarorbit');
 		assert.equal(m.secondaries[0].chance, 20);
@@ -64,11 +197,23 @@ it('ordinary attacks do not spend charge allowance or bypass Protect',()=>{const
 		assert.equal(chance(r, q, 10)[0], 40);
 		assert.equal(chance(r, q, 100)[0], 100);
 	});
-it('Sheer Force removed effects are not recreated by providers',()=>{const[p,a,r,q]=setup(['Lunar Orbit','Void Omen','Sheer Force']);const m=Dex.getActiveMove('crunch');battle.runEvent('ModifyMove',r,q,m,m);assert(!m.secondaries);});
-	for (const mode of ['selected', 'passive'])it(mode + ' Serene Grace uses the aura charge allowance rather than granting its own', () => {
-		const [p, a, r, q] = setup(['Lunar Orbit', mode === 'selected' ? 'Serene Grace' : 'No Ability', 'No Ability'], mode === 'passive' ? 'Togekiss' : 'Mew');
-		const receiver = mode === 'passive' ? p : a;
-		charge(receiver, q); assert(receiver.volatiles.voidomenchargespent); assert(!receiver.volatiles.twoturnmove);
-		charge(receiver, q); assert(receiver.volatiles.twoturnmove);
+	it('Sheer Force removed effects are not recreated by providers', () => {
+		const [p, a, r, q] = setup(['Lunar Orbit', 'Void Omen', 'Sheer Force']);
+		const m = Dex.getActiveMove('crunch');
+		battle.runEvent('ModifyMove', r, q, m, m);
+		assert(!m.secondaries);
 	});
+	for (const mode of ['selected', 'passive'])
+		it(mode + ' Serene Grace uses the aura charge allowance rather than granting its own', () => {
+			const [p, a, r, q] = setup(
+				['Lunar Orbit', mode === 'selected' ? 'Serene Grace' : 'No Ability', 'No Ability'],
+				mode === 'passive' ? 'Togekiss' : 'Mew'
+			);
+			const receiver = mode === 'passive' ? p : a;
+			charge(receiver, q);
+			assert(receiver.volatiles.voidomenchargespent);
+			assert(!receiver.volatiles.twoturnmove);
+			charge(receiver, q);
+			assert(receiver.volatiles.twoturnmove);
+		});
 });

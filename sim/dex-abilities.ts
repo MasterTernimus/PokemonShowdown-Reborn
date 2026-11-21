@@ -1,4 +1,4 @@
-import {adaptiveReductionCallback} from './adaptive-cycle';
+import { adaptiveReductionCallback } from './adaptive-cycle';
 import type { PokemonEventMethods, ConditionData, ModdedConditionData } from './dex-conditions';
 import { assignMissingFields, BasicEffect, toID } from './dex-data';
 import { Utils } from '../lib/utils';
@@ -6,13 +6,25 @@ import { Utils } from '../lib/utils';
 interface AbilityEventMethods {
 	fallen?: (this: Battle, pokemon: Pokemon) => number;
 	getBestNoseMove?: (this: Battle, source: Pokemon, target: Pokemon) => ActiveMove | null;
-	queueTemporalHex?: (this: Battle, pokemon: Pokemon, abilityName?: string, typePool?: string[] | null, basePower?: number, immediate?: boolean) => void;
+	queueTemporalHex?: (
+		this: Battle,
+		pokemon: Pokemon,
+		abilityName?: string,
+		typePool?: string[] | null,
+		basePower?: number,
+		immediate?: boolean,
+	) => void;
 	boostedField?: (this: Battle) => boolean;
 	healUltraEgo?: (this: Battle, pokemon: Pokemon, source: string) => void;
 	checkMode?: (this: Battle, pokemon: Pokemon) => void;
 	markRequiem?: (this: Battle, target: Pokemon, source: Pokemon) => void;
 	lowerOffense?: (this: Battle, target: Pokemon, source: Pokemon) => void;
-	onAfterSwitchOut?: (this: Battle, target: Pokemon, replacement: Pokemon, effect: Effect | null) => void;
+	onAfterSwitchOut?: (
+		this: Battle,
+		target: Pokemon,
+		replacement: Pokemon,
+		effect: Effect | null,
+	) => void;
 	onCheckShow?: (this: Battle, pokemon: Pokemon) => void;
 	onEnd?: (this: Battle, target: Pokemon & Side & Field) => void;
 	onStart?: (this: Battle, target: Pokemon) => void;
@@ -35,20 +47,32 @@ export interface AbilityData extends Partial<Ability>, AbilityEventMethods, Poke
 	name: string;
 }
 
-export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {
-	inherit: true,
-	condition?: ModdedConditionData,
-};
-export interface AbilityDataTable { [abilityid: IDEntry]: AbilityData }
-export interface ModdedAbilityDataTable { [abilityid: IDEntry]: ModdedAbilityData }
+export type ModdedAbilityData =
+	| AbilityData |
+	(Partial<AbilityData> & {
+		inherit: true,
+		condition?: ModdedConditionData,
+	});
+export interface AbilityDataTable {
+	[abilityid: IDEntry]: AbilityData;
+}
+export interface ModdedAbilityDataTable {
+	[abilityid: IDEntry]: ModdedAbilityData;
+}
 
 // Event callbacks are copied onto Dex abilities by assignMissingFields.
-export interface Ability extends AbilityEventMethods, PokemonEventMethods {}
+const AbilityEffect: abstract new (data: AnyObject) =>
+	BasicEffect & AbilityEventMethods & PokemonEventMethods = BasicEffect;
 
-type AbilityHandler<K extends keyof Ability> = Extract<NonNullable<Ability[K]>, (...args: never[]) => unknown>;
-type AbilityHandlerName = {[K in keyof Ability]-?: AbilityHandler<K> extends never ? never : K}[keyof Ability];
+type AbilityHandler<K extends keyof Ability> = Extract<
+	NonNullable<Ability[K]>,
+	(...args: never[]) => unknown
+>;
+type AbilityHandlerName = {
+	[K in keyof Ability]-?: AbilityHandler<K> extends never ? never : K;
+}[keyof Ability];
 
-export class Ability extends BasicEffect implements Readonly<BasicEffect> {
+export class Ability extends AbilityEffect implements Readonly<BasicEffect> {
 	declare readonly effectType: 'Ability';
 
 	/** Rating from -1 Detrimental to +5 Essential; see `data/abilities.ts` for details. */
@@ -60,7 +84,7 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	constructor(data: AnyObject) {
 		super(data);
 		// Display-only renames may explicitly retain their canonical ability ID.
-		if (data.id) Object.assign(this, {id: toID(data.id)});
+		if (data.id) Object.assign(this, { id: toID(data.id) });
 
 		this.fullname = `ability: ${this.name}`;
 		this.effectType = 'Ability';
@@ -86,9 +110,18 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 			}
 		}
 		assignMissingFields(this, data);
-		for (const event of ['onDamage', 'onSourceModifyDamage', 'onSourceBasePower', 'onSourceModifyAtk', 'onSourceModifySpA', 'onModifyDef', 'onModifySpD']) {
+		for (const event of [
+			'onDamage',
+			'onSourceModifyDamage',
+			'onSourceBasePower',
+			'onSourceModifyAtk',
+			'onSourceModifySpA',
+			'onModifyDef',
+			'onModifySpD',
+		]) {
 			const callback = (this as any)[event];
-			if (typeof callback === 'function') (this as any)[event] = adaptiveReductionCallback(this, callback);
+			if (typeof callback === 'function')
+				(this as any)[event] = adaptiveReductionCallback(this, callback);
 		}
 	}
 }
@@ -139,12 +172,17 @@ export class DexAbilities {
 			if (this.dex.currentMod === 'gen7letsgo' && ability.id !== 'noability') {
 				(ability as any).isNonstandard = 'Past';
 			}
-			if ((this.dex.currentMod === 'gen7letsgo' || this.dex.gen <= 2) && ability.id === 'noability') {
+			if (
+				(this.dex.currentMod === 'gen7letsgo' || this.dex.gen <= 2) &&
+				ability.id === 'noability'
+			) {
 				(ability as any).isNonstandard = null;
 			}
 		} else {
 			ability = new Ability({
-				id, name: id, exists: false,
+				id,
+				name: id,
+				exists: false,
 			});
 		}
 

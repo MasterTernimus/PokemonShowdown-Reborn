@@ -1,5 +1,5 @@
-import type {ModdedSpeciesFormatsData} from '../../../sim/dex-species';
-export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
+import type { ModdedSpeciesFormatsData } from '../../../sim/dex-species';
+export const FormatsData: { [k: string]: ModdedSpeciesFormatsData } = {
 	bulbasaur: {
 		tier: "LC",
 	},

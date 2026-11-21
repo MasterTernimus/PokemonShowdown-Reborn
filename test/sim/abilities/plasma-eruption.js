@@ -82,12 +82,4 @@ describe('Current Typhlosionite forms', () => {
 			for (const move of ['zapcannon', 'shockwave', 'thunder']) assert(learnset[move].includes('9M'));
 		}
 	});
-
-
-
-
-
-
-
-
 });

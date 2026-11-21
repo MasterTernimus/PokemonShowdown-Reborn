@@ -2,7 +2,7 @@
 
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
+const { Dex } = require('../../../dist/sim');
 
 let battle;
 describe('Sceptile and Verdant Drake', () => {
@@ -27,10 +27,10 @@ describe('Sceptile and Verdant Drake', () => {
 	});
 
 	it('gives Mega Sceptile Lightning Rod without changing its base ability', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Sceptile', item: 'Sceptilite', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Sceptile', item: 'Sceptilite', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['splash', 'thunderbolt']},
+			{ species: 'Mew', moves: ['splash', 'thunderbolt'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const sceptile = battle.p1.active[0];

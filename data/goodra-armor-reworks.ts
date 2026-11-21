@@ -1,4 +1,4 @@
-import type {AbilityDataTable} from '../sim/dex-abilities';
+import type { AbilityDataTable } from '../sim/dex-abilities';
 
 export const ArmorTwinDescriptions = {
 	twincannons: {
@@ -13,7 +13,7 @@ export const ArmorTwinDescriptions = {
 
 export function installGoodraArmorReworks(abilities: AbilityDataTable) {
 	abilities.gentleembrace = {
-		name: 'Gentle Embrace', num: 12087, rating: 3, flags: {breakable: 1},
+		name: 'Gentle Embrace', num: 12087, rating: 3, flags: { breakable: 1 },
 		shortDesc: 'Takes 20% less contact damage. Hydration.',
 		desc: 'Contact attacks deal 20% less damage. Cures major status at turn end in effective rain or on Water Surface, Underwater and Midnight Zone.',
 		onSourceModifyDamage(damage, source, target, move) {
@@ -33,12 +33,12 @@ export function installGoodraArmorReworks(abilities: AbilityDataTable) {
 			if (damage <= 0 || !target.hp || !source || source.isAlly(target) || move.category !== 'Physical' ||
 				target.m.shellboundFuryTurn === this.turn) return;
 			target.m.shellboundFuryTurn = this.turn;
-			this.boost({spa: 1}, target, target, this.effect);
+			this.boost({ spa: 1 }, target, target, this.effect);
 		},
 	};
 	abilities.soulforgedarmor = {
 		...abilities.flashfire,
-		name: 'Soulforged Armor', num: 12064, rating: 3, flags: {breakable: 1},
+		name: 'Soulforged Armor', num: 12064, rating: 3, flags: { breakable: 1 },
 		shortDesc: 'Takes 20% less damage from super-effective attacks.',
 		desc: 'Super-effective attacks deal 20% less damage.',
 		onSourceModifyDamage(damage, source, target, move) {

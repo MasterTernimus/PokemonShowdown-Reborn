@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Neutralization rooms', function () {
-	afterEach(function () {
+describe('Neutralization rooms', () => {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
-	it('allows Trick Room, Magic Room, and Wonder Room after entry', function () {
+	it('allows Trick Room, Magic Room, and Wonder Room after entry', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 			{ species: 'Quagsire', ability: 'neutralization', moves: ['splash'] },
 		], [
@@ -28,7 +28,7 @@ describe('Neutralization rooms', function () {
 		}
 	});
 
-	it('should end active rooms when Neutralization enters battle', function () {
+	it('should end active rooms when Neutralization enters battle', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 			{ species: 'Magikarp', ability: 'swiftswim', moves: ['splash'] },
 			{ species: 'Quagsire', ability: 'neutralization', moves: ['splash'] },
@@ -43,7 +43,7 @@ describe('Neutralization rooms', function () {
 		assert.false(battle.field.getPseudoWeather('trickroom'));
 	});
 
-	it('should activate only once per target for a multi-hit move', function () {
+	it('should activate only once per target for a multi-hit move', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 			{ species: 'Quagsire', ability: 'neutralization', moves: ['pinmissile'] },
 		], [
@@ -57,7 +57,7 @@ describe('Neutralization rooms', function () {
 		assert.statStage(battle.p2.active[0], 'spe', 0);
 	});
 
-	it('lowers only the higher special offense by one stage', function () {
+	it('lowers only the higher special offense by one stage', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 			{ species: 'Quagsire', ability: 'neutralization', moves: ['tackle'] },
 		], [
@@ -71,7 +71,7 @@ describe('Neutralization rooms', function () {
 		assert.statStage(target, 'spe', 0);
 	});
 
-	it('allows Auras to form and persist while still blocking base field changes', function () {
+	it('allows Auras to form and persist while still blocking base field changes', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 			{ species: 'Quagsire', ability: 'neutralization', moves: ['splash'] },
 		], [
@@ -91,13 +91,13 @@ describe('Neutralization rooms', function () {
 		assert.equal(battle.field.auraField, 'psychicterrain');
 	});
 
-	it('should not activate when a chaining multi-hit move becomes a spread hit', function () {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Quagsire', ability: 'neutralization', moves: ['dragondarts']},
-			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+	it('should not activate when a chaining multi-hit move becomes a spread hit', () => {
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Quagsire', ability: 'neutralization', moves: ['dragondarts'] },
+			{ species: 'Magikarp', ability: 'swiftswim', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'synchronize', moves: ['splash']},
-			{species: 'Celebi', ability: 'naturalcure', moves: ['splash']},
+			{ species: 'Mew', ability: 'synchronize', moves: ['splash'] },
+			{ species: 'Celebi', ability: 'naturalcure', moves: ['splash'] },
 		]]);
 		battle.makeChoices();
 

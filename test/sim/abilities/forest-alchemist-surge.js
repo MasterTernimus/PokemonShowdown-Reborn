@@ -9,9 +9,9 @@ describe('Forest Surge and Alchemist Surge', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 
 	it('sets Forest and a five-turn Grassy Aura together on entry', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mew', ability: 'Forest Surge', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Mew', ability: 'Forest Surge', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		assert.equal(battle.field.terrain, 'forestterrain');
@@ -21,9 +21,9 @@ describe('Forest Surge and Alchemist Surge', () => {
 	});
 
 	it('gives status moves Prankster priority while keeping Alchemist Surge effects', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Shuckle', ability: 'Alchemist Surge', moves: ['taunt']}],
-			[{species: 'Deoxys-Speed', ability: 'No Ability', moves: ['tackle']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Shuckle', ability: 'Alchemist Surge', moves: ['taunt'] }],
+			[{ species: 'Deoxys-Speed', ability: 'No Ability', moves: ['tackle'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const user = battle.p1.active[0];

@@ -1,12 +1,12 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim/dex');
+const { Dex } = require('../../../dist/sim/dex');
 let battle;
 function setup(move = 'splash', ability = 'No Ability', targetAbility = 'No Ability', guard = 'protect') {
-	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-		[{species: 'Mew', ability, moves: [move, 'splash'], evs: {spe: 252}}],
-		[{species: 'Mew', ability: targetAbility, moves: ['splash', guard]}],
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+		[{ species: 'Mew', ability, moves: [move, 'splash'], evs: { spe: 252 } }],
+		[{ species: 'Mew', ability: targetAbility, moves: ['splash', guard] }],
 	]);
 	battle.makeChoices('team 1', 'team 1');
 	return [battle.p1.active[0], battle.p2.active[0]];
@@ -60,9 +60,9 @@ describe('Field audit regressions', () => {
 	}
 	for (const bothProtected of [false, true]) {
 		it(`charges a Rocky spread contact move once when ${bothProtected ? 'both foes' : 'one foe'} Protect`, () => {
-			battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [
-				[{species: 'Mew', ability: 'No Ability', moves: ['breakingswipe']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
-				[{species: 'Mew', ability: 'No Ability', moves: ['protect', 'splash']}, {species: 'Mew', ability: 'No Ability', moves: ['protect', 'splash']}],
+			battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
+				[{ species: 'Mew', ability: 'No Ability', moves: ['breakingswipe'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+				[{ species: 'Mew', ability: 'No Ability', moves: ['protect', 'splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['protect', 'splash'] }],
 			]);
 			battle.makeChoices('team 12', 'team 12');
 			battle.field.startTerrain('rockyterrain');

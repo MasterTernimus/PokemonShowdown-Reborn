@@ -5,18 +5,18 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Flower Gift', function () {
-	afterEach(function () {
+describe('Flower Gift', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should boost allies' Attack and Special Defense stats`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: "Cherrim", ability: 'flowergift', moves: ['healbell']},
-			{species: "Snorlax", ability: 'immunity', moves: ['healbell']},
+	it(`should boost allies' Attack and Special Defense stats`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Cherrim", ability: 'flowergift', moves: ['healbell'] },
+			{ species: "Snorlax", ability: 'immunity', moves: ['healbell'] },
 		], [
-			{species: "Blissey", ability: 'serenegrace', moves: ['healbell']},
-			{species: "Blissey", ability: 'serenegrace', moves: ['healbell']},
+			{ species: "Blissey", ability: 'serenegrace', moves: ['healbell'] },
+			{ species: "Blissey", ability: 'serenegrace', moves: ['healbell'] },
 		]]);
 
 		// The custom Sunshine form also changes Cherrim's base stats.
@@ -32,13 +32,13 @@ describe('Flower Gift', function () {
 		assert.equal(battle.p1.active[1].getStat('spd'), battle.modify(baseSpd, 1.5));
 	});
 
-	it(`should still work if Cherrim transforms into something with Flower Gift without originally having it`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: "Cherrim", ability: 'serenegrace', moves: ['transform']},
-			{species: "Snorlax", ability: 'immunity', moves: ['healbell']},
+	it(`should still work if Cherrim transforms into something with Flower Gift without originally having it`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Cherrim", ability: 'serenegrace', moves: ['transform'] },
+			{ species: "Snorlax", ability: 'immunity', moves: ['healbell'] },
 		], [
-			{species: "Blissey", ability: 'flowergift', moves: ['healbell']},
-			{species: "Blissey", ability: 'flowergift', moves: ['healbell']},
+			{ species: "Blissey", ability: 'flowergift', moves: ['healbell'] },
+			{ species: "Blissey", ability: 'flowergift', moves: ['healbell'] },
 		]]);
 
 		battle.makeChoices('move transform 1, move healbell', 'move healbell, move healbell');

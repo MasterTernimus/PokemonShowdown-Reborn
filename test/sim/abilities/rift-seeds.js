@@ -1,14 +1,14 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
-const {adaptiveMemory} = require('../../../dist/sim/adaptive-cycle');
+const { Dex } = require('../../../dist/sim');
+const { adaptiveMemory } = require('../../../dist/sim/adaptive-cycle');
 let battle;
 
 function setup(field = 'rockyterrain', item = '', ability = 'riftherald') {
-	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-		[{species: 'Mew', ability: 'noability', item, moves: ['riftopening', 'splash', 'trickroom', 'darkpulse']}],
-		[{species: 'Mew', ability: 'noability', moves: ['splash', 'tackle', 'riftopening']}],
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+		[{ species: 'Mew', ability: 'noability', item, moves: ['riftopening', 'splash', 'trickroom', 'darkpulse'] }],
+		[{ species: 'Mew', ability: 'noability', moves: ['splash', 'tackle', 'riftopening'] }],
 	]);
 	battle.makeChoices('team 1', 'team 1');
 	if (field) battle.field.startTerrain(field);
@@ -185,7 +185,7 @@ describe('Rift Herald and Rift Aura', () => {
 				if (adapted !== 'none') {
 					const pokemon = adapted === 'source' ? p : q;
 					pokemon.setAbility('adaptivecycle');
-					adaptiveMemory(pokemon).fields[field] = {stage: 3, turn: battle.turn};
+					adaptiveMemory(pokemon).fields[field] = { stage: 3, turn: battle.turn };
 				}
 				// Only the source's adaptation removes the base-field penalty. The independent Aura remains.
 				assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('moonblast'), 400), adapted === 'source' ? 300 : 200);

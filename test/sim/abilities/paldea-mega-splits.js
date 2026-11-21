@@ -21,7 +21,7 @@ describe('Approved six Paldea Mega passive migrations', () => {
 		let count = 0;
 		for (const old of require('./paldea-mega-before.json')) {
 			const s = Dex.species.get(old.id);
-			assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, {...old.abilities}), old.id);
+			assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, { ...old.abilities }), old.id);
 			assert.deepEqual(s.passives, require('./passive-approval-overlays').current(old.id, old.passives), old.id);
 			if (approved[old.id]) count++;
 		}

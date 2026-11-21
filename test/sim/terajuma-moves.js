@@ -3,21 +3,21 @@
 const assert = require('../assert');
 const common = require('../common');
 
-describe('Milotic-Terajuma moves and Whiplash', function () {
+describe('Milotic-Terajuma moves and Whiplash', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 
 	function setup(userMoves, foeMoves = ['splash'], ability = 'whiplash') {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Milotic-Terajuma', ability, moves: userMoves},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Milotic-Terajuma', ability, moves: userMoves },
 		], [
-			{species: 'Snorlax', ability: 'immunity', moves: foeMoves},
+			{ species: 'Snorlax', ability: 'immunity', moves: foeMoves },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		return [battle.p1.active[0], battle.p2.active[0]];
 	}
 
-	it('raises Accuracy on entry and lets Tail Smash lower Defense', function () {
+	it('raises Accuracy on entry and lets Tail Smash lower Defense', () => {
 		const [milotic, foe] = setup(['tailsmash']);
 		assert.equal(milotic.boosts.accuracy, 1);
 		const move = battle.dex.moves.get('tailsmash');
@@ -28,7 +28,7 @@ describe('Milotic-Terajuma moves and Whiplash', function () {
 		assert.equal(foe.boosts.def, -1);
 	});
 
-	it('boosts Tail Smash damage with Whiplash', function () {
+	it('boosts Tail Smash damage with Whiplash', () => {
 		let [, foe] = setup(['tailsmash']);
 		battle.makeChoices('move tailsmash', 'move splash');
 		const boostedDamage = foe.maxhp - foe.hp;
@@ -39,7 +39,7 @@ describe('Milotic-Terajuma moves and Whiplash', function () {
 		assert(boostedDamage > normalDamage * 1.25);
 	});
 
-	it('doubles Deluge power only after damage from that target this turn', function () {
+	it('doubles Deluge power only after damage from that target this turn', () => {
 		const [milotic, foe] = setup(['deluge'], ['tackle']);
 		battle.onEvent('CriticalHit', battle.format, false);
 		const move = battle.dex.moves.get('deluge');
@@ -62,7 +62,7 @@ describe('Milotic-Terajuma moves and Whiplash', function () {
 		assert(boostedDamage > normalDamage * 1.5);
 	});
 
-	it('sets Atlantis Wall only in rain or eligible fields, on the user side', function () {
+	it('sets Atlantis Wall only in rain or eligible fields, on the user side', () => {
 		const [milotic] = setup(['atlantiswall']);
 		battle.makeChoices('move atlantiswall', 'move splash');
 		assert.false(!!battle.p1.getSideCondition('atlantiswall'));
@@ -72,7 +72,7 @@ describe('Milotic-Terajuma moves and Whiplash', function () {
 		assert.false(!!battle.p2.getSideCondition('atlantiswall'));
 	});
 
-	it('uses normal integer PP and announces its actual duration', function () {
+	it('uses normal integer PP and announces its actual duration', () => {
 		const [milotic] = setup(['atlantiswall', 'splash']);
 		const move = battle.dex.moves.get('atlantiswall');
 		const slot = milotic.moveSlots.find(entry => entry.id === 'atlantiswall');
@@ -89,7 +89,7 @@ describe('Milotic-Terajuma moves and Whiplash', function () {
 		assert(battle.log.some(line => line.includes('-sideend') && line.includes('move: Atlantis Wall')));
 	});
 
-	it('gives Atlantis Wall eight turns in rain and five on Misty Terrain', function () {
+	it('gives Atlantis Wall eight turns in rain and five on Misty Terrain', () => {
 		const [milotic] = setup(['atlantiswall']);
 		const move = battle.dex.moves.get('atlantiswall');
 		battle.field.setWeather('raindance', milotic);
@@ -104,7 +104,7 @@ describe('Milotic-Terajuma moves and Whiplash', function () {
 		assert.equal(move.onModifyPriority.call(battle, 0), 1);
 	});
 
-	it('allows the listed fields, but Air Lock suppresses rain-only eligibility', function () {
+	it('allows the listed fields, but Air Lock suppresses rain-only eligibility', () => {
 		for (const terrain of ['watersurfaceterrain', 'underwaterterrain', 'mistyterrain', 'murkwatersurfaceterrain', 'midnightzoneterrain']) {
 			const [milotic] = setup(['atlantiswall']);
 			const move = battle.dex.moves.get('atlantiswall');
@@ -124,7 +124,7 @@ describe('Milotic-Terajuma moves and Whiplash', function () {
 		assert.equal(move.onTry.call(battle, milotic), false);
 	});
 
-	it('halves super-effective physical and special damage', function () {
+	it('halves super-effective physical and special damage', () => {
 		for (const attack of ['thunderbolt', 'earthquake']) {
 			let [milotic] = setup(['atlantiswall'], [attack]);
 			battle.field.setWeather('raindance', milotic);
@@ -142,7 +142,7 @@ describe('Milotic-Terajuma moves and Whiplash', function () {
 		}
 	});
 
-	it('lets screen-breaking moves remove Atlantis Wall', function () {
+	it('lets screen-breaking moves remove Atlantis Wall', () => {
 		const [milotic] = setup(['atlantiswall'], ['brickbreak']);
 		battle.field.setWeather('raindance', milotic);
 		battle.makeChoices('move atlantiswall', 'move brickbreak');

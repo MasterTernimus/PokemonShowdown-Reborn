@@ -24,10 +24,10 @@ describe('Storm Fright', () => {
 		});
 	}
 	it('gives Mega Manectric passive Intimidate alongside Storm Power and Lightning Rod', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Manectric', item: 'Manectite', moves: ['splash', 'bite']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Manectric', item: 'Manectite', moves: ['splash', 'bite'] },
 		], [
-			{species: 'Mew', moves: ['splash', 'thunderbolt']},
+			{ species: 'Mew', moves: ['splash', 'thunderbolt'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash mega', 'move splash');
@@ -53,10 +53,10 @@ describe('Storm Fright', () => {
 	});
 
 	it('boosts Special Attack in rain and takes Storm Power recoil', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Manectric', item: 'Manectite', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Manectric', item: 'Manectite', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['splash']},
+			{ species: 'Mew', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash mega', 'move splash');

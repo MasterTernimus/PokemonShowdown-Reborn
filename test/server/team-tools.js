@@ -28,8 +28,8 @@ describe('Server-authoritative team tools', () => {
 		assert.throws(() => previewForms('', Teams.pack([set])), /format/);
 	});
 	it('validates twelve independent teams and rejects a thirteenth', () => {
-		const input = Array.from({length: 12}, (_, index) => ({name: 'Team ' + index,
-			format: 'gen9nofieldsinglesgame', team: Teams.pack([set])}));
+		const input = Array.from({ length: 12 }, (_, index) => ({ name: 'Team ' + index,
+			format: 'gen9nofieldsinglesgame', team: Teams.pack([set]) }));
 		const result = validateSavedTeams(input);
 		assert.equal(result.length, 12);
 		assert(result.every(entry => entry.matchup.startsWith('Not checked')));

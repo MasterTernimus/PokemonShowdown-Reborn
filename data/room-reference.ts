@@ -1,5 +1,5 @@
 /** Public reference copy for effects that coexist with fields and auras. */
-export const RoomReference: Record<string, {summary: string, sections: Record<string, string[]>}> = {
+export const RoomReference: Record<string, { summary: string, sections: Record<string, string[]> }> = {
 	trickroom: {
 		summary: 'Slower Pokémon move first within the same priority bracket.',
 		sections: {

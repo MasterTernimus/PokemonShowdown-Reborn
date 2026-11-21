@@ -20,9 +20,9 @@ describe('Ability description audit', () => {
 	});
 
 	it('applies Void Veil’s described Fairy Tale entry boost', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mismagius', ability: 'Void Veil', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Mismagius', ability: 'Void Veil', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.field.startTerrain('fairytaleterrain');
 		battle.makeChoices('team 1', 'team 1');
@@ -32,9 +32,9 @@ describe('Ability description audit', () => {
 	});
 
 	it('removes the selected Striker kick bonus from Unchecked Assault', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mew', ability: 'Unchecked Assault', moves: ['highjumpkick']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Mew', ability: 'Unchecked Assault', moves: ['highjumpkick'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const user = battle.p1.active[0], foe = battle.p2.active[0];
@@ -42,9 +42,9 @@ describe('Ability description audit', () => {
 	});
 
 	it('gives Neurotoxin Hydra Bond’s Dragon’s Den power bonus', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mew', ability: 'Neurotoxin', moves: ['tackle']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Mew', ability: 'Neurotoxin', moves: ['tackle'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.field.startTerrain('dragonsdenterrain');
@@ -53,9 +53,9 @@ describe('Ability description audit', () => {
 	});
 
 	it('gives Alchemist Surge Prankster’s Dark-type immunity rule', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mew', ability: 'Alchemist Surge', moves: ['taunt']}],
-			[{species: 'Umbreon', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Mew', ability: 'Alchemist Surge', moves: ['taunt'] }],
+			[{ species: 'Umbreon', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.field.clearTerrain();
@@ -65,9 +65,9 @@ describe('Ability description audit', () => {
 	});
 
 	it('does not restore Venom Bastion’s removed weather immunity or Bug boost', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mew', ability: 'Venom Bastion', moves: ['bugbuzz']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Mew', ability: 'Venom Bastion', moves: ['bugbuzz'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const user = battle.p1.active[0], foe = battle.p2.active[0];

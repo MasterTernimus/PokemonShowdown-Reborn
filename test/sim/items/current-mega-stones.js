@@ -1,7 +1,7 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex, TeamValidator} = require('../../../dist/sim');
+const { Dex, TeamValidator } = require('../../../dist/sim');
 describe('Current Hydreigon and Lucario Mega stones', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
@@ -10,9 +10,9 @@ describe('Current Hydreigon and Lucario Mega stones', () => {
 		['Lucario', 'Carry On', 'Lucarionite Z', 'Lucario-Mega-Z', 'auraprecision'],
 	]) {
 		it(`${item} validates and evolves ${species} into ${mega} through the battle choice`, () => {
-			const set = {species, ability, item, moves: [species === 'Hydreigon' ? 'darkpulse' : 'aurasphere']};
-			assert.deepEqual(new TeamValidator('gen9nofieldsinglesgame').validateSet({...set}, {}) || [], []);
-			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[set], [{species: 'Blissey', ability: 'No Ability', moves: ['splash']}]]);
+			const set = { species, ability, item, moves: [species === 'Hydreigon' ? 'darkpulse' : 'aurasphere'] };
+			assert.deepEqual(new TeamValidator('gen9nofieldsinglesgame').validateSet({ ...set }, {}) || [], []);
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[set], [{ species: 'Blissey', ability: 'No Ability', moves: ['splash'] }]]);
 			if (battle.requestState === 'teampreview') battle.makeChoices('team 1', 'team 1');
 			const p = battle.p1.active[0];
 			assert.equal(p.getMoveRequestData().canMegaEvo, true);

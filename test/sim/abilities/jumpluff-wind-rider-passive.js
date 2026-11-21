@@ -26,12 +26,12 @@ describe('Jumpluff selected and innate behavior', () => {
 		if (ability === 'Windy Surge') {
 			assert.equal(p.side.sideConditions.tailwind.duration, 2);
 			assert.equal(p.boosts.atk, 0);
-			}
-		b.actions.useMove('tackle', q, {target: p});
+		}
+		b.actions.useMove('tackle', q, { target: p });
 		assert.equal(q.boosts.spe, -1);
 		if (ability === 'Wind Rider') {
 			const hp = p.hp;
-			b.actions.useMove(Object.assign(Dex.getActiveMove('gust'), {accuracy: true}), q, {target: p});
+			b.actions.useMove(Object.assign(Dex.getActiveMove('gust'), { accuracy: true }), q, { target: p });
 			assert.equal(p.hp, hp);
 			assert.equal(p.boosts.atk, 1);
 		}

@@ -1,5 +1,5 @@
-import type {AbilityData, AbilityDataTable} from '../sim/dex-abilities';
-import {applySereneGrace} from './ally-serene-grace';
+import type { AbilityData, AbilityDataTable } from '../sim/dex-abilities';
+import { applySereneGrace } from './ally-serene-grace';
 
 export const GraceSupportDescriptions = {
 	serenegrace: {
@@ -22,7 +22,7 @@ export function installGraceSupport(abilities: AbilityDataTable) {
 	delete abilities.voidomen.onModifyMovePriority;
 	delete abilities.voidomen.onAllyModifyMove;
 	delete (abilities.voidomen as AbilityData & { onAllyModifyMovePriority?: number }).onAllyModifyMovePriority;
-	(abilities.fortunatewing as AbilityData & {onAllyModifyMovePriority: number}).onAllyModifyMovePriority = -2;
+	(abilities.fortunatewing as AbilityData & { onAllyModifyMovePriority: number }).onAllyModifyMovePriority = -2;
 	abilities.fortunatewing.onAllyModifyMove = function (move, source) {
 		const holder = this.effectState.target;
 		if (source === holder || !holder.hp || !holder.isActive || !source.isAlly(holder)) return;

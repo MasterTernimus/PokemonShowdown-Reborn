@@ -5,23 +5,23 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Relic Mishap', function () {
-	afterEach(function () {
+describe('Relic Mishap', () => {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
-	it('should be assigned to every Galar fossil in place of Water Absorb or Volt Absorb', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should be assigned to every Galar fossil in place of Water Absorb or Volt Absorb', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		for (const species of ['Dracozolt', 'Arctozolt', 'Dracovish', 'Arctovish']) {
 			assert.equal(battle.dex.species.get(species).abilities[0], 'Relic Mishap');
 		}
 	});
 
-	it('should absorb both Water- and Electric-type attacks', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Arctovish', ability: 'relicmishap', moves: ['splash']},
+	it('should absorb both Water- and Electric-type attacks', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Arctovish', ability: 'relicmishap', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['watergun', 'thundershock']},
+			{ species: 'Mew', ability: 'noguard', moves: ['watergun', 'thundershock'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const arctovish = battle.p1.active[0];
@@ -55,11 +55,11 @@ describe('Relic Mishap', function () {
 		}
 	}
 
-	it('should boost Sp. Def in Sand and Defense in Hail', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Dracovish', ability: 'relicmishap', moves: ['splash']},
+	it('should boost Sp. Def in Sand and Defense in Hail', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Dracovish', ability: 'relicmishap', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['splash']},
+			{ species: 'Mew', ability: 'noguard', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const dracovish = battle.p1.active[0];
@@ -75,12 +75,12 @@ describe('Relic Mishap', function () {
 		assert.equal(dracovish.getStat('spd'), baseSpD);
 	});
 
-	it('should heal 1/16 and ignore both Sandstorm and Hail damage', function () {
+	it('should heal 1/16 and ignore both Sandstorm and Hail damage', () => {
 		for (const weather of ['sandstorm', 'hail']) {
-			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-				{species: 'Dracovish', ability: 'relicmishap', moves: ['splash']},
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+				{ species: 'Dracovish', ability: 'relicmishap', moves: ['splash'] },
 			], [
-				{species: 'Mew', ability: 'noguard', moves: ['splash']},
+				{ species: 'Mew', ability: 'noguard', moves: ['splash'] },
 			]]);
 			battle.makeChoices('team 1', 'team 1');
 			const dracovish = battle.p1.active[0];
@@ -94,12 +94,12 @@ describe('Relic Mishap', function () {
 		}
 	});
 
-	it('should reduce damage from attacks by 10%', function () {
+	it('should reduce damage from attacks by 10%', () => {
 		const damageTaken = ability => {
-			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-				{species: 'Dracovish', ability, moves: ['splash']},
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+				{ species: 'Dracovish', ability, moves: ['splash'] },
 			], [
-				{species: 'Mew', ability: 'noguard', moves: ['pound']},
+				{ species: 'Mew', ability: 'noguard', moves: ['pound'] },
 			]]);
 			battle.makeChoices('team 1', 'team 1');
 			const dracovish = battle.p1.active[0];

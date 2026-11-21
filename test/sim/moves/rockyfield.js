@@ -3,9 +3,9 @@ const assert = require('assert').strict;
 const common = require('../../common');
 let battle;
 function setup(move = 'splash', ability = 'No Ability', targetAbility = 'No Ability') {
-	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-		[{species: 'Mew', ability, moves: [move, 'splash'], evs: {spe: 252}}],
-		[{species: 'Mew', ability: targetAbility, moves: ['splash', 'protect']}],
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+		[{ species: 'Mew', ability, moves: [move, 'splash'], evs: { spe: 252 } }],
+		[{ species: 'Mew', ability: targetAbility, moves: ['splash', 'protect'] }],
 	]);
 	battle.makeChoices('team 1', 'team 1');
 	battle.field.startTerrain('rockyterrain');
@@ -14,9 +14,9 @@ function setup(move = 'splash', ability = 'No Ability', targetAbility = 'No Abil
 describe('Rocky Field mechanics', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	it('marks Splintered Stormshards terrain temporary and uses its configured four-turn duration', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Lycanroc', ability: 'No Ability', item: 'lycaniumz', moves: ['stoneedge', 'splash']}],
-			[{species: 'Blissey', ability: 'Sturdy', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Lycanroc', ability: 'No Ability', item: 'lycaniumz', moves: ['stoneedge', 'splash'] }],
+			[{ species: 'Blissey', ability: 'Sturdy', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move 1 zmove', 'move 1');

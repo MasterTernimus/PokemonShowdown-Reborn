@@ -5,87 +5,95 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Curse', function () {
-	afterEach(function () {
+describe('Curse', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should request the Ghost target if the user is a known Ghost`, function () {
-		battle = common.createBattle([[
-			{species: 'Gengar', moves: ['curse']},
-		], [
-			{species: 'Caterpie', moves: ['sleeptalk']},
-		]]);
+	it(`should request the Ghost target if the user is a known Ghost`, () => {
+		battle = common.createBattle([
+			[{ species: 'Gengar', moves: ['curse'] }],
+			[{ species: 'Caterpie', moves: ['sleeptalk'] }],
+		]);
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
 	});
 
-	it(`should request the Ghost target after the user becomes Ghost`, function () {
-		battle = common.createBattle([[
-			{species: 'Rapidash', moves: ['curse']},
-		], [
-			{species: 'Trevenant', item: 'laggingtail', moves: ['trickortreat']},
-		]]);
+	it(`should request the Ghost target after the user becomes Ghost`, () => {
+		battle = common.createBattle([
+			[{ species: 'Rapidash', moves: ['curse'] }],
+			[{ species: 'Trevenant', item: 'laggingtail', moves: ['trickortreat'] }],
+		]);
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
 	});
 
-	it(`should not request a target after the user stops being Ghost`, function () {
-		battle = common.createBattle([[
-			{species: 'Gengar', moves: ['curse']},
-		], [
-			{species: 'Jellicent', moves: ['soak']},
-		]]);
+	it(`should not request a target after the user stops being Ghost`, () => {
+		battle = common.createBattle([
+			[{ species: 'Gengar', moves: ['curse'] }],
+			[{ species: 'Jellicent', moves: ['soak'] }],
+		]);
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 	});
 
-	it(`should not request a target if the user is a known non-Ghost`, function () {
-		battle = common.createBattle([[
-			{species: 'Blastoise', moves: ['curse']},
-		], [
-			{species: 'Caterpie', moves: ['sleeptalk']},
-		]]);
+	it(`should not request a target if the user is a known non-Ghost`, () => {
+		battle = common.createBattle([
+			[{ species: 'Blastoise', moves: ['curse'] }],
+			[{ species: 'Caterpie', moves: ['sleeptalk'] }],
+		]);
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 	});
 
-	it(`should not request a target if the user is an unknown non-Ghost`, function () {
-		battle = common.createBattle([[
-			{species: 'Blastoise', moves: ['curse', 'reflecttype']},
-		], [
-			{species: 'Zoroark', ability: 'illusion', moves: ['sleeptalk']},
-			{species: 'Gengar', moves: ['sleeptalk']},
-		]]);
+	it(`should not request a target if the user is an unknown non-Ghost`, () => {
+		battle = common.createBattle([
+			[{ species: 'Blastoise', moves: ['curse', 'reflecttype'] }],
+			[
+				{ species: 'Zoroark', ability: 'illusion', moves: ['sleeptalk'] },
+				{ species: 'Gengar', moves: ['sleeptalk'] },
+			],
+		]);
 		battle.makeChoices('move reflecttype', 'auto');
 
-		assert.deepEqual(battle.p1.active[0].getTypes(), battle.dex.species.get("Zoroark").types); // Copied Zoroark's type instead of Gengar's
+		assert.deepEqual(battle.p1.active[0].getTypes(), battle.dex.species.get('Zoroark').types); // Copied Zoroark's type instead of Gengar's
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 	});
 
 	it('lets passive Protean Kecleon select the second opposing slot in doubles', () => {
-		const mon = (species, moves) => ({species, moves});
-		battle = common.createBattle({gameType:'doubles'}, [[mon('Kecleon',['curse']),mon('Claydol',['splash'])],[mon('Pelipper',['splash']),mon('Archaludon',['splash'])]]);
-		const [user,ally] = battle.p1.active, [other,chosen] = battle.p2.active;
-		assert.equal(user.getMoveRequestData().moves[0].target,'normal');
-		battle.makeChoices('move curse 2, move splash','auto');
-		assert(user.hasType('Ghost'));assert(chosen.volatiles.curse);
-		for (const pokemon of [user,ally,other]) assert(!pokemon.volatiles.curse);
-		assert.equal(user.hp,user.maxhp-Math.floor(user.maxhp/3));
+		const mon = (species, moves) => ({ species, moves });
+		battle = common.createBattle({ gameType: 'doubles' }, [
+			[mon('Kecleon', ['curse']), mon('Claydol', ['splash'])],
+			[mon('Pelipper', ['splash']), mon('Archaludon', ['splash'])],
+		]);
+		const [user, ally] = battle.p1.active,
+			[other, chosen] = battle.p2.active;
+		assert.equal(user.getMoveRequestData().moves[0].target, 'normal');
+		battle.makeChoices('move curse 2, move splash', 'auto');
+		assert(user.hasType('Ghost'));
+		assert(chosen.volatiles.curse);
+		for (const pokemon of [user, ally, other]) assert(!pokemon.volatiles.curse);
+		assert.equal(user.hp, user.maxhp - Math.floor(user.maxhp / 3));
 	});
 	it('keeps self boosts when selected Protean is suppressed', () => {
-		battle = common.createBattle([[{species:'Mew',ability:'Protean',moves:['curse']}],[{species:'Mew',moves:['splash']}]]);
-		const p = battle.p1.active[0];p.addVolatile('gastroacid');
-		assert.equal(p.getMoveRequestData().moves[0].target,'self');
-		battle.makeChoices();assert.equal(p.boosts.atk,1);assert.equal(p.boosts.def,1);assert.equal(p.boosts.spe,-1);
+		battle = common.createBattle([
+			[{ species: 'Mew', ability: 'Protean', moves: ['curse'] }],
+			[{ species: 'Mew', moves: ['splash'] }],
+		]);
+		const p = battle.p1.active[0];
+		p.addVolatile('gastroacid');
+		assert.equal(p.getMoveRequestData().moves[0].target, 'self');
+		battle.makeChoices();
+		assert.equal(p.boosts.atk, 1);
+		assert.equal(p.boosts.def, 1);
+		assert.equal(p.boosts.spe, -1);
 		assert(!p.volatiles.curse);
 	});
-	it(`should curse the target if a Ghost user has Protean`, function () {
-		battle = common.createBattle([[
-			{species: 'Gengar', ability: 'protean', moves: ['curse']},
-		], [
-			{species: 'Caterpie', moves: ['sleeptalk']},
-		]]);
+	it(`should curse the target if a Ghost user has Protean`, () => {
+		battle = common.createBattle([
+			[{ species: 'Gengar', ability: 'protean', moves: ['curse'] }],
+			[{ species: 'Caterpie', moves: ['sleeptalk'] }],
+		]);
 		const gengar = battle.p1.active[0];
 		const caterpie = battle.p2.active[0];
 		const curseResidual = Math.floor(caterpie.maxhp / 4);
@@ -98,31 +106,40 @@ describe('Curse', function () {
 		assert.equal(caterpie.hp, caterpie.maxhp - curseResidual * 2);
 	});
 
-	it(`should target either random opponent if the target is an ally`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Wynaut', moves: ['sleeptalk']},
-			{species: 'Gengar', moves: ['curse']},
-		], [
-			{species: 'Caterpie', moves: ['sleeptalk']},
-			{species: 'Metapod', moves: ['sleeptalk']},
-		]]);
+	it(`should target either random opponent if the target is an ally`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [
+			[
+				{ species: 'Wynaut', moves: ['sleeptalk'] },
+				{ species: 'Gengar', moves: ['curse'] },
+			],
+			[
+				{ species: 'Caterpie', moves: ['sleeptalk'] },
+				{ species: 'Metapod', moves: ['sleeptalk'] },
+			],
+		]);
 		battle.makeChoices('move sleeptalk, move curse -1', 'auto');
 
 		const wynaut = battle.p1.active[0];
 		const caterpie = battle.p2.active[0];
 		const metapod = battle.p2.active[1];
 		assert.fullHP(wynaut);
-		assert(caterpie.maxhp !== caterpie.hp || metapod.maxhp !== metapod.hp, `Either Caterpie or Metapod should have lost HP from Curse`);
+		assert(
+			caterpie.maxhp !== caterpie.hp || metapod.maxhp !== metapod.hp,
+			`Either Caterpie or Metapod should have lost HP from Curse`
+		);
 	});
 
-	it(`[Gen 7] should target the ally if the target is an ally`, function () {
-		battle = common.gen(7).createBattle({gameType: 'doubles'}, [[
-			{species: 'Wynaut', moves: ['sleeptalk']},
-			{species: 'Gengar', moves: ['curse']},
-		], [
-			{species: 'Caterpie', moves: ['sleeptalk']},
-			{species: 'Metapod', moves: ['sleeptalk']},
-		]]);
+	it(`[Gen 7] should target the ally if the target is an ally`, () => {
+		battle = common.gen(7).createBattle({ gameType: 'doubles' }, [
+			[
+				{ species: 'Wynaut', moves: ['sleeptalk'] },
+				{ species: 'Gengar', moves: ['curse'] },
+			],
+			[
+				{ species: 'Caterpie', moves: ['sleeptalk'] },
+				{ species: 'Metapod', moves: ['sleeptalk'] },
+			],
+		]);
 		battle.makeChoices('move sleeptalk, move curse -1', 'auto');
 
 		const wynaut = battle.p1.active[0];
@@ -130,22 +147,40 @@ describe('Curse', function () {
 	});
 });
 
-describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function () {
-	afterEach(function () {
+describe('XY/ORAS Curse targetting when becoming Ghost the same turn', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	const doublesTeams = [[
-		{species: "Kecleon", ability: 'colorchange', item: 'laggingtail', moves: ['curse', 'calmmind']},
-		{species: "Sableye", ability: 'prankster', item: '', moves: ['lightscreen', 'mudsport']},
-	], [
-		{species: "Raikou", ability: 'pressure', item: '', moves: ['aurasphere', 'calmmind']},
-		{species: "Gastly", ability: 'levitate', item: '', moves: ['lick', 'calmmind']},
-	]];
+	const doublesTeams = [
+		[
+			{
+				species: 'Kecleon',
+				ability: 'colorchange',
+				item: 'laggingtail',
+				moves: ['curse', 'calmmind'],
+			},
+			{ species: 'Sableye', ability: 'prankster', item: '', moves: ['lightscreen', 'mudsport'] },
+		],
+		[
+			{ species: 'Raikou', ability: 'pressure', item: '', moves: ['aurasphere', 'calmmind'] },
+			{ species: 'Gastly', ability: 'levitate', item: '', moves: ['lick', 'calmmind'] },
+		],
+	];
 
 	const triplesTeams = [
-		doublesTeams[0].concat({species: "Metapod", ability: 'shedskin', item: '', moves: ['harden', 'stringshot']}),
-		doublesTeams[1].concat({species: "Kakuna", ability: 'shedskin', item: '', moves: ['harden', 'stringshot']}),
+		doublesTeams[0].concat({
+			species: 'Metapod',
+			ability: 'shedskin',
+			item: '',
+			moves: ['harden', 'stringshot'],
+		}),
+		doublesTeams[1].concat({
+			species: 'Kakuna',
+			ability: 'shedskin',
+			item: '',
+			moves: ['harden', 'stringshot'],
+		}),
 	];
 
 	function runDoublesTest(battle, curseUser) {
@@ -211,27 +246,41 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		assert(cursedFoe);
 	}
 
-	common.itGen(6, 'should target an opponent in Doubles if the user is on left side and becomes Ghost the same turn', () => {
-		battle = common.gen(6).createBattle({gameType: 'doubles'}, doublesTeams.slice());
-		runDoublesTest(battle, battle.p1.active[0]);
-	});
+	common.itGen(
+		6,
+		'should target an opponent in Doubles if the user is on left side and becomes Ghost the same turn',
+		() => {
+			battle = common.gen(6).createBattle({ gameType: 'doubles' }, doublesTeams.slice());
+			runDoublesTest(battle, battle.p1.active[0]);
+		}
+	);
 
-	common.itGen(6, 'should target the ally in Doubles if the user is on right side and becomes Ghost the same turn', () => {
-		battle = common.gen(6).createBattle({gameType: 'doubles'}, [
-			[doublesTeams[0][1], doublesTeams[0][0]],
-			doublesTeams[1],
-		]);
-		runDoublesTest(battle, battle.p1.active[1]);
-	});
+	common.itGen(
+		6,
+		'should target the ally in Doubles if the user is on right side and becomes Ghost the same turn',
+		() => {
+			battle = common
+				.gen(6)
+				.createBattle({ gameType: 'doubles' }, [
+					[doublesTeams[0][1], doublesTeams[0][0]],
+					doublesTeams[1],
+				]);
+			runDoublesTest(battle, battle.p1.active[1]);
+		}
+	);
 
 	for (const cursePos of [0, 1, 2]) {
-		common.itGen(5, 'should target an opponent in Triples even if the user is on position ' + cursePos, () => {
-			const p1team = triplesTeams[0].slice(1);
-			p1team.splice(cursePos, 0, triplesTeams[0][0]);
-			const p2team = triplesTeams[1].slice();
+		common.itGen(
+			5,
+			'should target an opponent in Triples even if the user is on position ' + cursePos,
+			() => {
+				const p1team = triplesTeams[0].slice(1);
+				p1team.splice(cursePos, 0, triplesTeams[0][0]);
+				const p2team = triplesTeams[1].slice();
 
-			battle = common.gen(5).createBattle({gameType: 'triples'}, [p1team, p2team]);
-			runTriplesTest(battle, battle.p1.active[cursePos]);
-		});
+				battle = common.gen(5).createBattle({ gameType: 'triples' }, [p1team, p2team]);
+				runTriplesTest(battle, battle.p1.active[cursePos]);
+			}
+		);
 	}
 });

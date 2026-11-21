@@ -1,15 +1,13 @@
-import {SnowyField} from './snowy-field';
+import { SnowyField } from './snowy-field';
 import { installFieldArrivalMessages } from './field-messages';
-import {EclipseTerrains} from './eclipse-fields';
+import { EclipseTerrains } from './eclipse-fields';
 import { isGroundBoneMove } from './ground-bone-moves';
-import {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';
+import { adaptiveFieldMultiplier, adaptiveEnvironment } from '../sim/adaptive-cycle';
 import { MidnightZone } from './midnight-zone';
 import { FieldCoolingMoves } from './field-cooling';
 export const denCooling = FieldCoolingMoves;
 /* eslint-disable @stylistic/max-len */
 import { type TerrainData } from "../sim/dex-terrains";
-import { type Battle } from '../sim/battle';
-import { type Pokemon } from '../sim/pokemon';
 
 function flowerGardenStage(stage: number): TerrainData {
 	const name = `Flower Garden ${stage}`;
@@ -696,7 +694,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				if (move.id === 'infernalrage' && !(move as ActiveMove & {infernalFieldCleared?: boolean}).infernalFieldCleared) return;
+				if (move.id === 'infernalrage' && !(move as ActiveMove & { infernalFieldCleared?: boolean }).infernalFieldCleared) return;
 				const terrainEndMoves = ['defog', 'gust', 'winddance', 'airstreamassault', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'supersonicskystrike', 'seedflare', 'gmaxwindrage'];
 				const igniteMoves = ['infernalrage', 'eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
 				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
@@ -1077,9 +1075,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onBasePowerPriority: 6,
 			onModifyMove(move) {
-				if (move.id === 'scaleshot') move.selfBoost = {boosts: {spe: 1}};
-				const fire_moves = ['smackdown', 'thousandarrows', 'continentalcrush', 'tectonicrage', 'rockclimb', 'earthquake'];
-				if (fire_moves.includes(move.id)) {
+				if (move.id === 'scaleshot') move.selfBoost = { boosts: { spe: 1 } };
+				const fireMoves = ['smackdown', 'thousandarrows', 'continentalcrush', 'tectonicrage', 'rockclimb', 'earthquake'];
+				if (fireMoves.includes(move.id)) {
 					move.types = [move.type, 'Fire'];
 				}
 				if (move.id === 'strength') {
@@ -1355,12 +1353,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				if (move.id === 'infernalrage' && !(move as ActiveMove & {infernalFieldCleared?: boolean}).infernalFieldCleared) return;
+				if (move.id === 'infernalrage' && !(move as ActiveMove & { infernalFieldCleared?: boolean }).infernalFieldCleared) return;
 				const igniteMoves = ['infernalrage', 'eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
 				const hauntedMoves = ['ominouswind', 'phantomforce', 'shadowforce', 'spectralscream', 'trickortreat'];
 				const swampMoves = ['surf', 'muddywater'];
 				const currentCounter = this.field.terrainState.terrainChanges?.get('swampterrain') ?? 0;
-				const neutralizationActive = this.getAllActive().some(pokemon => pokemon?.hasAbilityOrPassive('neutralization'));
 				if (igniteMoves.includes(move.id) && (this.field.weather !== 'raindance' || !this.field.getPseudoWeather('watersport')) || (move.isMax && move.type === 'Fire')) {
 					this.field.changeTerrain('burningterrain');
 					return;
@@ -1582,7 +1579,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePowerPriority: 6,
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const strong_boost = ["mysticalfire", "magicalleaf", "ancientpower", "judgment", "deiludicium", "sacredfire", "extremespeed", "sacredsword", "return"];
+				const strongBoost = ["mysticalfire", "magicalleaf", "ancientpower", "judgment", "deiludicium", "sacredfire", "extremespeed", "sacredsword", "return"];
 				const boost = ['multipulse', "psystrike", "aeroblast", "originpulse", "doomdesire", "mistball", "crushgrip", "lusterpurge", "secretsword", "psychoboost", "relicsong", "spacialrend", "hyperspacehole", "roaroftime", "landswrath", "precipiceblades", "dragonascent", "moongeistbeam", "sunsteelstrike", "prismaticlaser", "fleurcannon", "diamondstorm", "genesissupernova", "searingsunrazesmash", "menacingmoonrazemaelstrom"];
 				const hauntedMoves = ['ominouswind', 'phantomforce', 'shadowforce', 'spectralscream', 'trickortreat'];
 				if (move.id === 'radiantassault') {
@@ -1601,7 +1598,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'The attack was cleansed...');
 					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
-				if (strong_boost.includes(move.id)) {
+				if (strongBoost.includes(move.id)) {
 					if (move.id === 'extremespeed') {
 						this.add('-message', 'Godspeed!');
 					} else {
@@ -1716,7 +1713,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onAfterMove(source, target, move) {
 				if (move.id === 'magmadrift' && this.field.moveTransitionBlocked(source, move)) return;
-				if (move.id === 'infernalrage' && !(move as ActiveMove & {infernalFieldCleared?: boolean}).infernalFieldCleared) return;
+				if (move.id === 'infernalrage' && !(move as ActiveMove & { infernalFieldCleared?: boolean }).infernalFieldCleared) return;
 				const igniteMoves = ['infernalrage', 'burningjealousy', 'eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'infernooverdrive', 'lavaplume', 'magmadrift', 'mindblown', 'ragingfury', 'searingshot'];
 				const quakeMoves = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
 				const hotWaterMoves = ['scald', 'steameruption', 'hydrosteam'];
@@ -2140,8 +2137,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
 				const boost: string[] = ["aurorabeam", "signalbeam", "flashcannon", "dazzlinggleam", "mirrorshot", "photongeyser", "psystrike", "aeroblast", "sacredfire", "mistball", "lusterpurge", "originpulse", "precipiceblades", "dragonascent", "psychoboost", "roaroftime", "magmastorm", "crushgrip", "judgment", "deiludicium", "seedflare", "shadowforce", "searingshot", "vcreate", "secretsword", "sacredsword", "relicsong", "fusionbolt", "fusionflare", "iceburn", "freezeshock", "boltstrike", "blueflare", "technoblast", "oblivionwing", "landswrath", "thousandarrows", "thousandwaves", "diamondstorm", "steameruption", "coreenforcer", "fleurcannon", "prismaticlaser", "sunsteelstrike", "spectralthief", "moongeistbeam", "multiattack", "mindblown", "plasmafists", "earthpower", "powergem", "eruption", "continentalcrush", "genesissupernova", "soulstealing7starstrike", "searingsunrazesmash", "menacingmoonrazemaelstrom", "astralbarrage", "behemothbash", "behemothblade", "collisioncourse", "doubleironbash", "dragonenergy", "dynamaxcannon", "electrodrift", "eternabeam", "fierywrath", "glaciallance", "ruination", "freezingglare", "terastarstorm", "surgingstrikes", "malignantchain", "tachyoncutter", "mightycleave", "hydrosteam", "thunderclap", "ivycudgel", "psyblade", "sandsearstorm", "wildboltstorm", "springtidestorm", "thundercage", "thunderouskick", "wickedblow", "mirrorbeam"];
-				const strong_boost: string[] = ["vacuumwave", "dracometeor", "heavenfall", "meteormash", "moonblast", "cometpunch", "swift", "meteorbeam", "hyperspacehole", "spacialrend", "hyperspacefury", "ancientpower", "futuredummy", "blackholeeclipse"];
-				const weak_nerf = ['bulldoze', 'earthquake', 'magnitude'];
+				const strongBoost: string[] = ["vacuumwave", "dracometeor", "heavenfall", "meteormash", "moonblast", "cometpunch", "swift", "meteorbeam", "hyperspacehole", "spacialrend", "hyperspacefury", "ancientpower", "futuredummy", "blackholeeclipse"];
+				const weakNerf = ['bulldoze', 'earthquake', 'magnitude'];
 				if (move.id === 'radiantassault') {
 					this.add('-message', 'The light shone through the infinite darkness!');
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
@@ -2150,7 +2147,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'The ethereal energy strengthened the attack!');
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
-				if (strong_boost.includes(move.id)) {
+				if (strongBoost.includes(move.id)) {
 					this.add('-message', 'The light shone through the infinite darkness!');
 					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
@@ -2158,7 +2155,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'A star came crashing down on ' + target.name);
 					modifier *= adaptiveFieldMultiplier(this, source, target, 4);
 				}
-				if (weak_nerf.includes(move.id)) {
+				if (weakNerf.includes(move.id)) {
 					this.add('-message', 'The unformed land diffused the attack...');
 					modifier *= adaptiveFieldMultiplier(this, source, target, 0.25);
 				}
@@ -2434,10 +2431,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', moveToMessageMap.get(move.id));
 				}
 				let modifier = 1;
-				const boost_types = ['Rock', 'Ice', 'Flying'];
+				const boostTypes = ['Rock', 'Ice', 'Flying'];
 				const boost = ["vitalthrow", "circlethrow", "stormthrow", "ominouswind", "silverwind", "twister", "razorwind", "fairywind", "avalanche", "powdersnow", "hypervoice", "glaciate", 'bittermalice'];
 				const igniteMoves = ['infernalrage', 'eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
-				if (boost_types.includes(move.type)) {
+				if (boostTypes.includes(move.type)) {
 					this.add('-message', 'The field strengthened the move\'s ' + move.type + ' typing');
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
@@ -2465,7 +2462,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				if (move.id === 'infernalrage' && !(move as ActiveMove & {infernalFieldCleared?: boolean}).infernalFieldCleared) return;
+				if (move.id === 'infernalrage' && !(move as ActiveMove & { infernalFieldCleared?: boolean }).infernalFieldCleared) return;
 				const igniteMoves = ['infernalrage', 'eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
 				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
 					this.add('-message', 'The snow melted away!');
@@ -2506,7 +2503,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
 				const boost: string[] = ["aurorabeam", "signalbeam", "flashcannon", "lusterpurge", "dazzlinggleam", "mirrorshot", "technoblast", "solarbeam", "photongeyser", "moonblast", "meteorbeam", "mirrorbeam"];
-				const strong_boost: string[] = ["dracometeor", "meteormash", "cometpunch", "spacialrend", "swift", "hyperspacehole", "hyperspacefury", "moongeistbeam", "sunsteelstrike", "blackholeeclipse", "searingsunrazesmash", "menacingmoonrazemaelstrom"];
+				const strongBoost: string[] = ["dracometeor", "meteormash", "cometpunch", "spacialrend", "swift", "hyperspacehole", "hyperspacefury", "moongeistbeam", "sunsteelstrike", "blackholeeclipse", "searingsunrazesmash", "menacingmoonrazemaelstrom"];
 				if (this.field.weather === '') {
 					if (move.type === 'Dark' || move.type === 'Psychic') {
 						this.add('-message', 'The field strengthened the attack!');
@@ -2524,7 +2521,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 						this.add('-message', 'Starlight surged through the attack!');
 						modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 					}
-					if (strong_boost.includes(move.id)) {
+					if (strongBoost.includes(move.id)) {
 						this.add('-message', 'The astral energy boosted the attack!');
 						modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 					}
@@ -2598,7 +2595,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				if (move.id === 'infernalrage' && !(move as ActiveMove & {infernalFieldCleared?: boolean}).infernalFieldCleared) return;
+				if (move.id === 'infernalrage' && !(move as ActiveMove & { infernalFieldCleared?: boolean }).infernalFieldCleared) return;
 				const steam = ['muddywater', 'sparklingaria', 'surf', 'waterpledge', 'waterspout', 'watersport', 'hydrovortex', 'oceanicoperetta'];
 				const igniteMoves = ['infernalrage', 'eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
 				const freeze = ['blizzard', 'glaciate', 'subzeroslammer'];
@@ -2713,7 +2710,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				if (move.id === 'infernalrage' && !(move as ActiveMove & {infernalFieldCleared?: boolean}).infernalFieldCleared) return;
+				if (move.id === 'infernalrage' && !(move as ActiveMove & { infernalFieldCleared?: boolean }).infernalFieldCleared) return;
 				const igniteMoves = ['infernalrage', 'eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
 				const currentCounter = this.field.terrainState.terrainChanges?.get('revertTerrain') ?? 0;
 				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
@@ -3306,13 +3303,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 	},
 };
 
-import {skipClearingField} from './yang-aura-clear';
+import { skipClearingField } from './yang-aura-clear';
 installFieldArrivalMessages(Terrains);
 for (const terrain of Object.values(Terrains)) {
- const afterMove = terrain.condition?.onAfterMove;
- if (typeof afterMove !== 'function') continue;
- terrain.condition!.onAfterMove = function (source, target, move) {
-  if (skipClearingField(source, move)) return;
-  return afterMove.call(this, source, target, move);
- };
+	const afterMove = terrain.condition?.onAfterMove;
+	if (typeof afterMove !== 'function') continue;
+	terrain.condition.onAfterMove = function (source, target, move) {
+		if (skipClearingField(source, move)) return;
+		return afterMove.call(this, source, target, move);
+	};
 }

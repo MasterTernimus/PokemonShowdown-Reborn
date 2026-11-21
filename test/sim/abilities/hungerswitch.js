@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe("Hunger Switch", function () {
-	afterEach(function () {
+describe("Hunger Switch", () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it("should alternate forms every turn", function () {
+	it("should alternate forms every turn", () => {
 		battle = common.createBattle([[
-			{species: 'Morpeko', ability: 'hungerswitch', moves: ['rest']},
+			{ species: 'Morpeko', ability: 'hungerswitch', moves: ['rest'] },
 		], [
-			{species: 'Magikarp', ability: 'Swift Swim', moves: ['splash']},
+			{ species: 'Magikarp', ability: 'Swift Swim', moves: ['splash'] },
 		]]);
 		const peko = battle.p1.active[0];
 		assert.species(peko, 'Morpeko');

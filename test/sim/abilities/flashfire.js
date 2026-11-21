@@ -5,11 +5,11 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Flash Fire', function () {
-	it('Elemental Seed grants Fire power while Drifblim keeps Unburden', function () {
-		battle = common.createBattle({formatid: 'gen9dragonsden'}, [
-			[{species: 'Drifblim', ability: 'Unburden', item: 'Elemental Seed', moves: ['ember']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+describe('Flash Fire', () => {
+	it('Elemental Seed grants Fire power while Drifblim keeps Unburden', () => {
+		battle = common.createBattle({ formatid: 'gen9dragonsden' }, [
+			[{ species: 'Drifblim', ability: 'Unburden', item: 'Elemental Seed', moves: ['ember'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const [holder, target] = [battle.p1.active[0], battle.p2.active[0]];
@@ -19,15 +19,15 @@ describe('Flash Fire', function () {
 		assert(battle.log.some(line => line.endsWith('|Flash Fire|[from] item: Elemental Seed')));
 		assert.equal(battle.runEvent('ModifySpA', holder, target, battle.dex.getActiveMove('ember'), 100), 150);
 	});
-	afterEach(function () {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should grant immunity to Fire-type moves and increase Fire-type attacks by 50% once activated', function () {
+	it('should grant immunity to Fire-type moves and increase Fire-type attacks by 50% once activated', () => {
 		battle = common.createBattle([[
-			{species: 'Heatran', ability: 'flashfire', moves: ['incinerate']},
+			{ species: 'Heatran', ability: 'flashfire', moves: ['incinerate'] },
 		], [
-			{species: 'Talonflame', ability: 'galewings', moves: ['flareblitz']},
+			{ species: 'Talonflame', ability: 'galewings', moves: ['flareblitz'] },
 		]]);
 		const [flashMon, foePokemon] = [battle.p1.active[0], battle.p2.active[0]];
 		battle.makeChoices('move incinerate', 'move flareblitz');
@@ -36,11 +36,11 @@ describe('Flash Fire', function () {
 		assert.bounded(damage, [82, 97]);
 	});
 
-	it('should grant Fire-type immunity even if the user is frozen', function () {
+	it('should grant Fire-type immunity even if the user is frozen', () => {
 		battle = common.createBattle([[
-			{species: 'Heatran', ability: 'flashfire', moves: ['sleeptalk']},
+			{ species: 'Heatran', ability: 'flashfire', moves: ['sleeptalk'] },
 		], [
-			{species: 'Talonflame', ability: 'galewings', moves: ['flareblitz']},
+			{ species: 'Talonflame', ability: 'galewings', moves: ['flareblitz'] },
 		]]);
 		const flashMon = battle.p1.active[0];
 		flashMon.setStatus('frz');
@@ -49,20 +49,20 @@ describe('Flash Fire', function () {
 		assert(flashMon.volatiles.flashfire); // Only custom frostbite residual damage applied.
 	});
 
-	it('should have its Fire-type immunity suppressed by Mold Breaker', function () {
+	it('should have its Fire-type immunity suppressed by Mold Breaker', () => {
 		battle = common.createBattle([[
-			{species: 'Heatran', ability: 'flashfire', moves: ['incinerate']},
+			{ species: 'Heatran', ability: 'flashfire', moves: ['incinerate'] },
 		], [
-			{species: 'Haxorus', ability: 'moldbreaker', moves: ['firepunch']},
+			{ species: 'Haxorus', ability: 'moldbreaker', moves: ['firepunch'] },
 		]]);
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices('move incinerate', 'move firepunch'));
 	});
 
-	it(`should lose the Flash Fire boost if its ability is changed`, function () {
+	it(`should lose the Flash Fire boost if its ability is changed`, () => {
 		battle = common.createBattle([[
-			{species: 'Heatran', ability: 'flashfire', moves: ['sleeptalk', 'incinerate']},
+			{ species: 'Heatran', ability: 'flashfire', moves: ['sleeptalk', 'incinerate'] },
 		], [
-			{species: 'Talonflame', ability: 'shellarmor', moves: ['flamethrower', 'worryseed']},
+			{ species: 'Talonflame', ability: 'shellarmor', moves: ['flamethrower', 'worryseed'] },
 		]]);
 		battle.randomizer = damage => damage;
 		battle.onEvent('CriticalHit', battle.format, () => false);
@@ -78,16 +78,16 @@ describe('Flash Fire', function () {
 	});
 });
 
-describe('Flash Fire [Gen 3-4]', function () {
-	afterEach(function () {
+describe('Flash Fire [Gen 3-4]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	common.itGen(3, 'should activate and grant Fire-type immunity even if the user is frozen in Gen 3', function () {
+	common.itGen(3, 'should activate and grant Fire-type immunity even if the user is frozen in Gen 3', () => {
 		battle = common.gen(3).createBattle([[
-			{species: 'Arcanine', ability: 'flashfire', moves: ['sleeptalk']},
+			{ species: 'Arcanine', ability: 'flashfire', moves: ['sleeptalk'] },
 		], [
-			{species: 'Charizard', ability: 'blaze', moves: ['flamethrower']},
+			{ species: 'Charizard', ability: 'blaze', moves: ['flamethrower'] },
 		]]);
 		const flashFireMon = battle.p1.active[0];
 		flashFireMon.setStatus('frz');
@@ -95,11 +95,11 @@ describe('Flash Fire [Gen 3-4]', function () {
 		assert.notEqual(flashFireMon.hp, flashFireMon.maxhp);
 	});
 
-	common.itGen(4, 'should activate and grant Fire-type immunity even if the user is frozen in Gen 4', function () {
+	common.itGen(4, 'should activate and grant Fire-type immunity even if the user is frozen in Gen 4', () => {
 		battle = common.gen(4).createBattle([[
-			{species: 'Heatran', ability: 'flashfire', moves: ['sleeptalk']},
+			{ species: 'Heatran', ability: 'flashfire', moves: ['sleeptalk'] },
 		], [
-			{species: 'Charizard', ability: 'blaze', moves: ['flamethrower']},
+			{ species: 'Charizard', ability: 'blaze', moves: ['flamethrower'] },
 		]]);
 		const flashFireMon = battle.p1.active[0];
 		flashFireMon.setStatus('frz');

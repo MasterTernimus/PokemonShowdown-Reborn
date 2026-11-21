@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('./../assert');
-const {Dex} = require('../../dist/sim/dex');
+const { Dex } = require('../../dist/sim/dex');
 
 Dex.includeData();
 
@@ -11,7 +11,7 @@ describe('Machamp-Gmax and legacy Raging Fists', () => {
 		assert.equal(machamp.abilities[0], "Titan's Knuckles");
 	});
 
-	it('describes Hydra Bond, Ghost bypass and damaging-only accuracy', function () {
+	it('describes Hydra Bond, Ghost bypass and damaging-only accuracy', () => {
 		const ability = Dex.abilities.get('Raging Fists');
 		assert(ability.desc.includes('damaging moves cannot miss'));
 		assert(ability.desc.includes('Status moves retain their normal accuracy'));

@@ -55,7 +55,7 @@ export const ReadableAbilitySummaries: Record<string, string> = {
 };
 
 /** Plain-language explanations, shared by battle data, reference text and client exports. */
-export const PlainLanguageAbilityDescriptions: Record<string, {shortDesc: string, desc: string}> = {
+export const PlainLanguageAbilityDescriptions: Record<string, { shortDesc: string, desc: string }> = {
 	undertow: {
 		shortDesc: "Water attacks gain Smack Down's grounding effect. Water Absorb.",
 		desc: "Water attacks gain Smack Down's grounding effect when they damage a foe directly. A surviving airborne foe is grounded until it switches out, allowing Ground moves to hit it. Substitute and Water immunities still block this effect. Also has Water Absorb, including its field healing.",
@@ -131,7 +131,7 @@ export const PlainLanguageAbilityDescriptions: Record<string, {shortDesc: string
 };
 
 // These species passives intentionally omit components present in the selectable ability.
-export const PlainLanguagePassiveDescriptions: Record<string, {shortDesc: string, desc: string}> = {
+export const PlainLanguagePassiveDescriptions: Record<string, { shortDesc: string, desc: string }> = {
 	undertow: {
 		shortDesc: "Water attacks gain Smack Down's grounding effect.",
 		desc: "Water attacks gain Smack Down's grounding effect when they damage a foe directly. A surviving airborne foe is grounded until it switches out, allowing Ground moves to hit it. Substitute and Water immunities still block this effect.",

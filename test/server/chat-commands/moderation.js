@@ -8,7 +8,7 @@
 const assert = require('assert').strict;
 let moderation;
 
-const {makeUser} = require('../../users-utils');
+const { makeUser } = require('../../users-utils');
 
 describe('room promotions', function () {
 	before(() => {

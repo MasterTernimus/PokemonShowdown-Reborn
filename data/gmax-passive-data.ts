@@ -1,4 +1,4 @@
-import {November16BalanceDescriptions} from './nov16-balance-descriptions';
+import { November16BalanceDescriptions } from './nov16-balance-descriptions';
 /** Explicit Gmax approvals; base forms and excluded branches are not recipients. */
 export const GmaxPassiveSelections: Record<string, string> = {
 	pikachugmax: 'static', meowthgmax: 'pickup', kinglergmax: 'swiftswim', gengargmax: 'cursedbody',

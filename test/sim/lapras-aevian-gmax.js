@@ -3,12 +3,12 @@
 const assert = require('./../assert');
 const common = require('./../common');
 
-describe('Lapras-Aevian-Gmax', function () {
-	it('uses Psychic moves for G-Max Echo Resonance and sets Aurora Veil', function () {
-		const battle = common.createBattle({formatid: 'gen9mistyfieldadrienn'}, [[
-			{species: 'Lapras-Aevian', ability: 'protectiveward', gigantamax: true, moves: ['psychic', 'tackle']},
+describe('Lapras-Aevian-Gmax', () => {
+	it('uses Psychic moves for G-Max Echo Resonance and sets Aurora Veil', () => {
+		const battle = common.createBattle({ formatid: 'gen9mistyfieldadrienn' }, [[
+			{ species: 'Lapras-Aevian', ability: 'protectiveward', gigantamax: true, moves: ['psychic', 'tackle'] },
 		], [
-			{species: 'Blissey', ability: 'noability', moves: ['splash']},
+			{ species: 'Blissey', ability: 'noability', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const lapras = battle.p1.active[0];
@@ -22,11 +22,11 @@ describe('Lapras-Aevian-Gmax', function () {
 		assert(lapras.side.getSideCondition('auroraveil'));
 	});
 
-	it('defines the requested form, stats, typing, and composite Ability', function () {
+	it('defines the requested form, stats, typing, and composite Ability', () => {
 		const dex = common.gen(9).dex;
 		const species = dex.species.get('Lapras-Aevian-Gmax');
 		assert.deepEqual(species.types, ['Rock', 'Psychic']);
-		assert.deepEqual(species.baseStats, {hp: 195, atk: 85, def: 80, spa: 85, spd: 95, spe: 60});
+		assert.deepEqual(species.baseStats, { hp: 195, atk: 85, def: 80, spa: 85, spd: 95, spe: 60 });
 		assert.equal(species.abilities[0], 'Crystal Resonance');
 		assert.equal(dex.abilities.get('crystalresonance').name, 'Crystal Resonance');
 	});

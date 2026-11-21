@@ -5,15 +5,15 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Apex Venom', function () {
-	afterEach(function () {
+describe('Apex Venom', () => {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
-	it('combines Strong Jaw and Shed Skin while keeping Poison Fang Poison-type', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Seviper', ability: 'Apex Venom', moves: ['Poison Fang', 'Poison Jab']}],
-			[{species: 'Magikarp', moves: ['Splash']}],
+	it('combines Strong Jaw and Shed Skin while keeping Poison Fang Poison-type', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Seviper', ability: 'Apex Venom', moves: ['Poison Fang', 'Poison Jab'] }],
+			[{ species: 'Magikarp', moves: ['Splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const seviper = battle.p1.active[0];
@@ -26,10 +26,10 @@ describe('Apex Venom', function () {
 		assert.equal(poisonFang.secondaries?.at(-1)?.chance, 30);
 	});
 
-	it('makes Poison moves super effective against Poison and Steel', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Seviper', ability: 'Apex Venom', moves: ['Poison Fang', 'Poison Jab']}],
-			[{species: 'Perrserker', moves: ['Splash']}, {species: 'Koffing', moves: ['Splash']}],
+	it('makes Poison moves super effective against Poison and Steel', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Seviper', ability: 'Apex Venom', moves: ['Poison Fang', 'Poison Jab'] }],
+			[{ species: 'Perrserker', moves: ['Splash'] }, { species: 'Koffing', moves: ['Splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const seviper = battle.p1.active[0];
@@ -46,10 +46,10 @@ describe('Apex Venom', function () {
 		assert(battle.p2.active[0].hp < startingHP, 'Poison Jab should damage Steel under Apex Venom');
 	});
 
-	it('lets biting moves hit through protection', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Seviper', ability: 'Apex Venom', moves: ['Crunch']}],
-			[{species: 'Magikarp', moves: ['Protect']}],
+	it('lets biting moves hit through protection', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Seviper', ability: 'Apex Venom', moves: ['Crunch'] }],
+			[{ species: 'Magikarp', moves: ['Protect'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const target = battle.p2.active[0];

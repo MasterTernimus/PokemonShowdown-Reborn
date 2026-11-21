@@ -3,7 +3,7 @@
 const assert = require('./../assert');
 const common = require('../common');
 
-describe('Mod loader', function () {
+describe('Mod loader', () => {
 	common.itGen(2, 'should work fine in any order', () => {
 		{
 			const Dex = require('./../../dist/sim/dex').Dex;
@@ -20,18 +20,18 @@ describe('Mod loader', function () {
 	});
 });
 
-describe('Dex#getEffect', function () {
-	it('returns the same object for the same id', function () {
+describe('Dex#getEffect', () => {
+	it('returns the same object for the same id', () => {
 		assert.equal(Dex.conditions.get('Stealth Rock'), Dex.conditions.get('stealthrock'));
 		assert.notEqual(Dex.conditions.get('move: Stealth Rock'), Dex.conditions.get('stealthrock'));
 	});
 
-	it('does not return elements from the Object prototype', function () {
+	it('does not return elements from the Object prototype', () => {
 		assert.false(Dex.conditions.get('constructor').exists);
 	});
 });
 
-describe('Dex#getSpecies', function () {
+describe('Dex#getSpecies', () => {
 	for (const order of [['Ninetales-Reborn', 'Ninetales-Alt'], ['Ninetales-Alt', 'Ninetales-Reborn']]) {
 		it(`preserves the cosmetic base through aliases (${order.join(' then ')})`, () => {
 			// Exercise both cold-cache lookup orders, not a previously resolved alias.
@@ -43,17 +43,17 @@ describe('Dex#getSpecies', function () {
 			assert.equal(first.abilities.S, 'Ashen Seeds');
 		});
 	}
-	it('should handle cosmetic Flabébé formes', function () {
+	it('should handle cosmetic Flabébé formes', () => {
 		assert.equal(Dex.species.get('Flabébé-yellow').name, 'Flabébé-Yellow');
 	});
 
-	it('should handle Minior-Meteor formes', function () {
+	it('should handle Minior-Meteor formes', () => {
 		assert(!Dex.species.get('Minior-Meteor').isNonstandard);
 		assert(Dex.forGen(8).species.get('Minior-Meteor').isNonstandard);
 		assert(!Dex.forGen(7).species.get('Minior-Meteor').isNonstandard);
 	});
 
-	it.skip('should handle Rockruff-Dusk', function () {
+	it.skip('should handle Rockruff-Dusk', () => {
 		assert.equal(Dex.species.get('rockruffdusk').name, 'Rockruff-Dusk');
 	});
 
@@ -71,15 +71,15 @@ describe('Dex#getSpecies', function () {
 	});
 });
 
-describe('Dex#getItem', function () {
+describe('Dex#getItem', () => {
 	for (const gen of [5, 6, 7, 8]) common.itGen(gen, 'should correctly mark Gem legality', () => {
 		assert.false(Dex.forGen(gen).items.get('Normal Gem').isNonstandard);
 		assert.equal(Dex.forGen(gen).items.get('Rock Gem').isNonstandard, gen === 5 ? null : gen === 8 ? 'Past' : 'Unobtainable');
 	});
 });
 
-describe('Dex#getMove', function () {
-	it(`should correctly handle G-Max moves`, function () {
+describe('Dex#getMove', () => {
+	it(`should correctly handle G-Max moves`, () => {
 		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').name, "G-Max Befuddle");
 		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').gen, 8);
 		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').isNonstandard, "Gigantamax");

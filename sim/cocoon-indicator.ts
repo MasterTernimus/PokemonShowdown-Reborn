@@ -1,4 +1,4 @@
-import type {Pokemon} from './pokemon';
+import type { Pokemon } from './pokemon';
 
 /** Public display only; the persistent cocoon remains owned by Silken Decoy. */
 export function updateCocoonIndicator(pokemon: Pokemon) {

@@ -12,12 +12,12 @@ describe('Suppressed ability-driven Rejuv forms', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 	function start(species, ability, item = '', gasFirst = false) {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species, ability, item, moves: ['splash']},
-			{species: 'Snorlax', ability: 'No Ability', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species, ability, item, moves: ['splash'] },
+			{ species: 'Snorlax', ability: 'No Ability', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'No Ability', moves: ['splash', 'gastroacid']},
-			{species: 'Weezing', ability: 'Neutralizing Gas', moves: ['splash']},
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash', 'gastroacid'] },
+			{ species: 'Weezing', ability: 'Neutralizing Gas', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 12', gasFirst ? 'team 21' : 'team 12');
 		return battle.p1.active[0];

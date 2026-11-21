@@ -3,11 +3,11 @@
  */
 'use strict';
 
-const {testSet, testNotBothMoves, testHasSTAB, testAlwaysHasMove} = require('./tools');
+const { testSet, testNotBothMoves, testHasSTAB, testAlwaysHasMove } = require('./tools');
 const assert = require('../assert');
 
 describe('[Gen 8] Random Battle (slow)', () => {
-	const options = {format: 'gen8randombattle'};
+	const options = { format: 'gen8randombattle' };
 	if (!Dex.formats.get('gen8randombattle').exists) {
 		it.skip('gen8randombattle: upstream format is not registered in Reborn');
 		return;
@@ -201,7 +201,6 @@ describe('[Gen 8] Random Battle (slow)', () => {
 	it('should always give Palossand Shore Up', () => testAlwaysHasMove('palossand', options, 'shoreup'));
 	it('should always give Azumarill Aqua Jet', () => testAlwaysHasMove('azumarill', options, 'aquajet'));
 
-
 	it('should forbid a certain Togekiss set', () => {
 		testSet('togekiss', options, set => {
 			assert.notDeepEqual(
@@ -214,7 +213,7 @@ describe('[Gen 8] Random Battle (slow)', () => {
 });
 
 describe('[Gen 8] Random Doubles Battle (slow)', () => {
-	const options = {format: 'gen8randomdoublesbattle'};
+	const options = { format: 'gen8randomdoublesbattle' };
 	if (!Dex.formats.get('gen8randomdoublesbattle').exists) {
 		it.skip('gen8randomdoublesbattle: upstream format is not registered in Reborn');
 		return;
@@ -259,7 +258,7 @@ describe('[Gen 8] Random Battle (No Dmax) (slow)', () => {
 });
 
 describe('[Gen 8] Free-for-All Random Battle (slow)', () => {
-	const options = {format: 'gen8freeforallrandombattle', isDoubles: true};
+	const options = { format: 'gen8freeforallrandombattle', isDoubles: true };
 	if (!Dex.formats.get('gen8freeforallrandombattle').exists) {
 		it.skip('gen8freeforallrandombattle: upstream format is not registered in Reborn');
 		return;
@@ -273,7 +272,7 @@ describe('[Gen 8] Free-for-All Random Battle (slow)', () => {
 });
 
 describe('[Gen 8 BDSP] Random Battle (slow)', () => {
-	const options = {format: 'gen8bdsprandombattle'};
+	const options = { format: 'gen8bdsprandombattle' };
 	if (!Dex.formats.get('gen8bdsprandombattle').exists) {
 		it.skip('gen8bdsprandombattle: upstream format is not registered in Reborn');
 		return;
@@ -315,7 +314,7 @@ describe('[Gen 8 BDSP] Random Battle (slow)', () => {
 			// This test is marked as slow because although each individual test is fairly fast to run,
 			// ~500 tests are generated, so they can dramatically slow down the process of unit testing.
 			it(`should not generate Choice items on ${species.name} sets with status moves, unless an item-switching move or Healing Wish is generated`, () => {
-				testSet(species.id, {...options, rounds: 500}, set => {
+				testSet(species.id, { ...options, rounds: 500 }, set => {
 					if (set.item.startsWith('Choice') && !okToHaveChoiceMoves.some(okMove => set.moves.includes(okMove))) {
 						assert(set.moves.every(m => dex.moves.get(m).category !== 'Status'), `Choice item and status moves on set ${JSON.stringify(set)}`);
 					}

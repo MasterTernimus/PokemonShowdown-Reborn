@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Z-Move power conversion', function () {
-	afterEach(function () {
+describe('Z-Move power conversion', () => {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
-	it('should scale type-compatible signature crystals from the selected base move', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Lycanroc', ability: 'keeneye', item: 'lycaniumz', moves: ['mightycleave']},
+	it('should scale type-compatible signature crystals from the selected base move', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Lycanroc', ability: 'keeneye', item: 'lycaniumz', moves: ['mightycleave'] },
 		], [
-			{species: 'Shuckle', ability: 'sturdy', moves: ['splash']},
+			{ species: 'Shuckle', ability: 'sturdy', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const pokemon = battle.p1.active[0];
@@ -26,11 +26,11 @@ describe('Z-Move power conversion', function () {
 		assert.equal(zMove.baseMove, 'mightycleave');
 	});
 
-	it('should use the same multihit conversion represented by move data', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Lycanroc', ability: 'keeneye', item: 'lycaniumz', moves: ['rockblast']},
+	it('should use the same multihit conversion represented by move data', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Lycanroc', ability: 'keeneye', item: 'lycaniumz', moves: ['rockblast'] },
 		], [
-			{species: 'Shuckle', ability: 'sturdy', moves: ['splash']},
+			{ species: 'Shuckle', ability: 'sturdy', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const pokemon = battle.p1.active[0];
@@ -41,11 +41,11 @@ describe('Z-Move power conversion', function () {
 		assert.equal(zMove.basePower, baseMove.zMove.basePower);
 	});
 
-	it('should scale fixed-count multihit moves by their combined base power', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Lucario', ability: 'steadfast', item: 'steeliumz', moves: ['needlegun']},
+	it('should scale fixed-count multihit moves by their combined base power', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Lucario', ability: 'steadfast', item: 'steeliumz', moves: ['needlegun'] },
 		], [
-			{species: 'Shuckle', ability: 'sturdy', moves: ['splash']},
+			{ species: 'Shuckle', ability: 'sturdy', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const pokemon = battle.p1.active[0];

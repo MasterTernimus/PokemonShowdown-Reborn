@@ -5,12 +5,12 @@ describe('Latest profile ability regressions', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
 	it('Absolute Zero grants Snow Warning, Mold Breaker and Filter without changing type effectiveness', () => {
-		battle = common.createBattle({formatid: 'gen9doublescustomgame'}, [[
-			{species: 'Ampharos-Aevian-Mega', ability: 'Absolute Zero', moves: ['icebeam']},
-			{species: 'Mew', ability: 'No Ability', moves: ['icebeam']},
+		battle = common.createBattle({ formatid: 'gen9doublescustomgame' }, [[
+			{ species: 'Ampharos-Aevian-Mega', ability: 'Absolute Zero', moves: ['icebeam'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['icebeam'] },
 		], [
-			{species: 'Flareon', ability: 'No Ability', moves: ['flamethrower']},
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
+			{ species: 'Flareon', ability: 'No Ability', moves: ['flamethrower'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
 		]]);
 		const [holder, ally] = battle.p1.active;
 		const fire = battle.p2.active[0];
@@ -28,9 +28,9 @@ describe('Latest profile ability regressions', () => {
 		}
 	});
 	it('Protective Ward absorbs Water without Storm Drain boosts or redirection', () => {
-		battle = common.createBattle({formatid: 'gen9customgame'}, [[
-			{species: 'Lapras-Aevian', ability: 'Protective Ward', moves: ['splash']},
-		], [{species: 'Mew', ability: 'No Ability', moves: ['watergun']}]]);
+		battle = common.createBattle({ formatid: 'gen9customgame' }, [[
+			{ species: 'Lapras-Aevian', ability: 'Protective Ward', moves: ['splash'] },
+		], [{ species: 'Mew', ability: 'No Ability', moves: ['watergun'] }]]);
 		const lapras = battle.p1.active[0];
 		lapras.hp = Math.floor(lapras.maxhp / 2);
 		const hp = lapras.hp;
@@ -41,9 +41,9 @@ describe('Latest profile ability regressions', () => {
 		assert.false(lapras.hasAbility('Storm Drain'));
 	});
 	it('Crystal Resonance reflects status moves after Lapras Gmaxes', () => {
-		battle = common.createBattle({formatid: 'gen9mistyfieldadrienn'}, [[
-			{species: 'Lapras-Aevian', ability: 'Protective Ward', gigantamax: true, moves: ['psychic']},
-		], [{species: 'Lugia', ability: 'No Ability', moves: ['toxic']}]]);
+		battle = common.createBattle({ formatid: 'gen9mistyfieldadrienn' }, [[
+			{ species: 'Lapras-Aevian', ability: 'Protective Ward', gigantamax: true, moves: ['psychic'] },
+		], [{ species: 'Lugia', ability: 'No Ability', moves: ['toxic'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move psychic dynamax', 'move toxic');
 		assert.equal(battle.p1.active[0].ability, 'crystalresonance');
@@ -51,9 +51,9 @@ describe('Latest profile ability regressions', () => {
 		assert.equal(battle.p2.active[0].status, 'tox');
 	});
 	it('Wild Spirit guarantees critical hits only on its first active turn', () => {
-		battle = common.createBattle({formatid: 'gen9customgame'}, [[
-			{species: 'Kommo-o-Aevian', ability: 'Wild Spirit', moves: ['tackle']},
-		], [{species: 'Blissey', ability: 'No Ability', moves: ['splash']}]]);
+		battle = common.createBattle({ formatid: 'gen9customgame' }, [[
+			{ species: 'Kommo-o-Aevian', ability: 'Wild Spirit', moves: ['tackle'] },
+		], [{ species: 'Blissey', ability: 'No Ability', moves: ['splash'] }]]);
 		const user = battle.p1.active[0];
 		const move = battle.dex.getActiveMove('tackle');
 		assert.equal(user.boosts.accuracy, 1);
@@ -62,11 +62,11 @@ describe('Latest profile ability regressions', () => {
 		assert.equal(battle.runEvent('ModifyCritRatio', user, battle.p2.active[0], move, 1), 1);
 	});
 	it('Vile Assault intercepts the departing opponent and spends one move', () => {
-		battle = common.createBattle({formatid: 'gen9customgame'}, [[
-			{species: 'Kommo-o-Aevian', ability: 'Inexorable', moves: ['vileassault']},
+		battle = common.createBattle({ formatid: 'gen9customgame' }, [[
+			{ species: 'Kommo-o-Aevian', ability: 'Inexorable', moves: ['vileassault'] },
 		], [
-			{species: 'Shuckle', ability: 'No Ability', moves: ['splash']},
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
+			{ species: 'Shuckle', ability: 'No Ability', moves: ['splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
 		]]);
 		const departing = battle.p2.active[0];
 		const pp = battle.p1.active[0].moveSlots[0].pp;

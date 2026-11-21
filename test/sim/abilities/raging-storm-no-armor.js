@@ -1,34 +1,91 @@
 'use strict';
-const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim');
-describe('Raging Storm without inherited Battle Armor',()=>{
- let battle; afterEach(()=>{battle?.destroy();battle=null;});
- function setup(ability){battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Mew',ability,moves:['splash','outrage']}],[{species:'Mew',ability:'No Ability',moves:['splash','frostbreath']}]]);battle.makeChoices('team 1','team 1');return [battle.p1.active[0],battle.p2.active[0]];}
- for (const species of ['Weezing', 'Weezing-Galar']) {
-  it('Neutralizing Gas protects '+species+' from Chople Berry Haxorus until the gas leaves', () => {
-   const set = ability => ({species, ability, moves:['splash']});
-   battle = common.createBattle({formatid:'gen9nofieldsinglesgame'}, [
-    [{species:'Haxorus', ability:'Raging Storm', item:'Chople Berry', moves:['earthquake']}],
-    [set('Neutralizing Gas'), set('Misty Surge')],
-   ]);
-   battle.makeChoices('team 1','team 12');
-   const user = battle.p1.active[0], gas = battle.p2.active[0];
-   assert(gas.getPassives().includes('levitate'));
-   assert(user.ignoringAbility());
-   const hp = gas.hp;
-   battle.makeChoices('move earthquake','move splash');
-   assert.equal(gas.hp, hp);
-   assert.equal(user.item, 'chopleberry');
-   battle.makeChoices('move earthquake','switch 2');
-   const next = battle.p2.pokemon.find(p => p !== gas);
-   assert(next.getPassives().includes('levitate'));
-   assert(next.hp < next.maxhp);
-   assert(!user.ignoringAbility());
-  });
- }
- for(const ability of ['Raging Storm','Raging Overlord','Unleashed Ego']){
- it(ability+' loses armor identity, crit immunity, reduction, field and stat-drop rewards',()=>{const[p,q]=setup(ability);assert(!p.hasAbility('battlearmor'));assert(p.hasAbility('moldbreaker'));const move=Dex.getActiveMove('tackle');assert.notEqual(battle.runEvent('CriticalHit',p,q,move),false);assert.equal(battle.runEvent('ModifyDamage',q,p,move,1000),1000);assert.equal(battle.runEvent('ModifyDamage',q,p,Dex.getActiveMove('quickattack'),1000),500);battle.field.setTerrain('fairytaleterrain',p);battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.boosts.def,0);battle.boost({atk:-1},p,q);assert.equal(p.boosts.def,0);});
- it(ability+' keeps bypasses, crit ratio, hail protection, rampage behavior and suppression immunity',()=>{const[p,q]=setup(ability);const m=Dex.getActiveMove('outrage');battle.singleEvent('ModifyMove',p.getAbility(),p.abilityState,m,p,q);assert(m.ignoreAbility&&m.infiltrates&&m.ignoreDefensive);assert(!m.self?.volatileStatus);assert.equal(battle.runEvent('ModifyCritRatio',p,q,m,1),2);assert.equal(p.runStatusImmunity('hail'),false);p.addVolatile('gastroacid',q);assert(p.hasAbility('ragingstorm'));});
- }
+const assert = require('assert').strict,
+	common = require('../../common'),
+	{ Dex } = require('../../../dist/sim');
+describe('Raging Storm without inherited Battle Armor', () => {
+	let battle;
+	afterEach(() => {
+		battle?.destroy();
+		battle = null;
+	});
+	function setup(ability) {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Mew', ability, moves: ['splash', 'outrage'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash', 'frostbreath'] }],
+		]);
+		battle.makeChoices('team 1', 'team 1');
+		return [battle.p1.active[0], battle.p2.active[0]];
+	}
+	for (const species of ['Weezing', 'Weezing-Galar']) {
+		it(
+			'Neutralizing Gas protects ' + species + ' from Chople Berry Haxorus until the gas leaves',
+			() => {
+				const set = ability => ({ species, ability, moves: ['splash'] });
+				battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+					[
+						{
+							species: 'Haxorus',
+							ability: 'Raging Storm',
+							item: 'Chople Berry',
+							moves: ['earthquake'],
+						},
+					],
+					[set('Neutralizing Gas'), set('Misty Surge')],
+				]);
+				battle.makeChoices('team 1', 'team 12');
+				const user = battle.p1.active[0],
+					gas = battle.p2.active[0];
+				assert(gas.getPassives().includes('levitate'));
+				assert(user.ignoringAbility());
+				const hp = gas.hp;
+				battle.makeChoices('move earthquake', 'move splash');
+				assert.equal(gas.hp, hp);
+				assert.equal(user.item, 'chopleberry');
+				battle.makeChoices('move earthquake', 'switch 2');
+				const next = battle.p2.pokemon.find(p => p !== gas);
+				assert(next.getPassives().includes('levitate'));
+				assert(next.hp < next.maxhp);
+				assert(!user.ignoringAbility());
+			}
+		);
+	}
+	for (const ability of ['Raging Storm', 'Raging Overlord', 'Unleashed Ego']) {
+		it(
+			ability + ' loses armor identity, crit immunity, reduction, field and stat-drop rewards',
+			() => {
+				const [p, q] = setup(ability);
+				assert(!p.hasAbility('battlearmor'));
+				assert(p.hasAbility('moldbreaker'));
+				const move = Dex.getActiveMove('tackle');
+				assert.notEqual(battle.runEvent('CriticalHit', p, q, move), false);
+				assert.equal(battle.runEvent('ModifyDamage', q, p, move, 1000), 1000);
+				assert.equal(
+					battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('quickattack'), 1000),
+					500
+				);
+				battle.field.setTerrain('fairytaleterrain', p);
+				battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
+				assert.equal(p.boosts.def, 0);
+				battle.boost({ atk: -1 }, p, q);
+				assert.equal(p.boosts.def, 0);
+			}
+		);
+		it(
+			ability +
+			' keeps bypasses, crit ratio, hail protection, rampage behavior and suppression immunity',
+			() => {
+				const [p, q] = setup(ability);
+				const m = Dex.getActiveMove('outrage');
+				battle.singleEvent('ModifyMove', p.getAbility(), p.abilityState, m, p, q);
+				assert(m.ignoreAbility && m.infiltrates && m.ignoreDefensive);
+				assert(!m.self?.volatileStatus);
+				assert.equal(battle.runEvent('ModifyCritRatio', p, q, m, 1), 2);
+				assert.equal(p.runStatusImmunity('hail'), false);
+				p.addVolatile('gastroacid', q);
+				assert(p.hasAbility('ragingstorm'));
+			}
+		);
+	}
 	it('preserves standalone Battle Armor while Venom Armor loses its removed component', () => {
 		const [p, q] = setup('Battle Armor');
 		assert.equal(battle.runEvent('CriticalHit', p, q, Dex.getActiveMove('tackle')), false);

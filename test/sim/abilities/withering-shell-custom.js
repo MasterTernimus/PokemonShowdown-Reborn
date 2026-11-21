@@ -15,16 +15,16 @@ describe('Withering Shell custom effects', () => {
 		for (const name of ['Corsola', 'Corsola-Alt']) {
 			const species = Dex.species.get(name);
 			assert.deepEqual(species.types, ['Water', 'Rock']);
-			assert.deepEqual(species.baseStats, {hp: 95, atk: 55, def: 100, spa: 120, spd: 130, spe: 30});
-			assert.deepEqual(species.abilities, {0: 'Withering Shell', 1: 'Perish Body', H: 'Lightning Rod'});
+			assert.deepEqual(species.baseStats, { hp: 95, atk: 55, def: 100, spa: 120, spd: 130, spe: 30 });
+			assert.deepEqual(species.abilities, { 0: 'Withering Shell', 1: 'Perish Body', H: 'Lightning Rod' });
 		}
 	});
 
 	it('combines Crumbling Shell, Rain Dish and Sticky Hold with passive Natural Recovery', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame', preview: true}, [[
-			{species: 'Corsola-Alt', ability: 'Withering Shell', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame', preview: true }, [[
+			{ species: 'Corsola-Alt', ability: 'Withering Shell', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'Synchronize', moves: ['tackle', 'splash']},
+			{ species: 'Mew', ability: 'Synchronize', moves: ['tackle', 'splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const corsola = battle.p1.active[0];
@@ -47,10 +47,10 @@ describe('Withering Shell custom effects', () => {
 	});
 
 	it('should not apply removed Weak Armor effects when a water field blocks Crumbling Shell', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame', preview: true}, [[
-			{species: 'Corsola', ability: 'Withering Shell', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame', preview: true }, [[
+			{ species: 'Corsola', ability: 'Withering Shell', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'Synchronize', moves: ['tackle']},
+			{ species: 'Mew', ability: 'Synchronize', moves: ['tackle'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const corsola = battle.p1.active[0];

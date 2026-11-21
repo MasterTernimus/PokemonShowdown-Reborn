@@ -132,7 +132,7 @@ describe('October follow-up rules', () => {
 					}
 					const hp = foe.hp;
 					const move = Dex.getActiveMove(id); move.accuracy = true;
-					battle.actions.runMove(move, p, p.getLocOf(foe), {externalMove: true});
+					battle.actions.runMove(move, p, p.getLocOf(foe), { externalMove: true });
 					if (protection === 'Flying' || protection === 'Levitate') assert(foe.hp < hp);
 					else assert.equal(foe.hp, hp);
 				});

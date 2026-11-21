@@ -41,7 +41,7 @@ describe('Approved Ultra Instinct and Inferno Ascendant rework', () => {
 		for (const ego of ['Ultra Ego', 'Burning Ego', 'Perfect Ego', 'Unleashed Ego', 'Terra Ascendant']) {
 			it(instinct + ' and ' + ego + ' inherit the rivalry without doubling retaliation', () => {
 				const [p, q] = setup(instinct); q.setAbility(ego, null, null, true);
-				hit(q, p, {multihit: 3}); assert.equal(p.hp, 3820);
+				hit(q, p, { multihit: 3 }); assert.equal(p.hp, 3820);
 				hit(q, p); assert.equal(p.hp, 3720);
 				hit(p, q); assert.equal(q.boosts.atk, 0); assert.equal(q.boosts.spa, 0);
 				hit(p, q); battle.fieldEvent('Residual');
@@ -52,7 +52,7 @@ describe('Approved Ultra Instinct and Inferno Ascendant rework', () => {
 	for (const category of ['Physical', 'Special']) it(category + ' rivalry ignores stages only for the appropriate matchup and guard', () => {
 		const [p, q] = setup(); q.setAbility('Ultra Ego');
 		const stat = category === 'Physical' ? 'atk' : 'spa';
-		const damage = () => {p.hp = 4000; hit(q, p, {damage: undefined, category}); return 4000 - p.hp;};
+		const damage = () => { p.hp = 4000; hit(q, p, { damage: undefined, category }); return 4000 - p.hp; };
 		const neutral = damage(); battle.turn++; q.boosts[stat] = 6;
 		assert.equal(damage(), neutral); assert.equal(q.boosts[stat], 6);
 		assert(damage() > neutral * 4, 'later attack uses positive stages and no guard');
@@ -79,9 +79,9 @@ describe('Approved Ultra Instinct and Inferno Ascendant rework', () => {
 	it('Substitute retains boosted damage and does not spend the rivalry guard', () => {
 		const [p, q] = setup(); q.setAbility('Ultra Ego'); q.boosts.atk = 6;
 		p.addVolatile('substitute'); p.volatiles.substitute.hp = 2000;
-		hit(q, p, {damage: undefined}); const boosted = 2000 - p.volatiles.substitute.hp;
+		hit(q, p, { damage: undefined }); const boosted = 2000 - p.volatiles.substitute.hp;
 		assert.equal(p.m.ultraInstinctGuardTurn, undefined); p.removeVolatile('substitute');
-		hit(q, p, {damage: undefined}); assert(boosted > (4000 - p.hp) * 4);
+		hit(q, p, { damage: undefined }); assert(boosted > (4000 - p.hp) * 4);
 	});
 
 	it('Predator bypasses the first reduction without reserving it for a later attack', () => {
@@ -128,7 +128,7 @@ describe('Approved Ultra Instinct and Inferno Ascendant rework', () => {
 	}
 	it('Aura Precision blocks guaranteed secondary effects through Mold Breaker', () => {
 		const [p, q] = setup('Aura Precision'); q.setAbility('Mold Breaker');
-		hit(q, p, {secondary: {chance: 100, status: 'par'}});
+		hit(q, p, { secondary: { chance: 100, status: 'par' } });
 		assert.equal(p.status, ''); assert.equal(p.hp, 3930);
 	});
 	it('ordinary Magma Armor remains bypassable without Ultra Instinct', () => {

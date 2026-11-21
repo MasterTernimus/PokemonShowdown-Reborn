@@ -1,5 +1,5 @@
-import type {AbilityDataTable} from '../sim/dex-abilities';
-import {skipPassiveComponent} from './passive-ability-cleanup';
+import type { AbilityDataTable } from '../sim/dex-abilities';
+import { skipPassiveComponent } from './passive-ability-cleanup';
 
 export const AuraGazeDescriptions = {
 	aurasight: {
@@ -20,7 +20,7 @@ export function installAuraGaze(abilities: AbilityDataTable) {
 		onModifyMove(move, source) {
 			if (skipPassiveComponent(this, source, 'aurasight') || move.id !== 'aurasphere' || move.isZ || move.isMax) return;
 			move.category = source.getStat('atk', false, true) > source.getStat('spa', false, true) ? 'Physical' : 'Special';
-			move.flags = {...move.flags, bypasssub: 1};
+			move.flags = { ...move.flags, bypasssub: 1 };
 		},
 	};
 	abilities.revealinggaze = {
@@ -30,10 +30,10 @@ export function installAuraGaze(abilities: AbilityDataTable) {
 			const foes = source.foes().filter(target => target.hp && target.isActive && source.isAdjacent(target));
 			const target = foes.find(foe => foe.position === source.position) || foes[0];
 			if (!target) return;
-			const saved = {move: this.activeMove, pokemon: this.activePokemon, target: this.activeTarget,
-				event: this.event, effect: this.effect, state: this.effectState, result: source.moveThisTurnResult};
+			const saved = { move: this.activeMove, pokemon: this.activePokemon, target: this.activeTarget,
+				event: this.event, effect: this.effect, state: this.effectState, result: source.moveThisTurnResult };
 			try {
-				this.actions.useMove('miracleeye', source, {target, sourceEffect: this.effect});
+				this.actions.useMove('miracleeye', source, { target, sourceEffect: this.effect });
 			} finally {
 				this.activeMove = saved.move; this.activePokemon = saved.pokemon; this.activeTarget = saved.target;
 				this.event = saved.event; this.effect = saved.effect; this.effectState = saved.state;

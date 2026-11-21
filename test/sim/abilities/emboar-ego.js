@@ -1,12 +1,54 @@
-'use strict';const assert=require('assert').strict,common=require('../../common');const{Dex}=require('../../../dist/sim');let battle;
-describe('Emboar Ego cosmetic variants',()=>{
- afterEach(()=>{battle?.destroy();battle=null;});
- for(const[a,b]of [['emboarego','emboar'],['emboarmegaego','emboarmega']])it(a+' matches current '+b+' mechanics',()=>{const s=Dex.species.get(a),base=Dex.species.get(b);assert(s.exists);for(const k of ['baseStats','types','abilities','passives'])assert.deepEqual(s[k],base[k],k);assert.deepEqual(Dex.species.getLearnsetData(a).learnset,Dex.species.getLearnsetData('emboar').learnset);if(a.includes('mega'))assert.equal(s.requiredItem,base.requiredItem);});
- for(const[species,expected]of [['Emboar-Ego','emboarmegaego'],['Emboar','emboarmega'],['Emboar-Reborn','emboarmegareborn']])it(species+' follows its own Emboarite route',()=>{battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species,item:'Emboarite',ability:'Gluttony',moves:['tackle']}],[{species:'Mew',ability:'No Ability',moves:['splash']}]]);battle.makeChoices('team 1','team 1');const p=battle.p1.active[0];assert(battle.actions.runMegaEvo(p));assert.equal(p.species.id,expected);assert.deepEqual(p.getPassives(),Dex.species.get(expected).passives);});
+'use strict';
+const assert = require('assert').strict,
+	common = require('../../common');
+const { Dex } = require('../../../dist/sim');
+let battle;
+describe('Emboar Ego cosmetic variants', () => {
+	afterEach(() => {
+		battle?.destroy();
+		battle = null;
+	});
+	for (const [a, b] of [
+		['emboarego', 'emboar'],
+		['emboarmegaego', 'emboarmega'],
+	])
+		it(a + ' matches current ' + b + ' mechanics', () => {
+			const s = Dex.species.get(a),
+				base = Dex.species.get(b);
+			assert(s.exists);
+			for (const k of ['baseStats', 'types', 'abilities', 'passives'])
+				assert.deepEqual(s[k], base[k], k);
+			assert.deepEqual(
+				Dex.species.getLearnsetData(a).learnset,
+				Dex.species.getLearnsetData('emboar').learnset
+			);
+			if (a.includes('mega')) assert.equal(s.requiredItem, base.requiredItem);
+		});
+	for (const [species, expected] of [
+		['Emboar-Ego', 'emboarmegaego'],
+		['Emboar', 'emboarmega'],
+		['Emboar-Reborn', 'emboarmegareborn'],
+	])
+		it(species + ' follows its own Emboarite route', () => {
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+				[{ species, item: 'Emboarite', ability: 'Gluttony', moves: ['tackle'] }],
+				[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+			]);
+			battle.makeChoices('team 1', 'team 1');
+			const p = battle.p1.active[0];
+			assert(battle.actions.runMegaEvo(p));
+			assert.equal(p.species.id, expected);
+			assert.deepEqual(p.getPassives(), Dex.species.get(expected).passives);
+		});
 	it('preserves Emboar mechanics with the approved Mud Barrage replacement', () => {
 		for (const old of require('../../../artifacts/emboar-ego/before.json')) {
 			const s = Dex.species.get(old.id);
-			assert.deepEqual(s.abilities, ['emboar', 'emboaralt'].includes(old.id) ? { ...old.abilities, 0: 'Controlled Fury' } : old.abilities);
+			assert.deepEqual(
+				s.abilities,
+				['emboar', 'emboaralt'].includes(old.id) ?
+					{ ...old.abilities, 0: 'Controlled Fury' } :
+					old.abilities
+			);
 			assert.deepEqual(s.baseStats, { ...old.stats, spa: old.stats.spa + 7 });
 			assert.deepEqual(s.types, old.types);
 			assert.deepEqual(s.passives, old.passives);
@@ -15,8 +57,15 @@ describe('Emboar Ego cosmetic variants',()=>{
 				expected.mudbarrage = expected.mudslap;
 				delete expected.mudslap;
 			}
-			const normalized = table => table && Object.fromEntries(Object.entries(table).map(([move, sources]) => [move, [...sources].sort()]));
-			assert.deepEqual(normalized(Dex.species.getLearnsetData(old.id).learnset), normalized(expected));
+			const normalized = table =>
+				table &&
+				Object.fromEntries(
+					Object.entries(table).map(([move, sources]) => [move, [...sources].sort()])
+				);
+			assert.deepEqual(
+				normalized(Dex.species.getLearnsetData(old.id).learnset),
+				normalized(expected)
+			);
 		}
 	});
 });

@@ -2,15 +2,15 @@
 
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim/dex');
-const {PRNG} = require('../../../dist/sim/prng');
+const { Dex } = require('../../../dist/sim/dex');
+const { PRNG } = require('../../../dist/sim/prng');
 
 describe('Type cleanup runtime regressions', () => {
 	it('canonicalizes an imported ability alias and preserves its effects after switching', () => {
 		const battle = common.createBattle([[
-			{species: 'Mew', ability: 'Wildfire Core', moves: ['splash']},
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
-		], [{species: 'Mew', ability: 'No Ability', moves: ['splash']}]]);
+			{ species: 'Mew', ability: 'Wildfire Core', moves: ['splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+		], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
 		try {
 			const pokemon = battle.p1.active[0];
 			assert.equal(pokemon.baseAbility, 'unboundblaze');
@@ -42,9 +42,9 @@ describe('Type cleanup runtime regressions', () => {
 			const prng = new PRNG('1,2,3,4');
 			const generator = new Constructor('gen9nofieldsinglesgame', prng);
 			assert.equal(generator.prng, prng);
-			const first = Array.from({length: 10}, () => generator.random(10000));
+			const first = Array.from({ length: 10 }, () => generator.random(10000));
 			generator.setSeed('1,2,3,4');
-			assert.deepEqual(Array.from({length: 10}, () => generator.random(10000)), first);
+			assert.deepEqual(Array.from({ length: 10 }, () => generator.random(10000)), first);
 		}
 	});
 
@@ -59,12 +59,12 @@ describe('Type cleanup runtime regressions', () => {
 	});
 
 	it('tracks Neutralization targets separately and does not repeat a drop on the same target', () => {
-		const battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Quagsire', ability: 'Neutralization', moves: ['splash']},
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
+		const battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Quagsire', ability: 'Neutralization', moves: ['splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
 		]]);
 		try {
 			battle.makeChoices('team 1, 2', 'team 1, 2');

@@ -190,7 +190,7 @@ describe('Lore partnership reworks', () => {
 		hit(p, t, 'shadowball', { basePower: 1 }); assert.equal(p.hp, 2304);
 		p.setAbility('No Ability');
 		p.setAbility('Blackwater Anchor');
-		hit(p, t, 'shadowball', {basePower: 1});
+		hit(p, t, 'shadowball', { basePower: 1 });
 		assert.equal(p.hp, 2304, 'Restoring the ability must not refresh healing in the same turn');
 		battle.fieldEvent('Residual'); freshTurn();
 		assert.notEqual(battle.runEvent('DragOut', p, t), false);

@@ -3,16 +3,16 @@ const assert = require('./../assert');
 const common = require('./../common');
 let battle;
 
-describe('Salazzle-Mega', function () {
+describe('Salazzle-Mega', () => {
 	afterEach(() => battle?.destroy());
 
-	it('defines Salazzle-Mega and Salazzite correctly', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('defines Salazzle-Mega and Salazzite correctly', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		const base = battle.dex.species.get('Salazzle');
 		const mega = battle.dex.species.get('Salazzle-Mega');
 		assert(base.otherFormes.includes('Salazzle-Mega'));
 		assert.deepEqual(mega.types, ['Poison', 'Fire']);
-		assert.deepEqual(mega.baseStats, {hp: 68, atk: 74, def: 70, spa: 148, spd: 80, spe: 140});
+		assert.deepEqual(mega.baseStats, { hp: 68, atk: 74, def: 70, spa: 148, spd: 80, spe: 140 });
 		assert.equal(mega.bst, 580);
 		assert.equal(mega.abilities[0], 'Corrosive Burn');
 		assert.equal(mega.requiredItem, 'Salazzite');
@@ -20,10 +20,10 @@ describe('Salazzle-Mega', function () {
 		assert.equal(battle.dex.items.get('Salazzite').megaStone.Salazzle, 'Salazzle-Mega');
 	});
 
-	it('Mega Evolves and applies every Corrosive Burn component', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Salazzle', item: 'Salazzite', moves: ['toxic', 'sludgebomb']},
-		], [{species: 'Skarmory', ability: 'No Ability', moves: ['splash']}]]);
+	it('Mega Evolves and applies every Corrosive Burn component', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Salazzle', item: 'Salazzite', moves: ['toxic', 'sludgebomb'] },
+		], [{ species: 'Skarmory', ability: 'No Ability', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move toxic mega', 'move splash');
 		const salazzle = battle.p1.active[0];

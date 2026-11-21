@@ -27,7 +27,9 @@ export const FieldTransitionNotes: Record<string, string[]> = {
 		'To Murkwater Surface: Sludge Wave twice or Acid Downpour once. Active Pokémon faint unless Poison-type, Steel-type or semi-invulnerable. Neutralization prevents this transition.',
 		'Ordinary field setters cannot replace Underwater.',
 	],
-	snowyterrain: ['Clear the snow → successful Heat Wave, Eruption, Searing Shot, Flame Burst, Lava Plume, Fire Pledge, Mind Blown, Incinerate or Inferno Overdrive. Reveals the field underneath.'],
+	snowyterrain: [
+		'Clear the snow → successful Heat Wave, Eruption, Searing Shot, Flame Burst, Lava Plume, Fire Pledge, Mind Blown, Incinerate or Inferno Overdrive. Reveals the field underneath.',
+	],
 	mountainterrain: [
 		'To Snowy Mountain: Blizzard, Glaciate or Subzero Slammer.',
 		'To Snowy Mountain: sustained hail. From a fresh field, three end-of-turn checks; after a non-hail turn, two consecutive hail checks.',
@@ -51,10 +53,16 @@ export const FieldTransitionNotes: Record<string, string[]> = {
 		'Explosion protection: semi-invulnerability, Protect, Flame Body, Flare Boost, Flash Fire, Heatproof, Magma Armor, Water Bubble, Water Veil or Well-Baked Body.',
 		'Volcanic without the explosion → a Fire Max move; or two uses in total of Magma Drift, Fever Pitch, Heat Wave, Lava Plume, Overheat, Incinerate, Inferno, Flame Burst, Fire Pledge or Sacred Fire.',
 	],
-	factoryterrain: ['To Short Circuit: Bulldoze, Fissure, Earthquake, Explosion, Magnitude, Self-Destruct, Tectonic Rage, Light That Burns the Sky, Aura Wheel, Discharge, Gigavolt Havoc, Ion Deluge, Overdrive or physical Super UMD Move.'],
-	shortcircuitterrain: ['To Factory: Aura Wheel, Charge Beam, Discharge, Gigavolt Havoc, Ion Deluge, Overdrive, Parabolic Charge, Wild Charge, Rising Voltage or special Super UMD Move.'],
+	factoryterrain: [
+		'To Short Circuit: Bulldoze, Fissure, Earthquake, Explosion, Magnitude, Self-Destruct, Tectonic Rage, Light That Burns the Sky, Aura Wheel, Discharge, Gigavolt Havoc, Ion Deluge, Overdrive or physical Super UMD Move.',
+	],
+	shortcircuitterrain: [
+		'To Factory: Aura Wheel, Charge Beam, Discharge, Gigavolt Havoc, Ion Deluge, Overdrive, Parabolic Charge, Wild Charge, Rising Voltage or special Super UMD Move.',
+	],
 	hauntedterrain: ['To Holy: Origin Pulse, Purify, Sacred Fire, Dazzling Gleam or Flash.'],
-	holyterrain: ['To Haunted: Ominous Wind, Phantom Force, Shadow Force, Spectral Scream, Trick-or-Treat or Curse used by a Ghost type. Neutralization prevents this.'],
+	holyterrain: [
+		'To Haunted: Ominous Wind, Phantom Force, Shadow Force, Spectral Scream, Trick-or-Treat or Curse used by a Ghost type. Neutralization prevents this.',
+	],
 	corrosiveterrain: ['To Grassy: Purify or Seed Flare.'],
 	crystalcavernterrain: [
 		'To Cave: two uses in total of Bulldoze, Earthquake, Fissure or Magnitude; Tectonic Rage works in one. The breaking move gains 1.3× power.',
@@ -65,25 +73,47 @@ export const FieldTransitionNotes: Record<string, string[]> = {
 		'To Cave: two uses in total of Bulldoze, Earthquake, Fissure, Magnitude or Tectonic Rage. The breaking move gains 1.3× power.',
 		'To Crystal Cavern: ordinary sun. Returns here when that sun ends.',
 	],
-	murkwatersurfaceterrain: ['To Water Surface: Whirlpool.', 'To Icy: Blizzard, Glaciate or Subzero Slammer. The ice remembers Murkwater underneath.'],
-	newworldterrain: ['To Starlight Arena: Gravity, Geomancy or Light of Ruin.', 'Ordinary field setters cannot replace New World.'],
-	starlightarenaterrain: ['No special outgoing move or weather transition. New World changes into this field through Gravity, Geomancy or Light of Ruin; Eclipse fields can become it through Geomancy or Light of Ruin.'],
+	murkwatersurfaceterrain: [
+		'To Water Surface: Whirlpool.',
+		'To Icy: Blizzard, Glaciate or Subzero Slammer. The ice remembers Murkwater underneath.',
+	],
+	newworldterrain: [
+		'To Starlight Arena: Gravity, Geomancy or Light of Ruin.',
+		'Ordinary field setters cannot replace New World.',
+	],
+	starlightarenaterrain: [
+		'No special outgoing move or weather transition. New World changes into this field through Gravity, Geomancy or Light of Ruin; Eclipse fields can become it through Geomancy or Light of Ruin.',
+	],
 	rainbowterrain: ['Clear → Light That Burns the Sky, or hail/sandstorm at turn end.'],
-	swampterrain: ['Reveal the field underneath → 3 drying points. Sun adds 1 per turn; harsh sun adds 3. Clears if there is no field underneath.'],
+	swampterrain: [
+		'Reveal the field underneath → 3 drying points. Sun adds 1 per turn; harsh sun adds 3. Clears if there is no field underneath.',
+	],
 	volcanicterrain: [
 		'To Cave: one cooling or strong cooling use: Surf, Muddy Water, Blizzard, Sparkling Aria, Water Pledge, Glaciate, Water Spout, Hydro Vortex, Oceanic Operetta or Subzero Slammer. Misses, immunities and Protect still count.',
 		'To Cave: two uses in total of Sand Tomb, Scorching Sands, Sandsear Storm, Defog, Gust, Wind Dance, Airstream Assault, Hurricane, Razor Wind, Tailwind, Twister, Whirlwind, Water Sport, Sludge Wave or G-Max Wind Rage.',
 		'To Cave: Continental Crush, Supersonic Skystrike or Acid Downpour once; ordinary rain or sandstorm at turn end also works.',
 		'To Dragon’s Den: Dragon Pulse or Dragon Energy twice in total; Devastating Drake, Draco Meteor or Core Enforcer once. Dragon Rend changes it after damaging an enemy or its Substitute. This progress is separate from cooling.',
 	],
-	wastelandterrain: ['No special move or weather transition. Usually expires after 3 turns, or 5 when created by an ability; Amplifield Rock adds 3. A starting field may be permanent.'],
+	wastelandterrain: [
+		'No special move or weather transition. Usually expires after 3 turns, or 5 when created by an ability; Amplifield Rock adds 3. A starting field may be permanent.',
+	],
 };
 
 // These fields have no field-specific move/weather transition. General field setters
 // and clearing moves still obey their own restrictions; this is not an immunity claim.
-for (const id of ['ashenbeachterrain', 'bigtopterrain', 'desertterrain', 'fairytaleterrain',
-	'inverseterrain', 'rockyterrain', 'electricterrain', 'psychicterrain']) {
-	FieldTransitionNotes[id] = ['No special move or weather transition. Use a field-setting or field-clearing effect.'];
+for (const id of [
+	'ashenbeachterrain',
+	'bigtopterrain',
+	'desertterrain',
+	'fairytaleterrain',
+	'inverseterrain',
+	'rockyterrain',
+	'electricterrain',
+	'psychicterrain',
+]) {
+	FieldTransitionNotes[id] = [
+		'No special move or weather transition. Use a field-setting or field-clearing effect.',
+	];
 }
 
 for (let stage = 1; stage <= 5; stage++) {
@@ -99,13 +129,17 @@ for (let stage = 1; stage <= 5; stage++) {
 
 /** Extra conditions only; the route table already lists destinations, moves and use counts. */
 export const FieldTransitionExtraNotes: Record<string, string[]> = Object.fromEntries(
-	Object.keys(FieldTransitionNotes).map(id => [id, []])
+	Object.keys(FieldTransitionNotes).map(id => [id, []]),
 );
 Object.assign(FieldTransitionExtraNotes, {
-	dragonsdenterrain: ['Ordinary field setters cannot replace Dragon’s Den.',
+	dragonsdenterrain: [
+		'Ordinary field setters cannot replace Dragon’s Den.',
 		'Mist Ball’s Fairy Tale lasts 5 turns; clearing moves cannot end it early.',
-		'After reaching Volcanic, one more cooling use turns it into Cave.'],
-	caveterrain: ['Explosion protection: semi-invulnerability, Protect, Flame Body, Flare Boost, Flash Fire, Heatproof, Magma Armor, Water Bubble, Water Veil or Well-Baked Body.'],
+		'After reaching Volcanic, one more cooling use turns it into Cave.',
+	],
+	caveterrain: [
+		'Explosion protection: semi-invulnerability, Protect, Flame Body, Flare Boost, Flash Fire, Heatproof, Magma Armor, Water Bubble, Water Veil or Well-Baked Body.',
+	],
 	icyterrain: ['Revealing Misty scatters Spikes on both sides.'],
 	underwaterterrain: ['Ordinary field setters cannot replace Underwater.'],
 	newworldterrain: ['Ordinary field setters cannot replace New World.'],
@@ -113,27 +147,44 @@ Object.assign(FieldTransitionExtraNotes, {
 	glitchterrain: ['Another full field cannot replace Glitch.'],
 	adriennterrain: ['While Misty is active, use Misty’s pollution and clearing rules.'],
 	volcanicterrain: ['Progress toward Dragon’s Den is separate from cooling.'],
-	wastelandterrain: ['Usually lasts 3 turns, or 5 when created by an ability. Amplifield Rock adds 3. Starting fields can be permanent.'],
+	wastelandterrain: [
+		'Usually lasts 3 turns, or 5 when created by an ability. Amplifield Rock adds 3. Starting fields can be permanent.',
+	],
 });
-for (let stage = 1; stage <= 5; stage++) FieldTransitionExtraNotes[`flowergarden${stage}`] = [
-	'Sun and rain include harsh sun and heavy rain. At most one automatic growth per turn.',
-	'A burning garden returns at its saved stage minus turns spent burning, minimum stage 1.',
-	'Rain Dance, Water Spout and Water Sport also grow the garden when they put out its fire.',
-];
+for (let stage = 1; stage <= 5; stage++)
+	FieldTransitionExtraNotes[`flowergarden${stage}`] = [
+		'Sun and rain include harsh sun and heavy rain. At most one automatic growth per turn.',
+		'A burning garden returns at its saved stage minus turns spent burning, minimum stage 1.',
+		'Rain Dance, Water Spout and Water Sport also grow the garden when they put out its fire.',
+	];
 
 /** Only aliases whose field hooks delegate to these components. Unique custom effects stay named. */
 export const FieldAbilityComponents: Record<string, Record<string, string[]>> = {
 	dragonsdenterrain: {
-		atrocity: ['magmaarmor', 'dragonize'], unboundblaze: ['magmaarmor', 'dragonize'],
-		draconicforce: ['dragonize'], smolderingshroud: ['whitesmoke'], constrictingheat: ['whitesmoke'],
+		atrocity: ['magmaarmor', 'dragonize'],
+		unboundblaze: ['magmaarmor', 'dragonize'],
+		draconicforce: ['dragonize'],
+		smolderingshroud: ['whitesmoke'],
+		constrictingheat: ['whitesmoke'],
 		ragingfists: ['hydrabond'],
 	},
-	fairytaleterrain: { atrocity: ['dragonize'], unboundblaze: ['dragonize'], draconicforce: ['dragonize'] },
+	fairytaleterrain: {
+		atrocity: ['dragonize'],
+		unboundblaze: ['dragonize'],
+		draconicforce: ['dragonize'],
+	},
 	volcanicterrain: { smolderingshroud: ['whitesmoke'], constrictingheat: ['whitesmoke'] },
 };
 
-for (const field of ['factoryterrain', 'shortcircuitterrain', 'fairytaleterrain', 'dragonsdenterrain',
-	'starlightarenaterrain', 'newworldterrain', 'holyterrain']) {
+for (const field of [
+	'factoryterrain',
+	'shortcircuitterrain',
+	'fairytaleterrain',
+	'dragonsdenterrain',
+	'starlightarenaterrain',
+	'newworldterrain',
+	'holyterrain',
+]) {
 	(FieldAbilityComponents[field] ||= {}).argentdevotion =
 		field === 'fairytaleterrain' ? ['armorize', 'swornduty'] : ['armorize'];
 }
@@ -142,7 +193,13 @@ for (const field of ['icyterrain', 'snowymountainterrain', 'coldeclipseterrain']
 }
 FieldAbilityComponents.factoryterrain.scarecrow = ['steelworker'];
 
-for (const field of ['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain']) {
+for (const field of [
+	'rockyterrain',
+	'mountainterrain',
+	'snowymountainterrain',
+	'caveterrain',
+	'volcanicterrain',
+]) {
 	(FieldAbilityComponents[field] ||= {}).hyperdrill = ['powerdrill'];
 }
 
@@ -161,43 +218,98 @@ export const ConciseFieldAbilityNotes: Record<string, Record<string, string[]>> 
 		magmaarmor: ['On entry: +1 Defense and Sp. Def.', 'Immune to incoming Fire moves.'],
 		dragonize: ['Converted Normal → Dragon moves: 1.5× power instead of 1.2×.'],
 		berserk: ['On entry: +1 Sp. Atk.', 'Surviving a hit that crosses half HP: +2 Sp. Atk.'],
-		dragonsmaw: ['Dragon attacks use 2× Attack or Sp. Atk instead of 1.5×.', 'Fairy typing on the holder contributes a resistance instead of its normal matchup.'],
+		dragonsmaw: [
+			'Dragon attacks use 2× Attack or Sp. Atk instead of 1.5×.',
+			'Fairy typing on the holder contributes a resistance instead of its normal matchup.',
+		],
 		hydrabond: ['Attacks gain 1.2× power.'],
 		ragingfists: ['Attacks gain 1.2× power.'],
 		goodasgold: ['Removes weaknesses contributed by the holder’s Steel typing.'],
 		shellarmor: ['On entry: +1 Defense.'],
-		shedskin: ['Its end-of-turn recovery always activates when eligible: cures status, heals 1/4 HP and raises Speed and the higher attacking stat by 1 each, then lowers Defense and Sp. Def by 1.', 'Scrafty heals 1/8 HP instead. Negative stages or temporary ailments can trigger recovery but are not cleared.'],
+		shedskin: [
+			'Its end-of-turn recovery always activates when eligible: cures status, heals 1/4 HP and raises Speed and the higher attacking stat by 1 each, then lowers Defense and Sp. Def by 1.',
+			'Scrafty heals 1/8 HP instead. Negative stages or temporary ailments can trigger recovery but are not cleared.',
+		],
 	},
 	fairytaleterrain: { dragonize: ['Converted Normal → Dragon moves: 1.5× power instead of 1.2×.'] },
 	volcanicterrain: { magmaarmor: ['On entry: +1 Defense and Sp. Def.'] },
-	infernaleclipseterrain: { magmaarmor: ['On entry: +1 Defense and Sp. Def.', 'Immune to incoming Fire moves.'] },
+	infernaleclipseterrain: {
+		magmaarmor: ['On entry: +1 Defense and Sp. Def.', 'Immune to incoming Fire moves.'],
+	},
 	coldeclipseterrain: { magmaarmor: ['Can receive frostbite; still cures it afterward.'] },
 };
-for (const field of ['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain']) {
-	(ConciseFieldAbilityNotes[field] ||= {}).powerdrill = ['Drill and horn moves: 2× power; bypass Protect.'];
+for (const field of [
+	'rockyterrain',
+	'mountainterrain',
+	'snowymountainterrain',
+	'caveterrain',
+	'volcanicterrain',
+]) {
+	(ConciseFieldAbilityNotes[field] ||= {}).powerdrill = [
+		'Drill and horn moves: 2× power; bypass Protect.',
+	];
 }
 for (const field of ['caveterrain', 'desertterrain']) {
 	(ConciseFieldAbilityNotes[field] ||= {}).eartheater = ['At turn end: heals 1/16 max HP.'];
 }
 for (const field of [
-	'dragonsdenterrain', 'fairytaleterrain', 'rainbowterrain', 'starlightarenaterrain', 'mistyterrain',
+	'dragonsdenterrain',
+	'fairytaleterrain',
+	'rainbowterrain',
+	'starlightarenaterrain',
+	'mistyterrain',
 ]) {
-	(ConciseFieldAbilityNotes[field] ||= {}).marvelscale = ['Defense: 1.5×, even without a status condition.'];
+	(ConciseFieldAbilityNotes[field] ||= {}).marvelscale = [
+		'Defense: 1.5×, even without a status condition.',
+	];
 }
 for (const field of ['burningterrain', 'superheatedterrain', 'dragonsdenterrain', 'volcanicterrain']) {
 	(ConciseFieldAbilityNotes[field] ||= {}).thermalexchange = ['At turn end: +1 Attack.'];
 	ConciseFieldAbilityNotes[field].wellbakedbody = ['At turn end: +1 Defense.'];
 }
 for (const [power, fields] of [
-	[1.5, ['fairytaleterrain', 'dragonsdenterrain', 'rockyterrain', 'bigtopterrain', 'mountainterrain', 'snowymountainterrain', 'coldeclipseterrain']],
-	[1.3, ['desertterrain', 'forestterrain', 'burningterrain', 'superheatedterrain', 'ashenbeachterrain',
-		'watersurfaceterrain', 'caveterrain', 'starlightarenaterrain', 'newworldterrain']],
+	[
+		1.5,
+		[
+			'fairytaleterrain',
+			'dragonsdenterrain',
+			'rockyterrain',
+			'bigtopterrain',
+			'mountainterrain',
+			'snowymountainterrain',
+			'coldeclipseterrain',
+		],
+	],
+	[
+		1.3,
+		[
+			'desertterrain',
+			'forestterrain',
+			'burningterrain',
+			'superheatedterrain',
+			'ashenbeachterrain',
+			'watersurfaceterrain',
+			'caveterrain',
+			'starlightarenaterrain',
+			'newworldterrain',
+		],
+	],
 ] as const) {
-	for (const field of fields) (ConciseFieldAbilityNotes[field] ||= {}).relentlesshunt = [`Attacks gain ${power}× power.`];
+	for (const field of fields)
+		(ConciseFieldAbilityNotes[field] ||= {}).relentlesshunt = [`Attacks gain ${power}× power.`];
 }
-for (const field of ['factoryterrain', 'shortcircuitterrain', 'fairytaleterrain', 'dragonsdenterrain',
-	'starlightarenaterrain', 'newworldterrain', 'holyterrain']) {
-	(ConciseFieldAbilityNotes[field] ||= {}).armorize = ['Converted Normal → Steel moves: 1.5× power instead of 1.2×.'];
+for (const field of [
+	'factoryterrain',
+	'shortcircuitterrain',
+	'fairytaleterrain',
+	'dragonsdenterrain',
+	'starlightarenaterrain',
+	'newworldterrain',
+	'holyterrain',
+]) {
+	(ConciseFieldAbilityNotes[field] ||= {}).armorize = [
+		'Converted Normal → Steel moves: 1.5× power instead of 1.2×.',
+	];
 }
 
 const redundantSentences = new Set([
@@ -215,20 +327,33 @@ const redundantSentences = new Set([
 
 /** Keep numbers, conditions and exceptions. Split prose at sentence boundaries, not decimals or stat abbreviations. */
 export function conciseFieldNotes(lines: readonly string[]): string[] {
-	return [...new Set(lines.flatMap(line => line
-		.replace(/Special Attack/g, 'Sp. Atk').replace(/Special Defense/g, 'Sp. Def')
-		.replace(/base maximum HP/g, 'max HP').replace(/maximum HP/g, 'max HP')
-		.replace(/Pokemon/g, 'Pokémon').replace(/(\d)x\b/g, '$1×')
-		.replace(/during the residual phase/g, 'at turn end')
-		.replace(/at field residual/g, 'at turn end')
-		.replace(/the status-move clearing branch/g, 'clearing with a status move')
-		.replace(/named ([\d.]+×) (?:power )?bonus/g, '$1 power')
-		.replace(/, despite older prose calling it Snow/g, '')
-		.split(/(?<!\bSp)\. (?=[A-Z])/)
-		.map(sentence => sentence.trim())
-		.filter(sentence => sentence && !sentence.includes('is misspelled') &&
-			!/^Its ordinary .+ remain\.?$/.test(sentence) &&
-			!/^Healing prevention or full HP can prevent recovery\.?$/.test(sentence) &&
-			!redundantSentences.has(sentence.endsWith('.') ? sentence : sentence + '.'))
-		.map(sentence => /[.!?]$/.test(sentence) ? sentence : sentence + '.')))];
+	return [
+		...new Set(
+			lines.flatMap(line =>
+				line
+					.replace(/Special Attack/g, 'Sp. Atk')
+					.replace(/Special Defense/g, 'Sp. Def')
+					.replace(/base maximum HP/g, 'max HP')
+					.replace(/maximum HP/g, 'max HP')
+					.replace(/Pokemon/g, 'Pokémon')
+					.replace(/(\d)x\b/g, '$1×')
+					.replace(/during the residual phase/g, 'at turn end')
+					.replace(/at field residual/g, 'at turn end')
+					.replace(/the status-move clearing branch/g, 'clearing with a status move')
+					.replace(/named ([\d.]+×) (?:power )?bonus/g, '$1 power')
+					.replace(/, despite older prose calling it Snow/g, '')
+					.split(/(?<!\bSp)\. (?=[A-Z])/)
+					.map(sentence => sentence.trim())
+					.filter(
+						sentence =>
+							sentence &&
+							!sentence.includes('is misspelled') &&
+							!/^Its ordinary .+ remain\.?$/.test(sentence) &&
+							!/^Healing prevention or full HP can prevent recovery\.?$/.test(sentence) &&
+							!redundantSentences.has(sentence.endsWith('.') ? sentence : sentence + '.'),
+					)
+					.map(sentence => (/[.!?]$/.test(sentence) ? sentence : sentence + '.')),
+			),
+		),
+	];
 }

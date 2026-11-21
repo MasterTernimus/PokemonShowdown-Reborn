@@ -3,13 +3,13 @@
  */
 'use strict';
 
-const {testTeam, testAlwaysHasMove} = require('./tools');
+const { testTeam, testAlwaysHasMove } = require('./tools');
 const assert = require('../assert');
 const Teams = require('./../../dist/sim/teams').Teams;
 const Dex = require('./../../dist/sim/dex').Dex;
 
 describe('[Gen 9] Random Battle (slow)', () => {
-	const options = {format: 'gen9randombattle'};
+	const options = { format: 'gen9randombattle' };
 	if (!Dex.formats.get('gen9randombattle').exists) {
 		it.skip('gen9randombattle: upstream format is not registered in Reborn');
 		return;
@@ -18,14 +18,14 @@ describe('[Gen 9] Random Battle (slow)', () => {
 	before(() => { setsJSON = require(`../../dist/data/random-sets.json`); });
 	const dex = Dex.forFormat(options.format);
 
-	it('all Pokemon should have 4 moves, except for Ditto', function () {
+	it('all Pokemon should have 4 moves, except for Ditto', () => {
 		// This test takes more than 2000ms
-		testTeam({...options, rounds: 100}, team => {
+		testTeam({ ...options, rounds: 100 }, team => {
 			for (const pokemon of team) assert(pokemon.name === 'Ditto' || pokemon.moves.length === 4);
 		});
 	});
 
-	it('all moves on all sets should be obtainable', function () {
+	it('all moves on all sets should be obtainable', () => {
 		const generator = Teams.getGenerator(options.format);
 		const rounds = 100;
 		for (const pokemon of Object.keys(setsJSON)) {
@@ -52,7 +52,7 @@ describe('[Gen 9] Random Battle (slow)', () => {
 						const defog = i % 2;
 						const stealthRock = Math.floor(i / 2) % 2;
 						const stickyWeb = Math.floor(i / 4) % 2;
-						teamDetails = {defog, stealthRock, stickyWeb};
+						teamDetails = { defog, stealthRock, stickyWeb };
 						// randomMoveset() deletes moves from the movepool, so recreate it every time
 						const movePool = set.movepool.map(m => dex.moves.get(m).id);
 						const moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, false, movePool, teraType, role);
@@ -72,21 +72,21 @@ describe('[Gen 9] Random Battle (slow)', () => {
 });
 
 describe('[Gen 9] Monotype Random Battle (slow)', () => {
-	const options = {format: 'gen9monotyperandombattle'};
+	const options = { format: 'gen9monotyperandombattle' };
 	if (!Dex.formats.get('gen9monotyperandombattle').exists) {
 		it.skip('gen9monotyperandombattle: upstream format is not registered in Reborn');
 		return;
 	}
 
-	it('all Pokemon should share a common type', function () {
-		testTeam({...options, rounds: 100}, team => {
+	it('all Pokemon should share a common type', () => {
+		testTeam({ ...options, rounds: 100 }, team => {
 			assert.legalTeam(team, 'gen9customgame@@@sametypeclause');
 		});
 	});
 });
 
 describe('[Gen 9] Random Doubles Battle (slow)', () => {
-	const options = {format: 'gen9randomdoublesbattle'};
+	const options = { format: 'gen9randomdoublesbattle' };
 	if (!Dex.formats.get('gen9randomdoublesbattle').exists) {
 		it.skip('gen9randomdoublesbattle: upstream format is not registered in Reborn');
 		return;
@@ -95,14 +95,14 @@ describe('[Gen 9] Random Doubles Battle (slow)', () => {
 	before(() => { setsJSON = require(`../../dist/data/random-doubles-sets.json`); });
 	const dex = Dex.forFormat(options.format);
 
-	it('all Pokemon should have 4 moves, except for Ditto', function () {
+	it('all Pokemon should have 4 moves, except for Ditto', () => {
 		// This test takes more than 2000ms
-		testTeam({...options, rounds: 100}, team => {
+		testTeam({ ...options, rounds: 100 }, team => {
 			for (const pokemon of team) assert(pokemon.name === 'Ditto' || pokemon.moves.length === 4);
 		});
 	});
 
-	it('all moves on all sets should be obtainable', function () {
+	it('all moves on all sets should be obtainable', () => {
 		const generator = Teams.getGenerator(options.format);
 		const rounds = 100;
 		for (const pokemon of Object.keys(setsJSON)) {
@@ -129,7 +129,7 @@ describe('[Gen 9] Random Doubles Battle (slow)', () => {
 						const defog = i % 2;
 						const stealthRock = Math.floor(i / 2) % 2;
 						const stickyWeb = Math.floor(i / 4) % 2;
-						teamDetails = {defog, stealthRock, stickyWeb};
+						teamDetails = { defog, stealthRock, stickyWeb };
 						// randomMoveset() deletes moves from the movepool, so recreate it every time
 						const movePool = set.movepool.map(m => dex.moves.get(m).id);
 						const moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, true, movePool, teraType, role);

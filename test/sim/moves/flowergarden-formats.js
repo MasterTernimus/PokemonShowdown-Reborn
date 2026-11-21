@@ -1,7 +1,7 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
+const { Dex } = require('../../../dist/sim');
 describe('Flower Garden format selection', () => {
 	for (const [id, gameType, players] of [
 		['gen9flowergarden', 'singles', 2],
@@ -16,9 +16,9 @@ describe('Flower Garden format selection', () => {
 			assert.equal(format.gameType, gameType);
 			assert.notEqual(format.challengeShow, false);
 			assert.notEqual(format.searchShow, false);
-			const teams = Array.from({length: players}, () => Array.from({length: 6}, () =>
-				({species: 'Mew', ability: 'No Ability', moves: ['splash']})));
-			const battle = common.createBattle({formatid: id}, teams);
+			const teams = Array.from({ length: players }, () => Array.from({ length: 6 }, () =>
+				({ species: 'Mew', ability: 'No Ability', moves: ['splash'] })));
+			const battle = common.createBattle({ formatid: id }, teams);
 			try {
 				battle.makeChoices(...Array(players).fill('team 123456'));
 				assert.equal(battle.field.terrain, 'flowergarden1');

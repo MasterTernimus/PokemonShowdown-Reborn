@@ -31,17 +31,17 @@ function futureDamage(options = {}) {
 	return before - target.hp;
 }
 
-describe('Future Sight', function () {
-	afterEach(function () {
+describe('Future Sight', () => {
+	afterEach(() => {
 		battle?.destroy();
 		battle = null;
 	});
 
-	it(`should damage in two turns, ignoring Protect, affected by Dark immunities`, function () {
+	it(`should damage in two turns, ignoring Protect, affected by Dark immunities`, () => {
 		battle = common.createBattle([[
-			{species: 'Sneasel', moves: ['sleeptalk', 'futuresight']},
+			{ species: 'Sneasel', moves: ['sleeptalk', 'futuresight'] },
 		], [
-			{species: 'Girafarig', moves: ['sleeptalk', 'futuresight', 'protect']},
+			{ species: 'Girafarig', moves: ['sleeptalk', 'futuresight', 'protect'] },
 		]]);
 
 		const sneasel = battle.p1.active[0];
@@ -55,11 +55,11 @@ describe('Future Sight', function () {
 		assert.false.fullHP(girafarig);
 	});
 
-	it(`should fail when already active for the target's position`, function () {
+	it(`should fail when already active for the target's position`, () => {
 		battle = common.createBattle([[
-			{species: 'Sneasel', moves: ['sleeptalk']},
+			{ species: 'Sneasel', moves: ['sleeptalk'] },
 		], [
-			{species: 'Girafarig', moves: ['futuresight']},
+			{ species: 'Girafarig', moves: ['futuresight'] },
 		]]);
 
 		battle.makeChoices();
@@ -69,9 +69,9 @@ describe('Future Sight', function () {
 
 	common.itGen(2, `[Gen 2] should damage in two turns, ignoring Protect`, () => {
 		battle = common.gen(2).createBattle([[
-			{species: 'Sneasel', moves: ['sleeptalk', 'futuresight', 'sweetscent']},
+			{ species: 'Sneasel', moves: ['sleeptalk', 'futuresight', 'sweetscent'] },
 		], [
-			{species: 'Girafarig', moves: ['sleeptalk', 'futuresight', 'protect', 'sweetscent']},
+			{ species: 'Girafarig', moves: ['sleeptalk', 'futuresight', 'protect', 'sweetscent'] },
 		]]);
 
 		const sneasel = battle.p1.active[0];
@@ -86,7 +86,7 @@ describe('Future Sight', function () {
 		assert.false.fullHP(girafarig);
 	});
 
-	it(`should not double Stomping Tantrum for exiting normally`, function () {
+	it(`should not double Stomping Tantrum for exiting normally`, () => {
 		const run = first => {
 			battle?.destroy(); battle = common.createBattle([[{ species: 'Mew', ability: 'No Ability', moves: ['futuresight', 'splash', 'stompingtantrum'] }], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
 			battle.randomizer = n => n; battle.randomChance = (n, d) => n >= d;
@@ -95,24 +95,24 @@ describe('Future Sight', function () {
 		};
 		const normal = run('splash'); assert(normal > 0); assert.equal(run('futuresight'), normal);
 	});
-	it(`should not trigger Eject Button`, function () {
+	it(`should not trigger Eject Button`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', moves: ['futuresight']},
+			{ species: 'Wynaut', moves: ['futuresight'] },
 		], [
-			{species: 'Scizor', item: 'ejectbutton', moves: ['sleeptalk']},
-			{species: 'Roggenrola', moves: ['sleeptalk']},
+			{ species: 'Scizor', item: 'ejectbutton', moves: ['sleeptalk'] },
+			{ species: 'Roggenrola', moves: ['sleeptalk'] },
 		]]);
 
 		for (let i = 0; i < 3; i++) battle.makeChoices();
 		assert.equal(battle.requestState, 'move');
 	});
 
-	it(`should be able to set Future Sight against an empty target slot`, function () {
+	it(`should be able to set Future Sight against an empty target slot`, () => {
 		battle = common.createBattle([[
-			{species: 'Shedinja', moves: ['finalgambit']},
-			{species: 'Roggenrola', moves: ['sleeptalk']},
+			{ species: 'Shedinja', moves: ['finalgambit'] },
+			{ species: 'Roggenrola', moves: ['sleeptalk'] },
 		], [
-			{species: 'Wynaut', moves: ['sleeptalk', 'futuresight']},
+			{ species: 'Wynaut', moves: ['sleeptalk', 'futuresight'] },
 		]]);
 
 		battle.makeChoices('auto', 'move future sight');
@@ -123,11 +123,11 @@ describe('Future Sight', function () {
 		assert.false.fullHP(roggenrola);
 	});
 
-	it(`its damaging hit should not count as copyable for Copycat`, function () {
+	it(`its damaging hit should not count as copyable for Copycat`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', moves: ['sleeptalk', 'futuresight']},
+			{ species: 'Wynaut', moves: ['sleeptalk', 'futuresight'] },
 		], [
-			{species: 'Liepard', moves: ['sleeptalk', 'copycat']},
+			{ species: 'Liepard', moves: ['sleeptalk', 'copycat'] },
 		]]);
 
 		battle.makeChoices('move futuresight', 'auto');
@@ -140,11 +140,11 @@ describe('Future Sight', function () {
 		assert.fullHP(wynaut);
 	});
 
-	it(`should only cause the user to take Life Orb recoil on its damaging turn`, function () {
+	it(`should only cause the user to take Life Orb recoil on its damaging turn`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'lifeorb', moves: ['futuresight']},
+			{ species: 'wynaut', item: 'lifeorb', moves: ['futuresight'] },
 		], [
-			{species: 'mew', moves: ['sleeptalk']},
+			{ species: 'mew', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -160,9 +160,9 @@ describe('Future Sight', function () {
 
 	common.itGen(4, `[Gen 4] should not be affected by Life Orb`, () => {
 		battle = common.gen(4).createBattle([[
-			{species: 'wynaut', item: 'lifeorb', moves: ['futuresight']},
+			{ species: 'wynaut', item: 'lifeorb', moves: ['futuresight'] },
 		], [
-			{species: 'mew', ability: 'noguard', moves: ['sleeptalk']},
+			{ species: 'mew', ability: 'noguard', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -175,12 +175,12 @@ describe('Future Sight', function () {
 		assert.bounded(damage, [21, 25]); // [27-32] if Life Orb was applied
 	});
 
-	it(`should not be affected by Life Orb if not the original user`, function () {
+	it(`should not be affected by Life Orb if not the original user`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'lifeorb', moves: ['futuresight']},
-			{species: 'liepard', item: 'lifeorb', moves: ['sleeptalk']},
+			{ species: 'wynaut', item: 'lifeorb', moves: ['futuresight'] },
+			{ species: 'liepard', item: 'lifeorb', moves: ['sleeptalk'] },
 		], [
-			{species: 'mew', moves: ['sleeptalk']},
+			{ species: 'mew', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -193,11 +193,11 @@ describe('Future Sight', function () {
 		assert.bounded(damage, [22, 27]); // 30, 35 if Life Orb was applied
 	});
 
-	it(`should not cause the user to change typing on either its starting or damaging turn`, function () {
+	it(`should not cause the user to change typing on either its starting or damaging turn`, () => {
 		battle = common.createBattle([[
-			{species: 'roggenrola', ability: 'protean', moves: ['futuresight', 'sleeptalk']},
+			{ species: 'roggenrola', ability: 'protean', moves: ['futuresight', 'sleeptalk'] },
 		], [
-			{species: 'mew', moves: ['sleeptalk']},
+			{ species: 'mew', moves: ['sleeptalk'] },
 		]]);
 
 		const roggenrola = battle.p1.active[0];
@@ -208,36 +208,36 @@ describe('Future Sight', function () {
 		assert.false(roggenrola.hasType('Psychic'), `Protean Roggenrola should not change type on Future Sight's damaging turn`);
 	});
 
-	it(`should be boosted by Terrain only if Terrain is active on the damaging turn`, function () {
+	it(`should be boosted by Terrain only if Terrain is active on the damaging turn`, () => {
 		const normal = futureDamage(); assert(normal > 0);
 		assert.equal(futureDamage({ initialTerrain: true, clearTerrain: true }), normal);
 		const boosted = futureDamage({ finalTerrain: true }); assert(boosted > normal);
 		assert.equal(futureDamage({ initialTerrain: true }), boosted);
 	});
-	it(`should be boosted by Terrain even if the user is not on the field, as long as the user is not Flying-type`, function () {
+	it(`should be boosted by Terrain even if the user is not on the field, as long as the user is not Flying-type`, () => {
 		const grounded = futureDamage({ switched: true });
 		assert(futureDamage({ switched: true, finalTerrain: true }) > grounded);
 		const flying = futureDamage({ switched: true, flying: true }); assert(flying > 0);
 		assert.equal(futureDamage({ switched: true, flying: true, finalTerrain: true }), flying);
 	});
-	it(`should not ignore the target's screens, even when the user is not active on the field`, function () {
+	it(`should not ignore the target's screens, even when the user is not active on the field`, () => {
 		for (const switched of [false, true]) {
 			const normal = futureDamage({ switched }), screen = futureDamage({ switched, screen: true });
 			assert(screen > 0); assert(Math.abs(screen * 2 - normal) <= 2);
 		}
 	});
-	it(`should not consider the user's item or Ability when the user is not active`, function () {
+	it(`should not consider the user's item or Ability when the user is not active`, () => {
 		const normal = futureDamage();
 		assert(futureDamage({ item: 'Choice Specs' }) > normal);
 		assert(futureDamage({ ability: 'Adaptability' }) > normal);
 		const benched = futureDamage({ switched: true }); assert(benched > 0);
 		assert.equal(futureDamage({ switched: true, item: 'Choice Specs', ability: 'Adaptability' }), benched);
 	});
-	it(`should not ignore the target's Unaware`, function () {
+	it(`should not ignore the target's Unaware`, () => {
 		battle = common.createBattle([[
-			{species: 'Manaphy', ability: 'simple', moves: ['tailglow', 'futuresight']},
+			{ species: 'Manaphy', ability: 'simple', moves: ['tailglow', 'futuresight'] },
 		], [
-			{species: 'Ho-Oh', ability: 'unaware', moves: ['luckychant']},
+			{ species: 'Ho-Oh', ability: 'unaware', moves: ['luckychant'] },
 		]]);
 
 		battle.makeChoices();
@@ -249,19 +249,19 @@ describe('Future Sight', function () {
 		assert.bounded(damage, [60, 71]); // Damage would be 236-278 if Unaware was being ignored
 	});
 
-	it(`should use the user's most recent Special Attack stat if the user is on the field`, function () {
+	it(`should use the user's most recent Special Attack stat if the user is on the field`, () => {
 		const low = futureDamage({ spa: 100 }), high = futureDamage({ spa: 300 });
 		assert(low > 0); assert(high > low * 2, 'Special Attack changed after setup must affect the delayed hit');
 		const blade = futureDamage({ species: 'Aegislash', ability: 'Stance Change' });
 		const shield = futureDamage({ species: 'Aegislash', ability: 'Stance Change', shield: true });
 		assert(shield > 0); assert(blade > shield, 'King’s Shield before impact must use the current Shield form stats');
 	});
-	it.skip(`should use the user's most recent Special Attack stat, even if the user is not on the field`, function () {
+	it.skip(`should use the user's most recent Special Attack stat, even if the user is not on the field`, () => {
 		battle = common.createBattle([[
-			{species: 'Aegislash', ability: 'stancechange', moves: ['futuresight', 'kingsshield']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Aegislash', ability: 'stancechange', moves: ['futuresight', 'kingsshield'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Ho-Oh', ability: 'shellarmor', moves: ['recover', 'flareblitz']},
+			{ species: 'Ho-Oh', ability: 'shellarmor', moves: ['recover', 'flareblitz'] },
 		]]);
 
 		battle.makeChoices();
@@ -280,7 +280,7 @@ describe('Future Sight', function () {
 		assert.bounded(damage, [79, 94], `Future Sight should deal Blade Forme damage, even though Aegislash was KOed in Blade Forme.`);
 	});
 
-	it(`should only use Sp. Atk stat boosts/drops if the user is on the field`, function () {
+	it(`should only use Sp. Atk stat boosts/drops if the user is on the field`, () => {
 		const normal = futureDamage(), boosted = futureDamage({ boost: 2 }), reduced = futureDamage({ boost: -2 });
 		assert(boosted > normal); assert(reduced < normal);
 		const benched = futureDamage({ switched: true }); assert(benched > 0);

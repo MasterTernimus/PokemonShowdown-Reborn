@@ -3,9 +3,9 @@ const assert = require('assert').strict;
 const common = require('../../common');
 let battle;
 function start(species = 'Mew', field) {
-	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-		[{species, ability: 'No Ability', moves: ['tackle', 'kingsshield']}],
-		[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+		[{ species, ability: 'No Ability', moves: ['tackle', 'kingsshield'] }],
+		[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 	]);
 	if (field) battle.field.startTerrain(field);
 	battle.makeChoices('team 1', 'team 1');
@@ -21,9 +21,9 @@ describe('Imperial Mandate and Stance Change field modes', () => {
 		assert.equal(mon.boosts.def, 0); assert.equal(mon.boosts.spd, 0);
 	});
 	it('G-Max Aegislash gains the field defense stages on ability activation', () => {
-		battle = common.createBattle({formatid: 'gen9mistyfieldadrienn'}, [
-			[{species: 'Aegislash', ability: 'No Ability', gigantamax: true, moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9mistyfieldadrienn' }, [
+			[{ species: 'Aegislash', ability: 'No Ability', gigantamax: true, moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1'); battle.field.startTerrain('fairytaleterrain');
 		battle.makeChoices('move splash dynamax', 'move splash');

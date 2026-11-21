@@ -1,4 +1,4 @@
-import type {AbilityDataTable} from '../sim/dex-abilities';
+import type { AbilityDataTable } from '../sim/dex-abilities';
 
 export const AevianDisciplineMoves = `
 Coaching, Disable, Drain Punch, Mach Punch, Shadow Punch, Bullet Punch,
@@ -30,7 +30,7 @@ Psycho Cut, Psywave
 export function installAlakazamRejuv(abilities: AbilityDataTable) {
 	abilities.aeviandiscipline = {
 		...abilities.owntempo,
-		name: 'Aevian Discipline', num: 12060, rating: 3, flags: {breakable: 1},
+		name: 'Aevian Discipline', num: 12060, rating: 3, flags: { breakable: 1 },
 		shortDesc: 'Alakazam becomes Rejuv. Iron Fist + Own Tempo.',
 		desc: 'Alakazam becomes its pure Fighting-type Rejuv form. Includes local Iron Fist and Own Tempo: punching moves have 1.4x power, and the user cannot be confused or affected by Intimidate.',
 		onStart(pokemon) {
@@ -44,7 +44,7 @@ export function installAlakazamRejuv(abilities: AbilityDataTable) {
 	abilities.composed = {
 		...abilities.magicguard,
 		...abilities.innerfocus,
-		name: 'Composed', num: 12061, rating: 3.5, flags: {breakable: 1},
+		name: 'Composed', num: 12061, rating: 3.5, flags: { breakable: 1 },
 		shortDesc: 'Physical damage taken: 0.8x. Inner Focus + Magic Guard.',
 		desc: 'Incoming physical attacks deal 20% less damage, whether or not they make contact. Includes Inner Focus and Magic Guard: prevents flinching and Intimidate, and prevents indirect damage. Status conditions can still be inflicted. Special damage is not reduced, and this ability does not boost damage dealt.',
 		onSourceModifyDamage(damage, source, target, move) {

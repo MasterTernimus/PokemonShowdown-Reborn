@@ -13,7 +13,7 @@ interface SpeciesAbility {
 	G?: string;
 }
 
-type SpeciesTag = "Mythical" | "Restricted Legendary" | "Sub-Legendary" | "Ultra Beast" | "Paradox";
+type SpeciesTag = 'Mythical' | 'Restricted Legendary' | 'Sub-Legendary' | 'Ultra Beast' | 'Paradox';
 
 export interface SpeciesData extends Partial<Species> {
 	name: string;
@@ -34,9 +34,11 @@ export interface CosmeticFormeData extends Partial<Mutable<Species>> {
 	color?: string;
 }
 
-export type ModdedSpeciesData = SpeciesData | CosmeticFormeData |
-	Partial<Omit<SpeciesData, 'name'>> & { inherit: true } |
-	Partial<Omit<CosmeticFormeData, 'isCosmeticForme'>> & { inherit: true };
+export type ModdedSpeciesData =
+	| SpeciesData |
+	CosmeticFormeData |
+	(Partial<Omit<SpeciesData, 'name'>> & { inherit: true }) |
+	(Partial<Omit<CosmeticFormeData, 'isCosmeticForme'>> & { inherit: true });
 
 export interface SpeciesFormatsData {
 	doublesTier?: TierTypes.Doubles | TierTypes.Other;
@@ -63,13 +65,27 @@ export interface PokemonGoData {
 	LGPERestrictiveMoves?: { [moveid: string]: number | null };
 }
 
-export interface SpeciesDataTable { [speciesid: IDEntry]: SpeciesData | CosmeticFormeData }
-export interface ModdedSpeciesDataTable { [speciesid: IDEntry]: ModdedSpeciesData }
-export interface SpeciesFormatsDataTable { [speciesid: IDEntry]: SpeciesFormatsData }
-export interface ModdedSpeciesFormatsDataTable { [speciesid: IDEntry]: ModdedSpeciesFormatsData }
-export interface LearnsetDataTable { [speciesid: IDEntry]: LearnsetData }
-export interface ModdedLearnsetDataTable { [speciesid: IDEntry]: ModdedLearnsetData }
-export interface PokemonGoDataTable { [speciesid: IDEntry]: PokemonGoData }
+export interface SpeciesDataTable {
+	[speciesid: IDEntry]: SpeciesData | CosmeticFormeData;
+}
+export interface ModdedSpeciesDataTable {
+	[speciesid: IDEntry]: ModdedSpeciesData;
+}
+export interface SpeciesFormatsDataTable {
+	[speciesid: IDEntry]: SpeciesFormatsData;
+}
+export interface ModdedSpeciesFormatsDataTable {
+	[speciesid: IDEntry]: ModdedSpeciesFormatsData;
+}
+export interface LearnsetDataTable {
+	[speciesid: IDEntry]: LearnsetData;
+}
+export interface ModdedLearnsetDataTable {
+	[speciesid: IDEntry]: ModdedLearnsetData;
+}
+export interface PokemonGoDataTable {
+	[speciesid: IDEntry]: PokemonGoData;
+}
 
 /**
  * Describes a possible way to get a move onto a pokemon.
@@ -93,11 +109,16 @@ export interface PokemonGoDataTable { [speciesid: IDEntry]: PokemonGoData }
  * is otherwise ignored by the learnset checker (which will actually
  * check prevos for compatibility).
  */
-export type MoveSource = `${
-	1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-}${
-	'M' | 'T' | 'L' | 'R' | 'E' | 'D' | 'S' | 'V' | 'C'
-}${string}`;
+export type MoveSource = `${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}${
+	| 'M' |
+	'T' |
+	'L' |
+	'R' |
+	'E' |
+	'D' |
+	'S' |
+	'V' |
+	'C'}${string}`;
 
 export class Species extends BasicEffect implements Readonly<BasicEffect & SpeciesFormatsData> {
 	declare readonly effectType: 'Pokemon';
@@ -180,7 +201,14 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly prevo: string;
 	/** Evolutions. Array because many Pokemon have multiple evolutions. */
 	readonly evos: string[];
-	readonly evoType?: 'trade' | 'useItem' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold' | 'other';
+	readonly evoType?:
+		| 'trade' |
+		'useItem' |
+		'levelMove' |
+		'levelExtra' |
+		'levelFriendship' |
+		'levelHold' |
+		'other';
 	/** Evolution condition. falsy if doesn't evolve. */
 	declare readonly evoCondition?: string;
 	/** Evolution item. falsy if doesn't evolve. */
@@ -302,9 +330,10 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.cosmeticFormes = data.cosmeticFormes || undefined;
 		this.otherFormes = data.otherFormes || undefined;
 		this.formeOrder = data.formeOrder || undefined;
-		this.spriteid = data.spriteid ||
-			(toID(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toID(this.forme)}` : ''));
-		this.abilities = data.abilities || { 0: "" };
+		this.spriteid =
+			data.spriteid ||
+			toID(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toID(this.forme)}` : '');
+		this.abilities = data.abilities || { 0: '' };
 		this.passives = SpeciesPassives[this.id] || [];
 		this.types = data.types || ['???'];
 		this.addedType = data.addedType || undefined;
@@ -320,15 +349,25 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.eggGroups = data.eggGroups || [];
 		this.canHatch = data.canHatch || false;
 		this.gender = data.gender || '';
-		this.genderRatio = data.genderRatio || (this.gender === 'M' ? { M: 1, F: 0 } :
-			this.gender === 'F' ? { M: 0, F: 1 } :
-			this.gender === 'N' ? { M: 0, F: 0 } :
-			{ M: 0.5, F: 0.5 });
+		this.genderRatio =
+			data.genderRatio ||
+			(this.gender === 'M' ?
+				{ M: 1, F: 0 } :
+				this.gender === 'F' ?
+					{ M: 0, F: 1 } :
+					this.gender === 'N' ?
+						{ M: 0, F: 0 } :
+						{ M: 0.5, F: 0.5 });
 		this.requiredItem = data.requiredItem || undefined;
 		this.requiredItems = data.requiredItems || (this.requiredItem ? [this.requiredItem] : undefined);
 		this.baseStats = data.baseStats || { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-		this.bst = this.baseStats.hp + this.baseStats.atk + this.baseStats.def +
-			this.baseStats.spa + this.baseStats.spd + this.baseStats.spe;
+		this.bst =
+			this.baseStats.hp +
+			this.baseStats.atk +
+			this.baseStats.def +
+			this.baseStats.spa +
+			this.baseStats.spd +
+			this.baseStats.spe;
 		this.weightkg = data.weightkg || 0;
 		this.weighthg = this.weightkg * 10;
 		this.heightm = data.heightm || 0;
@@ -339,12 +378,17 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.maleOnlyHidden = !!data.maleOnlyHidden;
 		this.maxHP = data.maxHP || undefined;
 		this.isMega = this.forme.includes('Mega') || undefined;
-		this.isPrimal = this.forme === 'Primal' || (this.baseSpecies === 'Regigigas' && this.forme === 'Primordial') || undefined;
+		this.isPrimal =
+			this.forme === 'Primal' ||
+			(this.baseSpecies === 'Regigigas' && this.forme === 'Primordial') ||
+			undefined;
 		this.canGigantamax = data.canGigantamax || undefined;
 		this.gmaxUnreleased = !!data.gmaxUnreleased;
 		this.cannotDynamax = !!data.cannotDynamax;
-		this.battleOnly = data.battleOnly || (this.isMega || this.isPrimal ? this.baseSpecies : undefined);
-		this.changesFrom = data.changesFrom ||
+		this.battleOnly =
+			data.battleOnly || (this.isMega || this.isPrimal ? this.baseSpecies : undefined);
+		this.changesFrom =
+			data.changesFrom ||
 			(this.battleOnly !== this.baseSpecies ? this.battleOnly : this.baseSpecies);
 		if (Array.isArray(this.changesFrom)) this.changesFrom = this.changesFrom[0];
 		this.pokemonGoData = data.pokemonGoData || undefined;
@@ -374,11 +418,17 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	}
 }
 
-const EMPTY_SPECIES = Utils.deepFreeze(new Species({
-	id: '', name: '', exists: false,
-	tier: 'Illegal', doublesTier: 'Illegal',
-	natDexTier: 'Illegal', isNonstandard: 'Custom',
-}));
+const EMPTY_SPECIES = Utils.deepFreeze(
+	new Species({
+		id: '',
+		name: '',
+		exists: false,
+		tier: 'Illegal',
+		doublesTier: 'Illegal',
+		natDexTier: 'Illegal',
+		isNonstandard: 'Custom',
+	}),
+);
 
 export class Learnset {
 	readonly effectType: 'Learnset';
@@ -420,7 +470,7 @@ export class Learnset {
 
 // Current custom movepool removals are scoped to the original queried form.
 // Filter inherited sources without deleting access from unlisted ancestors or regional forms.
-export const Gen9MoveLearnsetExclusions: {[id: string]: readonly string[]} = {
+export const Gen9MoveLearnsetExclusions: { [id: string]: readonly string[] } = {
 	hippowdon: ['shoreup'],
 	hippowdonrift: ['shoreup'],
 	nidoking: ['shoreup'],
@@ -446,83 +496,82 @@ export const Gen9MoveLearnsetExclusions: {[id: string]: readonly string[]} = {
 	raichualola: ['sing'],
 	raichumegax: ['sing'],
 	raichumegay: ['sing'],
-	absol: ["tachyoncutter"],
-	absolmega: ["tachyoncutter"],
-	absolmegaz: ["tachyoncutter"],
-	aegislash: ["tachyoncutter"],
-	aegislashblade: ["tachyoncutter"],
-	aegislashgmax: ["tachyoncutter"],
-	altaria: ["bleakwindstorm"],
-	altariamega: ["bleakwindstorm"],
-	aurorus: ["diamondstorm"],
-	aurorusmega: ["diamondstorm"],
-	banette: ["magicpowder","spectralthief"],
-	banettemega: ["magicpowder","spectralthief"],
-	banettemegaz: ["magicpowder","spectralthief"],
-	beautifly: ["magicpowder"],
-	breloom: ["barbbarrage"],
-	breloommega: ["barbbarrage"],
-	delibird: ["bleakwindstorm"],
-	doublade: ["tachyoncutter"],
-	dragalge: ["clangingscales"],
-	dragalgemega: ["clangingscales"],
-	drapion: ["direclaw"],
-	dustox: ["magicpowder"],
-	feraligatr: ["aquastep"],
-	feraligatrgmax: ["aquastep"],
-	feraligatrmega: ["aquastep"],
-	floatzel: ["aquastep"],
-	florges: ["magicpowder"],
-	florgesblue: ["magicpowder"],
-	florgesorange: ["magicpowder"],
-	florgeswhite: ["magicpowder"],
-	florgesyellow: ["magicpowder"],
-	flygon: ["clangingscales"],
-	flygonmega: ["clangingscales"],
-	flygonmegaz: ["clangingscales"],
-	froslass: ["bleakwindstorm","magicpowder"],
-	froslassmega: ["bleakwindstorm","magicpowder"],
-	gardevoir: ["darkvoid"],
-	gardevoirmega: ["darkvoid"],
-	gardevoirmegaalt: ["darkvoid"],
-	gardevoirmegaz: ["darkvoid"],
-	gardevoirvoid: ["darkvoid"],
-	gardevoirvoidmega: ["darkvoid"],
-	gengar: ["spectralthief"],
-	gengargmax: ["spectralthief"],
-	gengarmega: ["spectralthief"],
-	gligar: ["direclaw"],
-	gligaralt: ["direclaw"],
-	gliscor: ["direclaw"],
-	gliscoralt: ["direclaw"],
-	haxorus: ["mightycleave"],
-	haxorusmega: ["mightycleave"],
-	meganium: ["magicpowder"],
-	meganiummega: ["magicpowder"],
-	meganiummegay: ["magicpowder"],
-	mimikyu: ["astralbarrage"],
-	mimikyubusted: ["astralbarrage"],
-	mimikyubustedtotem: ["astralbarrage"],
-	mimikyutotem: ["astralbarrage"],
-	ninetales: ["bleakwindstorm"],
-	ninetalesalola: ["bleakwindstorm"],
-	noivern: ["clangingscales"],
-	noivernmega: ["clangingscales"],
-	probopass: ["diamondstorm"],
-	typhlosion: ["bitterblade"],
-	typhlosionalt: ["bitterblade"],
-	typhlosionhisui: ["bitterblade"],
-	typhlosionmega: ["bitterblade"],
-	venusaur: ["magicpowder"],
-	venusaurgmax: ["magicpowder"],
-	venusaurmega: ["magicpowder"],
-	volcarona: ["blueflare"],
+	absol: ['tachyoncutter'],
+	absolmega: ['tachyoncutter'],
+	absolmegaz: ['tachyoncutter'],
+	aegislash: ['tachyoncutter'],
+	aegislashblade: ['tachyoncutter'],
+	aegislashgmax: ['tachyoncutter'],
+	altaria: ['bleakwindstorm'],
+	altariamega: ['bleakwindstorm'],
+	aurorus: ['diamondstorm'],
+	aurorusmega: ['diamondstorm'],
+	banette: ['magicpowder', 'spectralthief'],
+	banettemega: ['magicpowder', 'spectralthief'],
+	banettemegaz: ['magicpowder', 'spectralthief'],
+	beautifly: ['magicpowder'],
+	breloom: ['barbbarrage'],
+	breloommega: ['barbbarrage'],
+	delibird: ['bleakwindstorm'],
+	doublade: ['tachyoncutter'],
+	dragalge: ['clangingscales'],
+	dragalgemega: ['clangingscales'],
+	drapion: ['direclaw'],
+	dustox: ['magicpowder'],
+	feraligatr: ['aquastep'],
+	feraligatrgmax: ['aquastep'],
+	feraligatrmega: ['aquastep'],
+	floatzel: ['aquastep'],
+	florges: ['magicpowder'],
+	florgesblue: ['magicpowder'],
+	florgesorange: ['magicpowder'],
+	florgeswhite: ['magicpowder'],
+	florgesyellow: ['magicpowder'],
+	flygon: ['clangingscales'],
+	flygonmega: ['clangingscales'],
+	flygonmegaz: ['clangingscales'],
+	froslass: ['bleakwindstorm', 'magicpowder'],
+	froslassmega: ['bleakwindstorm', 'magicpowder'],
+	gardevoir: ['darkvoid'],
+	gardevoirmega: ['darkvoid'],
+	gardevoirmegaalt: ['darkvoid'],
+	gardevoirmegaz: ['darkvoid'],
+	gardevoirvoid: ['darkvoid'],
+	gardevoirvoidmega: ['darkvoid'],
+	gengar: ['spectralthief'],
+	gengargmax: ['spectralthief'],
+	gengarmega: ['spectralthief'],
+	gligar: ['direclaw'],
+	gligaralt: ['direclaw'],
+	gliscor: ['direclaw'],
+	gliscoralt: ['direclaw'],
+	haxorus: ['mightycleave'],
+	haxorusmega: ['mightycleave'],
+	meganium: ['magicpowder'],
+	meganiummega: ['magicpowder'],
+	meganiummegay: ['magicpowder'],
+	mimikyu: ['astralbarrage'],
+	mimikyubusted: ['astralbarrage'],
+	mimikyubustedtotem: ['astralbarrage'],
+	mimikyutotem: ['astralbarrage'],
+	ninetales: ['bleakwindstorm'],
+	ninetalesalola: ['bleakwindstorm'],
+	noivern: ['clangingscales'],
+	noivernmega: ['clangingscales'],
+	probopass: ['diamondstorm'],
+	typhlosion: ['bitterblade'],
+	typhlosionalt: ['bitterblade'],
+	typhlosionhisui: ['bitterblade'],
+	typhlosionmega: ['bitterblade'],
+	venusaur: ['magicpowder'],
+	venusaurgmax: ['magicpowder'],
+	venusaurmega: ['magicpowder'],
+	volcarona: ['blueflare'],
 };
-import {November16MoveRemovals} from '../data/nov16-movepool-removals';
+import { November16MoveRemovals } from '../data/nov16-movepool-removals';
 for (const [id, moves] of Object.entries(November16MoveRemovals)) {
- Gen9MoveLearnsetExclusions[id] = [...new Set([...(Gen9MoveLearnsetExclusions[id] || []), ...moves])];
+	Gen9MoveLearnsetExclusions[id] = [...new Set([...(Gen9MoveLearnsetExclusions[id] || []), ...moves])];
 }
-
 
 export class DexSpecies {
 	readonly dex: ModdedDex;
@@ -557,7 +606,11 @@ export class DexSpecies {
 
 		const alias = this.dex.getAlias(id);
 		if (alias) {
-			if (this.dex.data.FormatsData.hasOwnProperty(id) && this.dex.data.Pokedex[alias]?.abilities?.S && !this.dex.data.Pokedex[id]?.isCosmeticForme) {
+			if (
+				this.dex.data.FormatsData.hasOwnProperty(id) &&
+				this.dex.data.Pokedex[alias]?.abilities?.S &&
+				!this.dex.data.Pokedex[id]?.isCosmeticForme
+			) {
 				// special event ID
 				species = new Species({
 					...this.dex.data.Pokedex[alias],
@@ -568,10 +621,13 @@ export class DexSpecies {
 			} else {
 				species = this.get(alias);
 				if (this.dex.data.Pokedex?.[id]?.isCosmeticForme) {
-					const cosmeticForme = {...this.dex.data.Pokedex[id]};
+					const cosmeticForme = { ...this.dex.data.Pokedex[id] };
 					if (
-						cosmeticForme.canGigantamax === undefined && species.canGigantamax &&
-						!String(cosmeticForme.forme || '').toLowerCase().includes('mega')
+						cosmeticForme.canGigantamax === undefined &&
+						species.canGigantamax &&
+						!String(cosmeticForme.forme || '')
+							.toLowerCase()
+							.includes('mega')
 					) {
 						cosmeticForme.canGigantamax = species.canGigantamax;
 					}
@@ -579,7 +635,7 @@ export class DexSpecies {
 						...species,
 						...cosmeticForme,
 						name: species.baseSpecies + '-' + cosmeticForme.forme!, // Forme always exists on cosmetic forme entries
-						baseForme: "",
+						baseForme: '',
 						otherFormes: null,
 						cosmeticFormes: null,
 					});
@@ -596,7 +652,7 @@ export class DexSpecies {
 								name: forme,
 								forme: forme.slice(species.name.length + 1),
 								baseSpecies: species.name,
-								baseForme: "",
+								baseForme: '',
 								isCosmeticForme: true,
 								otherFormes: null,
 								cosmeticFormes: null,
@@ -646,11 +702,17 @@ export class DexSpecies {
 		}
 		if (id && this.dex.data.Pokedex.hasOwnProperty(id)) {
 			let pokedexData = this.dex.data.Pokedex[id];
-			if (pokedexData.isCosmeticForme && !pokedexData.abilities && pokedexData.baseSpecies && toID(pokedexData.baseSpecies) !== id) {
+			if (
+				pokedexData.isCosmeticForme &&
+				!pokedexData.abilities &&
+				pokedexData.baseSpecies &&
+				toID(pokedexData.baseSpecies) !== id
+			) {
 				const base = this.get(pokedexData.baseSpecies);
-				pokedexData = {...base, ...pokedexData};
+				pokedexData = { ...base, ...pokedexData };
 			}
-			const baseSpeciesTags = pokedexData.baseSpecies && this.dex.data.Pokedex[toID(pokedexData.baseSpecies)].tags;
+			const baseSpeciesTags =
+				pokedexData.baseSpecies && this.dex.data.Pokedex[toID(pokedexData.baseSpecies)].tags;
 			species = new Species({
 				tags: baseSpeciesTags,
 				...pokedexData,
@@ -665,26 +727,40 @@ export class DexSpecies {
 					}
 				}
 			}
-			if (!species.tier && !species.doublesTier && !species.natDexTier && species.baseSpecies !== species.name) {
+			if (
+				!species.tier &&
+				!species.doublesTier &&
+				!species.natDexTier &&
+				species.baseSpecies !== species.name
+			) {
 				if (species.baseSpecies === 'Mimikyu') {
 					species.tier = this.dex.data.FormatsData[toID(species.baseSpecies)].tier || 'Illegal';
-					species.doublesTier = this.dex.data.FormatsData[toID(species.baseSpecies)].doublesTier || species.tier as any;
-					species.natDexTier = this.dex.data.FormatsData[toID(species.baseSpecies)].natDexTier || species.tier;
+					species.doublesTier =
+						this.dex.data.FormatsData[toID(species.baseSpecies)].doublesTier ||
+						(species.tier as any);
+					species.natDexTier =
+						this.dex.data.FormatsData[toID(species.baseSpecies)].natDexTier || species.tier;
 				} else if (species.id.endsWith('totem')) {
 					species.tier = this.dex.data.FormatsData[species.id.slice(0, -5)].tier || 'Illegal';
-					species.doublesTier = this.dex.data.FormatsData[species.id.slice(0, -5)].doublesTier || species.tier as any;
-					species.natDexTier = this.dex.data.FormatsData[species.id.slice(0, -5)].natDexTier || species.tier;
+					species.doublesTier =
+						this.dex.data.FormatsData[species.id.slice(0, -5)].doublesTier ||
+						(species.tier as any);
+					species.natDexTier =
+						this.dex.data.FormatsData[species.id.slice(0, -5)].natDexTier || species.tier;
 				} else if (species.battleOnly) {
 					species.tier = this.dex.data.FormatsData[toID(species.battleOnly)]?.tier || 'Illegal';
-					species.doublesTier = this.dex.data.FormatsData[toID(species.battleOnly)]?.doublesTier || species.tier as any;
-					species.natDexTier = this.dex.data.FormatsData[toID(species.battleOnly)]?.natDexTier || species.tier;
+					species.doublesTier =
+						this.dex.data.FormatsData[toID(species.battleOnly)]?.doublesTier ||
+						(species.tier as any);
+					species.natDexTier =
+						this.dex.data.FormatsData[toID(species.battleOnly)]?.natDexTier || species.tier;
 				} else {
 					const baseFormatsData = this.dex.data.FormatsData[toID(species.baseSpecies)];
 					if (!baseFormatsData) {
 						throw new Error(`${species.baseSpecies} has no formats-data entry`);
 					}
 					species.tier = baseFormatsData.tier || 'Illegal';
-					species.doublesTier = baseFormatsData.doublesTier || species.tier as any;
+					species.doublesTier = baseFormatsData.doublesTier || (species.tier as any);
 					species.natDexTier = baseFormatsData.natDexTier || species.tier;
 				}
 			}
@@ -698,36 +774,48 @@ export class DexSpecies {
 				species.isNonstandard = 'Future';
 			}
 			if (this.dex.currentMod === 'gen7letsgo' && !species.isNonstandard) {
-				const isLetsGo = (
-					species.gen <= 7 && (species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
-					(!species.forme || species.isMega || (['Alola', 'Starter'].includes(species.forme) &&
-						species.name !== 'Pikachu-Alola'))
-				);
+				const isLetsGo =
+					species.gen <= 7 &&
+					(species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
+					(!species.forme ||
+						species.isMega ||
+						(['Alola', 'Starter'].includes(species.forme) && species.name !== 'Pikachu-Alola'));
 				if (!isLetsGo) species.isNonstandard = 'Past';
 			}
-			if (this.dex.currentMod === 'gen8bdsp' &&
-				(!species.isNonstandard || ["Gigantamax", "CAP"].includes(species.isNonstandard))) {
-				if (species.gen > 4 || (species.num < 1 && species.isNonstandard !== 'CAP') ||
-					species.id === 'pichuspikyeared') {
+			if (
+				this.dex.currentMod === 'gen8bdsp' &&
+				(!species.isNonstandard || ['Gigantamax', 'CAP'].includes(species.isNonstandard))
+			) {
+				if (
+					species.gen > 4 ||
+					(species.num < 1 && species.isNonstandard !== 'CAP') ||
+					species.id === 'pichuspikyeared'
+				) {
 					species.isNonstandard = 'Future';
 					species.tier = species.doublesTier = species.natDexTier = 'Illegal';
 				}
 			}
 			species.nfe = species.evos.some(evo => {
 				const evoSpecies = this.get(evo);
-				return !evoSpecies.isNonstandard ||
+				return (
+					!evoSpecies.isNonstandard ||
 					evoSpecies.isNonstandard === species?.isNonstandard ||
 					// Pokemon with Hisui evolutions
-					evoSpecies.isNonstandard === "Unobtainable";
+					evoSpecies.isNonstandard === 'Unobtainable'
+				);
 			});
-			species.canHatch = species.canHatch ||
-				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
+			species.canHatch =
+				species.canHatch ||
+				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) &&
+					!species.prevo &&
+					species.name !== 'Manaphy');
 			if (this.dex.gen === 1) species.bst -= species.baseStats.spd;
 			if (this.dex.gen < 5) {
 				species.abilities = this.dex.deepClone(species.abilities);
 				delete species.abilities['H'];
 			}
-			if (this.dex.gen === 3 && this.dex.abilities.get(species.abilities['1']).gen === 4) delete species.abilities['1'];
+			if (this.dex.gen === 3 && this.dex.abilities.get(species.abilities['1']).gen === 4)
+				delete species.abilities['1'];
 
 			if (this.dex.parentMod) {
 				// if this species is exactly identical to parentMod's species, reuse parentMod's copy
@@ -743,8 +831,13 @@ export class DexSpecies {
 			}
 		} else {
 			species = new Species({
-				id, name: id,
-				exists: false, tier: 'Illegal', doublesTier: 'Illegal', natDexTier: 'Illegal', isNonstandard: 'Custom',
+				id,
+				name: id,
+				exists: false,
+				tier: 'Illegal',
+				doublesTier: 'Illegal',
+				natDexTier: 'Illegal',
+				isNonstandard: 'Custom',
 			});
 		}
 		if (species.exists) this.speciesCache.set(id, this.dex.deepFreeze(species));
@@ -770,12 +863,20 @@ export class DexSpecies {
 			for (const moveid in learnset) {
 				if (species.isNonstandard !== 'CAP') {
 					if (gen4HMMoves.includes(moveid) && this.dex.gen >= 5) {
-						if (!learnset[moveid].some(source => parseInt(source.charAt(0)) >= 5 &&
-							parseInt(source.charAt(0)) <= this.dex.gen)) continue;
+						if (
+							!learnset[moveid].some(
+								source =>
+									parseInt(source.charAt(0)) >= 5 &&
+									parseInt(source.charAt(0)) <= this.dex.gen,
+							)
+						)
+							continue;
 					} else if (
-						gen3HMMoves.includes(moveid) && this.dex.gen >= 4 &&
+						gen3HMMoves.includes(moveid) &&
+						this.dex.gen >= 4 &&
 						!learnset[moveid].some(
-							source => parseInt(source.charAt(0)) >= 4 && parseInt(source.charAt(0)) <= this.dex.gen
+							source =>
+								parseInt(source.charAt(0)) >= 4 && parseInt(source.charAt(0)) <= this.dex.gen,
 						)
 					) {
 						continue;
@@ -805,7 +906,9 @@ export class DexSpecies {
 					// Smeargle time
 					// A few moves like Dark Void were made unSketchable in a generation later than when they were introduced
 					// However, this has only happened in a gen where transfer moves are unavailable
-					const sketchables = this.dex.moves.all().filter(m => !m.flags['nosketch'] && !m.isNonstandard);
+					const sketchables = this.dex.moves
+						.all()
+						.filter(m => !m.flags['nosketch'] && !m.isNonstandard);
 					for (const move of sketchables) {
 						movePool.add(move.id);
 					}
@@ -864,8 +967,11 @@ export class DexSpecies {
 
 		const excluded = this.dex.gen >= 9 ? Gen9MoveLearnsetExclusions[originalSpecies.id] : undefined;
 		if (!excluded) return out;
-		return out.map(entry => ({...entry,
-			learnset: Object.fromEntries(Object.entries(entry.learnset).filter(([move]) => !excluded.includes(move))),
+		return out.map(entry => ({
+			...entry,
+			learnset: Object.fromEntries(
+				Object.entries(entry.learnset).filter(([move]) => !excluded.includes(move)),
+			),
 		}));
 	}
 
@@ -888,7 +994,10 @@ export class DexSpecies {
 			// For Pokemon like Rotom and Necrozma whose movesets are extensions are their base formes
 			return this.get(species.changesFrom);
 		} else if (
-			checkingMoves && !species.prevo && species.baseSpecies && this.get(species.baseSpecies).prevo
+			checkingMoves &&
+			!species.prevo &&
+			species.baseSpecies &&
+			this.get(species.baseSpecies).prevo
 		) {
 			// For Pokemon like Cap Pikachu, who should be able to have egg moves in Gen 9
 			let baseEvo = this.get(species.baseSpecies);
@@ -931,7 +1040,10 @@ export class DexSpecies {
 		const seen = new Set(species.map(s => s.id));
 		for (const id of Object.keys(SpeciesPassives)) {
 			const entry = this.get(id);
-			if (entry.exists && !seen.has(entry.id)) { species.push(entry); seen.add(entry.id); }
+			if (entry.exists && !seen.has(entry.id)) {
+				species.push(entry);
+				seen.add(entry.id);
+			}
 		}
 		this.allCache = Object.freeze(species);
 		return this.allCache;

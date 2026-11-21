@@ -5,13 +5,13 @@ const common = require('./../common');
 
 let battle;
 
-describe('Custom alts and Haunted field rules', function () {
-	afterEach(function () {
+describe('Custom alts and Haunted field rules', () => {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
-	it('should expose the renamed Deso cosmetics with their base battle identity', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should expose the renamed Deso cosmetics with their base battle identity', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		for (const [baseName, altName] of [
 			['Mightyena', 'Mightyena-Deso'],
 			['Toxicroak', 'Toxicroak-Deso'],
@@ -30,15 +30,15 @@ describe('Custom alts and Haunted field rules', function () {
 		assert.equal(battle.dex.species.get('Cinccino-Alt').name, 'Cinccino-Deso');
 	});
 
-	it('should replace Regenerator on Blastoise with Bulletproof', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should replace Regenerator on Blastoise with Bulletproof', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		const abilities = battle.dex.species.get('Blastoise').abilities;
 		assert.equal(abilities[1], 'Bulletproof');
 		assert.false(Object.values(abilities).includes('Regenerator'));
 	});
 
-	it('should apply the requested ability and learnset updates', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should apply the requested ability and learnset updates', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		assert.equal(battle.dex.species.get('Obstagoon').abilities[0], 'Violent Rush');
 		assert.deepEqual(battle.dex.species.get('Manectric').baseStats, {
 			hp: 70, atk: 110, def: 65, spa: 125, spd: 65, spe: 105,
@@ -54,10 +54,10 @@ describe('Custom alts and Haunted field rules', function () {
 	});
 
 	it('allows core Auras over Haunted Terrain while blocking replacement fields', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Mew', ability: 'synchronize', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Mew', ability: 'synchronize', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'synchronize', moves: ['splash']},
+			{ species: 'Mew', ability: 'synchronize', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const source = battle.p1.active[0];
@@ -78,14 +78,14 @@ describe('Custom alts and Haunted field rules', function () {
 		}
 	});
 
-	it('should disable Battle Fervor, Ultra Ego, and Ultra Instinct in Haunted Terrain', function () {
-		battle = common.createBattle({formatid: 'gen9hauntedfield'}, [[
-			{species: 'Toxicroak', ability: 'battlefervor', moves: ['splash']},
-			{species: 'Dracovish', ability: 'ultraego', moves: ['splash']},
-			{species: 'Gallade', ability: 'ultrainstinct', moves: ['splash']},
+	it('should disable Battle Fervor, Ultra Ego, and Ultra Instinct in Haunted Terrain', () => {
+		battle = common.createBattle({ formatid: 'gen9hauntedfield' }, [[
+			{ species: 'Toxicroak', ability: 'battlefervor', moves: ['splash'] },
+			{ species: 'Dracovish', ability: 'ultraego', moves: ['splash'] },
+			{ species: 'Gallade', ability: 'ultrainstinct', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['pound', 'fakeout', 'splash']},
-			{species: 'Mew', ability: 'noguard', moves: ['fakeout', 'splash']},
+			{ species: 'Mew', ability: 'noguard', moves: ['pound', 'fakeout', 'splash'] },
+			{ species: 'Mew', ability: 'noguard', moves: ['fakeout', 'splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const toxicroak = battle.p1.active[0];
@@ -105,13 +105,13 @@ describe('Custom alts and Haunted field rules', function () {
 		assert(battle.log.some(line => line.includes('|cant|p1a: Gallade|flinch')));
 	});
 
-	it('should retain both Mega Absol on-faint Doom Desire casts', function () {
+	it('should retain both Mega Absol on-faint Doom Desire casts', () => {
 		for (const [ability, category] of [['doomwarning', 'Special'], ['omenedge', 'Physical']]) {
-			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-				{species: 'Absol-Mega', ability, moves: ['splash']},
-				{species: 'Mew', ability: 'synchronize', moves: ['splash']},
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+				{ species: 'Absol-Mega', ability, moves: ['splash'] },
+				{ species: 'Mew', ability: 'synchronize', moves: ['splash'] },
 			], [
-				{species: 'Mew', ability: 'synchronize', moves: ['splash']},
+				{ species: 'Mew', ability: 'synchronize', moves: ['splash'] },
 			]]);
 			battle.makeChoices('team 1', 'team 1');
 			const absol = battle.p1.active[0];

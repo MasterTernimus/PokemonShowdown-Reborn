@@ -23,7 +23,7 @@ describe('Approved Aura Convergence', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	it('ignores item and ability stat modifiers when choosing, but applies them to damage', () => {
 		const [p, q] = setup();
-		const attack = () => Object.assign(Dex.getActiveMove('aurasphere'), {willCrit: false});
+		const attack = () => Object.assign(Dex.getActiveMove('aurasphere'), { willCrit: false });
 		const normal = battle.actions.getDamage(p, q, attack());
 		q.setItem('Assault Vest');
 		assert.equal(adaptiveMoveView(attack(), p, q).category, 'Special');

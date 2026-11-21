@@ -1,25 +1,25 @@
-import {Dex, toID} from '../sim/dex';
-import {Utils} from '../lib';
-import {PRNG, PRNGSeed} from '../sim/prng';
-import {RuleTable} from '../sim/dex-formats';
-import {Tags} from './tags';
+import { Dex, toID } from '../sim/dex';
+import { Utils } from '../lib';
+import { PRNG, type PRNGSeed } from '../sim/prng';
+import { type RuleTable } from '../sim/dex-formats';
+import { Tags } from './tags';
 
 export interface TeamData {
-	typeCount: {[k: string]: number};
-	typeComboCount: {[k: string]: number};
-	baseFormes: {[k: string]: number};
+	typeCount: { [k: string]: number };
+	typeComboCount: { [k: string]: number };
+	baseFormes: { [k: string]: number };
 	megaCount?: number;
 	zCount?: number;
-	has: {[k: string]: number};
+	has: { [k: string]: number };
 	forceResult: boolean;
-	weaknesses: {[k: string]: number};
-	resistances: {[k: string]: number};
+	weaknesses: { [k: string]: number };
+	resistances: { [k: string]: number };
 	weather?: string;
 	eeveeLimCount?: number;
 	gigantamax?: boolean;
 }
 export interface BattleFactorySpecies {
-	flags: {limEevee?: 1};
+	flags: { limEevee?: 1 };
 	sets: BattleFactorySet[];
 }
 interface BattleFactorySet {
@@ -154,7 +154,7 @@ export class RandomTeams {
 	 *
 	 * returns true to try to force the move type, false otherwise.
 	 */
-	moveEnforcementCheckers: {[k: string]: MoveEnforcementChecker};
+	moveEnforcementCheckers: { [k: string]: MoveEnforcementChecker };
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		format = Dex.formats.get(format);
@@ -227,9 +227,10 @@ export class RandomTeams {
 	getTeam(options?: PlayerOptions | null): PokemonSet[] {
 		const generatorName = (
 			typeof this.format.team === 'string' && this.format.team.startsWith('random')
-		 ) ? this.format.team + 'Team' : '';
-		// @ts-ignore
-		return this[generatorName || 'randomTeam'](options);
+		) ? this.format.team + 'Team' : '';
+		const generate: (options?: PlayerOptions | null) => PokemonSet[] =
+			Reflect.get(this as object, generatorName || 'randomTeam');
+		return generate.call(this, options);
 	}
 
 	randomChance(numerator: number, denominator: number) {
@@ -349,14 +350,14 @@ export class RandomTeams {
 		moves: Set<string> | null,
 		species: Species,
 		teraType: string,
-		abilities: Set<string> = new Set(),
+		abilities = new Set<string>(),
 	): MoveCounter {
 		// This is primarily a helper function for random setbuilder functions.
 		const counter = new MoveCounter();
 		const types = species.types;
 		if (!moves?.size) return counter;
 
-		const categories = {Physical: 0, Special: 0, Status: 0};
+		const categories = { Physical: 0, Special: 0, Status: 0 };
 
 		// Iterate through all moves we've chosen so far and keep track of what they do:
 		for (const moveid of moves) {
@@ -1126,7 +1127,6 @@ export class RandomTeams {
 		return false;
 	}
 
-
 	getAbility(
 		types: string[],
 		moves: Set<string>,
@@ -1439,7 +1439,7 @@ export class RandomTeams {
 		}
 		if (isLead && (species.id === 'glimmora' ||
 			(['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Offensive Protect'].includes(role) &&
-			species.baseStats.hp + species.baseStats.def + species.baseStats.spd <= 230))
+				species.baseStats.hp + species.baseStats.def + species.baseStats.spd <= 230))
 		) return 'Focus Sash';
 		if (
 			['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Offensive Protect'].includes(role) &&
@@ -1622,8 +1622,8 @@ export class RandomTeams {
 		let ability = '';
 		let item = undefined;
 
-		const evs = {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85};
-		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+		const evs = { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 };
+		const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 
 		const types = species.types;
 		const abilities = new Set(Object.values(species.abilities));
@@ -1724,9 +1724,9 @@ export class RandomTeams {
 		pokemonToExclude: RandomTeamsTypes.RandomSet[] = [],
 		isMonotype = false,
 		pokemonList: string[]
-	): [{[k: string]: string[]}, string[]] {
+	): [{ [k: string]: string[] }, string[]] {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
-		const pokemonPool: {[k: string]: string[]} = {};
+		const pokemonPool: { [k: string]: string[] } = {};
 		const baseSpeciesPool = [];
 		for (const pokemon of pokemonList) {
 			let species = this.dex.species.get(pokemon);
@@ -1754,8 +1754,8 @@ export class RandomTeams {
 		return [pokemonPool, baseSpeciesPool];
 	}
 
-	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./random-sets.json');
-	randomDoublesSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./random-doubles-sets.json');
+	randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./random-sets.json');
+	randomDoublesSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./random-doubles-sets.json');
 
 	randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
@@ -1774,11 +1774,11 @@ export class RandomTeams {
 		const usePotD = global.Config && Config.potd && ruleTable.has('potd');
 		const potd = usePotD ? this.dex.species.get(Config.potd) : null;
 
-		const baseFormes: {[k: string]: number} = {};
+		const baseFormes: { [k: string]: number } = {};
 
-		const typeCount: {[k: string]: number} = {};
-		const typeComboCount: {[k: string]: number} = {};
-		const typeWeaknesses: {[k: string]: number} = {};
+		const typeCount: { [k: string]: number } = {};
+		const typeComboCount: { [k: string]: number } = {};
+		const typeWeaknesses: { [k: string]: number } = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 		let numMaxLevelPokemon = 0;
 
@@ -2008,7 +2008,7 @@ export class RandomTeams {
 			const moves = this.multipleSamplesNoReplace(pool, this.maxMoveCount);
 
 			// Random EVs
-			const evs: StatsTable = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+			const evs: StatsTable = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 			const s: StatID[] = ["hp", "atk", "def", "spa", "spd", "spe"];
 			let evpool = 510;
 			do {
@@ -2174,7 +2174,7 @@ export class RandomTeams {
 			}
 		}
 
-		const hasDexNumber: {[k: string]: number} = {};
+		const hasDexNumber: { [k: string]: number } = {};
 		for (let i = 0; i < n; i++) {
 			const num = this.sampleNoReplace(pool);
 			hasDexNumber[num] = i;
@@ -2366,7 +2366,7 @@ export class RandomTeams {
 			} while (m.length < setMoveCount);
 
 			// Random EVs
-			const evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+			const evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 			if (this.gen === 6) {
 				let evpool = 510;
 				do {

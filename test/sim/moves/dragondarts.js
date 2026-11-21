@@ -18,29 +18,29 @@ function assertHits(target, expected) {
 	assert.equal(hits.get(target) || 0, expected, target.name + ' Dragon Darts hit count');
 }
 
-describe('Dragon Darts', function () {
-	afterEach(function () {
+describe('Dragon Darts', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should hit twice in singles`, function () {
+	it(`should hit twice in singles`, () => {
 		battle = createBattle([[
-			{species: "Ninjask", moves: ['dragondarts']},
+			{ species: "Ninjask", moves: ['dragondarts'] },
 		], [
-			{species: "Mew", ability: 'stamina', moves: ['splash']},
+			{ species: "Mew", ability: 'stamina', moves: ['splash'] },
 		]]);
 		battle.makeChoices();
 		assertHits(battle.p2.active[0], 2);
 	});
 
-	it(`should use the user's higher attacking stat`, function () {
+	it(`should use the user's higher attacking stat`, () => {
 		let categories = [];
 		battle = createBattle({ formatid: 'gen9nofieldsinglesgame@@@!teampreview' }, [[
-			{species: "Dragapult", evs: {atk: 0, spa: 252}, moves: ['dragondarts']},
+			{ species: "Dragapult", evs: { atk: 0, spa: 252 }, moves: ['dragondarts'] },
 		], [
-			{species: "Mew", moves: ['splash']},
+			{ species: "Mew", moves: ['splash'] },
 		]]);
-		battle.onEvent('ModifyMove', battle.format, function (move, pokemon) {
+		battle.onEvent('ModifyMove', battle.format, (move, pokemon) => {
 			if (move.id === 'dragondarts' && pokemon.species.id === 'dragapult') categories.push(move.category);
 		});
 		battle.makeChoices('move dragondarts', 'move splash');
@@ -49,24 +49,24 @@ describe('Dragon Darts', function () {
 		battle.destroy();
 		categories = [];
 		battle = createBattle({ formatid: 'gen9nofieldsinglesgame@@@!teampreview' }, [[
-			{species: "Dragapult", evs: {atk: 252, spa: 0}, moves: ['dragondarts']},
+			{ species: "Dragapult", evs: { atk: 252, spa: 0 }, moves: ['dragondarts'] },
 		], [
-			{species: "Mew", moves: ['splash']},
+			{ species: "Mew", moves: ['splash'] },
 		]]);
-		battle.onEvent('ModifyMove', battle.format, function (move, pokemon) {
+		battle.onEvent('ModifyMove', battle.format, (move, pokemon) => {
 			if (move.id === 'dragondarts' && pokemon.species.id === 'dragapult') categories.push(move.category);
 		});
 		battle.makeChoices('move dragondarts', 'move splash');
 		assert.deepEqual(categories, ['Physical']);
 	});
 
-	it(`should hit each foe once in doubles`, function () {
+	it(`should hit each foe once in doubles`, () => {
 		battle = createBattle({ gameType: 'doubles' }, [[
-			{species: "Ninjask", moves: ['dragondarts']},
-			{species: "Mew", ability: 'stamina', moves: ['splash']},
+			{ species: "Ninjask", moves: ['dragondarts'] },
+			{ species: "Mew", ability: 'stamina', moves: ['splash'] },
 		], [
-			{species: "Mew", ability: 'stamina', moves: ['splash']},
-			{species: "Mew", ability: 'stamina', moves: ['splash']},
+			{ species: "Mew", ability: 'stamina', moves: ['splash'] },
+			{ species: "Mew", ability: 'stamina', moves: ['splash'] },
 		]]);
 		battle.makeChoices();
 		assertHits(battle.p1.active[1], 0);
@@ -74,13 +74,13 @@ describe('Dragon Darts', function () {
 		assertHits(battle.p2.active[1], 1);
 	});
 
-	it(`should hit the other foe twice if it misses against one`, function () {
+	it(`should hit the other foe twice if it misses against one`, () => {
 		battle = createBattle({ gameType: 'doubles' }, [[
-			{species: "Ninjask", item: 'blunderpolicy', moves: ['dragondarts']},
-			{species: "Wynaut", ability: 'stamina', moves: ['splash']},
+			{ species: "Ninjask", item: 'blunderpolicy', moves: ['dragondarts'] },
+			{ species: "Wynaut", ability: 'stamina', moves: ['splash'] },
 		], [
-			{species: "Mew", ability: 'stamina', moves: ['splash']},
-			{species: "Shaymin", ability: 'stamina', moves: ['splash']},
+			{ species: "Mew", ability: 'stamina', moves: ['splash'] },
+			{ species: "Shaymin", ability: 'stamina', moves: ['splash'] },
 		]]);
 
 		const ninjask = battle.p1.active[0];
@@ -89,7 +89,7 @@ describe('Dragon Darts', function () {
 		const shaymin = battle.p2.active[1];
 
 		// Modding accuracy so Dragon Darts always misses Mew
-		battle.onEvent('Accuracy', battle.format, function (accuracy, target, source, move) {
+		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
 			return target.species.id !== 'mew';
 		});
 
@@ -103,11 +103,11 @@ describe('Dragon Darts', function () {
 
 	it(`should hit its selected ally before the local slow Ally Switch pivot`, () => {
 		battle = createBattle({ gameType: 'doubles' }, [[
-			{species: "Ninjask", ability: 'stamina', moves: ['dragondarts']},
-			{species: "Mew", ability: 'stamina', moves: ['allyswitch']},
+			{ species: "Ninjask", ability: 'stamina', moves: ['dragondarts'] },
+			{ species: "Mew", ability: 'stamina', moves: ['allyswitch'] },
 		], [
-			{species: "Mew", ability: 'stamina', moves: ['splash']},
-			{species: "Shaymin", ability: 'stamina', moves: ['splash']},
+			{ species: "Mew", ability: 'stamina', moves: ['splash'] },
+			{ species: "Shaymin", ability: 'stamina', moves: ['splash'] },
 		]]);
 		battle.makeChoices('move dragondarts -2, move allyswitch', 'move splash, move splash');
 		assertHits(battle.p1.active[0], 0);
@@ -116,13 +116,13 @@ describe('Dragon Darts', function () {
 		assertHits(battle.p2.active[1], 0);
 	});
 
-	it(`should hit both targets even if one faints`, function () {
+	it(`should hit both targets even if one faints`, () => {
 		battle = createBattle({ gameType: 'doubles' }, [[
-			{species: "Ninjask", moves: ['dragondarts']},
-			{species: "Mew", moves: ['splash']},
+			{ species: "Ninjask", moves: ['dragondarts'] },
+			{ species: "Mew", moves: ['splash'] },
 		], [
-			{species: "Shedinja", moves: ['splash']},
-			{species: "Shedinja", moves: ['splash']},
+			{ species: "Shedinja", moves: ['splash'] },
+			{ species: "Shedinja", moves: ['splash'] },
 		]]);
 		battle.makeChoices();
 		battle.getDebugLog();
@@ -130,13 +130,13 @@ describe('Dragon Darts', function () {
 		assert.equal(battle.p2.active[1].hp, 0);
 	});
 
-	it(`should hit the ally twice in doubles`, function () {
+	it(`should hit the ally twice in doubles`, () => {
 		battle = createBattle({ gameType: 'doubles' }, [[
-			{species: "Ninjask", moves: ['dragondarts']},
-			{species: "Mew", ability: 'stamina', moves: ['splash']},
+			{ species: "Ninjask", moves: ['dragondarts'] },
+			{ species: "Mew", ability: 'stamina', moves: ['splash'] },
 		], [
-			{species: "Mew", ability: 'stamina', moves: ['splash']},
-			{species: "Mew", ability: 'stamina', moves: ['splash']},
+			{ species: "Mew", ability: 'stamina', moves: ['splash'] },
+			{ species: "Mew", ability: 'stamina', moves: ['splash'] },
 		]]);
 		battle.makeChoices('move dragondarts -2, move splash', 'move splash, move splash');
 		assertHits(battle.p1.active[1], 2);
@@ -144,13 +144,13 @@ describe('Dragon Darts', function () {
 		assertHits(battle.p2.active[1], 0);
 	});
 
-	it(`should smart-target the foe that's not Protecting in Doubles`, function () {
+	it(`should smart-target the foe that's not Protecting in Doubles`, () => {
 		battle = createBattle({ gameType: 'doubles' }, [[
-			{species: "Ninjask", moves: ['dragondarts']},
-			{species: "Mew", ability: 'stamina', moves: ['splash']},
+			{ species: "Ninjask", moves: ['dragondarts'] },
+			{ species: "Mew", ability: 'stamina', moves: ['splash'] },
 		], [
-			{species: "Mew", ability: 'stamina', moves: ['protect']},
-			{species: "Mew", ability: 'stamina', moves: ['splash']},
+			{ species: "Mew", ability: 'stamina', moves: ['protect'] },
+			{ species: "Mew", ability: 'stamina', moves: ['splash'] },
 		]]);
 		battle.makeChoices();
 		assertHits(battle.p1.active[1], 0);
@@ -158,13 +158,13 @@ describe('Dragon Darts', function () {
 		assertHits(battle.p2.active[1], 2);
 	});
 
-	it(`should be able to be redirected`, function () {
+	it(`should be able to be redirected`, () => {
 		battle = createBattle({ gameType: 'doubles' }, [[
-			{species: "Ninjask", moves: ['dragondarts']},
-			{species: "Mew", ability: 'stamina', moves: ['splash']},
+			{ species: "Ninjask", moves: ['dragondarts'] },
+			{ species: "Mew", ability: 'stamina', moves: ['splash'] },
 		], [
-			{species: "Mew", ability: 'stamina', moves: ['ragepowder']},
-			{species: "Mew", ability: 'stamina', moves: ['splash']},
+			{ species: "Mew", ability: 'stamina', moves: ['ragepowder'] },
+			{ species: "Mew", ability: 'stamina', moves: ['splash'] },
 		]]);
 		battle.makeChoices();
 		assertHits(battle.p1.active[1], 0);
@@ -172,16 +172,16 @@ describe('Dragon Darts', function () {
 		assertHits(battle.p2.active[1], 0);
 	});
 
-	it('should hit one target twice if the other is protected by an ability', function () {
+	it('should hit one target twice if the other is protected by an ability', () => {
 		battle = createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', {team: [
-			{species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"]},
-			{species: "Grimmsnarl", ability: "Prankster", moves: ["electrify"]},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"]},
-			{species: "Emolga", ability: "Motor Drive", moves: ["sleeptalk"]},
-		]});
+		battle.setPlayer('p1', { team: [
+			{ species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"] },
+			{ species: "Grimmsnarl", ability: "Prankster", moves: ["electrify"] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"] },
+			{ species: "Emolga", ability: "Motor Drive", moves: ["sleeptalk"] },
+		] });
 		battle.makeChoices('move dragondarts 2, move electrify -1', 'move sleeptalk, move sleeptalk');
 
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
@@ -191,48 +191,48 @@ describe('Dragon Darts', function () {
 		assert.statStage(battle.p2.active[1], 'spe', 1);
 	});
 
-	it('should hit one target twice if the other is immunue', function () {
+	it('should hit one target twice if the other is immunue', () => {
 		battle = createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', {team: [
-			{species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"]},
-			{species: "Ludicolo", ability: "Dancer", moves: ["sleeptalk"]},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"]},
-			{species: "Clefairy", ability: "Ripen", moves: ["sleeptalk"]},
-		]});
+		battle.setPlayer('p1', { team: [
+			{ species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"] },
+			{ species: "Ludicolo", ability: "Dancer", moves: ["sleeptalk"] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"] },
+			{ species: "Clefairy", ability: "Ripen", moves: ["sleeptalk"] },
+		] });
 		battle.makeChoices('move dragondarts 2, move sleeptalk', 'move sleeptalk, move sleeptalk');
 
 		assertHits(battle.p2.active[0], 2);
 		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
 
-	it('should hit one target twice if the other is semi-invulnerable', function () {
+	it('should hit one target twice if the other is semi-invulnerable', () => {
 		battle = createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', {team: [
-			{species: "Dragapult", item: "Lagging Tail", ability: "Clear Body", moves: ["dragondarts"]},
-			{species: "Ludicolo", ability: "Dancer", moves: ["sleeptalk"]},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"]},
-			{species: "Golurk", ability: "Ripen", moves: ["phantomforce"]},
-		]});
+		battle.setPlayer('p1', { team: [
+			{ species: "Dragapult", item: "Lagging Tail", ability: "Clear Body", moves: ["dragondarts"] },
+			{ species: "Ludicolo", ability: "Dancer", moves: ["sleeptalk"] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"] },
+			{ species: "Golurk", ability: "Ripen", moves: ["phantomforce"] },
+		] });
 		battle.makeChoices('move dragondarts 2, move sleeptalk', 'move sleeptalk, move phantomforce 1');
 
 		assertHits(battle.p2.active[0], 2);
 		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
 
-	it('should hit one target twice if the other is fainted', function () {
+	it('should hit one target twice if the other is fainted', () => {
 		battle = createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', {team: [
-			{species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"]},
-			{species: "Ludicolo", ability: "Dancer", moves: ["sleeptalk"]},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"]},
-			{species: "Snom", ability: "Ripen", moves: ["sleeptalk"]},
-		]});
+		battle.setPlayer('p1', { team: [
+			{ species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"] },
+			{ species: "Ludicolo", ability: "Dancer", moves: ["sleeptalk"] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"] },
+			{ species: "Snom", ability: "Ripen", moves: ["sleeptalk"] },
+		] });
 
 		battle.p2.active[1].faint();
 		battle.makeChoices('move dragondarts 2, move sleeptalk', 'move sleeptalk, move sleeptalk');
@@ -241,16 +241,16 @@ describe('Dragon Darts', function () {
 		assert.equal(battle.p2.active[1].hp, 0);
 	});
 
-	it('should hit one target twice if the other is Dark type and Dragon Darts is Prankster boosted', function () {
+	it('should hit one target twice if the other is Dark type and Dragon Darts is Prankster boosted', () => {
 		battle = createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', {team: [
-			{species: "Dragapult", ability: "Clear Body", moves: ["sleeptalk", "dragondarts"]},
-			{species: "Liepard", ability: "Prankster", moves: ["assist"]},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"]},
-			{species: "Spiritomb", ability: "Infiltrator", moves: ["sleeptalk"]},
-		]});
+		battle.setPlayer('p1', { team: [
+			{ species: "Dragapult", ability: "Clear Body", moves: ["sleeptalk", "dragondarts"] },
+			{ species: "Liepard", ability: "Prankster", moves: ["assist"] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"] },
+			{ species: "Spiritomb", ability: "Infiltrator", moves: ["sleeptalk"] },
+		] });
 
 		battle.makeChoices();
 
@@ -258,17 +258,17 @@ describe('Dragon Darts', function () {
 		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
 
-	it('should fail if both targets are fainted', function () {
+	it('should fail if both targets are fainted', () => {
 		battle = createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', {team: [
-			{species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"]},
-			{species: "Ludicolo", ability: "Dancer", moves: ["celebrate"]},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Arcanine", ability: "Flash Fire", moves: ["celebrate"]},
-			{species: "Arcanine", ability: "Flash Fire", moves: ["celebrate"]},
-			{species: "Arcanine", ability: "Flash Fire", moves: ["celebrate"]},
-		]});
+		battle.setPlayer('p1', { team: [
+			{ species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"] },
+			{ species: "Ludicolo", ability: "Dancer", moves: ["celebrate"] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: "Arcanine", ability: "Flash Fire", moves: ["celebrate"] },
+			{ species: "Arcanine", ability: "Flash Fire", moves: ["celebrate"] },
+			{ species: "Arcanine", ability: "Flash Fire", moves: ["celebrate"] },
+		] });
 
 		battle.p2.active[0].faint();
 		battle.p2.active[1].faint();

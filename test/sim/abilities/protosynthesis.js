@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Protosynthesis', function () {
-	afterEach(function () {
+describe('Protosynthesis', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should boost the user's highest stat except HP while Sunny Day is active`, function () {
+	it(`should boost the user's highest stat except HP while Sunny Day is active`, () => {
 		battle = common.createBattle([[
-			{species: 'Scream Tail', ability: 'protosynthesis', moves: ['raindance']},
+			{ species: 'Scream Tail', ability: 'protosynthesis', moves: ['raindance'] },
 		], [
-			{species: 'Torkoal', ability: 'drought', moves: ['sleeptalk']},
+			{ species: 'Torkoal', ability: 'drought', moves: ['sleeptalk'] },
 		]]);
 
 		const tail = battle.p1.active[0];
@@ -23,11 +23,11 @@ describe('Protosynthesis', function () {
 		assert(!tail.volatiles['protosynthesis'], `Scream Tail's SpD should stop being boosted when Sun ends`);
 	});
 
-	it(`should take stat stages and no other modifiers into account when determining the best stat`, function () {
+	it(`should take stat stages and no other modifiers into account when determining the best stat`, () => {
 		battle = common.createBattle([[
-			{species: 'Roaring Moon', ability: 'protosynthesis', evs: {'atk': 252, 'spd': 252}, moves: ['tailwind']},
+			{ species: 'Roaring Moon', ability: 'protosynthesis', evs: { 'atk': 252, 'spd': 252 }, moves: ['tailwind'] },
 		], [
-			{species: 'Salamence', ability: 'intimidate', moves: ['sunnyday']},
+			{ species: 'Salamence', ability: 'intimidate', moves: ['sunnyday'] },
 		]]);
 
 		battle.makeChoices();
@@ -36,22 +36,22 @@ describe('Protosynthesis', function () {
 		assert.equal(moon.volatiles['protosynthesis'].bestStat, 'spd');
 	});
 
-	it(`should not activate while Desolate Land is active`, function () {
+	it(`should not activate while Desolate Land is active`, () => {
 		battle = common.createBattle([[
-			{species: 'Roaring Moon', ability: 'protosynthesis', moves: ['sleeptalk']},
+			{ species: 'Roaring Moon', ability: 'protosynthesis', moves: ['sleeptalk'] },
 		], [
-			{species: 'Groudon-Primal', ability: 'desolateland', moves: ['sleeptalk']},
+			{ species: 'Groudon-Primal', ability: 'desolateland', moves: ['sleeptalk'] },
 		]]);
 
 		const moon = battle.p1.active[0];
 		assert(!moon.volatiles['protosynthesis']);
 	});
 
-	it(`should be activated by Booster Energy when Sunny Day is not active`, function () {
+	it(`should be activated by Booster Energy when Sunny Day is not active`, () => {
 		battle = common.createBattle([[
-			{species: 'Scream Tail', ability: 'protosynthesis', item: 'boosterenergy', moves: ['raindance', 'sunnyday']},
+			{ species: 'Scream Tail', ability: 'protosynthesis', item: 'boosterenergy', moves: ['raindance', 'sunnyday'] },
 		], [
-			{species: 'Torkoal', ability: 'drought', moves: ['sleeptalk']},
+			{ species: 'Torkoal', ability: 'drought', moves: ['sleeptalk'] },
 		]]);
 
 		const tail = battle.p1.active[0];
@@ -66,11 +66,11 @@ describe('Protosynthesis', function () {
 		assert(!!tail.volatiles['protosynthesis'], `Scream Tail's Protosynthesis activated by Booster Energy should still be active when Sun ends`);
 	});
 
-	it(`should not be prevented from activating if the user holds Utility Umbrella`, function () {
+	it(`should not be prevented from activating if the user holds Utility Umbrella`, () => {
 		battle = common.createBattle([[
-			{species: 'Scream Tail', ability: 'protosynthesis', item: 'utilityumbrella', moves: ['trick']},
+			{ species: 'Scream Tail', ability: 'protosynthesis', item: 'utilityumbrella', moves: ['trick'] },
 		], [
-			{species: 'Torkoal', ability: 'drought', moves: ['sleeptalk']},
+			{ species: 'Torkoal', ability: 'drought', moves: ['sleeptalk'] },
 		]]);
 
 		const tail = battle.p1.active[0];
@@ -79,10 +79,10 @@ describe('Protosynthesis', function () {
 
 	it(`should retain its innate passive boost under Neutralizing Gas`, () => {
 		battle = common.createBattle([[
-			{species: 'Scream Tail', ability: 'protosynthesis', item: 'boosterenergy', moves: ['luckychant', 'recover']},
+			{ species: 'Scream Tail', ability: 'protosynthesis', item: 'boosterenergy', moves: ['luckychant', 'recover'] },
 		], [
-			{species: 'Weezing', moves: ['venoshock']},
-			{species: 'Weezing', ability: 'neutralizinggas', moves: ['venoshock']},
+			{ species: 'Weezing', moves: ['venoshock'] },
+			{ species: 'Weezing', ability: 'neutralizinggas', moves: ['venoshock'] },
 		]]);
 
 		const tail = battle.p1.active[0];
@@ -99,12 +99,12 @@ describe('Protosynthesis', function () {
 		assert.equal(tail.maxhp - tail.hp, boostedDamage);
 	});
 
-	it(`should not activate while the user is Transformed`, function () {
+	it(`should not activate while the user is Transformed`, () => {
 		battle = common.createBattle([[
-			{species: 'Torkoal', ability: 'drought', moves: ['sleeptalk']},
-			{species: 'Ditto', ability: 'imposter', moves: ['transform']},
+			{ species: 'Torkoal', ability: 'drought', moves: ['sleeptalk'] },
+			{ species: 'Ditto', ability: 'imposter', moves: ['transform'] },
 		], [
-			{species: 'Roaring Moon', ability: 'protosynthesis', moves: ['sleeptalk']},
+			{ species: 'Roaring Moon', ability: 'protosynthesis', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('switch 2', 'auto');

@@ -8,9 +8,9 @@ describe('Surge field and aura duration', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 
 	function activate(ability, item, baseField) {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mew', ability: 'No Ability', item, moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Mew', ability: 'No Ability', item, moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		if (baseField) battle.field.startTerrain(baseField);

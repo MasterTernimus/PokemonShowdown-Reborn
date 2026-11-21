@@ -1053,7 +1053,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
-	laprasaeviangmax: {isNonstandard: "Custom", tier: "Illegal"},
+	laprasaeviangmax: { isNonstandard: "Custom", tier: "Illegal" },
 	ditto: {
 		tier: "ZU",
 		doublesTier: "(DUU)",
@@ -1283,7 +1283,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	hoothoot: {
 		tier: "LC",
 	},
-	noctowlmega: {tier: "OU"},
+	noctowlmega: { tier: "OU" },
 	noctowl: {
 		tier: "ZU",
 		doublesTier: "(DUU)",
@@ -1547,7 +1547,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		doublesTier: "NFE",
 		natDexTier: "NFE",
 	},
-	weavilemega: {tier: "OU"},
+	weavilemega: { tier: "OU" },
 	weavile: {
 		tier: "OU",
 		doublesTier: "(DUU)",
@@ -1913,7 +1913,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	shroomish: {
 		tier: "LC",
 	},
-	breloommega: {tier: "OU"},
+	breloommega: { tier: "OU" },
 	breloom: {
 		tier: "RU",
 		doublesTier: "(DUU)",
@@ -2270,7 +2270,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	feebas: {
 		tier: "LC",
 	},
-	miloticterajuma: {isNonstandard: "Custom", tier: "OU"},
+	miloticterajuma: { isNonstandard: "Custom", tier: "OU" },
 	milotic: {
 		tier: "RU",
 		doublesTier: "(DUU)",
@@ -2317,7 +2317,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	dusclops: {
 		tier: "NFE",
 	},
-	dusknoirmega: {tier: "OU"},
+	dusknoirmega: { tier: "OU" },
 	dusknoir: {
 		tier: "ZU",
 		doublesTier: "(DUU)",
@@ -2537,10 +2537,10 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
-	glalieaevian: {isNonstandard: "Custom", tier: "OU"},
-	glalieaevianmega: {isNonstandard: "Custom", tier: "Illegal"},
-	froslassaevian: {isNonstandard: "Custom", tier: "OU"},
-	froslassaevianmega: {isNonstandard: "Custom", tier: "Illegal"},
+	glalieaevian: { isNonstandard: "Custom", tier: "OU" },
+	glalieaevianmega: { isNonstandard: "Custom", tier: "Illegal" },
+	froslassaevian: { isNonstandard: "Custom", tier: "OU" },
+	froslassaevianmega: { isNonstandard: "Custom", tier: "Illegal" },
 	chimchar: {
 		tier: "LC",
 	},
@@ -2598,7 +2598,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	luxio: {
 		tier: "NFE",
 	},
-	luxraymega: {tier: "OU"},
+	luxraymega: { tier: "OU" },
 	luxray: {
 		tier: "ZU",
 		doublesTier: "(DUU)",
@@ -2731,7 +2731,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	bronzor: {
 		tier: "LC",
 	},
-	bronzongmega: {tier: "OU"},
+	bronzongmega: { tier: "OU" },
 	bronzong: {
 		tier: "PU",
 		doublesTier: "(DUU)",
@@ -4173,7 +4173,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	noibat: {
 		tier: "LC",
 	},
-	noivernmega: {tier: "OU"},
+	noivernmega: { tier: "OU" },
 	noivern: {
 		tier: "RU",
 		doublesTier: "(DUU)",
@@ -6229,46 +6229,46 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	},
 };
 
-const latestFormatUpdates: {[id: string]: any} = {
-	unfezant: {isNonstandard: "Custom", tier: "OU", natDexTier: "RU"},
-	unfezantrejuv: {isNonstandard: "Custom", tier: "OU", natDexTier: "RU"},
-	musharnarejuv: {isNonstandard: "Custom", tier: "OU", natDexTier: "RU"},
-	palossandrocky: {isNonstandard: "Custom", tier: "NU"},
-	palossandfiery: {isNonstandard: "Custom", tier: "NU"},
-	palossandicy: {isNonstandard: "Custom", tier: "NU"},
-	alakazamalt: {isNonstandard: "Custom", tier: "OU"},
-	alakazammegaalt: {isNonstandard: "Custom", tier: "OU"},
+const latestFormatUpdates: { [id: string]: any } = {
+	unfezant: { isNonstandard: "Custom", tier: "OU", natDexTier: "RU" },
+	unfezantrejuv: { isNonstandard: "Custom", tier: "OU", natDexTier: "RU" },
+	musharnarejuv: { isNonstandard: "Custom", tier: "OU", natDexTier: "RU" },
+	palossandrocky: { isNonstandard: "Custom", tier: "NU" },
+	palossandfiery: { isNonstandard: "Custom", tier: "NU" },
+	palossandicy: { isNonstandard: "Custom", tier: "NU" },
+	alakazamalt: { isNonstandard: "Custom", tier: "OU" },
+	alakazammegaalt: { isNonstandard: "Custom", tier: "OU" },
 	// Aevian profiles are custom species, but are legal in the mod's standard formats.
-	laprasaevian: {isNonstandard: "Custom", tier: "OU"},
-	miloticaevian: {isNonstandard: "Custom", tier: "OU"},
-	gastrodonaevian: {isNonstandard: "Custom", tier: "OU"},
-	gastrodoneastaevian: {isNonstandard: "Custom", tier: "OU"},
-	mismagiusaevian: {isNonstandard: "Custom", tier: "OU"},
-	golisopodaevian: {isNonstandard: "Custom", tier: "OU"},
-	drapionrejuv: {isNonstandard: "Custom", tier: "Illegal", doublesTier: "Illegal"},
-	volcaronaaevian: {isNonstandard: "Custom", tier: "OU"},
-	toxtricityaevian: {isNonstandard: "Custom", tier: "OU"},
-	toxtricityaeviangmax: {isNonstandard: "Custom", tier: "Illegal"},
-	sneasleraevian: {isNonstandard: "Custom", tier: "OU"},
-	kommooaevian: {isNonstandard: "Custom", tier: "OU"},
-	gyaradosaevian: {isNonstandard: "Custom", tier: "OU"},
-	gyaradosaevianmega: {isNonstandard: "Custom", tier: "Illegal"},
-	chandelureaevian: {isNonstandard: "Custom", tier: "OU"},
-	skeledirgeaevian: {isNonstandard: "Custom", tier: "OU"},
-	glimmoraaevian: {isNonstandard: "Custom", tier: "OU"},
-	pikachucosplay: {isNonstandard: null, tier: "ZU"},
-	pikachurockstar: {isNonstandard: null, tier: "ZU"},
-	pikachubelle: {isNonstandard: null, tier: "ZU"},
-	pikachupopstar: {isNonstandard: null, tier: "ZU"},
-	pikachuphd: {isNonstandard: null, tier: "ZU"},
-	pikachulibre: {isNonstandard: null, tier: "ZU"},
-	pikachupartner: {isNonstandard: null, tier: "ZU"},
-	pikachustarter: {isNonstandard: null, tier: "ZU"},
-	pikachugmax: {isNonstandard: null, tier: "ZU"},
-	gourgeist: {isNonstandard: "Unobtainable", tier: "Illegal"},
-	gourgeistsmall: {isNonstandard: null, tier: "RU"},
-	gourgeistlarge: {isNonstandard: "Unobtainable", tier: "Illegal"},
-	gourgeistsuper: {isNonstandard: null, tier: "RU"},
+	laprasaevian: { isNonstandard: "Custom", tier: "OU" },
+	miloticaevian: { isNonstandard: "Custom", tier: "OU" },
+	gastrodonaevian: { isNonstandard: "Custom", tier: "OU" },
+	gastrodoneastaevian: { isNonstandard: "Custom", tier: "OU" },
+	mismagiusaevian: { isNonstandard: "Custom", tier: "OU" },
+	golisopodaevian: { isNonstandard: "Custom", tier: "OU" },
+	drapionrejuv: { isNonstandard: "Custom", tier: "Illegal", doublesTier: "Illegal" },
+	volcaronaaevian: { isNonstandard: "Custom", tier: "OU" },
+	toxtricityaevian: { isNonstandard: "Custom", tier: "OU" },
+	toxtricityaeviangmax: { isNonstandard: "Custom", tier: "Illegal" },
+	sneasleraevian: { isNonstandard: "Custom", tier: "OU" },
+	kommooaevian: { isNonstandard: "Custom", tier: "OU" },
+	gyaradosaevian: { isNonstandard: "Custom", tier: "OU" },
+	gyaradosaevianmega: { isNonstandard: "Custom", tier: "Illegal" },
+	chandelureaevian: { isNonstandard: "Custom", tier: "OU" },
+	skeledirgeaevian: { isNonstandard: "Custom", tier: "OU" },
+	glimmoraaevian: { isNonstandard: "Custom", tier: "OU" },
+	pikachucosplay: { isNonstandard: null, tier: "ZU" },
+	pikachurockstar: { isNonstandard: null, tier: "ZU" },
+	pikachubelle: { isNonstandard: null, tier: "ZU" },
+	pikachupopstar: { isNonstandard: null, tier: "ZU" },
+	pikachuphd: { isNonstandard: null, tier: "ZU" },
+	pikachulibre: { isNonstandard: null, tier: "ZU" },
+	pikachupartner: { isNonstandard: null, tier: "ZU" },
+	pikachustarter: { isNonstandard: null, tier: "ZU" },
+	pikachugmax: { isNonstandard: null, tier: "ZU" },
+	gourgeist: { isNonstandard: "Unobtainable", tier: "Illegal" },
+	gourgeistsmall: { isNonstandard: null, tier: "RU" },
+	gourgeistlarge: { isNonstandard: "Unobtainable", tier: "Illegal" },
+	gourgeistsuper: { isNonstandard: null, tier: "RU" },
 };
 
 for (const [id, update] of Object.entries(latestFormatUpdates)) {
@@ -6277,7 +6277,7 @@ for (const [id, update] of Object.entries(latestFormatUpdates)) {
 }
 
 // Restore selectable roster tiers hidden by upstream Scarlet/Violet availability.
-const restoredRosterTiers: {[id: string]: string} = {
+const restoredRosterTiers: { [id: string]: string } = {
 	"caterpie": "LC",
 	"metapod": "NFE",
 	"butterfree": "RU",
@@ -6628,8 +6628,8 @@ const restoredRosterTiers: {[id: string]: string} = {
 	"dracovish": "Uber",
 	"arctovish": "RU",
 	"ampharosaevian": "OU",
-	"charizardalt": "OU"
+	"charizardalt": "OU",
 };
 for (const [id, tier] of Object.entries(restoredRosterTiers)) {
-	(FormatsData as any)[id] = {...(FormatsData as any)[id], tier};
+	(FormatsData as any)[id] = { ...(FormatsData as any)[id], tier };
 }

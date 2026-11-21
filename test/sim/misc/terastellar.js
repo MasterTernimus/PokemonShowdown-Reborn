@@ -5,8 +5,8 @@ const common = require('./../../common');
 
 let battle;
 
-describe("Tera Stellar", function () {
-	afterEach(function () {
+describe("Tera Stellar", () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
@@ -62,11 +62,11 @@ describe("Tera Stellar", function () {
 		assert.deepEqual(p.stellarBoostedTypes, ['Water']);
 	});
 
-	it(`should not modify the Pokemon's base type for defensive purposes`, function () {
+	it(`should not modify the Pokemon's base type for defensive purposes`, () => {
 		battle = common.createBattle([[
-			{species: 'Krookodile', moves: ['sleeptalk'], teraType: 'Stellar'},
+			{ species: 'Krookodile', moves: ['sleeptalk'], teraType: 'Stellar' },
 		], [
-			{species: 'Tornadus', ability: 'prankster', moves: ['psychic', 'thunderwave', 'leer']},
+			{ species: 'Tornadus', ability: 'prankster', moves: ['psychic', 'thunderwave', 'leer'] },
 		]]);
 
 		const krookodile = battle.p1.active[0];
@@ -83,11 +83,11 @@ describe("Tera Stellar", function () {
 		assert.statStage(krookodile, 'def', 0);
 	});
 
-	it(`should only be super-effective against opposing Terastallized targets`, function () {
+	it(`should only be super-effective against opposing Terastallized targets`, () => {
 		battle = common.createBattle([[
-			{species: 'Krookodile', moves: ['terablast'], teraType: 'Stellar'},
+			{ species: 'Krookodile', moves: ['terablast'], teraType: 'Stellar' },
 		], [
-			{species: 'Steelix', item: 'weaknesspolicy', moves: ['sleeptalk'], teraType: 'Stellar'},
+			{ species: 'Steelix', item: 'weaknesspolicy', moves: ['sleeptalk'], teraType: 'Stellar' },
 		]]);
 
 		const steelix = battle.p2.active[0];
@@ -95,11 +95,11 @@ describe("Tera Stellar", function () {
 		assert.statStage(steelix, 'atk', 2);
 	});
 
-	it(`should increase the user's stats with Tera Blast if the user has Contrary`, function () {
+	it(`should increase the user's stats with Tera Blast if the user has Contrary`, () => {
 		battle = common.createBattle([[
-			{species: 'inkay', ability: 'contrary', moves: ['terablast'], teraType: 'Stellar'},
+			{ species: 'inkay', ability: 'contrary', moves: ['terablast'], teraType: 'Stellar' },
 		], [
-			{species: 'chansey', moves: ['sleeptalk']},
+			{ species: 'chansey', moves: ['sleeptalk'] },
 		]]);
 
 		const inkay = battle.p1.active[0];

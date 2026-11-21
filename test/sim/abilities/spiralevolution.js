@@ -5,20 +5,20 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Spiral Evolution', function () {
-	afterEach(function () {
+describe('Spiral Evolution', () => {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
-	it('ignores every custom field Speed penalty', function () {
+	it('ignores every custom field Speed penalty', () => {
 		const fields = [
 			'coldeclipseterrain', 'icyterrain', 'murkwatersurfaceterrain', 'newworldterrain',
 			'snowyterrain', 'underwaterterrain', 'watersurfaceterrain',
 		];
 		for (const field of fields) {
-			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-				[{species: 'Eevee', ability: 'Spiral Evolution', moves: ['Splash']}],
-				[{species: 'Magikarp', moves: ['Splash']}],
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+				[{ species: 'Eevee', ability: 'Spiral Evolution', moves: ['Splash'] }],
+				[{ species: 'Magikarp', moves: ['Splash'] }],
 			]);
 			battle.makeChoices('team 1', 'team 1');
 			const eevee = battle.p1.active[0];
@@ -30,14 +30,14 @@ describe('Spiral Evolution', function () {
 	});
 
 	it('does not retain the removed Shield Dust component', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Eevee', ability: 'Spiral Evolution', moves: ['Splash']}],
-			[{species: 'Magikarp', moves: ['Splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Eevee', ability: 'Spiral Evolution', moves: ['Splash'] }],
+			[{ species: 'Magikarp', moves: ['Splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const eevee = battle.p1.active[0];
 		const flamethrower = battle.dex.getActiveMove('flamethrower');
-		const secondaries = [{chance: 100, status: 'brn'}];
+		const secondaries = [{ chance: 100, status: 'brn' }];
 		assert(!eevee.hasAbility('Shield Dust'));
 		assert.deepEqual(battle.runEvent('ModifySecondaries', eevee, battle.p2.active[0], flamethrower, secondaries), secondaries);
 	});

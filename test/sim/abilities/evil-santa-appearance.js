@@ -6,10 +6,10 @@ describe('Evil Santa cosmetic appearance', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 	function start(ability = 'Evil Santa') {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Delibird', ability, moves: ['splash']},
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
-		], [{species: 'Mew', ability: 'No Ability', moves: ['splash']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Delibird', ability, moves: ['splash'] },
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+		], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
 		battle.makeChoices('team 12', 'team 1');
 		return battle.p1.active[0];
 	}

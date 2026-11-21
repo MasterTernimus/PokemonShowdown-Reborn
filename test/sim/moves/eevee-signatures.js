@@ -5,22 +5,22 @@ const common = require('../../common');
 
 let battle;
 
-describe('Eevee signature moves', function () {
-	afterEach(function () {
+describe('Eevee signature moves', () => {
+	afterEach(() => {
 		battle?.destroy();
 		battle = null;
 	});
 
 	function startBattle(moves, targetSpecies = 'Blissey') {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Eevee-Starter', ability: 'runaway', moves},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Eevee-Starter', ability: 'runaway', moves },
 		], [
-			{species: targetSpecies, ability: 'naturalcure', moves: ['splash']},
+			{ species: targetSpecies, ability: 'naturalcure', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 	}
 
-	it('runs every post-hit effect from the Eevee signature moves', function () {
+	it('runs every post-hit effect from the Eevee signature moves', () => {
 		startBattle(['punchypummel']);
 		battle.makeChoices('move punchypummel', 'move splash');
 		assert.equal(battle.p2.active[0].boosts.def, -1);
@@ -52,7 +52,7 @@ describe('Eevee signature moves', function () {
 		assert.equal(battle.p1.active[0].boosts.spa, 1);
 	});
 
-	it('clears hazards with Twirly Twister and applies Forest effects for Stabby Swarm', function () {
+	it('clears hazards with Twirly Twister and applies Forest effects for Stabby Swarm', () => {
 		startBattle(['rockyrampage', 'twirlytwister']);
 		battle.makeChoices('move rockyrampage', 'move splash');
 		assert(battle.p2.sideConditions.stealthrock);
@@ -60,10 +60,10 @@ describe('Eevee signature moves', function () {
 		assert.false(battle.p2.sideConditions.stealthrock);
 
 		battle.destroy();
-		battle = common.createBattle({formatid: 'gen9forestfield'}, [[
-			{species: 'Eevee-Starter', ability: 'runaway', moves: ['stabbyswarm']},
+		battle = common.createBattle({ formatid: 'gen9forestfield' }, [[
+			{ species: 'Eevee-Starter', ability: 'runaway', moves: ['stabbyswarm'] },
 		], [
-			{species: 'Blissey', ability: 'naturalcure', moves: ['splash']},
+			{ species: 'Blissey', ability: 'naturalcure', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move stabbyswarm', 'move splash');
@@ -71,11 +71,11 @@ describe('Eevee signature moves', function () {
 		assert.equal(battle.p2.active[0].boosts.def, -1);
 	});
 
-	it('removes opposing screens with Steely Strike', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Eevee-Starter', ability: 'runaway', moves: ['steelystrike', 'splash']},
+	it('removes opposing screens with Steely Strike', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Eevee-Starter', ability: 'runaway', moves: ['steelystrike', 'splash'] },
 		], [
-			{species: 'Blissey', ability: 'naturalcure', moves: ['reflect', 'splash']},
+			{ species: 'Blissey', ability: 'naturalcure', moves: ['reflect', 'splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash', 'move reflect');
@@ -84,7 +84,7 @@ describe('Eevee signature moves', function () {
 		assert.false(battle.p2.sideConditions.reflect);
 	});
 
-	it('creates Glitch Field with Glitchy Graphics', function () {
+	it('creates Glitch Field with Glitchy Graphics', () => {
 		startBattle(['glitchygraphics']);
 		battle.makeChoices('move glitchygraphics', 'move splash');
 		assert.equal(battle.field.terrain, 'glitchterrain');

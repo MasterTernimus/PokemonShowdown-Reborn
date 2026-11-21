@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Hyper Beam`, function () {
-	afterEach(function () {
+describe(`Hyper Beam`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should always force a recharge turn`, function () {
+	it(`should always force a recharge turn`, () => {
 		battle = common.createBattle([[
-			{species: 'snorlax', ability: 'noguard', moves: ['hyperbeam', 'tackle']},
+			{ species: 'snorlax', ability: 'noguard', moves: ['hyperbeam', 'tackle'] },
 		], [
-			{species: 'alakazam', moves: ['substitute']},
+			{ species: 'alakazam', moves: ['substitute'] },
 		]]);
 		battle.makeChoices();
 		assert.cantMove(() => battle.choose('p1', 'move tackle'));
@@ -22,10 +22,10 @@ describe(`Hyper Beam`, function () {
 
 	common.itGen(1, `[Gen 1] should not force a recharge turn after KOing a Pokemon`, () => {
 		battle = common.gen(1).createBattle([[
-			{species: 'snorlax', moves: ['hyperbeam', 'tackle']},
+			{ species: 'snorlax', moves: ['hyperbeam', 'tackle'] },
 		], [
-			{species: 'abra', moves: ['swordsdance']},
-			{species: 'exeggutor', moves: ['swordsdance']},
+			{ species: 'abra', moves: ['swordsdance'] },
+			{ species: 'exeggutor', moves: ['swordsdance'] },
 		]]);
 		battle.makeChoices();
 		battle.choose('p2', 'switch exeggutor');
@@ -34,19 +34,19 @@ describe(`Hyper Beam`, function () {
 
 	common.itGen(1, `[Gen 1] should not force a recharge turn after breaking a Substitute`, () => {
 		battle = common.gen(1).createBattle([[
-			{species: 'snorlax', moves: ['hyperbeam', 'tackle']},
+			{ species: 'snorlax', moves: ['hyperbeam', 'tackle'] },
 		], [
-			{species: 'alakazam', moves: ['substitute']},
+			{ species: 'alakazam', moves: ['substitute'] },
 		]]);
 		battle.makeChoices();
 		assert.false.cantMove(() => battle.choose('p1', 'move tackle'));
 	});
 
 	common.itGen(1, `[Gen 1] should force a recharge turn after damaging, but not breaking a Substitute`, () => {
-		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
-			{species: 'slowpoke', moves: ['hyperbeam', 'tackle']},
+		battle = common.gen(1).createBattle({ forceRandomChance: true }, [[
+			{ species: 'slowpoke', moves: ['hyperbeam', 'tackle'] },
 		], [
-			{species: 'rhydon', moves: ['substitute']},
+			{ species: 'rhydon', moves: ['substitute'] },
 		]]);
 		battle.makeChoices();
 		assert.cantMove(() => battle.choose('p1', 'move tackle'));

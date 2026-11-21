@@ -2,7 +2,7 @@
 
 const assert = require('./../assert');
 const common = require('./../common');
-const {Gen8Gen9NatDexLearnsets} = require('../../dist/data/natdex-gen8-gen9-learnsets');
+const { Gen8Gen9NatDexLearnsets } = require('../../dist/data/natdex-gen8-gen9-learnsets');
 
 const TEST_MOVES_BY_TYPE = {
 	Normal: 'tackle', Fire: 'ember', Water: 'watergun', Bug: 'strugglebug', Electric: 'thundershock',
@@ -11,8 +11,8 @@ const TEST_MOVES_BY_TYPE = {
 	Psychic: 'confusion', Grass: 'leafage', Ice: 'powdersnow',
 };
 
-describe('Custom G-Max audit', function () {
-	it('gives every non-cosmetic G-Max form its own HP and applies it in battle', function () {
+describe('Custom G-Max audit', () => {
+	it('gives every non-cosmetic G-Max form its own HP and applies it in battle', () => {
 		const dex = common.gen(9).dex;
 		const gmaxForms = dex.species.all().filter(species =>
 			species.exists && species.forme.includes('Gmax') && !species.isCosmeticForme
@@ -28,10 +28,10 @@ describe('Custom G-Max audit', function () {
 		assert.equal(dex.species.get('Grimmsnarl-Gmax').baseStats.hp, 143);
 		assert.equal(dex.species.get('Grimmsnarl-Gmax-Azzy').baseStats.hp, 143);
 
-		const battle = common.createBattle({formatid: 'gen9mistyfieldadrienn'}, [[
-			{species: 'Grimmsnarl', ability: 'noability', gigantamax: true, moves: ['tackle']},
+		const battle = common.createBattle({ formatid: 'gen9mistyfieldadrienn' }, [[
+			{ species: 'Grimmsnarl', ability: 'noability', gigantamax: true, moves: ['tackle'] },
 		], [
-			{species: 'Magikarp', moves: ['splash']},
+			{ species: 'Magikarp', moves: ['splash'] },
 		]]);
 		try {
 			battle.makeChoices('team 1', 'team 1');
@@ -47,7 +47,7 @@ describe('Custom G-Max audit', function () {
 		}
 	});
 
-	it('resolves every G-Max-capable species and form', function () {
+	it('resolves every G-Max-capable species and form', () => {
 		const dex = common.gen(9).dex;
 		const eligible = dex.species.all().filter(species =>
 			species.exists && !species.forme.includes('Gmax') && species.canGigantamax
@@ -59,10 +59,10 @@ describe('Custom G-Max audit', function () {
 			try {
 				const gmaxMove = dex.moves.get(species.canGigantamax);
 				const baseMove = gmaxMove.id === 'gmaxcuddle' ? 'tackle' : TEST_MOVES_BY_TYPE[gmaxMove.type] || 'tackle';
-				battle = common.createBattle({formatid: 'gen9mistyfieldadrienn'}, [[
-					{species: species.id, ability: 'noability', gigantamax: true, moves: [baseMove]},
+				battle = common.createBattle({ formatid: 'gen9mistyfieldadrienn' }, [[
+					{ species: species.id, ability: 'noability', gigantamax: true, moves: [baseMove] },
 				], [
-					{species: 'Magikarp', moves: ['splash']},
+					{ species: 'Magikarp', moves: ['splash'] },
 				]]);
 				battle.makeChoices('team 1', 'team 1');
 				const pokemon = battle.p1.active[0];
@@ -94,7 +94,7 @@ describe('Custom G-Max audit', function () {
 		assert.deepEqual(failures, []);
 	});
 
-	it('scopes Nature Power to NatDex sources and Grass final evolutions', function () {
+	it('scopes Nature Power to NatDex sources and Grass final evolutions', () => {
 		const dex = common.gen(9).dex;
 		const expected = new Set(Object.entries(Gen8Gen9NatDexLearnsets)
 			.filter(([, data]) => data.learnset?.naturepower)
@@ -114,5 +114,4 @@ describe('Custom G-Max audit', function () {
 		assert.deepEqual(missing, []);
 		assert(!dex.data.Learnsets.flox, 'Unsupported species should not receive imported learnsets');
 	});
-
 });

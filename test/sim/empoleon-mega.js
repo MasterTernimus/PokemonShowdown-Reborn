@@ -2,8 +2,8 @@
 
 const assert = require('assert').strict;
 const common = require('../common');
-const {Dex} = require('../../dist/sim');
-const {TeamValidator} = require('../../dist/sim/team-validator');
+const { Dex } = require('../../dist/sim');
+const { TeamValidator } = require('../../dist/sim/team-validator');
 
 describe('Empoleon and Empoleon-Mega', () => {
 	let battle;
@@ -14,10 +14,10 @@ describe('Empoleon and Empoleon-Mega', () => {
 			{ hp: 84, atk: 86, def: 118, spa: 156, spd: 121, spe: 70 });
 		assert.equal(Dex.species.get('Empoleon-Mega').bst, 635);
 		const validator = TeamValidator.get('gen9nofieldsinglesgame');
-		assert.equal(validator.validateTeam([{species: 'Empoleon', item: 'Empoleonite', moves: ['Surf', 'Protect']}]), null);
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Empoleon', item: 'Empoleonite', moves: ['splash']},
-		], [{species: 'Mew', moves: ['splash']}]]);
+		assert.equal(validator.validateTeam([{ species: 'Empoleon', item: 'Empoleonite', moves: ['Surf', 'Protect'] }]), null);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Empoleon', item: 'Empoleonite', moves: ['splash'] },
+		], [{ species: 'Mew', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		const empoleon = battle.p1.active[0];
 		assert.equal(empoleon.canMegaEvo, 'Empoleon-Mega-Y');
@@ -40,9 +40,9 @@ describe('Empoleon and Empoleon-Mega', () => {
 	});
 
 	it('gives Exalt slicing and Steel Wing power without extra STAB or rain Speed', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Empoleon', ability: 'Exalt', moves: ['icebeam', 'aerialace']},
-		], [{species: 'Mew', moves: ['splash']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Empoleon', ability: 'Exalt', moves: ['icebeam', 'aerialace'] },
+		], [{ species: 'Mew', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		const empoleon = battle.p1.active[0];
 		for (const moveId of ['icebeam', 'aerialace']) {

@@ -5,9 +5,9 @@ describe('Machamp G-Max ability', () => {
 	for (const species of ['Machamp', 'Machamp-Alt']) {
 		for (const ability of ['Grit and Glory', 'Fourthhold Guard', 'Perfect Form']) {
 			it(`${species} gains Titan's Knuckles from ${ability}`, () => {
-				const battle = common.createBattle({formatid: 'gen9mistyfieldadrienn'}, [
-					[{species, ability, gigantamax: true, moves: ['splash']}],
-					[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+				const battle = common.createBattle({ formatid: 'gen9mistyfieldadrienn' }, [
+					[{ species, ability, gigantamax: true, moves: ['splash'] }],
+					[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 				]);
 				try {
 					battle.makeChoices('team 1', 'team 1');

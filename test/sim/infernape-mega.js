@@ -2,8 +2,8 @@
 
 const assert = require('assert').strict;
 const common = require('../common');
-const {Dex} = require('../../dist/sim');
-const {TeamValidator} = require('../../dist/sim/team-validator');
+const { Dex } = require('../../dist/sim');
+const { TeamValidator } = require('../../dist/sim/team-validator');
 
 describe('Infernape and Infernape-Mega', () => {
 	let battle;
@@ -11,10 +11,10 @@ describe('Infernape and Infernape-Mega', () => {
 
 	it('allows regular Infernape to Mega Evolve with Infernite', () => {
 		const validator = TeamValidator.get('gen9nofieldsinglesgame');
-		assert.equal(validator.validateTeam([{species: 'Infernape', item: 'Infernite', moves: ['Flamethrower', 'Protect']}]), null);
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Infernape', item: 'Infernite', moves: ['splash']},
-		], [{species: 'Mew', moves: ['splash']}]]);
+		assert.equal(validator.validateTeam([{ species: 'Infernape', item: 'Infernite', moves: ['Flamethrower', 'Protect'] }]), null);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Infernape', item: 'Infernite', moves: ['splash'] },
+		], [{ species: 'Mew', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		const infernape = battle.p1.active[0];
 		assert.equal(infernape.canMegaEvo, 'Infernape-Mega');

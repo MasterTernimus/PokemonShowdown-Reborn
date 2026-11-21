@@ -2,7 +2,7 @@
 
 const assert = require('./../../assert');
 const common = require('./../../common');
-const {Dex} = require('./../../../dist/sim');
+const { Dex } = require('./../../../dist/sim');
 
 let battle;
 
@@ -14,11 +14,11 @@ describe('Muk-Pulse custom effects', () => {
 	it('should keep Muk-Pulse independent from the restored Muk profile', () => {
 		const muk = Dex.species.get('Muk');
 		const pulse = Dex.species.get('Muk-Pulse');
-		assert.deepEqual(muk.baseStats, {hp: 105, atk: 105, def: 75, spa: 85, spd: 100, spe: 30});
-		assert.deepEqual(muk.abilities, {0: 'Accumulation', 1: 'Poison Touch', H: 'Regenerator'});
+		assert.deepEqual(muk.baseStats, { hp: 105, atk: 105, def: 75, spa: 85, spd: 100, spe: 30 });
+		assert.deepEqual(muk.abilities, { 0: 'Accumulation', 1: 'Poison Touch', H: 'Regenerator' });
 		assert.deepEqual(muk.otherFormes, ['Muk-Alola', 'Muk-Pulse']);
-		assert.deepEqual(pulse.baseStats, {hp: 105, atk: 105, def: 75, spa: 108, spd: 167, spe: 40});
-		assert.deepEqual(pulse.abilities, {0: 'Pulse Waste'});
+		assert.deepEqual(pulse.baseStats, { hp: 105, atk: 105, def: 75, spa: 108, spd: 167, spe: 40 });
+		assert.deepEqual(pulse.abilities, { 0: 'Pulse Waste' });
 		assert.equal(pulse.baseSpecies, 'Muk');
 		assert.equal(Object.values(pulse.baseStats).reduce((sum, stat) => sum + stat, 0), 600);
 		assert.legalTeam([{
@@ -27,10 +27,10 @@ describe('Muk-Pulse custom effects', () => {
 	});
 
 	it('should apply Pulse Waste contact poisoning', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Muk', item: 'Anomaly Core', ability: 'Poison Touch', moves: ['splash', 'tackle']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Muk', item: 'Anomaly Core', ability: 'Poison Touch', moves: ['splash', 'tackle'] },
 		], [
-			{species: 'Mew', moves: ['splash']},
+			{ species: 'Mew', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move 1 mega', 'move splash');
@@ -41,16 +41,16 @@ describe('Muk-Pulse custom effects', () => {
 		assert(muk.hasAbility('poisontouch'));
 		assert(muk.hasAbility('regenerator'));
 		battle.random = () => 0;
-		battle.actions.runMove('tackle', muk, muk.getLocOf(target), {externalMove: true});
+		battle.actions.runMove('tackle', muk, muk.getLocOf(target), { externalMove: true });
 		assert.equal(target.status, 'psn');
 	});
 
 	it('should use Protean and Regenerator through Pulse Waste', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Muk', item: 'Anomaly Core', ability: 'Poison Touch', moves: ['splash', 'watergun']},
-			{species: 'Chansey', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Muk', item: 'Anomaly Core', ability: 'Poison Touch', moves: ['splash', 'watergun'] },
+			{ species: 'Chansey', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['splash']},
+			{ species: 'Mew', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 12', 'team 1');
 		const foe = battle.p2.active[0];
@@ -70,10 +70,10 @@ describe('Muk-Pulse custom effects', () => {
 
 	for (const [release, displayName] of [['belch', 'Belch'], ['spitup', 'Spit Up']]) {
 		it(`should be able to randomly auto-release ${displayName} at three Stockpiles`, () => {
-			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-				{species: 'Muk', ability: 'Accumulation', moves: ['splash']},
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+				{ species: 'Muk', ability: 'Accumulation', moves: ['splash'] },
 			], [
-				{species: 'Mew', moves: ['splash']},
+				{ species: 'Mew', moves: ['splash'] },
 			]]);
 			battle.makeChoices('team 1', 'team 1');
 			const originalSample = battle.sample.bind(battle);

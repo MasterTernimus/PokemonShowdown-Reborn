@@ -27,7 +27,7 @@ describe('Mega composite ability components', () => {
 		// Blissey's natural Normal typing is immune to Ghost attacks.
 		foe.setType('Psychic');
 		foe.hp = foe.maxhp = foe.baseMaxhp = 10000;
-		battle.actions.useMove('shadowpunch', gengar, {target: foe});
+		battle.actions.useMove('shadowpunch', gengar, { target: foe });
 		battle.clearActiveMove();
 		assert(foe.hp < 10000);
 		assert(gengar.volatiles.shadowdoublespent.armed);
@@ -42,7 +42,7 @@ describe('Mega composite ability components', () => {
 		const [gengar, foe] = mega('Gengar', 'Gengarite');
 		foe.setType('Psychic');
 		foe.hp = foe.maxhp = foe.baseMaxhp = 10000;
-		battle.actions.useMove('shadowpunch', gengar, {target: foe});
+		battle.actions.useMove('shadowpunch', gengar, { target: foe });
 		battle.clearActiveMove();
 		assert(gengar.volatiles.shadowdoublespent.armed);
 		assert(gengar.addVolatile('gastroacid', foe));

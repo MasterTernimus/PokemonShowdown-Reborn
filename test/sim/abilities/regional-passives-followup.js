@@ -21,7 +21,7 @@ describe('Latest approved passive routing and scope preservation', () => {
 		battle = null;
 	});
 	it('leaves rejected choices and excluded new groups unassigned', () => {
-		const held = [ 'gardevoir', 'mawilemega', 'milotic', 'salamence', 'seviper', 'roserade', 'cherrim', 'probopass', 'bronzong', 'rhyperior', 'clawitzer', 'clawitzermega', 'meowstic', 'meowsticf', 'kommoo', 'golisopod', 'corviknight', 'armarouge', 'baxcalibur', 'tinkaton', 'kingambit', 'archaludon', 'glimmora', 'glimmoramega', 'bellibolt', 'scovillain', 'rabsca', 'dondozo', 'garchomp', 'garchompmegaz', 'garchompbattlebond', 'weavile', 'sigilyph', 'excadrill', 'krookodile', 'escavalier', 'conkeldurr'];
+		const held = ['gardevoir', 'mawilemega', 'milotic', 'salamence', 'seviper', 'roserade', 'cherrim', 'probopass', 'bronzong', 'rhyperior', 'clawitzer', 'clawitzermega', 'meowstic', 'meowsticf', 'kommoo', 'golisopod', 'corviknight', 'armarouge', 'baxcalibur', 'tinkaton', 'kingambit', 'archaludon', 'glimmora', 'glimmoramega', 'bellibolt', 'scovillain', 'rabsca', 'dondozo', 'garchomp', 'garchompmegaz', 'garchompbattlebond', 'weavile', 'sigilyph', 'excadrill', 'krookodile', 'escavalier', 'conkeldurr'];
 		for (const id of held.filter(id => ![...Object.values(require('./latest-passives-approved.json').groups).flat(), ...Object.values(require('./settled-passives-approved.json').groups).flat()].includes(id))) {
 			const p = Dex.species.get(id);
 			if (p.exists)

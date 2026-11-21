@@ -9,10 +9,10 @@ describe('Redirection move requests', () => {
 	for (const move of ['followme', 'ragepowder']) {
 		for (const gameType of ['doubles', 'multi']) {
 			it(`${move} accepts a self-targeting request in ${gameType}`, () => {
-				const user = {species: 'Mew', ability: 'No Ability', moves: [move]};
-				const idle = {species: 'Mew', ability: 'No Ability', moves: ['splash']};
+				const user = { species: 'Mew', ability: 'No Ability', moves: [move] };
+				const idle = { species: 'Mew', ability: 'No Ability', moves: ['splash'] };
 				const teams = gameType === 'doubles' ? [[user, idle], [idle, idle]] : [[user], [idle], [idle], [idle]];
-				battle = common.createBattle({gameType}, teams);
+				battle = common.createBattle({ gameType }, teams);
 				assert.equal(battle.p1.active[0].getMoves()[0].target, 'self');
 				if (gameType === 'doubles') battle.makeChoices(`move ${move}, move splash`, 'move splash, move splash');
 				else battle.makeChoices(`move ${move}`, 'move splash', 'move splash', 'move splash');
@@ -20,9 +20,9 @@ describe('Redirection move requests', () => {
 			});
 		}
 		it(`${move} retains selected-opponent redirection in free-for-all`, () => {
-			battle = common.createBattle({gameType: 'freeforall'}, [
-				[{species: 'Mew', ability: 'No Ability', moves: [move]}],
-				...Array.from({length: 3}, () => [{species: 'Mew', ability: 'No Ability', moves: ['tackle', 'splash']}]),
+			battle = common.createBattle({ gameType: 'freeforall' }, [
+				[{ species: 'Mew', ability: 'No Ability', moves: [move] }],
+				...Array.from({ length: 3 }, () => [{ species: 'Mew', ability: 'No Ability', moves: ['tackle', 'splash'] }]),
 			]);
 			const user = battle.p1.active[0];
 			assert.equal(user.getMoves()[0].target, 'normal');

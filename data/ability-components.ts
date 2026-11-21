@@ -1,10 +1,10 @@
-import {AbilityComponentExclusions} from './passive-ability-cleanup';
+import { AbilityComponentExclusions } from './passive-ability-cleanup';
 /** Genuine mechanical components shared by battle identity and search. */
 export const AbilityComponents: { [id: string]: string[] } = {
- piercingdrill: [],
- deepbore: ['moldbreaker', 'powerdrill'],
- grandmaster: ['innerfocus'],
- swiftvenom: ['swiftswim', 'merciless'],
+	piercingdrill: [],
+	deepbore: ['moldbreaker', 'powerdrill'],
+	grandmaster: ['innerfocus'],
+	swiftvenom: ['swiftswim', 'merciless'],
 	dreaddominion: ['hydrabond', 'moxie', 'intimidate'],
 	eternalflower: ['moldbreaker'],
 	ange: ['moldbreaker'],
@@ -136,7 +136,14 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	crystalresonance: ['amethystglow', 'magicbounce'],
 	windchime: ['armorize', 'punkrock', 'levitate'],
 	bogbody: ['thickfat', 'levitate', 'dryskin'],
-	solarhydra: ['hydrabond', 'grassysurge', 'solarpower', 'selfrepair', 'selfsufficient', 'naturalcure'],
+	solarhydra: [
+		'hydrabond',
+		'grassysurge',
+		'solarpower',
+		'selfrepair',
+		'selfsufficient',
+		'naturalcure',
+	],
 	astralengine: ['elevate', 'powerspot', 'analytic'],
 	hauntedchime: ['elevate', 'windpower', 'cursedbody'],
 	auramaster: ['dualwield', 'innerfocus', 'technician'],
@@ -238,7 +245,14 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	seasonalstride: ['chlorophyll'],
 	slowclamp: ['shellarmor', 'owntempo', 'analytic'],
 	solartrap: ['accumulation', 'digestivesap', 'liquidooze'],
-	spiralevolution: ['moldbreaker', 'adaptability', 'levitate', 'dualwield', 'infiltrator', 'shielddust'],
+	spiralevolution: [
+		'moldbreaker',
+		'adaptability',
+		'levitate',
+		'dualwield',
+		'infiltrator',
+		'shielddust',
+	],
 	stormsovereign: ['galewings', 'keeneye'],
 	sunsovereign: ['moldbreaker', 'drought', 'unboundblaze', 'selfsufficient', 'proficient'],
 	terraresolve: ['stamina', 'suctioncups', 'solidrock', 'proficient'],
@@ -302,109 +316,72 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	seviischooling: ['schooling', 'hydrabond', 'selfrepair', 'moldbreaker'],
 };
 Object.assign(AbilityComponents, {
-	"updraft": ['competitive'],
-	"corneredfang": [
-		"guts",
-	],
-	"nighthoard": [],
-	"dunerunner": [
-		"sandrush",
-	],
-	"frostrunner": [
-		"slushrush",
-	],
-	"bedrockclaw": [
-		"toughclaws",
-	],
-	"rimeclaw": [
-		"toughclaws",
-	],
-	"broodguard": [
-		"thickfat",
-		"friendguard",
-	],
-	"suncharm": [
-		"drought",
-	],
-	"causticscales": [],
-	"prismwings": [
-		"tintedlens",
-	],
-	"oneiricdust": [
-		"psychicsurge",
-	],
-	"pincercrush": [
-		"toughclaws",
-	],
-	"decoypincers": [],
-	"toxiccocoon": ["shielddust"],
-	"galebloom": [],
-	"gemeye": [
-		"keeneye",
-		"magicguard",
-	],
-	"lastlaugh": ["stall"],
-	"openingoverture": [],
-	"resonantblade": [],
-	"finalnote": [],
-	"livingtangle": [
-		"tanglinghair",
-		"stamina",
-	],
-	"rootrenewal": [
-		"regenerator",
-	],
-	"fortunatewing": [
-		"superluck",
-	],
-	"snowpack": [
-		"thickfat",
-		"icebody",
-		"toughclaws",
-	],
-	"icemirror": [],
-	"wailingsnow": [],
-	"stonewall": [
-		"sturdy",
-	],
-	"saltbastion": [
-		"sturdy",
-	],
-	"anchorbridge": [
-		"sturdy",
-	],
-	"layeredshell": [
-		"shellarmor",
-	],
-	"breakaway": [],
-	"fossilram": [
-		"rockhead",
-	],
-	"rootediron": [
-		"stamina",
-	],
-	"encorearia": [
-		"serenegrace",
-	],
-	"peppersting": [
-		"insomnia",
-	],
-	"sushitrick": [
-		"hospitality",
-	],
-	"mastercourse": [
-		"contrary",
-	],
-	"secondbrew": [],
-	"railsight": [
-		"stalwart",
-	],
+	updraft: ['competitive'],
+	corneredfang: ['guts'],
+	nighthoard: [],
+	dunerunner: ['sandrush'],
+	frostrunner: ['slushrush'],
+	bedrockclaw: ['toughclaws'],
+	rimeclaw: ['toughclaws'],
+	broodguard: ['thickfat', 'friendguard'],
+	suncharm: ['drought'],
+	causticscales: [],
+	prismwings: ['tintedlens'],
+	oneiricdust: ['psychicsurge'],
+	pincercrush: ['toughclaws'],
+	decoypincers: [],
+	toxiccocoon: ['shielddust'],
+	galebloom: [],
+	gemeye: ['keeneye', 'magicguard'],
+	lastlaugh: ['stall'],
+	openingoverture: [],
+	resonantblade: [],
+	finalnote: [],
+	livingtangle: ['tanglinghair', 'stamina'],
+	rootrenewal: ['regenerator'],
+	fortunatewing: ['superluck'],
+	snowpack: ['thickfat', 'icebody', 'toughclaws'],
+	icemirror: [],
+	wailingsnow: [],
+	stonewall: ['sturdy'],
+	saltbastion: ['sturdy'],
+	anchorbridge: ['sturdy'],
+	layeredshell: ['shellarmor'],
+	breakaway: [],
+	fossilram: ['rockhead'],
+	rootediron: ['stamina'],
+	encorearia: ['serenegrace'],
+	peppersting: ['insomnia'],
+	sushitrick: ['hospitality'],
+	mastercourse: ['contrary'],
+	secondbrew: [],
+	railsight: ['stalwart'],
 });
 
-export function abilityIncludesComponent(ability: string, component: string, seen = new Set<string>()): boolean {
+export function abilityIncludesComponent(
+	ability: string,
+	component: string,
+	seen = new Set<string>(),
+): boolean {
 	const normalized = ability.toLowerCase().replace(/[^a-z0-9]/g, '');
-	const rawId = Object.entries(NovemberAbilityNames).find(([, name]) => name.toLowerCase().replace(/[^a-z0-9]/g, '') === normalized)?.[0] || normalized;
-	const id = ({duskego: 'duskdrive', bedrockclaw:'duneclaws',rimeclaw:'glacierclaws',dunerunner:'sandrush',frostrunner:'slushrush',mineralgrip:'barbharvest',royalonslaught:'patriarchswrath',royalaegis:'matriarchsvigil',masterptissier:'masterpatissier'} as {[id:string]:string})[rawId] || rawId;
+	const rawId =
+		Object.entries(NovemberAbilityNames).find(
+			([, name]) => name.toLowerCase().replace(/[^a-z0-9]/g, '') === normalized,
+		)?.[0] || normalized;
+	const id =
+		(
+			{
+				duskego: 'duskdrive',
+				bedrockclaw: 'duneclaws',
+				rimeclaw: 'glacierclaws',
+				dunerunner: 'sandrush',
+				frostrunner: 'slushrush',
+				mineralgrip: 'barbharvest',
+				royalonslaught: 'patriarchswrath',
+				royalaegis: 'matriarchsvigil',
+				masterptissier: 'masterpatissier',
+			} as { [id: string]: string }
+		)[rawId] || rawId;
 	const queryID = component.toLowerCase().replace(/[^a-z0-9]/g, '');
 	const query = queryID === 'duskego' ? 'duskdrive' : queryID;
 	if (id === query) return true;
@@ -415,160 +392,107 @@ export function abilityIncludesComponent(ability: string, component: string, see
 }
 
 Object.assign(AbilityComponents, {
-  "sovereignarsenal": [],
-  "pollenengine": [
-    "chlorophyll"
-  ],
-  "titanpincer": [
-    "hypercutter"
-  ],
-  "shellcracker": ['moldbreaker'],
-  "tidaldominion": [
-    "swiftswim"
-  ],
-  "tempestfury": ["angerpoint"],
-  "ironlash": [
-    "whiplash"
-  ],
-  "trailbreaker": [],
-  "armoredadvance": [],
-  "gritgrappler": [
-    "guts"
-  ],
-  "dreadjaw": [
-    "moxie"
-  ],
-  "floehunter": [
-    "slushrush"
-  ],
-  "lanceguard": [
-    "shellarmor"
-  ],
-  "headlongresolve": [],
-  "herdshelter": [
-    "soundproof"
-  ],
-  "scorchsweep": [],
-  "opensky": [],
-  "tidalvoice": [
-    "liquidvoice", "soundproof"
-  ],
-  "rechargerelay": [
-    "battery"
-  ],
-  "hovercannon": [
-    "levitate"
-  ],
-  "keenhunt": [],
-  "bloodchallenge": [],
-  "twilightinstinct": [],
-  "twincannons": [],
-  "twinblades": [],
-  "heatreservoir": [],
-  "mourningcoat": [
-    "fluffy"
-  ],
-  "gravewind": [
-    "sandrush"
-  ],
-  "dozinggiant": [
-    "oblivious"
-  ],
-  "quillreservoir": [
-    "waterabsorb"
-  ],
-  "raisedquills": []
+	sovereignarsenal: [],
+	pollenengine: ['chlorophyll'],
+	titanpincer: ['hypercutter'],
+	shellcracker: ['moldbreaker'],
+	tidaldominion: ['swiftswim'],
+	tempestfury: ['angerpoint'],
+	ironlash: ['whiplash'],
+	trailbreaker: [],
+	armoredadvance: [],
+	gritgrappler: ['guts'],
+	dreadjaw: ['moxie'],
+	floehunter: ['slushrush'],
+	lanceguard: ['shellarmor'],
+	headlongresolve: [],
+	herdshelter: ['soundproof'],
+	scorchsweep: [],
+	opensky: [],
+	tidalvoice: ['liquidvoice', 'soundproof'],
+	rechargerelay: ['battery'],
+	hovercannon: ['levitate'],
+	keenhunt: [],
+	bloodchallenge: [],
+	twilightinstinct: [],
+	twincannons: [],
+	twinblades: [],
+	heatreservoir: [],
+	mourningcoat: ['fluffy'],
+	gravewind: ['sandrush'],
+	dozinggiant: ['oblivious'],
+	quillreservoir: ['waterabsorb'],
+	raisedquills: [],
 });
 
 Object.assign(AbilityComponents, {
-  "mountainbreaker": [],
-  "dreadpresence": [],
-  "palmmastery": [
-    "thickfat"
-  ],
-  "galvanicspirit": [
-    "vitalspirit"
-  ],
-  "blastchamber": [
-    "vitalspirit"
-  ],
-  "venomspurs": [],
-  "lastbrood": [
-    "swarm"
-  ],
-  "venombastion": [
-    "stamina"
-  ],
-  "shadowfeint": [],
-	"silksights": ["compoundeyes", "keeneye"],
-  "livenet": [
-    "unnerve"
-  ],
-  "barbharvest": [
-    "ironbarbs"
-  ],
-  "currentcoil": [
-    "swiftswim"
-  ],
-  "stormcircuit": [
-    "electricsurge",
-    "elevate",
-    "currentcoil",
-    "swiftswim"
-  ],
-  "soulpyre": ["infiltrator"],
-  "blackviper": [
-    "whiplash"
-  ],
-  "silkshuriken": [],
-  "hiddenscroll": [],
-  "toxicserenity": [
-    "poisonheal"
-  ],
-  "skywarden": [],
-  "lockjaw": [
-    "strongjaw"
-  ],
-  "rivershell": [
-    "shellarmor"
-  ],
-	"territorial": ["unnerve", "stamina", "guarddog"],
-  "funeralchoir": [],
-  "festivalstep": [],
-  "saltcrust": [
-    "clearbody"
-  ],
-  "beyondfear": [
-    "innerfocus"
-  ],
-  "stillwater": [
-    "waterabsorb"
-  ],
-  "mudmeditation": []
+	mountainbreaker: [],
+	dreadpresence: [],
+	palmmastery: ['thickfat'],
+	galvanicspirit: ['vitalspirit'],
+	blastchamber: ['vitalspirit'],
+	venomspurs: [],
+	lastbrood: ['swarm'],
+	venombastion: ['stamina'],
+	shadowfeint: [],
+	silksights: ['compoundeyes', 'keeneye'],
+	livenet: ['unnerve'],
+	barbharvest: ['ironbarbs'],
+	currentcoil: ['swiftswim'],
+	stormcircuit: ['electricsurge', 'elevate', 'currentcoil', 'swiftswim'],
+	soulpyre: ['infiltrator'],
+	blackviper: ['whiplash'],
+	silkshuriken: [],
+	hiddenscroll: [],
+	toxicserenity: ['poisonheal'],
+	skywarden: [],
+	lockjaw: ['strongjaw'],
+	rivershell: ['shellarmor'],
+	territorial: ['unnerve', 'stamina', 'guarddog'],
+	funeralchoir: [],
+	festivalstep: [],
+	saltcrust: ['clearbody'],
+	beyondfear: ['innerfocus'],
+	stillwater: ['waterabsorb'],
+	mudmeditation: [],
 });
 
 Object.assign(AbilityComponents, {
-  sirius: ['apexvenom', 'blackviper', 'whiplash'],
-  coldopen: [], quarrycannon: ['megalauncher'], tundramarch: ['oblivious'],
-  undertow: ['waterabsorb'], deadwater: [], vitalcircuit: [],
-  ringmaster: ['toughclaws'], unyielding: ['innerfocus'], primalrhythm: [],
-	setpiece: [], calculatedshot: ['frisk'], lunardread: ['dishearten', 'insomnia', 'pressure'], falsebouquet: [],
-  voidtyrant: ['hydrabond', 'berserk'],
-  meridianseal: [], rimeplate: [], darkdominion: ['darkaura'],
+	sirius: ['apexvenom', 'blackviper', 'whiplash'],
+	coldopen: [],
+	quarrycannon: ['megalauncher'],
+	tundramarch: ['oblivious'],
+	undertow: ['waterabsorb'],
+	deadwater: [],
+	vitalcircuit: [],
+	ringmaster: ['toughclaws'],
+	unyielding: ['innerfocus'],
+	primalrhythm: [],
+	setpiece: [],
+	calculatedshot: ['frisk'],
+	lunardread: ['dishearten', 'insomnia', 'pressure'],
+	falsebouquet: [],
+	voidtyrant: ['hydrabond', 'berserk'],
+	meridianseal: [],
+	rimeplate: [],
+	darkdominion: ['darkaura'],
 });
 
 AbilityComponents.soothingpresence = ['friendguard', 'aromaveil'];
 
 // Approved October signature revisions; no shared component is globally changed.
 Object.assign(AbilityComponents, {
-  steelplumage: [], venomcanticle: [], solarbud: [], dissonantecho: [],
-  templechime: ['elevate', 'levitate'],
-  solarhydra: ['hydrabond', 'grassysurge', 'solarpower', 'solarbud'],
-  stormcalling: ['drizzle', 'liquidvoice', 'dissonantecho'],
+	steelplumage: [],
+	venomcanticle: [],
+	solarbud: [],
+	dissonantecho: [],
+	templechime: ['elevate', 'levitate'],
+	solarhydra: ['hydrabond', 'grassysurge', 'solarpower', 'solarbud'],
+	stormcalling: ['drizzle', 'liquidvoice', 'dissonantecho'],
 	mossarmor: ['stamina', 'naturalcure'],
 });
 
-Object.assign(AbilityComponents, {searescuer: [], dreepyvanguard: ['stalwart'], groundingtail: []});
+Object.assign(AbilityComponents, { searescuer: [], dreepyvanguard: ['stalwart'], groundingtail: [] });
 
 // Venom Veil forwards selected Corrosion hooks; this identity enables poison-status immunity bypass.
 AbilityComponents.venomveil = ['liquidooze', 'corrosion', 'waterveil'];
@@ -578,58 +502,26 @@ AbilityComponents.frightfulwings = ['intimidate'];
 AbilityComponents.pulseeruption = ['sturdy'];
 
 Object.assign(AbilityComponents, {
-	"scrapbreaker": [
-		"moldbreaker",
-	],
-	"toxicsignature": [
-		"unnerve",
-	],
-	"wickedweave": [
-		"prankster",
-	],
-	"vaultkeeper": [
-		"prankster",
-		"stickyhold",
-	],
-	"masterkey": [],
-	"groundingtail": [],
-	"flintfracture": [],
-	"frozenfeast": [
-		"strongjaw",
-	],
-	"cinderscales": [
-		"flamebody",
-		"swarm",
-		"shielddust",
-	],
-	"sporeshroud": [
-		"effectspore",
-	],
-	"primevalhunt": [
-		"skilllink",
-		"owntempo",
-	],
-	"rimebreaker": [
-		"refrigerate",
-	],
-	"twilightinstinct": [],
-	"duskdrive": [
-		"battlefervor",
-		"precision",
-		"opportunist",
-	],
-	"evaporate": [
-		"dryskin",
-	],
-	"pressurekiln": [],
-	"shattercrust": [
-		"crumblingshell",
-	],
-	"restorativechime": [],
-	"dissonantchime": [],
-	"gravehunger": [
-		"baddreams",
-	],
+	scrapbreaker: ['moldbreaker'],
+	toxicsignature: ['unnerve'],
+	wickedweave: ['prankster'],
+	vaultkeeper: ['prankster', 'stickyhold'],
+	masterkey: [],
+	groundingtail: [],
+	flintfracture: [],
+	frozenfeast: ['strongjaw'],
+	cinderscales: ['flamebody', 'swarm', 'shielddust'],
+	sporeshroud: ['effectspore'],
+	primevalhunt: ['skilllink', 'owntempo'],
+	rimebreaker: ['refrigerate'],
+	twilightinstinct: [],
+	duskdrive: ['battlefervor', 'precision', 'opportunist'],
+	evaporate: ['dryskin'],
+	pressurekiln: [],
+	shattercrust: ['crumblingshell'],
+	restorativechime: [],
+	dissonantchime: [],
+	gravehunger: ['baddreams'],
 });
 
 AbilityComponents.primevalhunger = ['accumulation'];
@@ -674,25 +566,23 @@ AbilityComponents.voidsanctum = ['snowwarning'];
 AbilityComponents.chargedtail = ['static'];
 AbilityComponents.falsebouquet = ['magician'];
 
-AbilityComponents.eldritchremedy = ["owntempo","curiousmedicine"];
+AbilityComponents.eldritchremedy = ['owntempo', 'curiousmedicine'];
 
-AbilityComponents.infernaldominion = ["intimidate"];
+AbilityComponents.infernaldominion = ['intimidate'];
 
-AbilityComponents.hydraulicarmor = ["stamina"];
+AbilityComponents.hydraulicarmor = ['stamina'];
 
-AbilityComponents.hauntingpresence = ["levitate"];
+AbilityComponents.hauntingpresence = ['levitate'];
 
-AbilityComponents.slumberinggiant = ["comatose","thickfat"];
+AbilityComponents.slumberinggiant = ['comatose', 'thickfat'];
 
-AbilityComponents.oceanlullaby = ["shellarmor"];
+AbilityComponents.oceanlullaby = ['shellarmor'];
 
-AbilityComponents.shadowscreen = ["infiltrator"];
+AbilityComponents.shadowscreen = ['infiltrator'];
 
+AbilityComponents.voiddrift = ['levitate', 'overcoat'];
 
-
-AbilityComponents.voiddrift = ["levitate","overcoat"];
-
-AbilityComponents.voidguile = ["magician", "infiltrator"];
+AbilityComponents.voidguile = ['magician', 'infiltrator'];
 
 AbilityComponents.voidwrath = ['moldbreaker'];
 
@@ -701,51 +591,68 @@ AbilityComponents.creepingbloom = ['infiltrator'];
 AbilityComponents.dreadwings = ['intimidate', 'unnerve'];
 
 Object.assign(AbilityComponents, {
-	"causticchamber": [
-		"owntempo"
-	],
-	"demolitiontrunk": [
-		"sheerforce"
-	],
-	"deepresonance": [
-		"soundproof"
-	],
-	"siegemagnet": [
-		"magnetpull"
-	],
-	"patientmarksman": [
-		"sniper"
-	],
-	"cradleward": [
-		"sweetveil"
-	],
-	"sunreserve": [
-		"flashfire"
-	],
-	"silentreprisal": [
-		"soundproof",
-		"anticipation"
-	],
-	"dreamrefuge": [
-		"telepathy"
-	],
-	"closedcircuit": [
-		"clearbody"
-	]
+	causticchamber: ['owntempo'],
+	demolitiontrunk: ['sheerforce'],
+	deepresonance: ['soundproof'],
+	siegemagnet: ['magnetpull'],
+	patientmarksman: ['sniper'],
+	cradleward: ['sweetveil'],
+	sunreserve: ['flashfire'],
+	silentreprisal: ['soundproof', 'anticipation'],
+	dreamrefuge: ['telepathy'],
+	closedcircuit: ['clearbody'],
 });
 
-Object.assign(AbilityComponents, {"pridecall":["competitive","unnerve"],"hydroelectric":["dryskin"],"solarstride":["chlorophyll"],"frillflash":["dazzling"]});
+Object.assign(AbilityComponents, {
+	pridecall: ['competitive', 'unnerve'],
+	hydroelectric: ['dryskin'],
+	solarstride: ['chlorophyll'],
+	frillflash: ['dazzling'],
+});
 
-Object.assign(AbilityComponents, {"stokebelly":["gluttony"],"rousingfeast":["gluttony","cudchew"],"invisiblewall":["soundproof"],"sentinelfist":["ironfist"],"pursuitwake":["infiltrator"],"gentlegiant":["cloudnine"],"ringcraft":["limber"],"constrictingheat":["whitesmoke"]});
+Object.assign(AbilityComponents, {
+	stokebelly: ['gluttony'],
+	rousingfeast: ['gluttony', 'cudchew'],
+	invisiblewall: ['soundproof'],
+	sentinelfist: ['ironfist'],
+	pursuitwake: ['infiltrator'],
+	gentlegiant: ['cloudnine'],
+	ringcraft: ['limber'],
+	constrictingheat: ['whitesmoke'],
+});
 
 AbilityComponents.voidreprisal = ['guts'];
 AbilityComponents.wreckingcrew = ['ironfist'];
 
-Object.assign(AbilityComponents, {"evergreen":["overcoat","ripen"],"battlegrip":["moxie"],"scentscout":["frisk"],"surefoot":[],"baitedbloom":["gluttony","stickyhold"],"guidinggallop":["pastelveil"],"carrionwatch":["frisk","overcoat"]});
+Object.assign(AbilityComponents, {
+	evergreen: ['overcoat', 'ripen'],
+	battlegrip: ['moxie'],
+	scentscout: ['frisk'],
+	surefoot: [],
+	baitedbloom: ['gluttony', 'stickyhold'],
+	guidinggallop: ['pastelveil'],
+	carrionwatch: ['frisk', 'overcoat'],
+});
 
-Object.assign(AbilityComponents, {"scaleshelter":["shielddust","overcoat"],"stagesweep":["screencleaner"],"icebreaker":["hypercutter"],"cactuschorus":["waterabsorb","sandrush"],"crushingvenom":["strongjaw"],"crosswire":["ironfist"],"deepchill":["oblivious"],"climatereserve":[]});
+Object.assign(AbilityComponents, {
+	scaleshelter: ['shielddust', 'overcoat'],
+	stagesweep: ['screencleaner'],
+	icebreaker: ['hypercutter'],
+	cactuschorus: ['waterabsorb', 'sandrush'],
+	crushingvenom: ['strongjaw'],
+	crosswire: ['ironfist'],
+	deepchill: ['oblivious'],
+	climatereserve: [],
+});
 
-Object.assign(AbilityComponents, {"tunnelclearance":["hypercutter"],"crystalbastion":["sturdy"],"buriedcoil":["sandspit"],"staticreserve":["static"],"lockinggrip":["hypercutter"],"garlandgift":["flowerveil"]});
+Object.assign(AbilityComponents, {
+	tunnelclearance: ['hypercutter'],
+	crystalbastion: ['sturdy'],
+	buriedcoil: ['sandspit'],
+	staticreserve: ['static'],
+	lockinggrip: ['hypercutter'],
+	garlandgift: ['flowerveil'],
+});
 
 AbilityComponents.riotstance = ['defiant'];
 
@@ -766,7 +673,7 @@ AbilityComponents.orchardbond = ['hydrabond', 'harvest'];
 AbilityComponents.venomheal = [...(AbilityComponents.venomheal || []), 'hypercutter'];
 AbilityComponents.elevate = [...(AbilityComponents.elevate || []), 'levitate'];
 for (const [id, excluded] of Object.entries(AbilityComponentExclusions)) {
- AbilityComponents[id] = (AbilityComponents[id] || []).filter(part => !excluded.includes(part));
+	AbilityComponents[id] = (AbilityComponents[id] || []).filter(part => !excluded.includes(part));
 }
 
 AbilityComponents.gentlescales = ['compoundeyes'];
@@ -785,7 +692,10 @@ AbilityComponents.solartrap = ['accumulation', 'liquidooze'];
 AbilityComponents.auraprecision = ['ultrainstinct', 'shielddust', 'mindseye'];
 AbilityComponents.insight = ['telepathy', 'innerfocus'];
 
-import {SelectedComponentRemovals, SelectedExactComponents} from './selected-mega-simplification-data';
+import {
+	SelectedComponentRemovals,
+	SelectedExactComponents,
+} from './selected-mega-simplification-data';
 for (const [id, removed] of Object.entries(SelectedComponentRemovals)) {
 	AbilityComponents[id] = (AbilityComponents[id] || []).filter(part => !removed.includes(part));
 }
@@ -795,7 +705,7 @@ AbilityComponents.uncheckedassault = [...AbilityComponents.uncheckedassault, 'vi
 AbilityComponents.waterbarrage = ['dualwield', 'stalwart'];
 AbilityComponents.pollenbloom = ['thickfat', 'aromaveil'];
 
-import {GmaxExtractedComponents} from './gmax-passive-data';
+import { GmaxExtractedComponents } from './gmax-passive-data';
 for (const [id, components] of Object.entries(GmaxExtractedComponents)) {
 	AbilityComponents[id] = [...new Set([...(AbilityComponents[id] || []), ...components])];
 }
@@ -806,8 +716,12 @@ AbilityComponents.grapplingclaws = ['toughclaws'];
 
 AbilityComponents.baitedbloom = ['gluttony', 'regenerator'];
 AbilityComponents.sunsovereign = [...AbilityComponents.sunsovereign, 'intimidate'];
-AbilityComponents.stormsovereign = AbilityComponents.stormsovereign.filter(id => id !== 'keeneye').concat('updraft');
-AbilityComponents.sandsovereign = AbilityComponents.sandsovereign.filter(id => id !== 'mountainbreaker');
+AbilityComponents.stormsovereign = AbilityComponents.stormsovereign
+	.filter(id => id !== 'keeneye')
+	.concat('updraft');
+AbilityComponents.sandsovereign = AbilityComponents.sandsovereign.filter(
+	id => id !== 'mountainbreaker',
+);
 AbilityComponents.frostsovereign = [...AbilityComponents.frostsovereign, 'soundproof'];
 
 AbilityComponents.burningspirit = ['ultrainstinct', 'magmaarmor'];
@@ -825,8 +739,8 @@ AbilityComponents.heatcoil = [...AbilityComponents.heatcoil, 'longreach'];
 AbilityComponents.inversion = [...(AbilityComponents.inversion || []), 'infiltrator'];
 AbilityComponents.ironmountain = [...AbilityComponents.ironmountain, 'hypercutter'];
 
-import {FinalPassiveComponents} from './final-passive-migrations';
-import {FamilyReplacementComponents} from './family-replacements';
+import { FinalPassiveComponents } from './final-passive-migrations';
+import { FamilyReplacementComponents } from './family-replacements';
 Object.assign(AbilityComponents, FinalPassiveComponents, FamilyReplacementComponents);
 
 AbilityComponents.knightsguard = ['swornduty'];
@@ -860,49 +774,49 @@ AbilityComponents.magneticcommand = ['frisk', 'stalwart'];
 
 AbilityComponents.adhesivearmor = ['stickyhold'];
 AbilityComponents.causticooze = ['liquidooze'];
-AbilityComponents.royalpresence = ['pressure','unnerve'];
-AbilityComponents.hivesanctuary = ['sweetveil','friendguard'];
+AbilityComponents.royalpresence = ['pressure', 'unnerve'];
+AbilityComponents.hivesanctuary = ['sweetveil', 'friendguard'];
 delete AbilityComponents.royalescort;
 
-AbilityComponents.guidingglow = ['illuminate','sweetveil'];
+AbilityComponents.guidingglow = ['illuminate', 'sweetveil'];
 AbilityComponents.rainlitgrowth = ['raindish'];
-AbilityComponents.astralconcord = ['forewarn','competitive'];
-AbilityComponents.cellularconcord = ['naturalcure','analytic'];
-AbilityComponents.trickperformer = ['technician','prankster'];
+AbilityComponents.astralconcord = ['forewarn', 'competitive'];
+AbilityComponents.cellularconcord = ['naturalcure', 'analytic'];
+AbilityComponents.trickperformer = ['technician', 'prankster'];
 AbilityComponents.taptempo = ['owntempo'];
 
-AbilityComponents.venomarmor = ['dualwield','battlearmor'];
-AbilityComponents.toxicarmor = ['dualwield','violentrush'];
-AbilityComponents.sirius = [...(AbilityComponents.sirius || []),'venamskiss'];
+AbilityComponents.venomarmor = ['dualwield', 'battlearmor'];
+AbilityComponents.toxicarmor = ['dualwield', 'violentrush'];
+AbilityComponents.sirius = [...(AbilityComponents.sirius || []), 'venamskiss'];
 AbilityComponents.mycelialbond = ['dryskin'];
 AbilityComponents.scrapbreaker = [];
 
 AbilityComponents.silentact = ['soundproof'];
-AbilityComponents.curtaincall = ['icebody','filter'];
-AbilityComponents.stagesweep = ['screencleaner','infiltrator'];
+AbilityComponents.curtaincall = ['icebody', 'filter'];
+AbilityComponents.stagesweep = ['screencleaner', 'infiltrator'];
 
 AbilityComponents.pearlsiphon = ['competitive'];
 AbilityComponents.pearltide = ['hydration'];
 AbilityComponents.abyssalfang = ['strongjaw'];
 AbilityComponents.abyssalcurrent = ['waterabsorb'];
 
-AbilityComponents.soothingbouquet = ['friendguard','infiltrator'];
+AbilityComponents.soothingbouquet = ['friendguard', 'infiltrator'];
 
 AbilityComponents.mountainhide = ['innerfocus'];
-AbilityComponents.rimebark = ['thickfat','icebody'];
-AbilityComponents.blademastery = ['sharpness','superluck'];
-AbilityComponents.goldentalons = ['stalwart','goodasgold','sharpness'];
+AbilityComponents.rimebark = ['thickfat', 'icebody'];
+AbilityComponents.blademastery = ['sharpness', 'superluck'];
+AbilityComponents.goldentalons = ['stalwart', 'goodasgold', 'sharpness'];
 
 AbilityComponents.pyrousdominion = ['pressure'];
 
-AbilityComponents.bottomlessgullet = ['gluttony','cheekpouch'];
+AbilityComponents.bottomlessgullet = ['gluttony', 'cheekpouch'];
 AbilityComponents.divefisher = ['waterveil'];
-AbilityComponents.scatterbrain = ['oblivious','unaware'];
+AbilityComponents.scatterbrain = ['oblivious', 'unaware'];
 
 AbilityComponents.reinflate = ['punkrock'];
-AbilityComponents.cushionchorus = ['friendguard','aromaveil'];
-AbilityComponents.perfectapple = ['purepower','selfsufficient','angershell'];
-AbilityComponents.boundspirits = ['prankster','magicguard'];
+AbilityComponents.cushionchorus = ['friendguard', 'aromaveil'];
+AbilityComponents.perfectapple = ['purepower', 'selfsufficient', 'angershell'];
+AbilityComponents.boundspirits = ['prankster', 'magicguard'];
 AbilityComponents.keystoneseal = ['cursedbody'];
 
 AbilityComponents.polarrest = ['earlybird', 'icebody'];
@@ -930,7 +844,12 @@ AbilityComponents.barbharvest = ['suctioncups'];
 
 AbilityComponents.rimeboundspirit = ['heatproof'];
 
-Object.assign(AbilityComponents,{livewiretrap:['static'],mudflatdynamo:['battlearmor'],ironclamp:['battlearmor'],baitedcounter:['filter']});
+Object.assign(AbilityComponents, {
+	livewiretrap: ['static'],
+	mudflatdynamo: ['battlearmor'],
+	ironclamp: ['battlearmor'],
+	baitedcounter: ['filter'],
+});
 
 AbilityComponents.blackviper = [...new Set([...(AbilityComponents.blackviper || []), 'shedskin'])];
 
@@ -949,54 +868,55 @@ AbilityComponents.unboundspirit = ['vitalspirit'];
 AbilityComponents.ragingheart = ['innerfocus'];
 AbilityComponents.silkendecoy = ['selfsufficient', 'swarm'];
 
-Object.assign(AbilityComponents,{rollingfortress:['rockhead'],siegetusks:['moldbreaker'],floehunter:['slushrush'],headlongresolve:['reckless'],scorchsweep:['rockhead'],keenhunt:['keeneye'],hyperdrill:['powerdrill'],venombastion:['stamina']});
-delete AbilityComponents.armoredadvance; delete AbilityComponents.trailbreaker;
+Object.assign(AbilityComponents, {
+	rollingfortress: ['rockhead'],
+	siegetusks: ['moldbreaker'],
+	floehunter: ['slushrush'],
+	headlongresolve: ['reckless'],
+	scorchsweep: ['rockhead'],
+	keenhunt: ['keeneye'],
+	hyperdrill: ['powerdrill'],
+	venombastion: ['stamina'],
+});
+delete AbilityComponents.armoredadvance;
+delete AbilityComponents.trailbreaker;
 
-Object.assign(AbilityComponents,{duneclaws:['toughclaws'],glacierclaws:['toughclaws']});
-for(const id of ['bedrockclaw','rimeclaw','dunerunner','frostrunner'])delete AbilityComponents[id];
+Object.assign(AbilityComponents, { duneclaws: ['toughclaws'], glacierclaws: ['toughclaws'] });
+for (const id of ['bedrockclaw', 'rimeclaw', 'dunerunner', 'frostrunner']) delete AbilityComponents[id];
 
-import {EeveeCloysterComponents} from './eeveelution-cloyster-approved';
-Object.assign(AbilityComponents,EeveeCloysterComponents);
+import { EeveeCloysterComponents } from './eeveelution-cloyster-approved';
+Object.assign(AbilityComponents, EeveeCloysterComponents);
 
-
-AbilityComponents.ironmountain=['hypercutter','bruteforce'];
-AbilityComponents.disguise=[];
-AbilityComponents.stancechange=[];
+AbilityComponents.ironmountain = ['hypercutter', 'bruteforce'];
+AbilityComponents.disguise = [];
+AbilityComponents.stancechange = [];
 
 Object.assign(AbilityComponents, {
-	hydraflight: [
-		'levitate',
-		'hydrabond',
-	],
-	stringsofruin: [
-		'berserk',
-		'duskilate',
-	],
-	falseliberation: [
-		'moldbreaker',
-	],
+	hydraflight: ['levitate', 'hydrabond'],
+	stringsofruin: ['berserk', 'duskilate'],
+	falseliberation: ['moldbreaker'],
 });
 
-AbilityComponents.performer=['dancer','songstress'];
+AbilityComponents.performer = ['dancer', 'songstress'];
 
-import {MewtwoComponents} from './mewtwo-approved';
-Object.assign(AbilityComponents,MewtwoComponents);
+import { MewtwoComponents } from './mewtwo-approved';
+Object.assign(AbilityComponents, MewtwoComponents);
 
-import {SeasonalBirdComponents} from './seasonal-birds';
+import { SeasonalBirdComponents } from './seasonal-birds';
 Object.assign(AbilityComponents, SeasonalBirdComponents);
 
-import {JirachiComponents} from './jirachi-approved';
-Object.assign(AbilityComponents,JirachiComponents);
+import { JirachiComponents } from './jirachi-approved';
+Object.assign(AbilityComponents, JirachiComponents);
 
-import {RegiComponents} from './regi-approved';
-Object.assign(AbilityComponents,RegiComponents);
+import { RegiComponents } from './regi-approved';
+Object.assign(AbilityComponents, RegiComponents);
 
-import {PrimordialComponents} from './primordial-approved';
+import { PrimordialComponents } from './primordial-approved';
 Object.assign(AbilityComponents, PrimordialComponents);
 
-AbilityComponents.twindrills=['dualwield','powerdrill'];
+AbilityComponents.twindrills = ['dualwield', 'powerdrill'];
 
-import {AuditCleanupComponents} from './audit-cleanup-approved';
+import { AuditCleanupComponents } from './audit-cleanup-approved';
 Object.assign(AbilityComponents, AuditCleanupComponents);
 
 AbilityComponents.aevianking = ['guardianpresence', 'soundproof', 'waterabsorb'];
@@ -1021,8 +941,8 @@ AbilityComponents.livinglegend = ['flashfire', 'download'];
 AbilityComponents.venamskiss = ['shedskin'];
 
 // Explicit approved Gale Bloom Shield Dust and Twin Fang Rivalry additions.
-AbilityComponents.galebloom = ["shielddust"];
-AbilityComponents.twinfang = ["rivalry"];
+AbilityComponents.galebloom = ['shielddust'];
+AbilityComponents.twinfang = ['rivalry'];
 
 AbilityComponents.nightforager = [];
 
@@ -1055,17 +975,18 @@ AbilityComponents.rightfulexalt = ['serenegrace', 'innerfocus'];
 
 AbilityComponents.royalremedy = ['naturalcure', 'healer'];
 
-import {HitmonComponents} from './hitmon-rework';
+import { HitmonComponents } from './hitmon-rework';
 Object.assign(AbilityComponents, HitmonComponents);
 
 AbilityComponents.oraclesrefrain = ['soundproof'];
 
 AbilityComponents.monarchofice = ['slushrush'];
-AbilityComponents.emperorsresolve = ['swiftswim','competitive'];
+AbilityComponents.emperorsresolve = ['swiftswim', 'competitive'];
 
-AbilityComponents.imperialedge=AbilityComponents.exalt; delete AbilityComponents.exalt;
+AbilityComponents.imperialedge = AbilityComponents.exalt;
+delete AbilityComponents.exalt;
 
-import {LoreComponents} from './lore-pairs';
+import { LoreComponents } from './lore-pairs';
 Object.assign(AbilityComponents, LoreComponents);
 
 import { TidalPoiseComponents } from './terajuma-poise';
@@ -1088,14 +1009,15 @@ AbilityComponents.blazemastery = ['striker'];
 AbilityComponents.tidalmastery = ['damp'];
 
 AbilityComponents.gritandglory = ['guts'];
-AbilityComponents.fourthholdguard = []; // Approved critical immunity only, not the local Battle Armor damage multiplier.
+// Fourth Hold Guard grants only critical-hit immunity.
+AbilityComponents.fourthholdguard = [];
 AbilityComponents.perfectform = ['ironfist'];
 AbilityComponents.titansknuckles = ['ironfist'];
 
 AbilityComponents.cursedkeepsake = [];
 AbilityComponents.cursedmarionette = [];
 AbilityComponents.reapersgrip = ['selfsufficient'];
-AbilityComponents.bewitchingmajesty = ['magicbounce','queenlymajesty'];
+AbilityComponents.bewitchingmajesty = ['magicbounce', 'queenlymajesty'];
 
 AbilityComponents.shelteringbreeze = ['friendguard', 'windrider'];
 AbilityComponents.acquiredtaste = ['frisk'];
@@ -1113,7 +1035,8 @@ for (const id of [
 
 AbilityComponents.twinfocus = [];
 
-if (!AbilityComponents.lunarorbit.includes('serenegrace')) AbilityComponents.lunarorbit.push('serenegrace');
+if (!AbilityComponents.lunarorbit.includes('serenegrace'))
+	AbilityComponents.lunarorbit.push('serenegrace');
 
 AbilityComponents.cosmicanalysis = ['analytic', 'download'];
 
@@ -1124,37 +1047,33 @@ Object.assign(AbilityComponents, {
 	risingstriker: [],
 	risingrhythm: [],
 	risingmarksman: [],
-	grandstriker: [
-		'striker',
-		'defiant',
-		'risingstriker',
-	],
-	grandrhythm: [
-		'forestsurge',
-		'risingrhythm',
-	],
-	grandmarksman: [
-		'megalauncher',
-		'dualwield',
-		'risingmarksman',
-	],
-	calculatedshot: [
-		'frisk',
-	],
+	grandstriker: ['striker', 'defiant', 'risingstriker'],
+	grandrhythm: ['forestsurge', 'risingrhythm'],
+	grandmarksman: ['megalauncher', 'dualwield', 'risingmarksman'],
+	calculatedshot: ['frisk'],
 });
 
 // Identity lookup and callback dispatch share the current-form components.
 export function unstableEvoComponents(pokemon: { species: { id: string } }): IDEntry[] {
 	switch (pokemon.species.id) {
-	case 'jolteon': return ['lightningrod', 'voltabsorb'];
-	case 'flareon': return ['soulfire', 'fluffy'];
-	case 'vaporeon': return ['stormdrain', 'waterabsorb'];
-	case 'umbreon': return ['pressure', 'innerfocus'];
-	case 'espeon': return ['magicbounce', 'telepathy'];
-	case 'glaceon': return ['icescales', 'slushrush'];
-	case 'leafeon': return ['chlorophyll', 'regenerator'];
-	case 'sylveon': return ['friendguard', 'competitive'];
-	default: return [];
+	case 'jolteon':
+		return ['lightningrod', 'voltabsorb'];
+	case 'flareon':
+		return ['soulfire', 'fluffy'];
+	case 'vaporeon':
+		return ['stormdrain', 'waterabsorb'];
+	case 'umbreon':
+		return ['pressure', 'innerfocus'];
+	case 'espeon':
+		return ['magicbounce', 'telepathy'];
+	case 'glaceon':
+		return ['icescales', 'slushrush'];
+	case 'leafeon':
+		return ['chlorophyll', 'regenerator'];
+	case 'sylveon':
+		return ['friendguard', 'competitive'];
+	default:
+		return [];
 	}
 }
 
@@ -1188,4 +1107,5 @@ AbilityComponents.fortressshell = ['stalwart', 'guardianpresence'];
 
 AbilityComponents.cruelshell = [];
 
-for (const id of ['giftofknowledge', 'giftofemotion', 'giftofwill']) AbilityComponents[id] = ['levitate'];
+for (const id of ['giftofknowledge', 'giftofemotion', 'giftofwill'])
+	AbilityComponents[id] = ['levitate'];

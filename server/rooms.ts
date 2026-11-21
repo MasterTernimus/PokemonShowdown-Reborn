@@ -1,4 +1,4 @@
-import {invalidateBattleEngineGuards} from './battle-engine-guard';
+import { invalidateBattleEngineGuards } from './battle-engine-guard';
 /**
  * Rooms
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -1783,7 +1783,7 @@ export class GlobalRoomState {
 		}
 	}
 	startLockdown(err: Error | null = null, slow = false) {
-  invalidateBattleEngineGuards();
+		invalidateBattleEngineGuards();
 		if (this.lockdown && err) return;
 		this.cancelAutomaticKill();
 		this.slowLockdown = slow;
@@ -2191,8 +2191,8 @@ export const Rooms = {
 	 */
 	createBattle(options: RoomBattleOptions & Partial<RoomSettings>) {
 		if (options.challengeType === 'challengeofficial') {
-			options = {...options, isPrivate: false, modjoin: null,
-				players: options.players.map(player => ({...player, hidden: false, inviteOnly: false})),
+			options = { ...options, isPrivate: false, modjoin: null,
+				players: options.players.map(player => ({ ...player, hidden: false, inviteOnly: false })),
 			};
 		}
 		const players = options.players.map(player => player.user);

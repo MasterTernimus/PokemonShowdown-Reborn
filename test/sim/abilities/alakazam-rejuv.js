@@ -1,17 +1,17 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
-const {TeamValidator} = require('../../../dist/sim/team-validator');
-const {AevianDisciplineMoves} = require('../../../dist/data/alakazam-rejuv');
+const { Dex } = require('../../../dist/sim');
+const { TeamValidator } = require('../../../dist/sim/team-validator');
+const { AevianDisciplineMoves } = require('../../../dist/data/alakazam-rejuv');
 let battle;
 function setup(ability = 'Aevian Discipline') {
-	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[{species: 'Alakazam', ability, moves: ['Drain Punch']}], [{species: 'Mew', ability: 'No Ability', moves: ['Tackle']}]]);
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[{ species: 'Alakazam', ability, moves: ['Drain Punch'] }], [{ species: 'Mew', ability: 'No Ability', moves: ['Tackle'] }]]);
 	battle.makeChoices('team 1', 'team 1');
 	return battle.p1.active[0];
 }
 describe('Alakazam Rejuv', () => {
-	afterEach(() => {battle?.destroy(); battle = null;});
+	afterEach(() => { battle?.destroy(); battle = null; });
 	it('transforms through its selected ability and receives Composed, not Revealing Gaze', () => {
 		const p = setup();
 		assert.equal(p.species.id, 'alakazamrejuv');
@@ -42,14 +42,14 @@ describe('Alakazam Rejuv', () => {
 	for (const moveId of ['tackle', 'earthquake', 'watergun']) it('simulates incoming ' + moveId + ' against Composed', () => {
 		const damage = [];
 		for (const ability of ['No Ability', 'Composed']) {
-			battle = common.createBattle({formatid:'gen9nofieldsinglesgame'}, [
-				[{species:'Mew', ability, moves:['Splash']}],
-				[{species:'Mew', ability:'No Ability', moves:[moveId]}],
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+				[{ species: 'Mew', ability, moves: ['Splash'] }],
+				[{ species: 'Mew', ability: 'No Ability', moves: [moveId] }],
 			]);
 			battle.makeChoices('team 1', 'team 1');
 			battle.randomizer = n => n;
 			const p = battle.p1.active[0], q = battle.p2.active[0], hp = p.hp;
-			const move = Object.assign(Dex.getActiveMove(moveId), {accuracy:true, willCrit:false});
+			const move = Object.assign(Dex.getActiveMove(moveId), { accuracy: true, willCrit: false });
 			battle.actions.runMove(move, q, q.getLocOf(p));
 			damage.push(hp - p.hp);
 			battle.destroy(); battle = null;
@@ -70,9 +70,9 @@ describe('Alakazam Rejuv', () => {
 		assert(p.hasAbilityOrPassive('innerfocus'));
 		assert(p.hasAbilityOrPassive('magicguard'));
 		assert(!p.addVolatile('flinch', q));
-		battle.boost({atk:-1}, p, q, Dex.abilities.get('intimidate'));
+		battle.boost({ atk: -1 }, p, q, Dex.abilities.get('intimidate'));
 		assert.equal(p.boosts.atk, 0);
-		battle.boost({atk:-1}, p, q, Dex.moves.get('growl'));
+		battle.boost({ atk: -1 }, p, q, Dex.moves.get('growl'));
 		assert.equal(p.boosts.atk, -1);
 	});
 	for (const status of ['psn', 'brn']) it('allows ' + status + ' but prevents its residual damage', () => {
@@ -101,9 +101,9 @@ describe('Alakazam Rejuv', () => {
 		assert.equal(p.boosts.spd, 1);
 	});
 	it('applies the Magic Guard entry bonus exactly once on the first Fairy Tale switch-in', () => {
-		battle = common.createBattle({formatid:'gen9fairytalefield'}, [
-			[{species:'Alakazam', ability:'Aevian Discipline', moves:['Drain Punch']}],
-			[{species:'Mew', ability:'No Ability', moves:['Splash']}],
+		battle = common.createBattle({ formatid: 'gen9fairytalefield' }, [
+			[{ species: 'Alakazam', ability: 'Aevian Discipline', moves: ['Drain Punch'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['Splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const p = battle.p1.active[0];
@@ -127,12 +127,12 @@ describe('Alakazam Rejuv', () => {
 		for (const species of ['Alakazam', 'Alakazam-Rejuv']) {
 			for (let i = 0; i < AevianDisciplineMoves.length; i += 4) {
 				const moves = AevianDisciplineMoves.slice(i, i + 4);
-				const errors = validator.validateTeam([{species, ability: 'Aevian Discipline', moves}, {species:'Mew', moves:['Splash']}]);
-				assert.equal(errors, null, JSON.stringify({species, moves, errors}));
+				const errors = validator.validateTeam([{ species, ability: 'Aevian Discipline', moves }, { species: 'Mew', moves: ['Splash'] }]);
+				assert.equal(errors, null, JSON.stringify({ species, moves, errors }));
 			}
-			const errors = validator.validateTeam([{species, ability:'Aevian Discipline', moves:['Protect']}, {species:'Mew', moves:['Splash']}]);
+			const errors = validator.validateTeam([{ species, ability: 'Aevian Discipline', moves: ['Protect'] }, { species: 'Mew', moves: ['Splash'] }]);
 			assert(errors?.some(e => e.includes("can't use Protect with Aevian Discipline")));
 		}
-		assert.equal(validator.validateTeam([{species:'Alakazam', ability:'Magic Guard', moves:['Protect']}, {species:'Mew', moves:['Splash']}]), null);
+		assert.equal(validator.validateTeam([{ species: 'Alakazam', ability: 'Magic Guard', moves: ['Protect'] }, { species: 'Mew', moves: ['Splash'] }]), null);
 	});
 });

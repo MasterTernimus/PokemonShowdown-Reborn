@@ -1,12 +1,23 @@
-'use strict'; const assert = require('assert').strict, { publicFieldGuide } = require('../../dist/server/field-guide'), { calculatorMetadata } = require('../../dist/sim/custom-calculator');
+'use strict';
+const assert = require('assert').strict,
+	{ publicFieldGuide } = require('../../dist/server/field-guide'),
+	{ calculatorMetadata } = require('../../dist/sim/custom-calculator');
 describe('Public Field Guide', () => {
 	it('lists Black Testament’s power and healing rules only in their respective fields', () => {
 		const fields = publicFieldGuide().entries.filter(entry => entry.kind === 'field');
-		const powerFields = ['dragonsdenterrain', 'newworldterrain', 'shortcircuitterrain', 'starlightarenaterrain'];
+		const powerFields = [
+			'dragonsdenterrain',
+			'newworldterrain',
+			'shortcircuitterrain',
+			'starlightarenaterrain',
+		];
 		const healingFields = ['corrosiveterrain', 'wastelandterrain'];
 		for (const entry of fields) {
-			const effect = powerFields.includes(entry.id) ? 'Power is 1.2×.' :
-				healingFields.includes(entry.id) ? 'Healing prevention lasts 3 turns instead of 2.' : null;
+			const effect = powerFields.includes(entry.id) ?
+				'Power is 1.2×.' :
+				healingFields.includes(entry.id) ?
+					'Healing prevention lasts 3 turns instead of 2.' :
+					null;
 			const rows = entry.sections.Moves?.filter(row => row.startsWith('Black Testament:')) || [];
 			assert.deepEqual(rows, effect ? [`Black Testament: ${effect}`] : [], entry.id);
 			const reference = entry.referenceDetails.moves.find(move => move.id === 'blacktestament');
@@ -14,9 +25,11 @@ describe('Public Field Guide', () => {
 		}
 	});
 	it('covers every registered field and every separate aura', () => {
-		const g = publicFieldGuide(), m = calculatorMetadata();
-		for (const f of m.fields.filter(f => f.id))assert(g.entries.some(e => e.kind === 'field' && e.id === f.id));
-		for (const a of m.auras)assert(g.entries.some(e => e.kind === 'aura' && e.id === a.id));
+		const g = publicFieldGuide(),
+			m = calculatorMetadata();
+		for (const f of m.fields.filter(f => f.id))
+			assert(g.entries.some(e => e.kind === 'field' && e.id === f.id));
+		for (const a of m.auras) assert(g.entries.some(e => e.kind === 'aura' && e.id === a.id));
 		assert.equal(g.entries.length, 64);
 	});
 	it('reviews every field without claiming exhaustive coverage', () => {
@@ -27,16 +40,23 @@ describe('Public Field Guide', () => {
 			assert(Object.keys(e.sections).length >= 3, e.id);
 			assert.match(e.review, /Field effects/);
 			assert.equal(e.legacyNotes.length, 0);
-		} const n = g.entries.find(e => e.id === 'newworldterrain');
+		}
+		const n = g.entries.find(e => e.id === 'newworldterrain');
 		assert(!JSON.stringify(n.sections).match(/Void Crossing|voidcrossing/));
 	});
 	it('groups fields by seed family and keeps rooms separate', () => {
 		const g = publicFieldGuide();
-		for (const e of g.entries)assert(['Rooms & Gravity', 'Elemental', 'Magical', 'Synthetic', 'Telluric'].includes(e.group), e.id);
-		for (let i = 1;
-			i <= 5;
-			i++)assert.equal(g.entries.find(e => e.id === 'flowergarden' + i).group, 'Synthetic');
-		assert.match(g.entries.find(e => e.id === 'burningterrain').groupingNote, /both Elemental and Telluric/);
+		for (const e of g.entries)
+			assert(
+				['Rooms & Gravity', 'Elemental', 'Magical', 'Synthetic', 'Telluric'].includes(e.group),
+				e.id
+			);
+		for (let i = 1; i <= 5; i++)
+			assert.equal(g.entries.find(e => e.id === 'flowergarden' + i).group, 'Synthetic');
+		assert.match(
+			g.entries.find(e => e.id === 'burningterrain').groupingNote,
+			/both Elemental and Telluric/
+		);
 	});
 	it('serves anonymous users without checking rank or room permission', () => {
 		const cmd = require('../../dist/server/chat-plugins/public-field-guide').commands.fieldguide;
@@ -51,17 +71,21 @@ describe('Field Guide reference explanations', () => {
 	it('explains every indexed Icy Terrain reference with checked field-specific effects', () => {
 		const e = publicFieldGuide().entries.find(e => e.id === 'icyterrain');
 		let count = 0;
-		for (const kind of ['abilities', 'moves', 'items']) for (const row of e.referenceDetails[kind]) {
-			count++;
-			assert(row.reviewed, row.name);
-			assert(row.fieldEffects.length, row.name);
-		}assert.equal(count, 28); // Includes Solace Pulse and Cold Shoulder; Mind Freeze shares Ice Body's row.
+		for (const kind of ['abilities', 'moves', 'items'])
+			for (const row of e.referenceDetails[kind]) {
+				count++;
+				assert(row.reviewed, row.name);
+				assert(row.fieldEffects.length, row.name);
+			}
+		assert.equal(count, 28); // Includes Solace Pulse and Cold Shoulder; Mind Freeze shares Ice Body's row.
 	});
 	it('distinguishes pending details from checked effects', () => {
-		for (const e of publicFieldGuide().entries) for (const rows of Object.values(e.referenceDetails || {})) for (const row of rows) {
-			assert.equal(row.reviewed, !!row.fieldEffects.length);
-			assert(row.name);
-		}
+		for (const e of publicFieldGuide().entries)
+			for (const rows of Object.values(e.referenceDetails || {}))
+				for (const row of rows) {
+					assert.equal(row.reviewed, !!row.fieldEffects.length);
+					assert(row.name);
+				}
 	});
 });
 
@@ -70,7 +94,15 @@ describe('Eclipse guide sections', () => {
 	for (const id of ['coldeclipseterrain', 'rifteclipseterrain', 'infernaleclipseterrain']) {
 		it('separates effects, transitions and timer rules for ' + id, () => {
 			const sections = entry(id).sections;
-			for (const name of ['Boosts and general effects', 'Weather, rooms and Gravity', 'Transitions', 'Moves', 'Abilities', 'Seeds and other effects', 'Shared rules and limitations']) {
+			for (const name of [
+				'Boosts and general effects',
+				'Weather, rooms and Gravity',
+				'Transitions',
+				'Moves',
+				'Abilities',
+				'Seeds and other effects',
+				'Shared rules and limitations',
+			]) {
 				assert(sections[name].length, name);
 			}
 			assert.match(sections['Shared rules and limitations'].join(' '), /remaining turns/);
@@ -82,7 +114,8 @@ describe('Eclipse guide sections', () => {
 		['ashenaura', 'Ashen Seeds', ['Infernal Parade', 'Eruption']],
 	]) {
 		it('documents all development moves and both timer routes for ' + id, () => {
-			const sections = entry(id).sections, development = sections.Transitions;
+			const sections = entry(id).sections,
+				development = sections.Transitions;
 			assert(development[0].includes(ability));
 			for (const move of moves) assert(development[0].includes(move), move);
 			assert.match(development[1], /remaining turns/);
@@ -93,39 +126,82 @@ describe('Eclipse guide sections', () => {
 		});
 	}
 	it('documents Rift Herald entry, aura development and offensive-only Rift Aura', () => {
-		const aura = entry('riftaura'), sections = aura.sections;
+		const aura = entry('riftaura'),
+			sections = aura.sections;
 		assert.equal(aura.group, 'Magical');
 		assert.match(sections.Duration.join(' '), /Rift Herald.*5 turns, or 8 with Amplifield Rock/);
 		assert.match(sections.Duration.join(' '), /On no field.*full Rift Eclipse/);
 		assert.match(sections.Duration.join(' '), /without replacing the base field/);
 		assert.match(sections.Duration.join(' '), /not refreshed/);
-		assert.match(sections.Transitions.join(' '), /Any user.*Rift Opening.*Rift Herald is not required/);
+		assert.match(
+			sections.Transitions.join(' '),
+			/Any user.*Rift Opening.*Rift Herald is not required/
+		);
 		assert.match(sections.Transitions.join(' '), /consumes the aura and keeps its remaining turns/);
-		assert.match(sections.Transitions.join(' '), /once to create Rift Aura, then again to develop it/);
+		assert.match(
+			sections.Transitions.join(' '),
+			/once to create Rift Aura, then again to develop it/
+		);
 		assert.match(sections.Transitions.join(' '), /repeated ability entry do not develop/);
-		assert.match(sections.Duration.join(' '), /Rift Opening also creates Rift Aura over another field/);
-		assert.match(entry('rifteclipseterrain').sections['Seeds and other effects'].join(' '), /any user.*Rift Opening.*develops full Rift Eclipse/);
+		assert.match(
+			sections.Duration.join(' '),
+			/Rift Opening also creates Rift Aura over another field/
+		);
+		assert.match(
+			entry('rifteclipseterrain').sections['Seeds and other effects'].join(' '),
+			/any user.*Rift Opening.*develops full Rift Eclipse/
+		);
 		assert.match(sections.Transitions.join(' '), /blocked conversions leave the aura intact/);
 		assert.match(sections['Boosts and general effects'].join(' '), /Dark attacks: 1.3×/);
 		assert.match(sections['Boosts and general effects'].join(' '), /Ghost attacks: 1.2×/);
-		assert.match(sections['Boosts and general effects'].join(' '), /Fairy attacks: weakened to 0.75×/);
-		assert.match(sections['Boosts and general effects'].join(' '), /Fairy penalties do not multiply together/);
-		assert.match(sections['Boosts and general effects'].join(' '), /stronger 0.5× on full Rift Eclipse or Infernal Eclipse/);
-		assert.match(entry('rifteclipseterrain').sections['Boosts and general effects'].join(' '), /Fairy attacks: 0.5×/);
-		assert.match(sections['Boosts and general effects'].join(' '), /Spirit Break.*Rift Aura applies its own 0.75× penalty/);
-		assert.match(sections['Boosts and general effects'].join(' '), /does not apply.*sleeping damage.*Room and Gravity/);
+		assert.match(
+			sections['Boosts and general effects'].join(' '),
+			/Fairy attacks: weakened to 0.75×/
+		);
+		assert.match(
+			sections['Boosts and general effects'].join(' '),
+			/Fairy penalties do not multiply together/
+		);
+		assert.match(
+			sections['Boosts and general effects'].join(' '),
+			/stronger 0.5× on full Rift Eclipse or Infernal Eclipse/
+		);
+		assert.match(
+			entry('rifteclipseterrain').sections['Boosts and general effects'].join(' '),
+			/Fairy attacks: 0.5×/
+		);
+		assert.match(
+			sections['Boosts and general effects'].join(' '),
+			/Spirit Break.*Rift Aura applies its own 0.75× penalty/
+		);
+		assert.match(
+			sections['Boosts and general effects'].join(' '),
+			/does not apply.*sleeping damage.*Room and Gravity/
+		);
 		assert.match(sections.Moves.join(' '), /Nature Power calls Dark Pulse/);
-		assert.match(entry('rifteclipseterrain').sections.Abilities.join(' '), /Rift Herald creates full Rift Eclipse.*only on an empty field/);
+		assert.match(
+			entry('rifteclipseterrain').sections.Abilities.join(' '),
+			/Rift Herald creates full Rift Eclipse.*only on an empty field/
+		);
 		assert(!JSON.stringify(entry('rifteclipseterrain').sections).includes('Rift Seeds'));
 	});
 	it('keeps full-field seed effects separate from auras and documents shared move hooks', () => {
 		for (const id of ['frozenaura', 'ashenaura', 'riftaura']) {
-			assert.match(entry(id).sections['Boosts and general effects'].join(' '), /does not grant the full Eclipse field/);
-			assert.match(entry(id).sections.Moves.join(' '), /animation; this does not turn it into that move/);
+			assert.match(
+				entry(id).sections['Boosts and general effects'].join(' '),
+				/does not grant the full Eclipse field/
+			);
+			assert.match(
+				entry(id).sections.Moves.join(' '),
+				/animation; this does not turn it into that move/
+			);
 		}
 		assert.match(entry('frozenaura').sections.Moves.join(' '), /Dragon Rage deals 140/);
 		assert.match(entry('coldeclipseterrain').sections.Moves.join(' '), /Dragon Rage deals 140/);
-		assert.match(entry('infernaleclipseterrain').sections.Abilities.join(' '), /Ashen Seeds halves damage/);
+		assert.match(
+			entry('infernaleclipseterrain').sections.Abilities.join(' '),
+			/Ashen Seeds halves damage/
+		);
 	});
 	it('puts room and Gravity Eclipse rules in visible sections, not review metadata alone', () => {
 		for (const id of ['trickroom', 'wonderroom', 'magicroom', 'gravity']) {
@@ -143,36 +219,62 @@ describe('Field message trigger explanations', () => {
 			const notes = g.entries.find(e => e.id === id).sections['Battle messages'];
 			assert(notes.every(n => n.includes(' — ') || n.startsWith('Restoration messages')));
 			assert(notes.some(n => n.includes('lock')));
-		}assert(g.entries.find(e => e.id === 'icyterrain').sections['Battle messages'].some(n => n.includes('second accumulated Scald')));
+		}
+		assert(
+			g.entries
+				.find(e => e.id === 'icyterrain')
+				.sections['Battle messages'].some(n => n.includes('second accumulated Scald'))
+		);
 	});
 	it('has checked explanations for all indexed references and listed message triggers', () => {
 		const g = publicFieldGuide();
 		for (const e of g.entries) {
-			for (const rows of Object.values(e.referenceDetails || {})) for (const row of rows) {
-				assert(row.reviewed, e.id + '/' + row.id);
-				assert(row.fieldEffects.length);
-			} for (const n of e.sections['Battle messages'] || [])assert(!n.startsWith('Trigger review pending'), e.id);
+			for (const rows of Object.values(e.referenceDetails || {}))
+				for (const row of rows) {
+					assert(row.reviewed, e.id + '/' + row.id);
+					assert(row.fieldEffects.length);
+				}
+			for (const n of e.sections['Battle messages'] || [])
+				assert(!n.startsWith('Trigger review pending'), e.id);
 		}
 	});
 });
 
- describe('Rooms and Gravity reference', () => {
-  it('lists all four effects separately from fields and auras', () => {
-   const guide=publicFieldGuide(), rooms=guide.entries.filter(e=>e.kind==='effect');
-   assert.equal(guide.coverage.rooms,4);
-   assert.deepEqual(rooms.map(e=>e.id),['trickroom','wonderroom','magicroom','gravity']);
-   for(const e of rooms){assert.equal(e.group,'Rooms & Gravity');assert(e.summary);assert(e.sections.Duration.length);assert(e.review.includes('Cold Eclipse'));}
-  });
-  it('keeps the impact list synchronized with the battle move flags', () => {
-   const {Dex}=require('../../dist/sim');const gravity=publicFieldGuide().entries.find(e=>e.id==='gravity');
-   for(const move of Dex.moves.all().filter(m=>m.flags.gravityboost))assert(gravity.sections['Impact moves'][0].includes(move.name));
-  });
-  it('documents current Trick Room exceptions and Magic Room walls', () => {
-   const entries=publicFieldGuide().entries;
-   assert(entries.find(e=>e.id==='trickroom').sections.Duration.join(' ').includes('Amplifield Rock does not extend'));
-   const magic=JSON.stringify(entries.find(e=>e.id==='magicroom').sections);assert(magic.includes('Arenite Wall'));assert(magic.includes('Atlantis Wall'));
-  });
- });
+describe('Rooms and Gravity reference', () => {
+	it('lists all four effects separately from fields and auras', () => {
+		const guide = publicFieldGuide(),
+			rooms = guide.entries.filter(e => e.kind === 'effect');
+		assert.equal(guide.coverage.rooms, 4);
+		assert.deepEqual(
+			rooms.map(e => e.id),
+			['trickroom', 'wonderroom', 'magicroom', 'gravity']
+		);
+		for (const e of rooms) {
+			assert.equal(e.group, 'Rooms & Gravity');
+			assert(e.summary);
+			assert(e.sections.Duration.length);
+			assert(e.review.includes('Cold Eclipse'));
+		}
+	});
+	it('keeps the impact list synchronized with the battle move flags', () => {
+		const { Dex } = require('../../dist/sim');
+		const gravity = publicFieldGuide().entries.find(e => e.id === 'gravity');
+		for (const move of Dex.moves.all().filter(m => m.flags.gravityboost))
+			assert(gravity.sections['Impact moves'][0].includes(move.name));
+	});
+	it('documents current Trick Room exceptions and Magic Room walls', () => {
+		const entries = publicFieldGuide().entries;
+		assert(
+			entries
+				.find(e => e.id === 'trickroom')
+				.sections.Duration.join(' ')
+				.includes('Amplifield Rock does not extend')
+		);
+		const magic = JSON.stringify(entries.find(e => e.id === 'magicroom').sections);
+		assert(magic.includes('Arenite Wall'));
+		assert(magic.includes('Atlantis Wall'));
+	});
+});
 
 describe('Player-facing Field Notes', () => {
 	it('includes transitions for every field and component rows without general ability descriptions', () => {
@@ -198,20 +300,35 @@ describe('Player-facing Field Notes', () => {
 				const row = entry.referenceDetails.moves.find(r => r.id === move);
 				assert(row, move);
 				assert(entry.sections.Transitions.join(' ').includes(row.name), row.name);
-				assert.match(row.fieldEffects.join(' '), id === 'volcanicterrain' || strength === 2 ? /Cave/ : /Volcanic/);
+				assert.match(
+					row.fieldEffects.join(' '),
+					id === 'volcanicterrain' || strength === 2 ? /Cave/ : /Volcanic/
+				);
 			}
 		}
 	});
 	it('keeps programming terms out of all field effects and interaction notes', () => {
 		for (const entry of publicFieldGuide().entries) {
-			const text = [entry.review, ...Object.values(entry.sections).flat(), ...Object.values(entry.referenceDetails || {}).flatMap(rows => rows.flatMap(row => row.fieldEffects))].join(' ');
-			assert(!/\b(handler|callback|helper|implementation|indexed|volatile|code)\b/i.test(text), entry.id);
+			const text = [
+				entry.review,
+				...Object.values(entry.sections).flat(),
+				...Object.values(entry.referenceDetails || {}).flatMap(rows =>
+					rows.flatMap(row => row.fieldEffects)
+				),
+			].join(' ');
+			assert(
+				!/\b(handler|callback|helper|implementation|indexed|volatile|code)\b/i.test(text),
+				entry.id
+			);
 		}
 	});
 	it('explains Dragon Den cooling routes in Field Notes', () => {
 		const sections = publicFieldGuide().entries.find(e => e.id === 'dragonsdenterrain').sections;
 		assert.match(sections.Transitions.join(' '), /Volcanic.*two cooling uses.*Surf.*Muddy Water/);
-		assert.match(sections.Transitions.join(' '), /Cave immediately.*Glaciate.*Hydro Vortex.*Oceanic Operetta.*Subzero Slammer/);
+		assert.match(
+			sections.Transitions.join(' '),
+			/Cave immediately.*Glaciate.*Hydro Vortex.*Oceanic Operetta.*Subzero Slammer/
+		);
 		assert.match(sections.Transitions.join(' '), /Sparkling Aria/);
 	});
 });

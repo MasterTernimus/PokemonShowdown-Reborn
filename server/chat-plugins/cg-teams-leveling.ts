@@ -4,7 +4,7 @@
  * Handles updating the level database for [Gen 9] Computer-Generated Teams.
  */
 
-import {SQL} from "../../lib";
+import { SQL } from "../../lib";
 
 export let addPokemon: SQL.Statement | null = null;
 export let incrementWins: SQL.Statement | null = null;

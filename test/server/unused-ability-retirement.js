@@ -1,9 +1,9 @@
 'use strict';
 const assert = require('assert').strict;
-const {Dex} = require('../../dist/sim');
-const {AbilityComponents} = require('../../dist/data/ability-components');
-const {AbilitiesText} = require('../../dist/data/text/abilities');
-const {SignaturePassiveComponents} = require('../../dist/data/signature-passive-data');
+const { Dex } = require('../../dist/sim');
+const { AbilityComponents } = require('../../dist/data/ability-components');
+const { AbilitiesText } = require('../../dist/data/text/abilities');
+const { SignaturePassiveComponents } = require('../../dist/data/signature-passive-data');
 
 const retired = ['voltagevolley', 'soaringspirit', 'backwash', 'soultag'];
 describe('Individually verified unused ability retirement', () => {

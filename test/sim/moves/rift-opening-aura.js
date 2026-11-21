@@ -1,13 +1,13 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
+const { Dex } = require('../../../dist/sim');
 let battle;
 
 function setup(field = 'rockyterrain', item = '') {
-	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-		[{species: 'Mew', ability: 'noability', item, moves: ['riftopening', 'splash', 'trickroom', 'magicroom']}],
-		[{species: 'Mew', ability: 'noability', moves: ['riftopening', 'splash', 'taunt']}],
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+		[{ species: 'Mew', ability: 'noability', item, moves: ['riftopening', 'splash', 'trickroom', 'magicroom'] }],
+		[{ species: 'Mew', ability: 'noability', moves: ['riftopening', 'splash', 'taunt'] }],
 	]);
 	battle.makeChoices('team 1', 'team 1');
 	if (field) battle.field.startTerrain(field);

@@ -1,11 +1,11 @@
 'use strict';
 const assert = require('assert').strict;
-const {Dex} = require('../../dist/sim');
-const {ReadableAbilitySummaries, PlainLanguageAbilityDescriptions, PlainLanguagePassiveDescriptions} = require('../../dist/data/ability-readability');
-const {AbilityDescriptionOverrides} = require('../../dist/data/ability-descriptions');
-const {AbilityDisplaySummaries} = require('../../dist/data/ability-display-summaries');
-const {AbilitiesText} = require('../../dist/data/text/abilities');
-const {SignaturePassiveDescriptions} = require('../../dist/data/signature-passive-data');
+const { Dex } = require('../../dist/sim');
+const { ReadableAbilitySummaries, PlainLanguageAbilityDescriptions, PlainLanguagePassiveDescriptions } = require('../../dist/data/ability-readability');
+const { AbilityDescriptionOverrides } = require('../../dist/data/ability-descriptions');
+const { AbilityDisplaySummaries } = require('../../dist/data/ability-display-summaries');
+const { AbilitiesText } = require('../../dist/data/text/abilities');
+const { SignaturePassiveDescriptions } = require('../../dist/data/signature-passive-data');
 describe('Readable ability summaries', () => {
 	it('keeps every current ability summary concise, complete and free of placeholder prose', () => {
 		for (const ability of Dex.abilities.all()) {

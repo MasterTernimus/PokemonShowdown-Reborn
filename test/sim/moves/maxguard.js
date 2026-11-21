@@ -5,29 +5,29 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Max Guard', function () {
-	afterEach(function () {
+describe('Max Guard', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should be disallowed by Taunt', function () {
+	it('should be disallowed by Taunt', () => {
 		battle = common.createBattle([[
 			{ species: "Feebas", moves: ['maxguard', 'tackle'] },
 		], [
-			{species: "Wynaut", moves: ['taunt', 'splash']},
+			{ species: "Wynaut", moves: ['taunt', 'splash'] },
 		]]);
 		assert.false(battle.p1.active[0].getMoves().find(move => move.id === 'maxguard').disabled);
 		battle.makeChoices('move tackle', 'auto');
 		assert.cantMove(() => battle.choose('p1', 'move maxguard'), 'Feebas', 'Max Guard', true);
 	});
 
-	it('should allow Feint to damage the user, but not break the protection effect', function () {
+	it('should allow Feint to damage the user, but not break the protection effect', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'minun', moves: ['maxguard'] },
-			{species: 'plusle', moves: ['sleeptalk']},
+			{ species: 'plusle', moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', ability: 'noguard', moves: ['fissure']},
-			{species: 'wynaut', moves: ['feint']},
+			{ species: 'wynaut', ability: 'noguard', moves: ['fissure'] },
+			{ species: 'wynaut', moves: ['feint'] },
 		]]);
 		// Test the protection effect directly; persistent G-Max disables protection moves.
 		battle.makeChoices('move maxguard, move sleeptalk', 'move fissure 1, move feint 1');
@@ -38,13 +38,13 @@ describe('Max Guard', function () {
 		assert(battle.log.some(line => line.includes('|-activate|p1a: Minun|move: Max Guard')));
 	});
 
-	it('should block certain moves that bypass Protect', function () {
+	it('should block certain moves that bypass Protect', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'sunflora', item: 'sitrusberry', ability: 'minus', moves: ['maxguard'] },
-			{species: 'plusle', ability: 'plus', moves: ['magneticflux', 'gearup']},
+			{ species: 'plusle', ability: 'plus', moves: ['magneticflux', 'gearup'] },
 		], [
-			{species: 'ferrothorn', item: 'sitrusberry', moves: ['flowershield', 'teatime']},
-			{species: 'tsareena', ability: 'intrepidsword', moves: ['psychup', 'sleeptalk']},
+			{ species: 'ferrothorn', item: 'sitrusberry', moves: ['flowershield', 'teatime'] },
+			{ species: 'tsareena', ability: 'intrepidsword', moves: ['psychup', 'sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move maxguard, move magneticflux', 'move flowershield, move psychup 1');

@@ -13,7 +13,7 @@ describe('Signature ability interaction boundaries', () => {
 		battle.randomChance = () => true;
 		battle.randomizer = amount => amount;
 		// These copied-ability checks isolate the package from Mew's new Synchronize passive.
-        for (const pokemon of battle.getAllActive()) if (pokemon.species.id === 'mew') pokemon.getPassives = () => [];
+		for (const pokemon of battle.getAllActive()) if (pokemon.species.id === 'mew') pokemon.getPassives = () => [];
 		return [battle.p1.active[0], battle.p2.active[0]];
 	}
 	function attack(source, target, id, overrides = {}) {

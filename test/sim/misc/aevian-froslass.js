@@ -2,26 +2,26 @@
 
 const assert = require('../../assert');
 const common = require('../../common');
-const {Learnsets} = require('../../../dist/data/learnsets');
+const { Learnsets } = require('../../../dist/data/learnsets');
 
-describe('Aevian Froslass', function () {
+describe('Aevian Froslass', () => {
 	let battle;
 	afterEach(() => {
 		if (battle && !battle.ended) battle.destroy();
 		battle = null;
 	});
 
-	it('is female-only and routes Froslassite to the matching Mega form', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame', preview: false}, [[
-			{species: 'Froslass-Aevian', ability: 'Adaptability', item: 'Froslassite', moves: ['surf']},
+	it('is female-only and routes Froslassite to the matching Mega form', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame', preview: false }, [[
+			{ species: 'Froslass-Aevian', ability: 'Adaptability', item: 'Froslassite', moves: ['surf'] },
 		], [
-			{species: 'Froslass', ability: 'Cursed Body', item: 'Froslassite', moves: ['icebeam']},
+			{ species: 'Froslass', ability: 'Cursed Body', item: 'Froslassite', moves: ['icebeam'] },
 		]]);
 		if (!battle.p1.active[0] || !battle.p2.active[0]) battle.makeChoices('team 1', 'team 1');
 		const aevian = battle.p1.active[0];
 		assert.equal(aevian.gender, 'F');
 		assert.deepEqual(aevian.species.types, ['Grass', 'Water']);
-		assert.deepEqual(aevian.species.baseStats, {hp: 70, atk: 70, def: 70, spa: 110, spd: 70, spe: 110});
+		assert.deepEqual(aevian.species.baseStats, { hp: 70, atk: 70, def: 70, spa: 110, spd: 70, spe: 110 });
 		assert.deepEqual(aevian.species.abilities, { 0: 'Adaptability', 1: 'Dissonant Echo', H: 'Storm Power' });
 		assert.equal(battle.actions.canMegaEvo(aevian), 'Froslass-Aevian-Mega');
 		assert.equal(battle.actions.canMegaEvo(battle.p2.active[0]), 'Froslass-Mega');
@@ -32,18 +32,18 @@ describe('Aevian Froslass', function () {
 		assert.equal(battle.p1.active[0].ability, 'stormcalling');
 	});
 
-	it('Storm Calling starts rain and exposes all three component effects', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame', preview: false}, [[
-			{species: 'Froslass-Aevian', ability: 'Adaptability', item: 'Froslassite', moves: ['hypervoice']},
+	it('Storm Calling starts rain and exposes all three component effects', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame', preview: false }, [[
+			{ species: 'Froslass-Aevian', ability: 'Adaptability', item: 'Froslassite', moves: ['hypervoice'] },
 		], [
-			{species: 'Chansey', ability: 'Natural Cure', moves: ['softboiled']},
+			{ species: 'Chansey', ability: 'Natural Cure', moves: ['softboiled'] },
 		]]);
 		if (!battle.p1.active[0] || !battle.p2.active[0]) battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move hypervoice mega', 'move softboiled');
 		assert.equal(battle.field.weather, 'raindance');
 	});
 
-	it('retains supplied moves except the approved Moonblast removal', function () {
+	it('retains supplied moves except the approved Moonblast removal', () => {
 		const requested = [
 			'absorb', 'afteryou', 'allyswitch', 'aquaring', 'assurance', 'avalanche', 'blizzard', 'bodyslam',
 			'boomburst', 'brickbreak', 'bulletseed', 'chipaway', 'disable', 'dive', 'doubleedge', 'drainpunch',

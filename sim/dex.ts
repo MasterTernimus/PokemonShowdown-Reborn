@@ -47,11 +47,33 @@ const MODS_DIR = path.resolve(DATA_DIR, './mods');
 const dexes: { [mod: string]: ModdedDex } = Object.create(null);
 
 type DataType =
-	'Abilities' | 'Rulesets' | 'FormatsData' | 'Items' | 'Learnsets' | 'Moves' |
-	'Natures' | 'Pokedex' | 'Scripts' | 'Conditions' | 'TypeChart' | 'PokemonGoData' | 'Terrains';
+	| 'Abilities' |
+	'Rulesets' |
+	'FormatsData' |
+	'Items' |
+	'Learnsets' |
+	'Moves' |
+	'Natures' |
+	'Pokedex' |
+	'Scripts' |
+	'Conditions' |
+	'TypeChart' |
+	'PokemonGoData' |
+	'Terrains';
 const DATA_TYPES: DataType[] = [
-	'Abilities', 'Rulesets', 'FormatsData', 'Items', 'Learnsets', 'Moves',
-	'Natures', 'Pokedex', 'Scripts', 'Conditions', 'TypeChart', 'PokemonGoData', 'Terrains',
+	'Abilities',
+	'Rulesets',
+	'FormatsData',
+	'Items',
+	'Learnsets',
+	'Moves',
+	'Natures',
+	'Pokedex',
+	'Scripts',
+	'Conditions',
+	'TypeChart',
+	'PokemonGoData',
+	'Terrains',
 ];
 
 const DATA_FILES = {
@@ -71,8 +93,12 @@ const DATA_FILES = {
 };
 
 /** Unfortunately we do for..in too much to want to deal with the casts */
-export interface DexTable<T> { [id: string]: T }
-export interface AliasesTable { [id: IDEntry]: string }
+export interface DexTable<T> {
+	[id: string]: T;
+}
+export interface AliasesTable {
+	[id: IDEntry]: string;
+}
 
 interface DexTableData {
 	Abilities: DexTable<import('./dex-abilities').AbilityData>;
@@ -109,7 +135,7 @@ export class ModdedDex {
 	readonly Format = Format;
 	readonly ModdedDex = ModdedDex;
 	readonly Terrain = DataTerrain;
-	readonly name = "[ModdedDex]";
+	readonly name = '[ModdedDex]';
 	readonly isBase: boolean;
 	readonly currentMod: string;
 	readonly dataDir: string;
@@ -141,9 +167,9 @@ export class ModdedDex {
 	readonly fuzzyAliases: Map<ID, ID[]> | null = null;
 
 	constructor(mod = 'base') {
-		this.isBase = (mod === 'base');
+		this.isBase = mod === 'base';
 		this.currentMod = mod;
-		this.dataDir = (this.isBase ? DATA_DIR : MODS_DIR + '/' + this.currentMod);
+		this.dataDir = this.isBase ? DATA_DIR : MODS_DIR + '/' + this.currentMod;
 
 		this.dataCache = null;
 		this.textCache = null;
@@ -228,7 +254,7 @@ export class ModdedDex {
 		// remove zalgo
 		name = name.replace(
 			/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g,
-			''
+			'',
 		);
 		name = name.replace(/[\u239b-\u23b9]/g, '');
 
@@ -241,7 +267,7 @@ export class ModdedDex {
 	 */
 	getImmunity(
 		source: { type: string } | string,
-		target: { getTypes: () => string[] } | { types: string[] } | string[] | string
+		target: { getTypes: () => string[] } | { types: string[] } | string[] | string,
 	): boolean {
 		const sourceType: string = typeof source !== 'string' ? source.type : source;
 		// @ts-expect-error really wish TS would support this
@@ -259,11 +285,16 @@ export class ModdedDex {
 
 	getEffectiveness(
 		source: { type: string, types?: string[] } | string,
-		target: { getTypes: () => string[] } | { types: string[] } | string[] | string
+		target: { getTypes: () => string[] } | { types: string[] } | string[] | string,
 	): number {
-		const sourceTypes: string[] = typeof source === 'string' ? [source] : (source.types !== undefined ? [...source.types] : [source.type]);
-		// @ts-expect-error
-		const targetTyping: string[] = target.getTypes?.() || target.types || (typeof (target) === 'string' ? [target] : target);
+		const sourceTypes: string[] =
+			typeof source === 'string' ?
+				[source] :
+				source.types !== undefined ?
+					[...source.types] :
+					[source.type];
+		const targetTyping = typeof target === 'string' ? [target] :
+			Array.isArray(target) ? target : 'getTypes' in target ? target.getTypes() : target.types;
 		let totalTypeMod = 0;
 		for (const sourceType of sourceTypes) {
 			for (const type of targetTyping) {
@@ -335,8 +366,22 @@ export class ModdedDex {
 
 	getHiddenPower(ivs: StatsTable) {
 		const hpTypes = [
-			'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel',
-			'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark',
+			'Fighting',
+			'Flying',
+			'Poison',
+			'Ground',
+			'Rock',
+			'Bug',
+			'Ghost',
+			'Steel',
+			'Fire',
+			'Water',
+			'Grass',
+			'Electric',
+			'Psychic',
+			'Ice',
+			'Dragon',
+			'Dark',
 		];
 		const tr = this.trunc;
 		const stats = { hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31 };
@@ -349,7 +394,10 @@ export class ModdedDex {
 			return {
 				type: hpTypes[4 * (atkDV % 4) + (defDV % 4)],
 				power: tr(
-					(5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV % 4)) / 2 + 31
+					(5 * ((spcDV >> 3) + 2 * (speDV >> 3) + 4 * (defDV >> 3) + 8 * (atkDV >> 3)) +
+						(spcDV % 4)) /
+						2 +
+						31,
 				),
 			};
 		} else {
@@ -363,9 +411,9 @@ export class ModdedDex {
 				i *= 2;
 			}
 			return {
-				type: hpTypes[tr(hpTypeX * 15 / 63)],
+				type: hpTypes[tr((hpTypeX * 15) / 63)],
 				// After Gen 6, Hidden Power is always 60 base power
-				power: (this.gen && this.gen < 6) ? tr(hpPowerX * 40 / 63) + 30 : 60,
+				power: this.gen && this.gen < 6 ? tr((hpPowerX * 40) / 63) + 30 : 60,
 			};
 		}
 	}
@@ -375,24 +423,34 @@ export class ModdedDex {
 	 * compatibility with the cartridge games' math systems.
 	 */
 	trunc(this: void, num: number, bits = 0) {
-		if (bits) return (num >>> 0) % (2 ** bits);
+		if (bits) return (num >>> 0) % 2 ** bits;
 		return num >>> 0;
 	}
 
 	dataSearch(
 		target: string,
 		searchIn?: ('Pokedex' | 'Moves' | 'Abilities' | 'Items' | 'Natures' | 'TypeChart')[] | null,
-		isInexact?: boolean
+		isInexact?: boolean,
 	): AnyObject[] | null {
 		if (!target) return null;
 
 		searchIn = searchIn || ['Pokedex', 'Moves', 'Abilities', 'Items', 'Natures'];
 
 		const searchObjects = {
-			Pokedex: 'species', Moves: 'moves', Abilities: 'abilities', Items: 'items', Natures: 'natures', TypeChart: 'types',
+			Pokedex: 'species',
+			Moves: 'moves',
+			Abilities: 'abilities',
+			Items: 'items',
+			Natures: 'natures',
+			TypeChart: 'types',
 		} as const;
 		const searchTypes = {
-			Pokedex: 'pokemon', Moves: 'move', Abilities: 'ability', Items: 'item', Natures: 'nature', TypeChart: 'type',
+			Pokedex: 'pokemon',
+			Moves: 'move',
+			Abilities: 'ability',
+			Items: 'item',
+			Natures: 'nature',
+			TypeChart: 'type',
 		} as const;
 		let searchResults: AnyObject[] | null = [];
 		for (const table of searchIn) {
@@ -466,7 +524,9 @@ export class ModdedDex {
 				throw new TypeError(`${filePath}, if it exists, must export a non-null object`);
 			}
 			if (dataObject[dataType]?.constructor?.name !== 'Object') {
-				throw new TypeError(`${filePath}, if it exists, must export an object whose '${dataType}' property is an Object`);
+				throw new TypeError(
+					`${filePath}, if it exists, must export an object whose '${dataType}' property is an Object`,
+				);
 			}
 			return dataObject[dataType];
 		} catch (e: any) {
@@ -477,7 +537,8 @@ export class ModdedDex {
 	}
 
 	loadTextFile(
-		name: string, exportName: string
+		name: string,
+		exportName: string,
 	): DexTable<MoveText | ItemText | AbilityText | PokedexText | DefaultText> {
 		return require(`${DATA_DIR}/text/${name}`)[exportName];
 	}
@@ -586,7 +647,10 @@ export class ModdedDex {
 						formeLetter = 'bm' as ID;
 					} else {
 						// not doing baseForme as a hack to make aliases point to base forme
-						formeLetter = (species.forme || '').split(/ |-/).map(part => toID(part).charAt(0)).join('') as ID;
+						formeLetter = (species.forme || '')
+							.split(/ |-/)
+							.map(part => toID(part).charAt(0))
+							.join('') as ID;
 					}
 					addFuzzy(forme, id);
 				}
@@ -625,14 +689,14 @@ export class ModdedDex {
 		const Scripts = this.loadDataFile(basePath, 'Scripts') || {};
 		// We want to inherit most of Scripts but not this.
 		const init = Scripts.init;
-		this.parentMod = this.isBase ? '' : (Scripts.inherit || 'base');
+		this.parentMod = this.isBase ? '' : Scripts.inherit || 'base';
 
 		let parentDex;
 		if (this.parentMod) {
 			parentDex = dexes[this.parentMod];
 			if (!parentDex || parentDex === this) {
 				throw new Error(
-					`Unable to load ${this.currentMod}. 'inherit' in scripts.ts should specify a parent mod from which to inherit data, or must be not specified.`
+					`Unable to load ${this.currentMod}. 'inherit' in scripts.ts should specify a parent mod from which to inherit data, or must be not specified.`,
 				);
 			}
 		}

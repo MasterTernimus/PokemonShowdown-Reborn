@@ -17,7 +17,7 @@ const sourceRoots = ['config', 'data', 'dev-tools', 'lib', 'server', 'sim', 'too
 const excludedDirectories = new Set(['node_modules', 'dist', 'logs', 'databases', 'artifacts', 'backups']);
 const findFilesForPath = directory => {
 	const out = [];
-	for (const entry of fs.readdirSync(directory, {withFileTypes: true})) {
+	for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
 		if (entry.name.startsWith('.') || excludedDirectories.has(entry.name)) continue;
 		const file = path.join(directory, entry.name);
 		// stat preserves support for private source trees linked into server/chat-plugins.
@@ -69,6 +69,6 @@ exports.transpile = (force = false, decl = false) => {
 
 exports.buildDecls = () => {
 	const started = Date.now();
-	child_process.execFileSync(process.execPath, ['./node_modules/typescript/bin/tsc', '-p', 'sim'], {stdio: 'inherit'});
+	child_process.execFileSync(process.execPath, ['./node_modules/typescript/bin/tsc', '-p', 'sim'], { stdio: 'inherit' });
 	console.log(`Declarations: ${Date.now() - started}ms.`);
 };

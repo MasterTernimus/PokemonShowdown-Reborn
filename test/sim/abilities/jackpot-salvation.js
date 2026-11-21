@@ -67,7 +67,7 @@ describe('Hot Streak and False Salvation', () => {
 			}
 			const rolls = [];
 			battle.randomChance = (n, d) => { if (d === 5) rolls.push(n); return false; };
-			attack(p, foe, {multihit: 3, target: 'allAdjacentFoes'}); attack(p, foe);
+			attack(p, foe, { multihit: 3, target: 'allAdjacentFoes' }); attack(p, foe);
 			assert.deepEqual(rolls, [mode === 'suppressed-ally' ? 1 : 2]);
 		});
 	}

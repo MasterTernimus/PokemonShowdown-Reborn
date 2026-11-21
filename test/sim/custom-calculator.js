@@ -16,7 +16,7 @@ describe('Custom engine calculator', () => {
 		assert.deepEqual(summary.exampleLog, detailed.exampleLog);
 	});
 	it('only checks participating slots for public-state eligibility', () => {
-		const input = scenario({evaluationMode: 'public-state'});
+		const input = scenario({ evaluationMode: 'public-state' });
 		input.actors[2].ability = 'Berserk';
 		assert.equal(calculateScenario(input).results.length, 2);
 		for (const mode of ['doubles', 'freeforall']) {
@@ -25,17 +25,17 @@ describe('Custom engine calculator', () => {
 		}
 	});
 	it('preserves an entry boost unless the scenario explicitly overrides it', () => {
-		const input = scenario({format:'gen9dragonsden', field:'dragonsdenterrain', move:'dragonpulse'});
-		Object.assign(input.actors[0], {species:'Drampa', ability:'Berserk'});
+		const input = scenario({ format: 'gen9dragonsden', field: 'dragonsdenterrain', move: 'dragonpulse' });
+		Object.assign(input.actors[0], { species: 'Drampa', ability: 'Berserk' });
 		const auto = calculateScenario(input);
 		assert.equal(auto.resolved.actors[0].boosts.spa, 1);
-		input.actors[0].boosts = {spa:0};
+		input.actors[0].boosts = { spa: 0 };
 		const reset = calculateScenario(input);
 		assert.equal(reset.resolved.actors[0].boosts.spa, 0);
 		assert(auto.results[1].moveRange.min > reset.results[1].moveRange.min);
 	});
 	it('separates Blizzard damage rolls, critical hits, and uses that dealt no HP damage', () => {
-		const input = scenario({move: 'Blizzard', samples: 32});
+		const input = scenario({ move: 'Blizzard', samples: 32 });
 		input.actors[0].species = 'Glaceon';
 		input.actors[1].species = 'Dragonite';
 		const result = calculateScenario(input).results[1];
@@ -55,19 +55,19 @@ describe('Custom engine calculator', () => {
 		assert.equal(status.moveRange, null);
 	});
 	it('exposes the complete field and authoritative species/component inventory', () => {
-		const {calculatorMetadata} = require('../../dist/sim/custom-calculator');
-		const {Terrains} = require('../../dist/data/terrains');
-		const {AbilityComponents} = require('../../dist/data/ability-components');
-		const {Dex} = require('../../dist/sim/dex');
+		const { calculatorMetadata } = require('../../dist/sim/custom-calculator');
+		const { Terrains } = require('../../dist/data/terrains');
+		const { AbilityComponents } = require('../../dist/data/ability-components');
+		const { Dex } = require('../../dist/sim/dex');
 		const metadata = calculatorMetadata();
 		assert.deepEqual(metadata.fields.map(f => f.id).sort(), ['', ...Object.keys(Terrains), 'electricterrain', 'grassyterrain', 'mistyterrain', 'psychicterrain', 'adriennterrain'].sort());
 		assert.deepEqual(metadata.species.find(p => p.name === 'Sylveon').abilities, Dex.species.get('Sylveon').abilities);
 		assert.deepEqual(metadata.abilityComponents.soothingpresence, AbilityComponents.soothingpresence.map(id => Dex.abilities.get(id).name));
-		assert.throws(() => validateScenario(scenario({field: 'inventedfield'})), /Unsupported choice/);
+		assert.throws(() => validateScenario(scenario({ field: 'inventedfield' })), /Unsupported choice/);
 		for (const mode of ['singles', 'doubles', 'freeforall']) {
 			const base = calculatorFormats().find(f => f.gameType === mode);
 			for (const field of Object.keys(Terrains)) {
-				const {battle} = buildCalculatorBattle(validateScenario(scenario({format: base.id, field})), 0);
+				const { battle } = buildCalculatorBattle(validateScenario(scenario({ format: base.id, field })), 0);
 				assert.equal(battle.field.terrain, field, mode + ': ' + field);
 				battle.destroy();
 			}

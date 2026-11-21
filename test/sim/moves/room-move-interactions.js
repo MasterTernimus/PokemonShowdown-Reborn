@@ -3,13 +3,13 @@
 const assert = require('assert').strict;
 const common = require('../../common');
 
-describe('Room move interactions', function () {
+describe('Room move interactions', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 	function setup(move, item = '', ability = 'No Ability') {
 		battle = common.createBattle({}, [
-			[{species: 'Mew', ability, item, moves: [move, 'growl']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['growl', 'protect']}],
+			[{ species: 'Mew', ability, item, moves: [move, 'growl'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['growl', 'protect'] }],
 		]);
 		return [battle.p1.active[0], battle.p2.active[0]];
 	}
@@ -61,10 +61,10 @@ describe('Room move interactions', function () {
 	for (const ability of ['No Ability', 'Contrary']) {
 		it(`Guard Swap cleanses only the user's received negative defensive stages (${ability})`, () => {
 			const [p, q] = setup('guardswap', '', ability);
-			p.setBoost({def: -3, spd: 2, atk: -2});
-			q.setBoost({def: 4, spd: -2, spa: -1});
+			p.setBoost({ def: -3, spd: 2, atk: -2 });
+			q.setBoost({ def: 4, spd: -2, spa: -1 });
 			battle.field.addPseudoWeather('wonderroom', p);
-			battle.actions.useMove('guardswap', p, {target: q});
+			battle.actions.useMove('guardswap', p, { target: q });
 			assert.equal(p.boosts.def, 4);
 			assert.equal(p.boosts.spd, 0);
 			assert.equal(p.boosts.atk, -2);
@@ -76,22 +76,22 @@ describe('Room move interactions', function () {
 	}
 	it('Guard Swap clears both negative defenses after a successful swap', () => {
 		const [p, q] = setup('guardswap');
-		q.setBoost({def: -2, spd: -4});
+		q.setBoost({ def: -2, spd: -4 });
 		battle.field.addPseudoWeather('wonderroom', p);
-		battle.actions.useMove('guardswap', p, {target: q});
+		battle.actions.useMove('guardswap', p, { target: q });
 		assert.equal(p.boosts.def, 0);
 		assert.equal(p.boosts.spd, 0);
 	});
 	it('Guard Swap transfers negative defenses normally outside Wonder Room', () => {
 		const [p, q] = setup('guardswap');
-		q.setBoost({def: -2, spd: -4});
-		battle.actions.useMove('guardswap', p, {target: q});
+		q.setBoost({ def: -2, spd: -4 });
+		battle.actions.useMove('guardswap', p, { target: q });
 		assert.equal(p.boosts.def, -2);
 		assert.equal(p.boosts.spd, -4);
 	});
 	it('a protected Guard Swap does not cleanse the user', () => {
 		const [p, q] = setup('guardswap');
-		p.setBoost({def: -3, spd: -2});
+		p.setBoost({ def: -3, spd: -2 });
 		battle.field.addPseudoWeather('wonderroom', p);
 		battle.makeChoices('move guardswap', 'move protect');
 		assert.equal(p.boosts.def, -3);

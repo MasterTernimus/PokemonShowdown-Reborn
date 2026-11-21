@@ -1,18 +1,160 @@
 // Regression coverage for the approved Pulse form.
-const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim/dex');
-describe('Pulse Eruption',()=>{let b;afterEach(()=>{b?.destroy();b=null;});function setup(ability='No Ability',level=100,ev=252){b=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Camerupt',ability:'Magma Armor',item:'Anomaly Core',level,evs:{hp:ev},moves:['splash']},{species:'Mew',ability:'No Ability',moves:['splash']}],[{species:'Mew',ability,moves:['watergun','skillswap','toxic']}]]);b.makeChoices('team 12','team 1');const p=b.p1.active[0];assert(p.maxhp>1);p.hp=p.maxhp;assert.equal(b.actions.canMegaEvo(p),'Camerupt-Pulse');assert(b.actions.runMegaEvo(p));return[p,b.p2.active[0]];}function hit(p,t,extra={}){const m=b.dex.getActiveMove('watergun');Object.assign(m,{accuracy:true,willCrit:false},extra);b.actions.runMove(m,t,t.getLocOf(p));}
-for(const [level,ev] of [[1,0],[50,252],[100,252]])it('exact HP1 at level '+level,()=>{const[p]=setup('No Ability',level,ev);assert.equal(p.hp,1);assert.equal(p.maxhp,1);assert.equal(p.baseMaxhp,1);assert(p.species.cannotDynamax);p.updateMaxHp();b.heal(999,p);assert.equal(p.hp,1);assert.equal(p.maxhp,1);});
-it('preserves base/Mega and defines exact stats',()=>{assert.deepEqual(Dex.species.get('cameruptpulse').baseStats,{hp:1,atk:10,def:10,spa:170,spd:10,spe:10});assert.equal(Dex.species.get('camerupt').baseStats.hp,90);assert.equal(Dex.species.get('cameruptmega').requiredItem,'Cameruptite');});
-it('survives repeated attacks including multihit at1HP',()=>{const[p,t]=setup();hit(p,t);hit(p,t,{multihit:5});assert.equal(p.hp,1);});
-it('Mold Breaker defeats Sturdy',()=>{const[p,t]=setup('Mold Breaker');hit(p,t);assert.equal(p.hp,0);});
-it('residual damage defeats it',()=>{const[p,t]=setup();b.damage(1,p,t,b.dex.conditions.get('sandstorm'));assert.equal(p.hp,0);});
-it('does not cure major status or confusion on update or ability start',()=>{const[p,t]=setup();p.setStatus('par',t);p.addVolatile('confusion',t);b.eachEvent('Update');assert.equal(p.status,'par');assert(p.volatiles.confusion);p.setAbility('No Ability');p.setAbility('Pulse Eruption');b.eachEvent('Update');assert.equal(p.status,'par');assert(p.volatiles.confusion);});
-it('installs the automatic moves in order and preserves spent PP on re-entry',()=>{const[p]=setup();const expected=['eruption','snarl','shadowball','earthpower'];assert.deepEqual(p.moveSlots.map(m=>m.id),expected);p.moveSlots[0].pp-=2;const pp=p.moveSlots[0].pp;b.makeChoices('switch 2','move skillswap');b.makeChoices('switch 2','move skillswap');assert.deepEqual(p.moveSlots.map(m=>m.id),expected);assert.equal(p.moveSlots[0].pp,pp);});
-it('sets three-turn field',()=>{setup();assert.equal(b.field.terrain,'superheatedterrain');assert.equal(b.field.terrainState.duration,3);});
-it('cannot Skill Swap either direction',()=>{const[p,t]=setup();assert.equal(b.skillSwap(t,p),false);assert.equal(b.skillSwap(p,t),false);});
-it('entry hazards still KO after transformation',()=>{const[p]=setup();b.makeChoices('switch 2','move skillswap');b.p1.addSideCondition('stealthrock',b.p2.active[0]);b.makeChoices('switch 2','move skillswap');assert.equal(p.hp,0);});
-it('cannot offer Dynamax and retains HP1 after switch',()=>{const[p]=setup();assert.equal(p.getDynamaxRequest(),undefined);b.makeChoices('switch 2','move skillswap');b.makeChoices('switch 2','move skillswap');assert.equal(p.maxhp,1);assert.equal(p.hp,1);});
-it('field creation respects protection and Neutralization',()=>{const[p,t]=setup();p.setAbility('No Ability');b.field.setTerrain('underwaterterrain',p);p.setAbility('Pulse Eruption');assert.equal(b.field.terrain,'underwaterterrain');});
-it('field creation respects Neutralization',()=>{const[p,t]=setup();p.setAbility('No Ability');b.field.setTerrain('factoryterrain',p);t.setAbility('Neutralization');p.setAbility('Pulse Eruption');assert.equal(b.field.terrain,'factoryterrain');});
-it('ability replacement cannot recreate its field',()=>{const[p]=setup();p.setAbility('No Ability');b.field.setTerrain('factoryterrain',p);p.setAbility('Pulse Eruption');assert.equal(b.field.terrain,'factoryterrain');});
+const assert = require('assert').strict,
+	common = require('../../common'),
+	{ Dex } = require('../../../dist/sim/dex');
+describe('Pulse Eruption', () => {
+	let b;
+	afterEach(() => {
+		b?.destroy();
+		b = null;
+	});
+	function setup(ability = 'No Ability', level = 100, ev = 252) {
+		b = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[
+				{
+					species: 'Camerupt',
+					ability: 'Magma Armor',
+					item: 'Anomaly Core',
+					level,
+					evs: { hp: ev },
+					moves: ['splash'],
+				},
+				{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+			],
+			[{ species: 'Mew', ability, moves: ['watergun', 'skillswap', 'toxic'] }],
+		]);
+		b.makeChoices('team 12', 'team 1');
+		const p = b.p1.active[0];
+		assert(p.maxhp > 1);
+		p.hp = p.maxhp;
+		assert.equal(b.actions.canMegaEvo(p), 'Camerupt-Pulse');
+		assert(b.actions.runMegaEvo(p));
+		return [p, b.p2.active[0]];
+	}
+	function hit(p, t, extra = {}) {
+		const m = b.dex.getActiveMove('watergun');
+		Object.assign(m, { accuracy: true, willCrit: false }, extra);
+		b.actions.runMove(m, t, t.getLocOf(p));
+	}
+	for (const [level, ev] of [
+		[1, 0],
+		[50, 252],
+		[100, 252],
+	])
+		it('exact HP1 at level ' + level, () => {
+			const [p] = setup('No Ability', level, ev);
+			assert.equal(p.hp, 1);
+			assert.equal(p.maxhp, 1);
+			assert.equal(p.baseMaxhp, 1);
+			assert(p.species.cannotDynamax);
+			p.updateMaxHp();
+			b.heal(999, p);
+			assert.equal(p.hp, 1);
+			assert.equal(p.maxhp, 1);
+		});
+	it('preserves base/Mega and defines exact stats', () => {
+		assert.deepEqual(Dex.species.get('cameruptpulse').baseStats, {
+			hp: 1,
+			atk: 10,
+			def: 10,
+			spa: 170,
+			spd: 10,
+			spe: 10,
+		});
+		assert.equal(Dex.species.get('camerupt').baseStats.hp, 90);
+		assert.equal(Dex.species.get('cameruptmega').requiredItem, 'Cameruptite');
+	});
+	it('survives repeated attacks including multihit at1HP', () => {
+		const [p, t] = setup();
+		hit(p, t);
+		hit(p, t, { multihit: 5 });
+		assert.equal(p.hp, 1);
+	});
+	it('Mold Breaker defeats Sturdy', () => {
+		const [p, t] = setup('Mold Breaker');
+		hit(p, t);
+		assert.equal(p.hp, 0);
+	});
+	it('residual damage defeats it', () => {
+		const [p, t] = setup();
+		b.damage(1, p, t, b.dex.conditions.get('sandstorm'));
+		assert.equal(p.hp, 0);
+	});
+	it('does not cure major status or confusion on update or ability start', () => {
+		const [p, t] = setup();
+		p.setStatus('par', t);
+		p.addVolatile('confusion', t);
+		b.eachEvent('Update');
+		assert.equal(p.status, 'par');
+		assert(p.volatiles.confusion);
+		p.setAbility('No Ability');
+		p.setAbility('Pulse Eruption');
+		b.eachEvent('Update');
+		assert.equal(p.status, 'par');
+		assert(p.volatiles.confusion);
+	});
+	it('installs the automatic moves in order and preserves spent PP on re-entry', () => {
+		const [p] = setup();
+		const expected = ['eruption', 'snarl', 'shadowball', 'earthpower'];
+		assert.deepEqual(
+			p.moveSlots.map(m => m.id),
+			expected
+		);
+		p.moveSlots[0].pp -= 2;
+		const pp = p.moveSlots[0].pp;
+		b.makeChoices('switch 2', 'move skillswap');
+		b.makeChoices('switch 2', 'move skillswap');
+		assert.deepEqual(
+			p.moveSlots.map(m => m.id),
+			expected
+		);
+		assert.equal(p.moveSlots[0].pp, pp);
+	});
+	it('sets three-turn field', () => {
+		setup();
+		assert.equal(b.field.terrain, 'superheatedterrain');
+		assert.equal(b.field.terrainState.duration, 3);
+	});
+	it('cannot Skill Swap either direction', () => {
+		const [p, t] = setup();
+		assert.equal(b.skillSwap(t, p), false);
+		assert.equal(b.skillSwap(p, t), false);
+	});
+	it('entry hazards still KO after transformation', () => {
+		const [p] = setup();
+		b.makeChoices('switch 2', 'move skillswap');
+		b.p1.addSideCondition('stealthrock', b.p2.active[0]);
+		b.makeChoices('switch 2', 'move skillswap');
+		assert.equal(p.hp, 0);
+	});
+	it('cannot offer Dynamax and retains HP1 after switch', () => {
+		const [p] = setup();
+		assert.equal(p.getDynamaxRequest(), undefined);
+		b.makeChoices('switch 2', 'move skillswap');
+		b.makeChoices('switch 2', 'move skillswap');
+		assert.equal(p.maxhp, 1);
+		assert.equal(p.hp, 1);
+	});
+	it('field creation respects protection and Neutralization', () => {
+		const [p, t] = setup();
+		p.setAbility('No Ability');
+		b.field.setTerrain('underwaterterrain', p);
+		p.setAbility('Pulse Eruption');
+		assert.equal(b.field.terrain, 'underwaterterrain');
+	});
+	it('field creation respects Neutralization', () => {
+		const [p, t] = setup();
+		p.setAbility('No Ability');
+		b.field.setTerrain('factoryterrain', p);
+		t.setAbility('Neutralization');
+		p.setAbility('Pulse Eruption');
+		assert.equal(b.field.terrain, 'factoryterrain');
+	});
+	it('ability replacement cannot recreate its field', () => {
+		const [p] = setup();
+		p.setAbility('No Ability');
+		b.field.setTerrain('factoryterrain', p);
+		p.setAbility('Pulse Eruption');
+		assert.equal(b.field.terrain, 'factoryterrain');
+	});
 });

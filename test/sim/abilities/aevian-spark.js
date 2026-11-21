@@ -2,7 +2,7 @@
 
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
+const { Dex } = require('../../../dist/sim');
 
 const requestedMoves = `Thunder Punch|Absorb|Tackle|Stun Spore|Leech Seed|Bullet Seed|Headbutt|Sucker Punch|Mirror Coat|Fake Out|Spotlight|Wake-Up Shock|Seed Bomb|Zing Zap|Aerial Ace|Assurance|Brick Break|Brutal Swing|Bulk Up|Charm|Cut|Drain Punch|Dream Eater|Eerie Impulse|Electric Terrain|Electro Ball|Electroweb|Endeavor|Energy Ball|Flash|Fling|Focus Energy|Giga Drain|Giga Impact|Grass Knot|Grassy Glide|Grassy Terrain|Hone Claws|Hyper Beam|Infestation|Iron Head|Knock Off|Laser Focus|Magical Leaf|Magnet Rise|Mega Punch|Metronome|Nature Power|Payback|Poison Jab|Pollen Puff|Power Whip|Power-Up Punch|Rain Dance|Reversal|Rock Slide|Rock Smash|Rock Tomb|Shadow Claw|Shock Wave|Skitter Smack|Smack Down|Solar Beam|Solar Blade|Strength|Sunny Day|Swords Dance|Synthesis|Taunt|Thief|Throat Chop|Thunder|Thunder Wave|Thunderbolt|Volt Switch|Wild Charge|Work Up|Worry Seed|Zap Cannon|Zen Headbutt`.split('|').map(name => Dex.toID(name));
 
@@ -19,7 +19,7 @@ describe('Breloom-Rejuv, Aevian Spark, and Wake-Up Shock', () => {
 		assert.deepEqual(rejuv.types, ['Grass', 'Electric']);
 		assert.deepEqual(rejuv.baseStats, base.baseStats);
 		assert.equal(base.abilities.S, 'Aevian Spark');
-		assert.deepEqual(rejuv.abilities, {0: 'Aevian Spark'});
+		assert.deepEqual(rejuv.abilities, { 0: 'Aevian Spark' });
 		assert.equal(rejuv.requiredAbility, 'Aevian Spark');
 		assert.equal(Dex.items.get('Breloomite').megaStone['Breloom-Rejuv'], 'Breloom-Mega');
 		assert.equal(new Set(requestedMoves).size, requestedMoves.length, 'Requested list contains duplicate IDs');
@@ -30,9 +30,9 @@ describe('Breloom-Rejuv, Aevian Spark, and Wake-Up Shock', () => {
 	});
 
 	it('transforms on entry and can Mega Evolve with Breloomite', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Breloom', ability: 'Aevian Spark', item: 'Breloomite', moves: ['splash']},
-		], [{species: 'Mew', moves: ['splash']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Breloom', ability: 'Aevian Spark', item: 'Breloomite', moves: ['splash'] },
+		], [{ species: 'Mew', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		const breloom = battle.p1.active[0];
 		assert.equal(breloom.species.id, 'breloomrejuv');
@@ -43,9 +43,9 @@ describe('Breloom-Rejuv, Aevian Spark, and Wake-Up Shock', () => {
 	});
 
 	it('applies Early Bird, Technician, and Static without Tough Claws', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Breloom', ability: 'Aevian Spark', moves: ['splash']},
-		], [{species: 'Mew', moves: ['tackle']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Breloom', ability: 'Aevian Spark', moves: ['splash'] },
+		], [{ species: 'Mew', moves: ['tackle'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		const breloom = battle.p1.active[0];
 		const foe = battle.p2.active[0];
@@ -58,9 +58,9 @@ describe('Breloom-Rejuv, Aevian Spark, and Wake-Up Shock', () => {
 	});
 
 	it('doubles Wake-Up Shock against sleep and wakes the target without paralysis', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Breloom', ability: 'Aevian Spark', moves: ['wakeupshock']},
-		], [{species: 'Aggron', moves: ['splash']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Breloom', ability: 'Aevian Spark', moves: ['wakeupshock'] },
+		], [{ species: 'Aggron', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		const user = battle.p1.active[0];
 		const target = battle.p2.active[0];
@@ -77,9 +77,9 @@ describe('Breloom-Rejuv, Aevian Spark, and Wake-Up Shock', () => {
 	});
 
 	it('can paralyze an awake target on a successful hit', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Breloom', ability: 'Aevian Spark', moves: ['wakeupshock']},
-		], [{species: 'Aggron', moves: ['splash']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Breloom', ability: 'Aevian Spark', moves: ['wakeupshock'] },
+		], [{ species: 'Aggron', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.randomChance = () => true;
 		battle.makeChoices('move wakeupshock', 'move splash');

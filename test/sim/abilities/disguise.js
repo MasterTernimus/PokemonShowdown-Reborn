@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Disguise', function () {
+describe('Disguise', () => {
 	afterEach(() => battle.destroy());
 
-	common.itGen(7, 'should block damage from one move', function () {
+	common.itGen(7, 'should block damage from one move', () => {
 		battle = common.gen(7).createBattle([[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
 			// Mewtwo's native Absolute Pressure bypasses defensive abilities.
 			{ species: 'Mew', ability: 'pressure', moves: ['psystrike'] },
@@ -19,20 +19,20 @@ describe('Disguise', function () {
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices());
 	});
 
-	common.itGen(7, 'should only block damage from the first hit of a move', function () {
+	common.itGen(7, 'should only block damage from the first hit of a move', () => {
 		battle = common.gen(7).createBattle([[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
-			{species: 'Beedrill', ability: 'swarm', moves: ['twineedle']},
+			{ species: 'Beedrill', ability: 'swarm', moves: ['twineedle'] },
 		]]);
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices());
 	});
 
-	common.itGen(7, `should bust Disguise on self-hit confusion`, function () {
-		battle = common.gen(7).createBattle({forceRandomChance: true}, [[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
+	common.itGen(7, `should bust Disguise on self-hit confusion`, () => {
+		battle = common.gen(7).createBattle({ forceRandomChance: true }, [[
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
-			{species: 'Sableye', ability: 'prankster', moves: ['confuseray']},
+			{ species: 'Sableye', ability: 'prankster', moves: ['confuseray'] },
 		]]);
 
 		battle.makeChoices();
@@ -40,31 +40,31 @@ describe('Disguise', function () {
 		assert(battle.p1.active[0].passiveStates.disguise.busted);
 	});
 
-	it('should not block damage from weather effects', function () {
+	it('should not block damage from weather effects', () => {
 		battle = common.createBattle([[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
-			{species: 'Tyranitar', ability: 'sandstream', moves: ['rest']},
+			{ species: 'Tyranitar', ability: 'sandstream', moves: ['rest'] },
 		]]);
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices());
 	});
 
-	it('should not block damage from entry hazards', function () {
+	it('should not block damage from entry hazards', () => {
 		battle = common.createBattle([[
-			{species: 'Zangoose', ability: 'toxicboost', item: 'laggingtail', moves: ['return']},
-			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
+			{ species: 'Zangoose', ability: 'toxicboost', item: 'laggingtail', moves: ['return'] },
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
-			{species: 'forretress', ability: 'sturdy', item: 'redcard', moves: ['spikes']},
+			{ species: 'forretress', ability: 'sturdy', item: 'redcard', moves: ['spikes'] },
 		]]);
 		battle.makeChoices();
 		assert.false.fullHP(battle.p1.active[0]);
 	});
 
-	it('should not block status moves or damage from status', function () {
+	it('should not block status moves or damage from status', () => {
 		battle = common.createBattle([[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
-			{species: 'Ariados', ability: 'swarm', moves: ['toxicthread']},
+			{ species: 'Ariados', ability: 'swarm', moves: ['toxicthread'] },
 		]]);
 		const pokemon = battle.p1.active[0];
 		assert.sets(() => pokemon.status, 'tox', () => battle.makeChoices());
@@ -72,41 +72,41 @@ describe('Disguise', function () {
 		assert.false.fullHP(pokemon);
 	});
 
-	common.itGen(7, 'should not block secondary effects from damaging moves', function () {
+	common.itGen(7, 'should not block secondary effects from damaging moves', () => {
 		battle = common.gen(7).createBattle([[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
-			{species: 'Pikachu', ability: 'lightningrod', moves: ['nuzzle']},
+			{ species: 'Pikachu', ability: 'lightningrod', moves: ['nuzzle'] },
 		]]);
 		const pokemon = battle.p1.active[0];
 		assert.sets(() => pokemon.status, 'par', () => battle.makeChoices());
 		assert.fullHP(pokemon);
 	});
 
-	it('should deal one Counter damage plus the custom Disguise curse when it blocks a move', function () {
+	it('should deal one Counter damage plus the custom Disguise curse when it blocks a move', () => {
 		battle = common.createBattle([[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['counter']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['counter'] },
 		], [
-			{species: 'Weavile', ability: 'pressure', moves: ['feintattack']},
+			{ species: 'Weavile', ability: 'pressure', moves: ['feintattack'] },
 		]]);
 		assert.hurtsBy(battle.p2.active[0], 1 + Math.floor(battle.p2.active[0].maxhp / 8), () => battle.makeChoices());
 	});
 
-	it('should not trigger critical hits while active', function () {
+	it('should not trigger critical hits while active', () => {
 		battle = common.createBattle([[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['sleeptalk']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['sleeptalk'] },
 		], [
-			{species: 'Cryogonal', ability: 'noguard', moves: ['frostbreath']},
+			{ species: 'Cryogonal', ability: 'noguard', moves: ['frostbreath'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log.every(line => !line.startsWith('|-crit')));
 	});
 
-	it(`should not work while Transformed`, function () {
+	it(`should not work while Transformed`, () => {
 		battle = common.createBattle([[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['transform']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['transform'] },
 		], [
-			{species: 'Mimikyu', ability: 'disguise', moves: ['sleeptalk', 'aerialace']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['sleeptalk', 'aerialace'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('auto', 'move aerialace');

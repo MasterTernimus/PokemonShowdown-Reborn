@@ -1,28 +1,28 @@
 'use strict';
-const assert=require('../../assert'),common=require('../../common');
+const assert = require('../../assert'), common = require('../../common');
 let battle;
-describe('Gardevoir-Void and Void Voice',function(){
- afterEach(()=>battle?.destroy());
- it('uses normal Gardevoir mechanics and Mega Evolves with Void Veil and passive Pixilate',function(){
-  battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Gardevoir-Void',ability:'Void Veil',item:'Gardevoirite',moves:['splash']}],[{species:'Mew',ability:'Synchronize',moves:['splash']}]]);
-  battle.makeChoices('team 1','team 1');
-  const mon=battle.p1.active[0],foe=battle.p2.active[0];
-  assert.equal(mon.species.name,'Gardevoir-Void');
-  assert.deepEqual(mon.species.baseStats,battle.dex.species.get('Gardevoir').baseStats);
-  assert.deepEqual(mon.species.abilities,{0:'Trace',1:'Dream Guardian',H:'Void Veil'});
-  assert.equal(mon.canMegaEvo,'Gardevoir-Mega-Alt');
-  battle.makeChoices('move splash mega','move splash');
-  assert.equal(mon.ability,'voidvoice');assert(mon.hasAbility('voidveil'));
-  const move=battle.dex.getActiveMove('hypervoice');
+describe('Gardevoir-Void and Void Voice', () => {
+	afterEach(() => battle?.destroy());
+	it('uses normal Gardevoir mechanics and Mega Evolves with Void Veil and passive Pixilate', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[{ species: 'Gardevoir-Void', ability: 'Void Veil', item: 'Gardevoirite', moves: ['splash'] }], [{ species: 'Mew', ability: 'Synchronize', moves: ['splash'] }]]);
+		battle.makeChoices('team 1', 'team 1');
+		const mon = battle.p1.active[0], foe = battle.p2.active[0];
+		assert.equal(mon.species.name, 'Gardevoir-Void');
+		assert.deepEqual(mon.species.baseStats, battle.dex.species.get('Gardevoir').baseStats);
+		assert.deepEqual(mon.species.abilities, { 0: 'Trace', 1: 'Dream Guardian', H: 'Void Veil' });
+		assert.equal(mon.canMegaEvo, 'Gardevoir-Mega-Alt');
+		battle.makeChoices('move splash mega', 'move splash');
+		assert.equal(mon.ability, 'voidvoice'); assert(mon.hasAbility('voidveil'));
+		const move = battle.dex.getActiveMove('hypervoice');
 		assert.deepEqual(mon.getPassives(), ['pixilate']);
 		battle.runEvent('ModifyType', mon, foe, move, move);
-  assert.equal(move.type,'Fairy');assert.equal(battle.runEvent('BasePower',mon,foe,move,100),120);
-  battle.boost({atk:-1,spe:-1},mon,foe,battle.dex.getActiveMove('growl'));
-  assert.statStage(mon,'atk',-1);assert.statStage(mon,'spe',-1);
-  mon.hp-=100;const hp=mon.hp;
-  battle.singleEvent('Residual',mon.getAbility(),mon.abilityState,mon);
-  assert.equal(mon.hp,hp);
-  battle.field.setTerrain('psychicterrain',mon);
-  assert.equal(battle.runEvent('ModifySpe',mon,null,null,100),200);
- });
+		assert.equal(move.type, 'Fairy'); assert.equal(battle.runEvent('BasePower', mon, foe, move, 100), 120);
+		battle.boost({ atk: -1, spe: -1 }, mon, foe, battle.dex.getActiveMove('growl'));
+		assert.statStage(mon, 'atk', -1); assert.statStage(mon, 'spe', -1);
+		mon.hp -= 100; const hp = mon.hp;
+		battle.singleEvent('Residual', mon.getAbility(), mon.abilityState, mon);
+		assert.equal(mon.hp, hp);
+		battle.field.setTerrain('psychicterrain', mon);
+		assert.equal(battle.runEvent('ModifySpe', mon, null, null, 100), 200);
+	});
 });

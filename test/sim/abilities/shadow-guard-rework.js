@@ -8,9 +8,9 @@ describe('Voidcraft rework', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 
 	it('Mega Evolves into the new component ability without trapping or Magic Guard', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mismagius', ability: 'Void Veil', item: 'Dusk Stone', moves: ['splash']}],
-			[{species: 'Ho-Oh', ability: 'No Ability', moves: ['splash']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Mismagius', ability: 'Void Veil', item: 'Dusk Stone', moves: ['splash'] }],
+			[{ species: 'Ho-Oh', ability: 'No Ability', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash mega', 'move splash');
@@ -30,9 +30,9 @@ describe('Voidcraft rework', () => {
 	});
 
 	it('queues 120 BP Ghost Future Sight on Mega Evolution and every other turn', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mismagius', ability: 'Void Veil', item: 'Dusk Stone', moves: ['splash']}],
-			[{species: 'Ho-Oh', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Mismagius', ability: 'Void Veil', item: 'Dusk Stone', moves: ['splash'] }],
+			[{ species: 'Ho-Oh', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const futureMove = () => {
@@ -57,13 +57,13 @@ describe('Voidcraft rework', () => {
 	});
 
 	it('keeps Shadow Shield, Temporal Shift stat protection, and Insomnia', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
 			[{ species: 'Mismagius-Mega', ability: 'Voidcraft', moves: ['splash'] }],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const mega = battle.p1.active[0], foe = battle.p2.active[0];
-		battle.boost({spa: -1}, mega, foe);
+		battle.boost({ spa: -1 }, mega, foe);
 		assert.statStage(mega, 'spa', 0);
 		assert.equal(mega.trySetStatus('slp', foe), false);
 		const hp = mega.hp;
@@ -72,15 +72,15 @@ describe('Voidcraft rework', () => {
 	});
 
 	it('also fixes Temporal Shift’s own opposing-stat-drop protection', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mismagius', ability: 'Temporal Shift', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Mismagius', ability: 'Temporal Shift', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const mismagius = battle.p1.active[0], foe = battle.p2.active[0];
-		battle.boost({spa: -1}, mismagius, foe);
+		battle.boost({ spa: -1 }, mismagius, foe);
 		assert.statStage(mismagius, 'spa', 0);
-		battle.boost({spa: -1}, mismagius, mismagius);
+		battle.boost({ spa: -1 }, mismagius, mismagius);
 		assert.statStage(mismagius, 'spa', -1);
 	});
 });

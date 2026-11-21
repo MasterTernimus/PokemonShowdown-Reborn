@@ -1,18 +1,18 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {AbilityComponents} = require('../../../dist/data/ability-components');
+const { AbilityComponents } = require('../../../dist/data/ability-components');
 let battle;
 function start(ability) {
-	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-		{species: 'Mew', ability, moves: ['splash']},
-	], [{species: 'Mew', ability: 'No Ability', moves: ['tackle', 'splash']}]]);
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+		{ species: 'Mew', ability, moves: ['splash'] },
+	], [{ species: 'Mew', ability: 'No Ability', moves: ['tackle', 'splash'] }]]);
 	battle.makeChoices('team 1', 'team 1');
 	battle.randomChance = () => true;
 	return [battle.p1.active[0], battle.p2.active[0]];
 }
 describe('Withering Shell component cut', () => {
-	afterEach(() => {battle?.destroy(); battle = null;});
+	afterEach(() => { battle?.destroy(); battle = null; });
 	it('retains physical-hit hazards without disabling the attacker', () => {
 		const [p, q] = start('Withering Shell');
 		battle.makeChoices('move splash', 'move tackle');

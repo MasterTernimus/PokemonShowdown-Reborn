@@ -1,19 +1,19 @@
 'use strict';
 
 const assert = require('./../assert');
-const {Dex} = require('./../../dist/sim/dex');
+const { Dex } = require('./../../dist/sim/dex');
 
-describe('Ambipom custom data', function () {
+describe('Ambipom custom data', () => {
 	const requestedMoves = [
 		'aurasphere', 'focusblast', 'vacuumwave', 'swordsdance', 'nastyplot', 'bulkup', 'axekick', 'closecombat',
 		'crosschop', 'drainpunch', 'forcepalm', 'focuspunch', 'hammerarm', 'karatechop',
 		'machpunch', 'victorydance', 'tailslap', 'doubleslap', 'cometpunch',
 	];
 
-	it('uses the requested typing, 550 BST, abilities, and moves', function () {
+	it('uses the requested typing, 550 BST, abilities, and moves', () => {
 		const ambipom = Dex.species.get('Ambipom');
 		assert.deepEqual(ambipom.types, ['Normal', 'Fighting']);
-		assert.deepEqual(ambipom.baseStats, {hp: 80, atk: 110, def: 70, spa: 100, spd: 70, spe: 120});
+		assert.deepEqual(ambipom.baseStats, { hp: 80, atk: 110, def: 70, spa: 100, spd: 70, spe: 120 });
 		assert.equal(Object.values(ambipom.baseStats).reduce((sum, stat) => sum + stat, 0), 550);
 		assert.deepEqual(ambipom.abilities, { 0: 'Whiplash', 1: 'Pickup', H: 'Scrappy' });
 		assert.deepEqual(ambipom.passives, ['doublestrike']);
@@ -22,7 +22,7 @@ describe('Ambipom custom data', function () {
 		}
 	});
 
-	it('registers Double Strike as a composite ability', function () {
+	it('registers Double Strike as a composite ability', () => {
 		const ability = Dex.abilities.get('Double Strike');
 		assert.equal(ability.name, 'Double Strike');
 		assert(ability.onModifyMove);

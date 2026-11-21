@@ -31,7 +31,7 @@ describe('Final approved Predator Aura Precision and Entrenched designs', () => 
 	it('changes only Lucario Z selected ability and Haxorus passive in the roster', () => {
 		for (const old of require('./final-three-mega-before.json')) {
 			const now = Dex.species.get(old.id);
-			assert.deepEqual(now.abilities, require('./passive-approval-overlays').abilities(old.id, {...old.abilities}), old.id);
+			assert.deepEqual(now.abilities, require('./passive-approval-overlays').abilities(old.id, { ...old.abilities }), old.id);
 			assert.deepEqual(now.passives, require('./passive-approval-overlays').current(old.id, old.passives), old.id);
 		}
 	});

@@ -6,11 +6,11 @@ describe('G-Max Sandblast field behavior', () => {
 	afterEach(() => { battle?.destroy(); });
 	for (const terrain of ['', 'grassyterrain', 'desertterrain', 'flowergarden3']) {
 		it(`preserves ${terrain || 'no field'} while damaging and trapping both foes`, () => {
-			battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [
-				[{species: 'Sandaconda-Gmax', ability: 'No Ability', moves: ['gmaxsandblast']},
-					{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
-				[{species: 'Mew', ability: 'No Ability', moves: ['splash']},
-					{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+			battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
+				[{ species: 'Sandaconda-Gmax', ability: 'No Ability', moves: ['gmaxsandblast'] },
+					{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+				[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+					{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 			]);
 			battle.makeChoices('team 12', 'team 12');
 			if (terrain) battle.field.startTerrain(terrain);

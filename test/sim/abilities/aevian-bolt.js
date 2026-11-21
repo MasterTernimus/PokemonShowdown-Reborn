@@ -2,8 +2,8 @@
 
 const assert = require('../../assert');
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
-const {Learnsets} = require('../../../dist/data/learnsets');
+const { Dex } = require('../../../dist/sim');
+const { Learnsets } = require('../../../dist/data/learnsets');
 
 let battle;
 
@@ -17,7 +17,7 @@ describe('Aevian Bolt', () => {
 		assert.equal(Dex.species.get('Druddigon').abilities.S, 'Aevian Bolt');
 		const rejuv = Dex.species.get('Druddigon-Rejuv');
 		assert.deepEqual(rejuv.types, ['Dragon', 'Electric']);
-		assert.deepEqual(rejuv.baseStats, {hp: 107, atk: 60, def: 88, spa: 120, spd: 100, spe: 80});
+		assert.deepEqual(rejuv.baseStats, { hp: 107, atk: 60, def: 88, spa: 120, spd: 100, spe: 80 });
 		assert.equal(rejuv.requiredAbility, 'Aevian Bolt');
 		for (const move of ['agility', 'airslash', 'bravebird', 'discharge', 'hurricane', 'risingvoltage', 'voltswitch', 'zapcannon']) {
 			assert(Learnsets.druddigon.learnset[move], `Druddigon should learn ${move}`);
@@ -25,10 +25,10 @@ describe('Aevian Bolt', () => {
 	});
 
 	it('permanently transforms Druddigon and exposes all component abilities', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Druddigon', ability: 'Aevian Bolt', moves: ['thunderbolt']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Druddigon', ability: 'Aevian Bolt', moves: ['thunderbolt'] },
 		], [
-			{species: 'Mew', moves: ['splash']},
+			{ species: 'Mew', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const druddigon = battle.p1.active[0];
@@ -38,10 +38,10 @@ describe('Aevian Bolt', () => {
 	});
 
 	it('paralyzes a contact attacker through its Static component', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Druddigon', ability: 'Aevian Bolt', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Druddigon', ability: 'Aevian Bolt', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['tackle']},
+			{ species: 'Mew', moves: ['tackle'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.randomChance = () => true;
@@ -50,10 +50,10 @@ describe('Aevian Bolt', () => {
 	});
 
 	it('reverts a directly supplied Rejuv form without Aevian Bolt', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Druddigon-Rejuv', ability: 'Rough Scale', moves: ['thunderbolt']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Druddigon-Rejuv', ability: 'Rough Scale', moves: ['thunderbolt'] },
 		], [
-			{species: 'Mew', moves: ['splash']},
+			{ species: 'Mew', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		assert.equal(battle.p1.active[0].species.id, 'druddigon');

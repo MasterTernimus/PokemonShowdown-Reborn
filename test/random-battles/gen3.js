@@ -5,10 +5,10 @@
 const common = require('../common');
 
 const assert = require('../assert');
-const {testTeam, validateLearnset} = require('./tools');
+const { testTeam, validateLearnset } = require('./tools');
 
 common.describeGen(3, '[Gen 3] Random Battle (slow)', () => {
-	const options = {format: 'gen3randombattle'};
+	const options = { format: 'gen3randombattle' };
 	let setsJSON;
 	before(() => { setsJSON = require(`../../dist/data/mods/gen3/random-sets.json`); });
 	const dex = Dex.forFormat(options.format);
@@ -31,7 +31,7 @@ common.describeGen(3, '[Gen 3] Random Battle (slow)', () => {
 						const dexMove = Dex.moves.get(move);
 						assert(dexMove.exists, `${species.name} has invalid move: ${move}`);
 						assert(move === dexMove.id || move.startsWith('hiddenpower'), `${species.name} has misformatted move: ${move}`);
-						assert(validateLearnset(dexMove, {species}, 'anythinggoes', 'gen3'), `${species.name} can't learn ${move}`);
+						assert(validateLearnset(dexMove, { species }, 'anythinggoes', 'gen3'), `${species.name} can't learn ${move}`);
 					}
 					for (let i = 0; i < set.movepool.length - 1; i++) {
 						assert(set.movepool[i + 1] > set.movepool[i], `${species} movepool should be sorted alphabetically`);
@@ -51,14 +51,14 @@ common.describeGen(3, '[Gen 3] Random Battle (slow)', () => {
 		});
 	});
 
-	it('all Pokemon should have 4 moves, except for Ditto and Unown', function () {
+	it('all Pokemon should have 4 moves, except for Ditto and Unown', () => {
 		// This test takes more than 2000ms
-		testTeam({...options, rounds: 100}, team => {
+		testTeam({ ...options, rounds: 100 }, team => {
 			for (const pokemon of team) assert(pokemon.name === 'Ditto' || pokemon.name === 'Unown' || pokemon.moves.length === 4);
 		});
 	});
 
-	it('all moves on all sets should be obtainable', function () {
+	it('all moves on all sets should be obtainable', () => {
 		const generator = Teams.getGenerator(options.format);
 		const rounds = 100;
 		for (const pokemon of Object.keys(setsJSON)) {

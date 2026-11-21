@@ -5,14 +5,14 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Ice Face', function () {
+describe('Ice Face', () => {
 	afterEach(() => battle.destroy());
 
-	it(`should block damage from one physical move per Hail`, function () {
+	it(`should block damage from one physical move per Hail`, () => {
 		battle = common.createBattle([[
-			{species: 'Eiscue', ability: 'iceface', moves: ['splash']},
+			{ species: 'Eiscue', ability: 'iceface', moves: ['splash'] },
 		], [
-			{species: 'Mewtwo', ability: 'pressure', moves: ['tackle', 'watergun', 'hail']},
+			{ species: 'Mewtwo', ability: 'pressure', moves: ['tackle', 'watergun', 'hail'] },
 		]]);
 		const eiscue = battle.p1.active[0];
 
@@ -24,12 +24,12 @@ describe('Ice Face', function () {
 		assert.hurts(eiscue, () => battle.makeChoices());
 	});
 
-	it(`should not work while Transformed`, function () {
+	it(`should not work while Transformed`, () => {
 		battle = common.createBattle([[
-			{species: 'Eiscue', ability: 'iceface', moves: ['transform']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Eiscue', ability: 'iceface', moves: ['transform'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Eiscue', ability: 'iceface', moves: ['sleeptalk', 'aerialace', 'hail']},
+			{ species: 'Eiscue', ability: 'iceface', moves: ['sleeptalk', 'aerialace', 'hail'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('move aerialace', 'move aerialace');
@@ -46,7 +46,7 @@ describe('Ice Face', function () {
 
 	it(`should not trigger if the Pokemon was KOed by Max Hailstorm`, () => {
 		battle = common.createBattle({ formatid: 'gen9factoryfield' }, [[
-			{species: 'Eiscue', level: 1, ability: 'iceface', moves: ['sleeptalk']},
+			{ species: 'Eiscue', level: 1, ability: 'iceface', moves: ['sleeptalk'] },
 		], [
 			{ species: 'Snorlax', ability: 'No Ability', gigantamax: true, moves: ['icepunch'] },
 		]]);
@@ -65,13 +65,13 @@ describe('Ice Face', function () {
 		assert.false(hasMultipleActivates, "Ice Face should not trigger when being KOed. Only one |-activate| should exist in this test.");
 	});
 
-	it.skip(`should reform Ice Face on switchin after all entrance Abilities occur`, function () {
+	it.skip(`should reform Ice Face on switchin after all entrance Abilities occur`, () => {
 		battle = common.createBattle([[
-			{species: 'Eiscue', ability: 'iceface', moves: ['sleeptalk']},
-			{species: 'Abomasnow', ability: 'snowwarning', moves: ['sleeptalk']},
+			{ species: 'Eiscue', ability: 'iceface', moves: ['sleeptalk'] },
+			{ species: 'Abomasnow', ability: 'snowwarning', moves: ['sleeptalk'] },
 		], [
-			{species: 'Guzzlord', moves: ['tackle', 'finalgambit']},
-			{species: 'Torkoal', ability: 'drought', moves: ['sleeptalk']},
+			{ species: 'Guzzlord', moves: ['tackle', 'finalgambit'] },
+			{ species: 'Torkoal', ability: 'drought', moves: ['sleeptalk'] },
 		]]);
 		const eiscue = battle.p1.active[0];
 		battle.makeChoices();

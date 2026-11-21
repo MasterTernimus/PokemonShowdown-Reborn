@@ -5,17 +5,17 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Nose Formation', function () {
-	afterEach(function () {
+describe('Nose Formation', () => {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
-	it('should trigger Elevate when a Mini-Nose knocks out a target', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Probopass', ability: 'noseformation', moves: ['falseswipe']},
+	it('should trigger Elevate when a Mini-Nose knocks out a target', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Probopass', ability: 'noseformation', moves: ['falseswipe'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['splash']},
-			{species: 'Mew', ability: 'noguard', moves: ['splash']},
+			{ species: 'Mew', ability: 'noguard', moves: ['splash'] },
+			{ species: 'Mew', ability: 'noguard', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const probopass = battle.p1.active[0];

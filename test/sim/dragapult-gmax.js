@@ -3,15 +3,15 @@
 const assert = require('../assert');
 const common = require('../common');
 
-describe('G-Max Spirit Volley', function () {
+describe('G-Max Spirit Volley', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 
-	it('Phantom Barrage adds Hydra Bond power to Dragon Darts and Spirit Volley without extra hits', function () {
+	it('Phantom Barrage adds Hydra Bond power to Dragon Darts and Spirit Volley without extra hits', () => {
 		battle = common.createBattle({ formatid: 'gen9factoryfield' }, [[
-			{species: 'Dragapult-Gmax', ability: 'Phantom Barrage', moves: ['dragondarts', 'shadowball']},
+			{ species: 'Dragapult-Gmax', ability: 'Phantom Barrage', moves: ['dragondarts', 'shadowball'] },
 		], [
-			{species: 'Umbreon', moves: ['splash']},
+			{ species: 'Umbreon', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const dragapult = battle.p1.active[0];
@@ -29,13 +29,13 @@ describe('G-Max Spirit Volley', function () {
 			line.endsWith(`/${foe.maxhp}`)).length, 2, battle.log.join('\n'));
 	});
 
-	it('hits the selected foe at full power and the other foe once at lower power', function () {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Dragapult', gigantamax: true, moves: ['shadowball']},
-			{species: 'Wynaut', moves: ['splash']},
+	it('hits the selected foe at full power and the other foe once at lower power', () => {
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Dragapult', gigantamax: true, moves: ['shadowball'] },
+			{ species: 'Wynaut', moves: ['splash'] },
 		], [
-			{species: 'Umbreon', moves: ['splash']},
-			{species: 'Umbreon', moves: ['splash']},
+			{ species: 'Umbreon', moves: ['splash'] },
+			{ species: 'Umbreon', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1, 2', 'team 1, 2');
 		const dragapult = battle.p1.active[0];
@@ -57,11 +57,11 @@ describe('G-Max Spirit Volley', function () {
 		assert.equal(battle.p1.active[1].hp, battle.p1.active[1].maxhp);
 	});
 
-	it('hits a surviving lone foe a second time at 50 power', function () {
+	it('hits a surviving lone foe a second time at 50 power', () => {
 		battle = common.createBattle({ formatid: 'gen9factoryfield' }, [[
-			{species: 'Dragapult', gigantamax: true, moves: ['shadowball']},
+			{ species: 'Dragapult', gigantamax: true, moves: ['shadowball'] },
 		], [
-			{species: 'Umbreon', moves: ['splash']},
+			{ species: 'Umbreon', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move shadowball dynamax', 'move splash');
@@ -70,13 +70,13 @@ describe('G-Max Spirit Volley', function () {
 			line.startsWith('|-damage|p2a: Umbreon|') && line.endsWith(`/${foe.maxhp}`)).length, 2);
 	});
 
-	it('repeats on the survivor when its partner is knocked out before the attack', function () {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Dragapult', gigantamax: true, moves: ['shadowball']},
-			{species: 'Arceus', moves: ['extremespeed']},
+	it('repeats on the survivor when its partner is knocked out before the attack', () => {
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Dragapult', gigantamax: true, moves: ['shadowball'] },
+			{ species: 'Arceus', moves: ['extremespeed'] },
 		], [
-			{species: 'Umbreon', moves: ['splash']},
-			{species: 'Magikarp', level: 1, moves: ['splash']},
+			{ species: 'Umbreon', moves: ['splash'] },
+			{ species: 'Magikarp', level: 1, moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 12', 'team 12');
 		battle.makeChoices('move shadowball dynamax 1, move extremespeed 2', 'move splash, move splash');
@@ -85,12 +85,12 @@ describe('G-Max Spirit Volley', function () {
 			line.endsWith(`/${battle.p2.active[0].maxhp}`)).length, 2);
 	});
 
-	it('does not follow up on a target knocked out by the first hit', function () {
+	it('does not follow up on a target knocked out by the first hit', () => {
 		battle = common.createBattle({ formatid: 'gen9factoryfield' }, [[
-			{species: 'Dragapult', gigantamax: true, moves: ['shadowball']},
+			{ species: 'Dragapult', gigantamax: true, moves: ['shadowball'] },
 		], [
-			{species: 'Umbreon', level: 1, moves: ['splash']},
-			{species: 'Mew', moves: ['splash']},
+			{ species: 'Umbreon', level: 1, moves: ['splash'] },
+			{ species: 'Mew', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.p2.active[0].hp = 1;
@@ -100,11 +100,11 @@ describe('G-Max Spirit Volley', function () {
 	});
 
 	for (const protection of ['immunity', 'protect', 'maxguard']) {
-		it(`preserves ${protection} against the single-target fallback`, function () {
+		it(`preserves ${protection} against the single-target fallback`, () => {
 			const species = protection === 'immunity' ? 'Snorlax' : 'Umbreon';
 			battle = common.createBattle({ formatid: 'gen9factoryfield' }, [[
-				{species: 'Dragapult', gigantamax: true, moves: ['shadowball']},
-			], [{species, moves: [protection === 'immunity' ? 'splash' : protection]}]]);
+				{ species: 'Dragapult', gigantamax: true, moves: ['shadowball'] },
+			], [{ species, moves: [protection === 'immunity' ? 'splash' : protection] }]]);
 			battle.makeChoices('team 1', 'team 1');
 			battle.makeChoices('move shadowball dynamax', 'move 1');
 			const foe = battle.p2.active[0];
@@ -120,13 +120,13 @@ describe('G-Max Spirit Volley', function () {
 		});
 	}
 
-	it('checks Ghost immunity on the second foe', function () {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Dragapult', gigantamax: true, moves: ['shadowball']},
-			{species: 'Wynaut', moves: ['splash']},
+	it('checks Ghost immunity on the second foe', () => {
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Dragapult', gigantamax: true, moves: ['shadowball'] },
+			{ species: 'Wynaut', moves: ['splash'] },
 		], [
-			{species: 'Umbreon', moves: ['splash']},
-			{species: 'Snorlax', moves: ['splash']},
+			{ species: 'Umbreon', moves: ['splash'] },
+			{ species: 'Snorlax', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1, 2', 'team 1, 2');
 		battle.makeChoices('move shadowball dynamax 1, move splash', 'move splash, move splash');
@@ -134,13 +134,13 @@ describe('G-Max Spirit Volley', function () {
 		assert(battle.log.some(line => line.includes('|-immune|p2b: Snorlax')));
 	});
 
-	it('reduces the follow-up damage through Protect', function () {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Dragapult', gigantamax: true, moves: ['shadowball']},
-			{species: 'Wynaut', moves: ['splash']},
+	it('reduces the follow-up damage through Protect', () => {
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Dragapult', gigantamax: true, moves: ['shadowball'] },
+			{ species: 'Wynaut', moves: ['splash'] },
 		], [
-			{species: 'Umbreon', moves: ['splash']},
-			{species: 'Umbreon', moves: ['protect']},
+			{ species: 'Umbreon', moves: ['splash'] },
+			{ species: 'Umbreon', moves: ['protect'] },
 		]]);
 		battle.makeChoices('team 1, 2', 'team 1, 2');
 		battle.makeChoices('move shadowball dynamax 1, move splash', 'move splash, move protect');

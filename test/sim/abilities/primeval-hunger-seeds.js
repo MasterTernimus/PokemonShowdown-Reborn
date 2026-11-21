@@ -5,9 +5,9 @@ describe('Primeval Hunger seed applications', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
 	function setup(ability = 'No Ability') {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Cradily', ability: 'Primeval Hunger', moves: ['leechseed', 'sappyseed', 'splash']}],
-			[{species: 'Mew', ability, moves: ['splash']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Cradily', ability: 'Primeval Hunger', moves: ['leechseed', 'sappyseed', 'splash'] }],
+			[{ species: 'Mew', ability, moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 1', 'team 12');
 		battle.randomChance = () => false;
@@ -19,14 +19,14 @@ describe('Primeval Hunger seed applications', () => {
 	function hit(p, q, id, extra = {}) {
 		battle.clearActiveMove();
 		const move = battle.dex.getActiveMove(id);
-		Object.assign(move, {accuracy: true, willCrit: false}, extra);
+		Object.assign(move, { accuracy: true, willCrit: false }, extra);
 		battle.actions.runMove(move, p, p.getLocOf(q));
 	}
 	for (const id of ['leechseed', 'sappyseed']) {
 		for (const seeded of [false, true]) it(id + ' checks the actual redirected target, already seeded=' + seeded, () => {
-			const ally = {species: 'Mew', ability: 'No Ability', moves: ['splash']};
-			battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [
-				[{species: 'Cradily', ability: 'Primeval Hunger', moves: [id]}, {...ally}], [{...ally}, {...ally}],
+			const ally = { species: 'Mew', ability: 'No Ability', moves: ['splash'] };
+			battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
+				[{ species: 'Cradily', ability: 'Primeval Hunger', moves: [id] }, { ...ally }], [{ ...ally }, { ...ally }],
 			]);
 			battle.makeChoices('team 12', 'team 12');
 			const p = battle.p1.active[0], original = battle.p2.active[0], q = battle.p2.active[1];
@@ -53,7 +53,7 @@ describe('Primeval Hunger seed applications', () => {
 				if (failure === 'grass') q.setType('Grass');
 				if (failure === 'existing') q.addVolatile('leechseed', p);
 				if (failure === 'suppressed') p.addVolatile('gastroacid');
-				hit(p, q, id, failure === 'miss' ? {accuracy: 0} : {});
+				hit(p, q, id, failure === 'miss' ? { accuracy: 0 } : {});
 				assert(!q.volatiles.healblock); assert.equal(q.boosts.spa, failure === 'immune' ? 3 : 2);
 			});
 		}

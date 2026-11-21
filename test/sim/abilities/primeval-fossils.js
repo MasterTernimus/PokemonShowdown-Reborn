@@ -1,35 +1,35 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex, TeamValidator} = require('../../../dist/sim');
+const { Dex, TeamValidator } = require('../../../dist/sim');
 
 describe('Primeval fossil pair', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
-	const set = (ability = 'No Ability', species = 'Mew') => ({species, ability, moves: ['tackle', 'splash', 'doubleedge', 'payback']});
+	const set = (ability = 'No Ability', species = 'Mew') => ({ species, ability, moves: ['tackle', 'splash', 'doubleedge', 'payback'] });
 	function setup(ability, foeAbility = 'No Ability', gameType = 'singles') {
 		const teams = [[set(ability), set()], [set(foeAbility), set()]];
 		if (gameType === 'freeforall') teams.push([set()], [set()]);
-		battle = common.createBattle({gameType}, teams);
+		battle = common.createBattle({ gameType }, teams);
 		for (const side of battle.sides) for (const p of side.pokemon) p.hp = p.maxhp = p.baseMaxhp = 1000;
 		return [battle.p1.active[0], battle.p2.active[0]];
 	}
 	function hit(source, target, damage = 200, patch = {}) {
-		const move = Object.assign(Dex.getActiveMove('tackle'), {damage, accuracy: true, willCrit: false}, patch);
+		const move = Object.assign(Dex.getActiveMove('tackle'), { damage, accuracy: true, willCrit: false }, patch);
 		battle.actions.runMove(move, source, source.getLocOf(target));
 	}
 	it('updates only the intended evolved species slots, stats and typing', () => {
 		const rampardos = Dex.species.get('Rampardos'), bastiodon = Dex.species.get('Bastiodon');
 		assert.deepEqual(rampardos.types, ['Rock', 'Steel']);
-		assert.deepEqual(rampardos.abilities, {0: 'Intrepid Sword', 1: 'Mold Breaker', H: 'Primeval Skull'});
-		assert.deepEqual(bastiodon.abilities, {0: 'Dauntless Shield', 1: 'Stalwart', H: 'Primeval Shield'});
-		assert.deepEqual(bastiodon.baseStats, {hp: 80, atk: 65, def: 168, spa: 49, spd: 138, spe: 30});
+		assert.deepEqual(rampardos.abilities, { 0: 'Intrepid Sword', 1: 'Mold Breaker', H: 'Primeval Skull' });
+		assert.deepEqual(bastiodon.abilities, { 0: 'Dauntless Shield', 1: 'Stalwart', H: 'Primeval Shield' });
+		assert.deepEqual(bastiodon.baseStats, { hp: 80, atk: 65, def: 168, spa: 49, spd: 138, spe: 30 });
 		assert.equal(rampardos.bst, 530); assert.equal(bastiodon.bst, 530);
 		assert.deepEqual(rampardos.passives, ['relicarmor']); assert.deepEqual(bastiodon.passives, ['relicarmor']);
 		for (const name of ['Cranidos', 'Shieldon']) assert(!Object.values(Dex.species.get(name).abilities).some(a => a.startsWith('Primeval')));
 		const validator = new TeamValidator('gen9nofieldsinglesgame');
 		for (const [species, ability] of [['Rampardos', 'Primeval Skull'], ['Bastiodon', 'Primeval Shield']]) {
-			assert.deepEqual(validator.validateSet({...set(ability, species), moves: ['tackle']}, {}) || [], []);
+			assert.deepEqual(validator.validateSet({ ...set(ability, species), moves: ['tackle'] }, {}) || [], []);
 		}
 	});
 	for (const hp of [1000, 333, 1]) it(`Primeval Skull no longer survives a lethal hit from ${hp} HP`, () => {
@@ -38,7 +38,7 @@ describe('Primeval fossil pair', () => {
 	});
 	it('Skull keeps Rock Head recoil protection', () => {
 		const [p, q] = setup('Primeval Skull');
-		hit(p, q, 100, {recoil: [1, 2]}); assert.equal(p.hp, 1000);
+		hit(p, q, 100, { recoil: [1, 2] }); assert.equal(p.hp, 1000);
 		assert(p.hasAbility('rockhead'));
 	});
 	for (const id of ['rockslide', 'powergem', 'tackle']) it(`Skull scopes Defense-stage bypass for ${id}`, () => {
@@ -62,20 +62,20 @@ describe('Primeval fossil pair', () => {
 		const move = Dex.getActiveMove('rockslide');
 		battle.runEvent('ModifyMove', p, q, move, move);
 		assert(!move.ignorePositiveDefensive);
-		hit(p, q, 100, {recoil: [1, 2]}); assert.equal(p.hp, 950);
+		hit(p, q, 100, { recoil: [1, 2] }); assert.equal(p.hp, 950);
 	});
 	for (const category of ['Physical', 'Special']) it(`Shield reflects half and heals 30% of ${category} HP damage without a contact requirement`, () => {
 		const [p, q] = setup('Primeval Shield');
-		hit(q, p, 200, {category, flags: {protect: 1}});
+		hit(q, p, 200, { category, flags: { protect: 1 } });
 		assert.equal(p.hp, 860); assert.equal(q.hp, 900);
 	});
 	it('Shield processes each hit without recursively reflecting recoil', () => {
 		const [p, q] = setup('Primeval Shield', 'Primeval Shield');
-		hit(q, p, 200, {multihit: 3}); assert.equal(p.hp, 580); assert.equal(q.hp, 700);
+		hit(q, p, 200, { multihit: 3 }); assert.equal(p.hp, 580); assert.equal(q.hp, 700);
 	});
 	it('Shield stops the remaining hits if recoil knocks out the attacker', () => {
 		const [p, q] = setup('Primeval Shield'); q.hp = 100;
-		hit(q, p, 200, {multihit: 3}); assert.equal(p.hp, 860); assert.equal(q.hp, 0);
+		hit(q, p, 200, { multihit: 3 }); assert.equal(p.hp, 860); assert.equal(q.hp, 0);
 	});
 	it('Shield reflects actual damage from a lethal hit but cannot revive its holder', () => {
 		const [p, q] = setup('Primeval Shield'); p.hp = 100;

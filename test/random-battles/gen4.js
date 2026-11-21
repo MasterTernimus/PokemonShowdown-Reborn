@@ -5,10 +5,10 @@
 const common = require('../common');
 
 const assert = require('../assert');
-const {testTeam, testSet, testHiddenPower, validateLearnset} = require('./tools');
+const { testTeam, testSet, testHiddenPower, validateLearnset } = require('./tools');
 
 common.describeGen(4, '[Gen 4] Random Battle (slow)', () => {
-	const options = {format: 'gen4randombattle'};
+	const options = { format: 'gen4randombattle' };
 	let setsJSON;
 	before(() => { setsJSON = require(`../../dist/data/mods/gen4/random-sets.json`); });
 	const dex = Dex.forFormat(options.format);
@@ -31,7 +31,7 @@ common.describeGen(4, '[Gen 4] Random Battle (slow)', () => {
 						const dexMove = Dex.moves.get(move);
 						assert(dexMove.exists, `${species.name} has invalid move: ${move}`);
 						assert(move === dexMove.id || move.startsWith('hiddenpower'), `${species.name} has misformatted move: ${move}`);
-						assert(validateLearnset(dexMove, {species}, 'anythinggoes', 'gen4'), `${species.name} can't learn ${move}`);
+						assert(validateLearnset(dexMove, { species }, 'anythinggoes', 'gen4'), `${species.name} can't learn ${move}`);
 					}
 					for (let i = 0; i < set.movepool.length - 1; i++) {
 						assert(set.movepool[i + 1] > set.movepool[i], `${species} movepool should be sorted alphabetically`);
@@ -51,14 +51,14 @@ common.describeGen(4, '[Gen 4] Random Battle (slow)', () => {
 		});
 	});
 
-	it('all Pokemon should have 4 moves, except for Ditto and Unown', function () {
+	it('all Pokemon should have 4 moves, except for Ditto and Unown', () => {
 		// This test takes more than 2000ms
-		testTeam({...options, rounds: 100}, team => {
+		testTeam({ ...options, rounds: 100 }, team => {
 			for (const pokemon of team) assert(pokemon.name === 'Ditto' || pokemon.name === 'Unown' || pokemon.moves.length === 4);
 		});
 	});
 
-	it('all moves on all sets should be obtainable', function () {
+	it('all moves on all sets should be obtainable', () => {
 		const generator = Teams.getGenerator(options.format);
 		const rounds = 100;
 		for (const pokemon of Object.keys(setsJSON)) {
@@ -84,7 +84,7 @@ common.describeGen(4, '[Gen 4] Random Battle (slow)', () => {
 					for (let i = 0; i < 4; i++) {
 						const rapidSpin = i % 2;
 						const stealthRock = Math.floor(i / 2) % 2;
-						teamDetails = {rapidSpin, stealthRock};
+						teamDetails = { rapidSpin, stealthRock };
 						// randomMoveset() deletes moves from the movepool, so recreate it every time
 						const movePool = set.movepool.map(m => dex.moves.get(m).id);
 						const moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, movePool, preferredType, role);

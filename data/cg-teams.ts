@@ -33,8 +33,8 @@
  *   - Tracking type coverage to make it more likely that a moveset can hit every type
  */
 
-import {Dex, PRNG, SQL} from '../sim';
-import {EventMethods} from '../sim/dex-conditions';
+import { Dex, PRNG, SQL } from '../sim';
+import { type EventMethods } from '../sim/dex-conditions';
 import {
 	ABILITY_MOVE_BONUSES,
 	ABILITY_MOVE_TYPE_BONUSES,
@@ -45,15 +45,15 @@ import {
 } from './cg-team-data';
 
 interface TeamStats {
-	hazardSetters: {[moveid: string]: number};
-	typeWeaknesses: {[type: string]: number};
+	hazardSetters: { [moveid: string]: number };
+	typeWeaknesses: { [type: string]: number };
 	hazardRemovers: number;
 }
 
 // We put a limit on the number of Pokémon on a team that can be weak to a given type.
 const MAX_WEAK_TO_SAME_TYPE = 3;
 
-const levelOverride: {[speciesID: string]: number} = {};
+const levelOverride: { [speciesID: string]: number } = {};
 export let levelUpdateInterval: NodeJS.Timeout | null = null;
 
 async function updateLevels(database: SQL.DatabaseManager) {
@@ -64,7 +64,7 @@ async function updateLevels(database: SQL.DatabaseManager) {
 		`INSERT INTO gen9_historical_levels (level, species_id, timestamp) VALUES (?, ?, ${Date.now()})`
 	);
 	const data = await database.all('SELECT species_id, wins, losses, level FROM gen9computergeneratedteams');
-	for (let {species_id, wins, losses, level} of data) {
+	for (let { species_id, wins, losses, level } of data) {
 		const total = wins + losses;
 
 		if (total > 10) {
@@ -80,7 +80,7 @@ async function updateLevels(database: SQL.DatabaseManager) {
 }
 
 if (global.Config && Config.usesqlite && Config.usesqliteleveling) {
-	const database = SQL('cg-teams-level-updater', module, {file: './databases/battlestats.db'});
+	const database = SQL('cg-teams-level-updater', module, { file: './databases/battlestats.db' });
 
 	// update every 2 hours
 	void updateLevels(database);
@@ -94,7 +94,7 @@ export default class TeamGenerator {
 	forceLevel?: number;
 	prng: PRNG;
 	itemPool: Item[];
-	specialItems: {[pokemon: string]: string};
+	specialItems: { [pokemon: string]: string };
 
 	/** An estimate of the highest raw speed in the metagame */
 	readonly TOP_SPEED = 300;
@@ -173,14 +173,14 @@ export default class TeamGenerator {
 		// this is just a second reference the array because movePool gets set to point to a new array before the old one
 		// gets mutated
 		const movePoolCopy = movePool;
-		let interimMovePool: {move: string, weight: number}[] = [];
+		let interimMovePool: { move: string, weight: number }[] = [];
 		while (moves.length < 4 && movePool.length) {
 			let weights;
 			if (!movePoolIsTrimmed) {
 				if (!isRound2) {
 					for (const move of movePool) {
 						const weight = this.getMoveWeight(this.dex.moves.get(move), teamStats, species, moves, ability, level);
-						interimMovePool.push({move, weight});
+						interimMovePool.push({ move, weight });
 					}
 
 					interimMovePool.sort((a, b) => b.weight - a.weight);
@@ -195,7 +195,7 @@ export default class TeamGenerator {
 						const move = this.dex.moves.get(moveID);
 						if (moves.includes(move)) continue;
 						const weight = this.getMoveWeight(move, teamStats, species, moves, ability, level);
-						interimMovePool.push({move: moveID, weight});
+						interimMovePool.push({ move: moveID, weight });
 					}
 
 					interimMovePool.sort((a, b) => b.weight - a.weight);
@@ -213,7 +213,7 @@ export default class TeamGenerator {
 				weights = movePool.map(m => this.getMoveWeight(this.dex.moves.get(m), teamStats, species, moves, ability, level));
 			}
 
-			const moveID = this.weightedRandomPick(movePool, weights, {remove: true});
+			const moveID = this.weightedRandomPick(movePool, weights, { remove: true });
 
 			moves.push(this.dex.moves.get(moveID));
 			if (TeamGenerator.moveIsHazard(moves[moves.length - 1])) {
@@ -313,7 +313,7 @@ export default class TeamGenerator {
 			moves: moves.map(m => m.name),
 			nature: 'Quirky',
 			gender: species.gender,
-			evs: {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
+			evs: { hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84 },
 			ivs,
 			level,
 			teraType,
@@ -413,7 +413,7 @@ export default class TeamGenerator {
 				weight *= 32;
 
 				// these moves can also lessen the effectiveness of the user's team's own hazards
-				weight *= Math.pow(0.8, Object.values(teamStats.hazardSetters).reduce((total, num) => total + num, 0));
+				weight *= 0.8 ** Object.values(teamStats.hazardSetters).reduce((total, num) => total + num, 0);
 			}
 
 			// boosts
@@ -514,8 +514,8 @@ export default class TeamGenerator {
 		if (move.category === 'Special' && hasPhysicalSetup) powerEstimate *= 0.7;
 
 		const abilityBonus = (
-			((ABILITY_MOVE_BONUSES[ability] || {})[move.id] || 1) *
-			((ABILITY_MOVE_TYPE_BONUSES[ability] || {})[moveType] || 1)
+			(ABILITY_MOVE_BONUSES[ability]?.[move.id] || 1) *
+			(ABILITY_MOVE_TYPE_BONUSES[ability]?.[moveType] || 1)
 		);
 
 		let weight = powerEstimate * abilityBonus;
@@ -537,7 +537,7 @@ export default class TeamGenerator {
 		if (move.flags.contact) {
 			if (ability === 'Tough Claws') weight *= 1.3;
 			if (ability === 'Unseen Fist') weight *= 1.1;
-			if (ability === 'Poison Touch') weight *= TeamGenerator.statusWeight('psn', 1 - Math.pow(0.7, numberOfHits));
+			if (ability === 'Poison Touch') weight *= TeamGenerator.statusWeight('psn', 1 - 0.7 ** numberOfHits);
 		}
 		if (move.flags.bite && ability === 'Strong Jaw') weight *= 1.5;
 		// 5% boost for ability to break subs
@@ -570,7 +570,7 @@ export default class TeamGenerator {
 				}
 			}
 		}
-		if (ability === 'Toxic Chain') weight *= TeamGenerator.statusWeight('tox', 1 - Math.pow(0.7, numberOfHits));
+		if (ability === 'Toxic Chain') weight *= TeamGenerator.statusWeight('tox', 1 - 0.7 ** numberOfHits);
 
 		// Special effect if something special happened earlier in the turn
 		// More useful on slower Pokemon
@@ -607,7 +607,7 @@ export default class TeamGenerator {
 
 		// these two hazard removers don't clear hazards on the opponent's field, but can be blocked by type immunities
 		if (['rapidspin', 'mortalspin'].includes(move.id)) {
-			weight *= 1 + 20 * Math.pow(0.25, teamStats.hazardRemovers);
+			weight *= 1 + 20 * 0.25 ** teamStats.hazardRemovers;
 			teamStats.hazardRemovers++;
 		}
 
@@ -691,10 +691,10 @@ export default class TeamGenerator {
 		const abilityMod = ability === 'Simple' ? 2 : ability === 'Contrary' ? -1 : 1;
 		const bodyPressMod = movesSoFar.some(m => m.id === 'bodyPress') ? 2 : 1;
 		const electroBallMod = movesSoFar.some(m => m.id === 'electroball') ? 2 : 1;
-		for (const {chance, boosts} of [
-			{chance: 1, boosts: move.boosts},
-			{chance: 1, boosts: move.self?.boosts},
-			{chance: 1, boosts: move.selfBoost?.boosts},
+		for (const { chance, boosts } of [
+			{ chance: 1, boosts: move.boosts },
+			{ chance: 1, boosts: move.self?.boosts },
+			{ chance: 1, boosts: move.selfBoost?.boosts },
 			{
 				chance: secondaryChance,
 				boosts: move.secondary?.self?.boosts,
@@ -729,8 +729,8 @@ export default class TeamGenerator {
 		if (!['allAdjacentFoes', 'allAdjacent', 'foeSide', 'normal'].includes(move.target)) return 1;
 
 		let averageNumberOfDebuffs = 0;
-		for (const {chance, boosts} of [
-			{chance: 1, boosts: move.boosts},
+		for (const { chance, boosts } of [
+			{ chance: 1, boosts: move.boosts },
 			{
 				chance: move.secondary ? ((move.secondary.chance || 100) / 100) : 0,
 				boosts: move.secondary?.boosts,
@@ -864,7 +864,7 @@ export default class TeamGenerator {
 	weightedRandomPick<T>(
 		choices: T[],
 		weights: number[],
-		options?: {remove?: boolean}
+		options?: { remove?: boolean }
 	) {
 		if (!choices.length) throw new Error(`Can't pick from an empty list`);
 		if (choices.length !== weights.length) throw new Error(`Choices and weights must be the same length`);

@@ -39,7 +39,7 @@ describe('Approved eleven dancer passives and Anchored Battery extension', () =>
 			assert.deepEqual(s.abilities, approved.abilities(old.id, old.abilities), old.id + '/abilities');
 			assert.deepEqual(s.baseStats, approved.stats(old.id, old.baseStats), old.id + '/stats');
 			assert.deepEqual(s.types, old.types, old.id + '/types');
-			let expectedLearnset = old.learnset && {...old.learnset};
+			let expectedLearnset = old.learnset && { ...old.learnset };
 			// Seed Flare is now exclusive to Shaymin, including these reviewed dancers.
 			if (expectedLearnset) delete expectedLearnset.seedflare;
 			// The approved Invigorate-user grant adds a current-generation source.
@@ -48,7 +48,7 @@ describe('Approved eleven dancer passives and Anchored Battery extension', () =>
 				expectedLearnset.mudbarrage = expectedLearnset.mudslap;
 				delete expectedLearnset.mudslap;
 			}
-			const grants = {...require('./rejuv-move-learnsets-approved.json'), ...require('./yang-move-learnsets-approved.json')};
+			const grants = { ...require('./rejuv-move-learnsets-approved.json'), ...require('./yang-move-learnsets-approved.json') };
 			for (const [move, users] of Object.entries(grants)) if (users.includes(old.id)) {
 				assert(!Object.hasOwn(old.learnset || {}, move));
 				expectedLearnset ||= {};
@@ -58,7 +58,7 @@ describe('Approved eleven dancer passives and Anchored Battery extension', () =>
 			for (const [move, sources] of Object.entries(expectedLearnset || {})) {
 				expectedLearnset[move] = [...sources].sort((a, b) => Number(b[0]) - Number(a[0]) || 'MTLREVDSC'.indexOf(a[1]) - 'MTLREVDSC'.indexOf(b[1]));
 			}
-			if (['lilligant','lilliganthisui'].includes(old.id)) delete expectedLearnset.moonblast;
+			if (['lilligant', 'lilliganthisui'].includes(old.id)) delete expectedLearnset.moonblast;
 			assert.deepEqual(Dex.species.getLearnsetData(old.id).learnset, expectedLearnset, old.id + '/learnset');
 		}
 		assert.deepEqual(Dex.species.get('quaquaval').passives, ['torrent']);

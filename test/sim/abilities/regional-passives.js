@@ -31,6 +31,8 @@ describe('Exact approved regional passive whitelist', () => {
 		groups.aromaveil = groups.aromaveil.filter(id => id !== 'ribombee');
 		groups.sweetveil.unshift('ribombee');
 		groups.leafguard = groups.leafguard.filter(id => id !== 'jumpluff');
+		groups.stickyhold = groups.stickyhold.filter(id => id !== 'sirfetchd');
+		groups.steadfast.unshift('sirfetchd');
 		assert.deepEqual(RegionalPassiveGroups, groups);
 		for (const [p, ids] of Object.entries(require('./latest-passives-approved.json').groups)) for (const id of ids) expected[id] = [p];
 		require('./passive-approval-overlays').passives(expected);

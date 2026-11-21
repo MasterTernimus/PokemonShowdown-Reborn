@@ -1,5 +1,5 @@
 /** Compact move-list text; complete mechanics remain in each move's tooltip. */
-export const SignatureMoveSummaries: {[id: string]: string} = {
+export const SignatureMoveSummaries: { [id: string]: string } = {
 	vorpalblade: 'Hits foes; field-based Secret Power secondary effects.',
 	gildedarrow: 'User-dependent type; high critical-hit ratio.',
 	gildedhelix: '2 hits (3 with Hydra Bond); user-type; high crit rate.',
@@ -52,5 +52,5 @@ export const SignatureMoveSummaries: {[id: string]: string} = {
 export function signatureMoveText(id: string, credit: string, details: string) {
 	const owner = credit.replace(/\s*\([^)]*\)/g, '').replace(/^the /i, '');
 	const label = `${owner}'s move.`;
-	return {shortDesc: `${label} ${SignatureMoveSummaries[id]}`, desc: `${label} ${details}`};
+	return { shortDesc: `${label} ${SignatureMoveSummaries[id]}`, desc: `${label} ${details}` };
 }

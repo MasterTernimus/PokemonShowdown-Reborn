@@ -150,14 +150,14 @@ describe('Latest explicit passive approvals and redesigned abilities', () => {
 		assert(!t.volatiles.disable);
 	});
 	// Uproot's former ability mechanics are superseded by the approved signature-move tests.
- it('Uproot is a move rather than a selectable ability', () => {
-  assert(!Dex.abilities.get('uproot').exists);
-  assert(Dex.moves.get('uproot').exists);
-  assert(!Object.values(Dex.species.get('venusaur').abilities).includes('Uproot'));
- });
- it('preserves Vendetta without unrelated components, residuals or damage modifiers', () => {
+	it('Uproot is a move rather than a selectable ability', () => {
+		assert(!Dex.abilities.get('uproot').exists);
+		assert(Dex.moves.get('uproot').exists);
+		assert(!Object.values(Dex.species.get('venusaur').abilities).includes('Uproot'));
+	});
+	it('preserves Vendetta without unrelated components, residuals or damage modifiers', () => {
 		assert.deepEqual(require('../../../dist/data/ability-components').AbilityComponents.vendetta, ['innerfocus']);
-  assert(!Dex.abilities.get('vendetta').onResidual);
-  assert(!Dex.abilities.get('vendetta').onDamage);
- });
+		assert(!Dex.abilities.get('vendetta').onResidual);
+		assert(!Dex.abilities.get('vendetta').onDamage);
+	});
 });

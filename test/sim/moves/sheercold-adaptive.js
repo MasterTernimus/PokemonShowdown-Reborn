@@ -2,14 +2,14 @@
 
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
+const { Dex } = require('../../../dist/sim');
 
 let battle;
 function setup(species = 'Weavile') {
-	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-		{species, ability: 'No Ability', moves: ['sheercold', 'splash']},
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+		{ species, ability: 'No Ability', moves: ['sheercold', 'splash'] },
 	], [
-		{species: 'Mew', ability: 'No Ability', moves: ['splash']},
+		{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
 	]]);
 	battle.makeChoices('team 1', 'team 1');
 	battle.randomizer = n => n;
@@ -19,8 +19,8 @@ function setup(species = 'Weavile') {
 	return [source, target];
 }
 function use(source, target, properties = {}) {
-	const move = Object.assign(Dex.getActiveMove('sheercold'), {accuracy: true, willCrit: false}, properties);
-	battle.actions.useMove(move, source, {target});
+	const move = Object.assign(Dex.getActiveMove('sheercold'), { accuracy: true, willCrit: false }, properties);
+	battle.actions.useMove(move, source, { target });
 	return battle.activeMove;
 }
 
@@ -34,7 +34,7 @@ describe('Adaptive Sheer Cold', () => {
 		assert.equal(move.pp, 5);
 		assert.equal(move.category, 'Special');
 		assert(!move.ohko);
-		assert.deepEqual(move.secondary, {chance: 30, status: 'frz'});
+		assert.deepEqual(move.secondary, { chance: 30, status: 'frz' });
 		assert(move.shortDesc.includes('Adaptive'));
 		assert(move.desc.includes('Special on ties'));
 		assert(move.desc.includes('1/4 max HP'));
@@ -76,11 +76,11 @@ describe('Adaptive Sheer Cold', () => {
 	});
 	it('keeps frostbite and the direct opposing KO exemption', () => {
 		const [source, target] = setup();
-		use(source, target, {damage: 10, secondary: {chance: 100, status: 'frz'}});
+		use(source, target, { damage: 10, secondary: { chance: 100, status: 'frz' } });
 		assert.equal(target.status, 'frz');
 		source.hp = source.maxhp;
 		target.hp = 5;
-		use(source, target, {damage: 10});
+		use(source, target, { damage: 10 });
 		assert.equal(target.hp, 0);
 		assert.equal(source.hp, source.maxhp);
 	});

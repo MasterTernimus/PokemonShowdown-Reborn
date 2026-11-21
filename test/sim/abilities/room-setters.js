@@ -1,12 +1,12 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
+const { Dex } = require('../../../dist/sim');
 
 describe('Dedicated room setters', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
-	const set = (species, ability = 'No Ability', item = '') => ({species, ability, item, moves: ['splash', 'tackle', 'trickroom', 'skillswap']});
+	const set = (species, ability = 'No Ability', item = '') => ({ species, ability, item, moves: ['splash', 'tackle', 'trickroom', 'skillswap'] });
 	function setup(species = 'Unown', ability = 'No Ability', item = '') {
 		battle = common.createBattle({}, [[set(species, ability, item), set('Magikarp')], [set('Mew')]]);
 		return [battle.p1.active[0], battle.p2.active[0]];
@@ -88,8 +88,8 @@ describe('Dedicated room setters', () => {
 	});
 	it('rejects Role Play, Skill Swap, and Entrainment transfer', () => {
 		const [p, q] = setup('Unown', 'Lost Epoch');
-		for (const id of ['roleplay', 'skillswap']) battle.actions.useMove(id, q, {target: p});
-		battle.actions.useMove('entrainment', p, {target: q});
+		for (const id of ['roleplay', 'skillswap']) battle.actions.useMove(id, q, { target: p });
+		battle.actions.useMove('entrainment', p, { target: q });
 		assert.equal(p.ability, 'lostepoch'); assert.equal(q.ability, 'noability');
 	});
 	it('Trace cannot copy Lost Epoch', () => {
@@ -98,12 +98,12 @@ describe('Dedicated room setters', () => {
 	});
 	it('Transform and direct assignment to another species cannot start Trick Room', () => {
 		const [p, q] = setup('Unown', 'Lost Epoch'); battle.field.removePseudoWeather('trickroom');
-		battle.actions.useMove('transform', q, {target: p}); assert(!battle.field.getPseudoWeather('trickroom'));
+		battle.actions.useMove('transform', q, { target: p }); assert(!battle.field.getPseudoWeather('trickroom'));
 		q.transformed = false; q.setAbility('Lost Epoch');
 		assert(!battle.field.getPseudoWeather('trickroom'));
 	});
 	it('all four setters can coexist in free-for-all', () => {
-		battle = common.createBattle({gameType: 'freeforall'}, [[set('Unown', 'Lost Epoch')],
+		battle = common.createBattle({ gameType: 'freeforall' }, [[set('Unown', 'Lost Epoch')],
 			[set('Lunatone', 'Gravity Well')], [set('Carbink', 'Arcane Chamber')], [set('Beheeyem', 'Mirror Chamber')]]);
 		for (const room of ['gravity', 'magicroom', 'wonderroom', 'trickroom']) assert(battle.field.getPseudoWeather(room));
 	});

@@ -3,14 +3,14 @@
 const assert = require('./../../assert');
 const common = require('./../../common');
 
-describe('Evil Santa Present', function () {
-	it('hits each adjacent ally and foe once, with separate extra damage attributed to Evil Santa', function () {
-		const battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Delibird', ability: 'Evil Santa', moves: ['present']},
-			{species: 'Snorlax', moves: ['splash']},
+describe('Evil Santa Present', () => {
+	it('hits each adjacent ally and foe once, with separate extra damage attributed to Evil Santa', () => {
+		const battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Delibird', ability: 'Evil Santa', moves: ['present'] },
+			{ species: 'Snorlax', moves: ['splash'] },
 		], [
-			{species: 'Magneton', ability: 'Sturdy', moves: ['splash']},
-			{species: 'Lanturn', moves: ['splash']},
+			{ species: 'Magneton', ability: 'Sturdy', moves: ['splash'] },
+			{ species: 'Lanturn', moves: ['splash'] },
 		]]);
 		try {
 			battle.makeChoices('team 1,2', 'team 1,2');
@@ -30,11 +30,11 @@ describe('Evil Santa Present', function () {
 			battle.destroy();
 		}
 	});
-	it('rolls its extra effect once even when the target already has that status', function () {
-		const battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Delibird', ability: 'Evil Santa', moves: ['present']},
+	it('rolls its extra effect once even when the target already has that status', () => {
+		const battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Delibird', ability: 'Evil Santa', moves: ['present'] },
 		], [
-			{species: 'Mew', ability: 'No Ability', moves: ['splash']},
+			{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
 		]]);
 		try {
 			battle.makeChoices('team 1', 'team 1');

@@ -2,7 +2,7 @@
 
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
+const { Dex } = require('../../../dist/sim');
 
 let battle;
 describe('Dual offensive boosts and Glacial Heart', () => {
@@ -17,10 +17,10 @@ describe('Dual offensive boosts and Glacial Heart', () => {
 		['Sap Sipper', 'Bouffalant', 'vinewhip'],
 	]) {
 		it(`${ability} raises Attack and Special Attack when absorbing ${move}`, () => {
-			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-				{species, ability, moves: ['splash']},
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+				{ species, ability, moves: ['splash'] },
 			], [
-				{species: 'Mew', moves: [move]},
+				{ species: 'Mew', moves: [move] },
 			]]);
 			battle.makeChoices('team 1', 'team 1');
 			const holder = battle.p1.active[0];
@@ -33,10 +33,10 @@ describe('Dual offensive boosts and Glacial Heart', () => {
 	}
 
 	it('raises both stats when Berserk crosses half HP', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Drampa', ability: 'Berserk', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Drampa', ability: 'Berserk', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['superfang']},
+			{ species: 'Mew', moves: ['superfang'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const drampa = battle.p1.active[0];
@@ -48,17 +48,17 @@ describe('Dual offensive boosts and Glacial Heart', () => {
 
 	for (const ability of ['Berserk', 'Strings of Ruin', 'Expiration', 'Winter’s Malice', 'Helios', 'Void Tyrant']) {
 		it(ability + ' gains +1 Sp. Atk on entry, then +2 when an attack crosses half on Dragon’s Den', () => {
-			const set = {species: 'Drampa', ability, moves: ['splash']};
-			battle = common.createBattle({formatid: 'gen9dragonsden'}, [
-				[set, {species:'Mew', moves:['splash']}], [{species:'Mew', moves:['splash']}],
+			const set = { species: 'Drampa', ability, moves: ['splash'] };
+			battle = common.createBattle({ formatid: 'gen9dragonsden' }, [
+				[set, { species: 'Mew', moves: ['splash'] }], [{ species: 'Mew', moves: ['splash'] }],
 			]);
 			battle.makeChoices('team 12', 'team 1');
 			const p = battle.p1.active[0], foe = battle.p2.active[0];
 			assert.equal(p.boosts.spa, 1);
 			battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
 			assert.equal(p.boosts.spa, 1);
-			const move = Object.assign(battle.dex.getActiveMove('tackle'), {damage:Math.ceil(p.hp / 2), willCrit:false});
-			battle.actions.runMove(move, foe, foe.getLocOf(p), {externalMove:true});
+			const move = Object.assign(battle.dex.getActiveMove('tackle'), { damage: Math.ceil(p.hp / 2), willCrit: false });
+			battle.actions.runMove(move, foe, foe.getLocOf(p), { externalMove: true });
 			assert.equal(p.boosts.spa, 3);
 			battle.makeChoices('switch 2', 'move splash');
 			battle.makeChoices('switch 2', 'move splash');
@@ -70,10 +70,10 @@ describe('Dual offensive boosts and Glacial Heart', () => {
 			['gen9dragonsden', 'Drampa', 'Berserk', 0, 1],
 			['gen9electricfield', 'Manectric', 'Lightning Rod', 1, 1],
 		]) {
-			battle = common.createBattle({formatid}, [[
-				{species, ability, moves: ['splash']},
+			battle = common.createBattle({ formatid }, [[
+				{ species, ability, moves: ['splash'] },
 			], [
-				{species: 'Mew', moves: ['splash']},
+				{ species: 'Mew', moves: ['splash'] },
 			]]);
 			battle.makeChoices('team 1', 'team 1');
 			const holder = battle.p1.active[0];
@@ -85,12 +85,12 @@ describe('Dual offensive boosts and Glacial Heart', () => {
 	});
 
 	it('raises both Sap Sipper stats for an allied Grass move', () => {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Comfey', moves: ['aromatherapy']},
-			{species: 'Bouffalant', ability: 'Sap Sipper', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Comfey', moves: ['aromatherapy'] },
+			{ species: 'Bouffalant', ability: 'Sap Sipper', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['splash']},
-			{species: 'Mew', moves: ['splash']},
+			{ species: 'Mew', moves: ['splash'] },
+			{ species: 'Mew', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1, 2', 'team 1, 2');
 		battle.makeChoices('move aromatherapy, move splash', 'move splash, move splash');
@@ -101,10 +101,10 @@ describe('Dual offensive boosts and Glacial Heart', () => {
 
 	it('gives Mega Baxcalibur Glacial Heart without Tough Claws', () => {
 		assert.equal(Dex.species.get('Baxcalibur-Mega').abilities[0], 'Glacial Heart');
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Baxcalibur', item: 'Baxcalibrite', moves: ['splash', 'dragonclaw']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Baxcalibur', item: 'Baxcalibrite', moves: ['splash', 'dragonclaw'] },
 		], [
-			{species: 'Mew', moves: ['splash', 'ember']},
+			{ species: 'Mew', moves: ['splash', 'ember'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash mega', 'move splash');
@@ -136,10 +136,10 @@ describe('Dual offensive boosts and Glacial Heart', () => {
 	});
 
 	it('does not grant removed Stalwart entry boosts on Fairy Tale Field', () => {
-		battle = common.createBattle({formatid: 'gen9fairytalefield'}, [[
-			{species: 'Baxcalibur', item: 'Baxcalibrite', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9fairytalefield' }, [[
+			{ species: 'Baxcalibur', item: 'Baxcalibrite', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['splash']},
+			{ species: 'Mew', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash mega', 'move splash');

@@ -828,7 +828,7 @@ export const ReviewedReferenceDetails = {
 				"Electric attacks use 2× Attack or Special Attack on Electric and Factory fields instead of 1.3×. Electric Field additionally halves the offensive stat used by incoming Ground attacks.",
 			],
 			"railguncircuit": [
-				"Electric Field entry grants +1 Attack and Special Attack through Lightning Rod."
+				"Electric Field entry grants +1 Attack and Special Attack through Lightning Rod.",
 			],
 			"slowstart": [
 				"Holy removes its temporary Attack and Speed penalties and supplies 1.5× Defense instead of the temporary 2× defense outside Holy. Holy entry prints “Divine energy courses through [Pokémon]”. Electric Field removes one additional turn from the three-turn Slow Start countdown each turn.",
@@ -2590,7 +2590,7 @@ export const ReviewedReferenceDetails = {
 				"Electric attacks use 2× Attack or Special Attack on Electric and Factory fields instead of 1.3×. Electric Field additionally halves the offensive stat used by incoming Ground attacks.",
 			],
 			"railguncircuit": [
-				"Electric Field entry grants +1 Attack and Special Attack through Lightning Rod."
+				"Electric Field entry grants +1 Attack and Special Attack through Lightning Rod.",
 			],
 			"pulsetriad": [
 				"Once per battle per holder, entry attempts to create or refresh Factory for exactly three turns, including when Amplifield Rock is held. A blocked attempt still spends the allowance. Magnezone-Pulse receives Flash Cannon, Discharge, Recover and Autotomize; switching or regaining the ability does not reset the field use.",

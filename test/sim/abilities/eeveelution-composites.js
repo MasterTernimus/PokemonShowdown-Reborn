@@ -2,7 +2,7 @@
 
 const assert = require('assert').strict;
 const common = require('../../common');
-const {Dex} = require('../../../dist/sim');
+const { Dex } = require('../../../dist/sim');
 
 let battle;
 describe('Eevee and Eeveelution ability updates', () => {
@@ -19,10 +19,10 @@ describe('Eevee and Eeveelution ability updates', () => {
 	});
 
 	it('lets Tidal Wave absorb Water attacks and retain its component effects', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Vaporeon', ability: 'Tidal Wave', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Vaporeon', ability: 'Tidal Wave', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['watergun']},
+			{ species: 'Mew', moves: ['watergun'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const vaporeon = battle.p1.active[0];
@@ -38,10 +38,10 @@ describe('Eevee and Eeveelution ability updates', () => {
 	});
 
 	it('lets Livewire absorb Electric attacks and keep Quick Feet under paralysis', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Jolteon', ability: 'Livewire', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Jolteon', ability: 'Livewire', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['thunderbolt']},
+			{ species: 'Mew', moves: ['thunderbolt'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const jolteon = battle.p1.active[0];
@@ -60,10 +60,10 @@ describe('Eevee and Eeveelution ability updates', () => {
 	});
 
 	it('lets Kindled Fury absorb Fire attacks and expose every component', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Flareon', ability: 'Kindled Fury', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Flareon', ability: 'Kindled Fury', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['flamethrower']},
+			{ species: 'Mew', moves: ['flamethrower'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const flareon = battle.p1.active[0];

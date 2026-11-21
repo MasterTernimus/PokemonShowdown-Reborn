@@ -1,5 +1,35 @@
-const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim');describe('Cold Logic Forewarn accuracy utility',()=>{let battle;afterEach(()=>battle?.destroy());function setup(){battle=common.createBattle({formatid:'gen9nofielddoublesbattle'},[[{species:'Metagross-Mega',ability:'Cold Logic',moves:['splash']},{species:'Mew',ability:'No Ability',moves:['splash']}],[{species:'Mew',ability:'No Ability',moves:['surf','tackle']},{species:'Mew',ability:'No Ability',moves:['splash']}]]);battle.makeChoices('team 12','team 12');return[battle.p1.active[0],battle.p2.active[0],battle.p1.active[1]];}
-it('Keen Eye blocks accuracy drops from other Pokemon and permits self drops and other stats',()=>{const[p,q,a]=setup();battle.boost({accuracy:-1,atk:-1},p,q,Dex.moves.get('sandattack'));assert.equal(p.boosts.accuracy,0);assert.equal(p.boosts.atk,-1);battle.boost({accuracy:-1},p,p);battle.boost({accuracy:-1},p,a);assert.equal(p.boosts.accuracy,-1);p.addVolatile('gastroacid');battle.boost({accuracy:-1},p,q);assert.equal(p.boosts.accuracy,-2);});
+const assert = require('assert').strict,
+	common = require('../../common'),
+	{ Dex } = require('../../../dist/sim');
+describe('Cold Logic Forewarn accuracy utility', () => {
+	let battle;
+	afterEach(() => battle?.destroy());
+	function setup() {
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
+			[
+				{ species: 'Metagross-Mega', ability: 'Cold Logic', moves: ['splash'] },
+				{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+			],
+			[
+				{ species: 'Mew', ability: 'No Ability', moves: ['surf', 'tackle'] },
+				{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+			],
+		]);
+		battle.makeChoices('team 12', 'team 12');
+		return [battle.p1.active[0], battle.p2.active[0], battle.p1.active[1]];
+	}
+	it('Keen Eye blocks accuracy drops from other Pokemon and permits self drops and other stats', () => {
+		const [p, q, a] = setup();
+		battle.boost({ accuracy: -1, atk: -1 }, p, q, Dex.moves.get('sandattack'));
+		assert.equal(p.boosts.accuracy, 0);
+		assert.equal(p.boosts.atk, -1);
+		battle.boost({ accuracy: -1 }, p, p);
+		battle.boost({ accuracy: -1 }, p, a);
+		assert.equal(p.boosts.accuracy, -1);
+		p.addVolatile('gastroacid');
+		battle.boost({ accuracy: -1 }, p, q);
+		assert.equal(p.boosts.accuracy, -2);
+	});
 	it('adds Convergence and Keen Eye without Prism Armor and retains one Tough Claws', () => {
 		const [p, q] = setup();
 		assert(!p.hasAbility('prismarmor'));
@@ -12,5 +42,13 @@ it('Keen Eye blocks accuracy drops from other Pokemon and permits self drops and
 		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 1000), 1300);
 		assert.deepEqual(p.getPassives(), ['toughclaws']);
 	});
-it('reveals once and applies full Forewarn in ordinary field, with learned reduction replacing general reduction',()=>{const[p,q]=setup();assert.equal(battle.log.filter(l=>l.includes('ability: Forewarn')).length,1); for(const[id,n]of [['surf',750],['tackle',800]])assert.equal(battle.runEvent('Damage',p,q,Dex.getActiveMove(id),1000),n);});
+	it('reveals once and applies full Forewarn in ordinary field, with learned reduction replacing general reduction', () => {
+		const [p, q] = setup();
+		assert.equal(battle.log.filter(l => l.includes('ability: Forewarn')).length, 1);
+		for (const [id, n] of [
+			['surf', 750],
+			['tackle', 800],
+		])
+			assert.equal(battle.runEvent('Damage', p, q, Dex.getActiveMove(id), 1000), n);
+	});
 });

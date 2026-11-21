@@ -5,19 +5,19 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Composite ability cleanup', function () {
-	afterEach(function () {
+describe('Composite ability cleanup', () => {
+	afterEach(() => {
 		battle?.destroy();
 	});
 
-	it('should remove Invigorate hooks from Ancient Bloom', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should remove Invigorate hooks from Ancient Bloom', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		const ability = battle.dex.abilities.get('ancientbloom');
 		assert.equal(ability.onAnyTryHeal, undefined);
 	});
 
-	it('should add Pollen Bloom hooks to Ancient Bloom', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should add Pollen Bloom hooks to Ancient Bloom', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		const ability = battle.dex.abilities.get('ancientbloom');
 		assert(ability.onAnyModifyBoost);
 		assert(ability.onSourceModifyAtk);
@@ -26,8 +26,8 @@ describe('Composite ability cleanup', function () {
 		assert(ability.onImmunity);
 	});
 
-	it('keeps Tidal Crown support without its removed Shell Armor damage hook', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('keeps Tidal Crown support without its removed Shell Armor damage hook', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		const ability = battle.dex.abilities.get('fortressshell');
 		assert(ability.onModifyMove);
 		assert(ability.onResidual);
@@ -35,8 +35,8 @@ describe('Composite ability cleanup', function () {
 		assert(!ability.onSourceModifyDamage);
 	});
 
-	it('should give Blazing Crown Unbound Blaze while retaining its hidden Filter hook', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should give Blazing Crown Unbound Blaze while retaining its hidden Filter hook', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		const ability = battle.dex.abilities.get('burningcrown');
 		assert(ability.onUpdate);
 		assert(ability.onModifyType);
@@ -49,7 +49,7 @@ describe('Composite ability cleanup', function () {
 	});
 
 	it('should replace Lunar Dread marks with Dishearten and Insomnia without Pressure', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		const ability = battle.dex.abilities.get('lunardread');
 		for (const hook of ['onStart', 'onSetStatus', 'onTryAddVolatile']) assert(ability[hook]);
 		for (const hook of ['onDamage', 'onAnyModifyBoost', 'onSourceDamagingHit', 'onModifyCritRatio', 'condition', 'onDeductPP']) {
@@ -58,7 +58,7 @@ describe('Composite ability cleanup', function () {
 	});
 
 	it('should give Territorial Guard Dog and immediate Stamina hooks', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		const ability = battle.dex.abilities.get('territorial');
 		assert.equal(ability.onStart, undefined);
 		assert(ability.onDamagingHit);
@@ -72,7 +72,7 @@ describe('Composite ability cleanup', function () {
 	});
 
 	it('should give Still Waters Cloud Nine and Unaware without Magic Guard', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		const ability = battle.dex.abilities.get('stillwaters');
 		assert(ability.onSwitchIn);
 		assert(ability.onStart);
@@ -83,11 +83,11 @@ describe('Composite ability cleanup', function () {
 		assert.equal(ability.suppressWeather, true);
 	});
 
-	it('should not give Water Barrage Water Veil or Aqua Ring hooks', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Blastoise', ability: 'waterbarrage', moves: ['splash']},
+	it('should not give Water Barrage Water Veil or Aqua Ring hooks', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Blastoise', ability: 'waterbarrage', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['willowisp']},
+			{ species: 'Mew', ability: 'noguard', moves: ['willowisp'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const blastoise = battle.p1.active[0];
@@ -97,7 +97,7 @@ describe('Composite ability cleanup', function () {
 	});
 
 	it('should make Aegis Shield Bulletproof, Stamina and Friend Guard without Self Repair', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		const ability = battle.dex.abilities.get('wrathshield');
 		assert.equal(ability.onDamagingHit, battle.dex.abilities.get('stamina').onDamagingHit);
 		assert.equal(ability.onAfterEachBoost, undefined);
@@ -109,17 +109,17 @@ describe('Composite ability cleanup', function () {
 		assert.equal(ability.onSwitchOut, undefined);
 	});
 
-	it('should give Bulletproof and Mirror Armor their armor damage hooks', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should give Bulletproof and Mirror Armor their armor damage hooks', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		assert(battle.dex.abilities.get('bulletproof').onSourceModifyDamage);
 		assert(battle.dex.abilities.get('mirrorarmor').onSourceModifyDamage);
 	});
 
 	it('should keep Haxorus Rivalry as a passive alongside Raging Storm', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Haxorus', ability: 'ragingstorm', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Haxorus', ability: 'ragingstorm', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['splash']},
+			{ species: 'Mew', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const haxorus = battle.p1.active[0];
@@ -129,11 +129,11 @@ describe('Composite ability cleanup', function () {
 		assert(haxorus.hasAbility('moldbreaker'));
 	});
 
-	it('should set Eclipse Vision from the first move slot and switch types later', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Gothitelle', ability: 'eclipsevision', moves: ['darkpulse', 'calmmind']},
+	it('should set Eclipse Vision from the first move slot and switch types later', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Gothitelle', ability: 'eclipsevision', moves: ['darkpulse', 'calmmind'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['counter']},
+			{ species: 'Mew', ability: 'noguard', moves: ['counter'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const gothitelle = battle.p1.active[0];
@@ -145,11 +145,11 @@ describe('Composite ability cleanup', function () {
 		assert.equal(gothitelle.hp - hpBefore, Math.floor(gothitelle.baseMaxhp / 8));
 	});
 
-	it('should set Adaptive Cell from the first move slot and switch by category later', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Reuniclus', ability: 'adaptivecell', moves: ['drainpunch', 'psychic']},
+	it('should set Adaptive Cell from the first move slot and switch by category later', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Reuniclus', ability: 'adaptivecell', moves: ['drainpunch', 'psychic'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['counter']},
+			{ species: 'Mew', ability: 'noguard', moves: ['counter'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const reuniclus = battle.p1.active[0];
@@ -158,17 +158,17 @@ describe('Composite ability cleanup', function () {
 		assert.deepEqual(reuniclus.getTypes(), ['Psychic']);
 	});
 
-	it('should remove Pressure from Relic Armor and expose Abyss Sniper under its new ID', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should remove Pressure from Relic Armor and expose Abyss Sniper under its new ID', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		assert.equal(battle.dex.abilities.get('relicarmor').onDeductPP, undefined);
 		assert.equal(battle.dex.abilities.get('abysssniper').name, 'Abyss Sniper');
 	});
 
 	it('should keep Defeatist defensive retaliation without removed residual healing', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Archeops', ability: 'defeatist', moves: ['splash']},
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Archeops', ability: 'defeatist', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'noability', moves: ['growl']},
+			{ species: 'Mew', ability: 'noability', moves: ['growl'] },
 		]]);
 		const defeatist = battle.dex.abilities.get('defeatist');
 		for (const hook of ['onStart', 'onCriticalHit', 'onEffectiveness', 'onImmunity', 'onType', 'onResidual', 'onAfterBoost', 'onSourceModifyDamage']) {
@@ -184,11 +184,11 @@ describe('Composite ability cleanup', function () {
 		assert.statStage(archeops, 'spd', 1);
 	});
 
-	it('should remove Self Sufficient healing from Gooey and Steam Engine', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Goodra', ability: 'gooey', moves: ['splash']},
+	it('should remove Self Sufficient healing from Gooey and Steam Engine', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Goodra', ability: 'gooey', moves: ['splash'] },
 		], [
-			{species: 'Coalossal', ability: 'steamengine', moves: ['splash']},
+			{ species: 'Coalossal', ability: 'steamengine', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const goodra = battle.p1.active[0];
@@ -202,11 +202,11 @@ describe('Composite ability cleanup', function () {
 		assert.equal(coalossal.hp, coalossalHP);
 	});
 
-	it('should make Gooey lower only Speed by one after a contact hit', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Goodra', ability: 'gooey', moves: ['splash']},
+	it('should make Gooey lower only Speed by one after a contact hit', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Goodra', ability: 'gooey', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'noability', moves: ['tackle']},
+			{ species: 'Mew', ability: 'noability', moves: ['tackle'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash', 'move tackle');
@@ -215,11 +215,11 @@ describe('Composite ability cleanup', function () {
 		});
 	});
 
-	it('should expose every requested Hisuian Path component', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Wyrdeer', ability: 'hisuianpath', moves: ['splash']},
+	it('should expose every requested Hisuian Path component', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Wyrdeer', ability: 'hisuianpath', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['leafage']},
+			{ species: 'Mew', ability: 'noguard', moves: ['leafage'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const wyrdeer = battle.p1.active[0];
@@ -231,8 +231,8 @@ describe('Composite ability cleanup', function () {
 		assert(battle.dex.abilities.get('hisuianpath').onSourceModifyDamage);
 	});
 
-	it('should give Void Tyrant Hydra Bond, Berserk, and its Draco Meteor recovery', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should give Void Tyrant Hydra Bond, Berserk, and its Draco Meteor recovery', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		const ability = battle.dex.abilities.get('voidtyrant');
 		assert(ability.onModifyMove);
 		assert(ability.onAfterMoveSecondary);
@@ -242,7 +242,7 @@ describe('Composite ability cleanup', function () {
 	});
 
 	it('should give Toxic Evolution Corrosion and Shield Dust without removed damage reduction', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		const ability = battle.dex.abilities.get('toxicevolution');
 		assert.equal(ability.name, 'Toxic Evolution');
 		assert(ability.onNegateImmunity);
@@ -256,19 +256,19 @@ describe('Composite ability cleanup', function () {
 		assert.deepEqual(battle.dex.species.get('Weezing').passives, ['levitate']);
 	});
 
-	it('should give base Empoleon and its Mega their distinct abilities', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should give base Empoleon and its Mega their distinct abilities', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		const base = {
 			0: 'Competitive',
 			1: 'Imperial Legacy',
 			H: 'Royal Decree',
 		};
 		assert.deepEqual(battle.dex.species.get('Empoleon').abilities, base);
-		assert.deepEqual(battle.dex.species.get('Empoleon-Mega').abilities, {0: "Imperial Eternal"});
+		assert.deepEqual(battle.dex.species.get('Empoleon-Mega').abilities, { 0: "Imperial Eternal" });
 	});
 
-	it('should give Empress and Imperial Princess native Fighting STAB and suppress only Fairy weakness components', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should give Empress and Imperial Princess native Fighting STAB and suppress only Fairy weakness components', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		const source = battle.dex.species.get('Tsareena');
 		const target = battle.dex.species.get('Mew');
 		const fightingMove = battle.dex.moves.get('focusblast');
@@ -283,8 +283,8 @@ describe('Composite ability cleanup', function () {
 		}
 	});
 
-	it('should replace Sandaconda\'s Sand Veil with Shed Skin', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should replace Sandaconda\'s Sand Veil with Shed Skin', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		assert.deepEqual(battle.dex.species.get('Sandaconda').abilities, {
 			0: 'Buried Coil',
 			1: 'Stamina',
@@ -292,11 +292,11 @@ describe('Composite ability cleanup', function () {
 		});
 	});
 
-	it('should pair Apex Predator with innate Relic Armor', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Aerodactyl-Mega', ability: 'apexpredator', moves: ['splash']},
+	it('should pair Apex Predator with innate Relic Armor', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Aerodactyl-Mega', ability: 'apexpredator', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['gust']},
+			{ species: 'Mew', ability: 'noguard', moves: ['gust'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const aerodactyl = battle.p1.active[0];
@@ -315,11 +315,11 @@ describe('Composite ability cleanup', function () {
 		assert(aerodactyl.hasAbilityOrPassive('relicarmor'));
 	});
 
-	it('should let Hisuian Oath Poison attacks damage and poison Steel targets', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Sneasler', ability: 'hisuianoath', moves: ['direclaw', 'toxic']},
+	it('should let Hisuian Oath Poison attacks damage and poison Steel targets', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Sneasler', ability: 'hisuianoath', moves: ['direclaw', 'toxic'] },
 		], [
-			{species: 'Registeel', ability: 'clearbody', moves: ['splash']},
+			{ species: 'Registeel', ability: 'clearbody', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const registeel = battle.p2.active[0];
@@ -330,11 +330,11 @@ describe('Composite ability cleanup', function () {
 		assert(['psn', 'tox'].includes(registeel.status));
 	});
 
-	it('should make Download boost only the offense targeting the foe\'s weaker defense', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Porygon2', ability: 'download', moves: ['tackle']},
+	it('should make Download boost only the offense targeting the foe\'s weaker defense', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Porygon2', ability: 'download', moves: ['tackle'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['splash']},
+			{ species: 'Mew', ability: 'noguard', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const porygon = battle.p1.active[0];
@@ -346,13 +346,13 @@ describe('Composite ability cleanup', function () {
 		assert(battle.log.some(line => line.includes('|-crit|')), 'Download should make the first damaging move crit');
 	});
 
-	it('should make Download and Defragment mirror each other in Doubles', function () {
-		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
-			{species: 'Porygon2', ability: 'download', moves: ['splash']},
-			{species: 'Porygon-Z', ability: 'defragment', moves: ['zapcannon']},
+	it('should make Download and Defragment mirror each other in Doubles', () => {
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Porygon2', ability: 'download', moves: ['splash'] },
+			{ species: 'Porygon-Z', ability: 'defragment', moves: ['zapcannon'] },
 		], [
-			{species: 'Blissey', ability: 'naturalcure', moves: ['splash']},
-			{species: 'Blissey', ability: 'naturalcure', moves: ['splash']},
+			{ species: 'Blissey', ability: 'naturalcure', moves: ['splash'] },
+			{ species: 'Blissey', ability: 'naturalcure', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 12', 'team 12');
 		const download = battle.p1.active[0];
@@ -370,12 +370,12 @@ describe('Composite ability cleanup', function () {
 		assert.equal(battle.runEvent('Accuracy', battle.p2.active[1], defragment, second, second.accuracy), true);
 	});
 
-	it('should keep Phalanx Form untrapped without the removed Steel STAB', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Falinks-Mega', ability: 'phalanxform', moves: ['noretreat', 'ironhead']},
-			{species: 'Mew', ability: 'noguard', moves: ['splash']},
+	it('should keep Phalanx Form untrapped without the removed Steel STAB', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Falinks-Mega', ability: 'phalanxform', moves: ['noretreat', 'ironhead'] },
+			{ species: 'Mew', ability: 'noguard', moves: ['splash'] },
 		], [
-			{species: 'Gothitelle', ability: 'shadowtag', moves: ['splash']},
+			{ species: 'Gothitelle', ability: 'shadowtag', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1, 2', 'team 1');
 		const falinks = battle.p1.active[0];
@@ -387,8 +387,8 @@ describe('Composite ability cleanup', function () {
 		assert.species(battle.p1.active[0], 'Mew');
 	});
 
-	it('should remove the requested legacy composite hooks and expose Soul Strike', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should remove the requested legacy composite hooks and expose Soul Strike', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		assert.equal(battle.dex.abilities.get('celestialheart').onModifyMove, undefined);
 		assert.equal(battle.dex.abilities.get('draconicforce').onModifyAtk, undefined);
 		assert.equal(battle.dex.abilities.get('dreadmaw').onStart, undefined); // Frisk was removed.
@@ -399,11 +399,11 @@ describe('Composite ability cleanup', function () {
 		assert.equal(battle.dex.species.get('Gengar-Gmax').abilities[0], 'Afterlife Gate');
 	});
 
-	it('should expose every updated composite through normalized component IDs', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Mew', ability: 'synchronize', moves: ['splash']},
+	it('should expose every updated composite through normalized component IDs', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Mew', ability: 'synchronize', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'synchronize', moves: ['splash']},
+			{ species: 'Mew', ability: 'synchronize', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const pokemon = battle.p1.active[0];
@@ -427,7 +427,7 @@ describe('Composite ability cleanup', function () {
 			windchime: ['armorize', 'punkrock', 'levitate'],
 			hauntedchime: ['elevate', 'windpower', 'cursedbody'],
 			auramaster: ['dualwield', 'innerfocus', 'technician'],
-		lunarorbit: ['magicbounce', 'serenegrace', 'triage'],
+			lunarorbit: ['magicbounce', 'serenegrace', 'triage'],
 			stillwaters: ['cloudnine', 'unaware'],
 			relentlesshunt: ['roughskin'],
 			omenedge: ['sharpness', 'dualwield', 'pressure'],
@@ -439,8 +439,8 @@ describe('Composite ability cleanup', function () {
 			riotamp: ['galvanize', 'resonanceforce', 'voltabsorb'],
 			perfectstriker: ['striker', 'noguard', 'libero'],
 			mossarmor: ['stamina', 'naturalcure'],
-		stormcalling: ['drizzle', 'liquidvoice', 'dissonantecho'],
-		aevianglacier: ['snowwarning', 'icebody', 'refrigerate'],
+			stormcalling: ['drizzle', 'liquidvoice', 'dissonantecho'],
+			aevianglacier: ['snowwarning', 'icebody', 'refrigerate'],
 			aevianbolt: ['stormpower', 'static', 'voltabsorb'],
 			heatcoil: ['speedboost', 'flamebody'],
 			sweetsanctuary: ['stamina'],
@@ -474,8 +474,8 @@ describe('Composite ability cleanup', function () {
 		assert.deepEqual(battle.dex.species.get('Coalossal-Gmax').passives, ['flashfire']);
 	});
 
-	it('should keep active slots intact while Mega starters receive the Proficient passive', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should keep active slots intact while Mega starters receive the Proficient passive', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		assert.deepEqual(battle.dex.species.get('Swampert-Mega').passives, ['proficient']);
 		assert.deepEqual(battle.dex.species.get('Chesnaught-Mega').passives, ['proficient']);
 		assert.deepEqual(battle.dex.species.get('Greninja').passives, ['torrent']);
@@ -494,8 +494,8 @@ describe('Composite ability cleanup', function () {
 		});
 	});
 
-	it('should apply the requested species ability replacements and Altaria event slot', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+	it('should apply the requested species ability replacements and Altaria event slot', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' });
 		assert.deepEqual(battle.dex.species.get('Scizor').abilities, {
 			0: 'Pincer Crush', 1: 'Technician', H: 'Decoy Pincers',
 		});
@@ -510,11 +510,11 @@ describe('Composite ability cleanup', function () {
 		});
 	});
 
-	it('should use Armorize as the canonical name while resolving legacy Ironclad data', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Durant', ability: 'Ironclad', moves: ['splash']},
+	it('should use Armorize as the canonical name while resolving legacy Ironclad data', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Durant', ability: 'Ironclad', moves: ['splash'] },
 		], [
-			{species: 'Magikarp', moves: ['splash']},
+			{ species: 'Magikarp', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const armorize = battle.dex.abilities.get('Armorize');
@@ -525,11 +525,11 @@ describe('Composite ability cleanup', function () {
 		assert(battle.p1.active[0].hasAbility('armorize'));
 	});
 
-	it('should expose Aura Master contact protection and requested components', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Mew', ability: 'aura master', moves: ['splash']},
+	it('should expose Aura Master contact protection and requested components', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Mew', ability: 'aura master', moves: ['splash'] },
 		], [
-			{species: 'Mew', moves: ['tackle']},
+			{ species: 'Mew', moves: ['tackle'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const auraMaster = battle.dex.abilities.get('auramaster');
@@ -543,11 +543,11 @@ describe('Composite ability cleanup', function () {
 		assert.equal(battle.runEvent('SourceModifyDamage', target, source, move, 100), 50);
 	});
 
-	it('should give Copperajah-Gmax maximum power on weight-based moves', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Copperajah-Gmax', ability: 'treasuretitan', moves: ['heavyslam']},
+	it('should give Copperajah-Gmax maximum power on weight-based moves', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Copperajah-Gmax', ability: 'treasuretitan', moves: ['heavyslam'] },
 		], [
-			{species: 'Magikarp', moves: ['splash']},
+			{ species: 'Magikarp', moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const source = battle.p1.active[0];

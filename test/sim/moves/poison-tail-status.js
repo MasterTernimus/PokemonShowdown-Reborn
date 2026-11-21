@@ -29,7 +29,7 @@ describe('Poison Tail status payoff', () => {
 		assert.equal(move.accuracy, 100);
 		assert.equal(move.pp, 15);
 		assert.equal(move.critRatio, 1);
-		assert.deepEqual(move.secondaries, [{chance: 20, status: 'tox'}]);
+		assert.deepEqual(move.secondaries, [{ chance: 20, status: 'tox' }]);
 		for (const flag of ['tail', 'slicing', 'contact', 'protect', 'mirror', 'metronome']) assert(move.flags[flag]);
 	});
 	for (const ability of ['Sharpness', 'Whiplash']) {

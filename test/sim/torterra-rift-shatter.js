@@ -2,16 +2,16 @@
 
 const assert = require('assert').strict;
 const common = require('../common');
-const {Dex} = require('../../dist/sim');
+const { Dex } = require('../../dist/sim');
 
 describe('Torterra-Rift-Shatter', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
 
 	function startRift() {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Torterra', item: 'Anomaly Core', moves: ['splash', 'protect']},
-		], [{species: 'Mew', moves: ['splash']}]]);
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Torterra', item: 'Anomaly Core', moves: ['splash', 'protect'] },
+		], [{ species: 'Mew', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash mega', 'move splash');
 		return battle.p1.active[0];
@@ -20,7 +20,7 @@ describe('Torterra-Rift-Shatter', () => {
 	it('has the requested stats, type, ability, and total', () => {
 		const shatter = Dex.species.get('Torterra-Rift-Shatter');
 		assert.deepEqual(shatter.types, ['Grass', 'Fire']);
-		assert.deepEqual(shatter.baseStats, {hp: 180, atk: 120, def: 100, spa: 40, spd: 100, spe: 50});
+		assert.deepEqual(shatter.baseStats, { hp: 180, atk: 120, def: 100, spa: 40, spd: 100, spe: 50 });
 		assert.equal(shatter.bst, 590);
 		assert.equal(shatter.abilities[0], 'Desert Rift');
 		assert.equal(Dex.species.get('Torterrea-Rift-Shatter').id, shatter.id);
@@ -29,7 +29,7 @@ describe('Torterra-Rift-Shatter', () => {
 	it('revives once from the faint queue with a full reset and new field and moves', () => {
 		const torterra = startRift();
 		torterra.setStatus('brn');
-		battle.boost({atk: 2, def: -1}, torterra);
+		battle.boost({ atk: 2, def: -1 }, torterra);
 		torterra.addVolatile('confusion');
 		const pokemonLeft = torterra.side.pokemonLeft;
 		torterra.faint(battle.p2.active[0], battle.dex.moves.get('tackle'));

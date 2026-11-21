@@ -9,12 +9,12 @@ describe('Redirection move target selection', () => {
 	for (const move of ['ragepowder', 'followme']) {
 		for (const choice of ['move 1', 'move 1 1', 'move 1 -2', 'move 1 zmove', 'move 1 zmove 1']) {
 			it(`${move} accepts ${choice} in doubles and redirects to its user`, () => {
-				battle = common.createBattle({gameType: 'doubles'}, [[
-					{species: 'Amoonguss', ability: 'No Ability', item: move === 'ragepowder' ? 'Buginium Z' : 'Normalium Z', moves: [move]},
-					{species: 'Blissey', ability: 'No Ability', moves: ['splash']},
+				battle = common.createBattle({ gameType: 'doubles' }, [[
+					{ species: 'Amoonguss', ability: 'No Ability', item: move === 'ragepowder' ? 'Buginium Z' : 'Normalium Z', moves: [move] },
+					{ species: 'Blissey', ability: 'No Ability', moves: ['splash'] },
 				], [
-					{species: 'Snorlax', ability: 'No Ability', moves: ['tackle']},
-					{species: 'Blissey', ability: 'No Ability', moves: ['splash']},
+					{ species: 'Snorlax', ability: 'No Ability', moves: ['tackle'] },
+					{ species: 'Blissey', ability: 'No Ability', moves: ['splash'] },
 				]]);
 				const request = battle.p1.activeRequest.active[0];
 				assert.equal(request.moves[0].target, 'self');
@@ -27,11 +27,11 @@ describe('Redirection move target selection', () => {
 			});
 		}
 		it(`${move} preserves selected-opponent redirection in Free-for-All`, () => {
-			battle = common.createBattle({gameType: 'freeforall'}, [
-				[{species: 'Amoonguss', ability: 'No Ability', moves: [move]}],
-				[{species: 'Snorlax', ability: 'No Ability', moves: ['tackle']}],
-				[{species: 'Blissey', ability: 'No Ability', moves: ['splash']}],
-				[{species: 'Snorlax', ability: 'No Ability', moves: ['tackle']}],
+			battle = common.createBattle({ gameType: 'freeforall' }, [
+				[{ species: 'Amoonguss', ability: 'No Ability', moves: [move] }],
+				[{ species: 'Snorlax', ability: 'No Ability', moves: ['tackle'] }],
+				[{ species: 'Blissey', ability: 'No Ability', moves: ['splash'] }],
+				[{ species: 'Snorlax', ability: 'No Ability', moves: ['tackle'] }],
 			]);
 			if (battle.turn === 0) battle.makeChoices();
 			const [user, selected, victim, other] = battle.sides.map(side => side.active[0]);

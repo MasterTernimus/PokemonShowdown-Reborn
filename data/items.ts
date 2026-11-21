@@ -35,7 +35,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	belliboltite: {
 		name: "Belliboltite",
 		spritenum: 0,
-		megaStone: {Bellibolt: "Bellibolt-Mega"},
+		megaStone: { Bellibolt: "Bellibolt-Mega" },
 		itemUser: ["Bellibolt"],
 		num: 2661,
 		gen: 9,
@@ -46,7 +46,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	sunflorite: {
 		name: "Sunflorite",
 		spritenum: 0,
-		megaStone: {Sunflora: "Sunflora-Mega"},
+		megaStone: { Sunflora: "Sunflora-Mega" },
 		itemUser: ["Sunflora"],
 		num: 2660,
 		gen: 9,
@@ -2155,7 +2155,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onUseItem(item, pokemon) {
 			if (this.field.isTerrain('midnightzoneterrain')) {
-				this.boost({spa: 1});
+				this.boost({ spa: 1 });
 				pokemon.addVolatile('aquaring');
 				this.add('-message', pokemon.name + ' surrounded itself with a veil of water!');
 			}
@@ -2210,12 +2210,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.addVolatile('torment', pokemon, item);
 			}
 			if (this.field.isTerrain('snowyterrain')) {
-				this.boost({spd: 1}, pokemon);
+				this.boost({ spd: 1 }, pokemon);
 				pokemon.side.addSlotCondition(pokemon, 'wish', pokemon, item);
 				pokemon.side.addSideCondition('safeguard', pokemon, item);
 			}
 			if (this.field.isTerrain('infernaleclipseterrain')) {
-				this.boost({atk: 1, spa: 1}, pokemon);
+				this.boost({ atk: 1, spa: 1 }, pokemon);
 				pokemon.addVolatile('partiallytrapped', pokemon, this.dex.getActiveMove('firespin'));
 				if (pokemon.volatiles.partiallytrapped) pokemon.volatiles.partiallytrapped.duration = 4;
 			}
@@ -3735,7 +3735,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			const glutton = pokemon.hasAbilityOrPassive('Gluttony') ? 2 : 1;
-			this.heal(pokemon.baseMaxhp*glutton / 16);
+			this.heal(pokemon.baseMaxhp * glutton / 16);
 		},
 		num: 234,
 		gen: 2,
@@ -4085,7 +4085,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onUseItem(item, pokemon) {
 			if (this.field.isTerrain('rifteclipseterrain')) {
-				this.boost({def: 1}, pokemon);
+				this.boost({ def: 1 }, pokemon);
 				// A seed establishes Trick Room; only the move should toggle an existing room off.
 				if (!this.field.getPseudoWeather('trickroom')) {
 					this.field.addPseudoWeather('trickroom', pokemon, item);
@@ -6081,13 +6081,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 244,
 		gen: 2,
 	},
-	bronzongite: {...{"name":"Bronzongite","spritenum":619,"megaStone":{"Bronzong":"Bronzong-Mega"},"itemUser":["Bronzong"],"num":11091,"gen":9,"isNonstandard":"Custom","desc":"Allows Bronzong to Mega Evolve into Mega Bronzong.","shortDesc":"Allows Bronzong to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
-	noivernite: {...{"name":"Noivernite","spritenum":619,"megaStone":{"Noivern":"Noivern-Mega"},"itemUser":["Noivern"],"num":11093,"gen":9,"isNonstandard":"Custom","desc":"Allows Noivern to Mega Evolve into Mega Noivern.","shortDesc":"Allows Noivern to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
-	weavilite: {...{"name":"Weavilite","spritenum":619,"megaStone":{"Weavile":"Weavile-Mega"},"itemUser":["Weavile"],"num":11095,"gen":9,"isNonstandard":"Custom","desc":"Allows Weavile to Mega Evolve into Mega Weavile.","shortDesc":"Allows Weavile to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
-	dusknoirite: {...{"name":"Dusknoirite","spritenum":619,"megaStone":{"Dusknoir":"Dusknoir-Mega"},"itemUser":["Dusknoir"],"num":11097,"gen":9,"isNonstandard":"Custom","desc":"Allows Dusknoir to Mega Evolve into Mega Dusknoir.","shortDesc":"Allows Dusknoir to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
-	noctowlite: {...{"name":"Noctowlite","spritenum":619,"megaStone":{"Noctowl":"Noctowl-Mega"},"itemUser":["Noctowl"],"num":11098,"gen":9,"isNonstandard":"Custom","desc":"Allows Noctowl to Mega Evolve into Mega Noctowl.","shortDesc":"Allows Noctowl to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
-	luxranite: {...{"name":"Luxranite","spritenum":619,"megaStone":{"Luxray":"Luxray-Mega"},"itemUser":["Luxray"],"num":11100,"gen":9,"isNonstandard":"Custom","desc":"Allows Luxray to Mega Evolve into Mega Luxray.","shortDesc":"Allows Luxray to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
-	breloomite: {...{"name":"Breloomite","spritenum":619,"megaStone":{"Breloom":"Breloom-Mega","Breloom-Rejuv":"Breloom-Mega"},"itemUser":["Breloom","Breloom-Rejuv"],"num":11102,"gen":9,"isNonstandard":"Custom","desc":"Allows Breloom and Breloom-Rejuv to Mega Evolve into Mega Breloom.","shortDesc":"Allows Breloom or Breloom-Rejuv to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.species.name] && !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
+	bronzongite: { ...{ "name": "Bronzongite", "spritenum": 619, "megaStone": { "Bronzong": "Bronzong-Mega" }, "itemUser": ["Bronzong"], "num": 11091, "gen": 9, "isNonstandard": "Custom", "desc": "Allows Bronzong to Mega Evolve into Mega Bronzong.", "shortDesc": "Allows Bronzong to Mega Evolve." }, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; } },
+	noivernite: { ...{ "name": "Noivernite", "spritenum": 619, "megaStone": { "Noivern": "Noivern-Mega" }, "itemUser": ["Noivern"], "num": 11093, "gen": 9, "isNonstandard": "Custom", "desc": "Allows Noivern to Mega Evolve into Mega Noivern.", "shortDesc": "Allows Noivern to Mega Evolve." }, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; } },
+	weavilite: { ...{ "name": "Weavilite", "spritenum": 619, "megaStone": { "Weavile": "Weavile-Mega" }, "itemUser": ["Weavile"], "num": 11095, "gen": 9, "isNonstandard": "Custom", "desc": "Allows Weavile to Mega Evolve into Mega Weavile.", "shortDesc": "Allows Weavile to Mega Evolve." }, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; } },
+	dusknoirite: { ...{ "name": "Dusknoirite", "spritenum": 619, "megaStone": { "Dusknoir": "Dusknoir-Mega" }, "itemUser": ["Dusknoir"], "num": 11097, "gen": 9, "isNonstandard": "Custom", "desc": "Allows Dusknoir to Mega Evolve into Mega Dusknoir.", "shortDesc": "Allows Dusknoir to Mega Evolve." }, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; } },
+	noctowlite: { ...{ "name": "Noctowlite", "spritenum": 619, "megaStone": { "Noctowl": "Noctowl-Mega" }, "itemUser": ["Noctowl"], "num": 11098, "gen": 9, "isNonstandard": "Custom", "desc": "Allows Noctowl to Mega Evolve into Mega Noctowl.", "shortDesc": "Allows Noctowl to Mega Evolve." }, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; } },
+	luxranite: { ...{ "name": "Luxranite", "spritenum": 619, "megaStone": { "Luxray": "Luxray-Mega" }, "itemUser": ["Luxray"], "num": 11100, "gen": 9, "isNonstandard": "Custom", "desc": "Allows Luxray to Mega Evolve into Mega Luxray.", "shortDesc": "Allows Luxray to Mega Evolve." }, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; } },
+	breloomite: { ...{ "name": "Breloomite", "spritenum": 619, "megaStone": { "Breloom": "Breloom-Mega", "Breloom-Rejuv": "Breloom-Mega" }, "itemUser": ["Breloom", "Breloom-Rejuv"], "num": 11102, "gen": 9, "isNonstandard": "Custom", "desc": "Allows Breloom and Breloom-Rejuv to Mega Evolve into Mega Breloom.", "shortDesc": "Allows Breloom or Breloom-Rejuv to Mega Evolve." }, onTakeItem(item, source) { return !item.megaStone?.[source.species.name] && !item.megaStone?.[source.baseSpecies.baseSpecies]; } },
 	sharpedonite: {
 		name: "Sharpedonite",
 		spritenum: 619,
@@ -6815,7 +6815,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 1117,
 		gen: 8,
 	},
-		tatsugirinite: {
+	tatsugirinite: {
 		name: "Tatsugirinite",
 		spritenum: 513,
 		megaStone: {
@@ -8822,21 +8822,19 @@ const redundantItemIds = [
 
 for (const itemId of redundantItemIds) delete Items[itemId];
 
-
-
 Items.emboarite.megaStone!['Emboar-Ego'] = 'Emboar-Mega-Ego';
-Items.emboarite = {...Items.emboarite, itemUser: [...(Items.emboarite.itemUser || []), 'Emboar-Ego']};
+Items.emboarite = { ...Items.emboarite, itemUser: [...(Items.emboarite.itemUser || []), 'Emboar-Ego'] };
 
 Items.grimyinite.megaStone!['Mightyena-Grim'] = 'Mightyena-Mega-Grim';
 
-Items.jirachite={name:'Jirachite',spritenum:617,megaStone:{Jirachi:'Jirachi-Mega'},itemUser:['Jirachi'],onTakeItem(item,source){return !item.megaStone?.[source.baseSpecies.baseSpecies];},num:20001,gen:9};
+Items.jirachite = { name: 'Jirachite', spritenum: 617, megaStone: { Jirachi: 'Jirachi-Mega' }, itemUser: ['Jirachi'], onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }, num: 20001, gen: 9 };
 
-import {RegiAttackTypes} from './primordial-approved';
-Items.primordialorb={name:'Primordial Orb',spritenum:390,num:20002,gen:9,itemUser:['Regigigas'],isPrimalOrb:true,
- onSwitchInPriority:-1,
- onSwitchIn(pokemon){if(pokemon.isActive&&pokemon.baseSpecies.name==='Regigigas'&&!pokemon.transformed)pokemon.formeChange('Regigigas-Primordial',this.effect,true);},
- onTakeItem(item,source){return source.baseSpecies.baseSpecies!=='Regigigas';},
- onBasePower(basePower,pokemon,target,move){if(pokemon.baseSpecies.baseSpecies==='Regigigas'&&RegiAttackTypes.some(type=>this.movehasType(move,type)))return this.chainModify(1.5);},
+import { RegiAttackTypes } from './primordial-approved';
+Items.primordialorb = { name: 'Primordial Orb', spritenum: 390, num: 20002, gen: 9, itemUser: ['Regigigas'], isPrimalOrb: true,
+	onSwitchInPriority: -1,
+	onSwitchIn(pokemon) { if (pokemon.isActive && pokemon.baseSpecies.name === 'Regigigas' && !pokemon.transformed)pokemon.formeChange('Regigigas-Primordial', this.effect, true); },
+	onTakeItem(item, source) { return source.baseSpecies.baseSpecies !== 'Regigigas'; },
+	onBasePower(basePower, pokemon, target, move) { if (pokemon.baseSpecies.baseSpecies === 'Regigigas' && RegiAttackTypes.some(type => this.movehasType(move, type))) return this.chainModify(1.5); },
 };
 
 // Battle-inert incenses used by the approved Scented Geyser mapping.

@@ -1,4 +1,4 @@
-import {November16BalanceDescriptions} from './nov16-balance-descriptions';
+import { November16BalanceDescriptions } from './nov16-balance-descriptions';
 /** Reviewed presentation-only cleanup; no callbacks or components changed. */
 export const CurrentAbilityDescriptionCleanup = {
 	"unovawing": {

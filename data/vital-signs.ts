@@ -1,5 +1,5 @@
-import type {Battle} from '../sim/battle';
-import type {Pokemon} from '../sim/pokemon';
+import type { Battle } from '../sim/battle';
+import type { Pokemon } from '../sim/pokemon';
 
 interface PendingRescue {
 	move: ActiveMove;
@@ -13,12 +13,12 @@ export function recordVitalSigns(this: Battle, damage: number, target: Pokemon, 
 	const holder = this.effectState.target as Pokemon;
 	if (!holder.hp || !holder.isActive || !source || source.isAlly(target) || !target.isAlly(holder) ||
 		!target.hp || !target.isActive || damage <= 0 || effect.effectType !== 'Move' ||
-		(effect as ActiveMove).category === 'Status' || target.m.vitalSignsRescued) return;
+		(effect).category === 'Status' || target.m.vitalSignsRescued) return;
 	const pending: PendingRescue[] = (this.effectState.vitalSignsPending || []).filter(
 		(entry: PendingRescue) => entry.turn === this.turn
 	);
-	let entry = pending.find(entry => entry.move === effect && entry.source === source);
-	if (!entry) pending.push(entry = {move: effect as ActiveMove, source, turn: this.turn, targets: []});
+	let entry = pending.find(nestedEntry => nestedEntry.move === effect && nestedEntry.source === source);
+	if (!entry) pending.push(entry = { move: effect, source, turn: this.turn, targets: [] });
 	if (!entry.targets.includes(target)) entry.targets.push(target);
 	this.effectState.vitalSignsPending = pending;
 }
