@@ -131,7 +131,12 @@ const result = ts.transform(preview, [context => root => {
 			return node.declarationList.declarations.map(decl => ts.factory.updateVariableStatement(node, node.modifiers,
 				ts.factory.createVariableDeclarationList([decl], node.declarationList.flags)));
 		}
-		return ts.visitEachChild(node, visit, context);
+		const updated = ts.visitEachChild(node, visit, context);
+		if (!ts.isIfStatement(updated)) return updated;
+		const block = statement => ts.isBlock(statement) ? statement : ts.factory.createBlock([statement], true);
+		const alternate = updated.elseStatement;
+		return ts.factory.updateIfStatement(updated, updated.expression, block(updated.thenStatement),
+			alternate && !ts.isIfStatement(alternate) ? block(alternate) : alternate);
 	}
 	return ts.visitNode(root, visit);
 }]);
