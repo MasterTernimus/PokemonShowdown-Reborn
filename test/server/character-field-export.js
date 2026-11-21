@@ -16,11 +16,12 @@ describe('Character move field previews', () => {
 			fs.mkdirSync(src, { recursive: true });
 			execFileSync(process.execPath, [path.resolve(__dirname, '../../tools/export-client-field-rules.cjs'), root]);
 			const text = fs.readFileSync(path.join(src, 'battle-field-rules.ts'), 'utf8');
-			const moveRules = text.match(/const BattleFieldMoveRules = ([\s\S]*?);\nconst BattleAuraRules/);
-			assert(moveRules, 'Generated move preview rules');
-			const rules = vm.runInNewContext('(' + moveRules[1] + ')', {
-				import_adaptive_cycle: { adaptiveFieldMultiplier: (battle, source, target, factor) => factor },
-			});
+			const ts = require('typescript');
+			const script = ts.transpileModule(text, { compilerOptions: { target: ts.ScriptTarget.ES2020 } });
+			const window = {};
+			vm.runInNewContext(script.outputText, { window });
+			const rules = window.BattleFieldMoveRules;
+			assert(rules, 'Generated move preview rules');
 			for (const [id, profile] of Object.entries(CharacterMoveProfiles)) {
 				const hook = rules[id]?.onBasePower;
 				if (!profile.powerFields?.length) {
