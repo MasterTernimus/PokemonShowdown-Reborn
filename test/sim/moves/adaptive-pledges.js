@@ -57,7 +57,7 @@ describe('Adaptive Pledge categories', () => {
 	it('preserves every existing Pledge callback outside category selection', () => {
 		const fs = require('fs'),
 			before = require('../../../artifacts/adaptive-pledges/before.json'),
-			s = fs.readFileSync('data/moves.ts', 'utf8');
+			s = fs.readFileSync('data/moves.ts', 'utf8').replace(/\r\n/g, '\n');
 		for (const [id, old] of Object.entries(before.blocks)) {
 			const a = s.indexOf('\t' + id + ': {'),
 				b = s.indexOf('\n\t},', a) + 5;
