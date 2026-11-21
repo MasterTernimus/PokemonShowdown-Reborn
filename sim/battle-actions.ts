@@ -18,7 +18,7 @@ import {predatorUltraMatch} from './predator';
 import {ultraRivalry, ultraGuardAvailable} from './ultra-rivalry';
 import {ringmasterSwitch, ringmasterEntry, resetQueuedEntry, shedDecoyEntry} from '../data/queued-abilities-approved';
 import {guardFixedDamage} from '../data/guard-passives-approved';
-import {qualifiesForMalignantLight} from '../data/relic-beam';
+import {qualifiesForKeenLight} from '../data/relic-beam';
 
 const CHOOSABLE_TARGETS = new Set(['normal', 'normalOrSelf', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
@@ -2491,6 +2491,10 @@ export class BattleActions {
 		if (defender === target && target.species.id === 'kecleon' && adaptiveZHit(target, move)) {
 			ignorePositiveDefensive = true;
 		}
+		if (defender === target && (target.status === 'psn' || target.status === 'tox') &&
+			!source.isAlly(target) && source.hasAbilityOrPassive('rivalmalice')) {
+			ignorePositiveDefensive = true;
+		}
 		if (move.category !== 'Status' && this.battle.movehasType(move, 'Fire') && source.hasAbilityOrPassive('coronafurnace')) ignorePositiveDefensive = true;
 		if (defenseStat === 'def' && this.battle.movehasType(move, 'Rock') && source.hasAbility('keenhunt') && !source.isAlly(target)) ignorePositiveDefensive = true;
 		if (defenseStat === 'def' && move.flags.kick && source.hasAbility('imperialprincess')) ignorePositiveDefensive = true;
@@ -2538,13 +2542,13 @@ export class BattleActions {
 		}
 
 		// Liquid Arsenal compares fully modified defenses per target/hit; category and offense are unchanged.
-		const malignantLightApplies = move.category === 'Special' && source.hasAbilityOrPassive('malignantlight') &&
-			qualifiesForMalignantLight(move);
+		const keenLightApplies = move.category === 'Special' && source.hasAbilityOrPassive('keenlight') &&
+			qualifiesForKeenLight(move);
 		// Each defense's modifiers run once. Explicit move defense overrides retain precedence; ties keep normal defense.
 		if (move.category !== 'Status' && !move.overrideDefensivePokemon && (
             (source.hasAbility('liquidarsenal') && this.battle.movehasType(move, 'Water') && !move.overrideDefensiveStat) ||
             (source.hasAbility('psychedominion') && this.battle.movehasType(move, 'Psychic')) ||
-            malignantLightApplies ||
+            keenLightApplies ||
             (move.id === 'psystrike' && ['mewtwo','mewtwomegax','mewtwomegay'].includes(source.species.id))
         )) {
 			const alternateStat = defenseStat === 'def' ? 'spd' : 'def';

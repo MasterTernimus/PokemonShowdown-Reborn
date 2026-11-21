@@ -13,7 +13,7 @@ function entry(p){battle.singleEvent('SwitchIn',passiveEffect(battle,'supremeove
 describe('Kingambit Supreme Overlord extraction',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  it('replaces only Kingambit Entrenched and preserves slots/components',()=>{
-  const[p]=setup();assert.deepEqual(p.getPassives(),['supremeoverlord']);assert.deepEqual(Dex.species.get('kingambit').abilities,{0:'Defiant',1:"Conqueror's Will",H:'Royal Decree'});
+  const[p]=setup();assert.deepEqual(p.getPassives(),['supremeoverlord']);assert.deepEqual(Dex.species.get('kingambit').abilities,{0:'Defiant',1:"Conqueror's Will",H:'Pressure'});
   assert.deepEqual(require('../../../dist/data/ability-components').AbilityComponents.conquerorswill,['unnerve']);
   assert(!p.hasAbility('supremeoverlord'));assert(p.hasAbilityOrPassive('supremeoverlord'));
   for(const key of ['fallen','onAnyFaint','onBasePower','onTryAddVolatile','onDamage'])assert.equal(Dex.abilities.get('conquerorswill')[key],undefined,key);

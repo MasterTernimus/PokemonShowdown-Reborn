@@ -18,7 +18,7 @@ describe('Approved Fearow and Poliwrath refinements', () => {
   const p=Dex.species.get('Poliwrath'), f=Dex.species.get('Fearow');
   assert.deepEqual(p.baseStats,{hp:95,atk:100,def:95,spa:80,spd:85,spe:75});
 		assert.deepEqual(p.abilities, { 0: 'Reservoir', 1: 'Knuckle Tide', H: 'Crosscurrent', S: 'Aevian Ascendance' });
-  assert.deepEqual(f.baseStats,{hp:80,atk:125,def:80,spa:45,spd:80,spe:125});
+  assert.deepEqual(f.baseStats,{hp:80,atk:105,def:65,spa:45,spd:65,spe:110});
   assert.deepEqual(f.types,['Normal','Flying']);
 		assert.deepEqual(f.abilities, { 0: 'Power Drill', H: 'Sniper' });
   for(const id of ['hyperdrill','swordsdance','taunt']) assert(Dex.species.getLearnsetData('fearow').learnset[id].length);

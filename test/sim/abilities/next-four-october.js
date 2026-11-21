@@ -46,6 +46,16 @@ describe('Approved Haxorus, furnace, scales and Gooey changes',()=>{
    assert.equal(battle.runEvent(event,t,null,null,100),100);
   }
  });
+ for (const ffa of [false, true]) it('no KO Attack boost when '+(ffa ? 'other foes have Magic Guard' : 'no other foe is active'), () => {
+  const [user, target] = setup('Raging Storm','Haxorus',ffa);
+  if (ffa) for (const side of battle.sides.slice(2)) side.active[0].setAbility('magicguard');
+  target.hp = 1;
+  const attack = user.boosts.atk;
+  hit(user,target,'tackle');
+  battle.faintMessages();
+  assert(target.fainted);
+  assert.equal(user.boosts.atk, attack);
+ });
  it('Raging Storm still cleaves remaining FFA opponents on its KO',()=>{
   const[p,t]=setup('Raging Storm','Haxorus',true),others=battle.sides.slice(2).map(s=>s.active[0]),before=others.map(x=>x.hp);t.hp=1;hit(p,t,'tackle');battle.faintMessages();assert(others.every((x,i)=>x.hp<before[i]));
  });

@@ -23,9 +23,47 @@ describe('Approved rival and support queue',()=>{
   const move=Dex.getActiveMove('poisonfang');battle.actions.getDamage(q,p,move);assert.equal(p.getMoveHitData(move).typeMod,-1);
   p.setType(['Poison','Ground']);const next=Dex.getActiveMove('poisonfang');battle.actions.getDamage(q,p,next);assert.equal(p.getMoveHitData(next).typeMod,-2);
  });
- it('Rival Malice speed and HP-dependent direct damage apply once',()=>{
-  const[p,q]=setup('Seviper','Rival Malice');assert.equal(battle.runEvent('ModifySpe',p,null,null,100),150);
+ it('Rival Malice tracks poisoned foes and applies HP-dependent damage once',()=>{
+  const[p,q]=setup('Seviper','Rival Malice');assert.equal(battle.runEvent('ModifySpe',p,null,null,100),100);
+  for (const status of ['', 'psn', 'tox']) {
+   q.status = status;
+   assert.equal(battle.runEvent('ModifyAccuracy',q,p,Dex.getActiveMove('irontail'),75),75);
+   assert.equal(battle.runEvent('ModifyAccuracy',q,p,Dex.getActiveMove('hypnosis'),60),60);
+  }
   assert.equal(battle.runEvent('ModifyDamage',p,q,Dex.getActiveMove('tackle'),100),150);q.hp=500;assert.equal(battle.runEvent('ModifyDamage',p,q,Dex.getActiveMove('tackle'),100),125);
+ });
+ it('Rival Malice ignores only positive defensive stages on poisoned foes', () => {
+  const [user, foe] = setup('Seviper', 'Apex Venom');
+  battle.randomizer = damage => damage;
+  for (const [id, stat] of [['tackle', 'def'], ['sludgebomb', 'spd']]) {
+   const damage = () => battle.actions.getDamage(user, foe, {...Dex.getActiveMove(id), willCrit: false});
+   for (const status of ['', 'psn', 'tox']) {
+    foe.status = status;
+    foe.boosts[stat] = 0;
+    const baseline = damage();
+    foe.boosts[stat] = 2;
+    if (status) assert.equal(damage(), baseline);
+    else assert(damage() < baseline);
+    assert.equal(foe.boosts[stat], 2);
+    foe.boosts[stat] = -2;
+    assert(damage() > baseline);
+    foe.boosts[stat] = 0;
+   }
+  }
+ });
+ it('checks each spread target independently and respects boosts on a poisoned ally', () => {
+  const [user, poisoned] = setup('Seviper-Mega', 'Sirius');
+  const healthy = battle.p2.active[1], ally = battle.p1.active[1];
+  poisoned.status = ally.status = 'tox';
+  battle.randomizer = damage => damage;
+  const move = {...Dex.getActiveMove('earthquake'), willCrit: false};
+  for (const target of [poisoned, healthy, ally]) {
+   const baseline = battle.actions.getDamage(user, target, move);
+   target.boosts.def = 2;
+   const boosted = battle.actions.getDamage(user, target, move);
+   if (target === poisoned) assert.equal(boosted, baseline);
+   else assert(boosted < baseline);
+  }
  });
  it('Fang attacks retain Strong Jaw without a signature multiplier',()=>{
   const[p,q]=setup('Mew','Apex Venom');assert.equal(battle.runEvent('BasePower',p,q,Dex.getActiveMove('poisonfang'),100),150);

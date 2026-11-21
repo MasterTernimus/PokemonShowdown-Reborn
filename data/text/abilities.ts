@@ -985,12 +985,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ragingstorm: {
 		name: "Raging Storm",
-		desc: "This Ability cannot be suppressed. This Pokemon has Mold Breaker. Its attacks ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. If this Pokemon gets a KO, it damages remaining foes for 60% of the last damage in multi battles, or raises Attack by 1 if there is no valid target or no damage is dealt. Magic Guard users do not take this damage.",
-		shortDesc: "Cannot be suppressed; Mold Breaker; attacks ignore screens/defensive boosts; KO bonus.",
+		desc: "Neutralizing Gas suppresses this ability. This Pokemon has Mold Breaker. Its attacks ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. If this Pokemon gets a KO, it damages remaining foes for 60% of the last damage in multi battles. Magic Guard users do not take this damage.",
+		shortDesc: "Mold Breaker; attacks ignore screens/defensive boosts; KO splash.",
 	},
 	ragingoverlord: {
 		"name": "Raging Overlord",
-		"desc": "Moves ignore bypassable opposing abilities. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt; if there is no valid target or no damage is dealt, gains +1 Attack instead. Magic Guard prevents this splash damage. Cannot be suppressed. Each fainted ally adds 10% move damage; in Free-for-All, allies count twice. At 2+ fallen allies it gains Infiltrator; 4+, flinch immunity from Inner Focus; 5+, indirect-damage immunity and a one-time +1 Attack and Sp. Atk. Effective fallen count is capped at 5 after Free-for-All doubling, for a maximum 1.5x Supreme Overlord power multiplier.",
+		"desc": "Moves ignore bypassable opposing abilities. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt. Magic Guard prevents this splash damage. Cannot be suppressed. Each fainted ally adds 10% move damage; in Free-for-All, allies count twice. At 2+ fallen allies it gains Infiltrator; 4+, flinch immunity from Inner Focus; 5+, indirect-damage immunity and a one-time +1 Attack and Sp. Atk. Effective fallen count is capped at 5 after Free-for-All doubling, for a maximum 1.5x Supreme Overlord power multiplier.",
 		"shortDesc": "Ignores abilities/screens/defensive stages; KO splash damage; fallen allies grant bonuses. Supreme Overlord caps at 5 effective faints (1.5x power).",
 	},
 	vanguard: {
@@ -1188,7 +1188,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Scrappy + Striker + Opportunist + Limber. Technician is removed.",
 		shortDesc: "Scrappy + Striker + Opportunist + Limber.",
 	},
-	voidvoice: {name: "Void Voice", desc: "Pixilate + Queenly Majesty + Dream Sickness. Normal moves become Fairy and receive Pixilate power boosts. Blocks opposing priority moves targeting its side. Includes Telepathy and its field effects, 1/16 end-turn healing for itself and allies, and a once-per-switch-in rescue that leaves an ally at 1 HP and costs the holder 1/4 max HP.", shortDesc: "Pixilate + Queenly Majesty + Dream Sickness."},
+	voidvoice: {name: "Void Voice", desc: "Blocks opposing priority moves aimed at the holder or its allies. Damaging moves deal 1.5× damage on Fairy Tale or on Chessboard unless the holder is the Queen. Void Veil grants Levitate and Telepathy, doubles Speed in Psychic Terrain or Psychic Aura, and allows beneficial field effects while airborne. Gravity does not ground the holder or disable its airborne moves.", shortDesc: "Queenly Majesty + Void Veil. Blocks opposing priority and avoids allied attacks."},
 	perfectforesight: {
 		name: "Perfect Foresight",
 		desc: "Includes Insomnia and has its opposing-ability copying. Automatically applies target-specific Miracle Eye before a direct damaging Psychic move. Direct single-target HP damage stores a 90 BP Psychic special attack; opposing special HP damage stores a 90 BP special attack of the incoming type. Distinct qualifying attacks each queue a separate attack due next turn, including against the same opponent. At most one stored attack releases per owner per turn; additional due attacks postpone to the next turn. Snapshots its own level, Special Attack, stages and typing, without copied offensive abilities or items. Queues survive switching/fainting and coexist with ordinary Future Sight; normal live defenses apply. If its recorded slot has no living target when due, the same attack retries there next turn and remains queued until it can resolve or the battle ends. Once per battle when Alakazam Mega Evolves, sets real Reflect and Light Screen for 5 turns without shortening longer screens.",
@@ -1305,7 +1305,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Hydra Bond and Harvest's effects.",
 		shortDesc: "Hydra Bond + Harvest.",
 	},
-	streettyrant: {"name":"Street Tyrant","desc":"On entry, lowers all active foes' Attack by 1. Damaging moves ignore bypassable abilities. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1.","shortDesc":"Entry lowers foes' Attack; attacks ignore abilities; end-turn status cure, stat reset and healing chance. Mega"},
+	streettyrant: {"name":"Street Tyrant","desc":"On entry, lowers all active foes' Attack by 1. Damaging moves ignore bypassable abilities. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises Speed and its higher attacking stat by 1 each and lowers both defenses by 1.","shortDesc":"Entry lowers foes' Attack; attacks ignore abilities; end-turn status cure, stat reset and healing chance. Mega"},
 	vitalsigns: {name: "Vital Signs"},
 	divineintervention: {
 		name: "Divine Intervention",
@@ -2889,7 +2889,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Sharpness and Super Luck. Below half HP, its slicing moves have +1 priority.",
 		shortDesc: "Sharpness + Super Luck; below half HP, slicing moves gain +1 priority.",
 	},
-	shedskin: {"name":"Shed Skin","desc":"At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1.","shortDesc":"50% end-turn cure/reset and 1/4 heal; Dragon's Den changes the effect."},
+	shedskin: {"name":"Shed Skin","desc":"At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises Speed and its higher attacking stat by 1 each and lowers both defenses by 1.","shortDesc":"50% end-turn cure/reset and 1/4 heal; Dragon's Den changes the effect."},
 	sheerforce: {
 		name: "Sheer Force",
 		desc: "This Pokemon's attacks with secondary effects have their power multiplied by 1.3, but the secondary effects are removed. If a secondary effect was removed, it also removes the user's Life Orb recoil and Shell Bell recovery, and prevents the target's Anger Shell, Berserk, Color Change, Emergency Exit, Pickpocket, Wimp Out, Red Card, Eject Button, Kee Berry, and Maranga Berry from activating.",

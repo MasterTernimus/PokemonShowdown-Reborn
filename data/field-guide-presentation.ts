@@ -166,7 +166,7 @@ export const ConciseFieldAbilityNotes: Record<string, Record<string, string[]>> 
 		ragingfists: ['Attacks gain 1.2× power.'],
 		goodasgold: ['Removes weaknesses contributed by the holder’s Steel typing.'],
 		shellarmor: ['On entry: +1 Defense.'],
-		shedskin: ['Its end-of-turn recovery always activates when eligible: cures status, heals 1/4 HP and raises the higher attacking stat by 1, then lowers Defense and Sp. Def by 1.', 'Scrafty heals 1/8 HP instead. Negative stages or temporary ailments can trigger recovery but are not cleared.'],
+		shedskin: ['Its end-of-turn recovery always activates when eligible: cures status, heals 1/4 HP and raises Speed and the higher attacking stat by 1 each, then lowers Defense and Sp. Def by 1.', 'Scrafty heals 1/8 HP instead. Negative stages or temporary ailments can trigger recovery but are not cleared.'],
 	},
 	fairytaleterrain: { dragonize: ['Converted Normal → Dragon moves: 1.5× power instead of 1.2×.'] },
 	volcanicterrain: { magmaarmor: ['On entry: +1 Defense and Sp. Def.'] },

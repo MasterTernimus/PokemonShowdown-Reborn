@@ -74,7 +74,6 @@ export function installMegaPassiveAbilities(abilities: AbilityDataTable) {
 		lunarorbit: ['magicbounce', ['onTryHit', 'onAllyTryHitSide']],
 		dreadmaw: ['hugepower', ['onModifyAtk']],
 		cursedmarionette: ['prankster', ['onModifyPriority']],
-		voidvoice: ['pixilate', ['onModifyType']],
 		heavenlychorus: ['pixilate', ['onModifyType', 'onBasePower']],
 		freezerburn: ['refrigerate', ['onModifyType']],
 		uncheckedassault: ['scrappy', ['onModifyMove']],

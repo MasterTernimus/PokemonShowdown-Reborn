@@ -155,6 +155,7 @@ for (const [index, [id, name, type, basePower]] of specs.entries()) {
 		onAfterSubDamage(damage, target, source, move) { if (damage > 0) afterDamage(this, target, source, move, true); },
 	};
 }
+CharacterMoves.blacktestament.flags.tail = 1;
 CharacterMoves.blacktestament.onModifyType = gildedType;
 Object.assign(CharacterMoves.heavenfall, {
 	accuracy: 90, pp: 5, self: {boosts: {spa: -2}},

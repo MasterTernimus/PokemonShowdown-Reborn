@@ -81,12 +81,21 @@ describe('November audit battle regressions', () => {
 		battle.makeChoices('move 4 1 dynamax, move 1', 'move 1, move 1');
 		assert(battle.log.some(line => line.includes('|Prismatic Laser|')));
 	});
-	it('Strange Steam priority uses its queued target without a previous active move', () => {
-		start({ species: 'Mew', moves: ['strangesteam'] }, { species: 'Hydreigon' });
-		battle.clearActiveMove();
-		const move = battle.dex.getActiveMove('strangesteam');
-		assert.equal(battle.singleEvent('ModifyPriority', move, null, battle.p1.active[0], battle.p2.active[0], null, 0), 1);
-	});
+	for (const [terrain, chance] of [['', 20], ['dragonsdenterrain', 20], ['fairytaleterrain', 100], ['mistyterrain', 100]]) {
+		it('Strange Steam uses normal turn order and the correct confusion chance on ' + (terrain || 'a plain field'), () => {
+			start({ species: 'Weezing-Galar', ability: 'Neutralizing Gas', moves: ['strangesteam'] }, {
+				species: 'Sceptile', moves: ['pound'],
+			});
+			const [user, target] = [battle.p1.active[0], battle.p2.active[0]];
+			if (terrain) assert(battle.field.setTerrain(terrain, user));
+			const move = battle.dex.getActiveMove('strangesteam');
+			battle.singleEvent('ModifyMove', move, null, user, target, move, move);
+			assert.deepEqual(move.secondaries, [{ chance, volatileStatus: 'confusion' }]);
+			battle.makeChoices('move strangesteam', 'move pound');
+			assert.deepEqual(battle.log.filter(line => line.startsWith('|move|')).map(line => line.split('|')[3]),
+				['Pound', 'Strange Steam']);
+		});
+	}
 	for (const [ability, stat] of [['Vessel of Ruin', 'SpA'], ['Tablets of Ruin', 'Atk'], ['Beads of Ruin', 'SpD'], ['Sword of Ruin', 'Def']]) {
 		it(ability + ' modifies a move-free stat read once with two holders', () => {
 			battle = common.createBattle({ gameType: 'doubles' }, [[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }], [{ species: 'Mew', ability, moves: ['splash'] }, { species: 'Mew', ability, moves: ['splash'] }]]);

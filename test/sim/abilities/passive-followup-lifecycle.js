@@ -94,10 +94,11 @@ describe('Approved passive copy lifecycle and component replacements', () => {
 		assert(!getAbilityDisplayComponents('orchardbond').includes('stickyhold'));
 		assert(getAbilityDisplayComponents('abysslure', ['illuminate']).includes('suctioncups'));
 	});
-	it('Wooly Conductor lowers opposing contact Speed once per turn without duplicate Static rolls', () => {
+	it('Wooly Conductor includes Fluffy and Keen Light without slowing or paralyzing contact attackers', () => {
 		const [p, t] = setup('Ampharos', 'No Ability');
 		p.formeChange('Ampharos-Mega');
 		p.setAbility('Wooly Conductor');
+		for (const component of ['fluffy', 'keenlight', 'illuminate']) assert(p.hasAbility(component));
 		let rolls = 0;
 		battle.randomChance = (n, d) => {
 			if (n === 3 && d === 10)
@@ -106,10 +107,10 @@ describe('Approved passive copy lifecycle and component replacements', () => {
 		};
 		use('tackle', t, p, { basePower: 1 });
 		use('tackle', t, p, { basePower: 1 });
-		assert.equal(t.boosts.spe, -1);
+		assert.equal(t.boosts.spe, 0);
 		assert.equal(rolls, 0);
 		battle.fieldEvent('Residual');
 		use('tackle', t, p, { basePower: 1 });
-		assert.equal(t.boosts.spe, -2);
+		assert.equal(t.boosts.spe, 0);
 	});
 });

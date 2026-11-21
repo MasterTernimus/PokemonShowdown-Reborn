@@ -3,7 +3,7 @@ const assert=require('../../assert'),common=require('../../common');
 let battle;
 describe('Gardevoir-Void and Void Voice',function(){
  afterEach(()=>battle?.destroy());
- it('uses normal Gardevoir mechanics and Mega Evolves with Dream Guardian in Void Voice',function(){
+ it('uses normal Gardevoir mechanics and Mega Evolves with Void Veil and passive Pixilate',function(){
   battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Gardevoir-Void',ability:'Void Veil',item:'Gardevoirite',moves:['splash']}],[{species:'Mew',ability:'Synchronize',moves:['splash']}]]);
   battle.makeChoices('team 1','team 1');
   const mon=battle.p1.active[0],foe=battle.p2.active[0];
@@ -12,7 +12,7 @@ describe('Gardevoir-Void and Void Voice',function(){
   assert.deepEqual(mon.species.abilities,{0:'Trace',1:'Dream Guardian',H:'Void Veil'});
   assert.equal(mon.canMegaEvo,'Gardevoir-Mega-Alt');
   battle.makeChoices('move splash mega','move splash');
-  assert.equal(mon.ability,'voidvoice');assert(mon.hasAbility('dreamsickness'));
+  assert.equal(mon.ability,'voidvoice');assert(mon.hasAbility('voidveil'));
   const move=battle.dex.getActiveMove('hypervoice');
 		assert.deepEqual(mon.getPassives(), ['pixilate']);
 		battle.runEvent('ModifyType', mon, foe, move, move);
@@ -21,7 +21,7 @@ describe('Gardevoir-Void and Void Voice',function(){
   assert.statStage(mon,'atk',-1);assert.statStage(mon,'spe',-1);
   mon.hp-=100;const hp=mon.hp;
   battle.singleEvent('Residual',mon.getAbility(),mon.abilityState,mon);
-  assert(mon.hp>hp);
+  assert.equal(mon.hp,hp);
   battle.field.setTerrain('psychicterrain',mon);
   assert.equal(battle.runEvent('ModifySpe',mon,null,null,100),200);
  });

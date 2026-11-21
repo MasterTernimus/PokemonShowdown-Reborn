@@ -23,7 +23,7 @@ describe("Conqueror's Will",()=>{
 	afterEach(()=>{battle?.destroy();battle=null;});
 	it('has only the approved components and exact Kingambit slot',()=>{
 		const [p]=start();
-		assert.deepEqual(battle.dex.species.get('Kingambit').abilities,{0:'Defiant',1:"Conqueror's Will",H:'Royal Decree'});
+		assert.deepEqual(battle.dex.species.get('Kingambit').abilities,{0:'Defiant',1:"Conqueror's Will",H:'Pressure'});
 		assert(!p.hasAbility('supremeoverlord'));assert(p.hasAbility('unnerve'));assert(!p.hasAbility('battlearmor'));
 		const {AbilityComponents}=require('../../../dist/data/ability-components');
 		assert.deepEqual(AbilityComponents.conquerorswill,['unnerve']);
@@ -118,7 +118,7 @@ describe("Conqueror's Will",()=>{
 	it('publishes exact calculator metadata',()=>{
 		const {calculatorMetadata}=require('../../../dist/sim/custom-calculator');const m=calculatorMetadata();
 		assert.deepEqual(m.abilityComponents.conquerorswill,['Unnerve']);
-		assert.deepEqual(m.species.find(p=>p.name==='Kingambit').abilities,{0:'Defiant',1:"Conqueror's Will",H:'Royal Decree'});
+		assert.deepEqual(m.species.find(p=>p.name==='Kingambit').abilities,{0:'Defiant',1:"Conqueror's Will",H:'Pressure'});
 	});
 	it('does not add armor, forced-switch protection or Attack-drop cleansing',()=>{
 		const [p,t]=start();p.side.totalFainted=5;

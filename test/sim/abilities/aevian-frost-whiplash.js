@@ -48,7 +48,7 @@ describe('Aevian Frost and Whiplash', () => {
 
 	it('boosts every Tail move by 1.5x', () => {
 		for (const id of ['doublehit', 'poisontail', 'dragontail', 'irontail', 'aquatail', 'breakingswipe',
-			'tailslap', 'slam', 'bodyslam', 'heavyslam', 'flipturn', 'brutalswing']) {
+			'tailslap', 'slam', 'bodyslam', 'heavyslam', 'flipturn', 'brutalswing', 'blacktestament']) {
 			assert(Dex.moves.get(id).flags.tail, `${id} should be a Tail move`);
 		}
 		battle = common.createBattle({formatid: 'gen9customgame'}, [[
@@ -57,5 +57,6 @@ describe('Aevian Frost and Whiplash', () => {
 		const user = battle.p1.active[0];
 		const target = battle.p2.active[0];
 		assert.equal(battle.runEvent('BasePower', user, target, battle.dex.getActiveMove('bodyslam'), 100), 150);
+		assert.equal(battle.runEvent('BasePower', user, target, battle.dex.getActiveMove('blacktestament'), 100), 150);
 	});
 });

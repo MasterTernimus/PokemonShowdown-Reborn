@@ -11,16 +11,11 @@ export function installChampionMeteor(abilities: AbilityDataTable) {
    if (skipPassiveComponent(this, source, 'championscommand') || move.id !== 'hyperbeam' || move.isZ || move.isMax) return;
    move.type = 'Normal'; move.category = 'Physical'; move.forceSTAB = true;
   },
-  onAnyAfterDamageApplied(damage, target, source, move) {
-   if (source !== this.effectState.target || !move || move.id !== 'hyperbeam' || (move as ActiveMove).isZ || (move as ActiveMove).isMax || target.isAlly(source) || damage <= 0) return;
-   if (!target.hp) (this.activeMove as any).championKO = true;
-  },
   onAnyAfterSubDamage(damage, target, source, move) {
    if (source === this.effectState.target && damage > 0 && move.id === 'hyperbeam' && !move.isZ && !move.isMax) (this.activeMove as any).championSubHit = true;
   },
   onAnyAfterAttackResolved(source, target, move) {
-   if (source === this.effectState.target && source.hp && (move as any).championSubHit && !(move as any).championKO) source.addVolatile('mustrecharge');
-   if (source === this.effectState.target && move.id === 'hyperbeam' && !move.isZ && !move.isMax && (move as any).championKO) source.removeVolatile('mustrecharge');
+   if (source === this.effectState.target && source.hp && (move as any).championSubHit) source.addVolatile('mustrecharge');
   },
  };
  abilities.meteorcore = {

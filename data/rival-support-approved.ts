@@ -39,7 +39,6 @@ export function installRivalSupport(a: AbilityDataTable) {
 		onResidual(p) { if ((this.field.isTerrain(['corrosiveterrain','wastelandterrain']) && p.isGrounded()) || this.field.isTerrain(['corrosivemistterrain','murkwatersurfaceterrain'])) rivalHeal(this,p); },
 	};
 	a.rivalmalice = {name: 'Rival Malice', num: 11480, rating: 5, flags: {},
-		onModifySpe(spe) { return this.chainModify(1.5); },
 		onModifyDamage(damage, source, target, move) { if (move.category !== 'Status' && !move.damage && !move.damageCallback && !move.ohko) return this.chainModify(1 + 0.5 * target.hp / target.maxhp); },
 	};
 	const venom = a.venomarmor;

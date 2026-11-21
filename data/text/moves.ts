@@ -2497,8 +2497,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gigaimpact: {
 		name: "Giga Impact",
-		desc: "After a successful hit, the user must recharge next turn unless this move directly knocks out an opponent.",
-		shortDesc: "Recharges next turn unless it KOs an opponent.",
+		desc: "The user recharges after a hit. A direct knockout skips recharge on Glitch Field.",
+		shortDesc: "Recharge; skips it on a Glitch Field KO.",
 	},
 	gigatonhammer: {
 		name: "Gigaton Hammer",
@@ -3244,8 +3244,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hyperbeam: {
 		name: "Hyper Beam",
-		desc: "After a successful hit, the user must recharge next turn unless this move directly knocks out an opponent.",
-		shortDesc: "Recharges next turn unless it KOs an opponent.",
+		desc: "The user recharges after a hit. A direct knockout skips recharge on Glitch Field or with Champion's Command.",
+		shortDesc: "Recharge; Glitch or Champion's Command skips it on KO.",
 		gen1: {
 			desc: "If this move is successful, the user must recharge on the following turn and cannot select a move, unless the target or its substitute was knocked out by this move.",
 			shortDesc: "Can't move next turn if target or sub is not KOed.",

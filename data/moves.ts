@@ -10510,14 +10510,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1 },
-		onAfterHit(target, source, move) {
-			if (target.hp === 0 && this.field.isTerrain('glitchterrain')) {
-				this.add('-message', 'The glitchy terrain allowed Hyper Beam to feed off of the fallen pokemon\'s energy');
-				source.removeVolatile('mustrecharge');
-			} else {
-				source.addVolatile('mustrecharge');
-			}
-		},
 		self: {
 			volatileStatus: 'mustrecharge',
 		},
@@ -21267,13 +21259,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					chance: 100,
 					volatileStatus: 'confusion',
 				}];
-			}
-		},
-		onModifyPriority(priority, source, target, move) {
-			const attack = move || this.effect as ActiveMove;
-			if (!target || !attack.type) return;
-			if (this.dex.getEffectiveness(attack.type, target.getTypes()) > 0) {
-				return priority + 1;
 			}
 		},
 		secondary: {

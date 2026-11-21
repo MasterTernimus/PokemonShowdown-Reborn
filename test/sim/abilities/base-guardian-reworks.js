@@ -70,8 +70,10 @@ describe('Base guardian reworks and unchanged non-base holders',()=>{
   const [p,ally]=start('Gardevoir-Void','Dream Sickness');assert(p.hasAbility('telepathy'));
   p.hp=ally.hp=2000;battle.singleEvent('Residual',p.getAbility(),p.abilityState,p);assert.equal(p.hp,2250);assert.equal(ally.hp,2250);
  });
- it('preserves Mega Gardevoir’s Void Voice behavior',()=>{
+ it('Mega Gardevoir keeps its HP and its ally’s HP at turn end',()=>{
   const [p,ally]=start('Gardevoir-Mega','Void Voice');p.hp=ally.hp=2000;
-  battle.singleEvent('Residual',p.getAbility(),p.abilityState,p);assert.equal(p.hp,2250);assert.equal(ally.hp,2250);
+  battle.singleEvent('Residual',p.getAbility(),p.abilityState,p);assert.equal(p.hp,2000);assert.equal(ally.hp,2000);
+  battle.field.addPseudoWeather('gravity',p);assert(p.hasGravityExemption());assert(!p.isGrounded());assert(p.canBenefitFromTerrain());
+  assert(!p.hasAbility('magicguard'));assert(!p.hasAbility('insomnia'));
  });
 });

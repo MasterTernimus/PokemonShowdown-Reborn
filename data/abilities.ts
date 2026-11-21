@@ -5066,17 +5066,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect?.effectType !== 'Move') return;
 			const targets = source.foes().filter(foe => foe && !foe.fainted && foe !== target);
-			if (!targets.length) {
-				this.boost({ atk: 1 }, source, source);
-				return;
-			}
+			if (!targets.length) return;
 			const damage = Math.max(1, Math.floor((source.abilityState.ragingStormDamage || target.baseMaxhp) * 0.6));
-			let dealtDamage = false;
 			for (const foe of targets) {
 				if (foe.hasAbility('magicguard')) continue;
-				if (this.damage(damage, foe, source, this.dex.abilities.get('ragingstorm'))) dealtDamage = true;
+				this.damage(damage, foe, source, this.dex.abilities.get('ragingstorm'));
 			}
-			if (!dealtDamage) this.boost({ atk: 1 }, source, source);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.priority > 0) return this.chainModify(0.5);
@@ -6019,39 +6014,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10112,
 	},
 	voidvoice: {
-		onModifyDamage(damage, source, target, move) {
-			return this.dex.abilities.get('queenlymajesty').onModifyDamage?.call(this, damage, source, target, move);
-		},
-		onAnyBoost(boost, target, source, effect) {
-			return this.dex.abilities.get('dreamsickness').onAnyBoost?.call(this, boost, target, source, effect);
-		},
-		onBoost(boost, target, source, effect) {
-			return this.dex.abilities.get('dreamsickness').onBoost?.call(this, boost, target, source, effect);
-		},
-  onTryHit(target, source, move) { return this.dex.abilities.getHandler('dreamsickness', 'onTryHit')?.call(this, target, source, move); },
-  onModifySpe(spe, pokemon) { return this.dex.abilities.get('dreamsickness').onModifySpe?.call(this, spe, pokemon); },
-  onAnyTryBoost(boost, target, source, effect) { return this.dex.abilities.get('dreamsickness').onAnyBoost?.call(this, boost, target, source, effect); },
-  onTryBoost(boost, target, source, effect) { return this.dex.abilities.get('dreamsickness').onBoost?.call(this, boost, target, source, effect); },
-  onAnyDamage(damage, target, source, effect) { return this.dex.abilities.get('dreamsickness').onAnyDamage?.call(this, damage, target, source, effect); },
-  onResidual(pokemon) { this.dex.abilities.get('dreamsickness').onResidual?.call(this, pokemon); },
-		onModifyTypePriority: -1,
-		onModifyType(move, pokemon) {
-			const noModifyType = [
-				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
-			];
-			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
-				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
-				move.type = 'Fairy';
-				move.typeChangerBoosted = this.effect;
-			}
-		},
-		onBasePowerPriority: 23,
-		onBasePower(basePower, pokemon, target, move) {
-			return this.dex.abilities.get('pixilate').onBasePower?.call(this, basePower, pokemon, target, move);
-		},
-		onFoeTryMove(target, source, move) {
-			return this.dex.abilities.getHandler('queenlymajesty', 'onFoeTryMove')?.call(this, target, source, move);
-		},
 		flags: { breakable: 1 },
 		name: "Void Voice",
 		rating: 5,
@@ -8544,12 +8506,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					pokemon.removeVolatile('flashfire');
 				}
 			},
-			onStart(target) {
-				this.add('-start', target, 'ability: Flash Fire');
+			onStart(target, source, effect) {
+				if (effect?.id === 'elementalseed') {
+					this.add('-start', target, 'Flash Fire', '[from] item: Elemental Seed');
+				} else {
+					this.add('-start', target, 'ability: Flash Fire');
+				}
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, attacker, defender, move) {
-				if (move && this.movehasType(move, 'Fire') && (this.effectState.retainedByMega ||
+				if (move && this.movehasType(move, 'Fire') && (this.effectState.retainedByMega || this.effectState.sourceEffect?.id === 'elementalseed' ||
 					attacker.hasAbilityOrPassive(['flashfire', 'livinglegend', 'kindledfury']))) {
 					this.debug('Flash Fire boost');
 					return this.chainModify(1.5);
@@ -8557,7 +8523,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(atk, attacker, defender, move) {
-				if (move && this.movehasType(move, 'Fire') && (this.effectState.retainedByMega ||
+				if (move && this.movehasType(move, 'Fire') && (this.effectState.retainedByMega || this.effectState.sourceEffect?.id === 'elementalseed' ||
 					attacker.hasAbilityOrPassive(['flashfire', 'livinglegend', 'kindledfury']))) {
 					this.debug('Flash Fire boost');
 					return this.chainModify(1.5);
@@ -12201,7 +12167,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.speedSort(sortedActive);
 			for (const pokemon of sortedActive) {
 				if (pokemon !== source) {
-					if (pokemon.getAbility().flags['cantsuppress']) continue; // does not interact with e.g Ice Face, Zen Mode
+					if (pokemon.getAbility().flags['cantsuppress'] && pokemon.ability !== 'ragingstorm') continue;
 					if (pokemon.hasItem('abilityshield')) continue; // don't restart abilities that weren't suppressed
 
 					// Will be suppressed by Pokemon#ignoringAbility if needed
@@ -14593,7 +14559,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('dragonsdenterrain')) {
 				const atk = pokemon.getStat('atk', false, true);
 				const spa = pokemon.getStat('spa', false, true);
-				this.boost(atk >= spa ? { atk: 1, def: -1, spd: -1 } : { spa: 1, def: -1, spd: -1 }, pokemon, pokemon);
+				this.boost(atk >= spa ? { atk: 1, spe: 1, def: -1, spd: -1 } : { spa: 1, spe: 1, def: -1, spd: -1 }, pokemon, pokemon);
 				this.heal(pokemon.maxhp / 4, pokemon, pokemon);
 				return;
 			}
@@ -17440,20 +17406,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10191,
 	},
 	woolyconductor: {
-		onStart(pokemon) { return this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon); },
-		onSourceModifyDamage(damage, source, target, move) {
-			return this.dex.abilities.get('fluffy').onSourceModifyDamage?.call(this, damage, source, target, move);
-		},
-		onModifyMove(move) {
-			move.ignoreAbility = true;
-		},
-		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target)) {
-				let chance = 3;
-				if (this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('electricterrain')) chance = 6;
-				if (this.randomChance(chance, 10)) source.trySetStatus('par', target);
-			}
-		},
 		flags: { breakable: 1 },
 		name: "Wooly Conductor",
 		rating: 4.5,
@@ -20962,12 +20914,6 @@ Abilities.orchardbond.onTakeItem = function (item, pokemon, source) {
 Abilities.abysslure.onDragOutPriority = 1;
 Abilities.abysslure.onDragOut = function (pokemon) {
  if (pokemon.getPassives().includes('illuminate')) return Abilities.suctioncups.onDragOut?.call(this, pokemon);
-};
-Abilities.woolyconductor.onDamagingHit = function (damage, target, source, move) {
- if (damage <= 0 || !source?.hp || source.isAlly(target) || !this.checkMoveMakesContact(move, source, target) ||
-  target.volatiles.woolyconductorspent) return;
- target.addVolatile('woolyconductorspent', target, this.effect);
- this.boost({spe: -1}, source, target, this.effect);
 };
 
 // Approved replacements for components now supplied by the species passive.

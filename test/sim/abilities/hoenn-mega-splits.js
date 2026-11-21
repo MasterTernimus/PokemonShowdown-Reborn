@@ -337,10 +337,10 @@ describe('Approved nine Hoenn Mega passive migrations', () => {
 		assert.deepEqual(p.getPassives(), ['rivalmalice']);
 		assert.deepEqual(p.getSwitchRequestData().passives, ['rivalmalice']);
 		q.status = 'psn';
-		assert.equal(battle.runEvent('ModifySpe', q, null, null, 100), 150);
+		assert(p.hasAbilityOrPassive('rivalmalice'));
 		p.illusion = null;
 		assert.deepEqual(p.getPassives(), ['synchronize']);
-		assert.equal(battle.runEvent('ModifySpe', q, null, null, 100), 150);
+		assert(!p.hasAbilityOrPassive('rivalmalice'));
 	});
 	for (const move of ['Poison Fang', 'Sludge Bomb']) it(move + ' calculator damage matches direct seeded battle execution', () => {
 		const { calculateScenario, validateScenario, buildCalculatorBattle } = require('../../../dist/sim/custom-calculator');

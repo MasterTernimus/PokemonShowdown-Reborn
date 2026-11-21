@@ -209,7 +209,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Eligible single hits strike 3x; native variable hits maximize in singles/doubles; remaining hits chain after KO.",
 	},
 	"neurotoxin": {
-		"desc": "Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1. Heals 1/3 max HP on switching out.",
+		"desc": "Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises Speed and its higher attacking stat by 1 each and lowers both defenses by 1. Heals 1/3 max HP on switching out.",
 		"shortDesc": "Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x; 50% end-turn cure/reset and 1/4 heal; Dragon's Den changes the effect; Heals 1/3 HP on switching out."
 	},
 	"punchfiend": {
@@ -269,7 +269,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "No move recoil except Struggle; foe stat drops give +2 Attack; transforms Unfezant on entry."
 	},
 	"aeviandream": {
-		"desc": "Sleeping foes, including Comatose users, lose 1/8 max HP each turn. Disabled on Rainbow Field. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1. Contact moves have 1.3x power. When it enters battle as Musharna, it transforms into Musharna-Rejuv. If this Ability is suppressed, its Rejuv form reverts to the normal species until it switches out, even if suppression ends earlier.",
+		"desc": "Sleeping foes, including Comatose users, lose 1/8 max HP each turn. Disabled on Rainbow Field. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises Speed and its higher attacking stat by 1 each and lowers both defenses by 1. Contact moves have 1.3x power. When it enters battle as Musharna, it transforms into Musharna-Rejuv. If this Ability is suppressed, its Rejuv form reverts to the normal species until it switches out, even if suppression ends earlier.",
 		"shortDesc": "Sleeping foes lose 1/8 HP per turn, except on Rainbow; 50% end-turn cure/reset and 1/4 heal; Dragon's Den changes the effect; Contact moves have 1.3x power — transforms Musharna into Musharna-Rejuv."
 	},
 	"aevianfrost": {
@@ -401,7 +401,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Half contact damage; no flinch/Intimidate drop; stronger weak moves; eligible moves hit twice."
 	},
 	"patternshift": {
-		"desc": "Before using a move, changes to that move's type. Excludes reflected, delayed, Snatched and move-calling attacks; type-change restrictions still apply. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1. When attacking, ignores the target's Defense, Sp. Def and evasion stages. When defending, ignores the attacker's Attack, Defense, Sp. Atk and accuracy stages. Reveals opposing Illusions on entry.",
+		"desc": "Before using a move, changes to that move's type. Excludes reflected, delayed, Snatched and move-calling attacks; type-change restrictions still apply. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises Speed and its higher attacking stat by 1 each and lowers both defenses by 1. When attacking, ignores the target's Defense, Sp. Def and evasion stages. When defending, ignores the attacker's Attack, Defense, Sp. Atk and accuracy stages. Reveals opposing Illusions on entry.",
 		"shortDesc": "Changes type to match each eligible move; 50% end-turn cure/reset and 1/4 heal; Dragon's Den changes the effect; Ignores opposing combat/accuracy stages; reveals Illusions."
 	},
 	"bonewarrior": {
@@ -413,7 +413,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Tough Claws + Decoy Pincers.",
 	},
 	"apexvenom": {
-		"desc": "Biting moves have 1.5x power. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1. Poison moves, including Poison Fang, are super effective against Poison- and Steel-type Pokemon. Poison Fang has 1.5x power. Biting moves bypass protection and have a 30% chance to badly poison the target.",
+		"desc": "Biting moves have 1.5x power. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises Speed and its higher attacking stat by 1 each and lowers both defenses by 1. Poison moves, including Poison Fang, are super effective against Poison- and Steel-type Pokemon. Poison Fang has 1.5x power. Biting moves bypass protection and have a 30% chance to badly poison the target.",
 		"shortDesc": "Bites have 1.5x power; 50% end-turn cure/reset and 1/4 heal; Dragon's Den changes the effect — Poison hits Poison/Steel; bites bypass protection and badly poison 30%."
 	},
 	"blackviper": {
@@ -421,7 +421,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Entry gives +1 accuracy; 1.5x tail power; first tail hit each entry badly poisons."
 	},
 	"sirius": {
-		"desc": "Biting moves have 1.5x power. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1. Poison moves, including Poison Fang, are super effective against Poison- and Steel-type Pokemon. Poison Fang has 1.5x power. Biting moves bypass protection and have a 30% chance to badly poison the target. Whiplash: +1 accuracy on entry and 1.5x tail-move power. Its first tail hit against a foe each entry badly poisons that target, subject to normal status immunities. Has Apex Venom, Dragon-type Poison Fang, +1 accuracy on entry and 1.5x tail power. Its first tail hit against a foe each entry also badly poisons it, subject to status immunities.",
+		"desc": "Biting moves have 1.5x power. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises Speed and its higher attacking stat by 1 each and lowers both defenses by 1. Poison moves, including Poison Fang, are super effective against Poison- and Steel-type Pokemon. Poison Fang has 1.5x power. Biting moves bypass protection and have a 30% chance to badly poison the target. Whiplash: +1 accuracy on entry and 1.5x tail-move power. Its first tail hit against a foe each entry badly poisons that target, subject to normal status immunities. Has Apex Venom, Dragon-type Poison Fang, +1 accuracy on entry and 1.5x tail power. Its first tail hit against a foe each entry also badly poisons it, subject to status immunities.",
 		"shortDesc": "Bites have 1.5x power; 50% end-turn cure/reset and 1/4 heal; Dragon's Den changes the effect; Poison hits Poison/Steel; bites bypass protection and badly poison 30%."
 	},
 	"dragonize": {
@@ -565,7 +565,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Reverses stat changes except Z-Power."
 	},
 	"queensguard": {
-		"desc": "Reverses received stat-stage changes, except Z-Power changes. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1. On entry, lowers adjacent foes' Attack by 1. Substitute and Intimidate protections still apply. Moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist. Same-type moves have 1.3x power.",
+		"desc": "Reverses received stat-stage changes, except Z-Power changes. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises Speed and its higher attacking stat by 1 each and lowers both defenses by 1. On entry, lowers adjacent foes' Attack by 1. Substitute and Intimidate protections still apply. Moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist. Same-type moves have 1.3x power.",
 		"shortDesc": "Reverses stat changes except Z-Power; 50% end-turn cure/reset and 1/4 heal; Dragon's Den changes the effect; Entry lowers adjacent foes' Attack by 1; Moves bypass Substitute and opposing screens; Same-type moves have 1.3x power."
 	},
 	"corrosivetouch": {
@@ -677,11 +677,11 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Cannot be suppressed; weather attacks 1.5x; clear damage halved; Psychic/Dark choose type."
 	},
 	"ragingstorm": {
-		"desc": "Moves ignore bypassable opposing abilities. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt; if there is no valid target or no damage is dealt, gains +1 Attack instead. Magic Guard prevents this splash damage. Cannot be suppressed.",
+		"desc": "Moves ignore bypassable opposing abilities. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt. Magic Guard prevents this splash damage. Neutralizing Gas suppresses this ability.",
 		"shortDesc": "Ignores abilities/screens/defensive stages; half priority damage; KO splash damage."
 	},
 	"ragingoverlord": {
-		"desc": "Moves ignore bypassable opposing abilities. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt; if there is no valid target or no damage is dealt, gains +1 Attack instead. Magic Guard prevents this splash damage. Cannot be suppressed. Each fainted ally adds 10% move damage; in Free-for-All, allies count twice. At 2+ fallen allies it gains Infiltrator; 4+, flinch immunity from Inner Focus; 5+, indirect-damage immunity and a one-time +1 Attack and Sp. Atk.",
+		"desc": "Moves ignore bypassable opposing abilities. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt. Magic Guard prevents this splash damage. Cannot be suppressed. Each fainted ally adds 10% move damage; in Free-for-All, allies count twice. At 2+ fallen allies it gains Infiltrator; 4+, flinch immunity from Inner Focus; 5+, indirect-damage immunity and a one-time +1 Attack and Sp. Atk.",
 		"shortDesc": "Ignores abilities/screens/defensive stages; KO splash damage; fallen allies grant bonuses."
 	},
 	"vanguard": {
@@ -821,8 +821,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Normal/Fighting hit Ghosts; 1.4x kicks; copies foe boosts; no paralysis or opposing Speed drops."
 	},
 	"voidvoice": {
-		"desc": "Eligible Normal moves become Fairy and have 1.2x power, or 1.5x on Misty Terrain. Excludes moves whose type is set by their own effect, damaging Z-Moves and Terastallized Tera Blast. Blocks opposing priority moves aimed at it or its allies. Attacks deal 1.5x damage on Fairy Tale, or on Chessboard unless it has the Queen role. Has Telepathy, including avoiding allied damaging moves and doubled Speed in Psychic Terrain or Psychic Aura. At turn end, it and its active allies each heal 1/16 max HP. Once per switch-in, if an opposing move would knock out an ally, that ally survives at 1 HP and it loses 1/4 max HP, provided it has more HP than the cost.",
-		"shortDesc": "Normal moves become Fairy; blocks foe priority; avoids allied attacks; heals allies and can save one."
+		"desc": "Blocks opposing priority moves aimed at the holder or its allies. Damaging moves deal 1.5× damage on Fairy Tale or on Chessboard unless the holder is the Queen. Void Veil grants Levitate and Telepathy, doubles Speed in Psychic Terrain or Psychic Aura, and allows beneficial field effects while airborne. Gravity does not ground the holder or disable its airborne moves.",
+		"shortDesc": "Queenly Majesty + Void Veil. Blocks opposing priority and avoids allied attacks."
 	},
 	"memoryleak": {
 		"desc": "Positive stat boosts it would receive are passed to an adjacent ally instead.",
@@ -897,7 +897,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": November16BalanceDescriptions.rimeknuckle.shortDesc
 	},
 	"streettyrant": {
-		"desc": "On entry, lowers all active foes' Attack by 1. Damaging moves ignore bypassable abilities. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1.",
+		"desc": "On entry, lowers all active foes' Attack by 1. Damaging moves ignore bypassable abilities. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises Speed and its higher attacking stat by 1 each and lowers both defenses by 1.",
 		"shortDesc": "Entry lowers foes' Attack; attacks ignore abilities; end-turn status cure, stat reset and healing chance."
 	},
 	"vitalsigns": {"desc":"Includes Invigorate: healing received by the holder and its allies is multiplied by 1.3, each adjacent ally has a 50% chance to have its major status cured at turn end, and Safeguard lasts 5 turns. After an opposing damaging move finishes, each active teammate, including the holder, that lost HP to that move, survived, and is at half HP or less is healed by 1/4 max HP and cured of major status. Invigorate normally increases this healing to 32.5%. Each recipient can receive this emergency treatment only once per battle, even after switching, changing abilities or being revived. Healing obeys normal restrictions; the allowance is spent only if healing or curing succeeds. Allied, residual and Substitute-only damage do not trigger it.","shortDesc":"Heals and cures each teammate once when an attack leaves it at half HP or less."},
@@ -935,7 +935,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "When it is hit by an attack, the effect of Sandstorm begins."
 	},
 	"duneterror": {
-		"desc": "On entry, summons sandstorm for 5 turns, or 8 with Smooth Rock. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1. When it is hit by an attack, the effect of Sandstorm begins. Summons sand on entry and when hit; during Sandstorm, opposing Pokemon take Ground-type damage equal to 1/16 max HP, blocked by Ground immunities. On fainting, creates Desert Field for 5 turns.",
+		"desc": "On entry, summons sandstorm for 5 turns, or 8 with Smooth Rock. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises Speed and its higher attacking stat by 1 each and lowers both defenses by 1. When it is hit by an attack, the effect of Sandstorm begins. Summons sand on entry and when hit; during Sandstorm, opposing Pokemon take Ground-type damage equal to 1/16 max HP, blocked by Ground immunities. On fainting, creates Desert Field for 5 turns.",
 		"shortDesc": "Summons sandstorm on entry; 50% end-turn cure/reset and 1/4 heal; Dragon's Den changes the effect; When it is hit by an attack, the effect of Sandstorm begins — Desert Field for 5 turns on faint."
 	},
 	"heatcoil": {
@@ -1237,7 +1237,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x; Moves ignore bypassable abilities; +1 Accuracy on entry; critical hits deal 2.25x damage — Water STAB."
 	},
 	"truehydra": {
-		"desc": "Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. Heals 1/3 max HP on switching out. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. Eligible damaging moves hit three times, with the second and third hits at 30% damage. It heals 1/3 of its max HP on switching out, may shed status and other ailments at the end of a turn, heals 1/16 of its max HP each turn, and is immune to Sandstorm and Hail damage.",
+		"desc": "Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. Heals 1/3 max HP on switching out. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises Speed and its higher attacking stat by 1 each and lowers both defenses by 1. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. Eligible damaging moves hit three times, with the second and third hits at 30% damage. It heals 1/3 of its max HP on switching out, may shed status and other ailments at the end of a turn, heals 1/16 of its max HP each turn, and is immune to Sandstorm and Hail damage.",
 		"shortDesc": "Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x; Heals 1/3 HP on switching out; 50% end-turn cure/reset and 1/4 heal; Dragon's Den changes the effect; Heals 1/16 HP each turn."
 	},
 	"desertspirit": {
@@ -1689,7 +1689,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "20% less attack damage; 40% less if super effective — Curse becomes a 100 BP spread Ghost attack using the higher Attack or Sp. Atk; curses foes; heals 1/4 damage; half HP/faint sets Haunted Field."
 	},
 	"shedskin": {
-		"desc": "At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1.",
+		"desc": "At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises Speed and its higher attacking stat by 1 each and lowers both defenses by 1.",
 		"shortDesc": "50% end-turn cure/reset and 1/4 heal; Dragon's Den changes the effect."
 	},
 	"shellarmor": {
@@ -3098,17 +3098,17 @@ AbilityDescriptionOverrides.apexbond = {
 };
 
 AbilityDescriptionOverrides.ragingoverlord = {
-	"desc": "Moves ignore bypassable opposing abilities. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt; if there is no valid target or no damage is dealt, gains +1 Attack instead. Magic Guard prevents this splash damage. Cannot be suppressed. Each fainted ally adds 10% move damage; in Free-for-All, allies count twice. At 2+ fallen allies it gains Infiltrator; 4+, flinch immunity from Inner Focus; 5+, indirect-damage immunity and a one-time +1 Attack and Sp. Atk. Effective fallen count is capped at 5 after Free-for-All doubling, for a maximum 1.5x Supreme Overlord power multiplier.",
+	"desc": "Moves ignore bypassable opposing abilities. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt. Magic Guard prevents this splash damage. Cannot be suppressed. Each fainted ally adds 10% move damage; in Free-for-All, allies count twice. At 2+ fallen allies it gains Infiltrator; 4+, flinch immunity from Inner Focus; 5+, indirect-damage immunity and a one-time +1 Attack and Sp. Atk. Effective fallen count is capped at 5 after Free-for-All doubling, for a maximum 1.5x Supreme Overlord power multiplier.",
 	"shortDesc": "Ignores abilities/screens/defensive stages; KO splash damage; fallen allies grant bonuses. Supreme Overlord caps at 5 effective faints (1.5x power)."
 };
 
 AbilityDescriptionOverrides.shedskin = {
-	"desc": "At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1.",
+	"desc": "At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises Speed and its higher attacking stat by 1 each and lowers both defenses by 1.",
 	"shortDesc": "50% end-turn cure/reset and 1/4 heal; Dragon's Den changes the effect."
 };
 
 AbilityDescriptionOverrides.streettyrant = {
-	"desc": "On entry, lowers all active foes' Attack by 1. Damaging moves ignore bypassable abilities. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1.",
+	"desc": "On entry, lowers all active foes' Attack by 1. Damaging moves ignore bypassable abilities. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises Speed and its higher attacking stat by 1 each and lowers both defenses by 1.",
 	"shortDesc": "Entry lowers foes' Attack; attacks ignore abilities; end-turn status cure, stat reset and healing chance. Mega"
 };
 
@@ -3385,7 +3385,7 @@ Object.assign(AbilityDescriptionOverrides, {
 		"shortDesc": November16BalanceDescriptions.terraresolve.shortDesc
 	},
 	"queensguard": {
-		"desc": "Reverses received stat-stage changes, except Z-Power changes. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1. On entry, lowers adjacent foes' Attack by 1. Substitute and Intimidate protections still apply. Moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist.",
+		"desc": "Reverses received stat-stage changes, except Z-Power changes. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises Speed and its higher attacking stat by 1 each and lowers both defenses by 1. On entry, lowers adjacent foes' Attack by 1. Substitute and Intimidate protections still apply. Moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist.",
 		"shortDesc": "Combines the listed abilities."
 	},
 	"wrathshield": {
@@ -3653,10 +3653,6 @@ Object.assign(AbilityDescriptionOverrides, {
   }
 });
 
-AbilityDescriptionOverrides.woolyconductor = {
- desc: "Takes half damage from contact attacks and double damage from Fire attacks; contact Fire attacks deal normal damage. Moves ignore bypassable opposing abilities. Once per turn after an opposing contact attack deals HP damage, lowers its attacker's Speed by 1.",
- shortDesc: 'Fluffy and Mold Breaker; once per turn, damaging opposing contact lowers attacker Speed.',
-};
 AbilityDescriptionOverrides.guidinglight = {
  desc: "Blocks opposing priority moves aimed at its side. Each turn, has a 30% chance to cure each adjacent ally's major status. Successfully using Spotlight on an ally makes that ally take 20% less attack damage for the rest of the turn. Does not stack or change Spotlight redirection rules.",
  shortDesc: 'Blocks opposing priority; can cure adjacent allies; successful ally Spotlight reduces damage 20% this turn.',
@@ -4350,16 +4346,20 @@ AbilityDescriptionOverrides.relicbeam = {
 	shortDesc: 'Uses Defense for Sp. Atk; beam, pulse and bullet moves gain 50% power.',
 	desc: 'Sp. Atk uses the holder’s Defense and Defense stages instead of Sp. Atk and its stages. Named beam moves, pulse moves and bullet moves gain 50% power. Use /relicbeam to see the complete move list.',
 };
-AbilityDescriptionOverrides.malignantlight.desc =
-	AbilityDescriptionOverrides.illuminate.desc + ' ' + LightPinsirDescriptions.malignantlight.desc;
+AbilityDescriptionOverrides.keenlight.desc =
+	AbilityDescriptionOverrides.illuminate.desc + ' ' + LightPinsirDescriptions.keenlight.desc;
+AbilityDescriptionOverrides.woolyconductor = {
+	shortDesc: 'Fluffy + Keen Light. Special light moves target the lower defense.',
+	desc: AbilityDescriptionOverrides.fluffy.desc + ' ' + AbilityDescriptionOverrides.keenlight.desc,
+};
 AbilityDescriptionOverrides.ironmaiden.desc =
 	AbilityDescriptionOverrides.moxie.desc + ' ' + LightPinsirDescriptions.ironmaiden.desc;
 AbilityDescriptionOverrides.siegegrip.desc =
 	AbilityDescriptionOverrides.moldbreaker.desc + ' ' + LightPinsirDescriptions.siegegrip.desc;
 AbilityDescriptionOverrides.astralcore = {
-	shortDesc: 'Pure Power + Natural Cure + Malignant Light.',
+	shortDesc: 'Pure Power + Natural Cure + Keen Light.',
 	desc: AbilityDescriptionOverrides.purepower.desc + ' ' + AbilityDescriptionOverrides.naturalcure.desc +
-		' ' + AbilityDescriptionOverrides.malignantlight.desc,
+		' ' + AbilityDescriptionOverrides.keenlight.desc,
 };
 
 import {November16BalanceDescriptions} from './nov16-balance-descriptions';

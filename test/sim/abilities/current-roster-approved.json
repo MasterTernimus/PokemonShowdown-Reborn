@@ -1,6 +1,9 @@
 {
   "_comment": "Explicit local approvals through November 16. Edit this reviewed fixture rather than adding another override layer. No values are generated from runtime Dex.",
   "slots": {
+    "serperior": {"1": "Leaf Guard"},
+    "serperiorazzy": {"1": "Leaf Guard"},
+    "kingambit": {"H": "Pressure"},
     "typhlosionhisui": {"0":"Plasma Awakening"},
     "feraligatr": {"1":"Tidal Awakening"},
     "ninetales": {"1": "Cursed Body"},
@@ -46,10 +49,10 @@
       "1": "Frame Perfect"
     },
     "ampharos": {
-      "0": "Malignant Light"
+      "0": "Keen Light"
     },
     "necrozma": {
-      "1": "Malignant Light"
+      "1": "Keen Light"
     },
     "pinsir": {
       "0": "Siege Grip",
@@ -160,6 +163,7 @@
     }
   },
   "passives": {
+    "sirfetchd": ["steadfast"],
     "liepard": ["prankster"],
     "druddigon": ["roughskin"],
     "azelf": ["giftofwill"],
@@ -221,7 +225,7 @@
       "frameperfect"
     ],
     "starmie": [
-      "malignantlight"
+      "keenlight"
     ],
     "pinsir": [
       "hypercutter"
@@ -250,6 +254,11 @@
     ]
   },
   "stats": {
+    "fearow": {"hp":80,"atk":105,"def":65,"spa":45,"spd":65,"spe":110},
+    "gardevoirmega": {"hp":75,"atk":75,"def":80,"spa":165,"spd":145,"spe":100},
+    "gardevoirmegaalt": {"hp":75,"atk":75,"def":80,"spa":165,"spd":145,"spe":100},
+    "gallademega": {"hp":75,"atk":165,"def":97,"spa":68,"spd":125,"spe":110},
+    "gallademegaazzy": {"hp":75,"atk":165,"def":97,"spa":68,"spd":125,"spe":110},
     "deoxys": {"hp":50,"atk":120,"def":90,"spa":120,"spd":90,"spe":130},
     "lunatone": {"hp":100,"atk":35,"def":90,"spa":125,"spd":90,"spe":70},
     "solrock": {"hp":100,"atk":125,"def":90,"spa":35,"spd":90,"spe":70},

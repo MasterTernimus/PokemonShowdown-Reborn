@@ -27,7 +27,7 @@ describe('Gardevoir abilities and cosmetic Mega branches', () => {
 	}
 	function doubles(ability) {
 		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [
-			[{species: 'Gardevoir', ability, moves: ['splash']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+			[{species: ability === 'Void Voice' ? 'Gardevoir-Mega' : 'Gardevoir', ability, moves: ['splash']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
 			[{species: 'Mew', ability: 'No Ability', moves: ['quickattack', 'splash']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
 		]);
 		battle.makeChoices('team 12', 'team 12');
@@ -65,7 +65,7 @@ describe('Gardevoir abilities and cosmetic Mega branches', () => {
 	it('Void Voice has exact Pixilate conversion and Queenly Majesty protection', () => {
 		const [mon, ally] = doubles('Void Voice'), foe = battle.p2.active[0];
 		const move = battle.dex.getActiveMove('hypervoice');
-		battle.singleEvent('ModifyType', mon.getAbility(), mon.abilityState, move, mon);
+		battle.runEvent('ModifyType', mon, foe, move, move);
 		assert.equal(move.type, 'Fairy');
 		assert.equal(battle.runEvent('BasePower', mon, foe, move, 100), 120);
 		assert.equal(battle.runEvent('BasePower', mon, foe, battle.dex.getActiveMove('psychic'), 100), 100);

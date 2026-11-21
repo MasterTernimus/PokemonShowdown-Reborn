@@ -5,10 +5,10 @@ export {SignaturePassiveComponents, SignaturePassiveRemovedComponents, Signature
 export const AbilityComponentExclusions: { [id: string]: readonly string[] } = {
  uncheckedassault: ['limber'], cinderscales: ['shielddust'],
  cursedkeepsake: ['frisk'], curseddoll: ['frisk'], cursedmarionette: ['frisk'], cursedarmament: ['frisk'],
+ voidvoice: ['insomnia', 'magicguard'],
  guidinglight: ['illuminate'],
  stormsovereign: ['keeneye'],
  chargedtail: ['static'],
- woolyconductor: ['static'],
  reservoir: ['damp'],
  baitedbloom: ['stickyhold'],
  invisiblewall: ['soundproof'],
@@ -399,7 +399,7 @@ Object.assign(SharedPassiveAbilityDescriptions, {
   },
   "ragingstorm": {
     "passive": "battlearmor",
-    "desc": "Moves ignore bypassable opposing abilities. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt; if there is no valid target or no damage is dealt, gains +1 Attack instead. Magic Guard prevents this splash damage. Cannot be suppressed.",
+    "desc": "Moves ignore bypassable opposing abilities. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt. Magic Guard prevents this splash damage. Cannot be suppressed.",
     "shortDesc": "Bypasses screens and defensive stages; halves priority damage; KOs damage other foes."
   },
   "mirechorus": {
@@ -453,10 +453,8 @@ AbilityComponentExclusions.razorcurrent = ['strongjaw'];
 SharedPassiveComponents.slowclamp = [...(SharedPassiveComponents.slowclamp || []), 'shellarmor'];
 SharedPassiveComponents.crueltag = [...(SharedPassiveComponents.crueltag || []), 'shadowtag'];
 SharedPassiveComponents.joyride = [...(SharedPassiveComponents.joyride || []), 'aerilate'];
-SharedPassiveComponents.woolyconductor = [...(SharedPassiveComponents.woolyconductor || []), 'moldbreaker'];
 SharedPassiveComponents.relentlesslink = [...(SharedPassiveComponents.relentlesslink || []), 'skilllink'];
 SharedPassiveComponents.sandsovereign = [...(SharedPassiveComponents.sandsovereign || []), 'sandstream'];
-SharedPassiveComponents.voidvoice = [...(SharedPassiveComponents.voidvoice || []), 'pixilate'];
 SharedPassiveComponents.mirrorgreed = [...(SharedPassiveComponents.mirrorgreed || []), 'magicbounce'];
 SharedPassiveComponents.dreadmaw = [...(SharedPassiveComponents.dreadmaw || []), 'hugepower'];
 SharedPassiveComponents.heavenlychorus = [...(SharedPassiveComponents.heavenlychorus || []), 'pixilate'];
@@ -518,11 +516,6 @@ Object.assign(SharedPassiveAbilityDescriptions, {
 		"desc": "Natural Cure and Illuminate.",
 		"shortDesc": "Natural Cure and Illuminate.",
 	},
-	"woolyconductor": {
-		"passive": "moldbreaker",
-		"desc": "Fluffy. Once per turn, an opposing contact attacker that deals HP damage loses 1 Speed.",
-		"shortDesc": "Fluffy.",
-	},
 	"relentlesslink": {
 		"passive": "skilllink",
 		"desc": "Mold Breaker and Power Drill.",
@@ -537,11 +530,6 @@ Object.assign(SharedPassiveAbilityDescriptions, {
 		"passive": "intimidate",
 		"desc": "Contact moves have 1.3x power. Once per switch-in, the first opposing direct hit deals 25% less damage and lowers the attacker's Attack by 1 stage. Multi-hit moves spend this protection on the first hit.",
 		"shortDesc": "Tough Claws + Decoy Pincers.",
-	},
-	"voidvoice": {
-		"passive": "pixilate",
-		"desc": "Queenly Majesty and Dream Sickness, retaining its protective and stat-control effects.",
-		"shortDesc": "Queenly Majesty and Dream Sickness, retaining its protective and stat-control effects.",
 	},
 	"mirrorgreed": {
 		"passive": "magicbounce",

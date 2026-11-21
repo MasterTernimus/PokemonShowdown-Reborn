@@ -6,10 +6,10 @@ export const RelicBeamMoves = new Set([
 	'hydropump', 'thunderbolt', 'powergem', 'dazzlinggleam',
 ]);
 
-export const MalignantLightExtras = new Set(['photongeyser', 'luminacrash']);
+export const KeenLightExtras = new Set(['photongeyser', 'luminacrash']);
 
-export function qualifiesForMalignantLight(move: Pick<ActiveMove, 'id' | 'flags'>) {
-	return MalignantLightExtras.has(move.id) || qualifiesForRelicBeam(move);
+export function qualifiesForKeenLight(move: Pick<ActiveMove, 'id' | 'flags'>) {
+	return KeenLightExtras.has(move.id) || qualifiesForRelicBeam(move);
 }
 
 export function qualifiesForRelicBeam(move: Pick<ActiveMove, 'id' | 'flags'>) {

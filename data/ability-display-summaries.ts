@@ -147,7 +147,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"relentlesslink": "Combines the listed abilities.",
 	"mirrorgreed": "Combines the listed abilities.",
 	"uncheckedassault": "Combines the listed abilities.",
-	"voidvoice": "Normal moves become Fairy; blocks foe priority; heals allies and can save one.",
+	"voidvoice": "Queenly Majesty + Void Veil. Blocks opposing priority and avoids allied attacks.",
 	"dreamsickness": "Heals its side 1/16 each turn; once per entry saves an ally at a 1/4 HP cost.",
 	"voidveil": "First Dark/Ghost hit bypasses barriers; Gardevoir ignores New World defense penalties.",
 	"rifteater": "Summons sand; Stockpile every 2 eligible turns; once-battle half-HP guard, heal and awakening.",
@@ -913,7 +913,7 @@ for (const id of ['convergence', 'misalignedstars', 'frameperfect', 'insight', '
 	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 }
 
-for (const id of ['malignantlight', 'ironmaiden', 'siegegrip', 'astralcore']) {
+for (const id of ['keenlight', 'ironmaiden', 'siegegrip', 'astralcore', 'woolyconductor']) {
 	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 }
 

@@ -21,13 +21,15 @@ function cycle() {
 }
 describe('Approved per-entry budgets and base Victreebel follow-up', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
-	for (const ability of ['Dream Sickness', 'Void Voice']) it(ability + ' shares its rescue budget across replacement, restart and genuine reentry', () => {
+	it('Dream Sickness restores its rescue on genuine reentry', () => {
+		const ability = 'Dream Sickness';
 		const [p, ally, foe] = setup('Gardevoir-Void', ability); ally.hp = 100;
 		const rescue = () => battle.runEvent('Damage', ally, foe, Dex.getActiveMove('tackle'), 100);
 		assert.equal(rescue(), 99); assert.equal(p.hp, 3000); assert.equal(rescue(), 100);
 		p.setAbility('No Ability'); p.setAbility(ability); assert.equal(rescue(), 100);
 		battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(rescue(), 100);
-		p.setAbility(ability === 'Dream Sickness' ? 'Void Voice' : 'Dream Sickness'); assert.equal(rescue(), 100);
+		p.setAbility('Void Voice'); assert.equal(rescue(), 100);
+		p.setAbility(ability); assert.equal(rescue(), 100);
 		cycle(); ally.hp = 100; p.hp = 4000; assert.equal(rescue(), 99);
 	});
 	it('actual Gardevoir Mega Evolution cannot buy a second rescue', () => {

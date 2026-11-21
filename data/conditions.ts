@@ -95,7 +95,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	...ShelterConditions,
  shadowdoublespent: {name: 'Shadow Double spent', noCopy: true, onStart() { this.effectState.armed = true; }},
  crossfirecharge: {name: 'Crossfire charge', noCopy: true},
- woolyconductorspent: {name: 'woolyconductorspent', noCopy: true, duration: 1},
 
  dredgerturn: {name: 'Dredger turn', noCopy: true, duration: 1},
 	venamskissturn: {name: 'venamskissturn', noCopy: true, duration: 1},

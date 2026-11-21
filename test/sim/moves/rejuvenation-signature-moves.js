@@ -6,6 +6,16 @@ function use(id,p,q,patch={}){const move=Object.assign(battle.dex.getActiveMove(
 describe('Approved Rejuvenation signature moves',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  it('defines exactly16 unique numbers and exact grants including Archaludon/Hawlucha',()=>{assert.equal(Object.keys(RejuvenationSignatureLearnsets).length,16);const nums=Object.keys(RejuvenationSignatureLearnsets).map(id=>{const m=Dex.moves.get(id);assert(m.exists);assert.equal(m.priority,0);for(const species of RejuvenationSignatureLearnsets[id])assert(Dex.species.getLearnsetData(species).learnset[id]);return m.num;});assert.equal(new Set(nums).size,16);assert(RejuvenationSignatureLearnsets.superumdmove.includes('archaludon'));for(const id of ['lucario','gallade','hawlucha'])assert(RejuvenationSignatureLearnsets.galestrike.includes(id));});
+ it('Fever Pitch uses staged attacking stats and is Special on ties', () => {
+  const [user] = setup();
+  for (const [atk, spa, expected] of [[0, 0, 'Special'], [1, 0, 'Physical'], [1, 2, 'Special']]) {
+   Object.assign(user.boosts, {atk, spa});
+   const move = battle.dex.getActiveMove('feverpitch');
+   move.onModifyMove.call(battle, move, user);
+   assert.equal(move.category, expected);
+   assert([60, 80, 100].includes(move.basePower));
+  }
+ });
  it('only Spectral Scream has drain',()=>{for(const id of Object.keys(RejuvenationSignatureLearnsets))assert.equal(!!Dex.moves.get(id).drain,id==='spectralscream');});
  it('Multipulse follows Plates only',()=>{const[p,q]=setup('No Ability','Flame Plate');assert.equal(use('multipulse',p,q).type,'Fire');p.setItem('Charcoal');assert.equal(use('multipulse',p,q).type,'Normal');});
  for(const condition of ['Klutz','Magic Room'])it('Multipulse respects '+condition,()=>{const[p,q]=setup(condition==='Klutz'?'Klutz':'No Ability','Flame Plate');if(condition==='Magic Room')battle.field.addPseudoWeather('magicroom',p,battle.dex.getActiveMove('magicroom')); assert.equal(use('multipulse',p,q).type,'Normal');});

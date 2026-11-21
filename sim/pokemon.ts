@@ -960,8 +960,9 @@ export class Pokemon {
 
 		// Certain Abilities won't activate while Transformed, even if they ordinarily couldn't be suppressed (e.g. Disguise)
 		if (this.getAbility().flags['notransform'] && this.transformed) return true;
-		if (this.getAbility().flags['cantsuppress']) return false;
-		if (this.volatiles['gastroacid'] || this.volatiles['meridianseal']) {
+		const resistsSuppression = this.getAbility().flags['cantsuppress'];
+		if (resistsSuppression && this.ability !== 'ragingstorm') return false;
+		if (!resistsSuppression && (this.volatiles['gastroacid'] || this.volatiles['meridianseal'])) {
 			if (this.ability === 'cursedarmament') delete this.abilityState.charged;
 			return true;
 		}
@@ -2625,7 +2626,8 @@ export class Pokemon {
 	}
 
 	hasGravityExemption() {
-		return this.species.id === 'gardevoir' && this.hasAbility('voidveil') && !this.battle.suppressingAbility(this);
+		return (this.hasAbility('voidvoice') || (this.species.id === 'gardevoir' && this.hasAbility('voidveil'))) &&
+			!this.battle.suppressingAbility(this);
 	}
 
 	canBenefitFromTerrain() {

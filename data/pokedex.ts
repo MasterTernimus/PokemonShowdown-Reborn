@@ -550,7 +550,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 22,
 		name: "Fearow",
 		types: ["Normal", "Flying"],
-		baseStats: { hp: 80, atk: 125, def: 80, spa: 45, spd: 80, spe: 125 },
+		baseStats: { hp: 80, atk: 105, def: 65, spa: 45, spd: 65, spe: 110 },
 		abilities: { 0: "Lance Point", H: "Sniper" },
 		heightm: 1.2,
 		weightkg: 38,
@@ -6225,7 +6225,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Gardevoir",
 		forme: "Mega",
 		types: ["Psychic", "Fairy"],
-		baseStats: { hp: 75, atk: 75, def: 80, spa: 165, spd: 135, spe: 110 },
+		baseStats: { hp: 75, atk: 75, def: 80, spa: 165, spd: 145, spe: 100 },
 		abilities: { 0: "Void Voice" },
 		heightm: 1.6,
 		weightkg: 48.4,
@@ -10076,7 +10076,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Psychic", "Fighting"],
 		gender: "M",
-		baseStats: { hp: 75, atk: 165, def: 95, spa: 65, spd: 125, spe: 115 },
+		baseStats: { hp: 75, atk: 165, def: 97, spa: 68, spd: 125, spe: 110 },
 		abilities: { 0: "Sacred Edge" },
 		heightm: 1.6,
 		weightkg: 56.4,
@@ -10091,7 +10091,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega-Azzy",
 		types: ["Psychic", "Fighting"],
 		gender: "M",
-		baseStats: { hp: 75, atk: 165, def: 95, spa: 65, spd: 125, spe: 115 },
+		baseStats: { hp: 75, atk: 165, def: 97, spa: 68, spd: 125, spe: 110 },
 		abilities: { 0: "Sacred Edge" },
 		heightm: 1.6,
 		weightkg: 56.4,
@@ -10874,7 +10874,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Grass", "Dragon"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 75, atk: 75, def: 95, spa: 82, spd: 95, spe: 113 },
-		abilities: { 0: "Multiscale", 1: "Royal Decree", H: "Contrary" },
+		abilities: { 0: "Multiscale", 1: "Leaf Guard", H: "Contrary" },
 		heightm: 3.3,
 		weightkg: 63,
 		color: "Green",
@@ -21346,7 +21346,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Kingambit",
 		types: ["Dark", "Steel"],
 		baseStats: { hp: 105, atk: 135, def: 125, spa: 60, spd: 95, spe: 50 },
-		abilities: { 0: "Defiant", 1: "Conqueror's Will", H: "Royal Decree" },
+		abilities: { 0: "Defiant", 1: "Conqueror's Will", H: "Pressure" },
 		heightm: 2,
 		weightkg: 120,
 		color: "Black",
@@ -23837,7 +23837,7 @@ const latestSpeciesUpdates: {[id: string]: any} = {
 	persian: {baseStats: {hp: 80, atk: 105, def: 70, spa: 120, spd: 70, spe: 125}},
 	persianalola: {baseStats: {hp: 100, atk: 75, def: 80, spa: 100, spd: 95, spe: 110}},
 	floatzel: {baseStats: {hp: 90, atk: 105, def: 65, spa: 90, spd: 50, spe: 115}},
-	gallademega: {baseStats: {hp: 75, atk: 165, def: 95, spa: 68, spd: 125, spe: 112}},
+	gallademega: {baseStats: {hp: 75, atk: 165, def: 97, spa: 68, spd: 125, spe: 110}},
 	castform: {baseStats: {hp: 70, atk: 70, def: 70, spa: 70, spd: 70, spe: 100}},
 	heliolisk: {baseStats: {hp: 62, atk: 50, def: 60, spa: 110, spd: 99, spe: 109}},
 	xatu: {baseStats: {hp: 65, atk: 75, def: 90, spa: 105, spd: 90, spe: 95}},
@@ -24909,8 +24909,8 @@ Pokedex.dusknoir.abilities![1] = 'Misaligned Stars';
 Pokedex.mienshao.abilities![0] = 'Frame Perfect';
 Pokedex.ninjask.abilities![1] = 'Frame Perfect';
 
-Pokedex.ampharos.abilities![0] = 'Malignant Light';
-Pokedex.necrozma.abilities![1] = 'Malignant Light';
+Pokedex.ampharos.abilities![0] = 'Keen Light';
+Pokedex.necrozma.abilities![1] = 'Keen Light';
 Pokedex.pinsir.abilities![0] = 'Siege Grip';
 Pokedex.pinsir.abilities![1] = 'Iron Maiden';
 

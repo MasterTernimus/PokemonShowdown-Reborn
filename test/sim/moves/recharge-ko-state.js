@@ -32,15 +32,27 @@ describe('Recharge KO state and protocol', () => {
 		assert.equal(!!p.volatiles.mustrecharge, expected);
 	}
 	for (const move of Dex.moves.all().filter(m => m.flags.recharge)) {
-		for (const ko of [false, true]) it(`${move.name}: ${ko ? 'KO clears' : 'surviving hit retains'} recharge and its display`, () => {
+		for (const ko of [false, true]) it(`${move.name}: ${ko ? 'KO' : 'surviving hit'} sets the correct recharge state and display`, () => {
 			const [p, q] = setup(move.id);
 			if (ko) q.hp = 1;
 			hit(p, q, move.id);
 			assert.equal(q.hp === 0, ko);
-			assertDisplay(p, !ko);
-			assert.equal(p.getMoves(p.getLockedMove()).some(m => m.id === 'recharge'), !ko);
+			const mustRecharge = !ko || ['hyperbeam', 'gigaimpact'].includes(move.id);
+			assertDisplay(p, mustRecharge);
+			assert.equal(p.getMoves(p.getLockedMove()).some(m => m.id === 'recharge'), mustRecharge);
 		});
 	}
+	for (const id of ['hyperbeam', 'gigaimpact']) it(id + ' spends the next turn recharging after a KO and replacement', () => {
+		const [p, q] = setup(id);
+		q.hp = 1;
+		battle.randomChance = () => true;
+		battle.makeChoices('move ' + id, 'move splash');
+		battle.makeChoices('', 'switch 2');
+		assert.deepEqual(battle.p1.activeRequest.active[0].moves.map(move => move.id), ['recharge']);
+		battle.makeChoices('move recharge', 'move splash');
+		assertDisplay(p, false);
+		assert(battle.log.includes(`|cant|${p}|recharge`));
+	});
 	it('Radiant Assault clears recharge when only the second spread target is KOed', () => {
 		const [p, q] = setup('radiantassault', true);
 		battle.p2.active[1].hp = 1;
@@ -57,12 +69,22 @@ describe('Recharge KO state and protocol', () => {
 		assert(q.hp > 0);
 		assertDisplay(p, defense === 'substitute');
 	});
-	it('a generated recharge move receives the same KO waiver', () => {
+	it('Giga Impact called by another move still recharges after a KO', () => {
 		const [p, q] = setup('gigaimpact'); q.hp = 1;
 		battle.actions.useMove(Object.assign(Dex.getActiveMove('gigaimpact'), {accuracy: true}), p,
 			{target: q, sourceEffect: Dex.moves.get('sleeptalk')});
-		assert.equal(q.hp, 0); assertDisplay(p, false);
+		assert.equal(q.hp, 0); assertDisplay(p, true);
 	});
+	for (const id of ['hyperbeam', 'gigaimpact']) for (const ko of [false, true]) {
+		it(id + ' on Glitch Field waives recharge only on a KO: ' + ko, () => {
+			const [p, q] = setup(id);
+			battle.field.setTerrain('glitchterrain', p);
+			if (ko) q.hp = 1;
+			hit(p, q, id);
+			assert.equal(q.hp === 0, ko);
+			assertDisplay(p, !ko);
+		});
+	}
 	it('removes the indicator after the actual recharge turn', () => {
 		const [p, q] = setup('gigaimpact'); hit(p, q, 'gigaimpact');
 		assertDisplay(p, true);

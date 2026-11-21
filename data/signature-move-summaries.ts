@@ -6,7 +6,7 @@ export const SignatureMoveSummaries: {[id: string]: string} = {
 	beasthunter: 'Hits foes; best category per target; 25% through Protect.',
 	multipulse: 'Type follows held Plate. Pulse move.',
 	aquabatics: '+1 Sp. Atk and Speed; +2 on Big Top.',
-	feverpitch: '60/80/100 power. Usable asleep; wakes user.',
+	feverpitch: 'Adaptive. 60/80/100 power. Usable asleep; wakes user.',
 	thunderraid: '3 hits: 20/40/60 power; each can miss.',
 	desertsmark: 'Makes target Ground-type; binds through next turn.',
 	superumdmove: 'Uses whichever category deals more damage.',

@@ -197,7 +197,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	mirrorgreed: ['magicbounce', 'analytic', 'opportunist'],
 	moonlitwings: ['serenegrace'],
 	uncheckedassault: ['scrappy', 'striker', 'opportunist', 'limber'],
-	voidvoice: ['pixilate', 'queenlymajesty', 'dreamsickness', 'telepathy'],
+	voidvoice: ['queenlymajesty', 'voidveil', 'telepathy'],
 	perfectforesight: ['trace', 'insomnia'],
 	dreamsickness: ['telepathy'],
 	voidveil: ['levitate', 'magicguard', 'insomnia'],
@@ -249,7 +249,8 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	auroracurrent: ['snowwarning'],
 	dunetyrant: ['sandstream', 'strongjaw'],
 	ironmountain: ['filter', 'stamina', 'heavymetal'],
-	woolyconductor: ['fluffy', 'moldbreaker', 'static'],
+	woolyconductor: ['fluffy', 'keenlight'],
+	plasmaeruption: ['galvanize'],
 	helios: ['drought', 'moldbreaker', 'berserk', 'swiftswim'],
 	rimeknuckle: ['ironfist', 'filter', 'icebody'],
 	ragingstorm: ['moldbreaker'],
@@ -1170,11 +1171,11 @@ AbilityComponents.frameperfect = ['innerfocus'];
 AbilityComponents.insight = ['convergence', 'ultrainstinct'];
 AbilityComponents.coldlogic = [...AbilityComponents.coldlogic, 'convergence'];
 
-AbilityComponents.malignantlight = ['illuminate'];
+AbilityComponents.keenlight = ['illuminate'];
 AbilityComponents.splintershell = ['aftermath'];
 AbilityComponents.ironmaiden = ['moxie'];
 AbilityComponents.siegegrip = ['moldbreaker'];
-AbilityComponents.astralcore = ['purepower', 'naturalcure', 'malignantlight'];
+AbilityComponents.astralcore = ['purepower', 'naturalcure', 'keenlight'];
 
 AbilityComponents.voidpromise = AbilityComponents.moonveil;
 delete AbilityComponents.moonveil;

@@ -23,10 +23,10 @@ describe('Composite and field audit fixes', () => {
    assert(!p.hasAbility('levitate')); assert(p.isGrounded());
   });
  }
- it('Void Voice does not copy Void Veil or gain its Levitate', () => {
+ it('Void Voice has its own Void Veil without copying the opponent', () => {
   const p = setup('Void Voice', 'Void Veil');
   assert.equal(p.m.perfectForesightAbility, undefined);
-  assert(!p.hasAbility('levitate')); assert(p.isGrounded());
+  assert(p.hasAbility('levitate')); assert(!p.isGrounded());
  });
  it('resolves nested components of a copied composite', () => {
 		const p = setup('Perfect Foresight', 'Soul Cremation');

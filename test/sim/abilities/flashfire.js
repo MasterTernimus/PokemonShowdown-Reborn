@@ -6,6 +6,19 @@ const common = require('./../../common');
 let battle;
 
 describe('Flash Fire', function () {
+	it('Elemental Seed grants Fire power while Drifblim keeps Unburden', function () {
+		battle = common.createBattle({formatid: 'gen9dragonsden'}, [
+			[{species: 'Drifblim', ability: 'Unburden', item: 'Elemental Seed', moves: ['ember']}],
+			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+		]);
+		battle.makeChoices('team 1', 'team 1');
+		const [holder, target] = [battle.p1.active[0], battle.p2.active[0]];
+		assert.equal(holder.ability, 'unburden');
+		assert(holder.volatiles.unburden);
+		assert(holder.volatiles.flashfire);
+		assert(battle.log.some(line => line.endsWith('|Flash Fire|[from] item: Elemental Seed')));
+		assert.equal(battle.runEvent('ModifySpA', holder, target, battle.dex.getActiveMove('ember'), 100), 150);
+	});
 	afterEach(function () {
 		battle.destroy();
 	});

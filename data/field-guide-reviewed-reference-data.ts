@@ -463,9 +463,6 @@ export const ReviewedReferenceDetails = {
 			"execution": [
 				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, it blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.",
 			],
-			"woolyconductor": [
-				"The current package has no additional Electric Field or Short-Circuit paralysis effect. Its contact mitigation, Fire vulnerability, Mold Breaker and once-per-turn contact-attacker Speed drop operate normally here.",
-			],
 			"fortressshell": [
 				"Its Stalwart component raises Special Attack on entry in New World, Starlight Arena, Fairy Tale and Chess Board. Shell Armor adds entry Defense on Fairy Tale or Dragon Den. Its own field-entry effect raises Defense and Special Defense on Fairy Tale, New World, Cold Eclipse or Starlight, tracking changes between fields. New World, Cold Eclipse and Starlight give 1.5x power. Guardian Presence gives allied attacks 1.5x power on Haunted, Bewitched Woods, Holy or Psychic Field (1.3x otherwise), and reduces allied incoming damage by 25%. Electric Aura, Electric Field, Murkwater, Water Surface, Underwater, Midnight Zone, Factory or Short-Circuit activate its Electric redirection/absorption and Attack/Special Attack increases.",
 			],
@@ -883,9 +880,6 @@ export const ReviewedReferenceDetails = {
 			],
 			"surgeconduit": [
 				"Electric Field entry grants +1 Attack and Special Attack through Lightning Rod. Electric redirection/absorption and Rock Head remain; the species’ Electric Surge passive is separate.",
-			],
-			"woolyconductor": [
-				"The current package has no additional Electric Field or Short-Circuit paralysis effect. Its contact mitigation, Fire vulnerability, Mold Breaker and once-per-turn contact-attacker Speed drop operate normally here.",
 			],
 			"fortressshell": [
 				"Its Stalwart component raises Special Attack on entry in New World, Starlight Arena, Fairy Tale and Chess Board. Shell Armor adds entry Defense on Fairy Tale or Dragon Den. Its own field-entry effect raises Defense and Special Defense on Fairy Tale, New World, Cold Eclipse or Starlight, tracking changes between fields. New World, Cold Eclipse and Starlight give 1.5x power. Guardian Presence gives allied attacks 1.5x power on Haunted, Bewitched Woods, Holy or Psychic Field (1.3x otherwise), and reduces allied incoming damage by 25%. Electric Aura, Electric Field, Murkwater, Water Surface, Underwater, Midnight Zone, Factory or Short-Circuit activate its Electric redirection/absorption and Attack/Special Attack increases.",
@@ -1504,7 +1498,7 @@ export const ReviewedReferenceDetails = {
 				"Defense is 1.5× on Dragon’s Den, Fairy Tale, Rainbow, Starlight Arena and Misty without requiring a status condition. Having both a status and one of these fields does not stack the bonus.",
 			],
 			"shedskin": [
-				"On Dragon’s Den, a qualifying end-of-turn recovery activates without its ordinary 50% roll: cure status, heal 1/4 max HP, raise the higher attacking stat by one stage (Attack wins ties), and lower Defense and Special Defense by one stage. It does not clear negative stages or temporary ailments, although those can trigger it. Scrafty with Shed Skin or Street Tyrant heals 1/8 instead.",
+				"On Dragon’s Den, a qualifying end-of-turn recovery activates without its ordinary 50% roll: cure status, heal 1/4 max HP, raise Speed and the higher attacking stat by one stage each (Attack wins ties), and lower Defense and Special Defense by one stage. It does not clear negative stages or temporary ailments, although those can trigger it. Scrafty with Shed Skin or Street Tyrant heals 1/8 instead.",
 			],
 			"shellarmor": [
 				"Gains +1 Defense on Dragon’s Den or Fairy Tale entry. Prevents critical hits and gains +2 Special Defense when a foe lowers its stats. Its 20% damage cut applies on Fairy Tale only of these two fields.",
@@ -2646,7 +2640,7 @@ export const ReviewedReferenceDetails = {
 				"Shares Conversion’s counter: one use records progress, a later Conversion or Conversion 2 attempts to create Glitch. While already on Glitch, resets its duration to five turns, or eight with Amplifield Rock. This does not require a successful type change.",
 			],
 			"hyperbeam": [
-				"On Glitch, a hit that knocks out its target removes the recharge requirement and prints the fallen-energy message. Other hits still require recharge.",
+				"Hyper Beam and Giga Impact skip recharge when they knock out a foe on Glitch Field.",
 			],
 			"metronome": [
 				"On Glitch, chooses only eligible Metronome moves whose listed base power is at least 70. This excludes variable-power moves listed below that threshold even if their eventual power would be high.",

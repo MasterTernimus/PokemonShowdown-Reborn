@@ -76,6 +76,7 @@ describe('Approved Kanto and Johto Mega splits', () => {
 		battle.runEvent('Residual', p);
 		assert.equal(p.hp, 400);
 		assert.equal(p.boosts.atk + p.boosts.spa, 1);
+		assert.equal(p.boosts.spe, 1);
 		assert.equal(p.boosts.def, -1);
 	});
 	it('Shed Skin cleans status, negative stages and volatile effects once outside Dragon Den', () => {

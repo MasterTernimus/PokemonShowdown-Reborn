@@ -337,7 +337,6 @@ export const RegionalPassiveGroups = {
     "greedent",
     "thievul",
     "centiskorch",
-    "sirfetchd",
     "goodrahisui",
     "spidops",
     "grafaiai",
@@ -550,6 +549,7 @@ export const RegionalPassiveGroups = {
     "medichammega"
   ],
   "steadfast": [
+    "sirfetchd",
     "falinks",
     "falinksmega",
     "lucario",
@@ -1446,9 +1446,9 @@ SpeciesPassives.metagross = Object.freeze(['clearbody']);
 SpeciesPassives.accelgor = Object.freeze(['frameperfect']);
 ThematicPassiveIds.add('clearbody');
 ThematicPassiveIds.add('frameperfect');
-SpeciesPassives.starmie = Object.freeze(['malignantlight']);
+SpeciesPassives.starmie = Object.freeze(['keenlight']);
 SpeciesPassives.pinsir = Object.freeze(['hypercutter']);
-ThematicPassiveIds.add('malignantlight');
+ThematicPassiveIds.add('keenlight');
 ThematicPassiveIds.add('hypercutter');
 SpeciesPassives.garchomp = Object.freeze(['roughskin']);
 ThematicPassiveIds.add('roughskin');

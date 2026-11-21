@@ -5,7 +5,7 @@ const { Dex } = require('../../../dist/sim');
 const { qualifiesForRelicBeam, RelicBeamMoves } = require('../../../dist/data/relic-beam');
 const { commands, renderRelicBeamReference } = require('../../../dist/server/chat-plugins/relic-beam');
 
-describe('Malignant Light and Pinsir', () => {
+describe('Keen Light and Pinsir', () => {
 	let battle;
 	function start(ability, species = 'Mew', doubles = false) {
 		const mon = (a = 'No Ability', s = 'Mew') => ({ species: s, ability: a, moves: ['tackle', 'watergun', 'splash', 'protect'] });
@@ -35,9 +35,9 @@ describe('Malignant Light and Pinsir', () => {
 		assert.deepEqual(Dex.species.get('pinsir').passives, ['hypercutter']);
 		assert.deepEqual(Dex.species.get('pinsirmega').abilities, { 0: 'Unbridled Flight' });
 		assert.deepEqual(Dex.species.get('pinsirmega').passives, ['aerilate']);
-		assert.equal(Dex.species.get('ampharos').abilities[0], 'Malignant Light');
-		assert.deepEqual(Dex.species.get('necrozma').abilities, { 0: 'Prism Armor', 1: 'Malignant Light' });
-		assert.deepEqual(Dex.species.get('starmie').passives, ['malignantlight']);
+		assert.equal(Dex.species.get('ampharos').abilities[0], 'Keen Light');
+		assert.deepEqual(Dex.species.get('necrozma').abilities, { 0: 'Prism Armor', 1: 'Keen Light' });
+		assert.deepEqual(Dex.species.get('starmie').passives, ['keenlight']);
 		assert.deepEqual(Dex.species.get('starmiemega').passives, ['purepower']);
 	});
 	it('retains the original beams and pulse/bullet rule while adding the requested moves', () => {
@@ -48,7 +48,7 @@ describe('Malignant Light and Pinsir', () => {
 	});
 
 	it('keeps physical Photon Geyser on Defense even when Sp. Def is lower', () => {
-		const [p, foe] = start('Malignant Light');
+		const [p, foe] = start('Keen Light');
 		p.storedStats.atk = 400;
 		p.storedStats.spa = 100;
 		foe.storedStats.def = 400;
@@ -65,8 +65,8 @@ describe('Malignant Light and Pinsir', () => {
 		p.boosts.def = 2; p.boosts.spa = -3;
 		assert.equal(p.getStat('spa'), p.getStat('def', false, true));
 	});
-	for (const [ability, species] of [['Malignant Light', 'Mew'], ['No Ability', 'Starmie'],
-		['Malignant Light', 'Starmie'], ['Astral Core', 'Starmie-Mega']]) {
+	for (const [ability, species] of [['Keen Light', 'Mew'], ['No Ability', 'Starmie'],
+		['Keen Light', 'Starmie'], ['Astral Core', 'Starmie-Mega'], ['Wooly Conductor', 'Ampharos-Mega']]) {
 		it('uses the lower modified defense with no beam multiplier: ' + ability + '/' + species, () => {
 			const [p, foe] = start(ability, species);
 			for (const id of ['hydropump', 'icebeam', 'darkpulse', 'bulletseed']) {
@@ -100,7 +100,7 @@ describe('Malignant Light and Pinsir', () => {
 		});
 	}
 	it('preserves category and uses defensive stages and items per target', () => {
-		const [p, foe, , other] = start('Malignant Light', 'Mew', true);
+		const [p, foe, , other] = start('Keen Light', 'Mew', true);
 		p.storedStats.spa = 200; foe.storedStats.def = 100; foe.storedStats.spd = 200;
 		other.storedStats.def = 200; other.storedStats.spd = 100;
 		const move = Dex.getActiveMove('dazzlinggleam'); move.willCrit = false;
@@ -114,7 +114,7 @@ describe('Malignant Light and Pinsir', () => {
 		assert(damage(foe) < base, 'suppressed ability uses ordinary Sp. Def');
 	});
 	it('does not repeat Illuminate field effects when selected and passive', () => {
-		const [p, foe] = start('Malignant Light', 'Starmie');
+		const [p, foe] = start('Keen Light', 'Starmie');
 		battle.field.terrain = 'mirrorarenaterrain';
 		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
 		// Selected Illuminate defers to the passive; exercise the actual passive dispatch separately.
@@ -125,7 +125,7 @@ describe('Malignant Light and Pinsir', () => {
 		battle.runEvent('ModifyMove', p, foe, move, move);
 		assert(move.ignoreEvasion);
 	});
-	for (const ability of ['Malignant Light', 'Astral Core']) it(`runs nested Illuminate exactly once on entry for ${ability}`, () => {
+	for (const ability of ['Keen Light', 'Astral Core']) it(`runs nested Illuminate exactly once on entry for ${ability}`, () => {
 		const [p, foe] = start(ability, 'Starmie', true);
 		battle.field.terrain = 'mirrorarenaterrain';
 		battle.makeChoices('switch 3, move 3', 'move 3, move 3');

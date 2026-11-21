@@ -33,7 +33,7 @@ This Pokemon has Shell Prison, Regenerator, and Shell Armor's effects. When hit 
 Standard ability behavior; see data/text/abilities.ts.
 
 ## Typhlosion-Mega - Plasma Eruption
-Fire/Electric, 83/138/85/139/70/130. Typhlosionite Mega Evolves regular, Alt, and Hisuian Typhlosion. Plasma Eruption adds Proficient and Blazing Mane to both Fire and Electric attacks; either attack type has a 50% chance to swap unless the new type is immune. Burn Up and Double Shock remove their respective typings, then force the remaining attack type conversion.
+Fire/Electric, 78/127/78/137/85/130. Galvanize converts eligible Normal moves to Electric and boosts their power. Those moves stay Electric. Native Fire and Electric attacks can swap types. Three damaging Fire or Electric attacks build Pressure for the next attack’s core discharge. Proficient is Mega Typhlosion’s passive.
 
 ## Kangaskhan-Mega - Parental Bond
 Cannot be suppressed. This Pokemon has Parental Bond, Tough Claws, Scrappy, and Friend Guard's effects. Its damaging moves become multi-hit moves that hit twice; the second hit deals reduced damage. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, existing multi-hit moves, multi-target moves, or two-turn moves.

@@ -244,6 +244,7 @@ export function getAbilityDisplayComponents(id: string, passives: readonly strin
 	if (id === 'rkssystem' && /^silvally(?:bug|dark|dragon|electric|fairy|fighting|fire|flying|ghost|grass|ground|ice|poison|psychic|rock|steel|water)?$/.test(canonicalAbilityDisplayID(species))) {
 		return item === undefined ? [] : getRKSSystemMemoryAbilities(canonicalAbilityDisplayID(item));
 	}
+	if (id === 'voidvoice') return ['queenlymajesty', 'voidveil'];
 	if (id === 'perfectforecast') return PerfectForecastForms[canonicalAbilityDisplayID(species)]?.components || [];
 	if ((!species || species === 'gardevoir') && id === 'dreamsickness') return ['insomnia', 'swornduty'];
 	if ((!species || species === 'gardevoir') && id === 'voidveil') return ['levitate', 'telepathy'];

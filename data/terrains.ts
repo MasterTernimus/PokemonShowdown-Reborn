@@ -1470,7 +1470,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onAfterMove(source, target, move) {
-				if (move.flags['recharge'] && target?.fainted) {
+				if (move.flags['recharge'] && target?.fainted && !target.isAlly(source)) {
 					this.add('-message', 'The glitched terrain allowed the move to recharge from the fallen pokemon');
 					source.removeVolatile('mustrecharge');
 				}
@@ -2127,12 +2127,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onModifyDef(def, pokemon) {
-				if (!pokemon.isGrounded() && !(pokemon.species.id === 'gardevoir' && pokemon.hasAbilityOrPassive('voidveil')) && !pokemon.hasAbilityOrPassive('voidcrossing')) {
+				if (!pokemon.isGrounded() && !pokemon.hasGravityExemption() && !pokemon.hasAbilityOrPassive('voidcrossing')) {
 					return this.chainModify(0.9);
 				}
 			},
 			onModifySpD(spd, pokemon) {
-				if (!pokemon.isGrounded() && !(pokemon.species.id === 'gardevoir' && pokemon.hasAbilityOrPassive('voidveil')) && !pokemon.hasAbilityOrPassive('voidcrossing')) {
+				if (!pokemon.isGrounded() && !pokemon.hasGravityExemption() && !pokemon.hasAbilityOrPassive('voidcrossing')) {
 					return this.chainModify(0.9);
 				}
 			},

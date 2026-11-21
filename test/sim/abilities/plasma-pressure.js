@@ -19,6 +19,15 @@ describe('Plasma Eruption pressure cycle', () => {
 		battle.randomizer = value => value;
 		return [battle.p1.active[0], battle.p2.active[0]];
 	}
+	it('Galvanize keeps converted Normal attacks Electric and applies its power bonus once', () => {
+		const [user, target] = setup();
+		battle.randomChance = () => true;
+		const move = battle.dex.getActiveMove('swift');
+		battle.runEvent('ModifyType', user, target, move, move);
+		battle.runEvent('ModifyMove', user, target, move, move);
+		assert.equal(move.type, 'Electric');
+		assert.equal(battle.runEvent('BasePower', user, target, move, 100), 120);
+	});
 	function hit(p, q, id = 'flamethrower', changes = {}) {
 		const move = Object.assign(Dex.getActiveMove(id), {accuracy: true, willCrit: false}, changes);
 		battle.actions.useMove(move, p, {target: q});

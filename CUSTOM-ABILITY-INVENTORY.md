@@ -136,7 +136,7 @@ Custom-numbered entries: 233
 - **Phalanx Form** (`phalanxform`): Hydra Bond + Friend Guard + Battle Armor; Steel STAB; cannot be trapped. **Users:** Falinks-Mega
 - **Phantom Barrage** (`phantombarrage`): Infiltrator + Levitate + Hydra Bond; higher offensive stat for signature attacks. **Users:** Dragapult-Gmax
 - **Phantom Fist** (`phantomfist`): Moves cannot miss + Filter + Self Repair + Unseen Fist. **Users:** Golurk-Mega
-- **Plasma Eruption** (`plasmaeruption`): Proficient + Blazing Mane for Fire and Electric moves; 50% type swap, or forced conversion after Burn Up/Double Shock without creating an immunity. **Users:** Typhlosion-Mega
+- **Plasma Eruption** (`plasmaeruption`) converts eligible Normal moves to Electric with Galvanize. Fire and Electric attacks build Pressure toward a core discharge. **User:** Typhlosion-Mega
 - **Pollen Bloom** (`pollenbloom`): Thick Fat + Proficient; fixed Grass chip heals the user for damage dealt. **Users:** Venusaur
 - **Power Drill** (`powerdrill`): Drill moves have 1.5x power. **Users:** Rhydon, Seaking
 - **Precision** (`precision`): Super-effective moves never miss; boosted critical-hit ratio. **Users:** Inteleon
@@ -238,7 +238,7 @@ Custom-numbered entries: 233
 - **Wildfire Core** (`wildfirecore`): Dragonize + Magma Armor + Proficient; conditional Fire chip respects immunities. **Users:** Charizard
 - **Wind Chime** (`windchime`): Armorize + Punk Rock + Levitate. **Users:** Chimecho-Mega
 - **Windy Surge** (`windysurge`): On switch-in, sets 2-turn Tailwind on this Pokemon's side. **Users:** Beautifly, Drifblim, Eldegoss, Jumpluff, Rotom-Fan, Tropius
-- **Wooly Conductor** (`woolyconductor`): Fur Coat + Mold Breaker + Static. **Users:** Ampharos-Mega
+- **Wooly Conductor** (`woolyconductor`) combines Fluffy and Keen Light. Qualifying special light moves use the target’s lower defense. **User:** Ampharos-Mega
 - **Wrath Shield** (`wrathshield`): Bulletproof + Filter + Self Repair. **Users:** Chesnaught-Mega
 
 ## Approved signature follow-ups

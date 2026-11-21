@@ -50,14 +50,16 @@ function crossStatus(battle: Battle, target: Pokemon, source: Pokemon, type: str
 export function installPlasmaEruption(abilities: AbilityDataTable) {
 	abilities.plasmaeruption = {
 		name: 'Plasma Eruption', num: 10149, rating: 5, flags: {},
-		shortDesc: "Fire/Electric may swap and add status. Three hits ready a +60% core discharge.",
-		desc: "Fire/Electric attacks have a 50% chance to swap types, avoiding immunity on the first opponent when possible. The final type stays fixed: Electric adds 30% burn; Fire adds 30% paralysis. The holder is immune to both statuses. Each attack that damages an opponent or its Substitute gains one Pressure: first +1 Sp. Atk, second +1 Speed, third readies the core. The next Fire/Electric attack releases a core discharge: +60% power, then resets Pressure and its remaining stat boosts. If the primary foe takes damage, other foes take extra damage equal to 75% of the damage actually dealt to it; all affected foes receive the opposite status if possible. After discharge, flies for two end-of-turn ticks: Ground immunity, +20% Electric power, and no Pressure gain. Iron Ball, Gravity, Smack Down and Ingrain prevent flight. Landing powers up the next Fire attack by 30%. Discharge and landing bonuses are spent even on a miss or block. Switching or losing the ability clears its phases. Strongest field bonus only: Fire +15% on Volcanic, Burning, Superheated or Dragon's Den; Electric +15% on Electric Terrain/Aura, Factory or Short Circuit; both +10% on Mountain, Cave, Crystal Cavern, Desert, Ashen Beach or effective sun; both +5% on Haunted, New World, Inverse, Big Top or Fairy Tale.",
+		shortDesc: "Galvanize. Fire/Electric may swap and add status. Three hits ready a +60% core discharge.",
+		desc: "Galvanize converts eligible Normal moves to Electric and gives them its usual power bonus. Fire/Electric attacks have a 50% chance to swap types, avoiding immunity on the first opponent when possible. The final type stays fixed: Electric adds 30% burn; Fire adds 30% paralysis. The holder is immune to both statuses. Each attack that damages an opponent or its Substitute gains one Pressure: first +1 Sp. Atk, second +1 Speed, third readies the core. The next Fire/Electric attack releases a core discharge: +60% power, then resets Pressure and its remaining stat boosts. If the primary foe takes damage, other foes take extra damage equal to 75% of the damage actually dealt to it; all affected foes receive the opposite status if possible. After discharge, flies for two end-of-turn ticks: Ground immunity, +20% Electric power, and no Pressure gain. Iron Ball, Gravity, Smack Down and Ingrain prevent flight. Landing powers up the next Fire attack by 30%. Discharge and landing bonuses are spent even on a miss or block. Switching or losing the ability clears its phases. Strongest field bonus only: Fire +15% on Volcanic, Burning, Superheated or Dragon's Den; Electric +15% on Electric Terrain/Aura, Factory or Short Circuit; both +10% on Mountain, Cave, Crystal Cavern, Desert, Ashen Beach or effective sun; both +5% on Haunted, New World, Inverse, Big Top or Fairy Tale.",
 		onStart(pokemon) {
 			pokemon.addVolatile('plasmacore');
 			if (['brn', 'par'].includes(pokemon.status)) pokemon.cureStatus();
 		},
 		onUpdate(pokemon) { if (['brn', 'par'].includes(pokemon.status)) pokemon.cureStatus(); },
 		onSetStatus(status) { if (status.id === 'brn' || status.id === 'par') return false; },
+		onModifyTypePriority: abilities.galvanize.onModifyTypePriority,
+		onModifyType: abilities.galvanize.onModifyType,
 		onModifyMovePriority: -100,
 		onModifyMove(move, source) {
 			if (!qualifies(move) || (move as any).plasmaTypeChosen) return;
@@ -65,7 +67,8 @@ export function installPlasmaEruption(abilities: AbilityDataTable) {
 			const original = move.type, alternate = original === 'Fire' ? 'Electric' : 'Fire';
 			const first = source.foes().find(p => p.hp);
 			const originalBlocked = blocked(this, first, original), alternateBlocked = blocked(this, first, alternate);
-			if (!alternateBlocked && (originalBlocked || this.randomChance(1, 2))) move.type = alternate;
+			if (move.typeChangerBoosted !== this.effect && !alternateBlocked &&
+				(originalBlocked || this.randomChance(1, 2))) move.type = alternate;
 			if (move.type !== original) this.add('-message', `Plasma Eruption changed ${move.name} to ${move.type}!`);
 			const core = source.volatiles.plasmacore;
 			if (!core || core.pressure < 3) {
@@ -100,6 +103,7 @@ export function installPlasmaEruption(abilities: AbilityDataTable) {
 			if (data?.landing) this.chainModify(1.3);
 			const field = plasmaFieldMultiplier(this, source, move.type);
 			if (field !== 1) this.chainModify(field);
+			return abilities.galvanize.onBasePower?.call(this, basePower, source, target, move);
 		},
 		onAnyAfterDamageApplied(damage, target, source, effect) {
 			const data = (effect as any)?.plasmaAttack as PlasmaAttack | undefined;
