@@ -1,3 +1,4 @@
+import { formSignature } from '../data/form-signatures';
 import { tryRotomEject } from '../data/rotom-eject';
 import { refillMewtwoShield } from '../data/mewtwo-approved';
 import { DisabledSpecies } from '../data/disabled-species';
@@ -1124,7 +1125,20 @@ export class Pokemon {
 
 	gotAttacked(move: string | Move, damage: number | false | undefined, source: Pokemon) {
 		const damageNumber = typeof damage === 'number' ? damage : 0;
+		if (damageNumber > 0 && !this.isAlly(source)) {
+			const turns = source.m.lastDamagedSideTurn ||= {};
+			turns[this.side.id] = this.battle.turn;
+			if (this.side.allySide) turns[this.side.allySide.id] = this.battle.turn;
+		}
 		move = this.battle.dex.moves.get(move);
+		if (damageNumber > 0 && ['sableye', 'sableyemega'].includes(this.species.id) && !this.isAlly(source)) {
+			this.addVolatile('greedgospelmemory');
+			const memory = this.volatiles.greedgospelmemory;
+			if (memory) {
+				const foes: Pokemon[] = memory.foes ||= [];
+				if (!foes.includes(source)) foes.push(source);
+			}
+		}
 		this.attackedBy.push({
 			source,
 			damage: damageNumber,
@@ -1168,6 +1182,14 @@ export class Pokemon {
 		if (restrictData && this.maybeLocked) return null;
 		const lockedMove = this.battle.priorityEvent('SemiLockMove', this);
 		return lockedMove === true ? null : lockedMove;
+	}
+
+	signatureMoveTarget(move: Move) {
+		if (move.id === 'boomburst' && this.species.id === 'flygonmegaz') return 'normal';
+		if (move.id === 'swift' && this.species.id === 'gardevoirvoidmega') return 'normal';
+		if (move.id === 'discharge' && this.species.id === 'ampharosmega') return 'normal';
+		if (move.id === 'lavaplume' && this.species.id === 'cameruptmega') return 'allAdjacentFoes';
+		return move.target;
 	}
 
 	usesFallenStarTarget(move: Move) {
@@ -1215,9 +1237,14 @@ export class Pokemon {
 		const moves = [];
 		let hasValidMove = false;
 		for (const moveSlot of this.moveSlots) {
-			let moveName = moveSlot.move;
+			let moveName = formSignature(this, moveSlot.id)?.name || moveSlot.move;
+			if (moveSlot.id === 'powerwhip' && this.species.id === 'victreebelmega') moveName = 'Snare Vine';
+			if (moveSlot.id === 'firstimpression' && ['golisopodmega', 'golisopodaevianmega'].includes(this.species.id)) {
+				moveName = 'F.M. Impression';
+			}
+			if (moveSlot.id === 'steelwing' && this.species.id === 'skarmorymega') moveName = 'Gilded Wing';
 			if (moveSlot.id === 'wavecrash' && this.hasAbilityOrPassive('monarchofice'))
-				moveName = 'Royal Collision';
+				moveName = 'Crown Crash';
 			if (moveSlot.id === 'relicsong') {
 				if (this.species.id === 'meloettaencore') moveName = 'Encore Aria';
 				else if (this.species.id === 'meloettapirouette') moveName = 'Pirouette Dance';
@@ -1234,6 +1261,9 @@ export class Pokemon {
 			let target = this.usesFallenStarTarget(this.battle.dex.moves.get(moveSlot.id)) ?
 				'adjacentFoe' :
 				moveSlot.target;
+			if (['Beacon Beam', 'Crater Burst', 'Void Volley', 'Dune Echo'].includes(moveName)) {
+				target = this.signatureMoveTarget(this.battle.dex.moves.get(moveSlot.id));
+			}
 			if (moveSlot.id === 'decorate' && this.hasAbility('masterpatissier')) target = 'normalOrSelf';
 			switch (moveSlot.id) {
 			case 'petaldance':
@@ -1345,7 +1375,7 @@ export class Pokemon {
 			let protectMove = false;
 			if (move.volatileStatus && protectVolatiles.includes(move.volatileStatus)) protectMove = true;
 			if (this.species.id === 'aegislashgmax' && move.id === 'kingsshield') protectMove = false;
-			let actualTarget = this.usesFallenStarTarget(move) ? 'adjacentFoe' : move.target;
+			let actualTarget = this.usesFallenStarTarget(move) ? 'adjacentFoe' : this.signatureMoveTarget(move);
 			if (move.id === 'decorate' && this.hasAbility('masterpatissier'))
 				actualTarget = 'normalOrSelf';
 			switch (moveSlot.id) {
@@ -1578,7 +1608,7 @@ export class Pokemon {
 		for (boostName in boosts) {
 			delta = boosts[boostName]!;
 			const core = this.volatiles.plasmacore;
-			if (core && (boostName === 'spe' || boostName === 'spa')) {
+			if (core && (boostName === 'atk' || boostName === 'spa' || boostName === 'spe')) {
 				const key = `${boostName}Credit`,
 					credit = core[key] || 0;
 				if (credit > 0 && delta < 0) core[key] = Math.max(0, credit + delta);
@@ -1591,7 +1621,7 @@ export class Pokemon {
 
 	clearBoosts() {
 		if (this.volatiles.plasmacore) {
-			this.volatiles.plasmacore.speCredit = this.volatiles.plasmacore.spaCredit = 0;
+			for (const stat of ['atk', 'spa', 'spe']) this.volatiles.plasmacore[`${stat}Credit`] = 0;
 		}
 		this.removeVolatile('artilleryreload');
 		this.removeVolatile('artilleryfired');
@@ -1608,7 +1638,7 @@ export class Pokemon {
 		}
 		let boostName: BoostID;
 		for (boostName in boosts) {
-			if (this.volatiles.plasmacore && (boostName === 'spe' || boostName === 'spa')) {
+			if (this.volatiles.plasmacore && (boostName === 'atk' || boostName === 'spa' || boostName === 'spe')) {
 				this.volatiles.plasmacore[`${boostName}Credit`] = 0;
 			}
 			this.boosts[boostName] = boosts[boostName]!;
@@ -3069,7 +3099,6 @@ export class Pokemon {
 				'lunaridol',
 				'burningcrown',
 				'astralwitchcraft',
-				'voidcraft',
 				'phantombarrage',
 				'silentflight',
 			]) &&
@@ -3207,6 +3236,10 @@ export class Pokemon {
 			this.battle.dex.getEffectiveness(move.type, 'Flying') < 0
 		)
 			totalTypeMod--;
+		if (this.hasAbility('armoredshell') && !this.hasType('Water') && !this.battle.suppressingAbility(this)) {
+			totalTypeMod += Math.min(0, this.battle.dex.getEffectiveness(move, 'Water'));
+		}
+		if (move.name === 'Crown Crash' && this.hasType(['Fire', 'Steel'])) return Math.max(1, totalTypeMod);
 		return totalTypeMod;
 	}
 

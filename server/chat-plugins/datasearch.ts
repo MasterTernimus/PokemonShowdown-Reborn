@@ -91,23 +91,6 @@ function toListString(arr: string[]) {
 	return `${arr.slice(0, -1).join(', ')}, and ${arr.slice(-1)[0]}`;
 }
 
-const ARROW_MOVE_IDS = [
-	'spiritshackle',
-	'thousandarrows',
-	'triplearrows',
-	'snipeshot',
-	'razorleaf',
-	'magicalleaf',
-	'spikecannon',
-	'pinmissile',
-	'iciclespear',
-	'rockblast',
-	'bulletseed',
-	'scaleshot',
-	'psychocut',
-	'ceaselessedge',
-];
-
 function customMoveList(title: string, predicate: (move: Move) => boolean) {
 	const moves = Dex.moves
 		.all()
@@ -128,7 +111,7 @@ export const commands: Chat.ChatCommands = {
 	tailhelp: ['/tail - Lists all Tail moves boosted by Whiplash.'],
 	arrow(target, room, user) {
 		this.checkBroadcast();
-		this.sendReplyBox(customMoveList('Arrow moves', move => ARROW_MOVE_IDS.includes(move.id)));
+		this.sendReplyBox(customMoveList('Arrow moves', move => !!move.flags.arrow));
 	},
 	arrowhelp: ['/arrow - Lists all Arrow moves.'],
 	horn: 'drill',

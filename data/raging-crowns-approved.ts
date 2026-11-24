@@ -354,7 +354,7 @@ export const RagingCrownDescriptions = {
 	},
 	spiralevolution: {
 		shortDesc: 'Power Drill + Adaptability; double Twineedle power; protection piercing.',
-		desc: 'Full local Power Drill: drill and horn moves have 1.5x power, or 2x on Rocky, Mountain, Snowy Mountain, Cave and Volcanic, where they bypass protection at full power. Has Adaptability and double Twineedle power with its native hit count. Other damaging moves pierce protection at half power. Normal-priority moves act first in Trick Room without gaining priority. Ignores field Speed penalties and takes 20% less attack damage. Levitate remains separate.',
+		desc: 'Full local Power Drill: drill and horn moves have 1.5x power, or 2x on Rocky, Mountain, Snowy Mountain, Cave and Volcanic, where they bypass protection at full power. Has Adaptability and double Twineedle power, including all three hits of Triple Sting. Other damaging moves pierce protection at half power. Normal-priority moves act first in Trick Room without gaining priority. Ignores field Speed penalties and takes 20% less attack damage. Levitate remains separate.',
 	},
 	astralwitchcraft: {
 		shortDesc: 'Levitate + Magic Guard + Serene Grace.',

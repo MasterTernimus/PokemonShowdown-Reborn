@@ -713,7 +713,6 @@ Object.assign(SharedPassiveAbilityDescriptions, {
 Object.assign(SharedPassiveComponents, {
 	predator: ['contrary'],
 	nighthunt: ['strongjaw'],
-	voidcraft: ['elevate'],
 	stormbell: ['mirrorarmor'],
 	froststalker: ['stakeout'],
 	reapersgrip: ['unaware'],

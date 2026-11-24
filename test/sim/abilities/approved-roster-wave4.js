@@ -42,7 +42,7 @@ describe('Approved fourth roster pass', () => {
 	it('keeps the approved slots and searchable components after later roster revisions', () => {
 		for (const [species, ability, component] of [
 			['Seviper-Mega', 'Sirius', 'Black Viper'], ['Rhyperior', 'Quarry Cannon', 'Mega Launcher'],
-			['Mamoswine', 'Old North', 'Ice Body'], ['Jellicent', 'Water Absorb', 'Water Absorb'],
+			['Mamoswine', 'Old North', 'Ice Body'], ['Jellicent', 'Unnerve', 'Unnerve'],
 			['Incineroar', 'Ring Performer', 'Tough Claws'], ['Mudsdale', 'Unyielding', 'Inner Focus'],
 		]) {
 			assert(Object.values(Dex.species.get(species).abilities).includes(ability));

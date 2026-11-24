@@ -3268,22 +3268,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				move.isMax
 			)
 				return;
-			const arrowMoves = [
-				'spiritshackle',
-				'thousandarrows',
-				'triplearrows',
-				'snipeshot',
-				'razorleaf',
-				'magicalleaf',
-				'spikecannon',
-				'pinmissile',
-				'iciclespear',
-				'rockblast',
-				'bulletseed',
-				'scaleshot',
-				'psychocut',
-				'ceaselessedge',
-			];
 			if (
 				!(
 					move.flags['slicing'] ||
@@ -3291,7 +3275,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					move.flags['bullet'] ||
 					move.flags['horn'] ||
 					move.flags['drill'] ||
-					arrowMoves.includes(move.id)
+					move.flags.arrow
 				)
 			)
 				return;
@@ -12639,8 +12623,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					'caveterrain',
 					'volcanicterrain',
 				])
-			)
+			) {
+				move.flags = { ...move.flags };
 				delete move.flags['protect'];
+			}
 		},
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
@@ -15750,10 +15736,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 			for (const target of this.getAllActive()) {
-				if (target.hasItem('Ability Shield')) {
-					this.add('-block', target, 'item: Ability Shield');
-					continue;
-				}
+				if (target.hasItem('Ability Shield')) continue;
 				// Can't suppress a Tatsugiri inside of Dondozo already
 				if (target.volatiles['commanding']) {
 					continue;
@@ -18528,9 +18511,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				'weatherball',
 			];
 			if (
-				move.type === 'Normal' &&
+				move.category !== 'Status' && move.type === 'Normal' &&
 				(!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
-				!(move.isZ && move.category !== 'Status') &&
+				!move.isZ &&
 				!(move.name === 'Tera Blast' && pokemon.terastallized)
 			) {
 				move.type = pokemon.getTypes()[0];
@@ -18540,13 +18523,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			if (skipPassiveComponent(this, pokemon, 'seasonalstride')) return;
-			if (move.typeChangerBoosted === this.effect) return this.chainModify(1.5);
-		},
-		onModifySpe(spe, pokemon) {
-			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
-				if (skipPassiveComponent(this, pokemon, 'seasonalstride')) return;
-				return this.chainModify(2);
-			}
+			if (move.typeChangerBoosted === this.effect) return this.chainModify(1.2);
 		},
 		onResidual(pokemon) {
 			if (pokemon.baseSpecies.num !== 586 || pokemon.transformed) return;
@@ -18591,58 +18568,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 231,
 	},
 	voidcraft: {
-		onStart(pokemon) {
-			pokemon.abilityState.voidcraftStartTurn = this.turn;
-			this.dex.abilities
-				.get('temporalshift')
-				.queueTemporalHex?.call(this, pokemon, 'Void Craft', ['Ghost'], 120, true);
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			return this.dex.abilities
-				.get('elevate')
-				.onSourceAfterFaint?.call(this, length, target, source, effect);
-		},
-		onSourceModifyDamage(damage, source, target, move) {
-			return this.dex.abilities
-				.get('shadowshield')
-				.onSourceModifyDamage?.call(this, damage, source, target, move);
-		},
-		onImmunity(type, pokemon) {
-			return this.dex.abilities.get('shadowshield').onImmunity?.call(this, type, pokemon);
-		},
-		onTryBoost(boost, target, source, effect) {
-			return this.dex.abilities
-				.get('temporalshift')
-				.onTryBoost?.call(this, boost, target, source, effect);
-		},
-		onUpdate(pokemon) {
-			return this.dex.abilities.get('insomnia').onUpdate?.call(this, pokemon);
-		},
-		onSetStatus(status, target, source, effect) {
-			return this.dex.abilities
-				.get('insomnia')
-				.onSetStatus?.call(this, status, target, source, effect);
-		},
-		onTryAddVolatile(status, target, source, effect) {
-			return this.dex.abilities
-				.get('insomnia')
-				.onTryAddVolatile?.call(this, status, target, source, effect);
-		},
-		onBasePower(basePower, source, target, move) {
-			return this.dex.abilities
-				.get('insomnia')
-				.onBasePower?.call(this, basePower, source, target, move);
-		},
-		onResidual(pokemon) {
-			if (
-				(this.turn - pokemon.abilityState.voidcraftStartTurn) % 2 !== 0 ||
-				pokemon.abilityState.temporalShiftLastCastTurn === this.turn
-			)
-				return;
-			this.dex.abilities
-				.get('temporalshift')
-				.queueTemporalHex?.call(this, pokemon, 'Void Craft', ['Ghost'], 120, true);
-		},
 		flags: { breakable: 1, unbreakableDamage: 1 },
 		name: 'Void Craft',
 		rating: 4,
@@ -22404,7 +22329,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			// interaction with Ability Shield is similar to No Ability
 			if (pokemon.hasItem('Ability Shield')) {
-				this.add('-block', pokemon, 'item: Ability Shield');
 				this.effectState.seek = false;
 			}
 			if (this.effectState.seek) {
@@ -25460,7 +25384,7 @@ Abilities.agonyflame = {
 		if (source !== holder || source.isAlly(target) || damage <= 0 || effect.effectType !== 'Move')
 			return;
 		const move = effect;
-		if (move.category === 'Status' || !this.movehasType(move, 'Fire') || move.flags['futuremove'])
+		if (move.category === 'Status' || (!this.movehasType(move, 'Fire') && !this.movehasType(move, 'Dark')) || move.flags['futuremove'])
 			return;
 		if (this.effectState.agonyFlameMove !== move) {
 			this.effectState.agonyFlameMove = move;
@@ -26221,10 +26145,7 @@ Abilities.meridianseal.onSourceDamagingHit = function (damage, target, source, m
 	)
 		return;
 	if (target.getAbility().flags.cantsuppress) return;
-	if (target.hasItem('abilityshield')) {
-		this.add('-block', target, 'item: Ability Shield');
-		return;
-	}
+	if (target.hasItem('abilityshield')) return;
 	if (target.addVolatile('meridianseal', source, this.effect)) this.effectState.used = true;
 };
 Abilities.invisiblewall = { ...Abilities.soundproof, name: 'Invisible Wall', rating: 4, num: 11277 };
@@ -27665,6 +27586,12 @@ for (const id of ['guidinggallop', 'pastelveil'] as const) {
 }
 
 Abilities.racingspirit = { name: 'Racing Spirit', num: 11519, rating: 4, flags: {} };
+composeSelectedAbility(Abilities, 'voidcraft', ['temporalshift', 'shadowshield']);
+Abilities.voidcraft.queueTemporalHex = Abilities.temporalshift.queueTemporalHex;
+Abilities.voidcraft.onModifyMove = function (move) {
+	if (move.category !== 'Status' && this.movehasType(move, 'Fairy')) move.forceSTAB = true;
+};
+
 composeSelectedAbility(Abilities, 'racingspirit', ['rockhead', 'flashfire'], true);
 
 import { installAlcremie } from './alcremie-approved';
@@ -28427,3 +28354,58 @@ import { revisedNames } from './nov18-roster';
 installRosterAbilities(Abilities);
 for (const [id, name] of Object.entries(revisedNames))
 	Object.assign(Abilities[id as ID], { id: id as ID, name });
+
+composeSelectedAbility(Abilities, 'crystalbastion', ['filter', 'sturdy']);
+Abilities.kindredfury = { name: 'Kindred Fury', num: 32614, rating: 4, flags: {} };
+composeSelectedAbility(Abilities, 'kindredfury', ['friendguard', 'berserk']);
+Abilities.dunechorus = {
+	...Abilities.sandforce, name: 'Dune Chorus', num: 32610,
+	onAllyBasePowerPriority: 21,
+	onAllyBasePower(power, attacker, defender, move) {
+		if (attacker.hasAbilityOrPassive('sandforce') || attacker.hasAbility('dunechorus')) return;
+		const provider = attacker.allies().find(ally => ally.hasAbility('dunechorus'));
+		if (provider === this.effectState.target)
+			return Abilities.sandforce.onBasePower!.call(this, power, attacker, defender, move);
+	},
+	onAllyImmunity(type) { if (type === 'sandstorm') return false; },
+};
+Abilities.mineralheart = {
+	name: 'Mineral Heart', num: 32611, rating: 2, flags: {},
+	onResidualOrder: 5,
+	onResidual(pokemon) {
+		if (this.field.isWeather('sandstorm')) this.heal(pokemon.baseMaxhp / 16, pokemon);
+	},
+};
+Abilities.abyssalgrip = { name: 'Abyssal Grip', num: 32612, rating: 3, flags: {} };
+composeSelectedAbility(Abilities, 'abyssalgrip', ['suctioncups', 'infiltrator']);
+Abilities.siegebeak = {
+	...Abilities.rockhead, name: 'Siege Beak', num: 32613,
+	onModifyDef() { return this.chainModify(1.25); },
+	onModifySpD() { return this.chainModify(1.25); },
+	onBasePower(power, source, target, move) {
+		if (move.flags.bullet || move.id.includes('blast')) return this.chainModify(1.3);
+	},
+	onSourceModifyDamage(damage, attacker, defender) {
+		if (!attacker.isAlly(defender) && !defender.moveThisTurn && this.queue.willMove(defender))
+			return this.chainModify(defender.volatiles.beakblast ? 0.5 : 0.7);
+	},
+};
+
+import { installMegaSignatureAbilities } from './mega-signature-traps';
+installMegaSignatureAbilities(Abilities);
+
+Abilities.tripwirekick = {
+	...Abilities.hydrabond, name: 'Tripwire Kick', num: 32654, rating: 3, flags: {},
+	onBasePower(power, source, target, move) {
+		if (move.flags.kick) this.chainModify(1.1);
+		return Abilities.hydrabond.onBasePower?.call(this, power, source, target, move);
+	},
+	onSourceDamagingHit(damage, target, source, move) {
+		if (damage <= 0 || !move.flags.kick || target.isAlly(source) || !source.side.sideConditions.stickyweb || source.volatiles.tripwirekickspent) return;
+		source.addVolatile('tripwirekickspent', source, this.effect);
+		source.side.removeSideCondition('stickyweb');
+	},
+};
+
+import { SandDreamDescriptions } from './sand-dream-descriptions';
+for (const [id, text] of Object.entries(SandDreamDescriptions)) Object.assign(Abilities[id as ID], text);

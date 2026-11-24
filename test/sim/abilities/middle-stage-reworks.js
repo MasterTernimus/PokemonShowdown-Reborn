@@ -78,7 +78,7 @@ describe('Dodrio and Eviolite middle-stage reworks', () => {
 			goodrahisui: [80, 100, 100, 110, 150, 60],
 			garchomp: [108, 130, 95, 80, 85, 102],
 			kommoo: [75, 110, 125, 100, 105, 85],
-			dodrio: [90, 106, 85, 50, 75, 119],
+			dodrio: [90, 110, 85, 50, 75, 110],
 		};
 		for (const [id, stats] of Object.entries(expected))
 			assert.deepEqual(Object.values(Dex.species.get(id).baseStats), stats, id);

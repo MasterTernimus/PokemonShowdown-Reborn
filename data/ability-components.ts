@@ -101,6 +101,8 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	royalsun: ['drought', 'supremeoverlord', 'unnerve', 'flamebody'],
 	ragingfists: ['hydrabond', 'scrappy'],
 	aquashell: ['heatproof', 'frisk'],
+	armoredshell: ['heatproof'],
+	tripwirekick: ['hydrabond'],
 	warship: ['swiftswim', 'solidrock', 'strongjaw'],
 	sweetdecay: ['hustle', 'gluttony', 'sweetveil', 'corrosion'],
 	bakedbliss: ['wellbakedbody', 'thickfat', 'sweetveil', 'gluttony'],
@@ -242,7 +244,6 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	vanguard: ['intimidate'],
 	royalarmament: ['powerdrill'],
 	seablessing: ['waterveil', 'raindish'],
-	seasonalstride: ['chlorophyll'],
 	slowclamp: ['shellarmor', 'owntempo', 'analytic'],
 	solartrap: ['accumulation', 'digestivesap', 'liquidooze'],
 	spiralevolution: [
@@ -263,7 +264,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	auroracurrent: ['snowwarning'],
 	dunetyrant: ['sandstream', 'strongjaw'],
 	ironmountain: ['filter', 'stamina', 'heavymetal'],
-	woolyconductor: ['fluffy', 'keenlight'],
+	woolyconductor: ['fluffy', 'starlens'],
 	plasmaeruption: ['galvanize'],
 	helios: ['drought', 'moldbreaker', 'berserk', 'swiftswim'],
 	rimeknuckle: ['ironfist', 'filter', 'icebody'],
@@ -276,7 +277,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	divineintervention: ['vitalsigns', 'falsesalvation', 'regenerator'],
 	falsesalvation: ['telepathy'],
 	hotstreak: ['superluck'],
-	voidcraft: ['elevate', 'shadowshield', 'temporalshift', 'insomnia'],
+	voidcraft: ['temporalshift', 'shadowshield'],
 	requiem: ['cursedbody', 'filter'],
 	reapersgrip: ['unaware', 'darkaura', 'selfsufficient'],
 	pendulumswing: ['insomnia', 'filter'],
@@ -647,7 +648,11 @@ Object.assign(AbilityComponents, {
 
 Object.assign(AbilityComponents, {
 	tunnelclearance: ['hypercutter'],
-	crystalbastion: ['sturdy'],
+	crystalbastion: ['filter', 'sturdy'],
+	kindredfury: ['friendguard', 'berserk'],
+	dunechorus: ['sandforce'],
+	abyssalgrip: ['suctioncups', 'infiltrator'],
+	siegebeak: ['rockhead'],
 	buriedcoil: ['sandspit'],
 	staticreserve: ['static'],
 	lockinggrip: ['hypercutter'],
@@ -1090,11 +1095,11 @@ AbilityComponents.frameperfect = ['innerfocus'];
 AbilityComponents.insight = ['convergence', 'ultrainstinct'];
 AbilityComponents.coldlogic = [...AbilityComponents.coldlogic, 'convergence'];
 
-AbilityComponents.keenlight = ['illuminate'];
+AbilityComponents.starlens = ['illuminate'];
 AbilityComponents.splintershell = ['aftermath'];
 AbilityComponents.ironmaiden = ['moxie'];
 AbilityComponents.siegegrip = ['moldbreaker'];
-AbilityComponents.astralcore = ['purepower', 'naturalcure', 'keenlight'];
+AbilityComponents.astralcore = ['purepower', 'naturalcure', 'starlens'];
 
 AbilityComponents.voidpromise = AbilityComponents.moonveil;
 delete AbilityComponents.moonveil;

@@ -28,7 +28,7 @@ describe('Aevian Mega Golisopod and Desert Shell', () => {
 		assert.equal(aevianMega.bst, 630);
 		assert.equal(aevianMega.abilities[0], 'Desert Shell');
 		assert.equal(aevianMega.battleOnly, 'Golisopod-Aevian');
-		assert.equal(standardMega.abilities[0], 'Aqua Shell');
+		assert.equal(standardMega.abilities[0], 'Armored Shell');
 	});
 
 	for (const [species, item, expected] of [

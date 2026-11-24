@@ -4,8 +4,8 @@ import { skipPassiveComponent } from './passive-ability-cleanup';
 
 export const QueuedAbilityDescriptions = {
 	seasonalstride: {
-		shortDesc: 'Normal moves become its primary type at 1.5x; sun Speed 2x; weather changes season.',
-		desc: 'Normal attacks become the current primary type with the 1.5x conversion boost. Speed doubles only in sun. At turn end, rain selects Spring, sun Summer, sand Autumn and hail/snow Winter; no weather has the current form. The originally selected ability slot maps to the new season. External replacement abilities remain until ordinary restoration; genuine entry restores the selected slot for the current season. Transform does not cycle seasons.',
+		shortDesc: "Normal attacks become the current primary type with 1.2x power. Weather changes season.",
+		desc: "Eligible damaging Normal moves become the current primary type and gain 20% power. At turn end, rain selects Spring, sun Summer, sand Autumn, and hail or snow Winter. Clear weather keeps the current season. Changing season carries the selected ability slot across forms.",
 	},
 	sheddecoy: {
 		shortDesc: 'After entry effects, pays 1/4 max HP to create a Substitute.',

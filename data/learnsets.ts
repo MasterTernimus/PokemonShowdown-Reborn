@@ -39322,12 +39322,10 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			rocksmash: ["9M", "6M", "5M", "4M", "3M"],
 			rocktomb: ["9M", "8M", "7M", "6M", "5M", "4M", "3M"],
 			round: ["9M", "8M", "7M", "6M", "5M"],
-			sacredsword: ["9M"],
 			safeguard: ["9M", "8M", "7M", "6M", "5M", "4M", "3M"],
 			scaleshot: ["9M", "8T"],
 			screech: ["9L19", "8M", "8L49", "7L69", "6L23", "5L23", "4L23", "3L23"],
 			secretpower: ["9M", "6M", "4M", "3M"],
-			secretsword: ["9M"],
 			seedbomb: ["9M", "8M", "7T", "6T", "5T", "4T"],
 			seismictoss: ["9M", "3T"],
 			skittersmack: ["9M"],
@@ -48172,7 +48170,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			attract: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			aurasphere: ["9M"],
 			batonpass: [],
-			bellydrum: ["9E", "7E"],
 			blizzard: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			bodyslam: ["9M", "3T"],
 			brickbreak: ["9M", "7M", "6M", "5M", "4M", "3M", "3S2"],
@@ -58607,7 +58604,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			takedown: ["9M"],
 			taunt: ["9L29", "7M", "7L1", "6M", "6L1", "5M", "5L25", "4M", "4L25", "4S0"],
 			thief: ["9M", "7M", "6M", "5M", "4M"],
-			torchsong: ["9M"],
 			torment: ["9M", "7M", "6M", "5M", "4M"],
 			toxic: ["9M", "7M", "6M", "5M", "4M"],
 			twister: ["9E", "4T"],
@@ -113282,7 +113278,7 @@ for (const id of ['typhlosion', 'typhlosionhisui'] as const) {
 }
 
 // Explicit regular Politoed and Hitmonchan additions; regional forms keep their own lists.
-for (const [id, moves] of Object.entries({politoed:['sparklingaria','boomburst','alluringvoice'],hitmonchan:['meteormash','shadowpunch','surgingstrikes','suckerpunch']})) {
+for (const [id, moves] of Object.entries({politoed:['sparklingaria','boomburst','alluringvoice'],hitmonchan:['meteormash','shadowpunch','suckerpunch']})) {
  for (const move of moves) Learnsets[id as ID].learnset![move as ID] = [...new Set([...(Learnsets[id as ID].learnset![move as ID] || []), '9M' as const])];
 }
 
@@ -113349,3 +113345,11 @@ for (const [id, moves] of Object.entries(November16MoveRemovals)) {
  const learnset = Learnsets[id as ID]?.learnset;
  if (learnset) for (const move of moves) delete learnset[move as ID];
 }
+
+
+Learnsets.toucannon.learnset!.eggbomb = ['9L1'];
+
+for (const id of ['golisopod', 'golisopodaevian'] as const) Learnsets[id].learnset!.bulletpunch = ['9L1'];
+
+for (const id of ['feraligatr', 'sharpedo', 'huntail', 'bruxish'] as const) Learnsets[id].learnset!.riptidefang = ['9L1'];
+for (const id of ['ledian', 'buzzwole'] as const) Learnsets[id].learnset!.carapacejab = ['9L1'];

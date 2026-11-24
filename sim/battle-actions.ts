@@ -39,7 +39,7 @@ import {
 	shedDecoyEntry,
 } from '../data/queued-abilities-approved';
 import { guardFixedDamage } from '../data/guard-passives-approved';
-import { qualifiesForKeenLight } from '../data/relic-beam';
+import { qualifiesForStarLens } from '../data/relic-beam';
 
 const CHOOSABLE_TARGETS = new Set([
 	'normal',
@@ -822,6 +822,9 @@ export class BattleActions {
 			if (!move.hasBounced) move.pranksterBoosted = this.battle.activeMove.pranksterBoosted;
 		}
 		if (move.id === 'decorate' && pokemon.hasAbility('masterpatissier')) move.target = 'normalOrSelf';
+		if (['discharge', 'lavaplume', 'swift', 'boomburst'].includes(move.id)) {
+			move.target = pokemon.signatureMoveTarget(move);
+		}
 		if (pokemon.usesFallenStarTarget(move)) move.target = 'adjacentFoe';
 		const baseTarget = move.target;
 		let targetRelayVar = { target };
@@ -1228,6 +1231,7 @@ export class BattleActions {
 				hitResults[i] = true;
 			} else {
 				hitResults[i] = this.battle.runEvent('Invulnerability', target, pokemon, move);
+				if (!hitResults[i] && move.name === 'Pivot Kick') (move as ActiveMove & { rebounded?: boolean }).rebounded = true;
 			}
 			if (hitResults[i] === false) {
 				if (move.smartTarget) {
@@ -1384,6 +1388,7 @@ export class BattleActions {
 				accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 			}
 			if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) {
+				if (move.name === 'Pivot Kick') (move as ActiveMove & { rebounded?: boolean }).rebounded = true;
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
@@ -3242,8 +3247,8 @@ export class BattleActions {
 		// Liquid Arsenal compares fully modified defenses per target/hit; category and offense are unchanged.
 		const keenLightApplies =
 			move.category === 'Special' &&
-			source.hasAbilityOrPassive('keenlight') &&
-			qualifiesForKeenLight(move);
+			source.hasAbilityOrPassive('starlens') &&
+			qualifiesForStarLens(move);
 		// Each defense's modifiers run once. Explicit move defense overrides retain precedence; ties keep normal defense.
 		if (
 			move.category !== 'Status' &&
@@ -3253,6 +3258,7 @@ export class BattleActions {
 				!move.overrideDefensiveStat) ||
 				(source.hasAbility('psychedominion') && this.battle.movehasType(move, 'Psychic')) ||
 				keenLightApplies ||
+				move.id === 'petalspike' || (move.id === 'injection' && source.species.id === 'glimmoraaevianmega') ||
 				(move.id === 'psystrike' &&
 					['mewtwo', 'mewtwomegax', 'mewtwomegay'].includes(source.species.id)))
 		) {
@@ -3378,7 +3384,11 @@ export class BattleActions {
 		}
 
 		// random factor - also not a modifier
-		if (!move.noDamageVariance) baseDamage = this.battle.randomizer(baseDamage);
+		if (!move.noDamageVariance) {
+			const roll = this.battle.randomizer(baseDamage);
+			baseDamage = !pokemon.isAlly(target) && target.hasAbilityOrPassive('fortunatewing') ?
+				Math.min(roll, this.battle.randomizer(baseDamage)) : roll;
+		}
 
 		// STAB
 		// The "???" type never gets STAB

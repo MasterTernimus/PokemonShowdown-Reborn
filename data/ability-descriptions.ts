@@ -1830,8 +1830,8 @@ export const AbilityDescriptionOverrides: Record<string, { desc: string, shortDe
 		shortDesc: 'Double secondary-effect chances; no charging turns.',
 	},
 	seasonalstride: {
-		desc: 'Normal moves become its primary type and have 1.5x power. It has Chlorophyll and changes forme with weather: Spring in rain, Summer in sun, Autumn in sand, Winter in snow.',
-		shortDesc: 'Normal -> primary type 1.5x; weather forms.',
+		desc: "Eligible damaging Normal moves become the current primary type and gain 20% power. At turn end, rain selects Spring, sun Summer, sand Autumn, and hail or snow Winter. Clear weather keeps the current season. Changing season carries the selected ability slot across forms.",
+		shortDesc: "Normal attacks become the current primary type with 1.2x power. Weather changes season.",
 	},
 	shadowshield: {
 		desc: November16BalanceDescriptions.shadowshield.desc,
@@ -2896,8 +2896,8 @@ export const AbilityDescriptionOverrides: Record<string, { desc: string, shortDe
 			'Absorbs Water/Poison for 1/4 HP; drain harms foes; Swalot-Pulse changes Underwater to Murkwater.',
 	},
 	agonyflame: {
-		desc: 'After a Fire move damages a foe directly, blocks healing for 2 turns and has a 30% chance to burn. Rolls once per damaged foe per move.',
-		shortDesc: 'Fire hits block healing for 2 turns and have a 30% chance to burn.',
+		desc: 'After a Fire or Dark move damages a foe directly, blocks healing for 2 turns and has a 30% chance to burn. Rolls once per damaged foe per move.',
+		shortDesc: 'Fire and Dark hits block healing for 2 turns and have a 30% chance to burn.',
 	},
 	pulseeruption: {
 		desc: "Camerupt-Pulse automatically receives Eruption, Snarl, Shadow Ball, and Earth Power in that order. Full Sturdy: OHKO moves fail, and direct move damage cannot KO it from full HP. On entry, attempts to create or refresh Super-Heated Terrain for 5 turns, respecting normal field restrictions. Skill Swap fails. At Camerupt-Pulse's fixed 1 HP, Sturdy can prevent repeated direct hits; indirect damage and ability bypass remain effective. Field creation or refresh is attempted only once per battle per holder, even if blocked; switching, suppression, revival, or ability changes never reset this use. Camerupt must be at full HP immediately before Pulse Evolution or it faints before its HP is converted to 1.",
@@ -4592,7 +4592,7 @@ AbilityDescriptionOverrides.crystalward = {
 };
 
 AbilityDescriptionOverrides.agonyflame.desc =
-	'After a Fire move damages a foe directly, blocks healing for 2 turns and has a 30% chance to burn. Rolls once per damaged foe per move.';
+	'After a Fire or Dark move damages a foe directly, blocks healing for 2 turns and has a 30% chance to burn. Rolls once per damaged foe per move.';
 
 AbilityDescriptionOverrides.barbharvest = {
 	shortDesc: 'Suction Cups; removes own-side Stealth Rock before taking entry damage.',
@@ -5156,24 +5156,24 @@ AbilityDescriptionOverrides.relicbeam = {
 	shortDesc: 'Uses Defense for Sp. Atk; beam, pulse and bullet moves gain 50% power.',
 	desc: 'Sp. Atk uses the holder’s Defense and Defense stages instead of Sp. Atk and its stages. Named beam moves, pulse moves and bullet moves gain 50% power. Use /relicbeam to see the complete move list.',
 };
-AbilityDescriptionOverrides.keenlight.desc =
-	AbilityDescriptionOverrides.illuminate.desc + ' ' + LightPinsirDescriptions.keenlight.desc;
+AbilityDescriptionOverrides.starlens.desc =
+	AbilityDescriptionOverrides.illuminate.desc + ' ' + LightPinsirDescriptions.starlens.desc;
 AbilityDescriptionOverrides.woolyconductor = {
-	shortDesc: 'Fluffy + Keen Light. Special light moves target the lower defense.',
-	desc: AbilityDescriptionOverrides.fluffy.desc + ' ' + AbilityDescriptionOverrides.keenlight.desc,
+	shortDesc: 'Fluffy + Star Lens. Special light moves target the lower defense.',
+	desc: AbilityDescriptionOverrides.fluffy.desc + ' ' + AbilityDescriptionOverrides.starlens.desc,
 };
 AbilityDescriptionOverrides.ironmaiden.desc =
 	AbilityDescriptionOverrides.moxie.desc + ' ' + LightPinsirDescriptions.ironmaiden.desc;
 AbilityDescriptionOverrides.siegegrip.desc =
 	AbilityDescriptionOverrides.moldbreaker.desc + ' ' + LightPinsirDescriptions.siegegrip.desc;
 AbilityDescriptionOverrides.astralcore = {
-	shortDesc: 'Pure Power + Natural Cure + Keen Light.',
+	shortDesc: 'Pure Power + Natural Cure + Star Lens.',
 	desc:
 		AbilityDescriptionOverrides.purepower.desc +
 		' ' +
 		AbilityDescriptionOverrides.naturalcure.desc +
 		' ' +
-		AbilityDescriptionOverrides.keenlight.desc,
+		AbilityDescriptionOverrides.starlens.desc,
 };
 
 import { November16BalanceDescriptions } from './nov16-balance-descriptions';

@@ -3,15 +3,16 @@ export const RelicBeamMoves = new Set([
 	'aurorabeam', 'bubblebeam', 'chargebeam', 'dynamaxcannon', 'eternabeam',
 	'flashcannon', 'fleurcannon', 'icebeam', 'lusterpurge', 'meteorbeam',
 	'moongeistbeam', 'psybeam', 'signalbeam', 'solarbeam', 'steelbeam',
-	'hydropump', 'thunderbolt', 'powergem', 'dazzlinggleam',
+	'beaconbeam', 'hydropump', 'thunderbolt', 'powergem', 'dazzlinggleam',
 ]);
 
-export const KeenLightExtras = new Set(['photongeyser', 'luminacrash']);
+export const StarLensExtras = new Set(['photongeyser', 'luminacrash']);
 
-export function qualifiesForKeenLight(move: Pick<ActiveMove, 'id' | 'flags'>) {
-	return KeenLightExtras.has(move.id) || qualifiesForRelicBeam(move);
+export function qualifiesForStarLens(move: Pick<ActiveMove, 'id' | 'flags'>) {
+	return StarLensExtras.has(move.id) || qualifiesForRelicBeam(move);
 }
 
 export function qualifiesForRelicBeam(move: Pick<ActiveMove, 'id' | 'flags'>) {
-	return RelicBeamMoves.has(move.id) || !!move.flags.pulse || !!move.flags.bullet;
+	return (move as Partial<ActiveMove>).name === 'Beacon Beam' ||
+		RelicBeamMoves.has(move.id) || !!move.flags.pulse || !!move.flags.bullet;
 }

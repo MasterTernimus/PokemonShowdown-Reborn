@@ -312,9 +312,12 @@ function calculatorFieldIDs() {
 }
 export function calculatorMetadata() {
 	return {
+		zCrystals: Dex.items.all().filter(item => item.zMove).map(item => ({
+			name: item.name, type: item.zMoveType, from: item.zMoveFrom, users: item.itemUser,
+		})),
 		moves: Dex.moves
 			.all()
-			.filter(m => m.exists)
+			.filter(m => m.exists && !m.isZ && !m.isMax)
 			.map(m => ({ id: m.id, name: m.name })),
 		formats: calculatorFormats().map(f => ({
 			id: f.id,
@@ -401,6 +404,7 @@ export function validateScenario(input: unknown): CalcScenario {
 	if (!format) throw new Error('Unsupported calculator format. Select one from this server.');
 	const move = Dex.moves.get(name(data.move));
 	if (!move.exists) throw new Error('Unknown move.');
+	if (move.isZ || move.isMax) throw new Error('Choose the original move, then select Z-Move or G-Max in Attack mode.');
 	if (!Array.isArray(data.actors) || data.actors.length !== 4)
 		throw new Error('Provide four scenario slots.');
 	const screens = data.screens ?? [];
@@ -644,6 +648,7 @@ export function buildCalculatorBattle(scenario: CalcScenario, sample: number) {
 export function calculateScenario(input: unknown, includeActionOutcomes = true) {
 	const scenario = validateScenario(input);
 	const observedMoveTypes = new Set<string>();
+	let poweredMove: string | undefined;
 	const outcomes: {
 		damage: number[],
 		moveDamage: number[],
@@ -738,12 +743,20 @@ export function calculateScenario(input: unknown, includeActionOutcomes = true) 
 			const options: { zMove?: string, maxMove?: string } = {};
 			if (scenario.attackMode === 'z') {
 				options.zMove = battle.actions.getZMove(move, attacker);
-				if (!options.zMove) throw new Error('This set cannot use the selected Z-move.');
+				if (!options.zMove) {
+					throw new Error(
+						attacker.species.name + ' cannot use a Z-Move from ' + move.name + ' with ' +
+						(attacker.getItem().name || 'no item') + '. Choose a matching Z-Crystal and base move.',
+					);
+				}
+				poweredMove = move.category === 'Status' && options.zMove === move.name ? 'Z-' + move.name : options.zMove;
 			}
 			if (scenario.attackMode === 'max') {
 				if (!attacker.volatiles['dynamax'])
 					throw new Error('Activate Gigantamax before using a Max move.');
-				options.maxMove = battle.actions.getActiveMaxMove(move, attacker).id;
+				const maxMove = battle.actions.getActiveMaxMove(move, attacker);
+				options.maxMove = maxMove.id;
+				poweredMove = maxMove.name;
 				if (battle.dex.moves.get(options.maxMove).name !== attacker.canGigantamax) {
 					throw new Error(
 						'This engine only permits the matching signature G-Max move for this set.',
@@ -794,6 +807,7 @@ export function calculateScenario(input: unknown, includeActionOutcomes = true) 
 		format: scenario.format.name,
 		moveType: observedMoveTypes.size === 1 ? [...observedMoveTypes][0] : undefined,
 		move: Dex.moves.get(scenario.move).name,
+		poweredMove,
 		assumptions: incenseBranches ?
 			[
 				...assumptions,

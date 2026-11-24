@@ -67,7 +67,9 @@ function directoryOwner(f, pid, ownerToken = token) {
 function dead() {
 	throw Object.assign(new Error('dead'), { code: 'ESRCH' });
 }
-describe('Build lock orphan recovery', () => {
+describe('Build lock orphan recovery', function () {
+	// The clock is simulated, but each lock poll still reads the filesystem.
+	this.timeout(10000);
 	for (const value of ['', 'not-a-pid', '-1', '9999999999999999999999']) {
 		it('recovers a stale legacy record ' + JSON.stringify(value), () => {
 			const f = fixture();

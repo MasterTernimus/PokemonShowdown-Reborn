@@ -90,6 +90,15 @@ describe('Plasma Eruption pressure cycle', () => {
 		assert(p.volatiles.plasmaairborne);
 		assert.equal(q.status, 'par');
 	});
+	it('grants Attack to physical builds and clears only the stage earned from Pressure', () => {
+		const [p, q] = setup(false, '', 'Typhlosion-Mega');
+		p.setBoost({ atk: 2 });
+		ready(p, q);
+		assert.equal(p.boosts.atk, 3);
+		assert.equal(p.boosts.spa, 0);
+		hit(p, q);
+		assert.equal(p.boosts.atk, 2);
+	});
 	it('has no regular 30% power boost and keeps Proficient as a separate passive', () => {
 		let [p, q] = setup();
 		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('flamethrower'), 1000), 1000);

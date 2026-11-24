@@ -74,7 +74,7 @@ describe('Swift and Gravity rework', () => {
 				.filter(m => m.flags.gravityboost)
 				.map(m => m.id)
 				.sort(),
-			impacts.slice().sort()
+			[...impacts, 'armorslam', 'frosthammer'].sort()
 		);
 	});
 	for (const id of [...impacts, 'tackle', 'earthquake', 'meteorbeam', 'stoneedge', 'swift'])

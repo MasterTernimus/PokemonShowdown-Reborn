@@ -21,7 +21,7 @@ describe('Apex Flytrap and approved roster adjustments', () => {
 		assert.deepEqual(holder.species.abilities, { 0: 'Apex Flytrap', 1: 'Dry Skin', H: 'Regenerator' });
 		const toad = battle.dex.species.get('Seismitoad');
 		assert.deepEqual(toad.baseStats, { hp: 105, atk: 110, def: 90, spa: 95, spd: 90, spe: 75 });
-		assert.deepEqual(toad.abilities, { 0: 'Swift Swim', 1: 'Poison Touch', H: 'Marsh Hide' });
+		assert.deepEqual(toad.abilities, { 0: 'Swift Swim', 1: 'Sticky Hold', H: 'Marsh Hide' });
 	});
 
 	it('is airborne and refreshes its contact trap on later hits', () => {

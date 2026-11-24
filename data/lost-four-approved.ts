@@ -1,22 +1,6 @@
 import type { AbilityDataTable } from '../sim/dex-abilities';
 import type { ConditionDataTable } from '../sim/dex-conditions';
 import { skipPassiveComponent } from './passive-ability-cleanup';
-export const CanopyArrowMoves = [
-	'spiritshackle',
-	'thousandarrows',
-	'triplearrows',
-	'snipeshot',
-	'razorleaf',
-	'magicalleaf',
-	'spikecannon',
-	'pinmissile',
-	'iciclespear',
-	'rockblast',
-	'bulletseed',
-	'scaleshot',
-	'psychocut',
-	'ceaselessedge',
-];
 export const LostFourDescriptions = {
 	beguilingbouquet: {
 		name: 'Beguiling Bouquet',
@@ -260,7 +244,7 @@ export function installLostFour(abilities: AbilityDataTable) {
 		onModifyMovePriority: -5,
 		onModifyMove(move, pokemon, target) {
 			if (this.movehasType(move, 'Flying')) move.forceSTAB = true;
-			if (CanopyArrowMoves.includes(move.id) && !move.isZ && !move.isMax) move.accuracy = true;
+			if (move.flags.arrow && !move.isZ && !move.isMax) move.accuracy = true;
 			abilities.scrappy.onModifyMove?.call(this, move, pokemon, target);
 			abilities.longreach.onModifyMove?.call(this, move, pokemon, target);
 		},

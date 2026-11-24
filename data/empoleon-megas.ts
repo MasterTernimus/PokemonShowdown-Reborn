@@ -4,7 +4,7 @@ export const EmpoleonDescriptions = {
 	monarchofice: {
 		shortDesc:
 			'Ice STAB/field benefits + Slush Rush. 30% frostbite; crits frostbitten foes, then thaws.',
-		desc: 'Gains Ice STAB, Ice-type field and weather benefits, and Slush Rush. Damaging moves have a 30% frostbite chance, subject to normal secondary-effect modifiers. Attacks critically hit frostbitten foes unless critical hits are prevented, then thaw damaged foes after the attack. Wave Crash becomes Royal Collision: Water/Ice effectiveness, 10% recoil, and ignores target abilities. Remains Water/Steel.',
+		desc: 'Gains Ice STAB, Ice-type field and weather benefits, and Slush Rush. Damaging moves have a 30% frostbite chance, subject to normal secondary-effect modifiers. Attacks critically hit frostbitten foes unless critical hits are prevented, then thaw damaged foes after the attack. Wave Crash becomes Crown Crash: Water/Ice effectiveness, always super effective against Fire or Steel targets, 10% recoil, and ignores target abilities. Remains Water/Steel.',
 	},
 	emperorsresolve: {
 		shortDesc: 'Swift Swim + Flying STAB + Competitive.',
@@ -53,7 +53,7 @@ export function installEmpoleonMegas(abilities: AbilityDataTable) {
 		if (move.category === 'Status') return;
 		if (move.type === 'Ice') move.forceSTAB = true;
 		if (move.id === 'wavecrash') {
-			(move as any).name = 'Royal Collision';
+			(move as any).name = 'Crown Crash';
 			move.type = 'Water';
 			move.types = ['Water', 'Ice'];
 			move.recoil = [1, 10];

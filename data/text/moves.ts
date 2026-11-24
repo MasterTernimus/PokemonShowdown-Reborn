@@ -4607,8 +4607,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	octolock: {
 		name: 'Octolock',
-		desc: "Prevents the target from switching out. At the end of each turn during effect, the target's Defense, Special Defense, and Speed are lowered by 1 stage. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
-		shortDesc: 'Traps target, lowers Def, SpD, and Spe by 1 each turn.',
+		desc: "Traps the target and reduces its attack damage by 40%. At the end of each turn during effect, the target's Defense, Special Defense, and Speed are lowered by 1 stage. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
+		shortDesc: 'Traps; target deals 40% less damage and loses Def, SpD, and Spe each turn.',
 
 		start: '  [POKEMON] can no longer escape because of Octolock!',
 	},
@@ -6990,7 +6990,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	terrainpulse: {
 		name: 'Terrain Pulse',
-		desc: 'Type follows the active field or Aura. Electric, Grassy, Misty, Psychic and Rainbow fields double its power. New World gives it a random type; Crystal Cavern follows its crystal cycle.',
+		desc: 'Type follows the field or Aura. Power rises from 50 to 100 in Electric, Grassy, Misty, Psychic or Rainbow Terrain, or during an Aura. Matching field and Aura damage bonuses also apply. New World gives it a random type. Crystal Cavern follows its crystal cycle.',
 		shortDesc: 'Type follows field/Aura; certain fields double power.',
 	},
 	thief: {
@@ -7956,12 +7956,95 @@ MovesText.splinteredweb = {
 	desc: 'A 90-power Bug physical attack. If Stealth Rock is present on the target’s side when the move executes, it is a guaranteed critical hit unless critical hits are prevented. Otherwise it has the ordinary critical-hit chance. The target need not be grounded or vulnerable to entry hazards.',
 };
 
-MovesText.royalcollision = {
-	name: 'Royal Collision',
-	shortDesc: 'Water/Ice effectiveness; 10% recoil; ignores abilities.',
-	desc: "Monarch of Ice changes Wave Crash into this attack. Remains a Water move, combines Water and Ice effectiveness, ignores the target's ability, and deals 10% of damage dealt as recoil.",
+MovesText.gildedwing = {
+	name: 'Gilded Wing', shortDesc: "30% chance to raise the user's Defense and Sp. Def by 1.",
+};
+MovesText.snarevine = {
+	name: 'Snare Vine',
+	shortDesc: 'Mega Victreebel’s Power Whip. Traps the target for two turns.',
+};
+MovesText.fmimpression = {
+	name: 'F.M. Impression',
+	shortDesc: 'First turn only. Uses the better Bug/Steel matchup, or Bug/Ground for the Aevian Mega.',
+};
+MovesText.crowncrash = {
+	name: 'Crown Crash',
+	shortDesc: 'Water/Ice; super effective on Fire and Steel; 10% recoil; ignores abilities.',
+	desc: "Monarch of Ice changes Wave Crash into this attack. Remains a Water move, combines Water and Ice effectiveness, is always super effective against Fire or Steel targets, ignores the target's ability, and deals 10% of damage dealt as recoil.",
 };
 
 import { CharacterMoveDescriptions } from '../reborn-character-moves';
 for (const [id, details] of Object.entries(CharacterMoveDescriptions))
 	MovesText[id as ID] = { ...MovesText[id as ID], ...details };
+
+MovesText.sacredrush = { name: 'Sacred Rush', shortDesc: 'Always critically hits.' };
+MovesText.apexcleave = { name: 'Apex Cleave', shortDesc: 'Hits twice. Never misses and always critically hits.' };
+MovesText.shadowshuriken = { name: 'Shadow Shuriken', shortDesc: 'Three 30-power hits. Always critically hits.' };
+MovesText.omenslash = {
+	name: 'Omen Slash',
+	shortDesc: 'Uses the higher attacking stat. High crit rate; ignores positive defensive stages.',
+};
+MovesText.pincerjab = { name: 'Pincer Jab', shortDesc: '50 power. Usually moves first.' };
+
+MovesText.falsesmile = { name: 'False Smile', shortDesc: "A Fairy bite. 10% chance to lower the target's Attack." };
+MovesText.riptidefang = { name: 'Riptide Fang', shortDesc: 'A physical Water bite boosted by Strong Jaw.' };
+MovesText.carapacejab = { name: 'Carapace Jab', shortDesc: 'A physical Bug punch boosted by Iron Fist.' };
+
+MovesText.crushbite = { name: 'Crush Bite', shortDesc: 'Ignores positive Defense stages. A biting move.' };
+MovesText.razorbite = { name: 'Razor Bite', shortDesc: 'Bypasses Substitute. A biting move.' };
+MovesText.cometjab = { name: 'Comet Jab', shortDesc: 'Uses the higher attacking stat. A punching move.' };
+
+MovesText.beaconbeam = { name: 'Beacon Beam', shortDesc: 'Single-target Electric beam. 30% chance to paralyze.' };
+MovesText.hexstitch = {
+	name: 'Hex Stitch',
+	shortDesc: 'High crit rate. Bypasses Substitute and screens against cursed foes.',
+};
+MovesText.cloudsong = {
+	name: 'Cloud Song',
+	shortDesc: 'Sound and pulse. Calms confused active allies on a damaging hit; 30% chance to lower Sp. Def.',
+};
+MovesText.pivotkick = { name: 'Pivot Kick', shortDesc: 'On a miss or Protect, avoids crash damage and switches out.' };
+MovesText.greedgospel = {
+	name: 'Greed Gospel',
+	shortDesc: 'Turns Ghost against a foe that damaged the user this entry.',
+};
+MovesText.craterburst = { name: 'Crater Burst', shortDesc: 'Hits adjacent foes. 30% chance to burn each target.' };
+MovesText.armorslam = { name: 'Armor Slam', shortDesc: 'Uses Defense to attack. More power against lighter targets.' };
+MovesText.pulsechime = {
+	name: 'Pulse Chime',
+	shortDesc: 'Heal Bell; a successful status cure also heals active allies by 1/8.',
+};
+MovesText.anchorslam = {
+	name: 'Anchor Slam',
+	shortDesc: 'A tail attack that grounds its target. Keeps Iron Tail’s Defense drop chance.',
+};
+MovesText.triplesting = { name: 'Triple Sting', shortDesc: 'Three drill hits. Each has a 20% chance to poison.' };
+MovesText.talondive = {
+	name: 'Talon Dive',
+	shortDesc: 'High critical-hit rate. Makes contact and grounds the target on a hit.',
+};
+MovesText.dreadhowl = { name: 'Dread Howl', shortDesc: 'Dark sound and pulse attack. Hits through Substitute.' };
+
+MovesText.boltdash = { name: 'Bolt Dash', shortDesc: 'Bypasses Substitute and switches the user out on a hit.' };
+MovesText.galeslice = { name: 'Gale Slice', shortDesc: 'A damaging hit ends Tailwind on the opposing side.' };
+MovesText.saberparry = {
+	name: 'Saber Parry',
+	shortDesc: 'High critical-hit rate. The struck foe’s next contact attack against your side this turn deals 25% less damage.',
+};
+MovesText.guardsong = {
+	name: 'Guard Song',
+	shortDesc: 'Hits both foes. A damaging hit shields your side from one damaging sound move through the end of next turn.',
+};
+MovesText.veilslash = {
+	name: 'Veil Slash',
+	shortDesc: 'High critical-hit rate. Ignores boosted Defense if the target damaged your side this turn.',
+};
+MovesText.voidvolley = {
+	name: 'Void Volley',
+	shortDesc: 'Never misses. A foe left at half HP or less cannot heal through the end of next turn.',
+};
+
+import { StoneSignatures, RetiredStoneSignatures } from '../stone-signatures';
+for (const { name, desc } of Object.values({ ...StoneSignatures, ...RetiredStoneSignatures })) {
+	MovesText[name.toLowerCase().replace(/[^a-z0-9]/g, '') as ID] = { name, shortDesc: desc, desc };
+}

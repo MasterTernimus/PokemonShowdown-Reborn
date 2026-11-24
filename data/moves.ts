@@ -2970,6 +2970,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { snatch: 1, sound: 1, dance: 1 },
+		boosts: { atk: 1, def: 1, spa: 1, spd: 1, spe: 1 },
 		onTry(source) {
 			if (this.field.isTerrain('bigtopterrain') && source.hp <= (source.maxhp * 50 / 100)) return false;
 			if (source.hp <= (source.maxhp * 33 / 100) || source.maxhp === 1) return false;
@@ -4987,7 +4988,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, heal: 1, metronome: 1 },
 		drain: [1, 2],
 		onTryImmunity(target, source) {
-			return target.status === 'slp' || target.hasAbility('comatose') || source.hasAbility('nightrealm');
+			return target.status === 'slp' || target.hasAbility('comatose') || source.hasAbility(['nightrealm', 'dreamrefuge']);
 		},
 		target: "normal",
 		type: "Psychic",
@@ -7426,10 +7427,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (target.getAbility().flags['cantsuppress']) {
 				return false;
 			}
-			if (target.hasItem('Ability Shield')) {
-				this.add('-block', target, 'item: Ability Shield');
-				return null;
-			}
+			if (target.hasItem('Ability Shield')) return null;
 		},
 		condition: {
 			// Ability suppression implemented in Pokemon.ignoringAbility() within sim/pokemon.ts
@@ -9590,6 +9588,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					success = true;
 					if (ally === source) sourceCured = true;
 				}
+			}
+			if (success && move.name === 'Pulse Chime') {
+				for (const ally of source.allies()) if (ally.hp) this.heal(ally.baseMaxhp / 8, ally, source, move);
 			}
 			const healed = this.heal(source.baseMaxhp / (sourceCured ? 4 : 8), source, source);
 			if (source.hasAbility(['restorativechime', 'oceanlullaby'])) (move as any).restorativeChimeSuccess = !!(success || healed || guarded || allyGuarded);
@@ -14936,6 +14937,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onStart(pokemon, source) {
 				this.add('-start', pokemon, 'move: Octolock', `[of] ${source}`);
 			},
+			onModifyDamage() {
+				if (this.effectState.source?.isActive && this.effectState.source.hp) return this.chainModify(0.6);
+			},
 			onResidualOrder: 14,
 			onResidual(pokemon) {
 				const source = this.effectState.source;
@@ -16086,6 +16090,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (this.checkMoveBypassesProtect(move, source, target)) return;
+				if (move.name === 'Pivot Kick') {
+					(move as ActiveMove & { rebounded?: boolean }).rebounded = true;
+					if (this.canSwitch(source.side)) source.switchFlag = true;
+				}
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
@@ -17295,6 +17303,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (!result && (!this.field.isTerrain('glitchterrain') && target.status !== 'slp')) return result;
 			target.statusState.time = 3;
 			target.statusState.startTime = 3;
+			if (result && target.hasAbility('dreamrefuge')) {
+				for (const foe of target.foes()) {
+					if (!foe.status) foe.addVolatile('yawn', target, this.dex.abilities.get('dreamrefuge'));
+				}
+			}
 			this.heal(target.maxhp); // Aesthetic only as the healing happens after you fall asleep in-game
 		},
 		target: "self",
@@ -25094,17 +25107,6 @@ cradleRoomCondition.onFieldStart = function (target, source, effect) {
 	}
 	return result;
 };
-const dreamMoonlightHit = Moves.moonlight.onHit!;
-Moves.moonlight.onHit = function (target, source, move) {
-	const result = typeof dreamMoonlightHit === 'function' ? dreamMoonlightHit.call(this, target, source, move) : dreamMoonlightHit;
-	if (result === true && target.hasAbility('dreamrefuge') && !target.volatiles['dreamrefugespent']) {
-		target.addVolatile('dreamrefugespent', target, this.dex.abilities.get('dreamrefuge'));
-		const ally = target.allies().filter(p => p.hp && p.status).sort((a, b) => a.hp / a.maxhp - b.hp / b.maxhp)[0];
-		if (ally) ally.cureStatus();
-	}
-	return result;
-};
-
 const frillElectrify = Moves.electrify.condition as PokemonConditionData;
 const frillElectrifyType = frillElectrify.onModifyType!;
 frillElectrify.onModifyType = function (move, pokemon, target) {
@@ -25145,11 +25147,6 @@ approvedWideGuard.onTryHit = function (target, source, move) {
 		if (holder.hasAbility('invisiblewall')) {
 			holder.addVolatile('wideguardrewardspent', holder, this.dex.abilities.get('invisiblewall'));
 			if (holder.side.addSideCondition('safeguard', holder, this.dex.abilities.get('invisiblewall'))) holder.side.sideConditions['safeguard'].duration = 5;
-		} else if (holder.hasAbility('crystalbastion')) {
-			holder.addVolatile('wideguardrewardspent', holder, this.dex.abilities.get('crystalbastion'));
-			for (const stat of ['def', 'spd'] as const) {
-				if (holder.boosts[stat] < 0) { holder.boosts[stat] = 0; this.add('-clearnegativeboost', holder, '[from] ability: Crystal Bastion'); }
-			}
 		} else if (holder.hasAbility('sentinelfist')) {
 			holder.addVolatile('wideguardrewardspent', holder, this.dex.abilities.get('sentinelfist'));
 			this.heal(holder.baseMaxhp / 8, holder, holder, this.dex.abilities.get('sentinelfist'));
@@ -25213,7 +25210,19 @@ import { ScentedGeyser } from './scented-geyser';
 Moves.scentedgeyser = ScentedGeyser;
 Moves.splinteredweb = { num: 20051, name: 'Splintered Web', type: 'Bug', category: 'Physical', basePower: 90, accuracy: 100, pp: 10, priority: 0, target: 'normal', flags: { protect: 1, mirror: 1 }, onPrepareHit(target, source, move) { if (target.side.sideConditions.stealthrock) move.willCrit = true; } };
 
-Moves.royalcollision = { ...Moves.wavecrash, name: 'Royal Collision', num: 20090, types: ['Water', 'Ice'], recoil: [1, 10], ignoreAbility: true, isNonstandard: 'Custom' };
+Moves.gildedwing = {
+	...Moves.steelwing, name: 'Gilded Wing', num: 32650, basePower: 90, isNonstandard: 'Custom',
+	secondary: { ...Moves.steelwing.secondary!, self: { boosts: { def: 1, spd: 1 } } },
+};
+Moves.steelwing.onModifyMove = function (move, source) {
+	if (source.species.id !== 'skarmorymega') return;
+	(move as { name: string }).name = 'Gilded Wing';
+	move.basePower = Moves.gildedwing.basePower;
+	for (const secondary of move.secondaries || []) {
+		if (secondary.self?.boosts?.def) secondary.self.boosts.spd = 1;
+	}
+};
+Moves.crowncrash = { ...Moves.wavecrash, onModifyMove: undefined, name: 'Crown Crash', num: 20090, types: ['Water', 'Ice'], recoil: [1, 10], ignoreAbility: true, isNonstandard: 'Custom' };
 
 import { installStarterLinkMoves } from './starter-family-links';
 installStarterLinkMoves(Moves);
@@ -25223,3 +25232,188 @@ Object.assign(Moves, CharacterMoves);
 
 // Preserve Shaymin's exclusive access, including the Sketch route.
 Moves.seedflare.flags.nosketch = 1;
+
+import { installMegaSignatureMoves } from './mega-signature-traps';
+installMegaSignatureMoves(Moves);
+
+import { formSignature } from './form-signatures';
+Moves.sacredrush = { ...Moves.extremespeed, name: 'Sacred Rush', num: 32655, isNonstandard: 'Custom', willCrit: true };
+Moves.apexcleave = { ...Moves.dualchop, name: 'Apex Cleave', num: 32656, isNonstandard: 'Custom', accuracy: true, willCrit: true };
+Moves.shadowshuriken = { ...Moves.watershuriken, name: 'Shadow Shuriken', num: 32657, isNonstandard: 'Custom', basePower: 30, multihit: 3, willCrit: true };
+Moves.omenslash = { ...Moves.nightslash, name: 'Omen Slash', num: 32658, isNonstandard: 'Custom', ignorePositiveDefensive: true, onModifyMove(move, source) {
+	move.category = source.getStat('atk', false, true) > source.getStat('spa', false, true) ? 'Physical' : 'Special';
+} };
+Moves.pincerjab = { ...Moves.bulletpunch, name: 'Pincer Jab', num: 32659, isNonstandard: 'Custom', basePower: 50 };
+Moves.falsesmile = { ...Moves.playrough, name: 'False Smile', num: 32660, isNonstandard: 'Custom',
+	basePower: 70, accuracy: 100, flags: { ...Moves.playrough.flags, bite: 1 },
+};
+for (const id of ['extremespeed', 'dualchop', 'watershuriken', 'bulletpunch', 'playrough'] as const) {
+	const prior = Moves[id].onModifyMove;
+	Moves[id].onModifyMove = function (move, source, target) {
+		prior?.call(this, move, source, target);
+		const signature = formSignature(source, id);
+		if (!signature) return;
+		(move as { name: string }).name = signature.name;
+		if (id === 'bulletpunch') move.basePower = 50;
+		if (id === 'playrough') {
+			move.basePower = Moves.falsesmile.basePower;
+			move.accuracy = Moves.falsesmile.accuracy;
+			move.flags = { ...move.flags, bite: 1 };
+		}
+	};
+}
+
+Moves.riptidefang = {
+	name: 'Riptide Fang', num: 32661, type: 'Water', category: 'Physical', basePower: 65, accuracy: 100,
+	pp: 15, priority: 0, target: 'normal', flags: { bite: 1, contact: 1, protect: 1, mirror: 1, metronome: 1 }, isNonstandard: 'Custom',
+};
+Moves.carapacejab = {
+	name: 'Carapace Jab', num: 32662, type: 'Bug', category: 'Physical', basePower: 75, accuracy: 100,
+	pp: 15, priority: 0, target: 'normal', flags: { punch: 1, contact: 1, protect: 1, mirror: 1, metronome: 1 }, isNonstandard: 'Custom',
+};
+
+Moves.crushbite = { ...Moves.riptidefang, name: 'Crush Bite', num: 32663, basePower: 75, ignorePositiveDefensive: true };
+Moves.razorbite = { ...Moves.riptidefang, name: 'Razor Bite', num: 32664, flags: { ...Moves.riptidefang.flags, bypasssub: 1 } };
+Moves.cometjab = { ...Moves.carapacejab, name: 'Comet Jab', num: 32665,
+	onModifyMove(move, source) {
+		move.category = source.getStat('atk', false, true) > source.getStat('spa', false, true) ? 'Physical' : 'Special';
+	},
+};
+Moves.riptidefang.onModifyMove = function (move, source) {
+	const signature = formSignature(source, 'riptidefang');
+	if (!signature) return;
+	(move as { name: string }).name = signature.name;
+	if (source.species.id === 'feraligatrmega') {
+		move.basePower = Moves.crushbite.basePower;
+		move.ignorePositiveDefensive = true;
+	} else if (source.species.id === 'sharpedomega') {
+		move.flags = { ...move.flags, bypasssub: 1 };
+	}
+};
+Moves.carapacejab.onModifyMove = function (move, source, target) {
+	const signature = formSignature(source, 'carapacejab');
+	if (!signature) return;
+	(move as { name: string }).name = signature.name;
+	Moves.cometjab.onModifyMove!.call(this, move, source, target);
+};
+
+const signatureVariants = {
+	discharge: { name: 'Beacon Beam', target: 'normal' },
+	shadowclaw: { name: 'Hex Stitch' },
+	dragonpulse: { name: 'Cloud Song', basePower: 90, flags: { ...Moves.dragonpulse.flags, sound: 1, bypasssub: 1 } },
+	jumpkick: { name: 'Pivot Kick', basePower: 90, accuracy: 100 },
+	powergem: { name: 'Greed Gospel' },
+	lavaplume: { name: 'Crater Burst', target: 'allAdjacentFoes' },
+	heavyslam: { name: 'Armor Slam', overrideOffensiveStat: 'def' },
+	healbell: { name: 'Pulse Chime' },
+	irontail: { name: 'Anchor Slam', basePower: 85, volatileStatus: 'smackdown' },
+	twineedle: { name: 'Triple Sting', basePower: 25, multihit: 3, accuracy: 100, flags: { ...Moves.twineedle.flags, drill: 1 } },
+	stoneedge: { name: 'Talon Dive', volatileStatus: 'smackdown', target: 'normal', basePower: 85, accuracy: 100, flags: { ...Moves.stoneedge.flags, contact: 1 }, secondary: null },
+	darkpulse: { name: 'Dread Howl', flags: { ...Moves.darkpulse.flags, sound: 1, bypasssub: 1 }, secondary: null },
+	voltswitch: { name: 'Bolt Dash', basePower: 65, flags: { ...Moves.voltswitch.flags, bypasssub: 1 } },
+	airslash: { name: 'Gale Slice', secondary: null },
+	psychocut: { name: 'Saber Parry', basePower: 70, accuracy: 100 },
+	hypervoice: { name: 'Guard Song', basePower: 80, accuracy: 100 },
+	slash: { name: 'Veil Slash', basePower: 80, accuracy: 100 },
+	swift: { name: 'Void Volley', basePower: 70, accuracy: true, target: 'normal' },
+} as const;
+for (const [index, [base, variant]] of Object.entries(signatureVariants).entries()) {
+	const baseMove = Moves[base as keyof typeof signatureVariants];
+	const id = variant.name.toLowerCase().replace(/[^a-z0-9]/g, '') as ID;
+	const signature = Moves[id] = { ...baseMove, ...variant, num: 32670 + index, isNonstandard: 'Custom' };
+	const prior = baseMove.onModifyMove;
+	baseMove.onModifyMove = function (move, source, target) {
+		prior?.call(this, move, source, target);
+		if (formSignature(source, base)?.name !== variant.name) return;
+		Object.assign(move, variant);
+		if (signature.onAfterHit) move.onAfterHit = signature.onAfterHit;
+		if (base === 'slash') Moves.veilslash.onModifyMove!.call(this, move, source, target);
+		if (base === 'shadowclaw' && target?.volatiles.curse) move.infiltrates = true;
+		if (base === 'dragonpulse') move.onAfterMoveSecondarySelf = Moves.cloudsong.onAfterMoveSecondarySelf;
+		if (base === 'airslash') move.onAfterMoveSecondarySelf = Moves.galeslice.onAfterMoveSecondarySelf;
+		if (base === 'airslash' || base === 'stoneedge' || base === 'darkpulse') move.secondaries = null;
+		if (base === 'jumpkick') move.onMoveFail = Moves.pivotkick.onMoveFail;
+	};
+	if (base === 'shadowclaw') signature.onModifyMove = function (move, source, target) {
+		if (target?.volatiles.curse) move.infiltrates = true;
+	};
+}
+Moves.pivotkick.onMoveFail = function (target, source, move) {
+	if ((move as ActiveMove & { rebounded?: boolean }).rebounded) {
+		if (this.canSwitch(source.side)) source.switchFlag = true;
+		return;
+	}
+	Moves.jumpkick.onMoveFail!.call(this, target, source, move);
+};
+const vaultType: NonNullable<import('../sim/dex-moves').MoveData['onModifyType']> = function (move, source, target) {
+	if (source.volatiles.greedgospelmemory?.foes?.includes(target)) move.type = 'Ghost';
+};
+Moves.greedgospel.onModifyType = vaultType;
+Moves.powergem.onModifyType = function (move, source, target) {
+	if (formSignature(source, 'powergem')) vaultType.call(this, move, source, target);
+};
+
+Moves.cloudsong.onAfterMoveSecondarySelf = function (source, target, move) {
+	if (!target || source.isAlly(target) || !move.totalDamage) return;
+	for (const ally of source.allies()) {
+		if (ally.hp && ally.removeVolatile('confusion')) this.add('-end', ally, 'confusion');
+	}
+};
+
+Moves.galeslice.onAfterMoveSecondarySelf = function (source, target, move) {
+	if (target && !source.isAlly(target) && move.totalDamage) target.side.removeSideCondition('tailwind');
+};
+
+Moves.saberparry.onAfterHit = function (target, source, move) {
+	if (!target.hp || source.isAlly(target) || !target.getMoveHitData(move).damage) return;
+	target.addVolatile('saberparry', source);
+	const state = target.volatiles.saberparry;
+	if (state) (state.guards ||= {})[source.side.id] ||= { source };
+};
+Moves.saberparry.condition = {
+	duration: 1, noCopy: true,
+	onModifyDamage(damage, source, target, move) {
+		if (!this.checkMoveMakesContact(move, source, target)) return;
+		const guards = this.effectState.guards;
+		const guard = guards?.[target.side.id] || (target.side.allySide && guards?.[target.side.allySide.id]);
+		if (!guard || (guard.spent && guard.spent !== move)) return;
+		if (!guard.spent) this.add('-activate', target, 'move: Saber Parry');
+		guard.spent = move;
+		return this.chainModify(0.75);
+	},
+};
+Moves.guardsong.onAfterHit = function (target, source, move) {
+	if (!source.isAlly(target) && (target.getMoveHitData(move).damage || 0) > 0) source.side.addSideCondition('guardsong', source);
+};
+Moves.guardsong.condition = {
+	duration: 2,
+	onSideStart(side) { this.add('-sidestart', side, 'move: Guard Song'); },
+	onSideRestart() { this.effectState.duration = 2; delete this.effectState.blocked; },
+	onTryHitPriority: 2,
+	onTryHit(target, source, move) {
+		if (source === target || move.category === 'Status' || !move.flags.sound) return;
+		if (this.effectState.blocked && this.effectState.blocked !== move) return;
+		this.effectState.blocked = move;
+		this.add('-immune', target, '[from] move: Guard Song');
+		return null;
+	},
+	onAnyAfterMove(source, target, move) {
+		if (this.effectState.blocked === move) this.effectState.target.removeSideCondition('guardsong');
+	},
+	onSideEnd(side) { this.add('-sideend', side, 'move: Guard Song'); },
+};
+Moves.voidvolley.onAfterHit = function (target, source, move) {
+	if (!target.hp || source.isAlly(target) || target.hp * 2 > target.maxhp || !target.getMoveHitData(move).damage) return;
+	const block = target.volatiles.healblock;
+	if (block) {
+		block.duration = Math.max(block.duration || 0, 2);
+	} else if (target.addVolatile('healblock', source, move)) {
+		target.volatiles.healblock.duration = 2;
+	}
+};
+Moves.veilslash.onModifyMove = function (move, source, target) {
+	move.ignorePositiveDefensive = target?.m.lastDamagedSideTurn?.[source.side.id] === this.turn;
+};
+
+import { installStoneSignatures } from './stone-signatures';
+installStoneSignatures(Moves);

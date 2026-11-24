@@ -82,7 +82,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (effect && effect.effectType === 'Ability' && effect.name !== 'Trace') {
 				this.add('-ability', source, effect);
 			}
-			this.add('-block', target, 'item: Ability Shield');
 			return null;
 		},
 		// Mold Breaker protection implemented in Battle.suppressingAbility() within sim/battle.ts

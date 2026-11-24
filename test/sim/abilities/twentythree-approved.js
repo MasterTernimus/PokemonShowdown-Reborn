@@ -63,7 +63,7 @@ describe('Twenty-three selected families', () => {
 			electivire: { 0: 'Motor Drive', 1: 'Crosswire', H: 'Galvanic Spirit' },
 			walrein: { 0: 'Rimebreaker', 1: 'Deep Chill', H: 'Accumulation' },
 			excadrill: { 0: 'Sand Rush', 1: 'Tunnel Clearance', H: 'Mold Breaker' },
-			gigalith: { 0: 'Crystal Bastion', 1: 'Sand Stream', H: 'Sand Force' },
+			gigalith: { 0: 'Crystal Bastion', 1: 'Sand Stream', H: 'Dune Chorus' },
 			sandaconda: { 0: 'Buried Coil', 1: 'Stamina', H: 'Shed Skin' },
 			arctozolt: { 0: 'Relic Mishap', 1: 'Static Reserve', H: 'Slush Rush' },
 			pinsir: { 0: 'Siege Grip', 1: 'Iron Maiden', H: 'Violent Rush' },
@@ -442,14 +442,14 @@ describe('Twenty-three selected families', () => {
 		use(p, t, 'rapidspin');
 		assert(!t.side.sideConditions.reflect);
 	});
-	it('Crystal Bastion requires its own Wide Guard block and clears only negative defenses once', () => {
+	it('Crystal Bastion keeps defensive stages on its own Wide Guard block', () => {
 		const [p, t] = start('Crystal Bastion', 'Gigalith', 'doubles');
 		p.boosts.def = -2;
 		p.boosts.spd = 2;
 		p.side.addSideCondition('wideguard', p, battle.dex.moves.get('wideguard'));
 		assert.equal(p.boosts.def, -2);
 		use(t, p, 'rockslide');
-		assert.equal(p.boosts.def, 0);
+		assert.equal(p.boosts.def, -2);
 		assert.equal(p.boosts.spd, 2);
 		p.boosts.def = -2;
 		use(t, p, 'rockslide');

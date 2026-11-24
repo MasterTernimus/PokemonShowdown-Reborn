@@ -241,7 +241,7 @@ describe('Approved Pyroar and Heliolisk signatures', () => {
 		assert(t.volatiles.disable);
 		assert.equal(t.volatiles.disable.source, p);
 	});
-	it('Dream Refuge selects the lowest HP percentage among active statused allies', () => {
+	it('Dream Refuge leaves allied status intact when using Moonlight', () => {
 		const [p, t] = start('Dream Refuge', 'triples');
 		const [a, b] = p.allies();
 		p.hp = 1000;
@@ -251,6 +251,6 @@ describe('Approved Pyroar and Heliolisk signatures', () => {
 		b.setStatus('par');
 		hit(p, p, 'moonlight');
 		assert.equal(a.status, 'brn');
-		assert.equal(b.status, '');
+		assert.equal(b.status, 'par');
 	});
 });

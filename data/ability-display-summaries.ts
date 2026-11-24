@@ -283,7 +283,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	seablessing: '1.5x Def/SpD; entry heals self/allies 1/4.',
 	schooling: 'Changes form with HP and water fields; its School form gains the listed components.',
 	seviischooling: 'Changes Wishiwashi to Sevii form; School: Hydra Bond + Self Repair + Mold Breaker.',
-	seasonalstride: 'Normal -> primary type 1.5x; sun Speed 2x; weather forms.',
+	seasonalstride: 'Normal attacks become the current primary type with 1.2x power. Weather changes season.',
 	voidcraft: November16BalanceDescriptions.voidcraft.shortDesc,
 	voidhex:
 		'Direct damaging hits trap surviving foes through the next turn; further hits refresh the trap.',
@@ -1139,10 +1139,13 @@ for (const id of ['convergence', 'misalignedstars', 'frameperfect', 'insight', '
 	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 }
 
-for (const id of ['keenlight', 'ironmaiden', 'siegegrip', 'astralcore', 'woolyconductor']) {
+for (const id of ['starlens', 'ironmaiden', 'siegegrip', 'astralcore', 'woolyconductor']) {
 	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 }
 
 import { November16BalanceDescriptions } from './nov16-balance-descriptions';
 for (const [id, text] of Object.entries(November16BalanceDescriptions))
 	AbilityDisplaySummaries[id] = text.shortDesc;
+
+import { SandDreamDescriptions } from './sand-dream-descriptions';
+for (const [id, text] of Object.entries(SandDreamDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;

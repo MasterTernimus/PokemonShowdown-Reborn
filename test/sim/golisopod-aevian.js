@@ -26,8 +26,9 @@ describe('Golisopod-Aevian', () => {
 		assert(!standard.otherFormes.includes('Golisopod-Aevian'));
 
 		const moves = Dex.data.Learnsets.golisopodaevian.learnset;
-		assert.equal(Object.keys(moves).length, 78);
+		assert.equal(Object.keys(moves).length, 79);
 		assert.equal(Dex.species.getFullLearnset(regional.id).length, 1);
+		assert.deepEqual(moves.bulletpunch, ['9L1']);
 		for (const moveid of ['arenitewall', 'bonemerang', 'headlongrush', 'pinmissile', 'xscissor']) {
 			assert.deepEqual(moves[moveid], ['9M']);
 		}

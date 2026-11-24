@@ -26,6 +26,18 @@ describe('Bond ability component audit', () => {
 		battle = null;
 	});
 
+	for (const [species, move, name] of [['Arcanine', 'extremespeed', 'Sacred Rush'], ['Garchomp', 'dualchop', 'Apex Cleave'], ['Greninja', 'watershuriken', 'Shadow Shuriken']]) {
+		it(species + ' gains its named signature after a Battle Bond KO and spends the original PP', () => {
+			const [p, t] = transform(species, 'tackle', [move]);
+			const slot = p.moveSlots.find(s => s.id === move), pp = slot.pp;
+			assert.equal(p.getMoves().find(m => m.id === move).move, name);
+			battle.makeChoices('move ' + move, 'move splash');
+			assert.equal(p.lastMoveUsed.name, name);
+			assert.equal(p.lastMoveUsed.willCrit, true);
+			assert.equal(slot.pp, pp - 1);
+		});
+	}
+
 	it('Shadow Bond applies Proficient once and Water Shuriken bypasses Substitute', () => {
 		const [greninja, foe] = transform('Greninja', 'watershuriken', ['splash']);
 		assert.equal(greninja.ability, 'shadowbond');

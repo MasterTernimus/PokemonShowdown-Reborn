@@ -286,6 +286,7 @@ function afterDamage(
 			'jawlock',
 			'thousandwaves',
 			'apexflytraptrapped',
+			'snarevine',
 		])
 			source.removeVolatile(id);
 	}
@@ -393,6 +394,7 @@ for (const [index, [id, name, type, basePower]] of specs.entries()) {
 	};
 }
 CharacterMoves.blacktestament.flags.tail = 1;
+CharacterMoves.laurellash.flags.arrow = 1;
 CharacterMoves.blacktestament.onModifyType = gildedType;
 Object.assign(CharacterMoves.heavenfall, {
 	accuracy: 90,

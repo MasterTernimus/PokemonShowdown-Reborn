@@ -37,7 +37,7 @@ describe('Approved roster follow-up', () => {
 			['Hariyama', '0', 'Grit Grappler', 'Guts'], ['Krookodile', '1', 'Dread Jaw', 'Moxie'],
 			['Beartic', '1', 'Floe Hunter', 'Slush Rush'], ['Escavalier', 'H', 'Lanceguard', 'Shell Armor'],
 			['Primarina', 'H', 'Tidal Performer', 'Liquid Voice'], ['Vikavolt', '0', 'Hover Cannon', 'Levitate'],
-			['Vikavolt', 'H', 'Battery', 'Battery'], ['Houndstone', 'H', 'Mourning Coat', 'Fluffy'],
+			['Vikavolt', 'H', 'Swarm', 'Swarm'], ['Houndstone', 'H', 'Mourning Coat', 'Fluffy'],
 			['Dondozo', '1', 'Dozing Giant', 'Oblivious'], ['Clodsire', '1', 'Quill Reservoir', 'Water Absorb'],
 		]) {
 			assert.equal(Dex.species.get(species).abilities[slot], ability);

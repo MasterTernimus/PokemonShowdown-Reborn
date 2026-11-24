@@ -162,16 +162,34 @@ describe('Convergence, Misaligned Stars and Frame Perfect', () => {
 	it('records a whole multihit attack, blocks its next use once, then takes it normally', () => {
 		const [p, foe] = start('Misaligned Stars');
 		assert.equal(hit(foe, p, 'tackle', { damage: 10, multihit: 3 }), 30);
-		assert.equal(hit(foe, p, 'tackle', { damage: 10, multihit: 3 }), 0);
+		assert.equal(hit(foe, p, 'tackle', { damage: 10, multihit: 3 }), -30);
 		assert.equal(hit(foe, p, 'tackle', { damage: 10 }), 10);
 		assert.equal(battle.log.filter(l => l.includes('The stars were bad for that outcome')).length, 1);
 	});
-	it('records by move rather than attacker and does not block other moves', () => {
+	it('records each move independently across attackers', () => {
 		const [p, foe, , other] = start('Misaligned Stars', true);
 		hit(foe, p, 'tackle', { damage: 10 });
 		assert.equal(hit(other, p, 'watergun', { damage: 10 }), 10);
-		assert.equal(hit(other, p, 'tackle', { damage: 10 }), 0);
-		assert.equal(hit(foe, p, 'watergun', { damage: 10 }), 10);
+		assert.equal(hit(other, p, 'tackle', { damage: 10 }), -20);
+		assert.equal(hit(foe, p, 'watergun', { damage: 10 }), 0);
+	});
+	it('records Double Slap after Knock Off and blocks only the second Double Slap', () => {
+		const [p, foe] = start('Misaligned Stars', false, 'Dusknoir');
+		p.hp = p.maxhp / 4;
+		assert(hit(foe, p, 'knockoff') > 0);
+		const slap = () => hit(foe, p, 'doubleslap', { damage: 10, multihit: 5 });
+		assert.equal(slap(), 50);
+		assert.equal(slap(), -p.maxhp / 4);
+		assert.equal(slap(), 50);
+		assert.equal(hit(foe, p, 'knockoff'), -p.maxhp / 4);
+	});
+	it('records successful targeted status moves and ignores misses', () => {
+		const [p, foe] = start('Misaligned Stars');
+		hit(foe, p, 'growl', { accuracy: 0 });
+		for (const expected of [-1, -1, -2]) {
+			hit(foe, p, 'growl');
+			assert.equal(p.boosts.atk, expected);
+		}
 	});
 	it('allows the first move to KO and does not record misses or fully protected attacks', () => {
 		const [p, foe] = start('Misaligned Stars');
@@ -294,7 +312,9 @@ describe('Convergence, Misaligned Stars and Frame Perfect', () => {
 		const saved = JSON.stringify(State.serializeBattle(battle));
 		battle.destroy();
 		battle = State.deserializeBattle(saved);
-		assert.equal(hit(battle.p2.active[0], battle.p1.active[0]), 0);
+		const holder = battle.p1.active[0];
+		holder.hp = holder.maxhp / 2;
+		assert.equal(hit(battle.p2.active[0], holder), -holder.maxhp / 4);
 	});
 	it('clears Frame Perfect on a no-PP attempt or a failed before-move callback', () => {
 		const [p, foe] = start('Frame Perfect');

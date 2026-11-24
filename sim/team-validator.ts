@@ -687,6 +687,12 @@ export class TeamValidator {
 		let nature = dex.natures.get(Utils.getString(set.nature));
 		set.nature = nature.name;
 		if (!Array.isArray(set.moves)) set.moves = [];
+		if (dex.gen >= 9 && species.id === 'ninetales') {
+			for (const name of set.moves) {
+				const move = dex.moves.get(name);
+				if (move.type === 'Ice') problems.push(`${species.name} can't learn ${move.name}.`);
+			}
+		}
 		// Reborn formats intentionally allow custom movepools without Obtainable
 		// Moves. Enforce this explicit removal even for pasted/packed teams.
 		if (
@@ -3096,7 +3102,8 @@ export class TeamValidator {
 		move = dex.moves.get(move);
 		const moveid = move.id;
 		const baseSpecies = dex.species.get(originalSpecies);
-		if (dex.gen >= 9 && Gen9MoveLearnsetExclusions[baseSpecies.id]?.includes(moveid)) {
+		if (dex.gen >= 9 && (Gen9MoveLearnsetExclusions[baseSpecies.id]?.includes(moveid) ||
+			(baseSpecies.id === 'ninetales' && move.type === 'Ice'))) {
 			return `${baseSpecies.name} can't learn ${move.name}.`;
 		}
 		if (

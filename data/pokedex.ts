@@ -5489,7 +5489,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 229,
 		name: 'Houndoom',
 		types: ['Dark', 'Fire'],
-		baseStats: { hp: 75, atk: 110, def: 60, spa: 120, spd: 85, spe: 105 },
+		baseStats: { hp: 75, atk: 110, def: 60, spa: 120, spd: 85, spe: 95 },
 		abilities: { 0: 'Flash Fire', 1: 'Agony Flame', H: 'Battle Fervor' },
 		heightm: 1.4,
 		weightkg: 35,
@@ -5506,7 +5506,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: 'Houndoom',
 		forme: 'Mega',
 		types: ['Dark', 'Fire'],
-		baseStats: { hp: 75, atk: 110, def: 100, spa: 150, spd: 95, spe: 125 },
+		baseStats: { hp: 75, atk: 110, def: 100, spa: 150, spd: 95, spe: 115 },
 		abilities: { 0: 'Hellfire Eclipse' },
 		heightm: 1.9,
 		weightkg: 49.5,
@@ -9328,7 +9328,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 424,
 		name: 'Ambipom',
 		types: ['Normal', 'Fighting'],
-		baseStats: { hp: 80, atk: 110, def: 70, spa: 100, spd: 70, spe: 120 },
+		baseStats: { hp: 80, atk: 110, def: 70, spa: 100, spd: 70, spe: 115 },
 		abilities: { 0: 'Whiplash', 1: 'Double Strike', H: 'Scrappy' },
 		heightm: 1.2,
 		weightkg: 20.3,
@@ -13010,7 +13010,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: 'Summer',
 		types: ['Fire', 'Grass'],
 		baseStats: { hp: 80, atk: 110, def: 80, spa: 60, spd: 80, spe: 100 },
-		abilities: { 0: 'Seasonal Stride', 1: 'Flash Fire', H: 'Rock Head' },
+		abilities: { 0: 'Seasonal Stride', 1: 'Chlorophyll', H: 'Rock Head' },
 		heightm: 1.9,
 		weightkg: 92.5,
 		color: 'Brown',
@@ -16653,7 +16653,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 743,
 		name: 'Ribombee',
 		types: ['Bug', 'Fairy'],
-		baseStats: { hp: 65, atk: 55, def: 60, spa: 90, spd: 105, spe: 125 },
+		baseStats: { hp: 65, atk: 55, def: 60, spa: 90, spd: 105, spe: 124 },
 		abilities: { 0: 'Shield Dust', 1: 'Aroma Veil', H: 'Friend Guard' },
 		heightm: 0.2,
 		weightkg: 0.5,
@@ -24381,7 +24381,7 @@ const latestSpeciesUpdates: { [id: string]: any } = {
 	alakazam: { baseStats: { hp: 80, atk: 50, def: 50, spa: 135, spd: 95, spe: 120 } },
 	alakazammega: { baseStats: { hp: 80, atk: 55, def: 60, spa: 175, spd: 105, spe: 155 } },
 	dodrio: {
-		baseStats: { hp: 90, atk: 106, def: 85, spa: 50, spd: 75, spe: 119 },
+		baseStats: { hp: 90, atk: 110, def: 85, spa: 50, spd: 75, spe: 110 },
 		abilities: { 0: 'Triple Threat', 1: 'Speed Boost', H: 'Striker Frenzy' },
 	},
 	honchkrow: { baseStats: { hp: 100, atk: 135, def: 72, spa: 71, spd: 72, spe: 90 } },
@@ -24391,8 +24391,8 @@ const latestSpeciesUpdates: { [id: string]: any } = {
 	gigalith: { baseStats: { hp: 100, atk: 135, def: 130, spa: 80, spd: 80, spe: 25 } },
 	kingler: { baseStats: { hp: 80, atk: 135, def: 115, spa: 60, spd: 80, spe: 75 } },
 	kinglergmax: { baseStats: { hp: 120, atk: 135, def: 115, spa: 60, spd: 80, spe: 75 } },
-	rapidash: { baseStats: { hp: 80, atk: 110, def: 70, spa: 80, spd: 80, spe: 120 } },
-	rapidashgalar: { baseStats: { hp: 80, atk: 110, def: 70, spa: 80, spd: 80, spe: 120 } },
+	rapidash: { baseStats: { hp: 80, atk: 110, def: 70, spa: 80, spd: 80, spe: 110 } },
+	rapidashgalar: { baseStats: { hp: 80, atk: 110, def: 70, spa: 80, spd: 80, spe: 110 } },
 	vikavolt: { baseStats: { hp: 77, atk: 95, def: 99, spa: 145, spd: 75, spe: 43 } },
 	ninetales: { baseStats: { hp: 73, atk: 66, def: 75, spa: 111, spd: 110, spe: 110 } },
 	ninetalesalt: { baseStats: { hp: 73, atk: 66, def: 75, spa: 111, spd: 110, spe: 110 } },
@@ -25082,15 +25082,15 @@ Pokedex.fearow.abilities!['0'] = 'Keen Eye';
 Pokedex.kingler.abilities!['1'] = 'Hyper Cutter';
 Pokedex.cloyster.abilities!['H'] = 'Shell Armor';
 Pokedex.garganacl.abilities!['1'] = 'Inner Focus';
-Pokedex.vikavolt.abilities!['H'] = 'Battery';
-Pokedex.jellicent.abilities!['0'] = 'Water Absorb';
-Pokedex.jellicentazzy.abilities!['0'] = 'Water Absorb';
+Pokedex.vikavolt.abilities!['H'] = 'Swarm';
+Pokedex.jellicent.abilities!['0'] = 'Unnerve';
+Pokedex.jellicentazzy.abilities!['0'] = 'Unnerve';
 Pokedex.pinsir.abilities!['0'] = 'Hyper Cutter';
 Pokedex.hariyama.abilities = { 0: 'Grit Grappler', 1: 'Sheer Force', H: 'Stamina' };
-Pokedex.drednaw.abilities!['0'] = 'Strong Jaw';
+Pokedex.drednaw.abilities!['0'] = 'Hyper Cutter';
 Pokedex.mudsdale.abilities = { 0: 'Unyielding', 1: 'Battle Armor', H: 'Surefoot' };
 Pokedex.rhydon.abilities!['H'] = 'Lightning Rod';
-Pokedex.seismitoad.abilities!['1'] = 'Poison Touch';
+Pokedex.seismitoad.abilities!['1'] = 'Sticky Hold';
 
 // Approved Dusk replacement; its existing Tough Claws becomes a species passive.
 Pokedex.lycanrocdusk.abilities![0] = 'Scrappy';
@@ -25341,7 +25341,7 @@ Pokedex.cacturne.abilities!['0'] = 'Desert Vigil';
 
 // Approved +5 Speed only; there are no Staraptor cosmetic variants in this roster.
 Pokedex.staraptor.baseStats!.spe = 105;
-Pokedex.staraptormega.baseStats!.spe = 115;
+Pokedex.staraptormega.baseStats!.atk = 145;
 
 Pokedex.annihilape.abilities = { 0: 'Unbound Spirit', 1: 'Raging Heart', H: 'Defiant' };
 
@@ -25711,8 +25711,8 @@ Pokedex.dusknoir.abilities![1] = 'Misaligned Stars';
 Pokedex.mienshao.abilities![0] = 'Frame Perfect';
 Pokedex.ninjask.abilities![1] = 'Frame Perfect';
 
-Pokedex.ampharos.abilities![0] = 'Keen Light';
-Pokedex.necrozma.abilities![1] = 'Keen Light';
+Pokedex.ampharos.abilities![0] = 'Star Lens';
+Pokedex.necrozma.abilities![1] = 'Star Lens';
 Pokedex.pinsir.abilities![0] = 'Siege Grip';
 Pokedex.pinsir.abilities![1] = 'Iron Maiden';
 
@@ -25764,3 +25764,12 @@ Pokedex.togetic.baseStats = { hp: 65, atk: 40, def: 85, spa: 80, spd: 105, spe: 
 Pokedex.dusclops.baseStats = { hp: 55, atk: 70, def: 130, spa: 60, spd: 130, spe: 25 };
 Pokedex.solrock.baseStats = { hp: 100, atk: 125, def: 90, spa: 35, spd: 90, spe: 70 };
 Pokedex.lunatone.baseStats = { hp: 100, atk: 35, def: 90, spa: 125, spd: 90, spe: 70 };
+
+Pokedex.drampa.abilities![0] = 'Dragonize';
+Pokedex.gigalith.abilities!.H = 'Dune Chorus';
+Pokedex.grapploct.abilities!.H = 'Regenerator';
+
+Pokedex.golisopodmega.abilities![0] = 'Armored Shell';
+
+Pokedex.dodrio.abilities[0] = 'Tripwire Kick';
+Pokedex.dodrio.abilities.H = 'Guts';

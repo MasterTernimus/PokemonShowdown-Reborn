@@ -1,13 +1,24 @@
 /** Approved species removals, including their existing combat and cosmetic variants. */
 export const November16MoveRemovals: { [id: string]: readonly string[] } = {
+	aurorus: ['boomburst'],
+	aurorusmega: ['boomburst'],
+	lilligantrift: ['fierydance'],
+	primarina: ['aurasphere'],
+	primarinaalt: ['aurasphere'],
+	honchkrow: ['swordsdance'],
+	marowak: ['sacredfire'],
+	marowakalola: ['sacredfire'],
+	marowakalolatotem: ['sacredfire'],
+	glaceon: ['earthpower'],
+	manaphy: ['moonblast'],
 	typhlosion: ['earthpower', 'endure'],
 	typhlosionalt: ['earthpower', 'endure'],
 	typhlosionhisui: ['earthpower', 'endure'],
 	typhlosionmega: ['earthpower', 'endure'],
-	decidueye: ['endure'],
-	decidueyealt: ['endure'],
-	decidueyehisui: ['endure'],
-	decidueyehisuialt: ['endure'],
+	decidueye: ['endure', 'rockblast', 'scaleshot', 'pinmissile'],
+	decidueyealt: ['endure', 'rockblast', 'scaleshot', 'pinmissile'],
+	decidueyehisui: ['endure', 'rockblast', 'scaleshot', 'pinmissile'],
+	decidueyehisuialt: ['endure', 'rockblast', 'scaleshot', 'pinmissile'],
 	samurott: ['endure'],
 	samurottalt: ['endure'],
 	samurotthisui: ['endure'],
@@ -26,6 +37,7 @@ export const November16MoveRemovals: { [id: string]: readonly string[] } = {
 	],
 	"hitmonchan": [
 		"meteormash",
+		"surgingstrikes",
 	],
 	"electabuzz": [
 		"meteormash",
@@ -68,7 +80,17 @@ export const November16MoveRemovals: { [id: string]: readonly string[] } = {
 	],
 	"magmortar": [
 		"meteorbeam",
+		"steameruption",
 	],
+	roserade: ['earthpower'],
+	roserademega: ['earthpower'],
+	staraptor: ['extremespeed'],
+	staraptormega: ['extremespeed'],
+	zangoose: ['bellydrum'],
+	zangoosemega: ['bellydrum'],
+	chatot: ['torchsong'],
+	sceptile: ['secretsword', 'sacredsword'],
+	sceptilemega: ['secretsword', 'sacredsword'],
 	"hydreigon": [
 		"meteorbeam",
 	],
@@ -121,6 +143,7 @@ export const November16MoveRemovals: { [id: string]: readonly string[] } = {
 		"moonblast",
 	],
 	"lilligant": [
+		"fierydance",
 		"moonblast",
 	],
 	"sigilyph": [

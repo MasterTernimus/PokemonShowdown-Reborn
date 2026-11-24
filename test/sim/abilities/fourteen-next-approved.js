@@ -48,7 +48,7 @@ describe('Fourteen approved roster refinements', () => {
 			mrmime: { 0: 'Soundproof', 1: 'Technician', H: 'Filter' },
 			barraskewda: { 0: 'Swift Swim', 1: 'Pursuit Wake', H: 'Breakwater' },
 			golurk: { 0: 'Sentinel Fist', 1: 'No Guard', H: 'Self Repair' },
-			drampa: { 0: 'Berserk', 1: 'Sap Sipper', H: 'Gentle Giant' },
+			drampa: { 0: 'Dragonize', 1: 'Sap Sipper', H: 'Gentle Giant' },
 			hawlucha: { 0: 'Ringcraft', 1: 'Unburden', H: 'Mold Breaker' },
 			centiskorch: { 0: 'Coil Up', 1: 'White Smoke', H: 'Flame Body' },
 		};

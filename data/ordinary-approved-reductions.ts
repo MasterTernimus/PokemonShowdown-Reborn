@@ -78,7 +78,7 @@ export function installOrdinaryReductions(a: AbilityDataTable) {
 		}
 	};
 	a.spiralevolution.onBasePower = function (power, source, target, move) {
-		let modifier = move.id === 'twineedle' ? 2 : 1;
+		let modifier = ['twineedle', 'triplesting'].includes(move.id) ? 2 : 1;
 		if (
 			(
 				move as ActiveMove & { spiralEvolutionProtectedTargets?: Pokemon[] }

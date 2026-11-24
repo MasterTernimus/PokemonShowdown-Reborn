@@ -44,7 +44,8 @@ describe('Approved thirteen Sinnoh Unova Mega passive migrations', () => {
 		});
 		it(id + ' excludes only its extracted component from selected identity and preserves copied packages', () => {
 			const [p, q] = setup(id);
-			if (!['lucariomegaz', 'haxorusmega'].includes(id)) assert(p.getAbilityComponentExclusions().includes(passive));
+			if (id === 'mismagiusmega') assert(!p.hasAbility('elevate'));
+			else if (!['lucariomegaz', 'haxorusmega'].includes(id)) assert(p.getAbilityComponentExclusions().includes(passive));
 			const ability = p.ability;
 			q.setAbility(ability);
 			assert.equal(q.getAbilityComponentExclusions().includes(passive), !!require('./selected-simplifications-approved.json').removed[p.ability]?.includes(passive));
@@ -98,15 +99,20 @@ describe('Approved thirteen Sinnoh Unova Mega passive migrations', () => {
 		battle.runEvent('AfterFaint', q, p, Dex.getActiveMove('tackle'), 1);
 		assert.equal(Object.values(p.boosts).reduce((a, b) => a + b, 0), 2);
 	});
-	it('Voidcraft retains full Insomnia, Shadow Shield and the recurring Temporal Shift scheduler', () => {
+	it('Void Craft grants Fairy STAB and schedules Temporal Shift after an attack', () => {
 		const [p, q] = setup('Mismagius-Mega');
-		assert(p.hasAbility('insomnia'));
+		assert(!p.hasAbility('insomnia'));
 		assert(p.hasAbility('shadowshield'));
 		assert(p.hasAbility('temporalshift'));
-		assert(!p.trySetStatus('slp', q, Dex.moves.get('hypnosis')));
-		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('shadowball'), 100), 130);
-		const scheduled = p.abilityState.temporalShiftLastCastTurn;
-		assert.equal(typeof scheduled, 'number');
+		const fairy = Dex.getActiveMove('moonblast');
+		battle.runEvent('ModifyMove', p, q, fairy, fairy);
+		assert.equal(fairy.forceSTAB, true);
+		assert.equal(p.abilityState.temporalShiftLastCastTurn, undefined);
+		battle.makeChoices('move tackle', 'move splash');
+		battle.makeChoices('move splash', 'move splash');
+		const queued = q.side.slotConditions[q.position].futuremove;
+		assert.equal(queued.moveData.type, 'Ghost');
+		assert.equal(queued.moveData.basePower, 100);
 	});
 	it('Mirror Armor supplies reflection, field entry boosts and damage reduction exactly once', () => {
 		const [p, q] = setup('Bronzong-Mega');

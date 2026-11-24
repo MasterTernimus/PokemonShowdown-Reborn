@@ -86,8 +86,8 @@ export const November16BalanceDescriptions: Record<string, { name?: string, desc
 		"shortDesc": "Half attack damage at full HP. Immune to indirect damage.",
 	},
 	"voidcraft": {
-		"desc": "Airborne. Takes half attack damage at full HP. These reductions cannot be bypassed by ability-ignoring moves; its other protections can. Cannot sleep or be affected by Yawn, and foes cannot lower its stats. Dark and Ghost attacks have 1.3x power. Move KOs raise its highest stat by 1. Starting on Mega Evolution, queues a 120 BP Ghost Future Sight every other turn; each strikes two turns later. Immune to hail damage on Cold Eclipse. Ability suppression disables these effects.",
-		"shortDesc": "Half attack damage at full HP; no sleep/stat drops; recurring Ghost Future Sight.",
+		"desc": "Temporal Shift queues a 100-power Future Sight of the user’s primary type on the turn after a damaging move and prevents opposing stat drops. Fairy attacks gain STAB. Shadow Shield halves attack damage at full HP and protects against hail on Cold Eclipse.",
+		"shortDesc": "Temporal Shift + Shadow Shield. Fairy attacks gain STAB.",
 	},
 	"curseddoll": {
 		"desc": "Contact moves have 1.3x power. Takes half attack damage at full HP. This protection cannot be bypassed by ability-ignoring moves, but suppression disables it. Once per battle, surviving an opposing attack at half HP or less grants +1 Attack. Immune to hail on Cold Eclipse.",
@@ -98,7 +98,7 @@ export const November16BalanceDescriptions: Record<string, { name?: string, desc
 		"shortDesc": "Special Ghost/Poison HP hits curse once per turn; own KOs heal; Shadow Shield.",
 	},
 	"hellfireeclipse": {
-		"desc": "Dark Aura boosts all damaging Dark moves by 4/3, or multiplies them by 0.75 with Aura Break; multiple users do not stack. Immune to hail damage on Cold Eclipse. After a Fire move damages a foe directly, blocks healing for 2 turns and has a 30% chance to burn. Rolls once per damaged foe per move.",
+		"desc": "Dark Aura boosts all damaging Dark moves by 4/3, or multiplies them by 0.75 with Aura Break; multiple users do not stack. Immune to hail damage on Cold Eclipse. After a Fire or Dark move damages a foe directly, blocks healing for 2 turns and has a 30% chance to burn. Rolls once per damaged foe per move.",
 		"shortDesc": "Dark Aura + Agony Flame.",
 	},
 	"ultraego": {

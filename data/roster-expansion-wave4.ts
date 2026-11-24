@@ -199,10 +199,7 @@ export function applyRosterWave4(base: AbilityDataTable) {
 			if (!foeHit(damage, target, source) || !target.hp || move.type !== 'Fighting' || this.effectState.used) return;
 			this.effectState.used = true;
 			if (target.getAbility().flags['cantsuppress']) return;
-			if (target.hasItem('Ability Shield')) {
-				this.add('-block', target, 'item: Ability Shield');
-				return;
-			}
+			if (target.hasItem('Ability Shield')) return;
 			target.addVolatile('meridianseal', source, this.effect);
 		},
 		condition: {

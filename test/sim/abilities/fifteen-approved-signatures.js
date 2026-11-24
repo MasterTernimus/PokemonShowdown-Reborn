@@ -396,32 +396,14 @@ describe('Fifteen newly approved signatures', () => {
 		entry(p);
 		assert.equal(p.boosts.spa, 2);
 	});
-	it('Dream Refuge heals normally and cures only one statused active ally once per entry', () => {
-		const [p, t] = start('Dream Refuge', 'doubles');
-		const a = p.allies()[0];
+	it('Dream Refuge Moonlight heals the user without curing an ally', () => {
+		const [p] = start('Dream Refuge', 'doubles');
 		p.hp = 1000;
-		p.setStatus('brn');
-		a.setStatus('par');
-		const bench = p.side.pokemon[2];
-		bench.setStatus('brn');
+		const ally = p.allies()[0];
+		ally.setStatus('par');
 		hit(p, p, 'moonlight');
 		assert.equal(p.hp, 3000);
-		assert.equal(p.status, 'brn');
-		assert.equal(a.status, '');
-		assert.equal(bench.status, 'brn');
-		a.setStatus('par');
-		p.hp = 1000;
-		hit(p, p, 'moonlight');
-		assert.equal(a.status, 'par');
-		assert(p.volatiles.dreamrefugespent);
-	});
-	it('Dream Refuge failed Moonlight preserves budget; first success spends it even without a statused ally', () => {
-		const [p, t] = start('Dream Refuge');
-		hit(p, p, 'moonlight');
-		assert(!p.volatiles.dreamrefugespent);
-		p.hp = 1000;
-		hit(p, p, 'moonlight');
-		assert(p.volatiles.dreamrefugespent);
+		assert.equal(ally.status, 'par');
 	});
 	it('Dream Refuge keeps Telepathy allied immunity and Psychic Terrain speed', () => {
 		const [p, t] = start('Dream Refuge', 'doubles');
@@ -474,15 +456,6 @@ describe('Fifteen newly approved signatures', () => {
 		hit(p, t, 'watergun');
 		assert(!p.forceSwitchFlag);
 		assert.equal(t.item, '');
-	});
-	it('Dream Refuge preserves its entry budget through Heal Block', () => {
-		const [p, t] = start('Dream Refuge', 'doubles');
-		p.hp = 1000;
-		p.addVolatile('healblock', t);
-		p.allies()[0].setStatus('brn');
-		hit(p, p, 'moonlight');
-		assert(!p.volatiles.dreamrefugespent);
-		assert.equal(p.allies()[0].status, 'brn');
 	});
 	it('Closed Circuit obeys Heal Block', () => {
 		const [p, t] = start('Closed Circuit');

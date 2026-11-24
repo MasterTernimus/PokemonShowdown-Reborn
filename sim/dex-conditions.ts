@@ -31,6 +31,7 @@ export interface EventMethods {
 		target: Pokemon,
 		move: ActiveMove,
 	) => void;
+	onAfterSuccessfulStatusHit?: EventMethods['onAnyAfterSuccessfulStatusHit'];
 	onAnyAfterSuccessfulStatusHit?: (
 		this: Battle,
 		target: Pokemon,

@@ -1,6 +1,12 @@
 {
   "_comment": "Explicit local approvals through November 16. Edit this reviewed fixture rather than adding another override layer. No values are generated from runtime Dex.",
   "slots": {
+    "sawsbucksummer": {"1":"Chlorophyll"},
+    "vikavolt": {"H":"Swarm"},
+    "jellicent": {"0":"Unnerve"},
+    "jellicentazzy": {"0":"Unnerve"},
+    "seismitoad": {"1":"Sticky Hold"},
+    "drednaw": {"0":"Hyper Cutter"},
     "serperior": {"1": "Leaf Guard"},
     "serperiorazzy": {"1": "Leaf Guard"},
     "kingambit": {"H": "Pressure"},
@@ -49,10 +55,10 @@
       "1": "Frame Perfect"
     },
     "ampharos": {
-      "0": "Keen Light"
+      "0": "Star Lens"
     },
     "necrozma": {
-      "1": "Keen Light"
+      "1": "Star Lens"
     },
     "pinsir": {
       "0": "Siege Grip",
@@ -116,6 +122,11 @@
     }
   },
   "exactSlots": {
+    "dodrio": {"0":"Tripwire Kick","1":"Speed Boost","H":"Guts"},
+    "drampa": {"0":"Dragonize","1":"Sap Sipper","H":"Gentle Giant"},
+    "gigalith": {"0":"Crystal Bastion","1":"Sand Stream","H":"Dune Chorus"},
+    "grapploct": {"0":"Contrary","1":"Technician","H":"Regenerator"},
+    "golisopodmega": {"0":"Armored Shell"},
     "liepard": {"0":"Limber","1":"Unburden","H":"Alley Ambush"},
     "druddigon": {"0":"Sheer Force","1":"Mold Breaker","H":"Basking Scales","S":"Aevian Bolt"},
     "azelf": {"0":"Mold Breaker","1":"Vital Spirit","H":"Valor Seal"},
@@ -163,6 +174,10 @@
     }
   },
   "passives": {
+    "drampa": ["kindredfury"],
+    "gigalith": ["mineralheart"],
+    "grapploct": ["abyssalgrip"],
+    "toucannon": ["siegebeak"],
     "sirfetchd": ["steadfast"],
     "liepard": ["prankster"],
     "druddigon": ["roughskin"],
@@ -225,7 +240,7 @@
       "frameperfect"
     ],
     "starmie": [
-      "keenlight"
+      "starlens"
     ],
     "pinsir": [
       "hypercutter"
@@ -254,6 +269,14 @@
     ]
   },
   "stats": {
+    "rapidash": {"hp":80,"atk":110,"def":70,"spa":80,"spd":80,"spe":110},
+    "rapidashgalar": {"hp":80,"atk":110,"def":70,"spa":80,"spd":80,"spe":110},
+    "dodrio": {"hp":90,"atk":110,"def":85,"spa":50,"spd":75,"spe":110},
+    "houndoom": {"hp":75,"atk":110,"def":60,"spa":120,"spd":85,"spe":95},
+    "houndoommega": {"hp":75,"atk":110,"def":100,"spa":150,"spd":95,"spe":115},
+    "staraptormega": {"hp":85,"atk":145,"def":110,"spa":60,"spd":100,"spe":110},
+    "ambipom": {"hp":80,"atk":110,"def":70,"spa":100,"spd":70,"spe":115},
+    "ribombee": {"hp":65,"atk":55,"def":60,"spa":90,"spd":105,"spe":124},
     "fearow": {"hp":80,"atk":105,"def":65,"spa":45,"spd":65,"spe":110},
     "gardevoirmega": {"hp":75,"atk":75,"def":80,"spa":165,"spd":145,"spe":100},
     "gardevoirmegaalt": {"hp":75,"atk":75,"def":80,"spa":165,"spd":145,"spe":100},

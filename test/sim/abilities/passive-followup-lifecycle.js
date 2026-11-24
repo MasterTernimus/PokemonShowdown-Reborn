@@ -94,11 +94,11 @@ describe('Approved passive copy lifecycle and component replacements', () => {
 		assert(!getAbilityDisplayComponents('orchardbond').includes('stickyhold'));
 		assert(getAbilityDisplayComponents('abysslure', ['illuminate']).includes('suctioncups'));
 	});
-	it('Wooly Conductor includes Fluffy and Keen Light without slowing or paralyzing contact attackers', () => {
+	it('Wooly Conductor includes Fluffy and Star Lens without slowing or paralyzing contact attackers', () => {
 		const [p, t] = setup('Ampharos', 'No Ability');
 		p.formeChange('Ampharos-Mega');
 		p.setAbility('Wooly Conductor');
-		for (const component of ['fluffy', 'keenlight', 'illuminate']) assert(p.hasAbility(component));
+		for (const component of ['fluffy', 'starlens', 'illuminate']) assert(p.hasAbility(component));
 		let rolls = 0;
 		battle.randomChance = (n, d) => {
 			if (n === 3 && d === 10)

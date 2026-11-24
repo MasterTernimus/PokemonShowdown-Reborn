@@ -12,6 +12,13 @@ type SequenceMove = ActiveMove & {
 	convergenceAttack?: boolean, convergencePrepared?: boolean, convergenceCharged?: boolean,
 	framePrepared?: boolean, frameMomentum?: number, };
 
+function recordOpposingMove(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
+	if (!target.hp || target.isAlly(source)) return;
+	const state = sequence(target, 'misalignedStars');
+	state.recorded ||= {};
+	if (!(move.id in state.recorded)) state.recorded[move.id] = this.activeMove || move;
+}
+
 function gainCharge(this: Battle, damage: number, target: Pokemon, source: Pokemon, move: SequenceMove) {
 	if (move.effectType !== 'Move' || damage <= 0 || source.isAlly(target) || move.category === 'Status') return;
 	const active = (this.activeMove || move) as SequenceMove;
@@ -51,8 +58,8 @@ export const CombatSequenceDescriptions = {
 		desc: 'Includes Keen Eye. Land a physical and a special attack in either order to charge the next attack: 1.5× damage, ignoring positive defensive stages, type resistances and screens. Weaknesses and immunities still apply. Each move grants one charge. The charged attack consumes both charges even on a miss or block and earns no charge. Charges persist through switching.',
 	},
 	misalignedstars: {
-		shortDesc: 'Anticipation; records the first attack survived each entry; blocks its next use on the holder.',
-		desc: 'Includes Anticipation. After surviving the first opposing damaging move that hits it, blocks the next use of that move against it, from any foe. All hits of the original move finish normally. One recorded move and one block per entry; switching resets both.',
+		shortDesc: 'Anticipation. Each entry, blocks the first repeat of each move that hit it and heals 1/4 HP.',
+		desc: 'Includes Anticipation. Records each distinct attack that damages the holder and each opposing status move that successfully hits it. Blocks the next use of each recorded move against the holder from any foe. Each block restores 1/4 of the holder’s maximum HP. Later uses hit normally. A multihit attack counts as one use. Switching out clears the record.',
 	},
 	frameperfect: {
 		shortDesc: 'Inner Focus; any attacks build up to +50% Speed, +30% damage and 10% attack protection.',
@@ -96,19 +103,17 @@ export function installCombatSequences(
 	};
 	composeSelectedAbility(abilities, 'misalignedstars', ['anticipation'], true);
 	abilities.misalignedstars.onDamagingHit = function (damage, target, source, move) {
-		if (damage <= 0 || !target.hp || target.isAlly(source) || move.category === 'Status') return;
-		const state = sequence(target, 'misalignedStars');
-		if (state.recorded) return;
-		state.recorded = move.id;
-		state.original = this.activeMove || move;
+		if (damage > 0 && move.category !== 'Status') recordOpposingMove.call(this, target, source, move);
 	};
+	abilities.misalignedstars.onAfterSuccessfulStatusHit = recordOpposingMove;
 	abilities.misalignedstars.onTryHit = function (target, source, move) {
 		const state = sequence(target, 'misalignedStars');
-		if (target.isAlly(source) || move.category === 'Status' || state.spent || state.recorded !== move.id ||
-			state.original === (this.activeMove || move)) return;
-		state.spent = true;
+		const original = state.recorded?.[move.id];
+		if (!original || target.isAlly(source) || original === (this.activeMove || move)) return;
+		state.recorded[move.id] = null;
 		this.add('-activate', target, 'ability: Misaligned Stars');
 		this.add('-message', 'The stars were bad for that outcome…');
+		this.heal(target.baseMaxhp / 4, target, target);
 		return null;
 	};
 	abilities.misalignedstars.onSwitchOut = function (pokemon) { delete pokemon.m.misalignedStars; };

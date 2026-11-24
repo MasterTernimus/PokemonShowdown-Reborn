@@ -71,7 +71,7 @@ function removePressure(battle: Battle, pokemon: Pokemon) {
 	if (!core) return;
 	announcePressure(battle, pokemon, core.pressure || 0, 0);
 	core.pressure = 0;
-	for (const stat of ['spe', 'spa'] as const) {
+	for (const stat of ['atk', 'spa', 'spe'] as const) {
 		const credit = core[`${stat}Credit`] || 0;
 		core[`${stat}Credit`] = 0;
 		if (!credit) continue;
@@ -97,7 +97,7 @@ export function installPlasmaEruption(abilities: AbilityDataTable) {
 		flags: {},
 		shortDesc:
 			'Galvanize. Fire/Electric may swap and add status. Three hits ready a +60% core discharge.',
-		desc: "Galvanize converts eligible Normal moves to Electric and gives them its usual power bonus. Fire/Electric attacks have a 50% chance to swap types, avoiding immunity on the first opponent when possible. The final type stays fixed: Electric adds 30% burn; Fire adds 30% paralysis. The holder is immune to both statuses. Each attack that damages an opponent or its Substitute gains one Pressure: first +1 Sp. Atk, second +1 Speed, third readies the core. The next Fire/Electric attack releases a core discharge: +60% power, then resets Pressure and its remaining stat boosts. If the primary foe takes damage, other foes take extra damage equal to 75% of the damage actually dealt to it; all affected foes receive the opposite status if possible. After discharge, flies for two end-of-turn ticks: Ground immunity, +20% Electric power, and no Pressure gain. Iron Ball, Gravity, Smack Down and Ingrain prevent flight. Landing powers up the next Fire attack by 30%. Discharge and landing bonuses are spent even on a miss or block. Switching or losing the ability clears its phases. Strongest field bonus only: Fire +15% on Volcanic, Burning, Superheated or Dragon's Den; Electric +15% on Electric Terrain/Aura, Factory or Short Circuit; both +10% on Mountain, Cave, Crystal Cavern, Desert, Ashen Beach or effective sun; both +5% on Haunted, New World, Inverse, Big Top or Fairy Tale.",
+		desc: "Galvanize converts eligible Normal moves to Electric and gives them its usual power bonus. Fire/Electric attacks have a 50% chance to swap types, avoiding immunity on the first opponent when possible. The final type stays fixed: Electric adds 30% burn; Fire adds 30% paralysis. The holder is immune to both statuses. Each attack that damages an opponent or its Substitute gains one Pressure: first +1 to the higher of Attack and Sp. Atk (Sp. Atk on ties), second +1 Speed, third readies the core. The next Fire/Electric attack releases a core discharge: +60% power, then resets Pressure and its remaining stat boosts. If the primary foe takes damage, other foes take extra damage equal to 75% of the damage actually dealt to it; all affected foes receive the opposite status if possible. After discharge, flies for two end-of-turn ticks: Ground immunity, +20% Electric power, and no Pressure gain. Iron Ball, Gravity, Smack Down and Ingrain prevent flight. Landing powers up the next Fire attack by 30%. Discharge and landing bonuses are spent even on a miss or block. Switching or losing the ability clears its phases. Strongest field bonus only: Fire +15% on Volcanic, Burning, Superheated or Dragon's Den; Electric +15% on Electric Terrain/Aura, Factory or Short Circuit; both +10% on Mountain, Cave, Crystal Cavern, Desert, Ashen Beach or effective sun; both +5% on Haunted, New World, Inverse, Big Top or Fairy Tale.",
 		onStart(pokemon) {
 			pokemon.addVolatile('plasmacore');
 			if (['brn', 'par'].includes(pokemon.status)) pokemon.cureStatus();
@@ -226,7 +226,8 @@ export function installPlasmaEruption(abilities: AbilityDataTable) {
 			const old = core.pressure || 0;
 			core.pressure = Math.min(3, old + 1);
 			announcePressure(this, source, old, core.pressure);
-			const stat = core.pressure === 1 ? 'spa' : core.pressure === 2 ? 'spe' : null;
+			const offense = source.getStat('atk', false, true) > source.getStat('spa', false, true) ? 'atk' : 'spa';
+			const stat = core.pressure === 1 ? offense : core.pressure === 2 ? 'spe' : null;
 			if (stat) {
 				const before = source.boosts[stat];
 				this.boost({ [stat]: 1 }, source, source, this.effect);

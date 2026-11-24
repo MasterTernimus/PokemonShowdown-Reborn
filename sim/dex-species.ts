@@ -966,11 +966,14 @@ export class DexSpecies {
 		}
 
 		const excluded = this.dex.gen >= 9 ? Gen9MoveLearnsetExclusions[originalSpecies.id] : undefined;
-		if (!excluded) return out;
+		const excludeIce = this.dex.gen >= 9 && originalSpecies.id === 'ninetales';
+		if (!excluded && !excludeIce) return out;
 		return out.map(entry => ({
 			...entry,
 			learnset: Object.fromEntries(
-				Object.entries(entry.learnset).filter(([move]) => !excluded.includes(move)),
+				Object.entries(entry.learnset).filter(([move]) =>
+					!excluded?.includes(move) && !(excludeIce && this.dex.moves.get(move).type === 'Ice')
+				),
 			),
 		}));
 	}

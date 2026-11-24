@@ -117,7 +117,7 @@ describe('Oracle’s Refrain and requested coverage', () => {
 	});
 	for (const [species, moves] of Object.entries({
 		Politoed: ['Sparkling Aria', 'Boomburst', 'Alluring Voice'],
-		Hitmonchan: ['Shadow Punch', 'Surging Strikes', 'Sucker Punch'],
+		Hitmonchan: ['Shadow Punch', 'Sucker Punch'],
 	})) {
 		for (const name of moves)
 			it(species + ' legally learns ' + name, () => {

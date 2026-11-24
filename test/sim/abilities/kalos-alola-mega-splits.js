@@ -41,7 +41,7 @@ describe('Approved Kalos Alola nine Mega migrations and Ultra damage removal', (
 		it(id + ' acquires its passive through real Mega evolution and Transform', () => {
 			const [p, q] = setup(id);
 			assert.deepEqual(p.getPassives(), [passive]);
-			assert.equal(p.getAbilityComponentExclusions().includes(passive), id !== 'floettemega');
+			assert.equal(p.getAbilityComponentExclusions().includes(passive), !['floettemega', 'golisopodmega'].includes(id));
 			assert(q.transformInto(p));
 			assert.deepEqual(q.getPassives(), [passive]);
 			p.setAbility('No Ability');
@@ -138,11 +138,11 @@ describe('Approved Kalos Alola nine Mega migrations and Ultra damage removal', (
 		battle.boost({ atk: -1 }, p, q, Dex.abilities.get('intimidate'));
 		assert.equal(p.boosts.atk, 0);
 	});
-	it('Golisopod gets Tough Claws as its passive and Heatproof plus Frisk from Aqua Shell', () => {
+	it('Golisopod gets Tough Claws as its passive and Heatproof from Armored Shell', () => {
 		const [p, q] = setup('golisopodmega');
 		assert(!p.volatiles.aquaring);
 		assert(p.hasAbilityOrPassive('toughclaws'));
-		assert(p.hasAbility('heatproof')); assert(p.hasAbility('frisk'));
+		assert(p.hasAbility('heatproof')); assert(!p.hasAbility('frisk'));
 		assert(!p.hasAbility('innerfocus'));
 		p.setAbility('No Ability');
 		assert(p.trySetStatus('brn', q, Dex.moves.get('willowisp')));

@@ -3437,8 +3437,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	seasonalstride: {
 		name: 'Seasonal Stride',
-		desc: "Normal moves become this Pokemon's primary type and have 1.5x power. It has Chlorophyll and changes forme with weather: Spring in rain, Summer in sun, Autumn in sand, Winter in snow.",
-		shortDesc: 'Normal -> primary type 1.5x; Chlorophyll; weather forms.',
+		desc: "Eligible damaging Normal moves become the current primary type and gain 20% power. At turn end, rain selects Spring, sun Summer, sand Autumn, and hail or snow Winter. Clear weather keeps the current season. Changing season carries the selected ability slot across forms.",
+		shortDesc: "Normal attacks become the current primary type with 1.2x power. Weather changes season.",
 	},
 	shadowshield: {
 		name: 'Shadow Shield',
@@ -5044,8 +5044,8 @@ AbilitiesText.pulsefiltration = {
 
 AbilitiesText.agonyflame = {
 	name: 'Agony Flame',
-	desc: 'After a Fire move damages a foe directly, blocks healing for 2 turns and has a 30% chance to burn. Rolls once per damaged foe per move.',
-	shortDesc: 'Fire hits block healing for 2 turns and have a 30% chance to burn.',
+	desc: 'After a Fire or Dark move damages a foe directly, blocks healing for 2 turns and has a 30% chance to burn. Rolls once per damaged foe per move.',
+	shortDesc: 'Fire and Dark hits block healing for 2 turns and have a 30% chance to burn.',
 };
 
 AbilitiesText.pulseeruption = {
@@ -5613,7 +5613,7 @@ AbilitiesText.crystalward = {
 };
 
 AbilitiesText.agonyflame.desc =
-	'After a Fire move damages a foe directly, blocks healing for 2 turns and has a 30% chance to burn. Rolls once per damaged foe per move.';
+	'After a Fire or Dark move damages a foe directly, blocks healing for 2 turns and has a 30% chance to burn. Rolls once per damaged foe per move.';
 
 AbilitiesText.barbharvest = {
 	name: 'Mineral Grip',
@@ -5975,3 +5975,8 @@ for (const [id, text] of Object.entries(November16BalanceDescriptions)) {
 import { revisedNames } from '../nov18-roster';
 for (const [id, name] of Object.entries(revisedNames))
 	AbilitiesText[id as ID] = { ...AbilitiesText[id as ID], name };
+
+import { SandDreamDescriptions } from '../sand-dream-descriptions';
+for (const [id, text] of Object.entries(SandDreamDescriptions)) {
+	AbilitiesText[id as ID] = { ...AbilitiesText[id as ID], ...text };
+}

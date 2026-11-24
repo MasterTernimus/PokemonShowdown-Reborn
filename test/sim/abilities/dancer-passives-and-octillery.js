@@ -59,6 +59,7 @@ describe('Approved eleven dancer passives and Anchored Battery extension', () =>
 				expectedLearnset[move] = [...sources].sort((a, b) => Number(b[0]) - Number(a[0]) || 'MTLREVDSC'.indexOf(a[1]) - 'MTLREVDSC'.indexOf(b[1]));
 			}
 			if (['lilligant', 'lilliganthisui'].includes(old.id)) delete expectedLearnset.moonblast;
+			if (old.id === 'lilligant') delete expectedLearnset.fierydance;
 			assert.deepEqual(Dex.species.getLearnsetData(old.id).learnset, expectedLearnset, old.id + '/learnset');
 		}
 		assert.deepEqual(Dex.species.get('quaquaval').passives, ['torrent']);

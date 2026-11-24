@@ -6,6 +6,40 @@ function scenario(overrides = {}) {
 }
 function format(mode, field = '') { return calculatorFormats().find(f => f.gameType === mode && (f.terrain || '') === field).id; }
 describe('Custom engine calculator', () => {
+	for (const [field, aura, type, expected] of [
+		['', '', 'Normal', 50],
+		['electricterrain', '', 'Electric', 150],
+		['grassyterrain', '', 'Grass', 150],
+		['mistyterrain', '', 'Fairy', 150],
+		['psychicterrain', '', 'Psychic', 150],
+		['rainbowterrain', '', 'Dragon', 100],
+		['dragonsdenterrain', '', 'Dragon', 75],
+		['factoryterrain', 'electricterrain', 'Electric', 150],
+		['electricterrain', 'rainbowterrain', 'Dragon', 100],
+		['coldeclipseterrain', 'rainbowterrain', 'Dragon', 200],
+	]) {
+		it(`calculates Terrain Pulse on ${field || 'no field'}${aura ? ' with ' + aura : ''}`, () => {
+			const input = scenario({ field, move: 'Terrain Pulse' });
+			const { battle } = buildCalculatorBattle(validateScenario(input), 0);
+			try {
+				const user = battle.p1.active[0], foe = battle.p2.active[0];
+				if (aura) assert(battle.field.setAura(aura, 5, user));
+				const move = battle.dex.getActiveMove('terrainpulse');
+				battle.singleEvent('ModifyType', move, null, user, foe, move, move);
+				assert.equal(move.type, type, field);
+				assert.equal(battle.runEvent('BasePower', user, foe, move, move.basePower, true), expected, field);
+			} finally {
+				battle.destroy();
+			}
+		});
+	}
+	it('calculates the same damage as a 100 BP Electric attack on a neutral target in Electric Terrain', () => {
+		const input = scenario({ field: 'electricterrain', move: 'Terrain Pulse', samples: 16 });
+		const damage = move => calculateScenario({ ...input, move }).results.map(row => [row.min, row.max]);
+		const pulse = damage('Terrain Pulse');
+		assert(pulse.some(([min]) => min > 0));
+		assert.deepEqual(pulse, damage('Electro Drift'));
+	});
 	it('omits action traces on summary requests while preserving damage and KO results', () => {
 		const input = scenario();
 		const detailed = calculateScenario(input);
@@ -79,12 +113,23 @@ describe('Custom engine calculator', () => {
 		assert.equal(calculateScenario(input).resolved.actors[0].species, 'Charizard-Mega-X');
 		Object.assign(input.actors[0], { species: 'Mew', item: 'Firium Z', gimmick: '' });
 		input.attackMode = 'z';
-		assert(calculateScenario(input).exampleLog.some(line => line.includes('Inferno Overdrive')));
+		const fire = calculateScenario(input);
+		assert.equal(fire.poweredMove, 'Inferno Overdrive'); assert.equal(fire.move, 'Flamethrower');
+		assert(fire.exampleLog.some(line => line.includes('Inferno Overdrive')));
+		const song = scenario({ move: 'Sparkling Aria', attackMode: 'z' });
+		Object.assign(song.actors[0], { species: 'Primarina', item: 'Primarium Z' });
+		assert.equal(calculateScenario(song).poweredMove, 'Oceanic Operetta');
+		song.actors[0].item = 'Normalium Z'; song.move = 'Splash';
+		assert.equal(calculateScenario(song).poweredMove, 'Z-Splash');
+		song.actors[0].item = ''; assert.throws(() => calculateScenario(song), /matching Z-Crystal/);
+		song.move = 'Hydro Vortex'; assert.throws(() => validateScenario(song), /original move/);
 		Object.assign(input.actors[0], { species: 'Charizard', item: '', gimmick: 'gmax' });
 		input.attackMode = 'max';
 		assert.throws(() => calculateScenario(input), /unavailable/);
 		input.format = 'gen9factoryfield';
-		assert(calculateScenario(input).exampleLog.some(line => line.includes('G-Max Wildfire')));
+		const wildfire = calculateScenario(input);
+		assert.equal(wildfire.poweredMove, 'G-Max Wildfire');
+		assert(wildfire.exampleLog.some(line => line.includes('G-Max Wildfire')));
 		input.move = 'Dragon Pulse';
 		assert.throws(() => calculateScenario(input), /signature G-Max/);
 	});

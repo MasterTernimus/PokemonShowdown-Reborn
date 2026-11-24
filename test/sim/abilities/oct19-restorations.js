@@ -97,9 +97,9 @@ describe('October 19 approved restorations', () => {
 		battle.faintMessages();
 		assert(!q.volatiles.curse);
 	});
-	it('Dodrio separates passive Triple Threat utility from selected Hydra Bond', () => {
-		const [p, q] = setup('Dodrio', 'Hydra Bond');
-		assert.equal(Dex.species.get('dodrio').abilities.H, 'Long Stride');
+	it('Dodrio separates passive Triple Threat utility from the Hydra Bond component of Tripwire Kick', () => {
+		const [p, q] = setup('Dodrio', 'Tripwire Kick');
+		assert.equal(Dex.species.get('dodrio').abilities.H, 'Guts');
 		assert.deepEqual(p.getPassives(), ['triplethreat']);
 		assert(!p.addVolatile('flinch', q));
 		assert(p.addVolatile('confusion', q));

@@ -102,7 +102,7 @@ describe('Approved ability followups', () => {
 		});
 	}
 
-	it('Voidcraft keeps bypassable sleep protection and its legacy name resolves', () => {
+	it('Void Craft allows sleep and its legacy name resolves', () => {
 		const [p, t] = start('Voidcraft', 'Mold Breaker');
 		assert.equal(Dex.abilities.get('Shadow Guard').id, 'voidcraft');
 

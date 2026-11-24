@@ -1,3 +1,4 @@
+import { FormerFormMoves } from '../data/form-move-aliases';
 import { Utils } from '../lib/utils';
 import type { ConditionData, ModdedConditionData } from './dex-conditions';
 import { assignMissingFields, BasicEffect, toID } from './dex-data';
@@ -691,6 +692,7 @@ export class DexMoves {
 
 	getByID(id: ID): Move {
 		if (id === '' || id === 'constructor') return EMPTY_MOVE;
+		if (Object.prototype.hasOwnProperty.call(FormerFormMoves, id)) id = FormerFormMoves[id] as ID;
 		let move = this.moveCache.get(id);
 		if (move) return move;
 		if (this.dex.getAlias(id)) {

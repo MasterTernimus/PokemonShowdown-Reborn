@@ -35,7 +35,7 @@ describe('Approved Sawsbuck seasonal slots', () => {
 	});
 	for (const [ability, expected] of [
 		['Overcoat', ['overcoat', 'overcoat', 'overcoat', 'overcoat']],
-		['Swift Swim', ['flashfire', 'sandrush', 'slushrush', 'swiftswim']],
+		['Swift Swim', ['chlorophyll', 'sandrush', 'slushrush', 'swiftswim']],
 		['Sap Sipper', ['rockhead', 'stamina', 'icebody', 'sapsipper']],
 	])
 		it('keeps chosen slot ' + ability, () => {
@@ -65,6 +65,18 @@ describe('Approved Sawsbuck seasonal slots', () => {
 		assert.equal(p.ability, 'slushrush');
 		assert.equal(p.species.id, 'sawsbuckwinter');
 	});
+	it('doubles Speed only once after the weather slot becomes Chlorophyll', () => {
+		const p = setup();
+		season(p, 'sunnyday');
+		const speed = () => battle.runEvent('ModifySpe', p, null, null, 100);
+		assert.equal(speed(), 200);
+		battle.field.weather = '';
+		assert.equal(speed(), 100);
+		battle.field.terrain = 'flowergarden4';
+		assert.equal(speed(), 200);
+		p.addVolatile('gastroacid');
+		assert.equal(speed(), 100);
+	});
 	it('suppression retains passive cycle but clears stale Flash Fire', () => {
 		const p = setup();
 		season(p, 'sunnyday');
@@ -82,16 +94,17 @@ describe('Approved Sawsbuck seasonal slots', () => {
 		season(q, 'sunnyday');
 		assert.equal(q.species.id, 'sawsbuck');
 	});
-	it('conversion remains without a kicking bonus; sun-only speed survives selected suppression', () => {
+	it('conversion remains without a kicking bonus; sun does not grant passive Speed', () => {
 		const p = setup('Overcoat'),
 			q = battle.p2.active[0];
 		p.addVolatile('gastroacid');
 		const m = Dex.getActiveMove('megakick');
 		battle.runEvent('ModifyType', p, q, m, m);
 		assert.equal(m.type, 'Water');
-		assert.equal(battle.runEvent('BasePower', p, q, m, 100), 150);
+		assert.equal(battle.runEvent('BasePower', p, q, m, 100), 120);
 		battle.field.weather = 'sunnyday';
-		assert.equal(battle.runEvent('ModifySpe', p, null, null, 100), 200);
+		assert.equal(battle.runEvent('ModifySpe', p, null, null, 100), 100);
+		assert.equal(p.hasAbilityOrPassive('chlorophyll'), false);
 		battle.field.weather = '';
 		battle.field.terrain = 'forestterrain';
 		assert.equal(battle.runEvent('ModifySpe', p, null, null, 100), 100);
@@ -147,7 +160,7 @@ describe('Seasonal Stride no longer includes the kicking boost', () => {
 			assert.equal(p.hasAbilityOrPassive('striker'), false);
 			const kick = Dex.getActiveMove('megakick');
 			battle.runEvent('ModifyType', p, q, kick, kick);
-			assert.equal(battle.runEvent('BasePower', p, q, kick, 100), 150);
+			assert.equal(battle.runEvent('BasePower', p, q, kick, 100), 120);
 			assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('doublekick'), 100), 100);
 			assert(!/kicks|kicking|Striker/i.test(Dex.abilities.get('seasonalstride').desc));
 		});

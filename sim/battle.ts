@@ -3604,6 +3604,7 @@ export class Battle {
 		move = this.dex.moves.get(move);
 		if (move.id === 'decorate' && pokemon.hasAbility('masterpatissier'))
 			move = { ...move, target: 'normalOrSelf' };
+		if (move.target !== pokemon.signatureMoveTarget(move)) move = { ...move, target: pokemon.signatureMoveTarget(move) };
 		if (pokemon.usesFallenStarTarget(move)) move = { ...move, target: 'adjacentFoe' };
 		if (['followme', 'ragepowder'].includes(move.id)) {
 			if (this.gameType !== 'freeforall') return pokemon;

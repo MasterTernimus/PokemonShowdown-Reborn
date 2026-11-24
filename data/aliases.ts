@@ -1,6 +1,7 @@
 export const Aliases: import('../sim/dex').AliasesTable = {
 	// Display rename; retain the existing ability ID for old teams and replays.
-	malignantlight: 'Keen Light',
+	keenlight: 'Star Lens',
+	malignantlight: 'Star Lens',
 	witchshospitality: 'Acquired Taste',
 	duskego: 'Dusk Drive',
 	riftseeds: 'Rift Herald',

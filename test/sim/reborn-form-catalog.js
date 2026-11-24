@@ -23,7 +23,7 @@ describe('Reborn form catalog integrity', () => {
 	});
 	it('keeps disabled Mega data internal despite complete form ordering', () => {
 		const validator = TeamValidator.get('gen9nofieldsinglesgame');
-		for (const species of ['Mightyena-Mega', 'Mightyena-Mega-Grim', 'Empoleon-Mega-X']) {
+		for (const species of ['Mightyena-Mega', 'Mightyena-Mega-Grim']) {
 			const s = Dex.species.get(species); assert(s.exists);
 			const errors = validator.validateSet({ species, ability: s.abilities[0], moves: ['tackle'] }, {});
 			assert(errors.some(e => e.includes('disabled')), species);

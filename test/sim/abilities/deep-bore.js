@@ -214,7 +214,10 @@ describe('Mega Excadrill Deep Bore and Piercing Drill split', () => {
 			const options = {};
 			if (mode === 'miss') patch.accuracy = 0;
 			if (mode === 'immune') q.setType('Flying');
-			if (mode === 'substitute') q.addVolatile('substitute', q);
+			if (mode === 'substitute') {
+				id = 'hornattack'; // Mega Excadrill’s Drill Run becomes Claw Drill, which pierces Substitute.
+				q.addVolatile('substitute', q);
+			}
 			if (mode === 'nonqualifying') id = 'tackle';
 			if (mode === 'called') options.sourceEffect = Dex.moves.get('sleeptalk');
 			if (mode === 'instruct') patch.sourceEffect = 'instruct';

@@ -5,7 +5,7 @@ const { Dex } = require('../../../dist/sim');
 const { qualifiesForRelicBeam, RelicBeamMoves } = require('../../../dist/data/relic-beam');
 const { commands, renderRelicBeamReference } = require('../../../dist/server/chat-plugins/relic-beam');
 
-describe('Keen Light and Pinsir', () => {
+describe('Star Lens and Pinsir', () => {
 	let battle;
 	function start(ability, species = 'Mew', doubles = false) {
 		const mon = (a = 'No Ability', s = 'Mew') => ({ species: s, ability: a, moves: ['tackle', 'watergun', 'splash', 'protect'] });
@@ -35,20 +35,20 @@ describe('Keen Light and Pinsir', () => {
 		assert.deepEqual(Dex.species.get('pinsir').passives, ['hypercutter']);
 		assert.deepEqual(Dex.species.get('pinsirmega').abilities, { 0: 'Unbridled Flight' });
 		assert.deepEqual(Dex.species.get('pinsirmega').passives, ['aerilate']);
-		assert.equal(Dex.species.get('ampharos').abilities[0], 'Keen Light');
-		assert.deepEqual(Dex.species.get('necrozma').abilities, { 0: 'Prism Armor', 1: 'Keen Light' });
-		assert.deepEqual(Dex.species.get('starmie').passives, ['keenlight']);
+		assert.equal(Dex.species.get('ampharos').abilities[0], 'Star Lens');
+		assert.deepEqual(Dex.species.get('necrozma').abilities, { 0: 'Prism Armor', 1: 'Star Lens' });
+		assert.deepEqual(Dex.species.get('starmie').passives, ['starlens']);
 		assert.deepEqual(Dex.species.get('starmiemega').passives, ['purepower']);
 	});
 	it('retains the original beams and pulse/bullet rule while adding the requested moves', () => {
-		const expected = 'aurorabeam bubblebeam chargebeam dynamaxcannon eternabeam flashcannon fleurcannon icebeam lusterpurge meteorbeam moongeistbeam psybeam signalbeam solarbeam steelbeam hydropump thunderbolt powergem dazzlinggleam'.split(' ');
+		const expected = 'aurorabeam bubblebeam chargebeam dynamaxcannon eternabeam flashcannon fleurcannon icebeam lusterpurge meteorbeam moongeistbeam psybeam signalbeam solarbeam steelbeam hydropump thunderbolt powergem dazzlinggleam beaconbeam'.split(' ');
 		assert.deepEqual([...RelicBeamMoves].sort(), expected.sort());
 		for (const id of [...expected, 'aurasphere', 'bulletseed']) assert(qualifiesForRelicBeam(Dex.moves.get(id)), id);
 		assert(!qualifiesForRelicBeam(Dex.moves.get('watergun')));
 	});
 
 	it('keeps physical Photon Geyser on Defense even when Sp. Def is lower', () => {
-		const [p, foe] = start('Keen Light');
+		const [p, foe] = start('Star Lens');
 		p.storedStats.atk = 400;
 		p.storedStats.spa = 100;
 		foe.storedStats.def = 400;
@@ -65,8 +65,8 @@ describe('Keen Light and Pinsir', () => {
 		p.boosts.def = 2; p.boosts.spa = -3;
 		assert.equal(p.getStat('spa'), p.getStat('def', false, true));
 	});
-	for (const [ability, species] of [['Keen Light', 'Mew'], ['No Ability', 'Starmie'],
-		['Keen Light', 'Starmie'], ['Astral Core', 'Starmie-Mega'], ['Wooly Conductor', 'Ampharos-Mega']]) {
+	for (const [ability, species] of [['Star Lens', 'Mew'], ['No Ability', 'Starmie'],
+		['Star Lens', 'Starmie'], ['Astral Core', 'Starmie-Mega'], ['Wooly Conductor', 'Ampharos-Mega']]) {
 		it('uses the lower modified defense with no beam multiplier: ' + ability + '/' + species, () => {
 			const [p, foe] = start(ability, species);
 			for (const id of ['hydropump', 'icebeam', 'darkpulse', 'bulletseed']) {
@@ -100,7 +100,7 @@ describe('Keen Light and Pinsir', () => {
 		});
 	}
 	it('preserves category and uses defensive stages and items per target', () => {
-		const [p, foe, , other] = start('Keen Light', 'Mew', true);
+		const [p, foe, , other] = start('Star Lens', 'Mew', true);
 		p.storedStats.spa = 200; foe.storedStats.def = 100; foe.storedStats.spd = 200;
 		other.storedStats.def = 200; other.storedStats.spd = 100;
 		const move = Dex.getActiveMove('dazzlinggleam'); move.willCrit = false;
@@ -114,7 +114,7 @@ describe('Keen Light and Pinsir', () => {
 		assert(damage(foe) < base, 'suppressed ability uses ordinary Sp. Def');
 	});
 	it('does not repeat Illuminate field effects when selected and passive', () => {
-		const [p, foe] = start('Keen Light', 'Starmie');
+		const [p, foe] = start('Star Lens', 'Starmie');
 		battle.field.terrain = 'mirrorarenaterrain';
 		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
 		// Selected Illuminate defers to the passive; exercise the actual passive dispatch separately.
@@ -125,7 +125,7 @@ describe('Keen Light and Pinsir', () => {
 		battle.runEvent('ModifyMove', p, foe, move, move);
 		assert(move.ignoreEvasion);
 	});
-	for (const ability of ['Keen Light', 'Astral Core']) it(`runs nested Illuminate exactly once on entry for ${ability}`, () => {
+	for (const ability of ['Star Lens', 'Astral Core']) it(`runs nested Illuminate exactly once on entry for ${ability}`, () => {
 		const [p, foe] = start(ability, 'Starmie', true);
 		battle.field.terrain = 'mirrorarenaterrain';
 		battle.makeChoices('switch 3, move 3', 'move 3, move 3');

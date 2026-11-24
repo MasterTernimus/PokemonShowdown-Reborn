@@ -17,6 +17,9 @@ export const SignaturePassiveSelections: { [id: string]: string } = {
 };
 /** Only full primitive components actually retained by these seven signatures. */
 export const SignaturePassiveComponents: { [id: string]: readonly string[] } = {
+	kindredfury: ['friendguard', 'berserk'],
+	abyssalgrip: ['suctioncups', 'infiltrator'],
+	siegebeak: ['rockhead'],
 	tatteredmemory: ['cursedbody', 'frisk'],
 	spinyhide: ['roughskin', 'poisonpoint'],
 	omensight: ['anticipation', 'forewarn'],
@@ -150,6 +153,6 @@ SignaturePassiveComponents.healingmirror = ['magicbounce', 'healer'];
 
 SignaturePassiveComponents.frameperfect = ['innerfocus'];
 
-SignaturePassiveComponents.keenlight = ['illuminate'];
+SignaturePassiveComponents.starlens = ['illuminate'];
 
 SignaturePassiveComponents.doublestrike = ['skilllink', 'technician'];

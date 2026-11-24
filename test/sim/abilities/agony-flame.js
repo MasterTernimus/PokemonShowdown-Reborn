@@ -9,7 +9,7 @@ describe('Agony Flame', () => {
 			species: 'Houndoom',
 			ability: 'Agony Flame',
 			item: 'Houndoominite',
-			moves: ['flamethrower', 'heatwave', 'splash'],
+			moves: ['flamethrower', 'heatwave', 'darkpulse', 'splash'],
 		};
 		const t = { species: 'Blissey', ability: 'No Ability', item, moves: ['splash', 'softboiled'] };
 		const teams = format.includes('freeforall') ?
@@ -37,13 +37,19 @@ describe('Agony Flame', () => {
 	}
 	it('uses approved base/Mega stats and separate abilities', () => {
 		const [p] = setup();
-		assert.deepEqual(p.species.baseStats, { hp: 75, atk: 110, def: 60, spa: 120, spd: 85, spe: 105 });
-		assert.equal(p.species.bst, 555);
+		assert.deepEqual(p.species.baseStats, { hp: 75, atk: 110, def: 60, spa: 120, spd: 85, spe: 95 });
+		assert.equal(p.species.bst, 545);
 		assert.deepEqual(p.species.abilities, { 0: 'Agony Flame', 1: 'Insomnia', H: 'Unnerve' });
 		const mega = b.dex.species.get('houndoommega');
-		assert.deepEqual(mega.baseStats, { hp: 75, atk: 110, def: 100, spa: 150, spd: 95, spe: 125 });
-		assert.equal(mega.bst, 655);
+		assert.deepEqual(mega.baseStats, { hp: 75, atk: 110, def: 100, spa: 150, spd: 95, spe: 115 });
+		assert.equal(mega.bst, 645);
 		assert.equal(mega.abilities[0], 'Hellfire Eclipse');
+	});
+	it('burns and Heal Blocks with a damaging Dark move', () => {
+		const [p, target] = setup();
+		use(p, target, {}, 'darkpulse');
+		assert.equal(target.status, 'brn');
+		assert.equal(target.volatiles.healblock.duration, 2);
 	});
 	it('burns and Heal Blocks after the whole multi-hit move, once per target', () => {
 		const [p, t] = setup();
@@ -100,7 +106,7 @@ describe('Agony Flame', () => {
 			if (mode === 'protect') t.addVolatile('protect');
 			if (mode === 'immune') t.setAbility('Flash Fire');
 			if (mode === 'substitute') t.addVolatile('substitute');
-			if (mode === 'nonfire') extra.type = 'Dark';
+			if (mode === 'nonfire') extra.type = 'Water';
 			if (mode === 'delayed') extra.flags = { futuremove: 1 };
 			if (mode === 'suppressed') p.addVolatile('gastroacid');
 			const target = mode === 'self' ? p : t;
@@ -166,7 +172,7 @@ describe('Agony Flame', () => {
 		const [p, t] = setup();
 		assert(b.actions.runMegaEvo(p));
 		assert.equal(p.ability, 'hellfireeclipse');
-		assert.equal(p.species.bst, 655);
+		assert.equal(p.species.bst, 645);
 		use(p, t);
 		assert.equal(t.status, 'brn');
 		assert(t.volatiles.healblock);

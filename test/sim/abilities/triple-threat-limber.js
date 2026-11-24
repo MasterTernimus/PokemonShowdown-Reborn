@@ -13,7 +13,7 @@ describe('Triple Threat reviewed component replacement', () => {
 		assert.deepEqual(AbilityComponents.triplethreat, ['innerfocus', 'keeneye', 'earlybird']);
 		for (const id of AbilityComponents.triplethreat)assert(p.hasAbilityOrPassive(id));
 		assert(!p.hasAbility('sniper')); assert(p.hasAbilityOrPassive('innerfocus')); assert.deepEqual(p.getPassives(), ['triplethreat']);
-		assert(Object.values(battle.dex.species.get('Dodrio').abilities).includes('Hydra Bond'));
+		assert(Object.values(battle.dex.species.get('Dodrio').abilities).includes('Tripwire Kick'));
 	});
 	it('has no Sniper entry accuracy or critical-damage multiplier', () => {
 		const [p, t] = start(); assert.equal(p.boosts.accuracy, 0); assert.equal(p.getAbility().onModifyDamage, undefined);
@@ -74,8 +74,8 @@ describe('Triple Threat reviewed component replacement', () => {
 		const { calculatorMetadata } = require('../../../dist/sim/custom-calculator');
 		assert.deepEqual(calculatorMetadata().abilityComponents.triplethreat, ['Inner Focus', 'Keen Eye', 'Early Bird']);
 	});
-	it('keeps Dodrio at 525 BST with the final approved Attack and Speed', () => {
-		const [p] = start(); assert.deepEqual(p.species.baseStats, { hp: 90, atk: 106, def: 85, spa: 50, spd: 75, spe: 119 }); assert.equal(p.species.bst, 525);
-		assert.deepEqual(p.species.types, ['Ground', 'Flying']); assert.deepEqual(p.species.abilities, { 0: 'Hydra Bond', 1: 'Speed Boost', H: 'Long Stride' });
+	it('keeps Dodrio at 520 BST with the final approved Attack and Speed', () => {
+		const [p] = start(); assert.deepEqual(p.species.baseStats, { hp: 90, atk: 110, def: 85, spa: 50, spd: 75, spe: 110 }); assert.equal(p.species.bst, 520);
+		assert.deepEqual(p.species.types, ['Ground', 'Flying']); assert.deepEqual(p.species.abilities, { 0: 'Tripwire Kick', 1: 'Speed Boost', H: 'Guts' });
 	});
 });

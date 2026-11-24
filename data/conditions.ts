@@ -766,6 +766,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
 				return;
 			}
+			if (pokemon.hasAbility('dreamrefuge')) return;
 			this.add('cant', pokemon, 'slp');
 			if (move.sleepUsable) {
 				return;
@@ -1018,7 +1019,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	creepingbloomspent: { name: 'creepingbloomspent', noCopy: true },
 	demolitiontrunkspent: { name: 'demolitiontrunkspent', noCopy: true },
 	siegemagnetspent: { name: 'siegemagnetspent', noCopy: true },
-	dreamrefugespent: { name: 'dreamrefugespent', noCopy: true },
+
 	wideguardrewardspent: { name: 'wideguardrewardspent', noCopy: true },
 	gentlegiantspent: { name: 'gentlegiantspent', noCopy: true },
 	ringcraftspent: { name: 'ringcraftspent', noCopy: true },
@@ -1041,6 +1042,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	disorientingmindspent: { name: 'disorientingmindspent', noCopy: true },
 	wisecounselspent: { name: 'wisecounselspent', noCopy: true },
 	mindcurrentspent: { name: 'mindcurrentspent', noCopy: true },
+	tripwirekickspent: { name: 'Tripwire Kick spent', noCopy: true },
 	fortunatewingspent: { name: 'fortunatewingspent', noCopy: true },
 	infernalburnup: {
 		name: 'Infernal Burn Up',
@@ -2752,3 +2754,5 @@ Conditions.risingmomentum = {
 
 import { StarterLinkConditions } from './starter-family-links';
 Object.assign(Conditions, StarterLinkConditions);
+
+Conditions.greedgospelmemory = { name: 'Greed Gospel memory', noCopy: true };

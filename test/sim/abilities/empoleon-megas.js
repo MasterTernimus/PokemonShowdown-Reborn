@@ -59,6 +59,7 @@ describe('Empoleon Mega split', () => {
 		assert.equal(Dex.items.get('Empoleonite').id, 'empoleonitey');
 	});
 	for (const [stone, form] of [
+		['Empoleonite X', 'empoleonmegax'],
 		['Empoleonite Y', 'empoleonmegay'],
 		['Empoleonite', 'empoleonmegay'],
 	])
@@ -71,43 +72,20 @@ describe('Empoleon Mega split', () => {
 			battle.makeChoices('move splash mega', 'move splash');
 			assert.equal(battle.p1.active[0].species.id, form);
 		});
-	it('blocks disabled X imports, its stone and forced Mega routes', () => {
+	it('validates Empoleon holding its X stone', () => {
 		const { TeamValidator } = require('../../../dist/sim');
 		const validator = new TeamValidator('gen9nofieldsinglesgame');
-		const set = (species = 'Empoleon', item = '') => ({
-			species,
-			item,
-			ability: Dex.species.get(species).abilities[0],
-			moves: ['surf'],
-		});
-		for (const species of ['Empoleon-Mega-X', 'empoleonmegax'])
-			assert(validator.validateSet(set(species), {}).some(e => e.includes('disabled')));
-		assert(
-			validator.validateSet(set('Empoleon', 'Empoleonite X'), {}).some(e => e.includes('disabled'))
-		);
-		assert.throws(
-			() => common.createBattle({}, [[set('Empoleon-Mega-X')], [set('Mew')]]),
-			/disabled/
-		);
-		battle = common.createBattle({}, [[set('Empoleon', 'Empoleonite X')], [set('Mew')]]);
-		const p = battle.p1.active[0];
-		assert.equal(battle.actions.canMegaEvo(p), null);
-		assert(!p.formeChange('Empoleon-Mega-X'));
-		for (const suffix of ['', 'X', 'Y']) {
-			p['canMegaEvo' + suffix] = 'Empoleon-Mega-X';
-			assert.equal(battle.actions['runMegaEvo' + suffix](p), false);
-		}
-		assert.equal(p.species.id, 'empoleon');
+		assert.equal(validator.validateSet({ species: 'Empoleon', item: 'Empoleonite X', ability: 'Competitive', moves: ['surf'] }, {}), null);
 	});
-	it('hides X in public catalogs and family links while keeping normal and Y', () => {
+	it('shows X in public catalogs and family links while keeping normal and Y', () => {
 		const rules = require('../../../dist/server/rules-encyclopedia');
 		const calc = require('../../../dist/sim/custom-calculator');
 		for (const list of [calc.calculatorMetadata().species, rules.rulesCatalog().species]) {
-			assert(!list.some(s => s.name === 'Empoleon-Mega-X'));
+			assert(list.some(s => s.name === 'Empoleon-Mega-X'));
 			for (const name of ['Empoleon', 'Empoleon-Mega-Y']) assert(list.some(s => s.name === name));
 		}
-		assert(!rules.rulesDetail('species', 'Empoleon').forms.includes('Empoleon-Mega-X'));
-		assert.throws(() => rules.rulesDetail('species', 'Empoleon-Mega-X'), /Unknown/);
+		assert(rules.rulesDetail('species', 'Empoleon').forms.includes('Empoleon-Mega-X'));
+		assert(rules.rulesDetail('species', 'Empoleon-Mega-X'));
 	});
 	it('renames Exalt without removing its component effects', () => {
 		assert.equal(Dex.abilities.get('Imperial Legacy').id, 'imperialedge');
@@ -118,21 +96,21 @@ describe('Empoleon Mega split', () => {
 		assert(!p.addVolatile('flinch'));
 		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('steelwing'), 100), 150);
 	});
-	it('Royal Collision keeps the Wave Crash slot and PP, uses dual effectiveness, 10% recoil and ability bypass', () => {
+	it('Crown Crash keeps the Wave Crash slot and PP, uses dual effectiveness, 10% recoil and ability bypass', () => {
 		const [p, q] = setup('Imperial Ascendant', 'singles', 'Water Absorb');
 		q.setType('Grass');
 		const before = q.hp,
 			pbefore = p.hp;
 		const move = hit(p, q);
 		assert.equal(move.id, 'wavecrash');
-		assert.equal(move.name, 'Royal Collision');
+		assert.equal(move.name, 'Crown Crash');
 		assert.deepEqual(move.types, ['Water', 'Ice']);
 		assert.equal(move.type, 'Water');
 		assert(move.ignoreAbility);
 		assert.equal(q.runEffectiveness(move), 0);
 		assert(q.hp < before);
 		assert.equal(pbefore - p.hp, Math.round((before - q.hp) / 10));
-		assert.equal(p.getMoves()[0].move, 'Royal Collision');
+		assert.equal(p.getMoves()[0].move, 'Crown Crash');
 		assert.equal(p.getMoves()[0].id, 'wavecrash');
 		p.addVolatile('gastroacid');
 		assert.equal(p.getMoves()[0].move, 'Wave Crash');

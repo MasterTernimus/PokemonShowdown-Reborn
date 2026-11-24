@@ -7,7 +7,23 @@ let battle;
 
 describe('Ability Shield', () => {
 	afterEach(() => {
-		battle.destroy();
+		try {
+			assert(!battle.log.some(line => line.startsWith('|-block|') && line.includes('item: Ability Shield')));
+		} finally {
+			battle.destroy();
+		}
+	});
+
+	it('keeps Espeon’s ability active on entry against Neutralizing Gas', () => {
+		battle = common.createBattle([[
+			{ species: 'Espeon', ability: 'Synchronize', item: 'Ability Shield', moves: ['splash'] },
+		], [
+			{ species: 'Weezing', ability: 'Neutralizing Gas', moves: ['splash'] },
+		]]);
+		const espeon = battle.p1.active[0];
+		assert(espeon.hasAbility('synchronize'));
+		espeon.takeItem();
+		assert(!espeon.hasAbility('synchronize'));
 	});
 
 	it(`should protect the holder's ability against ability-changing moves`, () => {
@@ -18,7 +34,7 @@ describe('Ability Shield', () => {
 		]]);
 
 		battle.makeChoices();
-		assert(battle.log.some(line => line.includes('Ability Shield')), `Ability Shield should trigger a block message`);
+
 		assert.equal(battle.p1.active[0].ability, 'pressure', `Holder should retain ability`);
 	});
 
@@ -30,7 +46,7 @@ describe('Ability Shield', () => {
 		]]);
 
 		battle.makeChoices();
-		assert(battle.log.some(line => line.includes('Ability Shield')), `Ability Shield should trigger a block message`);
+
 		assert.equal(battle.p1.active[0].ability, 'pressure', `Holder should retain ability`);
 	});
 
@@ -68,7 +84,6 @@ describe('Ability Shield', () => {
 		]]);
 
 		assert(battle.log.some(line => line.includes('Neutralizing Gas')), `Neutralizing Gas should trigger`);
-		assert(battle.log.some(line => line.includes('Ability Shield')), `Ability Shield should trigger a block message`);
 
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].hp, 1, `Holder should survive due to Sturdy`);
@@ -100,7 +115,6 @@ describe('Ability Shield', () => {
 		]]);
 
 		battle.makeChoices('move splash', 'move gastroacid');
-		assert(battle.log.some(line => line.includes('Ability Shield')), `Ability Shield should trigger a block message`);
 
 		battle.makeChoices('move splash', 'move shadowball');
 		assert.equal(battle.p1.active[0].hp, 1, `Holder should survive due to Sturdy`);
@@ -143,7 +157,7 @@ describe('Ability Shield', () => {
 		]]);
 
 		battle.makeChoices();
-		assert(battle.log.some(line => line.includes('Ability Shield')), `Ability Shield should trigger a block message`);
+
 		assert.equal(battle.p1.active[0].ability, 'klutz', `Holder should retain ability`);
 	});
 

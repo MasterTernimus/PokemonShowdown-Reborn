@@ -10,11 +10,11 @@ describe('Ambipom custom data', () => {
 		'machpunch', 'victorydance', 'tailslap', 'doubleslap', 'cometpunch',
 	];
 
-	it('uses the requested typing, 550 BST, abilities, and moves', () => {
+	it('uses the requested typing, 545 BST, abilities, and moves', () => {
 		const ambipom = Dex.species.get('Ambipom');
 		assert.deepEqual(ambipom.types, ['Normal', 'Fighting']);
-		assert.deepEqual(ambipom.baseStats, { hp: 80, atk: 110, def: 70, spa: 100, spd: 70, spe: 120 });
-		assert.equal(Object.values(ambipom.baseStats).reduce((sum, stat) => sum + stat, 0), 550);
+		assert.deepEqual(ambipom.baseStats, { hp: 80, atk: 110, def: 70, spa: 100, spd: 70, spe: 115 });
+		assert.equal(Object.values(ambipom.baseStats).reduce((sum, stat) => sum + stat, 0), 545);
 		assert.deepEqual(ambipom.abilities, { 0: 'Whiplash', 1: 'Pickup', H: 'Scrappy' });
 		assert.deepEqual(ambipom.passives, ['doublestrike']);
 		for (const move of requestedMoves) {

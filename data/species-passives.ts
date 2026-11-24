@@ -1320,9 +1320,9 @@ SpeciesPassives.metagross = Object.freeze(['clearbody']);
 SpeciesPassives.accelgor = Object.freeze(['frameperfect']);
 ThematicPassiveIds.add('clearbody');
 ThematicPassiveIds.add('frameperfect');
-SpeciesPassives.starmie = Object.freeze(['keenlight']);
+SpeciesPassives.starmie = Object.freeze(['starlens']);
 SpeciesPassives.pinsir = Object.freeze(['hypercutter']);
-ThematicPassiveIds.add('keenlight');
+ThematicPassiveIds.add('starlens');
 ThematicPassiveIds.add('hypercutter');
 SpeciesPassives.garchomp = Object.freeze(['roughskin']);
 ThematicPassiveIds.add('roughskin');
@@ -1331,6 +1331,12 @@ for (const [skin, base] of Object.entries(CosmeticBattleCounterparts)) {
 }
 import { revisedPassives } from './nov18-roster';
 for (const [id, passive] of Object.entries(revisedPassives)) {
+	SpeciesPassives[id] = Object.freeze([passive]);
+	ThematicPassiveIds.add(passive);
+}
+for (const [id, passive] of Object.entries({
+	drampa: 'kindredfury', gigalith: 'mineralheart', grapploct: 'abyssalgrip', toucannon: 'siegebeak',
+})) {
 	SpeciesPassives[id] = Object.freeze([passive]);
 	ThematicPassiveIds.add(passive);
 }

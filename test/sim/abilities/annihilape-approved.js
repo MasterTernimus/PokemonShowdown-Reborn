@@ -186,11 +186,11 @@ describe('Annihilape, Vital Spirit and Staraptor approvals', () => {
 		assert.equal(Dex.species.get('staraptor').bst, 510);
 		assert.deepEqual(Dex.species.get('staraptormega').baseStats, {
 			hp: 85,
-			atk: 140,
+			atk: 145,
 			def: 110,
 			spa: 60,
 			spd: 100,
-			spe: 115,
+			spe: 110,
 		});
 		assert.equal(Dex.species.get('staraptormega').bst, 610);
 		assert.deepEqual(
