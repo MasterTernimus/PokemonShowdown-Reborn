@@ -2125,9 +2125,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Cute",
 	},
 	bouncybubble: {
-		onModifyMove(move, source) {
-			useHigherOffensiveStat(source, move);
-		},
 		num: 733,
 		accuracy: 100,
 		basePower: 60,
@@ -2506,9 +2503,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Clever",
 	},
 	buzzybuzz: {
-		onModifyMove(move, source) {
-			useHigherOffensiveStat(source, move);
-		},
 		num: 734,
 		accuracy: 100,
 		basePower: 60,
@@ -7163,9 +7157,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Psychic",
 	},
 	freezyfrost: {
-		onModifyMove(move, source) {
-			useHigherOffensiveStat(source, move);
-		},
 		num: 739,
 		accuracy: 90,
 		basePower: 100,
@@ -18168,9 +18159,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Clever",
 	},
 	sappyseed: {
-		onModifyMove(move, source) {
-			useHigherOffensiveStat(source, move);
-		},
 		num: 738,
 		accuracy: 90,
 		basePower: 100,
@@ -19280,9 +19268,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Cool",
 	},
 	sizzlyslide: {
-		onModifyMove(move, source) {
-			useHigherOffensiveStat(source, move);
-		},
 		num: 735,
 		accuracy: 100,
 		basePower: 60,
@@ -20321,9 +20306,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Tough",
 	},
 	sparklyswirl: {
-		onModifyMove(move, source) {
-			useHigherOffensiveStat(source, move);
-		},
 		num: 740,
 		accuracy: 85,
 		basePower: 120,
@@ -23771,9 +23753,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Cool",
 	},
 	veeveevolley: {
-		onModifyMove(move, pokemon) {
-			useHigherOffensiveStat(pokemon, move);
-		},
 		num: 741,
 		accuracy: true,
 		basePower: 0,
@@ -24901,7 +24880,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		onModifyMove() {
+		onModifyMove(move, source) {
+			useHigherOffensiveStat(source, move);
 			if (this.field.isTerrain('forestterrain')) this.add('-message', "They're coming out of the woodwork!");
 		},
 		onBasePower(basePower, source, target) {
@@ -25083,6 +25063,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Beautiful",
 	},
 };
+
+// The screen moves and Stabby Swarm also apply field effects in their own ModifyMove hooks.
+for (const id of [
+	'bouncybubble', 'buzzybuzz', 'sizzlyslide', 'glitzyglow', 'baddybad', 'sappyseed', 'freezyfrost', 'sparklyswirl', 'veeveevolley',
+	'punchypummel', 'twirlytwister', 'rockyrampage', 'dustydrift', 'steelystrike', 'stabbyswarm', 'ickyinjection', 'spookyspell', 'scalyscorn',
+] as const) {
+	const move = Moves[id];
+	move.flags.adaptivecategory = 1;
+	move.onModifyMove ??= function (activeMove, source) {
+		useHigherOffensiveStat(source, activeMove);
+	};
+}
 
 // Observe successful protection without changing any protection condition's result.
 // Detect shares Protect's condition; Endure does not block an attack and is excluded.

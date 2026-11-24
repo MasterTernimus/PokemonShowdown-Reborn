@@ -69,6 +69,7 @@ describe('Eevee signature moves', () => {
 		battle.makeChoices('move stabbyswarm', 'move splash');
 		assert(battle.p2.active[0].volatiles.partiallytrapped, 'Stabby Swarm should trap the target');
 		assert.equal(battle.p2.active[0].boosts.def, -1);
+		assert(battle.log.some(line => line.includes("They're coming out of the woodwork!")));
 	});
 
 	it('removes opposing screens with Steely Strike', () => {

@@ -76,8 +76,8 @@ for (const move of Dex.moves.all()) {
 		}
 		if (typeof move[key] === 'function' && /field\.(?:isTerrain|terrain|getTerrain|canSetTerrain)/.test(move[key].toString())) {
 			const hook = move[key].toString();
-			// Tooltips choose the category for both Eevee screens before applying the Mirror Arena bonus.
-			entries.push(key === 'onModifyMove' && ['baddybad', 'glitzyglow'].includes(move.id) ?
+			// The tooltip resolves the adaptive category before applying move-specific field effects.
+			entries.push(key === 'onModifyMove' && move.flags.adaptivecategory ?
 				hook.replace(/\buseHigherOffensiveStat\(source, move\);\s*/, '') : hook);
 		}
 	}

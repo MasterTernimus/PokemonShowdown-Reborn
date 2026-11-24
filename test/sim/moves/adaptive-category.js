@@ -36,6 +36,24 @@ describe('Adaptive move category timing', () => {
 		hit(a, d, id);
 		assert.equal(observed, ['radiantassault', 'veeveevolley'].includes(id) ? 'Special' : 'Physical');
 	});
+	for (const id of ['punchypummel', 'twirlytwister', 'rockyrampage', 'dustydrift', 'steelystrike',
+		'stabbyswarm', 'ickyinjection', 'spookyspell', 'scalyscorn']) {
+		for (const [stat, category, offense, defense] of [
+			['atk', 'Physical', 'atk', 'def'],
+			['spa', 'Special', 'spa', 'spd'],
+			['tie', 'Special', 'spa', 'spd'],
+		]) it(id + ' selects the Eevee partner damage stats for ' + stat, () => {
+			const [a, d] = setup();
+			d.setType('Water'); // All nine attacks can hit this target.
+			if (stat !== 'tie') a.boosts[stat] = 1;
+			let observed;
+			battle.onEvent('ModifyMove', battle.format, move => {
+				observed = [move.category, move.overrideOffensiveStat, move.overrideDefensiveStat];
+			});
+			assert(hit(a, d, id) > 0);
+			assert.deepEqual(observed, [category, offense, defense]);
+		});
+	}
 	for (const stat of ['atk', 'spa']) it('Needle Gun Underwater and screens match ' + stat, () => {
 		const [a, d] = setup(); a.boosts[stat] = 1;
 		const normal = hit(a, d, 'needlegun'); d.hp = d.maxhp;
