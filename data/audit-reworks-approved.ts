@@ -11,8 +11,8 @@ export const AuditReworkDescriptions: Record<string, { shortDesc: string, desc: 
 	},
 	reapersgrip: {
 		shortDesc:
-			'Self-Sufficient; 5-turn Haunted Aura on entry; Ghost attacks drain 25%. Ghost KO can create Haunted.',
-		desc: 'Heals 1/16 max HP each turn and ignores sandstorm/hail damage. Entry creates 5-turn Haunted Aura: all Ghost attacks gain 20% power. Its Ghost attacks heal 25% of opposing HP damage dealt. A direct Ghost KO while it survives and Haunted Aura remains attempts to convert the field to Haunted for 5 turns, consuming the Aura only on success. Respects field locks; cannot extend existing Haunted. Later entries can create the Aura again, but ability restarts cannot. Suppression stops new triggers and holder benefits; an existing Aura persists.',
+			'Self-Sufficient + Misaligned Stars. Haunted Aura. Ghost hits drain 25%. Ghost KOs can set Haunted.',
+		desc: 'Includes Anticipation. Misaligned Stars records attacks that damage its HP and opposing status moves that hit it. The next use of each recorded move is blocked and heals 1/4 max HP. Switching out clears the record. Heals 1/16 max HP each turn and ignores sandstorm/hail damage. Entry creates 5-turn Haunted Aura: all Ghost attacks gain 20% power. Its Ghost attacks heal 25% of opposing HP damage dealt. A direct Ghost KO while it survives and Haunted Aura remains attempts to convert the field to Haunted for 5 turns, consuming the Aura only on success. Respects field locks; cannot extend existing Haunted. Later entries can create the Aura again, but ability restarts cannot. Suppression stops new triggers and holder benefits; an existing Aura persists.',
 	},
 	bewitchingmajesty: {
 		shortDesc:

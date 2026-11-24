@@ -164,17 +164,21 @@ export function installCombatSequences(
 	abilities.frameperfect.onSwitchOut = function (pokemon) { delete pokemon.m.framePerfect; };
 
 	composeSelectedAbility(abilities, 'insight', ['convergence', 'ultrainstinct'], true);
-	// Cold Logic has custom Forewarn/Aftermath behavior; retain every existing callback.
-	const cold = abilities.coldlogic as any;
-	for (const [key, handler] of Object.entries(abilities.convergence)) {
-		if (!key.startsWith('on')) continue;
-		const previous = cold[key];
-		if (typeof handler !== 'function') { cold[key] ??= handler; continue; }
-		cold[key] = function (this: Battle, ...args: any[]) {
-			const result = previous?.apply(this, args);
-			if (result === false || result === null || result === 0) return result;
-			return handler.apply(this, args) ?? result;
-		};
+	// These abilities keep their custom hooks alongside the component's hooks.
+	for (const [id, component] of [['coldlogic', 'convergence'], ['reapersgrip', 'misalignedstars']] as const) {
+		const ability = abilities[id] as any;
+		for (const [key, handler] of Object.entries(abilities[component])) {
+			if (!key.startsWith('on')) continue;
+			const previous = ability[key];
+			if (previous === undefined) { ability[key] = handler; continue; }
+			if (typeof handler !== 'function') continue;
+			ability[key] = function (this: Battle, ...args: any[]) {
+				const result = previous.apply(this, args);
+				if (result === false || result === null || result === 0) return result;
+				const next = handler.apply(this, args);
+				return next === undefined ? result : next;
+			};
+		}
 	}
 	for (const id of ['convergence', 'misalignedstars', 'frameperfect', 'insight', 'coldlogic'] as const) {
 		Object.assign(abilities[id], descriptions[id]);

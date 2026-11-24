@@ -5,8 +5,14 @@ let battle;
 describe('Mega Dusknoir and Reaper\'s Grip', () => {
 	afterEach(() => battle?.destroy());
 	function setup() {
-		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[{ species: 'Dusknoir', item: 'Dusknoirite', ability: 'Pressure', moves: ['splash'] }], [{ species: 'Mew', ability: 'Synchronize', moves: ['splash', 'tackle'] }]]);
-		battle.makeChoices('team 1', 'team 1');
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[
+				{ species: 'Dusknoir', item: 'Dusknoirite', ability: 'Pressure', moves: ['splash'] },
+				{ species: 'Mew', ability: 'No Ability', moves: ['splash'] },
+			],
+			[{ species: 'Mew', ability: 'Synchronize', moves: ['splash', 'tackle', 'moonblast'] }],
+		]);
+		battle.makeChoices('team 12', 'team 1');
 		const mon = battle.p1.active[0];
 		assert.deepEqual(mon.species.baseStats, { hp: 65, atk: 120, def: 135, spa: 70, spd: 135, spe: 45 });
 		assert.deepEqual(mon.species.abilities, { 0: 'Requiem', 1: 'Misaligned Stars', H: 'Soul Reaver' });
@@ -29,6 +35,40 @@ describe('Mega Dusknoir and Reaper\'s Grip', () => {
 		mon.hp = 100;
 		battle.singleEvent('Residual', mon.getAbility(), mon.abilityState, mon);
 		assert.equal(mon.hp, 100 + Math.floor(mon.baseMaxhp / 16));
+	});
+	it('blocks the next use of each recorded attack or status move and heals once per block', () => {
+		const mon = setup(), foe = battle.p2.active[0];
+		assert.equal(mon.volatiles.warnedmoves?.anticipation, 'moonblast');
+		mon.hp = 60;
+		const heal = Math.floor(mon.baseMaxhp / 4);
+		const use = (id, changes = {}) => {
+			const move = Object.assign(battle.dex.getActiveMove(id), { accuracy: true, willCrit: false }, changes);
+			battle.actions.runMove(move, foe, foe.getLocOf(mon), { externalMove: true });
+		};
+		const attack = () => use('watergun', { damage: 10, multihit: 2 });
+		attack();
+		use('growl');
+		assert.equal(mon.hp, 40);
+		assert.equal(mon.boosts.atk, -1);
+		attack();
+		assert.equal(mon.hp, 40 + heal);
+		use('growl');
+		assert.equal(mon.hp, 40 + 2 * heal);
+		assert.equal(mon.boosts.atk, -1);
+		assert.equal(battle.log.filter(line => line.includes('The stars were bad for that outcome')).length, 2);
+		attack();
+		use('growl');
+		assert.equal(mon.hp, 20 + 2 * heal);
+		assert.equal(mon.boosts.atk, -2);
+		battle.makeChoices('switch 2', 'move splash');
+		battle.makeChoices('switch 2', 'move splash');
+		assert.equal(battle.p1.active[0], mon);
+		assert(battle.field.isAura('hauntedaura'));
+		const returnedHP = mon.hp;
+		attack();
+		use('growl');
+		assert.equal(mon.hp, returnedHP - 20);
+		assert.equal(mon.boosts.atk, -1);
 	});
 	it('converts Haunted Aura after an opposing Ghost KO and does not extend an existing field', () => {
 		const mon = setup(), foe = battle.p2.active[0], move = battle.dex.getActiveMove('shadowball');

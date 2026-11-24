@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "eb72e3d53923fc1c37f2aeae1334763892c3569fc2d7e08fc2e844ff0e078f53",
-  "packageManifestSHA256": "62544cc773d0b9be9608cc93e06d75100fa4a57df3a64e43187abb326d53f9f3",
-  "mechanicsSHA256": "dea7d58bb2593366422fd9389636b89e7877c44f867b020619305c8af2d22705",
+  "packageEngineRevision": "4d792254da9015babb60f41ee878900af942f3c5d047a50cc3b7a149cdd8837f",
+  "packageManifestSHA256": "f95c7a374f1e95a210463649d5dcad8ed5abb1f217d6a20101e86c3838bd7ffd",
+  "mechanicsSHA256": "ffce5177f62beb7fc6b72dd429fd3a3c00c94f5918e27967bf0ead761d792145",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -15,7 +15,7 @@
     },
     {
       "file": "dist/data/ability-components.js",
-      "sha256": "f382ae97ba9905b0d41a7eafc861d131a642cacf32c125b694248afdc645b43d"
+      "sha256": "d1b9552aea020e02eb96db268fc99ffccd0f717874c2210a6ef56303b551660a"
     },
     {
       "file": "dist/data/ability-display-summaries.js",
@@ -111,7 +111,7 @@
     },
     {
       "file": "dist/data/audit-reworks-approved.js",
-      "sha256": "0fcd698289248c974dd89983015848ade88012b208051b96141f8e1ded973242"
+      "sha256": "abf502d2be5fc99e10a09df92fdb19be2d5ded67c263f02c7f2ab9e1644c4a31"
     },
     {
       "file": "dist/data/aura-gaze-approved.js",
@@ -171,7 +171,7 @@
     },
     {
       "file": "dist/data/combat-sequences.js",
-      "sha256": "a77afedb67e5aa0c5244bb3691893234cc5239820fb5ed3e9e5cf4a1662baeab"
+      "sha256": "f87bb77fb6f4da16cc21b6dc78c274c765e3e4c2651f552c3c5cd039e94c874f"
     },
     {
       "file": "dist/data/concise-ability-descriptions.js",

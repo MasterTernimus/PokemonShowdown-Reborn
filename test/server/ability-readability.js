@@ -18,7 +18,7 @@ describe('Readable ability summaries', () => {
 		// These three packages were revised after the original readability pass.
 		const revised = { territorial: 'Stamina + Guard Dog.',
 			bewitchingmajesty: 'Queenly Majesty; creates Bewitched Aura. Smite can create Bewitched Woods.',
-			reapersgrip: 'Self-Sufficient; 5-turn Haunted Aura on entry; Ghost attacks drain 25%. Ghost KO can create Haunted.',
+			reapersgrip: 'Self-Sufficient + Misaligned Stars. Haunted Aura. Ghost hits drain 25%. Ghost KOs can set Haunted.',
 			bloodchallenge: 'First foe attack each turn deals 35% less damage. Counter answers either category and heals 25% HP.',
 		};
 		for (const [id, shortDesc] of Object.entries(ReadableAbilitySummaries)) {

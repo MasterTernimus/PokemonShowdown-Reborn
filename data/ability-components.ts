@@ -1021,7 +1021,7 @@ AbilityComponents.titansknuckles = ['ironfist'];
 
 AbilityComponents.cursedkeepsake = [];
 AbilityComponents.cursedmarionette = [];
-AbilityComponents.reapersgrip = ['selfsufficient'];
+AbilityComponents.reapersgrip = ['selfsufficient', 'misalignedstars'];
 AbilityComponents.bewitchingmajesty = ['magicbounce', 'queenlymajesty'];
 
 AbilityComponents.shelteringbreeze = ['friendguard', 'windrider'];
