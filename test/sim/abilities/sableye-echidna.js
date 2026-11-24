@@ -7,11 +7,11 @@ describe('Sableye’s Echidna abilities', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 	const mon = (species, ability, item = '') => ({ species, ability, item, moves: ['splash', 'taunt', 'tackle', 'nightshade'] });
-	function start(mega = false) {
+	function start(mega = false, reserve = mon('Mew', 'No Ability')) {
 		const holder = mon(mega ? 'Sableye-Mega' : 'Sableye', mega ? 'Tome of Avarice' : "Acquired Taste");
 		const ally = mon('Mew', 'No Ability', 'Oran Berry');
 		const foe = mon('Mew', 'No Ability', 'Sitrus Berry');
-		battle = common.createBattle({ gameType: 'doubles' }, [[holder, ally, mon('Mew', 'No Ability')], [foe, foe]]);
+		battle = common.createBattle({ gameType: 'doubles' }, [[holder, ally, reserve], [foe, foe]]);
 		battle.randomizer = n => n;
 		return [battle.p1.active[0], battle.p1.active[1], ...battle.p2.active];
 	}
@@ -36,13 +36,13 @@ describe('Sableye’s Echidna abilities', () => {
 		assert.equal(battle.p1.active[0], p);
 		const returned = p.hp; hit(q); assert.equal(p.hp, returned + 90);
 	});
-	it('learns an attack after HP damage, discounts subsequent uses from either foe, and forgets on switch', () => {
-		const [p,,q, r] = start(true);
+	it('remembers each damaging move across switches and discounts later uses from either foe', () => {
+		const [p,,q, r] = start(true, { ...mon('Sableye-Mega', 'Tome of Avarice'), name: 'Second Tome' });
 		p.hp = p.maxhp = p.baseMaxhp = 9000;
-		const hit = (user, id, extra = {}) => {
-			const before = p.hp;
-			battle.actions.useMove(Object.assign(Dex.getActiveMove(id), { accuracy: true, willCrit: false, secondaries: [], ...extra }), user, { target: p });
-			return before - p.hp;
+		const hit = (user, id, extra = {}, target = p) => {
+			const before = target.hp;
+			battle.actions.useMove(Object.assign(Dex.getActiveMove(id), { accuracy: true, willCrit: false, secondaries: [], ...extra }), user, { target });
+			return before - target.hp;
 		};
 		const first = hit(q, 'watergun', { multihit: 2 });
 		const repeat = hit(r, 'watergun');
@@ -51,9 +51,16 @@ describe('Sableye’s Echidna abilities', () => {
 		assert(p.hasAbilityOrPassive('magicbounce'));
 		battle.actions.useMove('taunt', q, { target: p });
 		assert(!p.volatiles.taunt); assert(q.volatiles.taunt);
+		const bubble = hit(q, 'bubble');
 		battle.makeChoices('switch 3, move splash', 'auto');
+		const second = battle.p1.active[0];
+		assert.equal(hit(q, 'watergun', {}, second), first / 2);
 		battle.makeChoices('switch 3, move splash', 'auto');
 		assert.equal(battle.p1.active[0], p);
-		assert.equal(hit(q, 'watergun'), first / 2);
+		assert.equal(hit(q, 'watergun'), repeat);
+		assert(Math.abs(hit(r, 'bubble') - bubble * 0.7) <= 1);
+		for (const name of ['Water Gun', 'Bubble']) {
+			assert.equal(battle.log.filter(line => line.includes(p.name + "'s Tome of Avarice recorded " + name + '!')).length, 1);
+		}
 	});
 });

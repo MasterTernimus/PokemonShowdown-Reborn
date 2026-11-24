@@ -28208,17 +28208,17 @@ Abilities.tomeofavarice = {
 	num: 12194,
 	rating: 4,
 	flags: { breakable: 1 },
-	shortDesc: 'Takes 30% less damage from moves that already hurt it this entry.',
-	desc: 'Remembers opposing moves that damage its HP. Later uses of those moves deal 30% less damage to it until it switches out.',
+	shortDesc: 'Takes 30% less damage from opposing moves that already hurt it this battle.',
+	desc: 'Records each opposing move that damages its HP. Later uses of a recorded move deal 30% less damage to this Pokémon, even after it switches out and returns.',
 	onSourceModifyDamage(damage, source, target, move) {
 		if (source.isAlly(target)) return;
 		const hit = target.getMoveHitData(move);
-		hit.tomeRead ??= !!this.effectState.learnedMoves?.includes(move.id);
+		hit.tomeRead ??= !!target.m.tomeOfAvariceMoves?.includes(move.id);
 		if (hit.tomeRead) return this.chainModify(0.7);
 	},
 	onDamagingHit(damage, target, source, move) {
 		if (damage <= 0 || source.isAlly(target)) return;
-		const moves: ID[] = (this.effectState.learnedMoves ||= []);
+		const moves: ID[] = (target.m.tomeOfAvariceMoves ||= []);
 		if (!moves.includes(move.id)) {
 			moves.push(move.id);
 			this.add('-message', target.name + "'s Tome of Avarice recorded " + move.name + '!');
