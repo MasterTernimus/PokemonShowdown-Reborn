@@ -18,7 +18,9 @@ describe('Adaptive move category timing', () => {
 		if (!a.moveSlots.some(x => x.id === id)) a.moveSlots.push({ move: m.name, id, pp: 10, maxpp: 10, target: m.target, disabled: false, used: false });
 		const before = d.hp; battle.actions.runMove(m, a, a.getLocOf(d)); return before - d.hp;
 	}
-	for (const id of ['needlegun', 'dragondarts', 'barrage', 'radiantassault', 'roaroftime', 'spacialrend', 'shadowforce', 'veeveevolley', 'explosion', 'selfdestruct']) {
+	for (const id of ['needlegun', 'dragondarts', 'barrage', 'radiantassault', 'roaroftime', 'spacialrend', 'shadowforce', 'veeveevolley',
+		'bouncybubble', 'buzzybuzz', 'sizzlyslide', 'glitzyglow', 'baddybad', 'sappyseed', 'freezyfrost', 'sparklyswirl',
+		'explosion', 'selfdestruct']) {
 		for (const stat of ['atk', 'spa']) it(id + ' resolves ' + stat + ' before field/ability hooks', () => {
 			const [a, d] = setup(); a.boosts[stat] = 1; let observed;
 			battle.onEvent('ModifyMove', battle.format, move => { observed = move.category; });

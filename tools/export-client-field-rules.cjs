@@ -74,7 +74,12 @@ for (const move of Dex.moves.all()) {
 			entries.push("onModifyMove(move) { move.category = this.sample(['Physical', 'Special']); }");
 			continue;
 		}
-		if (typeof move[key] === 'function' && /field\.(?:isTerrain|terrain|getTerrain|canSetTerrain)/.test(move[key].toString())) entries.push(move[key].toString());
+		if (typeof move[key] === 'function' && /field\.(?:isTerrain|terrain|getTerrain|canSetTerrain)/.test(move[key].toString())) {
+			const hook = move[key].toString();
+			// Tooltips choose the category for both Eevee screens before applying the Mirror Arena bonus.
+			entries.push(key === 'onModifyMove' && ['baddybad', 'glitzyglow'].includes(move.id) ?
+				hook.replace(/\buseHigherOffensiveStat\(source, move\);\s*/, '') : hook);
+		}
 	}
 	if (!entries.length) continue;
 	const base = {};

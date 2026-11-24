@@ -360,8 +360,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	baddybad: {
 		name: 'Baddy Bad',
-		desc: 'This move summons Reflect for 5 turns upon use.',
-		shortDesc: 'Summons Reflect.',
+		desc: 'Uses the higher of Attack and Sp. Atk. This move summons Reflect for 5 turns upon use.',
+		shortDesc: 'Uses the higher of Attack and Sp. Atk. Summons Reflect.',
 	},
 	banefulbunker: {
 		name: 'Baneful Bunker',
@@ -704,8 +704,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bouncybubble: {
 		name: 'Bouncy Bubble',
-		desc: 'The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.',
-		shortDesc: 'User recovers 50% of the damage dealt.',
+		desc: 'Uses the higher of Attack and Sp. Atk. The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.',
+		shortDesc: 'Uses the higher of Attack and Sp. Atk. User recovers 50% of the damage dealt.',
 	},
 	branchpoke: {
 		name: 'Branch Poke',
@@ -844,8 +844,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	buzzybuzz: {
 		name: 'Buzzy Buzz',
-		desc: 'Has a 100% chance to paralyze the foe.',
-		shortDesc: '100% chance to paralyze the foe.',
+		desc: 'Uses the higher of Attack and Sp. Atk. Has a 100% chance to paralyze the foe.',
+		shortDesc: 'Uses the higher of Attack and Sp. Atk. 100% chance to paralyze the foe.',
 	},
 	calmmind: {
 		name: 'Calm Mind',
@@ -2369,8 +2369,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	freezyfrost: {
 		name: 'Freezy Frost',
-		desc: 'Resets the stat stages of all active Pokemon to 0.',
-		shortDesc: 'Eliminates all stat changes.',
+		desc: 'Uses the higher of Attack and Sp. Atk. Resets the stat stages of all active Pokemon to 0.',
+		shortDesc: 'Uses the higher of Attack and Sp. Atk. Eliminates all stat changes.',
 	},
 	frenzyplant: {
 		name: 'Frenzy Plant',
@@ -2540,8 +2540,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	glitzyglow: {
 		name: 'Glitzy Glow',
-		desc: 'This move summons Light Screen for 5 turns upon use.',
-		shortDesc: 'Summons Light Screen.',
+		desc: 'Uses the higher of Attack and Sp. Atk. This move summons Light Screen for 5 turns upon use.',
+		shortDesc: 'Uses the higher of Attack and Sp. Atk. Summons Light Screen.',
 	},
 	gmaxbefuddle: {
 		name: 'G-Max Befuddle',
@@ -5640,8 +5640,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sappyseed: {
 		name: 'Sappy Seed',
-		desc: 'This move summons Leech Seed on the foe.',
-		shortDesc: 'Summons Leech Seed.',
+		desc: 'Uses the higher of Attack and Sp. Atk. This move summons Leech Seed on the foe.',
+		shortDesc: 'Uses the higher of Attack and Sp. Atk. Summons Leech Seed.',
 	},
 	savagespinout: {
 		name: 'Savage Spin-Out',
@@ -5918,8 +5918,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sizzlyslide: {
 		name: 'Sizzly Slide',
-		desc: 'Has a 100% chance to burn the foe.',
-		shortDesc: '100% chance to burn the foe.',
+		desc: 'Uses the higher of Attack and Sp. Atk. Has a 100% chance to burn the foe.',
+		shortDesc: 'Uses the higher of Attack and Sp. Atk. 100% chance to burn the foe.',
 	},
 	sketch: {
 		name: 'Sketch',
@@ -6254,8 +6254,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sparklyswirl: {
 		name: 'Sparkly Swirl',
-		desc: "Every Pokemon in the user's party is cured of its non-volatile status condition.",
-		shortDesc: "Cures the user's party of all status conditions.",
+		desc: "Uses the higher of Attack and Sp. Atk. Every Pokemon in the user's party is cured of its non-volatile status condition.",
+		shortDesc: "Uses the higher of Attack and Sp. Atk. Cures the user's party of all status conditions.",
 	},
 	spectralthief: {
 		name: 'Spectral Thief',

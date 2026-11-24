@@ -1270,7 +1270,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, mirror: 1 },
-		onModifyMove(move) {
+		onModifyMove(move, source) {
+			useHigherOffensiveStat(source, move);
 			if (this.field.isTerrain('mirrorarenaterrain')) {
 				move.self = {
 					boosts: {
@@ -2124,6 +2125,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Cute",
 	},
 	bouncybubble: {
+		onModifyMove(move, source) {
+			useHigherOffensiveStat(source, move);
+		},
 		num: 733,
 		accuracy: 100,
 		basePower: 60,
@@ -2502,6 +2506,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Clever",
 	},
 	buzzybuzz: {
+		onModifyMove(move, source) {
+			useHigherOffensiveStat(source, move);
+		},
 		num: 734,
 		accuracy: 100,
 		basePower: 60,
@@ -7156,6 +7163,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Psychic",
 	},
 	freezyfrost: {
+		onModifyMove(move, source) {
+			useHigherOffensiveStat(source, move);
+		},
 		num: 739,
 		accuracy: 90,
 		basePower: 100,
@@ -7702,7 +7712,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, mirror: 1 },
-		onModifyMove(move) {
+		onModifyMove(move, source) {
+			useHigherOffensiveStat(source, move);
 			if (this.field.isTerrain('mirrorarenaterrain')) {
 				move.self = {
 					boosts: {
@@ -18157,6 +18168,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Clever",
 	},
 	sappyseed: {
+		onModifyMove(move, source) {
+			useHigherOffensiveStat(source, move);
+		},
 		num: 738,
 		accuracy: 90,
 		basePower: 100,
@@ -19266,6 +19280,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Cool",
 	},
 	sizzlyslide: {
+		onModifyMove(move, source) {
+			useHigherOffensiveStat(source, move);
+		},
 		num: 735,
 		accuracy: 100,
 		basePower: 60,
@@ -20304,6 +20321,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Tough",
 	},
 	sparklyswirl: {
+		onModifyMove(move, source) {
+			useHigherOffensiveStat(source, move);
+		},
 		num: 740,
 		accuracy: 85,
 		basePower: 120,

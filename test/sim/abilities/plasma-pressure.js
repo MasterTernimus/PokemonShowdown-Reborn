@@ -28,15 +28,25 @@ describe('Plasma Eruption pressure cycle', () => {
 		battle.randomizer = value => value;
 		return [battle.p1.active[0], battle.p2.active[0]];
 	}
-	it('Galvanize keeps converted Normal attacks Electric and applies its power bonus once', () => {
-		const [user, target] = setup();
-		battle.randomChance = () => true;
-		const move = battle.dex.getActiveMove('swift');
-		battle.runEvent('ModifyType', user, target, move, move);
-		battle.runEvent('ModifyMove', user, target, move, move);
-		assert.equal(move.type, 'Electric');
-		assert.equal(battle.runEvent('BasePower', user, target, move, 100), 120);
-	});
+	for (const type of ['Fire', 'Electric']) {
+		it('keeps Galvanize power once on converted ' + type + ' attacks', () => {
+			const [user, target] = setup();
+			let rolls = 0;
+			battle.randomChance = (n, d) => {
+				assert.deepEqual([n, d], [1, 2]);
+				rolls++;
+				return type === 'Fire';
+			};
+			const move = battle.dex.getActiveMove('swift');
+			battle.runEvent('ModifyType', user, target, move, move);
+			assert.equal(move.type, 'Electric');
+			battle.runEvent('ModifyMove', user, target, move, move);
+			battle.runEvent('ModifyMove', user, target, move, move);
+			assert.equal(rolls, 1);
+			assert.equal(move.type, type);
+			assert.equal(battle.runEvent('BasePower', user, target, move, 100), 120);
+		});
+	}
 	function hit(p, q, id = 'flamethrower', changes = {}) {
 		const move = Object.assign(Dex.getActiveMove(id), { accuracy: true, willCrit: false }, changes);
 		battle.actions.useMove(move, p, { target: q });
