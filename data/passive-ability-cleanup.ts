@@ -1,4 +1,5 @@
 import { November16BalanceDescriptions } from './nov16-balance-descriptions';
+import { getShogunRoute } from './samurott-shogun';
 import {
 	SignaturePassiveComponents,
 	SignaturePassiveRemovedComponents,
@@ -193,7 +194,11 @@ export const SharedPassiveComponentAdditions: { [id: string]: { passive: string,
 		orchardbond: { passive: 'harvest', component: 'stickyhold' },
 		abysslure: { passive: 'illuminate', component: 'suctioncups' },
 	};
-export function getAbilityComponentAdditions(id: string, passives: readonly string[] = []): string[] {
+export function getAbilityComponentAdditions(id: string, passives: readonly string[] = [], species = ''): string[] {
+	if (id === 'shogunstance') {
+		const component = getShogunRoute(species)?.component;
+		return component ? [component] : [];
+	}
 	const replacement = SharedPassiveComponentAdditions[id];
 	return replacement && passives.includes(replacement.passive) ? [replacement.component] : [];
 }
@@ -855,7 +860,6 @@ Object.assign(SharedPassiveAbilityDescriptions, {
 Object.assign(SharedPassiveComponents, {
 	verdantsanctuary: ['grassysurge'],
 	bogbody: ['levitate'],
-	mastercourse: ['contrary'],
 	glacialheart: ['thermalexchange'],
 });
 Object.assign(SharedPassiveAbilityDescriptions, {
@@ -868,11 +872,6 @@ Object.assign(SharedPassiveAbilityDescriptions, {
 		passive: 'levitate',
 		shortDesc: 'Thick Fat and Dry Skin.',
 		desc: 'Full local Thick Fat and Dry Skin: Fire and Ice offensive stats are halved, Water absorption, the Fire power penalty, rain healing, sun damage and all field recovery or damage.',
-	},
-	mastercourse: {
-		passive: 'contrary',
-		shortDesc: 'Water/Dragon HP hits charge an ally, or itself alone, after the move.',
-		desc: 'Once per turn, dealing opposing HP damage with a Water or Dragon attack prepares a nonstacking +1 critical-hit-stage charge after the entire move finishes. Give it to the living adjacent ally with the lowest HP percentage, or to itself if none exists. The next executed damaging move consumes the charge even on a miss, protection or immunity; status moves preserve it, and switching clears it. A successful charged Water or Dragon move can prepare another charge afterward.',
 	},
 	glacialheart: {
 		passive: 'thermalexchange',
@@ -980,11 +979,6 @@ import { LateDisplayClarifications } from './late-display-clarifications';
 for (const [id, details] of Object.entries(LateDisplayClarifications))
 	if (SharedPassiveAbilityDescriptions[id])
 		Object.assign(SharedPassiveAbilityDescriptions[id], details);
-
-import { UltraEgoRivalryDescription, UltraEgoRivalryAbilities } from './ultra-rivalry-description';
-for (const id of UltraEgoRivalryAbilities)
-	if (SharedPassiveAbilityDescriptions[id])
-		SharedPassiveAbilityDescriptions[id].desc += UltraEgoRivalryDescription;
 
 delete SharedPassiveComponents.glacialheart;
 SharedPassiveAbilityDescriptions.glacialheart = {

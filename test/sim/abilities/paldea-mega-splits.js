@@ -31,14 +31,15 @@ describe('Approved six Paldea Mega passive migrations', () => {
 	for (const [id, passive] of Object.entries(approved)) {
 		it(id + ' uses real Mega evolution and Transform, with passives surviving selected suppression', () => {
 			const [p, q] = setup(id);
-			assert.deepEqual(p.getPassives(), [passive]);
-			if (id === 'baxcaliburmega') assert(!p.hasAbility(passive));
+			const passives = require('./passive-approval-overlays').current(id, [passive]);
+			assert.deepEqual(p.getPassives(), passives);
+			if (id === 'baxcaliburmega' || p.ability === 'mastercourse') assert(!p.hasAbility(passive));
 			else assert(p.getAbilityComponentExclusions().includes(passive));
 			assert(q.transformInto(p));
-			assert.deepEqual(q.getPassives(), [passive]);
+			assert.deepEqual(q.getPassives(), passives);
 			p.setAbility('No Ability');
 			p.addVolatile('gastroacid');
-			assert.deepEqual(p.getPassives(), [passive]);
+			assert.deepEqual(p.getPassives(), passives);
 		});
 		it(id + ' calculator damage applies a duplicate selected primitive only once', () => {
 			const { calculateScenario } = require('../../../dist/sim/custom-calculator');
@@ -94,10 +95,11 @@ describe('Approved six Paldea Mega passive migrations', () => {
 		assert(p.isGrounded());
 	});
 	for (const id of ['tatsugiricurlymega', 'tatsugiridroopymega', 'tatsugiristretchymega']) {
-		it(id + ' reverses boosts once and retains one nonstacking ally critical charge', () => {
+		it(id + ' takes normal stat drops and retains one nonstacking ally critical charge', () => {
 			const [p, q] = setup(id, true), ally = battle.p1.active[1], move = Dex.getActiveMove('surf');
+			assert.equal(p.boosts.spa, 1); // Base Tatsugiri entered with Sushi Savvy before Mega Evolution.
 			battle.boost({ spa: -1 }, p, p);
-			assert.equal(p.boosts.spa, 1);
+			assert.equal(p.boosts.spa, 0);
 			battle.runEvent('DamagingHit', q, p, move, 10);
 			assert(!ally.volatiles.mastercourse);
 			battle.runEvent('AfterMove', p, q, move);

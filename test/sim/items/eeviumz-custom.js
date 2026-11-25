@@ -31,6 +31,25 @@ describe('Eevee balance and Eevium Z', () => {
 		});
 	}
 
+	for (const species of ['Eevee-Starter', 'Eevee-Starter-Alt']) {
+		it(species + ' loses only the Eevium Z defense bonus when Sinister Blaze changes it into Abysseon', () => {
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+				[{ species, ability: 'Sinister Blaze', item: 'Eevium Z', moves: ['Last Resort'] }],
+				[{ species: 'Mew', ability: 'No Ability', moves: ['Splash'] }],
+			]);
+			battle.makeChoices('team 1', 'team 1');
+			const holder = battle.p1.active[0];
+			assert.equal(holder.species.id, 'abysseon');
+			for (const stat of ['def', 'spd']) {
+				assert.equal(holder.getStat(stat), holder.getStat(stat, true, true), stat);
+			}
+			holder.hp -= 100;
+			const hp = holder.hp;
+			battle.singleEvent('Residual', holder.getItem(), holder.itemState, holder);
+			assert.equal(holder.hp - hp, Math.floor(holder.baseMaxhp / 16));
+		});
+	}
+
 	it('restores only each ability-specific exception pool', () => {
 		const { StarterEeveeMoveExceptions } = require('../../../dist/data/eevee-ability-move-exceptions');
 		const validator = new TeamValidator('gen9nofieldsinglesgame@@@Obtainable Moves');

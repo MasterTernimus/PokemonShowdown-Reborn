@@ -27,7 +27,8 @@ export type MoveTarget =
 
 /** Possible move flags. */
 interface MoveFlags {
-	adaptivecategory?: 1; // Uses the higher stage-adjusted attacking stat; ties are Special.
+	adaptivecategory?: 1; // Uses the higher stage-adjusted attacking stat. Mega signatures keep their listed category on ties.
+	megasignature?: 1; // A damaging Mega signature; its default category breaks offensive stat ties.
 	allyanim?: 1; // The move plays its animation when used on an ally.
 	arrow?: 1; // Eligible for Fallen Star and Dual Wield's arrow-move effects.
 	bypasssub?: 1; // Ignores a target's substitute.
@@ -218,6 +219,8 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	 */
 	recoil?: [number, number];
 	drain?: [number, number];
+	/** Overrides the recipient of this move's own drain healing. */
+	drainRecipient?: (source: Pokemon, target: Pokemon) => Pokemon;
 	mindBlownRecoil?: boolean;
 	stealsBoosts?: boolean;
 	struggleRecoil?: boolean;
@@ -334,6 +337,10 @@ interface MoveHitData {
 	[targetSlotid: string]: {
 		auraRead?: boolean,
 		tomeRead?: boolean,
+		starsFirstUse?: boolean,
+		starsBlocked?: boolean,
+		starsReduced?: boolean,
+		starsHeal?: Pokemon,
 		armorFactor?: number,
 		/** Did this move crit against the target? */
 		crit: boolean,
@@ -564,6 +571,12 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.isZ = data.isZ || false;
 		this.isMax = data.isMax || false;
 		this.flags = data.flags || {};
+		if (this.flags.megasignature) {
+			const effect = this.desc || this.shortDesc;
+			const stats = this.overrideOffensiveStat === 'def' ? 'Defense and Sp. Atk' : 'Attack and Sp. Atk';
+			this.desc = `Uses the higher of the user's ${stats}. ${effect}`;
+			this.shortDesc = `Adaptive. ${this.shortDesc || effect}`;
+		}
 		this.selfSwitch = (typeof data.selfSwitch === 'string' ? (data.selfSwitch as ID) : data.selfSwitch) || undefined;
 		this.nonGhostTarget = data.nonGhostTarget || '';
 		this.ignoreAbility = data.ignoreAbility || false;

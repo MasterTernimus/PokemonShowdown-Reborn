@@ -158,14 +158,14 @@ describe('Rampage 140 power and conversion metadata', () => {
 		battle?.destroy();
 		battle = null;
 	});
-	it('covers exactly every ordinary move using the shared lock', () =>
+	it('covers the four learned rampage moves and Mega Infernape’s Blazing Fury using the shared lock', () =>
 		assert.deepEqual(
 			Dex.moves
 				.all()
 				.filter(m => !m.isZ && !m.isMax && m.self?.volatileStatus === 'lockedmove')
 				.map(m => m.id)
 				.sort(),
-			[...ids].sort()
+			[...ids, 'blazingfury'].sort()
 		));
 	for (const id of ids)
 		it(id + ' derives 200 Z power and retains 140 Max power', () => {

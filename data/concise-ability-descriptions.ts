@@ -1,4 +1,4 @@
-import { BurningSpiritDescription } from './ultra-instinct-description';
+import { BurningSpiritDescription, UltraInstinctDescription } from './ultra-instinct-description';
 /** Display-only audit; callbacks and component metadata remain unchanged. */
 export const ConciseAbilityDescriptions: Record<string, { desc: string, shortDesc: string }> = {
 	"smolderingshroud": {
@@ -226,10 +226,7 @@ export const ConciseAbilityDescriptions: Record<string, { desc: string, shortDes
 		"desc": "Eligible single-target attacks hit three times. In singles and doubles, native variable multi-hit moves use their maximum hit count, keeping native per-hit accuracy and damage. Remaining native hits can continue into another living opposing active Pokemon after a KO at 70% damage. Excludes non-FFA spread, charge, delayed, Z/Max and extra-hit-barred moves. Follow-ups deal 30% damage, retargeting another living opposing active Pokemon after a KO. In FFA, single-target moves hit all foes at 1.3x power; spread moves hit all foes three times with 30% follow-ups. Full-power spread stays full power. Moves have 1.2x power on Dragon's Den. Airborne: immune to Ground attacks, Spikes, Toxic Spikes, Sticky Web and Arena Trap unless grounded. Thousand Arrows can still hit. Prevents opposing stat drops. On entry, sets Factory Field for 3 turns. Eligible single-target attacks hit three times, it is ungrounded, and opponents cannot lower its stats. Field creation or refresh is attempted only once per battle per holder, even if blocked; switching, suppression, revival, or ability changes never reset this use. Magnezone-Pulse automatically receives Flash Cannon, Discharge, Recover, and Autotomize in that order. Its field creation, refresh and conversion last exactly 3 turns; Amplifield Rock does not extend them.",
 		"shortDesc": "5-turn Factory Field on entry.",
 	},
-	"ultrainstinct": {
-		"desc": "Mold Breaker + Inner Focus. Attacks have 1.3x power against an opposing target still queued to move or that switched in this turn, except a target with Battle Bond. The first opposing HP-damaging move each turn deals 30% less damage across all hits. Substitute-only damage preserves the allowance. After a whole attack deals opposing HP damage, heals 1/16 max HP once per turn while alive; healing restrictions apply. Multi-hit and spread moves heal only once; a failed heal cannot retry within the same move. On Ashen Beach, New World, Starlight Arena and Cold Eclipse: 35% reduction and 1/8 healing. The turn allowance persists through switches, form/ability changes and Transform. Bewitched Woods, Haunted and Holy disable Ultra Instinct's effects. Against Ultra Ego or its composites, the protected move deals 40% less damage and ignores positive offensive stages. Ultra Ego ignores its own negative Attack or Sp. Atk stages when attacking Ultra Instinct. Has the Predator interaction.",
-		"shortDesc": "Mold Breaker + Inner Focus; 1.3x timing power; first attack each turn deals 30% less; attack healing.",
-	},
+	"ultrainstinct": UltraInstinctDescription,
 	"duskdrive": {
 		"desc": "Battle Fervor, Precision and Opportunist, including their field effects, entry behavior, item blocking, damage modifiers and boost-copy timing.",
 		"shortDesc": "Combines the listed abilities.",

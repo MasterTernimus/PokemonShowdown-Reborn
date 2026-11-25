@@ -12,12 +12,17 @@ for(const [name,file] of [['BattlePokedex','pokedex'],['BattleAbilities','abilit
 require(path.join(root,'js/battle-dex-data.js'));
 require(path.join(root,'js/battle-dex.js'));
 const {BattlePokemonSearch,DexSearch}=new Function(fs.readFileSync(path.join(root,'js/battle-dex-search.js'),'utf8')+'\nreturn {BattlePokemonSearch,DexSearch};')();
-for(const [species,ability,component] of [['Scizor','Pincer Crush','Tough Claws'],['Mamoswine','Snowpack','Tough Claws'],['Nidoqueen','Broodguard','Friend Guard'],['Tangrowth','Living Tangle','Stamina'],['Tatsugiri-Curly-Mega','Master Course','Contrary']]) {
+for(const [species,ability,component] of [['Scizor','Pincer Crush','Tough Claws'],['Mamoswine','Snowpack','Tough Claws'],['Nidoqueen','Broodguard','Friend Guard'],['Tangrowth','Living Tangle','Stamina']]) {
  const p=Dex.species.get(species);
  assert(Object.values(p.abilities).includes(ability),`${species} assignment`);
  assert(Dex.hasAbilityEffect(p,component),`${species} component`);
  assert(BattlePokemonSearch.prototype.filter.call({dex:Dex},['pokemon',p.id],[['ability',component]]),`${species} filter`);
  assert(Dex.abilities.get(ability).desc.length>30,`${ability} description`);
+}
+for(const id of ['tatsugiricurlymega','tatsugiridroopymega','tatsugiristretchymega']) {
+ const p=Dex.species.get(id);
+ assert.deepEqual(p.passives,['sushisavvy']);
+ assert(!Dex.hasAbilityEffect(p,'Contrary'));
 }
 assert(!Dex.hasAbilityEffect(Dex.species.get('Lanturn'),'Lightning Rod'));
 assert(!Dex.hasAbilityEffect(Dex.species.get('Torterra-Mega-Y'),'Rocky Payload'));

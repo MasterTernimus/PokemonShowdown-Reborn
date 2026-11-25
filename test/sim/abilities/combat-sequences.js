@@ -179,9 +179,9 @@ describe('Convergence, Misaligned Stars and Frame Perfect', () => {
 		assert(hit(foe, p, 'knockoff') > 0);
 		const slap = () => hit(foe, p, 'doubleslap', { damage: 10, multihit: 5 });
 		assert.equal(slap(), 50);
-		assert.equal(slap(), -p.maxhp / 4);
+		assert.equal(slap(), -Math.floor(p.maxhp / 3));
 		assert.equal(slap(), 50);
-		assert.equal(hit(foe, p, 'knockoff'), -p.maxhp / 4);
+		assert.equal(hit(foe, p, 'knockoff'), -Math.floor(p.maxhp / 3));
 	});
 	it('records successful targeted status moves and ignores misses', () => {
 		const [p, foe] = start('Misaligned Stars');
@@ -210,6 +210,63 @@ describe('Convergence, Misaligned Stars and Frame Perfect', () => {
 		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
 		assert(p.volatiles.warnedmoves);
 		assert(p.hasAbility('anticipation'));
+	});
+	it('remembers each spread target independently and heals even from a Sheer Force attack', () => {
+		const [holder, foe, ally] = start('Misaligned Stars', true);
+		ally.setAbility('Misaligned Stars');
+		foe.setAbility('Sheer Force');
+		holder.hp = ally.hp = 2000;
+		const volley = () => battle.actions.runMove(Object.assign(Dex.getActiveMove('rockslide'), {
+			accuracy: true, damage: 40,
+		}), foe, foe.getLocOf(holder), { externalMove: true });
+		ally.addVolatile('protect');
+		volley();
+		ally.removeVolatile('protect');
+		assert.equal(holder.hp, 1960);
+		assert.equal(ally.hp, 2000);
+		volley();
+		assert.equal(holder.hp, 1960 + 3333);
+		assert.equal(ally.hp, 1960);
+		battle.makeChoices('switch 3, move splash', 'move splash, move splash');
+		battle.makeChoices('switch 3, move splash', 'move splash, move splash');
+		volley();
+		assert(foe.lastMoveUsed.hasSheerForce);
+		assert.equal(holder.hp, 1960 + 3333 - 20 + 2500);
+		assert.equal(ally.hp, 1960 + 3333);
+	});
+	it('cushions a remembered delayed hit and heals when the attack lands', () => {
+		const [holder, foe] = start('Misaligned Stars');
+		holder.hp = 3000;
+		const land = () => {
+			const move = Object.assign(Dex.getActiveMove('futuresight'), {
+				accuracy: true, damage: 40, onTry: undefined,
+			});
+			battle.actions.trySpreadMoveHit([holder], foe, move, true);
+			battle.clearActiveMove();
+		};
+		land();
+		assert.equal(holder.hp, 2960);
+		land();
+		assert.equal(holder.hp, 2960 + 3333);
+		battle.makeChoices('switch 2', 'move splash');
+		battle.makeChoices('switch 2', 'move splash');
+		land();
+		assert.equal(holder.hp, 2960 + 3333 - 20 + 2500);
+	});
+	it('keeps a full block from stealing boosts or consuming an attacking Gem', () => {
+		const [holder, foe] = start('Misaligned Stars');
+		holder.hp = 3000;
+		hit(foe, holder, 'spectralthief', { damage: 20 });
+		foe.setItem('Ghost Gem');
+		holder.boosts.atk = 2;
+		assert.equal(hit(foe, holder, 'spectralthief'), -3333);
+		assert.equal(holder.boosts.atk, 2);
+		assert.equal(foe.boosts.atk, 0);
+		assert.equal(foe.item, 'ghostgem');
+		hit(foe, holder, 'spectralthief');
+		assert.equal(holder.boosts.atk, 0);
+		assert.equal(foe.boosts.atk, 2);
+		assert.equal(foe.item, '');
 	});
 	it('applies momentum only after the entire multihit move and caps at ten', () => {
 		const [p, foe] = start('Frame Perfect');
@@ -272,16 +329,51 @@ describe('Convergence, Misaligned Stars and Frame Perfect', () => {
 		const move = prepare(p, 'tackle');
 		assert.equal(battle.runEvent('ModifyDamage', p, foe, move, 100), 142);
 	});
-	for (const ability of ['Misaligned Stars', 'Frame Perfect'])
-		it('clears ' + ability + ' on switching', () => {
-			const [p, foe] = start(ability);
-			hit(p, foe);
-			hit(foe, p);
+	it('clears Frame Perfect on switching', () => {
+		const [p, foe] = start('Frame Perfect');
+		hit(p, foe);
+		battle.makeChoices('switch 2', 'move splash');
+		assert(!p.m.framePerfect);
+	});
+	it('keeps each Stars record, blocks once in battle, then cushions one volley each entry', () => {
+		const [p, foe] = start('Misaligned Stars');
+		const reenter = () => {
 			battle.makeChoices('switch 2', 'move splash');
-			assert(!p.m.convergence);
-			assert(!p.m.misalignedStars);
-			assert(!p.m.framePerfect);
-		});
+			battle.makeChoices('switch 2', 'move splash');
+		};
+		const attack = extra => hit(foe, p, 'tackle', { damage: 20, multihit: 3, ...extra });
+		const status = () => hit(foe, p, 'growl');
+		p.hp = 2000;
+		assert.equal(attack(), 60);
+		status();
+		reenter();
+		assert.equal(attack({ accuracy: 0 }), 0);
+		p.addVolatile('protect');
+		assert.equal(attack(), 0);
+		p.removeVolatile('protect');
+		p.setType('Ghost');
+		assert.equal(attack(), 0);
+		p.setType('Normal');
+		p.addVolatile('substitute');
+		p.volatiles.substitute.hp = 500;
+		assert.equal(attack(), 0);
+		p.removeVolatile('substitute');
+		assert.equal(attack(), -3333);
+		assert.equal(status(), -3333);
+		assert.equal(p.boosts.atk, 0);
+		assert.equal(attack(), 60);
+		reenter();
+		assert.equal(attack({ accuracy: 0 }), 0);
+		const before = p.hp;
+		assert.equal(attack(), 30 - Math.min(2500, p.maxhp - (before - 30)));
+		assert.equal(attack(), 60);
+		assert.equal(status(), 0);
+		assert.equal(p.boosts.atk, -1);
+		reenter();
+		p.hp = 12;
+		assert.equal(attack(), 12);
+		assert.equal(p.hp, 0);
+	});
 	for (const ability of ['Convergence', 'Insight', 'Cold Logic'])
 		it(ability + ' keeps partial and full charges through switches', () => {
 			const [p, foe] = start(ability);
@@ -314,7 +406,7 @@ describe('Convergence, Misaligned Stars and Frame Perfect', () => {
 		battle = State.deserializeBattle(saved);
 		const holder = battle.p1.active[0];
 		holder.hp = holder.maxhp / 2;
-		assert.equal(hit(battle.p2.active[0], holder), -holder.maxhp / 4);
+		assert.equal(hit(battle.p2.active[0], holder), -Math.floor(holder.maxhp / 3));
 	});
 	it('clears Frame Perfect on a no-PP attempt or a failed before-move callback', () => {
 		const [p, foe] = start('Frame Perfect');

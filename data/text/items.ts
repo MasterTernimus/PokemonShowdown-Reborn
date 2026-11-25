@@ -550,7 +550,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	eeviumz: {
 		name: 'Eevium Z',
 		shortDesc:
-			'Eevee forms: 1.5x Def/SpD, heals 1/16 HP/turn; Extreme Evoboost via Last Resort or Veevee Volley.',
+			'Eevee: heals 1/16 HP per turn. 1.5x Def/SpD except in Abysseon form. Unlocks Extreme Evoboost.',
+		desc: 'Eevee, Starter Eevee and G-Max Eevee heal 1/16 max HP each turn. Eevium Z multiplies both defenses by 1.5 except while in Abysseon form. Last Resort and Veevee Volley can activate Extreme Evoboost for eligible users.',
 	},
 	ejectbutton: {
 		name: 'Eject Button',

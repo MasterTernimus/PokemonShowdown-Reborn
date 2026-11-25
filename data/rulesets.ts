@@ -5435,7 +5435,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	authorityclause: {
 		effectType: 'ValidatorRule',
 		name: 'Authority Clause',
-		desc: 'One Ultra Ego user and one Ultra Instinct user per team, including ordinary forms, components, passives and available Mega/Gmax forms. Also limits Neutralization, Royal Decree, Burning Ego, and Perfect Ego to one user combined.',
+		desc: 'One Ultra Ego user and one Ultra Instinct user per team, counting selected abilities, passives and available Mega/Gmax forms. Ultra Instinct granted by Lucarionite or Lucarionite Z is exempt. Also limits Neutralization, Royal Decree, Burning Ego, and Perfect Ego to one user combined.',
 		onBegin() {
 			this.add(
 				'rule',
@@ -5443,7 +5443,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			);
 			this.add(
 				'rule',
-				'Authority Clause: Limit one Ultra Ego user and one Ultra Instinct user, including ordinary and Mega/Gmax forms',
+				'Authority Clause: Limit one Ultra Ego user and one Ultra Instinct user. Ultra Instinct granted by Lucarionite or Lucarionite Z is exempt.',
 			);
 		},
 		onValidateTeam(team) {
@@ -5461,6 +5461,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				if (setAbility) abilities.add(setAbility);
 				const species = this.dex.species.get(set.species);
 				const forms = authorityForms(this.dex, set);
+				const stone = this.dex.items.get(set.item);
 				for (const form of forms) {
 					abilities.add(this.toID(form.abilities[0]));
 				}
@@ -5470,9 +5471,14 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 							candidate.id === species.id ?
 								set.ability || candidate.abilities[0] :
 								candidate.abilities[0];
-						return [active, ...candidate.passives].some(ability =>
-							abilityIncludesComponent(ability, component),
-						);
+						const activeId = this.toID(active);
+						const lucarioStoneInstinct = component === 'ultrainstinct' &&
+							candidate.isMega && candidate.baseSpecies === 'Lucario' &&
+							stone.megaStone?.Lucario === candidate.name &&
+							activeId === this.toID(candidate.abilities[0]) &&
+							(activeId === 'insight' || activeId === 'auraprecision');
+						return (!lucarioStoneInstinct && abilityIncludesComponent(active, component)) ||
+							candidate.passives.some(passive => abilityIncludesComponent(passive, component));
 					});
 					if (form) ultraUsers[component].push(`${set.name || set.species} (${form.name})`);
 				}

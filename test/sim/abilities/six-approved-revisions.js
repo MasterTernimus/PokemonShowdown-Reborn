@@ -74,7 +74,7 @@ describe('Six approved starter, shield and Nuzzle revisions', () => {
 		for (const [id, abilities] of [
 			['greninja', { 0: 'Guardian Tide', 1: 'Protean', H: 'Shadow Screen', S: 'Battle Bond' }],
 			['garchomp', { 0: 'Rough Skin', 1: 'Supreme Overlord', H: 'Void Wrath', S: 'Battle Bond' }],
-			['chesnaught', { 0: 'Friend Guard', 1: 'Royal Decree', H: 'Guardian Shield' }],
+			['chesnaught', { 0: 'Friend Guard', 1: 'Iron Barbs', H: 'Guardian Shield' }],
 			['ninetalesalola', { 0: 'Magic Bounce', 1: 'Serene Grace', H: 'Void Sanctum' }],
 			['raichu', { 0: 'Charged Tail', 1: 'Grounding Tail', H: 'Lightning Rod' }],
 		])

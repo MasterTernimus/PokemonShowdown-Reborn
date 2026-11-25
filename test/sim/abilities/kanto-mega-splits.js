@@ -138,12 +138,29 @@ describe('Approved Kanto and Johto Mega splits', () => {
 		for (const id of ['reflect', 'lightscreen', 'auroraveil']) q.side.addSideCondition(id, q);
 		const hit = id => battle.actions.useMove(Dex.getActiveMove(id), p, { target: q });
 		hit('nuzzle'); hit('psychic');
-		q.addVolatile('substitute'); hit('thunderbolt');
+		q.addVolatile('substitute');
+		const hp = q.hp;
+		hit('thundershock');
+		assert.equal(q.hp, hp);
 		assert(q.side.sideConditions.lightscreen && q.side.sideConditions.auroraveil);
-		q.removeVolatile('substitute'); hit('thunderbolt');
+		q.removeVolatile('substitute'); hit('thundershock');
+		assert(q.hp < hp);
 		assert(!q.side.sideConditions.lightscreen && !q.side.sideConditions.auroraveil);
 		assert(q.side.sideConditions.reflect);
 		assert(p.hasAbility('lightningrod')); assert(!p.hasAbility('transistor'));
+	});
+	it('Surge Rail bypasses Substitute and triggers Railgun Circuit when it deals special damage', () => {
+		const [p, q] = setup('Raichu-Mega-Y');
+		for (const screen of ['reflect', 'lightscreen', 'auroraveil']) q.side.addSideCondition(screen, q);
+		q.addVolatile('substitute', q);
+		const hp = q.hp, substituteHP = q.volatiles.substitute.hp;
+		battle.actions.useMove('thunderbolt', p, { target: q });
+		assert.equal(p.lastMoveUsed.name, 'Surge Rail');
+		assert.equal(p.lastMoveUsed.category, 'Special');
+		assert(q.hp < hp);
+		assert.equal(q.volatiles.substitute.hp, substituteHP);
+		assert(!q.side.sideConditions.lightscreen && !q.side.sideConditions.auroraveil);
+		assert(q.side.sideConditions.reflect);
 	});
 	it('Dry Skin absorbs once and applies its Fire modifier once through nested Parasitism', () => {
 		const [p, q] = setup('Parasect-Mega');

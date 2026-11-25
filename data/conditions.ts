@@ -1366,7 +1366,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.effectState.trueDuration--;
 		},
 		onStart(target, source, effect) {
-			this.effectState.trueDuration = this.random(2, 4);
+			this.effectState.trueDuration = effect.name === 'Blazing Fury' ? 2 : this.random(2, 4);
 			this.effectState.move = effect.id;
 			this.effectState.ragingHeartThrash = !!(effect as ActiveMove & { ragingHeartThrash?: boolean })
 				.ragingHeartThrash;

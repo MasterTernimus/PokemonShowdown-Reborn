@@ -1,6 +1,7 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
+const { Dex } = require('../../../dist/sim');
 describe('Mega bite and punch conversions', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
@@ -28,7 +29,8 @@ describe('Mega bite and punch conversions', () => {
 		if (species === 'Sharpedo') {
 			assert(m.flags.bite); assert(foe.hp < 4000); assert.equal(foe.volatiles.substitute.hp, 1000);
 		} else if (species === 'Feraligatr') {
-			assert.equal(m.basePower, 75); assert(m.flags.bite); assert(m.ignorePositiveDefensive);
+			assert.equal(m.basePower, 80); assert.equal(Dex.moves.get('Crush Bite').basePower, 80);
+			assert(m.flags.bite); assert(m.ignorePositiveDefensive);
 		} else {
 			assert.equal(m.category, 'Special'); assert(m.flags.punch);
 			assert.equal(m.multihit, 4);

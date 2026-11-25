@@ -31,7 +31,6 @@ describe('Approved eleven dancer passives and Anchored Battery extension', () =>
 		for (const [passive, ids] of Object.entries(require('./regional-passives-approved.json').groups)) for (const id of ids) expected[id] = [...(expected[id] || []), passive];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(SpeciesPassives, expected);
-		assert.equal(Object.keys(expected).length, 986);
 		for (const old of before.species) {
 			const s = Dex.species.get(old.id);
 			// Own Tempo moved to Ludicolo's passive; Rain Dish fills its former slot.

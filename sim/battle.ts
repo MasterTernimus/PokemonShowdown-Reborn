@@ -3070,7 +3070,7 @@ export class Battle {
 						if (effect.drain)
 							this.heal(
 								Math.round((crescentSubDamage * effect.drain[0]) / effect.drain[1]),
-								source,
+								effect.drainRecipient?.(source, target) ?? source,
 								target,
 								'drain',
 							);
@@ -3163,13 +3163,13 @@ export class Battle {
 					);
 					// Draining can be countered in gen 1
 					if (this.gen <= 1) this.lastDamage = amount;
-					this.heal(amount, source, target, 'drain');
+					this.heal(amount, effect.drainRecipient?.(source, target) ?? source, target, 'drain');
 				}
 				if (this.gen > 4 && effect.drain && source) {
 					const amount = Math.round(
 						((targetDamage + crescentSubDamage) * effect.drain[0]) / effect.drain[1],
 					);
-					this.heal(amount, source, target, 'drain');
+					this.heal(amount, effect.drainRecipient?.(source, target) ?? source, target, 'drain');
 				}
 			}
 		}

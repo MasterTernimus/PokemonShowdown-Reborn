@@ -446,6 +446,16 @@ function consumeAccumulationStockpileLayer(battle: Battle, pokemon: Pokemon) {
 import { adaptiveMemory, adaptiveDisplay } from '../sim/adaptive-cycle';
 
 export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
+	sushisavvy: {
+		name: 'Sushi Savvy',
+		num: 32660,
+		rating: 4,
+		flags: {},
+		onSwitchIn(pokemon) {
+			if (pokemon.isStarted || skipPassiveComponent(this, pokemon, 'sushisavvy')) return;
+			this.boost({ spa: 1 }, pokemon, pokemon);
+		},
+	},
 	adaptivecycle: {
 		onStart(pokemon) {
 			delete adaptiveMemory(pokemon).lastDisplay;
@@ -14553,6 +14563,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onStart(pokemon) {
+			if (skipPassiveComponent(this, pokemon, 'magmaarmor')) return;
 			if (this.field.isTerrain(['dragonsdenterrain', 'volcanicterrain', 'infernaleclipseterrain'])) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
 			}
@@ -14571,6 +14582,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move && this.movehasType(move, ['Water', 'Ice'])) {
+				if (skipPassiveComponent(this, defender, 'magmaarmor')) return;
 				this.debug('Magma Armor weaken');
 				return this.chainModify(0.5);
 			}
@@ -14578,6 +14590,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
 			if (move && this.movehasType(move, ['Water', 'Ice'])) {
+				if (skipPassiveComponent(this, defender, 'magmaarmor')) return;
 				this.debug('Magma Armor weaken');
 				return this.chainModify(0.5);
 			}
@@ -20597,7 +20610,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.flags['sound']) return this.chainModify(1.5);
 		},
 		onModifyMove(move, pokemon) {
-			if (move.flags['sound'] && move.category !== 'Status') {
+			if (move.flags['sound'] && move.category !== 'Status' && !move.flags.megasignature) {
 				move.overrideOffensiveStat =
 					pokemon.getStat('atk') >= pokemon.getStat('spa') ? 'atk' : 'spa';
 			}
@@ -22254,9 +22267,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	toughclaws: {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
-			if (move.flags['contact']) {
-				return this.chainModify([5325, 4096]);
-			}
+			if (!move.flags['contact']) return;
+			const species = attacker.m.perfectIllusion && attacker.illusion ? attacker.illusion.species : attacker.species;
+			if (
+				this.effectState.speciesPassive === 'toughclaws' &&
+				species.id === 'lycanrocdusk' && attacker.hasAbility('ultrainstinct') &&
+				ultraInstinctBoostsPower(this, attacker, defender)
+			) return;
+			return this.chainModify([5325, 4096]);
 		},
 		flags: {},
 		name: 'Tough Claws',
@@ -23304,13 +23322,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onTryBoost(boost, target, source, effect) {
 			if (isUltraSuppressedTerrain(this)) return;
+			if (boost.accuracy && boost.accuracy < 0 && source && !source.isAlly(target)) {
+				delete boost.accuracy;
+				this.add('-fail', target, 'unboost', 'accuracy', '[from] ability: Ultra Instinct');
+			}
 			return this.dex.abilities
 				.get('innerfocus')
 				.onTryBoost?.call(this, boost, target, source, effect);
-		},
-		onModifyMove(move, pokemon, target) {
-			if (isUltraSuppressedTerrain(this)) return;
-			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, pokemon, target);
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target) {
@@ -27462,7 +27480,7 @@ installSignaturePassiveAbilities(Abilities);
 import { installApprovedSovereigns } from './sovereign-approved';
 installApprovedSovereigns(Abilities);
 
-import { installUltraInstinctRework } from './ultra-instinct-rework';
+import { installUltraInstinctRework, ultraInstinctBoostsPower } from './ultra-instinct-rework';
 installUltraInstinctRework(Abilities);
 
 import { installPassiveCleanupApproved } from './passive-cleanup-approved';
@@ -27586,12 +27604,6 @@ for (const id of ['guidinggallop', 'pastelveil'] as const) {
 }
 
 Abilities.racingspirit = { name: 'Racing Spirit', num: 11519, rating: 4, flags: {} };
-composeSelectedAbility(Abilities, 'voidcraft', ['temporalshift', 'shadowshield']);
-Abilities.voidcraft.queueTemporalHex = Abilities.temporalshift.queueTemporalHex;
-Abilities.voidcraft.onModifyMove = function (move) {
-	if (move.category !== 'Status' && this.movehasType(move, 'Fairy')) move.forceSTAB = true;
-};
-
 composeSelectedAbility(Abilities, 'racingspirit', ['rockhead', 'flashfire'], true);
 
 import { installAlcremie } from './alcremie-approved';
@@ -28208,8 +28220,6 @@ Abilities.tomeofavarice = {
 	num: 12194,
 	rating: 4,
 	flags: { breakable: 1 },
-	shortDesc: 'Takes 30% less damage from opposing moves that already hurt it this battle.',
-	desc: 'Records each opposing move that damages its HP. Later uses of a recorded move deal 30% less damage to this Pokémon, even after it switches out and returns.',
 	onSourceModifyDamage(damage, source, target, move) {
 		if (source.isAlly(target)) return;
 		const hit = target.getMoveHitData(move);
@@ -28284,6 +28294,13 @@ installJackpotSalvation(Abilities);
 import { installCombatSequences } from './combat-sequences';
 installCombatSequences(Abilities, NovemberFinalDescriptions);
 
+// Temporal Shift now has its Misaligned Stars hooks; inherit the whole package.
+composeSelectedAbility(Abilities, 'voidcraft', ['temporalshift', 'shadowshield']);
+Abilities.voidcraft.queueTemporalHex = Abilities.temporalshift.queueTemporalHex;
+Abilities.voidcraft.onModifyMove = function (move) {
+	if (move.category !== 'Status' && this.movehasType(move, 'Fairy')) move.forceSTAB = true;
+};
+
 import { installLightPinsir } from './malignant-light-pinsir';
 installLightPinsir(Abilities, NovemberFinalDescriptions);
 
@@ -28340,6 +28357,22 @@ Abilities.ballastplating = {
 	onBasePower(basePower, pokemon, target, move) {
 		if (['bodypress', 'heavyslam', 'gyroball'].includes(move.id)) return this.chainModify(1.2);
 	},
+};
+
+Abilities.furnacehide = {
+	...Abilities.flamebody, name: 'Furnace Hide', num: 32734,
+	onBasePower(basePower, source, target, move) {
+		if (target.status === 'brn' && !source.isAlly(target) && this.movehasType(move, 'Fire')) {
+			return this.chainModify(1.2);
+		}
+	},
+};
+Abilities.steamforge = {
+	name: 'Steam Forge', num: 32735, rating: 3, flags: {},
+};
+composeSelectedAbility(Abilities, 'steamforge', ['magmaarmor'], true);
+Abilities.steamforge.onBasePower = function (basePower, source, target, move) {
+	if (source.boosts.def > 0 && this.movehasType(move, 'Steel')) return this.chainModify(1.2);
 };
 
 // Installers can supply legacy text; apply the approved descriptions after them.
@@ -28408,4 +28441,6 @@ Abilities.tripwirekick = {
 };
 
 import { SandDreamDescriptions } from './sand-dream-descriptions';
+import { ShogunStance } from './samurott-shogun';
+Abilities.shogunstance = ShogunStance;
 for (const [id, text] of Object.entries(SandDreamDescriptions)) Object.assign(Abilities[id as ID], text);

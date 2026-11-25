@@ -30,7 +30,7 @@ function states(p, t, check) {
 	p.setAbility('Pressure'); check();
 }
 describe('Additional exact Sticky Hold, Soundproof and Suction Cups passives', () => {
-	it('keeps at most one passive per species and Liquid Ooze on ordinary Grimer and Muk', () => {
+	it('reserves multiple passives for approved forms and keeps Liquid Ooze on ordinary Grimer and Muk', () => {
 		const exceptions = {
 			regigigas: ['slowstart', 'ancientassembly'],
 			regigigasprimordial: ['primordialconstruct', 'ancientassembly'],

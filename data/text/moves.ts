@@ -7990,9 +7990,9 @@ MovesText.falsesmile = { name: 'False Smile', shortDesc: "A Fairy bite. 10% chan
 MovesText.riptidefang = { name: 'Riptide Fang', shortDesc: 'A physical Water bite boosted by Strong Jaw.' };
 MovesText.carapacejab = { name: 'Carapace Jab', shortDesc: 'A physical Bug punch boosted by Iron Fist.' };
 
-MovesText.crushbite = { name: 'Crush Bite', shortDesc: 'Ignores positive Defense stages. A biting move.' };
+MovesText.crushbite = { name: 'Crush Bite', shortDesc: 'Ignores positive defensive stages. A biting move.' };
 MovesText.razorbite = { name: 'Razor Bite', shortDesc: 'Bypasses Substitute. A biting move.' };
-MovesText.cometjab = { name: 'Comet Jab', shortDesc: 'Uses the higher attacking stat. A punching move.' };
+MovesText.cometjab = { name: 'Comet Jab', shortDesc: 'A punching move.' };
 
 MovesText.beaconbeam = { name: 'Beacon Beam', shortDesc: 'Single-target Electric beam. 30% chance to paralyze.' };
 MovesText.hexstitch = {
@@ -8009,7 +8009,7 @@ MovesText.greedgospel = {
 	shortDesc: 'Turns Ghost against a foe that damaged the user this entry.',
 };
 MovesText.craterburst = { name: 'Crater Burst', shortDesc: 'Hits adjacent foes. 30% chance to burn each target.' };
-MovesText.armorslam = { name: 'Armor Slam', shortDesc: 'Uses Defense to attack. More power against lighter targets.' };
+MovesText.armorslam = { name: 'Armor Slam', shortDesc: 'Uses Defense or Sp. Atk. More power against lighter targets.', desc: 'More powerful against lighter targets.' };
 MovesText.pulsechime = {
 	name: 'Pulse Chime',
 	shortDesc: 'Heal Bell; a successful status cure also heals active allies by 1/8.',
@@ -8037,7 +8037,7 @@ MovesText.guardsong = {
 };
 MovesText.veilslash = {
 	name: 'Veil Slash',
-	shortDesc: 'High critical-hit rate. Ignores boosted Defense if the target damaged your side this turn.',
+	shortDesc: 'High critical-hit rate. Ignores positive defensive stages if the target damaged your side this turn.',
 };
 MovesText.voidvolley = {
 	name: 'Void Volley',
@@ -8045,6 +8045,9 @@ MovesText.voidvolley = {
 };
 
 import { StoneSignatures, RetiredStoneSignatures } from '../stone-signatures';
-for (const { name, desc } of Object.values({ ...StoneSignatures, ...RetiredStoneSignatures })) {
-	MovesText[name.toLowerCase().replace(/[^a-z0-9]/g, '') as ID] = { name, shortDesc: desc, desc };
+import { ShogunMoveText } from '../samurott-shogun';
+MovesText.crestingcut = { name: 'Cresting Cut', ...ShogunMoveText.crestingcut };
+MovesText.moonlesscut = { name: 'Moonless Cut', ...ShogunMoveText.moonlesscut };
+for (const { name, desc, shortDesc = desc } of Object.values({ ...StoneSignatures, ...RetiredStoneSignatures })) {
+	MovesText[name.toLowerCase().replace(/[^a-z0-9]/g, '') as ID] = { name, shortDesc, desc };
 }

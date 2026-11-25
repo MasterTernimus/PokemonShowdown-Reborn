@@ -29,6 +29,30 @@ describe('Garchompite Mega choice', () => {
 			[{ species: 'Mew', moves: ['splash'] }]]);
 		assert.equal(battle.p1.active[0].canMegaEvoX, null);
 	});
+	for (const [item, choice, singleTarget] of [
+		['Garchompite', 'mega', true],
+		['Garchompite', 'megax', false],
+		['Garchompite Z', 'mega', false],
+	]) it(`${item} uses the selected Mega’s Earthquake target on the turn it evolves (${choice})`, () => {
+		const ally = { species: 'Blissey', ability: 'No Ability', moves: ['splash'] };
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
+			[{ species: 'Garchomp', ability: 'Rough Skin', item, moves: ['earthquake'] }, ally],
+			[ally, { ...ally, species: 'Chansey' }],
+		]);
+		battle.makeChoices('team 12', 'team 12');
+		const [garchomp, partner] = battle.p1.active;
+		const [first, second] = battle.p2.active;
+		const slot = garchomp.getMoveRequestData().moves[0];
+		assert.equal(slot.target, 'allAdjacent');
+		assert.equal(slot.megaTarget, item === 'Garchompite' ? 'normal' : undefined);
+		assert.equal(slot.megaXTarget, undefined);
+		battle.makeChoices(`move earthquake ${choice}${singleTarget ? ' +2' : ''}, move splash`, 'move splash, move splash');
+		assert.equal(garchomp.species.id, singleTarget ? 'garchompmega' : 'garchompmegaz');
+		assert.equal(partner.hp === partner.maxhp, singleTarget);
+		assert.equal(first.hp === first.maxhp, singleTarget);
+		assert(second.hp < second.maxhp);
+		assert.equal(garchomp.getMoves()[0].target, singleTarget ? 'normal' : 'allAdjacent');
+	});
 	for (const item of ['Garchompite', 'Garchompite Z']) it(`accepts a pasted Mega-Z set with ${item}`, () => {
 		const set = { species: 'Garchomp-Mega-Z', ability: 'Relentless Hunt', item, moves: ['dragonpulse'], nature: 'Modest', evs: { spa: 252, spe: 252 } };
 		assert.equal(new TeamValidator('gen9nofieldsinglesgame').validateTeam([set]), null);

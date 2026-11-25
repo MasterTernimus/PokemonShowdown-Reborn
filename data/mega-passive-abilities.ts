@@ -46,7 +46,7 @@ export function installMegaPassiveAbilities(abilities: AbilityDataTable) {
 	for (const id of ['regenerator', 'shedskin', 'insomnia', 'selfsufficient', 'solarpower', 'stalwart',
 		'armorize', 'duskilate', 'technician', 'venamskiss', 'contrary', 'strongjaw', 'elevate',
 		'mirrorarmor', 'stakeout', 'unaware', 'soulpyre', 'noguard', 'auraguard', 'fairyaura', 'drizzle',
-		'grassysurge', 'thermalexchange', 'zerotohero', 'supersweetsyrup']) {
+		'grassysurge', 'thermalexchange', 'zerotohero', 'supersweetsyrup', 'watercompaction']) {
 		for (const key of Object.keys(table[id])) {
 			const original = table[id][key];
 			if (!key.startsWith('on') || typeof original !== 'function') continue;
@@ -58,7 +58,6 @@ export function installMegaPassiveAbilities(abilities: AbilityDataTable) {
 	}
 	// These package callbacks hand-code the extracted primitive rather than delegating it.
 	const manual: { [id: string]: [string, string[]] } = {
-		mastercourse: ['contrary', ['onChangeBoost']],
 		inversion: ['contrary', ['onChangeBoost']],
 		ange: ['fairyaura', ['onAnyBasePower']],
 		perfectego: ['noguard', ['onAnyAccuracy', 'onAnyInvulnerability']],

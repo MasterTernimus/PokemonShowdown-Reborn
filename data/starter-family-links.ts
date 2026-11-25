@@ -1,6 +1,7 @@
 import type { AbilityDataTable } from '../sim/dex-abilities';
 import type { MoveDataTable } from '../sim/dex-moves';
 import type { ConditionDataTable } from '../sim/dex-conditions';
+import { KalosRipostes } from './kalos-ripostes';
 
 const KalosElements: Record<string, string> = {
 	knightsreprisal: 'Grass',
@@ -11,7 +12,15 @@ const KalosElements: Record<string, string> = {
 	shadowcurrent: 'Water',
 };
 export const StarterLinkConditions: ConditionDataTable = {
-	guardiancounter: { name: 'guardiancounter', noCopy: true },
+	guardiancounter: {
+		name: 'guardiancounter', noCopy: true,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'Aegis Charge', '[silent]');
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'Aegis Charge', '[silent]');
+		},
+	},
 };
 export function installStarterLinks(a: AbilityDataTable) {
 	for (const [id, type] of Object.entries({
@@ -101,13 +110,19 @@ export function installStarterLinkMoves(moves: MoveDataTable) {
 		) => any;
 		condition.onTryHit = function (target, source, move) {
 			const result = before.call(this, target, source, move);
-			if (
-				result === this.NOT_FAIL &&
-				move.category !== 'Status' &&
-				!source.isAlly(target) &&
-				target.hasAbility(Object.keys(KalosElements))
-			)
+			if (result !== this.NOT_FAIL || move.category === 'Status' || source.isAlly(target)) return result;
+			if (id === 'spikyshield' && this.effectState.sourceEffect?.name === KalosRipostes.chesnaughtmega.name) {
+				if (!move.flags.contact) {
+					this.damage(source.baseMaxhp / 16, source, target);
+				} else if (source.hp && target.m.brambleSnareEntry !== target.previouslySwitchedIn &&
+					this.checkMoveMakesContact(move, source, target)) {
+					target.m.brambleSnareEntry = target.previouslySwitchedIn;
+					this.boost({ spe: -1 }, source, target, this.dex.getActiveMove('brambleguard'));
+				}
+			}
+			if (target.hasAbility(Object.keys(KalosElements))) {
 				target.addVolatile('guardiancounter', target, target.getAbility());
+			}
 			return result;
 		};
 	}

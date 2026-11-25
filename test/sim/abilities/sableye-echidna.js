@@ -36,29 +36,33 @@ describe('Sableye’s Echidna abilities', () => {
 		assert.equal(battle.p1.active[0], p);
 		const returned = p.hp; hit(q); assert.equal(p.hp, returned + 90);
 	});
-	it('remembers each damaging move across switches and discounts later uses from either foe', () => {
+	it('combines its permanent discount with Stars protection independently for each holder', () => {
 		const [p,,q, r] = start(true, { ...mon('Sableye-Mega', 'Tome of Avarice'), name: 'Second Tome' });
-		p.hp = p.maxhp = p.baseMaxhp = 9000;
+		p.maxhp = p.baseMaxhp = 9000;
+		p.hp = 4000;
 		const hit = (user, id, extra = {}, target = p) => {
 			const before = target.hp;
 			battle.actions.useMove(Object.assign(Dex.getActiveMove(id), { accuracy: true, willCrit: false, secondaries: [], ...extra }), user, { target });
 			return before - target.hp;
 		};
 		const first = hit(q, 'watergun', { multihit: 2 });
-		const repeat = hit(r, 'watergun');
+		assert.equal(hit(r, 'watergun', { multihit: 3 }), -3000);
+		const repeat = hit(q, 'watergun');
 		assert(Math.abs(repeat - first * 0.35) <= 1);
 		assert.equal(battle.log.filter(line => line.includes('recorded Water Gun')).length, 1);
 		assert(p.hasAbilityOrPassive('magicbounce'));
 		battle.actions.useMove('taunt', q, { target: p });
 		assert(!p.volatiles.taunt); assert(q.volatiles.taunt);
-		const bubble = hit(q, 'bubble');
+		hit(q, 'bubble');
 		battle.makeChoices('switch 3, move splash', 'auto');
 		const second = battle.p1.active[0];
 		assert.equal(hit(q, 'watergun', {}, second), first / 2);
 		battle.makeChoices('switch 3, move splash', 'auto');
 		assert.equal(battle.p1.active[0], p);
-		assert.equal(hit(q, 'watergun'), repeat);
-		assert(Math.abs(hit(r, 'bubble') - bubble * 0.7) <= 1);
+		p.hp = 2500;
+		assert.equal(hit(q, 'watergun'), battle.modify(repeat, 0.5) - 2250);
+		assert.equal(hit(r, 'watergun'), repeat);
+		assert.equal(hit(r, 'bubble'), -3000);
 		for (const name of ['Water Gun', 'Bubble']) {
 			assert.equal(battle.log.filter(line => line.includes(p.name + "'s Tome of Avarice recorded " + name + '!')).length, 1);
 		}

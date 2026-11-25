@@ -11,9 +11,53 @@ function setup(ability = 'Ultra Instinct', field = '', doubles = false, species 
 	battle.randomChance = (n, d) => n >= d; battle.randomizer = n => n; return [p, q];
 }
 function hit(p, q, extra = {}) { const m = Object.assign(Dex.getActiveMove('tackle'), { accuracy: true, willCrit: false, damage: 100 }, extra); battle.actions.useMove(m, p, { target: q }); battle.clearActiveMove(); return m; }
-function power(p, q) { return battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 100); }
+function power(p, q, move = 'tackle') { return battle.runEvent('BasePower', p, q, Dex.getActiveMove(move), 100); }
 describe('Approved Ultra Instinct and Inferno Ascendant rework', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
+	describe('Dusk Lycanroc contact power', () => {
+		it('uses one 1.3x boost per target, even when only one doubles foe is still queued', () => {
+			const [dusk, pending] = setup('Twilight Instinct', '', true, 'Lycanroc-Dusk');
+			const moved = battle.p2.active[1];
+			assert.deepEqual(dusk.getPassives(), ['toughclaws']);
+			battle.queue.addChoice({ choice: 'move', pokemon: pending, moveid: 'splash' });
+			assert.equal(power(dusk, pending), 130, 'contact with both conditions previously reached 169');
+			assert.equal(power(dusk, moved), 130, 'contact after the foe moved uses Tough Claws');
+			assert.equal(power(dusk, pending, 'watergun'), 130, 'timing applies to noncontact');
+			assert.equal(power(dusk, moved, 'watergun'), 100, 'neither bonus applies');
+
+			const incoming = battle.p2.pokemon[2];
+			battle.actions.switchIn(incoming, moved.position);
+			assert.equal(incoming.m.enteredBattleTurn, battle.turn);
+			assert.equal(power(dusk, incoming), 130);
+			assert.equal(power(dusk, incoming, 'watergun'), 130);
+		});
+		it('keeps Tough Claws when Battle Bond, the field or suppression prevents the timing boost', () => {
+			const [dusk, foe] = setup('Twilight Instinct', '', false, 'Lycanroc-Dusk');
+			battle.queue.addChoice({ choice: 'move', pokemon: foe, moveid: 'splash' });
+			foe.setAbility('Battle Bond', null, null, true);
+			assert(foe.hasAbility('battlebond'));
+			assert.equal(power(dusk, foe), 130);
+			assert.equal(power(dusk, foe, 'watergun'), 100);
+			foe.setAbility('No Ability', null, null, true);
+			battle.field.setTerrain('hauntedterrain', dusk);
+			assert.equal(power(dusk, foe), 130);
+			assert.equal(power(dusk, foe, 'watergun'), 100);
+			battle.field.clearTerrain();
+			dusk.addVolatile('gastroacid', foe);
+			assert(!dusk.hasAbility('ultrainstinct'));
+			assert.equal(power(dusk, foe), 130);
+			assert.equal(power(dusk, foe, 'watergun'), 100);
+		});
+		it('allows other contact and timing power combinations to stack', () => {
+			const [dusk, foe] = setup('Strong Jaw', '', false, 'Lycanroc-Dusk');
+			assert.equal(power(dusk, foe, 'crunch'), 195, 'Strong Jaw and Tough Claws');
+			dusk.formeChange('Excadrill', null, true);
+			dusk.setAbility('Ultra Instinct');
+			assert.deepEqual(dusk.getPassives(), ['toughclaws']);
+			battle.queue.addChoice({ choice: 'move', pokemon: foe, moveid: 'splash' });
+			assert.equal(power(dusk, foe), 169, 'the same two boosts on another species');
+		});
+	});
 	for (const ability of ['Ultra Instinct', 'Inferno Ascendant']) it(ability + ' announces a rivalry once per actual encounter', () => {
 		const [p, q] = setup(ability); q.setAbility('Burning Ego');
 		const messages = () => battle.log.filter(line => line.startsWith('|-message|') && /Ego flares|Instinct sharpens/.test(line));
@@ -101,18 +145,49 @@ describe('Approved Ultra Instinct and Inferno Ascendant rework', () => {
 		const [p, q] = setup('Ultra Instinct', '', false, 'Infernape'); hit(q, p); p.hp = 2000; hit(p, q); assert.equal(p.hp, 2250);
 		p.formeChange('Infernape-Mega', null, true); p.hp = 2250; p.maxhp = p.baseMaxhp = 4000; p.setAbility('Inferno Ascendant'); hit(q, p); assert.equal(p.hp, 2150); hit(p, q); assert.equal(p.hp, 2150);
 	});
-	for (const ability of ['Ultra Instinct', 'Inferno Ascendant']) it(ability + ' retains Mold Breaker and Inner Focus without accuracy or evasion entry boosts', () => {
-		const [p, q] = setup(ability); const move = Dex.getActiveMove('tackle'); battle.runEvent('ModifyMove', p, q, move, move); assert.equal(move.ignoreAbility, true);
+	for (const ability of ['Ultra Instinct', 'Inferno Ascendant', 'Twilight Instinct', 'Aura Precision', 'Insight']) it(ability + ' respects Levitate and retains Inner Focus', () => {
+		const [p, q] = setup(ability);
+		assert(!p.hasAbility('moldbreaker'));
+		q.setAbility('Levitate');
+		battle.actions.useMove('earthquake', p, { target: q });
+		assert.equal(q.hp, q.maxhp);
+		q.setAbility('No Ability');
+		battle.actions.useMove('earthquake', p, { target: q });
+		assert(q.hp < q.maxhp);
 		assert(!p.addVolatile('flinch', q)); q.setAbility('Intimidate'); assert.equal(p.boosts.atk, 0);
 		battle.field.terrain = 'newworldterrain'; battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(p.boosts.accuracy, 0); assert.equal(p.boosts.evasion, 0);
+	});
+	for (const ability of ['Ultra Instinct', 'Inferno Ascendant']) it(ability + ' blocks only opponents’ accuracy drops', () => {
+		const [p, q] = setup(ability, '', true);
+		q.setAbility('Ultra Ego');
+		battle.actions.useMove('sandattack', q, { target: p });
+		assert.equal(p.boosts.accuracy, 0);
+		battle.boost({ accuracy: -1, def: -1 }, p, q);
+		assert.equal(p.boosts.accuracy, 0);
+		assert.equal(p.boosts.def, -1);
+		battle.boost({ accuracy: -1 }, p, p);
+		battle.boost({ accuracy: -1 }, p, battle.p1.active[1]);
+		assert.equal(p.boosts.accuracy, -2);
+		battle.boost({ accuracy: 1 }, p, q);
+		assert.equal(p.boosts.accuracy, -1);
+	});
+	it('preserves passive Levitate against Ultra Ego only while the holder has active Ultra Instinct', () => {
+		const [p, q] = setup('Twilight Instinct', '', false, 'Weezing');
+		assert(p.getPassives().includes('levitate'));
+		q.setAbility('Ultra Ego');
+		battle.actions.useMove('earthquake', q, { target: p });
+		assert.equal(p.hp, p.maxhp);
+		p.setAbility('No Ability');
+		battle.actions.useMove('earthquake', q, { target: p });
+		assert(p.hp < p.maxhp);
 	});
 	for (const item of ['', 'Ability Shield']) it('Inferno Ascendant protects Magma Armor from bypass with ' + (item || 'no item'), () => {
 		const [p, q] = setup('Inferno Ascendant'); p.setItem(item); q.setAbility('Mold Breaker'); const move = Dex.getActiveMove('watergun'); move.ignoreAbility = true; battle.setActiveMove(move, q, p);
 		assert.equal(battle.runEvent('ModifySpA', q, p, move, 100), 50);
 		battle.clearActiveMove(); hit(q, p); assert.equal(p.hp, 3930); // Ultra Instinct itself is not a breakable component.
 	});
-	for (const ability of ['Ultra Instinct', 'Aura Precision', 'Inferno Ascendant', 'Twilight Instinct']) {
-		for (const attacker of ['Mold Breaker', 'Teravolt', 'Turboblaze', 'Burning Ego']) {
+	for (const ability of ['Ultra Instinct', 'Aura Precision', 'Inferno Ascendant', 'Twilight Instinct', 'Insight']) {
+		for (const attacker of ['Mold Breaker', 'Teravolt', 'Turboblaze', 'Ultra Ego', 'Burning Ego']) {
 			it(ability + ' protects components and passives against ' + attacker, () => {
 				const [p, q] = setup(ability); q.setAbility(attacker);
 				const move = Dex.getActiveMove('tackle');
@@ -207,6 +282,7 @@ describe('Approved Ultra Instinct and Inferno Ascendant rework', () => {
 		for (const field of ['bewitchedwoodsterrain', 'hauntedterrain', 'holyterrain'])it(ability + ' disables only Ultra Instinct on ' + field, () => {
 			const [p, q] = setup(ability, field); q.m.enteredBattleTurn = battle.turn; assert.equal(power(p, q), 100); hit(q, p); assert.equal(p.hp, 3900); p.hp = 2000; hit(p, q); assert.equal(p.hp, 2000);
 			const move = Dex.getActiveMove('tackle'); battle.runEvent('ModifyMove', p, q, move, move); assert(!move.ignoreAbility);
+			battle.boost({ accuracy: -1 }, p, q, Dex.moves.get('sandattack')); assert.equal(p.boosts.accuracy, -1);
 		});
 		it(ability + ' excludes Substitute-only and allied damage, hazards and residual damage from defensive budget', () => {
 			const [p, q] = setup(ability, '', true); p.addVolatile('substitute'); p.volatiles.substitute.hp = 1000; hit(q, p); assert.equal(p.volatiles.substitute.hp, 900); assert.equal(p.m.ultraInstinctGuardTurn, undefined);
@@ -250,8 +326,8 @@ describe('Approved Ultra Instinct and Inferno Ascendant rework', () => {
 		assert.equal(p.boosts.atk, 1); assert.equal(p.boosts.accuracy, 1);
 	});
 	it('Mega Infernape gains only the revised package and keeps Proficient separate', () => {
-		const [p, q] = setup('Inferno Ascendant', '', false, 'Infernape-Mega'); assert.deepEqual(p.getPassives(), ['proficient']); for (const id of ['ultrainstinct', 'moldbreaker', 'innerfocus', 'magmaarmor'])assert(p.hasAbility(id), id);
-		for (const id of ['opportunist', 'selfsufficient', 'proficient', 'flamebody', 'ironfist', 'battlefervor', 'perfectego'])assert(!p.hasAbility(id), id);
+		const [p, q] = setup('Inferno Ascendant', '', false, 'Infernape-Mega'); assert.deepEqual(p.getPassives(), ['proficient']); for (const id of ['ultrainstinct', 'innerfocus', 'magmaarmor'])assert(p.hasAbility(id), id);
+		for (const id of ['moldbreaker', 'opportunist', 'selfsufficient', 'proficient', 'flamebody', 'ironfist', 'battlefervor', 'perfectego'])assert(!p.hasAbility(id), id);
 		p.hp = 2000; battle.singleEvent('Residual', p.getAbility(), p.abilityState, p); assert.equal(p.hp, 2000); const move = Dex.getActiveMove('flamethrower'); assert.equal(battle.runEvent('BasePower', p, q, move, 100), 130);
 	});
 	it('Inferno Ascendant keeps Magma Armor field entry without copying queued boosts at Mega events', () => {

@@ -1,4 +1,4 @@
-import { formSignature } from '../data/form-signatures';
+import { formSignature, signatureTarget } from '../data/form-signatures';
 import { tryRotomEject } from '../data/rotom-eject';
 import { refillMewtwoShield } from '../data/mewtwo-approved';
 import { DisabledSpecies } from '../data/disabled-species';
@@ -1185,11 +1185,7 @@ export class Pokemon {
 	}
 
 	signatureMoveTarget(move: Move) {
-		if (move.id === 'boomburst' && this.species.id === 'flygonmegaz') return 'normal';
-		if (move.id === 'swift' && this.species.id === 'gardevoirvoidmega') return 'normal';
-		if (move.id === 'discharge' && this.species.id === 'ampharosmega') return 'normal';
-		if (move.id === 'lavaplume' && this.species.id === 'cameruptmega') return 'allAdjacentFoes';
-		return move.target;
+		return signatureTarget(this.species.id, move.id) || move.target;
 	}
 
 	usesFallenStarTarget(move: Move) {
@@ -1215,7 +1211,7 @@ export class Pokemon {
 				if (moveSlot.id !== lockedMove) continue;
 				return [
 					{
-						move: moveSlot.move,
+						move: formSignature(this, moveSlot.id)?.name || moveSlot.move,
 						id: moveSlot.id,
 						target:
 							lockedMove === 'petaldance' && this.battle.field.isTerrain('flowergarden5') ?
@@ -1258,12 +1254,10 @@ export class Pokemon {
 				) => number;
 				moveName += ` ${basePowerCallback(this)}`;
 			}
-			let target = this.usesFallenStarTarget(this.battle.dex.moves.get(moveSlot.id)) ?
+			const move = this.battle.dex.moves.get(moveSlot.id);
+			let target = this.usesFallenStarTarget(move) ?
 				'adjacentFoe' :
-				moveSlot.target;
-			if (['Beacon Beam', 'Crater Burst', 'Void Volley', 'Dune Echo'].includes(moveName)) {
-				target = this.signatureMoveTarget(this.battle.dex.moves.get(moveSlot.id));
-			}
+				signatureTarget(this.species.id, move.id) || moveSlot.target;
 			if (moveSlot.id === 'decorate' && this.hasAbility('masterpatissier')) target = 'normalOrSelf';
 			switch (moveSlot.id) {
 			case 'petaldance':
@@ -1291,7 +1285,6 @@ export class Pokemon {
 				}
 				break;
 			}
-			const move = this.battle.dex.moves.get(moveSlot.id);
 			if (
 				this.battle.gameType !== 'freeforall' &&
 				move.multihit &&
@@ -1325,14 +1318,21 @@ export class Pokemon {
 				hasValidMove = true;
 			}
 
-			moves.push({
+			const slot: MoveRequestData = {
 				move: moveName,
 				id: moveSlot.id,
 				pp: moveSlot.pp,
 				maxpp: moveSlot.maxpp,
 				target,
 				disabled,
-			});
+			};
+			for (const [key, form] of [
+				['megaTarget', this.canMegaEvo], ['megaXTarget', this.canMegaEvoX], ['megaYTarget', this.canMegaEvoY],
+			] as const) {
+				const nextTarget = form && signatureTarget(toID(form), move.id);
+				if (nextTarget && nextTarget !== target) slot[key] = nextTarget;
+			}
+			moves.push(slot);
 		}
 		return hasValidMove ? moves : [];
 	}
@@ -2798,7 +2798,7 @@ export class Pokemon {
 				[this.m.carryOnAbility] :
 				[]),
 			...memoryComponents,
-			...getAbilityComponentAdditions(this.ability, this.getPassives()),
+			...getAbilityComponentAdditions(this.ability, this.getPassives(), this.species.id),
 		];
 		if (this.ability === 'unstableevo') pending.push(...unstableEvoComponents(this));
 		if (this.ability === 'perfectforesight' && this.m.perfectForesightAbility) {

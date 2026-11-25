@@ -733,9 +733,9 @@ Object.assign(MegaMigrationPassives, {
 	drampamega: ['drizzle'],
 	arbolivamega: ['grassysurge'],
 	belliboltmega: ['levitate'],
-	tatsugiricurlymega: ['contrary'],
-	tatsugiridroopymega: ['contrary'],
-	tatsugiristretchymega: ['contrary'],
+	tatsugiricurlymega: ['sushisavvy'],
+	tatsugiridroopymega: ['sushisavvy'],
+	tatsugiristretchymega: ['sushisavvy'],
 	baxcaliburmega: ['thermalexchange'],
 });
 import { SelectedPassiveSwaps } from './selected-mega-simplification-data';
@@ -1336,6 +1336,8 @@ for (const [id, passive] of Object.entries(revisedPassives)) {
 }
 for (const [id, passive] of Object.entries({
 	drampa: 'kindredfury', gigalith: 'mineralheart', grapploct: 'abyssalgrip', toucannon: 'siegebeak',
+	heatran: 'flashfire', heatranmega: 'watercompaction',
+	tatsugiri: 'sushisavvy', tatsugiridroopy: 'sushisavvy', tatsugiristretchy: 'sushisavvy',
 })) {
 	SpeciesPassives[id] = Object.freeze([passive]);
 	ThematicPassiveIds.add(passive);

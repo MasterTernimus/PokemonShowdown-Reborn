@@ -35,6 +35,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Steadfast", H: "Justified" },
 	},
+	heatran: {
+		inherit: true,
+		abilities: { 0: "Flash Fire", H: "Flame Body" },
+	},
 	giratinaorigin: {
 		inherit: true,
 		requiredItem: "Griseous Orb",

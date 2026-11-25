@@ -1,4 +1,7 @@
 export const Aliases: import('../sim/dex').AliasesTable = {
+	briarriposte: 'Bramble Guard',
+	emberriposte: 'Hexfire',
+	tideriposte: 'Mist Shuriken',
 	// Display rename; retain the existing ability ID for old teams and replays.
 	keenlight: 'Star Lens',
 	malignantlight: 'Star Lens',

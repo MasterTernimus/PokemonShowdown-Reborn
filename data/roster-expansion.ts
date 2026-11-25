@@ -631,7 +631,6 @@ export function applyApprovedRosterAbilities(base: AbilityDataTable) {
 		},
 	});
 	add('mastercourse', 'Master Course', {
-		...base.contrary,
 		onStart() {
 			this.effectState.lastTurn = -1;
 		},

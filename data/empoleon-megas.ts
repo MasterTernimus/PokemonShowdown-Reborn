@@ -1,5 +1,6 @@
 import type { AbilityDataTable } from '../sim/dex-abilities';
 import { composeSelectedAbility } from './selected-mega-simplifications';
+import { applyMegaSignatureCategory } from './form-signatures';
 export const EmpoleonDescriptions = {
 	monarchofice: {
 		shortDesc:
@@ -49,11 +50,13 @@ export function installEmpoleonMegas(abilities: AbilityDataTable) {
 		)
 			return false;
 	};
-	abilities.monarchofice.onModifyMove = function (move) {
+	abilities.monarchofice.onModifyMove = function (move, source) {
 		if (move.category === 'Status') return;
 		if (move.type === 'Ice') move.forceSTAB = true;
 		if (move.id === 'wavecrash') {
 			(move as any).name = 'Crown Crash';
+			applyMegaSignatureCategory(move, source);
+			move.basePower = this.dex.moves.get('crowncrash').basePower;
 			move.type = 'Water';
 			move.types = ['Water', 'Ice'];
 			move.recoil = [1, 10];

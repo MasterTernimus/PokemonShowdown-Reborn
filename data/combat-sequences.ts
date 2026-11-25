@@ -1,6 +1,8 @@
 import type { AbilityDataTable } from '../sim/dex-abilities';
 import { composeSelectedAbility } from './selected-mega-simplifications';
 import { SharedPassiveAbilityDescriptions, skipPassiveComponent } from './passive-ability-cleanup';
+import { misalignedStarsEffect } from './nov16-balance-descriptions';
+import { hasCrescentSubDamage } from '../sim/crescent-rend';
 
 /** Entry identity survives Mega Evolution but changes on a genuine switch-in. */
 function sequence(pokemon: Pokemon, key: string) {
@@ -14,9 +16,28 @@ type SequenceMove = ActiveMove & {
 
 function recordOpposingMove(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
 	if (!target.hp || target.isAlly(source)) return;
-	const state = sequence(target, 'misalignedStars');
+	const state = target.m.misalignedStars ||= { recorded: {}, spentEntry: {} };
 	state.recorded ||= {};
-	if (!(move.id in state.recorded)) state.recorded[move.id] = this.activeMove || move;
+	if (!(move.id in state.recorded)) {
+		state.recorded[move.id] = true;
+		target.getMoveHitData(this.activeMove || move).starsFirstUse = true;
+	}
+}
+
+function blockRecordedMove(this: Battle, target: Pokemon, move: ActiveMove) {
+	const state = target.m.misalignedStars;
+	if (!state?.recorded) return;
+	const hit = target.getMoveHitData(this.activeMove || move);
+	if (hit.starsBlocked) return null;
+	if (!state.recorded[move.id] || hit.starsFirstUse) return;
+	state.recorded[move.id] = null; // A full block has been spent for this move.
+	state.spentEntry ||= {};
+	state.spentEntry[move.id] = target.m.ultraRivalryEntryToken;
+	hit.starsBlocked = true;
+	this.add('-activate', target, 'ability: Misaligned Stars');
+	this.add('-message', 'The stars were bad for that outcome…');
+	this.heal(target.baseMaxhp / 3, target, target);
+	return null;
 }
 
 function gainCharge(this: Battle, damage: number, target: Pokemon, source: Pokemon, move: SequenceMove) {
@@ -58,8 +79,8 @@ export const CombatSequenceDescriptions = {
 		desc: 'Includes Keen Eye. Land a physical and a special attack in either order to charge the next attack: 1.5× damage, ignoring positive defensive stages, type resistances and screens. Weaknesses and immunities still apply. Each move grants one charge. The charged attack consumes both charges even on a miss or block and earns no charge. Charges persist through switching.',
 	},
 	misalignedstars: {
-		shortDesc: 'Anticipation. Each entry, blocks the first repeat of each move that hit it and heals 1/4 HP.',
-		desc: 'Includes Anticipation. Records each distinct attack that damages the holder and each opposing status move that successfully hits it. Blocks the next use of each recorded move against the holder from any foe. Each block restores 1/4 of the holder’s maximum HP. Later uses hit normally. A multihit attack counts as one use. Switching out clears the record.',
+		shortDesc: 'Anticipation. Blocks a repeat and heals 1/3 HP. After switching, halves a repeat and heals 1/4 HP.',
+		desc: misalignedStarsEffect,
 	},
 	frameperfect: {
 		shortDesc: 'Inner Focus; any attacks build up to +50% Speed, +30% damage and 10% attack protection.',
@@ -103,20 +124,49 @@ export function installCombatSequences(
 	};
 	composeSelectedAbility(abilities, 'misalignedstars', ['anticipation'], true);
 	abilities.misalignedstars.onDamagingHit = function (damage, target, source, move) {
-		if (damage > 0 && move.category !== 'Status') recordOpposingMove.call(this, target, source, move);
+		if (damage <= 0 || move.category === 'Status' || !target.hp || target.isAlly(source)) return;
+		recordOpposingMove.call(this, target, source, move);
+		const hit = target.getMoveHitData(this.activeMove || move);
+		if (hit.starsReduced) {
+			target.m.misalignedStars.spentEntry[move.id] = target.m.ultraRivalryEntryToken;
+			hit.starsHeal = target;
+		}
 	};
 	abilities.misalignedstars.onAfterSuccessfulStatusHit = recordOpposingMove;
-	abilities.misalignedstars.onTryHit = function (target, source, move) {
-		const state = sequence(target, 'misalignedStars');
-		const original = state.recorded?.[move.id];
-		if (!original || target.isAlly(source) || original === (this.activeMove || move)) return;
-		state.recorded[move.id] = null;
-		this.add('-activate', target, 'ability: Misaligned Stars');
-		this.add('-message', 'The stars were bad for that outcome…');
-		this.heal(target.baseMaxhp / 4, target, target);
-		return null;
+	// Spectral Thief steals boosts before hit callbacks. Its blocked use must leave those boosts in place.
+	abilities.misalignedstars.onMoveTargeted = function (target, source, move) {
+		if (move.stealsBoosts && !target.isAlly(source) && target.m.misalignedStars?.recorded?.[move.id])
+			move.stealsBoosts = false;
 	};
-	abilities.misalignedstars.onSwitchOut = function (pokemon) { delete pokemon.m.misalignedStars; };
+	// Accuracy, immunities and Protect are resolved. Block before a damaging hit would consume a Gem.
+	abilities.misalignedstars.onTryPrimaryHitPriority = 1;
+	abilities.misalignedstars.onTryPrimaryHit = function (target, source, move) {
+		if (target.isAlly(source) || (target.volatiles.substitute && !move.flags.bypasssub && !move.infiltrates)) return;
+		return blockRecordedMove.call(this, target, move);
+	};
+	abilities.misalignedstars.onDamagePriority = 2;
+	abilities.misalignedstars.onDamage = function (damage, target, source, effect) {
+		if (damage <= 0 || effect.effectType !== 'Move' || effect.category === 'Status' || !source || target.isAlly(source)) return;
+		const state = target.m.misalignedStars;
+		// Crescent Rend can break a Substitute and send the remaining damage to the holder.
+		if (state?.recorded?.[effect.id] && hasCrescentSubDamage(target, effect)) return blockRecordedMove.call(this, target, effect);
+		if (state?.recorded?.[effect.id] !== null) return;
+		const hit = target.getMoveHitData(this.activeMove || effect);
+		if (!hit.starsReduced && (state.spentEntry?.[effect.id] ?? state.entry) === target.m.ultraRivalryEntryToken) return;
+		state.spentEntry ||= {};
+		hit.starsReduced = true;
+		return Math.max(1, this.modify(damage, 0.5));
+	};
+	abilities.misalignedstars.onAnyAfterAttackResolved = function (source, target, move) {
+		const holder: Pokemon = this.effectState.target;
+		const hit = move?.moveHitData?.[holder.getSlot()];
+		if (!holder.hp || hit?.starsHeal !== holder) return;
+		delete hit.starsHeal;
+		this.add('-activate', holder, 'ability: Misaligned Stars');
+		this.heal(holder.baseMaxhp / 4, holder, holder);
+	};
+	// Future Sight and other delayed hits reach this boundary outside the normal move action.
+	abilities.misalignedstars.onAnyAfterTargetedMove = abilities.misalignedstars.onAnyAfterAttackResolved;
 
 	abilities.frameperfect = {
 		name: 'Frame Perfect', num: 32595, rating: 4, flags: {}, ...CombatSequenceDescriptions.frameperfect,
@@ -165,7 +215,10 @@ export function installCombatSequences(
 
 	composeSelectedAbility(abilities, 'insight', ['convergence', 'ultrainstinct'], true);
 	// These abilities keep their custom hooks alongside the component's hooks.
-	for (const [id, component] of [['coldlogic', 'convergence'], ['reapersgrip', 'misalignedstars']] as const) {
+	for (const [id, component] of [
+		['coldlogic', 'convergence'], ['reapersgrip', 'misalignedstars'],
+		['temporalshift', 'misalignedstars'], ['tomeofavarice', 'misalignedstars'],
+	] as const) {
 		const ability = abilities[id] as any;
 		for (const [key, handler] of Object.entries(abilities[component])) {
 			if (!key.startsWith('on')) continue;

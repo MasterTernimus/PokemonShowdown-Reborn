@@ -30,6 +30,8 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	mightyjaw: ['proficient'],
 	blazingmane: ['flashfire'],
 	coronafurnace: ['flamebody'],
+	furnacehide: ['flamebody'],
+	steamforge: ['magmaarmor'],
 
 	gigavolt: ['moldbreaker', 'lightningrod', 'static'],
 	verdantedge: ['chlorophyll', 'grasspelt', 'sharpness'],
@@ -308,7 +310,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	toxicarmor: ['dualwield', 'violentrush'],
 	corrosiveburn: ['corrosion', 'oblivious', 'venomignition'],
 	solarrush: ['sandrush', 'chlorophyll'],
-	ultrainstinct: ['moldbreaker', 'innerfocus'],
+	ultrainstinct: ['innerfocus'],
 	unovawing: ['superluck', 'competitive'],
 	aevianwing: ['rockhead', 'defiant'],
 	resuscitation: ['selfrepair', 'magicguard'],
@@ -354,7 +356,6 @@ Object.assign(AbilityComponents, {
 	encorearia: ['serenegrace'],
 	peppersting: ['insomnia'],
 	sushitrick: ['hospitality'],
-	mastercourse: ['contrary'],
 	secondbrew: [],
 	railsight: ['stalwart'],
 });
@@ -1091,6 +1092,8 @@ AbilityComponents.solareruption = ['megasol', 'flamebody'];
 
 AbilityComponents.convergence = ['keeneye'];
 AbilityComponents.misalignedstars = ['anticipation'];
+AbilityComponents.temporalshift = ['misalignedstars'];
+AbilityComponents.tomeofavarice = ['misalignedstars'];
 AbilityComponents.frameperfect = ['innerfocus'];
 AbilityComponents.insight = ['convergence', 'ultrainstinct'];
 AbilityComponents.coldlogic = [...AbilityComponents.coldlogic, 'convergence'];

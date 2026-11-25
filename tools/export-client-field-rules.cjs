@@ -9,6 +9,7 @@ const {FieldNotes} = require('../dist/data/field-guide');
 const {denCooling} = require('../dist/data/terrains');
 const {resolveNaturePowerMove} = require('../dist/data/nature-power');
 const {CharacterMoveProfiles} = require('../dist/data/reborn-character-moves');
+const {StoneSignatures} = require('../dist/data/stone-signatures');
 const ts = require('typescript');
 const destination = process.argv[2];
 if (!destination) throw new Error('Usage: node tools/export-client-field-rules.cjs <client-root>');
@@ -48,7 +49,10 @@ const moveRows = [];
 // The character move factory creates a separate copy of the same closure per move.
 // Export its declarative fields; a move with a distinct hook follows the ordinary path.
 const characterPowerHook = Dex.moves.get('blacktestament').onBasePower.toString();
+const derivedMoveIDs = new Set(Object.values(StoneSignatures).map(route => Dex.moves.get(route.name).id));
 for (const move of Dex.moves.all()) {
+	// The client looks up converted moves by their learned move ID to preserve their field interactions.
+	if (derivedMoveIDs.has(move.id)) continue;
 	const entries = [];
 	for (const key of ['onModifyType', 'onModifyMove', 'onModifyPriority', 'onBasePower', 'basePowerCallback']) {
 		const profile = CharacterMoveProfiles[move.id];
@@ -74,8 +78,11 @@ for (const move of Dex.moves.all()) {
 			entries.push("onModifyMove(move) { move.category = this.sample(['Physical', 'Special']); }");
 			continue;
 		}
-		if (typeof move[key] === 'function' && /field\.(?:isTerrain|terrain|getTerrain|canSetTerrain)/.test(move[key].toString())) {
-			const hook = move[key].toString();
+		const handler = move[key];
+		if (typeof handler !== 'function') continue;
+		const native = key === 'onModifyMove' && 'nativeOnModifyMove' in handler ? handler.nativeOnModifyMove : handler;
+		if (native && /field\.(?:isTerrain|terrain|getTerrain|canSetTerrain)/.test(native.toString())) {
+			const hook = native.toString();
 			// The tooltip resolves the adaptive category before applying move-specific field effects.
 			entries.push(key === 'onModifyMove' && move.flags.adaptivecategory ?
 				hook.replace(/\buseHigherOffensiveStat\(source, move\);\s*/, '') : hook);

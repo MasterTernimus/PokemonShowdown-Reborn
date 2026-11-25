@@ -18,6 +18,8 @@ const impacts = [
 	'icehammer',
 	'dragonhammer',
 	'woodhammer',
+	'timbercrash',
+	'furnacecrash',
 	'gigatonhammer',
 	'dracometeor',
 ];

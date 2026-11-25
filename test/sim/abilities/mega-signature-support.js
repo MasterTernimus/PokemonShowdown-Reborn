@@ -1,7 +1,7 @@
 'use strict';
 const assert = require('assert').strict;
 const common = require('../../common');
-const { Dex } = require('../../../dist/sim');
+const { Dex, TeamValidator } = require('../../../dist/sim');
 const { qualifiesForStarLens } = require('../../../dist/data/relic-beam');
 describe('Mega signature support moves', () => {
 	it('resolves historical move names without renaming abilities that share those names', () => {
@@ -13,7 +13,7 @@ describe('Mega signature support moves', () => {
 		for (const name of ['Apex Cleave', 'Pearl Current']) assert.equal(Dex.abilities.get(name).name, name);
 	});
 	let b;
-	afterEach(() => b?.destroy());
+	afterEach(() => { b?.destroy(); b = null; });
 	function start(base, move, form = base + '-Mega') {
 		const mon = (species, moves) => ({ species, moves, ability: 'No Ability' });
 		b = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
@@ -33,14 +33,65 @@ describe('Mega signature support moves', () => {
 		return m;
 	}
 	const { StoneSignatures } = require('../../../dist/data/stone-signatures');
+	const { MegaSignatureExpansion } = require('../../../dist/data/mega-signature-expansion');
+	const { KalosRipostes } = require('../../../dist/data/kalos-ripostes');
+	for (const [species, form, base, name, originalPower, megaPower] of [
+		['Ledian', 'Ledian-Mega', 'carapacejab', 'Comet Jab', 75, 80],
+		['Pidgeot', 'Pidgeot-Mega', 'airslash', 'Gale Slice', 75, 80],
+		['Gardevoir', 'Gardevoir-Mega-Z', 'slash', 'Veil Slash', 90, 90],
+		['Houndoom', 'Houndoom-Mega', 'darkpulse', 'Dread Howl', 80, 85],
+	]) {
+		it(name + ' has the same upgraded power in the move list and battle, using the original slot and PP', () => {
+			const [p,,foe] = start(species, base, form);
+			const original = Dex.moves.get(base);
+			const signature = Dex.moves.get(name);
+			assert.equal(original.basePower, originalPower);
+			assert.equal(signature.basePower, megaPower);
+			assert.equal(signature.pp, original.pp);
+			const slot = p.getMoves()[0];
+			assert.equal(slot.id, base);
+			assert.equal(slot.move, name);
+			b.makeChoices('move 1 1, move splash', 'move protect, move splash');
+			assert.equal(p.lastMoveUsed?.name, name);
+			assert.equal(p.lastMoveUsed.basePower, megaPower);
+			assert.equal(p.moveSlots[0].pp, slot.pp - 1);
+			const direct = hit(p, foe, name);
+			assert.equal(direct.basePower, megaPower);
+		});
+	}
+	for (const [form, spec] of Object.entries({ ...MegaSignatureExpansion, ...KalosRipostes })) {
+		it(spec.name + ' is available through the matching stone on a legal base set', () => {
+			const mega = Dex.species.get(form);
+			const base = Dex.species.get(mega.battleOnly || mega.baseSpecies);
+			const item = mega.requiredItems[0];
+			const set = {
+				species: base.name, ability: base.abilities[0], item, moves: [spec.base],
+				nature: 'Serious', evs: { hp: 252, spe: 252 },
+			};
+			const validator = new TeamValidator('gen9nofieldsinglesgame@@@Obtainable Abilities,Obtainable Moves');
+			assert.equal(validator.validateTeam([set]), null);
+			b = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+				[set], [{ species: 'Blissey', moves: ['splash'], ability: 'No Ability' }],
+			]);
+			b.makeChoices('team 1', 'team 1');
+			const p = b.p1.active[0];
+			assert.equal(p.getMoves()[0].move, Dex.moves.get(spec.base).name);
+			const branch = p.canMegaEvo === mega.name ? 'mega' : p.canMegaEvoX === mega.name ? 'megax' : 'megay';
+			b.makeChoices(`move 1 ${branch}`, 'move splash');
+			assert.equal(p.species.id, form);
+			assert.equal(p.getMoves()[0].move, spec.name);
+			assert.equal(p.getMoves()[0].id, spec.base);
+		});
+	}
 	for (const [id, spec] of Object.entries(StoneSignatures)) {
 		it(spec.name + ' uses the learned move slot and converts only on its Mega', () => {
 			const form = Dex.species.get(id), base = Dex.moves.get(spec.base);
-			const [p,,t] = start(form.battleOnly, spec.base, form.name);
+			const origin = Array.isArray(form.battleOnly) ? form.battleOnly[0] : form.battleOnly || form.baseSpecies;
+			const [p,,t] = start(origin, spec.base, form.name);
 			assert.equal(p.getMoves()[0].move, spec.name); assert.equal(p.getMoves()[0].id, base.id);
 			assert.equal(Dex.moves.get(spec.name).pp, base.pp);
 			const m = hit(p, t, spec.base); assert.equal(m.name, spec.name); assert.equal(m.id, spec.base);
-			p.formeChange(form.battleOnly, null, true);
+			p.formeChange(origin, null, true);
 			assert.equal(p.getMoves()[0].move, base.name);
 		});
 	}
@@ -119,6 +170,77 @@ describe('Mega signature support moves', () => {
 		assert.equal(m.accuracy, 100);
 		assert(foeHP > t.hp);
 		assert.equal(hp - p.hp, Math.round((foeHP - t.hp) / 8));
+	});
+	it('Leaf Rush frees its Grass-type user from binding and recovers only lost Speed on a damaging hit', () => {
+		const [p, ally, foe] = start('Sceptile', 'leafblade');
+		p.setAbility('No Ability'); // Otherwise Raging Thicket lets the hit bypass Substitute.
+		hit(foe, p, 'leechseed');
+		assert(!p.volatiles.leechseed);
+		p.boosts.spe = -2;
+		assert(p.addVolatile('partiallytrapped', foe, Dex.moves.get('wrap')));
+		hit(p, ally, 'leafblade');
+		assert(p.volatiles.partiallytrapped);
+		foe.addVolatile('protect', foe);
+		hit(p, foe, 'leafblade');
+		assert(p.volatiles.partiallytrapped);
+		foe.removeVolatile('protect');
+		foe.addVolatile('substitute', foe);
+		hit(p, foe, 'leafblade');
+		assert(p.volatiles.partiallytrapped);
+		assert.equal(p.boosts.spe, -2);
+		foe.removeVolatile('substitute');
+		hit(p, foe, 'leafblade');
+		assert(!p.volatiles.partiallytrapped);
+		assert.equal(p.boosts.spe, -1);
+		hit(p, foe, 'leafblade');
+		hit(p, foe, 'leafblade');
+		assert.equal(p.boosts.spe, 0);
+	});
+	it('Blaze Rush deals its damage through Reflect before breaking it and preserves Light Screen', () => {
+		const [p, ally, foe] = start('Blaziken', 'blazekick');
+		p.setAbility('No Ability');
+		b.randomizer = value => value;
+		b.randomChance = (chance, outOf) => chance >= outOf;
+		foe.side.addSideCondition('reflect', foe);
+		foe.side.addSideCondition('lightscreen', foe);
+		p.side.addSideCondition('reflect', p);
+		hit(p, ally, 'blazekick');
+		assert(p.side.sideConditions.reflect);
+		foe.addVolatile('substitute', foe);
+		hit(p, foe, 'blazekick');
+		assert(foe.side.sideConditions.reflect);
+		foe.removeVolatile('substitute');
+		const before = foe.hp;
+		const move = hit(p, foe, 'blazekick');
+		assert.equal(move.critRatio, 2);
+		assert.deepEqual(move.secondaries, [{ chance: 10, status: 'brn' }]);
+		assert(!foe.side.sideConditions.reflect && foe.side.sideConditions.lightscreen);
+		const afterScreen = foe.hp;
+		hit(p, foe, 'blazekick');
+		assert(before - afterScreen < afterScreen - foe.hp);
+	});
+	it('Tide Rush clears every hazard on its side once per volley when a foe loses HP', () => {
+		const [p,,foe, other] = start('Swampert', 'muddywater');
+		p.boosts.accuracy = 6;
+		const hazards = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend'];
+		for (const id of hazards) p.side.addSideCondition(id, foe);
+		p.side.addSideCondition('spikes', foe);
+		foe.side.addSideCondition('stickyweb', p);
+		p.side.addSideCondition('reflect', p);
+		foe.addVolatile('protect', foe);
+		other.addVolatile('substitute', other);
+		hit(p, foe, 'muddywater');
+		for (const id of hazards) assert(p.side.sideConditions[id], id);
+		other.removeVolatile('substitute');
+		hit(p, foe, 'muddywater');
+		for (const id of hazards) assert(!p.side.sideConditions[id], id);
+		foe.removeVolatile('protect');
+		p.side.addSideCondition('stickyweb', foe);
+		const before = b.log.length;
+		hit(p, foe, 'muddywater');
+		assert(!p.side.sideConditions.stickyweb);
+		assert(p.side.sideConditions.reflect && foe.side.sideConditions.stickyweb);
+		assert.equal(b.log.slice(before).filter(line => line.startsWith('|-sideend|') && line.includes('Sticky Web')).length, 1);
 	});
 	it('Tide Rush uses Attack and damages both foes while sparing its ally', () => {
 		const [p, a, t, q] = start('Swampert', 'muddywater'); p.boosts.accuracy = 6;

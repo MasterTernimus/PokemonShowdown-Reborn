@@ -1,6 +1,8 @@
 /** Form-bound signatures keep the original move slot and its PP. */
 import { StoneSignatures } from './stone-signatures';
+import { SamurottSignatures } from './samurott-shogun';
 export const FormSignatures = {
+	...SamurottSignatures,
 	gallademega: { base: 'psychocut', name: 'Saber Parry', ability: '' },
 	gallademegaazzy: { base: 'psychocut', name: 'Saber Parry', ability: '' },
 	gardevoirmega: { base: 'hypervoice', name: 'Guard Song', ability: '' },
@@ -30,6 +32,38 @@ export const FormSignatures = {
 	mawilemega: { base: 'playrough', name: 'False Smile', ability: '' },
 	scizormega: { base: 'bulletpunch', name: 'Pincer Jab', ability: '' },
 } as const;
+
+// These four conversions are applied in their original move or ability hooks.
+export const MegaSignatureNames = new Set([
+	...Object.entries(FormSignatures).filter(([form]) => form.includes('mega')).map(([, move]) => move.name),
+	...Object.values(StoneSignatures).map(move => move.name),
+	...Object.values(SamurottSignatures).map(move => move.name),
+	'Snare Vine', 'F.M. Impression', 'Gilded Wing', 'Crown Crash',
+]);
+
+export function applyMegaSignatureCategory(move: ActiveMove, source: Pokemon, name = move.name) {
+	if (!MegaSignatureNames.has(name) || move.category === 'Status' || move.isZ || move.isMax) return;
+	const signature = source.battle.dex.moves.get(name);
+	// Armor Slam's physical damage has always been powered by the user's Defense.
+	const physicalStat = signature.overrideOffensiveStat === 'def' ? 'def' : 'atk';
+	const physical = source.getStat(physicalStat, false, true);
+	const special = source.getStat('spa', false, true);
+	const usePhysical = physical > special || (physical === special && signature.category === 'Physical');
+	move.flags = { ...move.flags, adaptivecategory: 1, megasignature: 1 };
+	move.category = usePhysical ? 'Physical' : 'Special';
+	move.overrideOffensiveStat = usePhysical ? physicalStat : 'spa';
+	// Some base moves choose a defensive stat in their own category hook. Recompute it for the signature.
+	if (move.overrideDefensiveStat && !signature.overrideDefensiveStat) delete move.overrideDefensiveStat;
+}
+
+/** A stone signature may change which positions can be selected before the move runs. */
+export function signatureTarget(form: string, move: string) {
+	const stone = StoneSignatures[form];
+	if (stone?.base === move) return stone.changes.target;
+	if (form === 'gardevoirvoidmega' && move === 'swift') return 'normal';
+	if (form === 'ampharosmega' && move === 'discharge') return 'normal';
+	if (form === 'cameruptmega' && move === 'lavaplume') return 'allAdjacentFoes';
+}
 
 export function formSignature(pokemon: Pokemon, move: string) {
 	const stone = StoneSignatures[pokemon.species.id];

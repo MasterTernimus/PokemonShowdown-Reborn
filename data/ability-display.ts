@@ -144,9 +144,10 @@ export function getAbilityDisplayComponents(
 	const excluded = getAbilityComponentExclusions(id, passives, species);
 	const parts = Array.from(
 		new Set(
-			[...directDisplayComponents(id), ...getAbilityComponentAdditions(id, passives)].map(
-				canonicalAbilityDisplayID,
-			),
+			[
+				...directDisplayComponents(id),
+				...getAbilityComponentAdditions(id, passives, canonicalAbilityDisplayID(species)),
+			].map(canonicalAbilityDisplayID),
 		),
 	).filter(part => !passives.includes(part) && !excluded.includes(part));
 	// A component already included by another named package needs no second display entry.

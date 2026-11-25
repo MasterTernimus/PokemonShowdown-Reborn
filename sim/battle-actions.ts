@@ -5,6 +5,7 @@ import { warnIncomingOpponents } from '../data/warned-moves';
 import { encoreAriaAfterHits } from './encore-aria';
 import { prepareMeloettaMove } from '../data/meloetta-encore';
 import { DisabledSpecies } from '../data/disabled-species';
+import { applyMegaSignatureCategory } from '../data/form-signatures';
 import { recordClawSTAB } from '../data/sandslash-rework';
 import {
 	grandStrategyPrepared,
@@ -822,9 +823,7 @@ export class BattleActions {
 			if (!move.hasBounced) move.pranksterBoosted = this.battle.activeMove.pranksterBoosted;
 		}
 		if (move.id === 'decorate' && pokemon.hasAbility('masterpatissier')) move.target = 'normalOrSelf';
-		if (['discharge', 'lavaplume', 'swift', 'boomburst'].includes(move.id)) {
-			move.target = pokemon.signatureMoveTarget(move);
-		}
+		move.target = pokemon.signatureMoveTarget(move);
 		if (pokemon.usesFallenStarTarget(move)) move.target = 'adjacentFoe';
 		const baseTarget = move.target;
 		let targetRelayVar = { target };
@@ -854,6 +853,7 @@ export class BattleActions {
 			adaptiveMoveSnapshot(move) :
 			null;
 		this.battle.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
+		applyMegaSignatureCategory(move, pokemon);
 		if (adaptiveNativeBefore) adaptiveCaptureNativeMove(this.battle, move, adaptiveNativeBefore);
 		if (baseTarget !== move.target) {
 			// Target changed in ModifyMove, so we must adjust it here
@@ -1368,7 +1368,7 @@ export class BattleActions {
 						const boosts = this.battle.runEvent('ModifyBoost', target, null, null, {
 							...target.boosts,
 						});
-						if (boosts.evasion > 0 && adaptiveSetup(pokemon, target)) boosts.evasion = 0;
+						if (boosts.evasion > 0 && (move.ignorePositiveEvasion || adaptiveSetup(pokemon, target))) boosts.evasion = 0;
 						boost = this.battle.clampIntRange(boost - boosts['evasion'], -6, 6);
 					}
 					if (boost > 0) {
@@ -1705,7 +1705,7 @@ export class BattleActions {
 						const boosts = this.battle.runEvent('ModifyBoost', target, null, null, {
 							...target.boosts,
 						});
-						if (boosts.evasion > 0 && adaptiveSetup(pokemon, target)) boosts.evasion = 0;
+						if (boosts.evasion > 0 && (move.ignorePositiveEvasion || adaptiveSetup(pokemon, target))) boosts.evasion = 0;
 						const boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
 						if (boost > 0) {
 							accuracy /= boostTable[boost];

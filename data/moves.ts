@@ -7667,7 +7667,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return true;
 			},
 			onSourceModifyDamage() {
-				return this.chainModify(2);
+				return this.chainModify(this.effectState.sourceEffect?.name === 'Glacier Glaive' ? 1.5 : 2);
 			},
 			onBeforeMovePriority: 100,
 			onBeforeMove(pokemon) {
@@ -13813,7 +13813,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		sideCondition: 'mist',
 		condition: {
 			duration: 5,
-			durationCallback(source) {
+			durationCallback(source, user, effect) {
+				if (effect?.name === 'Polar Prism') return 3;
 				if (this.field.getPseudoWeather('magicroom')) return 8;
 				if (source?.effectiveWeather && ['hail', 'snow'].includes(source.effectiveWeather())) return 8;
 				return 5;
@@ -13839,10 +13840,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					return this.chainModify(move.spreadHit ? 0.75 : 0.9);
 				}
 			},
-			onSideStart(side) {
+			onSideStart(side, source, effect) {
 				this.add('-sidestart', side, 'Mist',
-					...(this.field.getPseudoWeather('magicroom') ? [`[turns] ${this.effectState.duration}`] : []));
-				if (this.field.getPseudoWeather('magicroom')) {
+					...(effect?.name === 'Polar Prism' || this.field.getPseudoWeather('magicroom') ? [`[turns] ${this.effectState.duration}`] : []));
+				if (this.field.getPseudoWeather('magicroom') && this.effectState.duration === 8) {
 					this.add('-message', 'Magic Room wove Mist into an 8-turn barrier!');
 				}
 			},
@@ -16094,7 +16095,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (this.checkMoveBypassesProtect(move, source, target)) return;
 				if (move.name === 'Pivot Kick') {
 					(move as ActiveMove & { rebounded?: boolean }).rebounded = true;
-					if (this.canSwitch(source.side)) source.switchFlag = true;
+					if (!source.volatiles.puppetsnare && this.canSwitch(source.side)) source.switchFlag = true;
 				}
 				if (move.smartTarget) {
 					move.smartTarget = false;
@@ -19093,7 +19094,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return this.NOT_FAIL;
 			} else {
 				if (this.field.isTerrain(['watersurfaceterrain', 'murkwatersurfaceterrain', 'underwaterterrain'])) {
-					if (pokemon.hasAbility('watercompaction')) {
+					if (pokemon.hasAbilityOrPassive('watercompaction')) {
 						this.boost({ def: 2 });
 					}
 				}
@@ -21528,7 +21529,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.damage(this.actions.calcRecoilDamage(damage, move, source), source, target, 'recoil');
 				}
 				if (move.drain) {
-					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
+					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), move.drainRecipient?.(source, target) ?? source, target, 'drain');
 				}
 				this.singleEvent('AfterSubDamage', move, null, target, source, move, damage);
 				this.runEvent('AfterSubDamage', target, source, move, damage);
@@ -25234,7 +25235,7 @@ Moves.steelwing.onModifyMove = function (move, source) {
 		if (secondary.self?.boosts?.def) secondary.self.boosts.spd = 1;
 	}
 };
-Moves.crowncrash = { ...Moves.wavecrash, onModifyMove: undefined, name: 'Crown Crash', num: 20090, types: ['Water', 'Ice'], recoil: [1, 10], ignoreAbility: true, isNonstandard: 'Custom' };
+Moves.crowncrash = { ...Moves.wavecrash, onModifyMove: undefined, name: 'Crown Crash', num: 20090, basePower: 125, types: ['Water', 'Ice'], recoil: [1, 10], ignoreAbility: true, isNonstandard: 'Custom' };
 
 import { installStarterLinkMoves } from './starter-family-links';
 installStarterLinkMoves(Moves);
@@ -25248,7 +25249,7 @@ Moves.seedflare.flags.nosketch = 1;
 import { installMegaSignatureMoves } from './mega-signature-traps';
 installMegaSignatureMoves(Moves);
 
-import { formSignature } from './form-signatures';
+import { formSignature, MegaSignatureNames } from './form-signatures';
 Moves.sacredrush = { ...Moves.extremespeed, name: 'Sacred Rush', num: 32655, isNonstandard: 'Custom', willCrit: true };
 Moves.apexcleave = { ...Moves.dualchop, name: 'Apex Cleave', num: 32656, isNonstandard: 'Custom', accuracy: true, willCrit: true };
 Moves.shadowshuriken = { ...Moves.watershuriken, name: 'Shadow Shuriken', num: 32657, isNonstandard: 'Custom', basePower: 30, multihit: 3, willCrit: true };
@@ -25284,9 +25285,9 @@ Moves.carapacejab = {
 	pp: 15, priority: 0, target: 'normal', flags: { punch: 1, contact: 1, protect: 1, mirror: 1, metronome: 1 }, isNonstandard: 'Custom',
 };
 
-Moves.crushbite = { ...Moves.riptidefang, name: 'Crush Bite', num: 32663, basePower: 75, ignorePositiveDefensive: true };
+Moves.crushbite = { ...Moves.riptidefang, name: 'Crush Bite', num: 32663, basePower: 80, ignorePositiveDefensive: true };
 Moves.razorbite = { ...Moves.riptidefang, name: 'Razor Bite', num: 32664, flags: { ...Moves.riptidefang.flags, bypasssub: 1 } };
-Moves.cometjab = { ...Moves.carapacejab, name: 'Comet Jab', num: 32665,
+Moves.cometjab = { ...Moves.carapacejab, name: 'Comet Jab', num: 32665, basePower: 80,
 	onModifyMove(move, source) {
 		move.category = source.getStat('atk', false, true) > source.getStat('spa', false, true) ? 'Physical' : 'Special';
 	},
@@ -25306,6 +25307,7 @@ Moves.carapacejab.onModifyMove = function (move, source, target) {
 	const signature = formSignature(source, 'carapacejab');
 	if (!signature) return;
 	(move as { name: string }).name = signature.name;
+	move.basePower = Moves.cometjab.basePower;
 	Moves.cometjab.onModifyMove!.call(this, move, source, target);
 };
 
@@ -25321,12 +25323,12 @@ const signatureVariants = {
 	irontail: { name: 'Anchor Slam', basePower: 85, volatileStatus: 'smackdown' },
 	twineedle: { name: 'Triple Sting', basePower: 25, multihit: 3, accuracy: 100, flags: { ...Moves.twineedle.flags, drill: 1 } },
 	stoneedge: { name: 'Talon Dive', volatileStatus: 'smackdown', target: 'normal', basePower: 85, accuracy: 100, flags: { ...Moves.stoneedge.flags, contact: 1 }, secondary: null },
-	darkpulse: { name: 'Dread Howl', flags: { ...Moves.darkpulse.flags, sound: 1, bypasssub: 1 }, secondary: null },
+	darkpulse: { name: 'Dread Howl', basePower: 85, flags: { ...Moves.darkpulse.flags, sound: 1, bypasssub: 1 }, secondary: null },
 	voltswitch: { name: 'Bolt Dash', basePower: 65, flags: { ...Moves.voltswitch.flags, bypasssub: 1 } },
-	airslash: { name: 'Gale Slice', secondary: null },
+	airslash: { name: 'Gale Slice', basePower: 80, secondary: null },
 	psychocut: { name: 'Saber Parry', basePower: 70, accuracy: 100 },
 	hypervoice: { name: 'Guard Song', basePower: 80, accuracy: 100 },
-	slash: { name: 'Veil Slash', basePower: 80, accuracy: 100 },
+	slash: { name: 'Veil Slash', basePower: 90, accuracy: 100 },
 	swift: { name: 'Void Volley', basePower: 70, accuracy: true, target: 'normal' },
 } as const;
 for (const [index, [base, variant]] of Object.entries(signatureVariants).entries()) {
@@ -25352,7 +25354,7 @@ for (const [index, [base, variant]] of Object.entries(signatureVariants).entries
 }
 Moves.pivotkick.onMoveFail = function (target, source, move) {
 	if ((move as ActiveMove & { rebounded?: boolean }).rebounded) {
-		if (this.canSwitch(source.side)) source.switchFlag = true;
+		if (!source.volatiles.puppetsnare && this.canSwitch(source.side)) source.switchFlag = true;
 		return;
 	}
 	Moves.jumpkick.onMoveFail!.call(this, target, source, move);
@@ -25428,4 +25430,10 @@ Moves.veilslash.onModifyMove = function (move, source, target) {
 };
 
 import { installStoneSignatures } from './stone-signatures';
+import { installShogunCuts } from './samurott-shogun';
+installShogunCuts(Moves);
 installStoneSignatures(Moves);
+for (const name of MegaSignatureNames) {
+	const signature = Moves[name.toLowerCase().replace(/[^a-z0-9]/g, '') as ID];
+	if (signature.category !== 'Status') signature.flags = { ...signature.flags, adaptivecategory: 1, megasignature: 1 };
+}

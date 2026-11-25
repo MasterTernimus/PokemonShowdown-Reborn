@@ -60,7 +60,7 @@ describe('Flash Fire', () => {
 
 	it(`should lose the Flash Fire boost if its ability is changed`, () => {
 		battle = common.createBattle([[
-			{ species: 'Heatran', ability: 'flashfire', moves: ['sleeptalk', 'incinerate'] },
+			{ species: 'Lampent', ability: 'flashfire', moves: ['sleeptalk', 'incinerate'] },
 		], [
 			{ species: 'Talonflame', ability: 'shellarmor', moves: ['flamethrower', 'worryseed'] },
 		]]);

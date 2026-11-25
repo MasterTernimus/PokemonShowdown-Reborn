@@ -1,4 +1,5 @@
 import { Battle as SimulatorBattle } from '../sim/battle';
+import { applyMegaSignatureCategory } from './form-signatures';
 import type { AbilityDataTable } from '../sim/dex-abilities';
 import type { MoveDataTable } from '../sim/dex-moves';
 
@@ -77,6 +78,7 @@ export function installMegaSignatureMoves(moves: MoveDataTable) {
 				const defender = preview.sides[target.side.n].pokemon[target.side.pokemon.indexOf(target)];
 				const candidate = preview.dex.getActiveMove('firstimpression');
 				Object.assign(candidate, { type, types: [type], willCrit: false, hit: 1 });
+				applyMegaSignatureCategory(candidate, attacker, 'F.M. Impression');
 				preview.randomizer = value => value;
 				preview.setActiveMove(candidate, attacker, defender);
 				if (!defender.runImmunity(candidate) || !preview.runEvent('TryHit', defender, attacker, candidate)) return 0;
@@ -91,4 +93,5 @@ export function installMegaSignatureMoves(moves: MoveDataTable) {
 		move.type = other > bug ? alternative : 'Bug';
 		move.types = [move.type];
 	};
+	moves.fmimpression.onModifyType = moves.firstimpression.onModifyType;
 }

@@ -1,3 +1,5 @@
+import { UltraInstinctDescription } from './ultra-instinct-description';
+
 /** Player-facing wording only. Full rules remain available in the ability details. */
 export const ReadableAbilitySummaries: Record<string, string> = {
 	slipstream: 'Airborne; first landed Flying attack each entry sets 3-turn Tailwind.',
@@ -34,7 +36,7 @@ export const ReadableAbilitySummaries: Record<string, string> = {
 	stormcircuit: 'Entry: Electric Terrain or Aura for 5 turns (8 with Amplifield Rock).',
 	ultraego: 'Ability bypass; healing from damage dealt/taken; attack boosts and field bonuses.',
 	territorial: 'Blocks Berries/forced switching; HP hits heal 1/16, +1 Defense once/turn; Intimidate: +1 Attack.',
-	ultrainstinct: 'Mold Breaker + Inner Focus; timing power, first-attack protection and attack healing.',
+	ultrainstinct: UltraInstinctDescription.shortDesc,
 	empress: 'Queenly Majesty + Royal Decree; once-battle half-HP rally cures allies and sets Safeguard.',
 	toxiccocoon: 'Shield Dust; halves first Special HP attack each entry; poisons first contact attacker.',
 	sushitrick: 'Entry: allies heal 1/4 HP and clear confusion; alone, clears own confusion/negative accuracy.',

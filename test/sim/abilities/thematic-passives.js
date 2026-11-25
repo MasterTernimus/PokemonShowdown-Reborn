@@ -78,7 +78,7 @@ describe('Approved thematic species passives', () => {
 			forms.map(form => base + form)
 		);
 		assert.equal(cosmetics.length, 27);
-		assert.equal(Object.keys(SpeciesPassives).length, 986);
+		assert.equal(Object.keys(SpeciesPassives).length, 988);
 		for (const [passive, group] of Object.entries(ThematicPassiveGroups))
 			for (const id of group)
 				assert.deepEqual(Dex.species.get(id).passives, expected(id, passive), id);

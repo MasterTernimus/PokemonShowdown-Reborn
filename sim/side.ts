@@ -116,6 +116,9 @@ export interface MoveRequestData {
 	pp?: number;
 	maxpp?: number;
 	target?: string;
+	megaTarget?: string;
+	megaXTarget?: string;
+	megaYTarget?: string;
 	disabled?: string | boolean;
 	disabledSource?: string;
 }
@@ -750,6 +753,11 @@ export class Side {
 		}
 		const move = this.battle.dex.getActiveMove(moveid);
 		move.ppSlot = moveSlot;
+		const slot = moveSlot === undefined ? undefined : request.moves[moveSlot];
+		const megaTarget = event === 'mega' ? slot?.megaTarget : event === 'megax' ? slot?.megaXTarget :
+			event === 'megay' ? slot?.megaYTarget : undefined;
+		// Older clients can still submit their spread move without a target on the Mega turn.
+		if (megaTarget && (targetLoc || this.battle.actions.targetTypeChoices(targetType))) targetType = megaTarget;
 
 		// Z-move
 		const wantsZMove = event === 'zmove' || event === 'zmove-terastallize';

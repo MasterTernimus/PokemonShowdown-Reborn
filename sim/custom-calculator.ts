@@ -9,6 +9,7 @@ import {
 	SignaturePassiveDescriptions,
 } from '../data/passive-ability-cleanup';
 import { getAbilityDisplayComponents } from '../data/ability-display';
+import { StoneSignatures } from '../data/stone-signatures';
 /** Isolated, bounded single-action scenarios using the real battle engine. */
 import { Battle } from './battle';
 import { Dex } from './dex';
@@ -210,24 +211,29 @@ function actor(input: unknown, move: string): CalcActor {
 	if (itemName && !item.exists) throw new Error('Unknown item.');
 	const nature = Dex.natures.get(name(data.nature) || 'Serious');
 	if (!nature.exists) throw new Error('Unknown nature.');
-	const moves =
+	const inputMoves =
 		data.moves === undefined ?
 			[move || 'Splash'] :
-			Array.isArray(data.moves) ?
-				data.moves.slice() :
-				data.moves;
+			data.moves;
 	if (
-		!Array.isArray(moves) ||
-		!moves.length ||
-		moves.length > 4 ||
-		moves.some(m => typeof m !== 'string' || !Dex.moves.get(m).exists)
+		!Array.isArray(inputMoves) ||
+		!inputMoves.length ||
+		inputMoves.length > 4 ||
+		inputMoves.some(m => typeof m !== 'string' || !Dex.moves.get(m).exists)
 	) {
 		throw new Error('Provide one to four recognized moves.');
 	}
-	if (move && !moves.some(m => Dex.moves.get(m).id === Dex.moves.get(move).id)) {
+	const destination = data.gimmick === 'mega' &&
+		(item.megaStone?.[species.name] || item.megaStone?.[species.baseSpecies]);
+	const signature = StoneSignatures[Dex.toID(destination || species.name)];
+	// Imported teams keep the learned move in its original slot, including its PP and field effects.
+	const learnedMove = (slot: string) => signature && Dex.toID(slot) === Dex.toID(signature.name) ? signature.base : slot;
+	const moves = inputMoves.map(learnedMove);
+	const selected = learnedMove(move);
+	if (selected && !moves.some(m => Dex.moves.get(m).id === Dex.moves.get(selected).id)) {
 		if (moves.length === 4)
 			throw new Error('The selected attack must be in the attacker moveset (maximum four moves).');
-		moves.unshift(move);
+		moves.unshift(selected);
 	}
 	const set: PokemonSet = {
 		name: species.name,
@@ -236,7 +242,7 @@ function actor(input: unknown, move: string): CalcActor {
 		item: itemName,
 		nature: nature.name,
 		level: integer(data.level, 100, 1, 100),
-		moves: moves.slice(),
+		moves,
 		gender: '',
 		evs: {} as StatsTable,
 		ivs: {} as StatsTable,
@@ -739,7 +745,10 @@ export function calculateScenario(input: unknown, includeActionOutcomes = true) 
 			)
 				incenseBranches = true;
 			const logStart = battle.log.length;
-			const move = battle.dex.moves.get(scenario.move);
+			const signature = StoneSignatures[attacker.species.id];
+			const usesSignature = signature && battle.dex.toID(signature.name) === scenario.move &&
+				attacker.hasMove(signature.base);
+			const move = battle.dex.moves.get(usesSignature ? signature.base : scenario.move);
 			const options: { zMove?: string, maxMove?: string } = {};
 			if (scenario.attackMode === 'z') {
 				options.zMove = battle.actions.getZMove(move, attacker);

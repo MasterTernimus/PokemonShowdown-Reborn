@@ -30,8 +30,9 @@ describe('Authority Clause team-wide Ultra limits', () => {
 	it('rejects Mega Emboar plus Mega Hawlucha through equipped stones', () => {
 		assert(validate([emboar(), hawlucha()]).some(error => /only one Ultra Ego/.test(error)));
 	});
-	it('rejects two Ultra Instinct Megas, including composite abilities', () => {
-		assert(validate([infernape(), lucario()]).some(error => /only one Ultra Instinct/.test(error)));
+	it('counts Infernite’s mandatory Ultra Instinct against an ordinary Ultra Instinct teammate', () => {
+		assert(validate([set('Infernape', 'Opportunist', 'Infernite'), set('Sawk', 'Ultra Instinct')])
+			.some(error => /only one Ultra Instinct/.test(error)));
 	});
 	it('allows one of each Mega family without double-counting Infernape before and after evolution', () => {
 		assert.equal(validate([emboar(), infernape()]), null);
@@ -44,8 +45,34 @@ describe('Authority Clause team-wide Ultra limits', () => {
 			set('Torterra', Dex.species.get('Torterra').abilities[0], 'Torterranite')];
 		assert(validate(team).some(error => /only one Ultra Ego/.test(error)));
 	});
-	it('counts ordinary Infernape alongside an Ultra Instinct Mega', () => {
-		assert(validate([set('Infernape', 'Ultra Instinct'), lucario()]).some(error => /only one Ultra Instinct/.test(error)));
+	for (const [stone, mega, forced] of [
+		['Lucarionite', 'Lucario-Mega', 'Insight'], ['Lucarionite Z', 'Lucario-Mega-Z', 'Aura Precision'],
+	]) {
+		it('allows the Ultra Instinct from ' + stone + ' alongside Twilight Instinct', () => {
+			const wolf = set('Lycanroc-Dusk', 'Twilight Instinct');
+			for (const ability of ['Carry On', 'Convergence', 'Armorize', 'Ultra Ego']) {
+				assert.equal(validate([set('Lucario', ability, stone), wolf]), null);
+			}
+			const text = mega + ' @ ' + stone + '\nAbility: ' + forced + '\n- Protect\n\n' +
+				'Lycanroc-Dusk\nAbility: Twilight Instinct\n- Protect';
+			assert.equal(validate(Teams.unpack(Teams.pack(Teams.import(text)))), null);
+		});
+		it('counts genuinely selected abilities even with ' + stone, () => {
+			const wolf = set('Lycanroc-Dusk', 'Twilight Instinct');
+			for (const ability of ['Ultra Instinct', forced]) {
+				assert(validate([set('Lucario', ability, stone), wolf]).some(error => /only one Ultra Instinct/.test(error)));
+			}
+			assert(validate([set('Lucario', 'Ultra Ego', stone), wolf, set('Throh', 'Ultra Ego')])
+				.some(error => /only one Ultra Ego/.test(error)));
+			const errors = validate([set('Lucario', 'Convergence', stone), wolf, set('Sawk', 'Ultra Instinct')]);
+			assert(errors.some(error => /only one Ultra Instinct/.test(error)));
+			assert(!errors.join(' ').includes('Lucario'));
+		});
+	}
+	it('counts a directly selected Insight and a Mega with an unrelated item', () => {
+		const wolf = set('Lycanroc-Dusk', 'Twilight Instinct');
+		assert(validate([set('Lucario', 'Insight'), wolf]).some(error => /only one Ultra Instinct/.test(error)));
+		assert(check([set('Lucario-Mega', 'Insight', 'Leftovers'), wolf]).some(error => /only one Ultra Instinct/.test(error)));
 	});
 	it('counts Dusk Ego and Twilight Instinct on ordinary Lycanroc forms', () => {
 		assert.equal(validate([set('Lycanroc-Dusk', 'Dusk Ego'), set('Hitmonlee', 'Ultra Instinct')]), null);

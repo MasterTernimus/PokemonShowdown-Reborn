@@ -27,6 +27,7 @@ exports.abilities = (id, expected) => {
 	if (id === 'venusaur') expected.S = 'Uproot';
 	if (id === 'lucariomegaz') expected[0] = 'Aura Precision';
 	const slots = {
+		chesnaught: ['1', 'Iron Barbs'],
 		lucariomega: ['0', 'Aura Convergence'],
 		kangaskhan: ['1', 'Healer'],
 		froslass: ['0', 'Haunting Veil'],

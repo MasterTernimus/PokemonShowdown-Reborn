@@ -1,3 +1,4 @@
+import { UltraInstinctDescription, BurningSpiritDescription } from '../ultra-instinct-description';
 import { AbilityDescriptionOverrides } from '../ability-descriptions';
 import { getAbilitySelectorSummary } from '../ability-display';
 import {
@@ -6,7 +7,22 @@ import {
 } from '../roster-expansion-text';
 import { OpenCageText } from '../open-cage';
 export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
+	sushisavvy: {
+		name: 'Sushi Savvy',
+		shortDesc: 'Raises Sp. Atk by 1 stage each time this Pokémon enters battle.',
+		desc: 'Raises Sp. Atk by 1 stage on every switch-in. Mega Evolution keeps the boost from entry.',
+	},
 	opencage: OpenCageText,
+	furnacehide: {
+		name: 'Furnace Hide',
+		shortDesc: 'Flame Body. Fire attacks gain 20% power against burned foes.',
+		desc: 'Contact attackers have a 30% burn chance (60% on Volcanic Field, 0% on Cold Eclipse). On Infernal Eclipse, gains +1 Defense and Sp. Def on entry. Fire attacks have 1.2× power against burned foes.',
+	},
+	steamforge: {
+		name: 'Steam Forge',
+		shortDesc: 'Magma Armor. Steel attacks gain 20% power while Defense is raised.',
+		desc: "Cures freeze and prevents it outside Cold Eclipse. Incoming Water and Ice attacks use half the attacker’s offensive stat. On entry in Dragon's Den, Volcanic, or Infernal Eclipse, raises Defense and Sp. Def by 1. Dragon's Den and Infernal Eclipse give Fire immunity. Steel attacks have 1.2× power while Defense is raised.",
+	},
 	deepbore: { name: 'Deep Bore', ...AbilityDescriptionOverrides.deepbore },
 	dreaddominion: {
 		name: 'Dread Dominion',
@@ -4836,11 +4852,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Toxic Debris, Corrosion, and Merciless's effects.",
 		shortDesc: 'Toxic Debris + Corrosion + Merciless.',
 	},
-	ultrainstinct: {
-		name: 'Ultra Instinct',
-		desc: 'Mold Breaker + Inner Focus. Attacks deal 2x damage through screens or 1.5x damage when the target has yet to move or has just switched in. On Ashen Beach, New World, Starlight Arena, or Cold Eclipse, it gains 1 Accuracy on entry, deals 1.5x damage, and takes 50% less damage. Otherwise it takes 70% less damage if the attacker has not yet moved. Bewitched Woods, Haunted, and Holy Field suppress these effects.',
-		shortDesc: 'Mold Breaker + Inner Focus; screen and timing boosts; field defenses.',
-	},
+	ultrainstinct: { name: 'Ultra Instinct', ...UltraInstinctDescription },
 	duskdrive: {
 		name: 'Dusk Ego',
 		desc: 'This Pokemon has Precision, Opportunist, and Battle Fervor built in.',
@@ -5415,8 +5427,6 @@ import { SovereignDescriptions } from '../sovereign-approved-data';
 for (const [id, details] of Object.entries(SovereignDescriptions))
 	Object.assign(AbilitiesText[id as ID], details);
 
-import { UltraInstinctDescription, BurningSpiritDescription } from '../ultra-instinct-description';
-Object.assign(AbilitiesText.ultrainstinct, UltraInstinctDescription);
 Object.assign(AbilitiesText.burningspirit, BurningSpiritDescription);
 import { PassiveCleanupDescriptions } from '../passive-cleanup-approved';
 for (const [id, details] of Object.entries(PassiveCleanupDescriptions)) {
@@ -5977,6 +5987,8 @@ for (const [id, name] of Object.entries(revisedNames))
 	AbilitiesText[id as ID] = { ...AbilitiesText[id as ID], name };
 
 import { SandDreamDescriptions } from '../sand-dream-descriptions';
+import { ShogunStanceText } from '../samurott-shogun';
+AbilitiesText.shogunstance = ShogunStanceText;
 for (const [id, text] of Object.entries(SandDreamDescriptions)) {
 	AbilitiesText[id as ID] = { ...AbilitiesText[id as ID], ...text };
 }

@@ -339,10 +339,10 @@ describe('Approved roster expansion and component search', () => {
 		assert(!ally.volatiles.confusion);
 		assert(battle.log.some(line => line.includes('colorful sushi surprise')));
 	});
-	it('Master Course has Contrary and grants a nonstacking, single-attack ally critical charge', () => {
-		const [p, ally, foe] = make('Tatsugiri', 'Master Course');
+	it('Master Course grants a nonstacking, single-attack ally critical charge and allows normal stat drops', () => {
+		const [p, ally, foe] = make('Mew', 'Master Course');
 		battle.boost({ spa: -2 }, p, p);
-		assert.equal(p.boosts.spa, 2);
+		assert.equal(p.boosts.spa, -2);
 		hit('watergun', p, foe);
 		assert(ally.volatiles.mastercourse);
 		assert.equal(battle.runEvent('ModifyCritRatio', ally, foe, battle.dex.getActiveMove('tackle'), 1), 2);

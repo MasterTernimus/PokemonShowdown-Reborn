@@ -6,6 +6,10 @@ const favored = ['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain'
 function disabled(battle: Battle) {
 	return battle.field.isTerrain(['bewitchedwoodsterrain', 'hauntedterrain', 'holyterrain']);
 }
+export function ultraInstinctBoostsPower(battle: Battle, source: Pokemon, target?: Pokemon) {
+	return !!target && !source.isAlly(target) && !disabled(battle) && !target.hasAbility('battlebond') &&
+		(!!battle.queue.willMove(target) || target.m.enteredBattleTurn === battle.turn);
+}
 function opposingMove(source: Pokemon | undefined, target: Pokemon, effect: Effect | undefined) {
 	return !!source && !source.isAlly(target) && effect?.effectType === 'Move' &&
 		(effect).category !== 'Status';
@@ -25,8 +29,7 @@ export function installUltraInstinctRework(abilities: AbilityDataTable) {
 		if (!disabled(this)) this.add('-ability', pokemon, 'Ultra Instinct');
 	};
 	instinct.onBasePower = function (this: Battle, power: number, source: Pokemon, target: Pokemon) {
-		if (disabled(this) || !target || source.isAlly(target) || target.hasAbility('battlebond')) return;
-		if (this.queue.willMove(target) || target.m.enteredBattleTurn === this.turn) return this.chainModify(1.3);
+		if (ultraInstinctBoostsPower(this, source, target)) return this.chainModify(1.3);
 	};
 	delete instinct.onSourceModifyDamage;
 	instinct.onDamagePriority = -15;

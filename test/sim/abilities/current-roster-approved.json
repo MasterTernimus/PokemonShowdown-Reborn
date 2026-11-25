@@ -1,6 +1,10 @@
 {
   "_comment": "Explicit local approvals through November 16. Edit this reviewed fixture rather than adding another override layer. No values are generated from runtime Dex.",
   "slots": {
+    "samurott": {"S":"Shogun Stance"},
+    "samurottalt": {"S":"Shogun Stance"},
+    "samurotthisui": {"S":"Shogun Stance"},
+    "samurotthisuialt": {"S":"Shogun Stance"},
     "sawsbucksummer": {"1":"Chlorophyll"},
     "vikavolt": {"H":"Swarm"},
     "jellicent": {"0":"Unnerve"},
@@ -122,6 +126,8 @@
     }
   },
   "exactSlots": {
+    "heatran": {"0":"White Smoke","1":"Unnerve","H":"Furnace Hide"},
+    "heatranmega": {"0":"Steam Forge"},
     "dodrio": {"0":"Tripwire Kick","1":"Speed Boost","H":"Guts"},
     "drampa": {"0":"Dragonize","1":"Sap Sipper","H":"Gentle Giant"},
     "gigalith": {"0":"Crystal Bastion","1":"Sand Stream","H":"Dune Chorus"},
@@ -174,7 +180,15 @@
     }
   },
   "passives": {
+    "tatsugiri": ["sushisavvy"],
+    "tatsugiridroopy": ["sushisavvy"],
+    "tatsugiristretchy": ["sushisavvy"],
+    "tatsugiricurlymega": ["sushisavvy"],
+    "tatsugiridroopymega": ["sushisavvy"],
+    "tatsugiristretchymega": ["sushisavvy"],
     "drampa": ["kindredfury"],
+    "heatran": ["flashfire"],
+    "heatranmega": ["watercompaction"],
     "gigalith": ["mineralheart"],
     "grapploct": ["abyssalgrip"],
     "toucannon": ["siegebeak"],

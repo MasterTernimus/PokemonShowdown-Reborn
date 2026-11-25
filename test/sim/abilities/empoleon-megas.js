@@ -104,6 +104,8 @@ describe('Empoleon Mega split', () => {
 		const move = hit(p, q);
 		assert.equal(move.id, 'wavecrash');
 		assert.equal(move.name, 'Crown Crash');
+		assert.equal(move.basePower, 125);
+		assert.equal(Dex.moves.get('Crown Crash').basePower, move.basePower);
 		assert.deepEqual(move.types, ['Water', 'Ice']);
 		assert.equal(move.type, 'Water');
 		assert(move.ignoreAbility);

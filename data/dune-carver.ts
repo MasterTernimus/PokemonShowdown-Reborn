@@ -1,11 +1,15 @@
 import type { AbilityData } from '../sim/dex-abilities';
 
-function clearHazards(this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) {
-	if (damage <= 0 || !source.hp || !move.flags.slicing || move.category === 'Status') return;
+export function clearEntryHazards(battle: Battle, source: Pokemon, from: string) {
 	for (const id of ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend']) {
 		if (!source.side.removeSideCondition(id)) continue;
-		this.add('-sideend', source.side, this.dex.conditions.get(id).name, '[from] ability: Dune Carver', `[of] ${source}`);
+		battle.add('-sideend', source.side, battle.dex.conditions.get(id).name, '[from] ' + from, `[of] ${source}`);
 	}
+}
+
+function clearHazards(this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) {
+	if (damage <= 0 || !source.hp || !move.flags.slicing || move.category === 'Status') return;
+	clearEntryHazards(this, source, 'ability: Dune Carver');
 }
 
 export const DuneCarver: AbilityData = {

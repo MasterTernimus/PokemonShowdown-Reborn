@@ -1,5 +1,13 @@
 /* eslint-disable @stylistic/max-len */
 
+function isEeviumHolder(pokemon: Pokemon) {
+	return ['eevee', 'eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id) || pokemon.species.id === 'eeveegmax';
+}
+
+function eeviumDefense(this: Battle, stat: number, pokemon: Pokemon) {
+	if (pokemon.species.id !== 'abysseon' && isEeviumHolder(pokemon)) return this.chainModify(1.5);
+}
+
 export const Items: import('../sim/dex-items').ItemDataTable = {
 	hydreigonite: {
 		name: "Hydreigonite",
@@ -1975,17 +1983,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	eeviumz: {
 		name: "Eevium Z",
 		onModifyDefPriority: 2,
-		onModifyDef(def, pokemon) {
-			if (['eevee', 'eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id) || pokemon.species.id === 'eeveegmax') {
-				return this.chainModify(1.5);
-			}
-		},
+		onModifyDef: eeviumDefense,
 		onModifySpDPriority: 2,
-		onModifySpD(spd, pokemon) {
-			if (['eevee', 'eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id) || pokemon.species.id === 'eeveegmax') {
-				return this.chainModify(1.5);
-			}
-		},
+		onModifySpD: eeviumDefense,
 		spritenum: 657,
 		onTakeItem: false,
 		zMove: "Extreme Evoboost",
@@ -1993,9 +1993,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
-			if (['eevee', 'eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id) || pokemon.species.id === 'eeveegmax') {
-				this.heal(pokemon.baseMaxhp / 16);
-			}
+			if (isEeviumHolder(pokemon)) this.heal(pokemon.baseMaxhp / 16);
 		},
 		itemUser: ["Eevee", 'Eevee-Starter', 'Eevee-Starter-Alt', 'Eevee-Gmax'],
 		num: 805,

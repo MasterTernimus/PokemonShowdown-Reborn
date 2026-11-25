@@ -40,7 +40,7 @@ describe('Mega Dusknoir and Reaper\'s Grip', () => {
 		const mon = setup(), foe = battle.p2.active[0];
 		assert.equal(mon.volatiles.warnedmoves?.anticipation, 'moonblast');
 		mon.hp = 60;
-		const heal = Math.floor(mon.baseMaxhp / 4);
+		const heal = Math.floor(mon.baseMaxhp / 3);
 		const use = (id, changes = {}) => {
 			const move = Object.assign(battle.dex.getActiveMove(id), { accuracy: true, willCrit: false }, changes);
 			battle.actions.runMove(move, foe, foe.getLocOf(mon), { externalMove: true });
@@ -67,7 +67,7 @@ describe('Mega Dusknoir and Reaper\'s Grip', () => {
 		const returnedHP = mon.hp;
 		attack();
 		use('growl');
-		assert.equal(mon.hp, returnedHP - 20);
+		assert.equal(mon.hp, Math.min(mon.maxhp, returnedHP - 10 + Math.floor(mon.baseMaxhp / 4)));
 		assert.equal(mon.boosts.atk, -1);
 	});
 	it('converts Haunted Aura after an opposing Ghost KO and does not extend an existing field', () => {

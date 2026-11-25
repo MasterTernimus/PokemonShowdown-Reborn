@@ -35,7 +35,7 @@ export function absorbHit(
 			[
 				...(AbilityComponents[id] || []),
 				...(SignaturePassiveComponents[id] || []),
-				...getAbilityComponentAdditions(id, target.getPassives()),
+				...getAbilityComponentAdditions(id, target.getPassives(), target.species.id),
 			].some(part => contains(part, component, seen))
 		);
 	};

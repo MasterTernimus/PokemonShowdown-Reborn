@@ -1,3 +1,6 @@
+import {
+	AuraPrecisionDescription, BurningSpiritDescription, UltraInstinctDescription,
+} from './ultra-instinct-description';
 /** Plain-language display text only. Battle callbacks and component identities live elsewhere. */
 export const AbilityDescriptionOverrides: Record<string, { desc: string, shortDesc: string }> = {
 	everlastingbloom: {
@@ -2374,11 +2377,7 @@ export const AbilityDescriptionOverrides: Record<string, { desc: string, shortDe
 		shortDesc:
 			'Immune to powder effects, sandstorm and hail damage; Other Pokemon cannot lower its Defense; Heals 1/3 HP on switching out.',
 	},
-	ultrainstinct: {
-		desc: "Moves ignore bypassable opposing abilities. Prevents flinching and Intimidate's Attack drop. Attacks deal 2x damage through screens or 1.5x damage when the target has yet to move or has just switched in. On Ashen Beach, New World, Starlight Arena, or Cold Eclipse, it gains 1 Accuracy on entry, deals 1.5x damage, and takes 50% less damage. Otherwise it takes 70% less damage if the attacker has not yet moved. Bewitched Woods, Haunted, and Holy Field suppress these effects.",
-		shortDesc:
-			'Moves ignore bypassable abilities; Cannot flinch; blocks Intimidate — screen and timing boosts; field defenses.',
-	},
+	ultrainstinct: UltraInstinctDescription,
 	duskdrive: {
 		desc: 'Full Battle Fervor, Precision and Opportunist, including their field effects, entry behavior, item blocking, damage modifiers and boost-copy timing.',
 		shortDesc:
@@ -2663,11 +2662,6 @@ export const AbilityDescriptionOverrides: Record<string, { desc: string, shortDe
 	sushitrick: {
 		desc: 'On entry, heals each adjacent ally by 1/4 max HP and cures its confusion.',
 		shortDesc: 'Entry heals adjacent allies by 1/4 HP and cures their confusion.',
-	},
-	mastercourse: {
-		desc: 'Reverses received stat-stage changes, except Z-Power changes. Once per turn, damaging a foe with a Water or Dragon attack gives an adjacent ally +1 critical-hit stage for its next damaging move. The charge does not stack and ends on switching out.',
-		shortDesc:
-			'Reverses stat changes except Z-Power — Water or Dragon hits grant an adjacent ally +1 critical-hit stage.',
 	},
 	secondbrew: {
 		desc: "Once per turn, when it receives draining-move healing, it also restores 1/8 of the lowest-HP adjacent ally's max HP.",
@@ -4292,10 +4286,7 @@ AbilityDescriptionOverrides.auraguard = {
 	shortDesc: 'Takes half damage from contact moves.',
 	desc: 'Damage taken from contact moves is halved, whether the move is physical or special. Noncontact moves are unaffected.',
 };
-AbilityDescriptionOverrides.auraprecision = {
-	shortDesc: "Ultra Instinct + Shield Dust + Mind's Eye.",
-	desc: "Full local Ultra Instinct, Shield Dust and Mind's Eye. Ultra Instinct supplies its own whole-attack recovery, first-attack reduction and field interactions. Shield Dust blocks secondary effects aimed at this Pokemon while retaining attacker self-effects. Mind's Eye lets Normal and Fighting moves hit Ghosts, supplies Fairy and Dark STAB, ignores evasion boosts, prevents external accuracy drops, reveals opposing Illusions and applies its Cold Eclipse power and damage reduction.",
-};
+AbilityDescriptionOverrides.auraprecision = AuraPrecisionDescription;
 AbilityDescriptionOverrides.predator = {
 	shortDesc:
 		'1.3x timing power, or 1.5x on rocky fields or against authority/Ultra abilities; no stacking.',
@@ -4312,7 +4303,7 @@ AbilityDescriptionOverrides.verdantsanctuary = {
 
 AbilityDescriptionOverrides.mastercourse = {
 	shortDesc: 'Water/Dragon HP hits charge an ally, or itself alone, after the move.',
-	desc: 'Reverses received stat-stage changes except Z-Power. Once per turn, dealing opposing HP damage with a Water or Dragon attack prepares a nonstacking +1 critical-hit-stage charge after the entire move finishes. Give it to the living adjacent ally with the lowest HP percentage, or to itself if none exists. The next executed damaging move consumes the charge even on a miss, protection or immunity; status moves preserve it, and switching clears it. A successful charged Water or Dragon move can prepare another charge afterward.',
+	desc: 'Once per turn, dealing Water or Dragon damage to a foe’s HP gives the adjacent ally with the lowest HP percentage a charge after the move ends. If alone, the user gets the charge. The charge adds one critical-hit stage to the next damaging move, even if it misses or is blocked. It cannot stack and switching clears it.',
 };
 
 import { SelectedAbilityDescriptions } from './selected-mega-simplification-data';
@@ -4358,8 +4349,6 @@ AbilityDescriptionOverrides.burningrage = BurningRageDescription;
 import { SovereignDescriptions } from './sovereign-approved-data';
 Object.assign(AbilityDescriptionOverrides, SovereignDescriptions);
 
-import { UltraInstinctDescription, BurningSpiritDescription } from './ultra-instinct-description';
-AbilityDescriptionOverrides.ultrainstinct = UltraInstinctDescription;
 AbilityDescriptionOverrides.burningspirit = BurningSpiritDescription;
 import { PassiveCleanupDescriptions } from './passive-cleanup-approved';
 Object.assign(AbilityDescriptionOverrides, PassiveCleanupDescriptions);
@@ -4821,11 +4810,11 @@ Object.assign(AbilityDescriptionOverrides, {
 Object.assign(AbilityDescriptionOverrides, {
 	duskdrive: {
 		shortDesc: 'Keen Eye + Ultra Ego.',
-		desc: 'Keen Eye prevents opposing accuracy drops, ignores evasion boosts and reveals Illusions. Includes Ultra Ego’s attack boosts, recovery, ability bypass and field interactions.',
+		desc: 'Keen Eye prevents opposing accuracy drops, ignores evasion boosts and reveals Illusions. Includes Ultra Ego’s attack boosts, recovery, ability bypass and field interactions. Ultra Ego cannot bypass active Ultra Instinct.',
 	},
 	twilightinstinct: {
 		shortDesc: 'Ultra Instinct + Opportunist.',
-		desc: 'Copies opposing stat boosts. Retains Ultra Instinct’s attack timing bonus, incoming damage protection, recovery and field interactions.',
+		desc: "Copies opposing stat boosts. Ultra Instinct boosts attacks by 1.3x against foes still queued to move or that switched in this turn, except foes with Battle Bond. When that boost applies, it takes precedence over Dusk Lycanroc's Tough Claws. Otherwise, Tough Claws gives contact moves its usual 1.3x power. Ultra Instinct also prevents flinching, Intimidate and opposing accuracy drops, guards against the first attack each turn, and heals after damaging a foe. Ultra Ego cannot bypass active Ultra Instinct.",
 	},
 	forsakensleeper: {
 		shortDesc: 'Comatose + Soundproof + Rattled.',
