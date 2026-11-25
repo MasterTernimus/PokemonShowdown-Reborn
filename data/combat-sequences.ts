@@ -146,10 +146,12 @@ export function installCombatSequences(
 	};
 	abilities.misalignedstars.onDamagePriority = 2;
 	abilities.misalignedstars.onDamage = function (damage, target, source, effect) {
-		if (damage <= 0 || effect.effectType !== 'Move' || effect.category === 'Status' || !source || target.isAlly(source)) return;
+		if (damage <= 0 || effect.effectType !== 'Move' || effect.category === 'Status' ||
+			!source || target.isAlly(source)) return;
 		const state = target.m.misalignedStars;
 		// Crescent Rend can break a Substitute and send the remaining damage to the holder.
-		if (state?.recorded?.[effect.id] && hasCrescentSubDamage(target, effect)) return blockRecordedMove.call(this, target, effect);
+		if (state?.recorded?.[effect.id] &&
+			hasCrescentSubDamage(target, effect)) return blockRecordedMove.call(this, target, effect);
 		if (state?.recorded?.[effect.id] !== null) return;
 		const hit = target.getMoveHitData(this.activeMove || effect);
 		if (!hit.starsReduced && (state.spentEntry?.[effect.id] ?? state.entry) === target.m.ultraRivalryEntryToken) return;

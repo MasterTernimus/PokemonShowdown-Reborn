@@ -27,7 +27,8 @@ export type MoveTarget =
 
 /** Possible move flags. */
 interface MoveFlags {
-	adaptivecategory?: 1; // Uses the higher stage-adjusted attacking stat. Mega signatures keep their listed category on ties.
+	// Uses the higher stage-adjusted attacking stat. Mega signatures keep their listed category on ties.
+	adaptivecategory?: 1;
 	megasignature?: 1; // A damaging Mega signature; its default category breaks offensive stat ties.
 	allyanim?: 1; // The move plays its animation when used on an ally.
 	arrow?: 1; // Eligible for Fallen Star and Dual Wield's arrow-move effects.

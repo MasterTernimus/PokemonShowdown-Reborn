@@ -8009,7 +8009,8 @@ MovesText.greedgospel = {
 	shortDesc: 'Turns Ghost against a foe that damaged the user this entry.',
 };
 MovesText.craterburst = { name: 'Crater Burst', shortDesc: 'Hits adjacent foes. 30% chance to burn each target.' };
-MovesText.armorslam = { name: 'Armor Slam', shortDesc: 'Uses Defense or Sp. Atk. More power against lighter targets.', desc: 'More powerful against lighter targets.' };
+MovesText.armorslam = { name: 'Armor Slam', shortDesc:
+	'Uses Defense or Sp. Atk. More power against lighter targets.', desc: 'More powerful against lighter targets.' };
 MovesText.pulsechime = {
 	name: 'Pulse Chime',
 	shortDesc: 'Heal Bell; a successful status cure also heals active allies by 1/8.',
