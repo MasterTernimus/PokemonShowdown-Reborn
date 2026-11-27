@@ -1561,6 +1561,11 @@ export class Pokemon {
 			item: this.item,
 			pokeball: this.pokeball,
 		};
+		if (!forAlly && ['sableye', 'sableyemega'].includes(this.species.id)) {
+			const attackers: Pokemon[] = this.volatiles.greedgospelmemory?.foes || [];
+			entry.greedGospelTargets = attackers.filter(foe => foe.isActive && foe.hp && !this.isAlly(foe))
+				.map(foe => foe.getSlot());
+		}
 		if (!forAlly && this.isActive && this.illusion && !this.fainted) {
 			entry.disguise = {
 				name: this.illusion.name,

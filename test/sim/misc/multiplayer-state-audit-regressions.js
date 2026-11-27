@@ -120,9 +120,14 @@ describe('Multiplayer and snapshot audit regressions', () => {
 		}
 	});
 
-	it('continues to reject unknown complex state outside supported terrain Maps', () => {
+	it('roundtrips active move tracking Maps with references to the restored Pokemon', () => {
 		startSnapshot('gen9nofieldsinglesgame');
-		battle.unhandledMap = new Map();
-		assert.throws(() => battle.toJSON(), /Unsupported type Map/);
+		battle.lastMove = battle.dex.getActiveMove('surf');
+		battle.lastMove.stormDamage = new Map([[battle.p2.active[0], { source: battle.p1.active[0], damage: 17 }]]);
+		restored = Battle.fromJSON(JSON.stringify(battle.toJSON()));
+		const tracked = restored.lastMove.stormDamage;
+		assert(tracked instanceof Map);
+		assert.equal(tracked.size, 1);
+		assert.deepEqual(tracked.get(restored.p2.active[0]), { source: restored.p1.active[0], damage: 17 });
 	});
 });

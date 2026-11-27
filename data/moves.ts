@@ -25351,7 +25351,7 @@ const signatureVariants = {
 	shadowclaw: { name: 'Hex Stitch' },
 	dragonpulse: { name: 'Cloud Song', basePower: 90, flags: { ...Moves.dragonpulse.flags, sound: 1, bypasssub: 1 } },
 	jumpkick: { name: 'Pivot Kick', basePower: 90, accuracy: 100 },
-	powergem: { name: 'Greed Gospel' },
+	powergem: { name: 'Greed Gospel', forceSTAB: true },
 	lavaplume: { name: 'Crater Burst', target: 'allAdjacentFoes' },
 	heavyslam: { name: 'Armor Slam', overrideOffensiveStat: 'def' },
 	healbell: { name: 'Pulse Chime' },
@@ -25395,7 +25395,11 @@ Moves.pivotkick.onMoveFail = function (target, source, move) {
 	Moves.jumpkick.onMoveFail!.call(this, target, source, move);
 };
 const vaultType: NonNullable<import('../sim/dex-moves').MoveData['onModifyType']> = function (move, source, target) {
-	if (source.volatiles.greedgospelmemory?.foes?.includes(target)) move.type = 'Ghost';
+	move.type = 'Rock';
+	if (!target || !source.volatiles.greedgospelmemory?.foes?.includes(target)) return;
+	const types = target.getTypes();
+	if (this.dex.getImmunity('Ghost', types) && this.dex.getEffectiveness('Ghost', types) >= 0 &&
+		this.dex.getEffectiveness('Rock', types) <= 0) move.type = 'Ghost';
 };
 Moves.greedgospel.onModifyType = vaultType;
 Moves.powergem.onModifyType = function (move, source, target) {

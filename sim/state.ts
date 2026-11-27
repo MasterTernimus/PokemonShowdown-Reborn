@@ -358,21 +358,21 @@ export const State = new class {
 			if (obj instanceof Set) {
 				return { __battleCollection: 'Set', values: [...obj].map(value => this.serializeWithRefs(value, battle)) };
 			}
+			if (obj instanceof Map) {
+				return { __battleCollection: 'Map', entries: this.serializeWithRefs([...obj], battle) };
+			}
 			if (this.isActiveMove(obj)) return this.serializeActiveMove(obj, battle);
 			if (this.isReferable(obj)) return this.toRef(obj);
 			if (obj.constructor !== Object) {
 				// If we're getting this error, some 'special' field has been added to
 				// an object and we need to update the logic in this file to handle it.
-				// The most common case it that someone added a Set/Map which probably
-				// needs to be serialized as an Array/Object respectively - see how
-				// Battle 'hints' or Choice 'switchIns' are handled (and you will likely
-				// need to add the new field to the respective skip constant).
 				throw new TypeError(`Unsupported type ${obj.constructor.name}: ${obj as any}`);
 			}
 
 			const o: any = {};
 			for (const [key, value] of Object.entries(obj)) {
-				o[key] = this.serializeWithRefs(value, battle);
+				const encoded = this.serializeWithRefs(value, battle);
+				if (encoded !== undefined) o[key] = encoded;
 			}
 			return o;
 		default:
@@ -398,9 +398,12 @@ export const State = new class {
 				return arr;
 			}
 
-			const collection = obj as { __battleCollection?: string, values?: unknown[] };
+			const collection = obj as { __battleCollection?: string, values?: unknown[], entries?: unknown[] };
 			if (collection.__battleCollection === 'Set' && Array.isArray(collection.values)) {
 				return new Set(collection.values.map(value => this.deserializeWithRefs(value, battle)));
+			}
+			if (collection.__battleCollection === 'Map' && Array.isArray(collection.entries)) {
+				return new Map(this.deserializeWithRefs(collection.entries, battle));
 			}
 			if (this.isActiveMove(obj)) return this.deserializeActiveMove(obj, battle);
 

@@ -69,25 +69,30 @@ export class RandomPlayerAI extends BattlePlayer {
 			this.choose(this.chooseTeamPreview(request.side.pokemon));
 		} else if (request.active) {
 			// move request
-			let [canMegaEvo, canUltraBurst, canZMove, canDynamax, canTerastallize] = [true, true, true, true, true];
+			const spent = new Set<string>();
+			const budget = request.side.gimmicks?.find(side => side.id === request.side.id);
+			let remaining = budget ? budget.limit - budget.used : Infinity;
 			const pokemon = request.side.pokemon;
 			const chosen: number[] = [];
 			const choices = request.active.map((active: AnyObject, i: number) => {
 				if (pokemon[i].condition.endsWith(` fnt`) || pokemon[i].commanding) return `pass`;
 
-				canMegaEvo = canMegaEvo && active.canMegaEvo;
-				canUltraBurst = canUltraBurst && active.canUltraBurst;
-				canZMove = canZMove && !!active.canZMove;
-				canDynamax = canDynamax && !!active.canDynamax;
-				canTerastallize = canTerastallize && !!active.canTerastallize;
-
-				// Determine whether we should change form if we do end up switching
-				const change = (canMegaEvo || canUltraBurst || canDynamax) && this.prng.random() < this.mega;
-				// If we've already dynamaxed or if we're planning on potentially dynamaxing
-				// we need to use the maxMoves instead of our regular moves
-
-				const useMaxMoves = (!active.canDynamax && active.maxMoves) || (change && canDynamax);
-				const possibleMoves = useMaxMoves ? active.maxMoves.maxMoves : active.moves;
+				// Select the transformation before reading its move slots and target types.
+				const mega = active.canMegaEvo ? 'mega' : active.canMegaEvoX ? 'megax' : active.canMegaEvoY ? 'megay' : '';
+				const canMega = mega && !spent.has('mega');
+				const canDynamax = active.canDynamax && !spent.has('dynamax');
+				const canUltra = active.canUltraBurst && !spent.has('ultra');
+				const canZMove = remaining > 0 && active.canZMove && !spent.has('zmove');
+				let change = '';
+				if (remaining > 0 && (canMega || canUltra || canDynamax) && this.prng.random() < this.mega) {
+					change = active.canTerastallize && !spent.has('terastallize') ? 'terastallize' :
+						canDynamax ? 'dynamax' : canMega ? mega : 'ultra';
+				}
+				const useMaxMoves = (!active.canDynamax && active.maxMoves) || change === 'dynamax';
+				const possibleMoves = useMaxMoves ? active.maxMoves.maxMoves :
+					change === 'mega' && active.pulseMoves ? active.pulseMoves : active.moves;
+				const targetKey = change === 'mega' ? 'megaTarget' : change === 'megax' ? 'megaXTarget' :
+					change === 'megay' ? 'megaYTarget' : '';
 
 				let canMove = range(1, possibleMoves.length).filter(j => (
 					// not disabled
@@ -98,7 +103,7 @@ export class RandomPlayerAI extends BattlePlayer {
 				)).map(j => ({
 					slot: j,
 					move: possibleMoves[j - 1].move,
-					target: possibleMoves[j - 1].target,
+					target: possibleMoves[j - 1][targetKey] || possibleMoves[j - 1].target,
 					zMove: false,
 				}));
 				if (canZMove) {
@@ -122,7 +127,7 @@ export class RandomPlayerAI extends BattlePlayer {
 					let move = `move ${m.slot}`;
 					// NOTE: We don't generate all possible targeting combinations.
 					if (request.active.length > 1) {
-						if ([`normal`, `any`, `adjacentFoe`].includes(m.target)) {
+						if ([`normal`, `normalOrSelf`, `any`, `adjacentFoe`].includes(m.target)) {
 							move += ` ${1 + this.prng.random(2)}`;
 						}
 						if (m.target === `adjacentAlly`) {
@@ -161,29 +166,19 @@ export class RandomPlayerAI extends BattlePlayer {
 				} else if (moves.length) {
 					const move = this.chooseMove(active, moves);
 					if (move.endsWith(` zmove`)) {
-						canZMove = false;
+						spent.add('zmove');
+						remaining--;
 						return move;
 					} else if (change) {
-						if (canTerastallize) {
-							canTerastallize = false;
-							return `${move} terastallize`;
-						} else if (canDynamax) {
-							canDynamax = false;
-							return `${move} dynamax`;
-						} else if (canMegaEvo) {
-							canMegaEvo = false;
-							return `${move} mega`;
-						} else {
-							canUltraBurst = false;
-							return `${move} ultra`;
-						}
+						spent.add(change.startsWith('mega') ? 'mega' : change);
+						remaining--;
+						return `${move} ${change}`;
 					} else {
 						return move;
 					}
 				} else {
 					throw new Error(`${this.constructor.name} unable to make choice ${i}. request='${typeof request}',` +
-						` chosen='${chosen}', (mega=${canMegaEvo}, ultra=${canUltraBurst}, zmove=${canZMove},` +
-						` dynamax='${canDynamax}', terastallize=${canTerastallize})`);
+						` chosen='${chosen}', change='${change}'`);
 				}
 			});
 			this.choose(choices.join(`, `));

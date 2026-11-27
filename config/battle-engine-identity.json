@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "4620f9b73ee892144b0df43741f6ba515c9c16fc66a80b6095fefbee7bf7dd18",
-  "packageManifestSHA256": "7c83a9d405838cb4d4afc9e90ff9d04c67ea8fed149f7f63a67e15f3c1e3bbf4",
-  "mechanicsSHA256": "ffac113ec788ebd50a6940894aa525346dd4af8b974de488dcc70b84100864f7",
+  "packageEngineRevision": "baaa1c32e5fdce8834731ae8406eacf982125b11f344e8f96018099f6145c515",
+  "packageManifestSHA256": "5b003a1070b9adfdd6b6ebd79956c6864ace81f3d64f2b09d08c405d347daddd",
+  "mechanicsSHA256": "7e637a3c7d9449289cb43e0b0fc61abe3ef0aaa28ca7fd4e66794f80112a2b8c",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -687,7 +687,7 @@
     },
     {
       "file": "dist/data/moves.js",
-      "sha256": "0e5eb13df3eeaf3db9d6ca823ed509d15a205773550186b237f8370bcec321cb"
+      "sha256": "6728ee6c36cd5de4b61a983b0c024e7f59860d0c8860aac0e0a335c1900c5875"
     },
     {
       "file": "dist/data/natdex-gen8-gen9-learnsets.js",
@@ -1051,7 +1051,7 @@
     },
     {
       "file": "dist/data/text/moves.js",
-      "sha256": "89db9a107706274f95a3aaa5b1a00a6e9783e303d327bbe2dbc84ccb8ffc9a8b"
+      "sha256": "3bfb83e9017b93f5b9967876ca9fb1288ad381f0dcde54e19fd38cd0e7b3de40"
     },
     {
       "file": "dist/data/text/pokedex.js",
@@ -1307,7 +1307,7 @@
     },
     {
       "file": "dist/sim/pokemon.js",
-      "sha256": "ad2491382f751054b563289478895a145fc6cbd2029ca2c382f664a0ba6f43a1"
+      "sha256": "59c92a8b70d6312404f5cdadf170826b7b0c06f19205e89b8e5b9f447b6da7b7"
     },
     {
       "file": "dist/sim/predator.js",
@@ -1343,7 +1343,7 @@
     },
     {
       "file": "dist/sim/state.js",
-      "sha256": "15a65e1dd3a58e7f802c6daba91f7a0366d1563e7029d72892396e309c9efbab"
+      "sha256": "59c66822a9d7c94f20a970d83aa498560b674d32a2d14b52381cb5c1cd156c1a"
     },
     {
       "file": "dist/sim/team-validator.js",
@@ -1363,11 +1363,11 @@
     },
     {
       "file": "dist/sim/tools/random-player-ai.js",
-      "sha256": "593a7598e855c9d8e74d7b83af3930a22deec96b04a0a6a8f72903197ae77b3a"
+      "sha256": "ec1400e422094ada3ec517fc99719e55d3d54c8fb8c5d737566f6959751b3336"
     },
     {
       "file": "dist/sim/tools/runner.js",
-      "sha256": "db4c3e28e038cfbe82f926c9ca3d1dc1c2c9cc085e13c674585e8cc035d02906"
+      "sha256": "1947b06b80489bed19680921f1c53f4e51c90abfbaa0506e09cd48a2ae8b2f9a"
     },
     {
       "file": "dist/sim/ultra-rivalry.js",

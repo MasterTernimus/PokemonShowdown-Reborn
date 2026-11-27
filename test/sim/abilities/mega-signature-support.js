@@ -343,9 +343,48 @@ describe('Mega signature support moves', () => {
 	});
 	it('Greed Gospel recognizes the specific foe that hurt Sableye', () => {
 		const [p,,t, q] = start('Sableye', 'powergem');
+		t.setType('Psychic');
+		q.setType('Psychic');
+		assert.deepEqual(p.getSwitchRequestData().greedGospelTargets, []);
 		hit(t, p, 'watergun');
+		assert.deepEqual(p.getSwitchRequestData().greedGospelTargets, [t.getSlot()]);
+		assert.equal(p.getSwitchRequestData(true).greedGospelTargets, undefined);
 		assert.equal(hit(p, t, 'powergem').type, 'Ghost');
 		assert.equal(hit(p, q, 'powergem').type, 'Rock');
+		b.actions.switchIn(t.side.pokemon[2], t.position);
+		assert.deepEqual(p.getSwitchRequestData().greedGospelTargets, []);
+	});
+	it('Greed Gospel keeps Rock against Ghost immunities, Ghost resists and Rock weaknesses', () => {
+		const [p,,t] = start('Sableye', 'powergem');
+		hit(t, p, 'watergun');
+		for (const types of [['Normal'], ['Dark'], ['Fire'], ['Ghost', 'Flying']]) {
+			t.setType(types);
+			const before = t.hp;
+			assert.equal(hit(p, t, 'powergem').type, 'Rock', types.join('/'));
+			assert(t.hp < before);
+		}
+		t.setType('Water');
+		assert.equal(hit(p, t, 'greedgospel').type, 'Ghost');
+	});
+	it('Greed Gospel grants a single STAB on either type and leaves ordinary Power Gem alone', () => {
+		const [p,,t] = start('Sableye', 'powergem');
+		b.randomizer = damage => damage;
+		t.setType('Water');
+		for (const type of ['Rock', 'Ghost']) {
+			if (type === 'Ghost') hit(t, p, 'watergun');
+			const move = hit(p, t, 'powergem');
+			assert.equal(move.type, type);
+			assert(move.forceSTAB);
+			move.willCrit = false;
+			const actual = b.actions.getDamage(p, t, move);
+			const natural = b.actions.getDamage(p, t, { ...move, forceSTAB: false });
+			if (type === 'Rock') assert(Math.abs(actual - natural * 1.5) <= 1);
+			else assert.equal(actual, natural);
+		}
+		p.formeChange('Sableye', null, true);
+		const base = hit(p, t, 'powergem');
+		assert.equal(base.type, 'Rock');
+		assert(!base.forceSTAB);
 	});
 	it('Armor Slam uses Defense and preserves weight scaling', () => {
 		const [p,,t] = start('Aggron', 'heavyslam');

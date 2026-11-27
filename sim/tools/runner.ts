@@ -101,7 +101,7 @@ export class Runner {
 		const p2 = this.p2options.createAI(
 			streams.p2, { seed: this.newSeed(), ...this.p2options }
 		);
-		let p3: RandomPlayerAI, p4: RandomPlayerAI;
+		let p3: RandomPlayerAI | undefined, p4: RandomPlayerAI | undefined;
 		if (is4P) {
 			p3 = this.p4options.createAI(
 				streams.p3, { seed: this.newSeed(), ...this.p3options }
@@ -110,15 +110,6 @@ export class Runner {
 				streams.p4, { seed: this.newSeed(), ...this.p4options }
 			);
 		}
-		// TODO: Use `await Promise.race([streams.omniscient.read(), p1, p2])` to avoid
-		// leaving these promises dangling once it no longer causes memory leaks (v8#9069).
-		void p1.start();
-		void p2.start();
-		if (is4P) {
-			void p3!.start();
-			void p4!.start();
-		}
-
 		let initMessage = `>start ${JSON.stringify(spec)}\n` +
 			`>player p1 ${JSON.stringify(p1spec)}\n` +
 			`>player p2 ${JSON.stringify(p2spec)}`;
@@ -127,12 +118,17 @@ export class Runner {
 				`>player p3 ${JSON.stringify(p3spec!)}\n` +
 				`>player p4 ${JSON.stringify(p4spec!)}`;
 		}
-		void streams.omniscient.write(initMessage);
-
-		for await (const chunk of streams.omniscient) {
-			if (this.output) console.log(chunk);
+		const readBattle = async () => {
+			await streams.omniscient.write(initMessage);
+			for await (const chunk of streams.omniscient) {
+				if (this.output) console.log(chunk);
+			}
+		};
+		try {
+			await Promise.all([p1.start(), p2.start(), p3?.start(), p4?.start(), readBattle()]);
+		} finally {
+			await streams.omniscient.writeEnd();
 		}
-		return streams.omniscient.writeEnd();
 	}
 
 	// Same as PRNG#generatedSeed, only deterministic.

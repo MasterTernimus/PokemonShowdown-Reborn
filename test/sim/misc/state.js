@@ -45,8 +45,8 @@ describe('State', () => {
 		});
 		it('should require special treatment for complex objects', () => {
 			const battle = common.createBattle(TEAMS);
-			battle.foo = new Map();
-			assert.throws(() => battle.toJSON(), /Unsupported type Map/);
+			battle.foo = new WeakMap();
+			assert.throws(() => battle.toJSON(), /Unsupported type WeakMap/);
 		});
 	});
 });

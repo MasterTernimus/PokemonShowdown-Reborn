@@ -8007,7 +8007,8 @@ MovesText.cloudsong = {
 MovesText.pivotkick = { name: 'Pivot Kick', shortDesc: 'On a miss or Protect, avoids crash damage and switches out.' };
 MovesText.greedgospel = {
 	name: 'Greed Gospel',
-	shortDesc: 'Turns Ghost against a foe that damaged the user this entry.',
+	shortDesc: 'Always gets STAB. Can turn Ghost against a foe that damaged the user.',
+	desc: 'Always gets the same-type attack bonus. Starts as Rock. Against a foe that damaged the user since it switched in, it turns Ghost unless the foe resists or is immune to Ghost, or is weak to Rock.',
 };
 MovesText.craterburst = { name: 'Crater Burst', shortDesc: 'Hits adjacent foes. 30% chance to burn each target.' };
 MovesText.armorslam = { name: 'Armor Slam', shortDesc:
