@@ -35,6 +35,63 @@ describe('Reborn character signature moves', () => {
 		battle?.destroy();
 		battle = null;
 	});
+
+	for (const [species, item, mega, learned, signature, defendingType, expected] of [
+		['Garchomp', 'Garchompite', 'Garchomp-Mega', 'earthquake', 'Fault Cleave', 'Electric', 'Ground'],
+		['Garchomp', 'Garchompite Z', 'Garchomp-Mega-Z', 'dragonpulse', 'Sonic Lance', 'Dragon', 'Dragon'],
+		['Tyranitar', 'Tyranitarite', 'Tyranitar-Mega', 'stoneedge', 'Ruin Edge', 'Psychic', 'Dark'],
+		['Scizor', 'Scizorite', 'Scizor-Mega', 'bulletpunch', 'Pincer Jab', 'Fairy', 'Steel'],
+	]) it(mega + ' keeps Ancestral Wrath alongside its separate Mega signature', () => {
+		const spare = { species: 'Mew', ability: 'No Ability', moves: ['splash'] };
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species, item, moves: ['ancestralwrath', learned] }, spare], [spare, spare],
+		]);
+		battle.makeChoices('team 12', 'team 12');
+		const user = battle.p1.active[0], target = battle.p2.active[0];
+		user.maxhp = user.baseMaxhp = user.hp = target.maxhp = target.baseMaxhp = target.hp = 10000;
+		target.setType(defendingType);
+		const branch = user.canMegaEvo === mega ? 'mega' : user.canMegaEvoX === mega ? 'megax' : 'megay';
+		battle.makeChoices('move 1 ' + branch, 'move splash');
+		assert.equal(user.species.name, mega);
+		assert.equal(user.lastMoveUsed.name, 'Ancestral Wrath');
+		assert.equal(user.lastMoveUsed.type, expected);
+		assert.equal(user.lastMoveUsed.category, 'Physical');
+		assert.equal(user.lastMoveUsed.basePower, 100);
+		const slots = user.getMoves();
+		assert.equal(slots[0].move, 'Ancestral Wrath');
+		assert.equal(slots[1].move, signature);
+		battle.makeChoices('move 2', 'move splash');
+		assert.equal(user.lastMoveUsed.name, signature);
+		battle.p1.pokemon[1].faint();
+		battle.faintMessages();
+		battle.makeChoices('move 1', 'move splash');
+		assert.equal(user.lastMoveUsed.name, 'Ancestral Wrath');
+		assert.equal(user.lastMoveUsed.basePower, 130);
+	});
+
+	it('Ancestral Wrath respects immunities, ties, added Tera types and Stellar', () => {
+		const [user, target] = setup();
+		user.setType(['Dragon', 'Ground']);
+		target.setType('Normal');
+		use('ancestralwrath', user, target);
+		assert.equal(user.lastMoveUsed.type, 'Dragon');
+		target.setType(['Fairy', 'Flying']);
+		const hp = target.hp;
+		use('ancestralwrath', user, target);
+		assert.equal(user.lastMoveUsed.type, 'Dragon');
+		assert.equal(target.hp, hp);
+		target.setType('Electric');
+		target.setAbility('Levitate', null, null, true);
+		use('ancestralwrath', user, target);
+		assert.equal(user.lastMoveUsed.type, 'Dragon');
+		target.setType('Grass');
+		user.terastallized = 'Fire';
+		use('ancestralwrath', user, target);
+		assert.equal(user.lastMoveUsed.type, 'Fire');
+		user.terastallized = 'Stellar';
+		use('ancestralwrath', user, target);
+		assert.equal(user.lastMoveUsed.type, 'Dragon');
+	});
 	for (const [id, profile] of Object.entries(CharacterMoveProfiles)) {
 		it(id + ' is implemented and learnable by the approved users', () => {
 			const move = Dex.moves.get(id);

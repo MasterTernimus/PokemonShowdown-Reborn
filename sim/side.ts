@@ -133,6 +133,8 @@ export interface PokemonMoveRequestData {
 	canMegaEvo?: boolean;
 	canMegaEvoX?: boolean;
 	canMegaEvoY?: boolean;
+	megaForms?: Partial<Record<'mega' | 'megax' | 'megay', string>>;
+	megaFormStats?: Partial<Record<'mega' | 'megax' | 'megay', Pick<StatsTable, 'atk' | 'spa'>>>;
 	canUltraBurst?: boolean;
 	canZMove?: AnyObject | null;
 	canDynamax?: boolean;
@@ -626,6 +628,8 @@ export class Side {
 				delete pokemon.canMegaEvo;
 				delete pokemon.canMegaEvoX;
 				delete pokemon.canMegaEvoY;
+				delete pokemon.megaForms;
+				delete pokemon.megaFormStats;
 				delete pokemon.canUltraBurst;
 				delete pokemon.canZMove;
 				delete pokemon.canDynamax;
@@ -1030,6 +1034,11 @@ export class Side {
 			}
 		}
 		if (req.moves.every(m => m.disabled || m.id === 'struggle')) {
+			if (req.megaForms) {
+				delete req.megaForms;
+				delete req.megaFormStats;
+				updated = true;
+			}
 			if (req.canMegaEvo) {
 				req.canMegaEvo = false;
 				updated = true;

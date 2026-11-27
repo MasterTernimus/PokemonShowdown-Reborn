@@ -153,9 +153,9 @@ export const CharacterMoveProfiles: { [id: string]: Profile } = {
 		fields: ['dragonsdenterrain', 'superheatedterrain'],
 		fieldEffect: 'Power is 1.2×.',
 		message: 'Solaris fought for a world that was lost!',
-		short: '120 power while your team has fewer surviving Pokemon.',
+		short: 'Uses the best matchup among the user’s types. 130 power when outnumbered.',
 		details:
-			'Power rises from 90 to 120 when the user’s team has fewer surviving Pokemon than the target’s team.',
+			'Uses the user’s type with the best type-chart matchup against the selected target. A non-Stellar Tera type is also eligible. Ties favor the first eligible type in the user’s original type order. Power rises from 100 to 130 if the user’s side has fewer surviving Pokémon than the target’s side.',
 	},
 	steadfaststrike: {
 		credit: 'Victoria',
@@ -323,7 +323,7 @@ const specs: [string, string, string, number][] = [
 	['coldshoulder', 'Cold Shoulder', 'Ice', 85],
 	['solarpledge', 'Solar Pledge', 'Rock', 80],
 	['lunarpledge', 'Lunar Pledge', 'Rock', 80],
-	['ancestralwrath', 'Ancestral Wrath', 'Dragon', 90],
+	['ancestralwrath', 'Ancestral Wrath', 'Dragon', 100],
 	['steadfaststrike', 'Steadfast Strike', 'Fighting', 80],
 	['rebelanthem', 'Rebel Anthem', 'Poison', 80],
 	['laurellash', 'Laurel Lash', 'Grass', 85],
@@ -369,7 +369,7 @@ for (const [index, [id, name, type, basePower]] of specs.entries()) {
 				source.side.pokemon.filter(p => !p.fainted && p.hp).length <
 					target.side.pokemon.filter(p => !p.fainted && p.hp).length
 			)
-				move.basePower = 120;
+				move.basePower = 130;
 		},
 		onBasePower(power, source, target, move) {
 			const profile = CharacterMoveProfiles[move.id];
@@ -396,6 +396,22 @@ for (const [index, [id, name, type, basePower]] of specs.entries()) {
 CharacterMoves.blacktestament.flags.tail = 1;
 CharacterMoves.laurellash.flags.arrow = 1;
 CharacterMoves.blacktestament.onModifyType = gildedType;
+CharacterMoves.ancestralwrath.onModifyType = function (move, source, target) {
+	const types = new Set(source.getTypes(false, true));
+	if (source.terastallized && source.terastallized !== 'Stellar') types.add(source.terastallized);
+	move.type = [...types][0];
+	if (!target) return;
+	const defendingTypes = target.getTypes();
+	let best = -Infinity;
+	for (const type of types) {
+		if (!target.runImmunity(type)) continue;
+		const matchup = this.dex.getEffectiveness(type, defendingTypes);
+		if (matchup > best) {
+			move.type = type;
+			best = matchup;
+		}
+	}
+};
 Object.assign(CharacterMoves.heavenfall, {
 	accuracy: 90,
 	pp: 5,

@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "d1e4d4277cfc34a36614bcbb65d756efc751db73502fdbbf86788f0fcd4f9c93",
-  "packageManifestSHA256": "5d224c695035b548afd8e2ad0c25e0249c8edd965ce07676a6bcdc08a9fe23d0",
-  "mechanicsSHA256": "9c7cf1ff452e8f1a28c42c8994804a022912202fd90fd0759269986b9d451997",
+  "packageEngineRevision": "4620f9b73ee892144b0df43741f6ba515c9c16fc66a80b6095fefbee7bf7dd18",
+  "packageManifestSHA256": "7c83a9d405838cb4d4afc9e90ff9d04c67ea8fed149f7f63a67e15f3c1e3bbf4",
+  "mechanicsSHA256": "ffac113ec788ebd50a6940894aa525346dd4af8b974de488dcc70b84100864f7",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -827,7 +827,7 @@
     },
     {
       "file": "dist/data/reborn-character-moves.js",
-      "sha256": "e12b4942c906f516cf0bf5a31186fbb537fe664d52d10d24244866622244203a"
+      "sha256": "d5a5f31421f7cb66a567d33367670fcbad2f9334f264b57708466a302ee6dd5d"
     },
     {
       "file": "dist/data/regi-approved.js",
@@ -1079,7 +1079,7 @@
     },
     {
       "file": "dist/data/ultra-instinct-rework.js",
-      "sha256": "fcb6edd674116af804b186c3c08f43d180f6e636b27eb91d515036809bfdae29"
+      "sha256": "4c69579eeeb54aa7945fccac2f045d5457ccf1536de6fc36a5bb5c819f6b32c2"
     },
     {
       "file": "dist/data/ultra-rivalry-description.js",
@@ -1307,7 +1307,7 @@
     },
     {
       "file": "dist/sim/pokemon.js",
-      "sha256": "f9e75f3d62725bab286b3e58ca45143a5e961b1fc3d80726075b2134dbe3e35b"
+      "sha256": "ad2491382f751054b563289478895a145fc6cbd2029ca2c382f664a0ba6f43a1"
     },
     {
       "file": "dist/sim/predator.js",
@@ -1327,7 +1327,7 @@
     },
     {
       "file": "dist/sim/side.js",
-      "sha256": "46e21a18111477a1dce70c04914c19e5d31ad7de5488848df0f901cc799e42b3"
+      "sha256": "8c6ae13139da60db94a0a0558ff49ceb8af4ee0dd011bdfb1e4a726eec6ceea2"
     },
     {
       "file": "dist/sim/signature-category-power.js",

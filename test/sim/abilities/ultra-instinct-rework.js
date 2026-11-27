@@ -14,6 +14,45 @@ function hit(p, q, extra = {}) { const m = Object.assign(Dex.getActiveMove('tack
 function power(p, q, move = 'tackle') { return battle.runEvent('BasePower', p, q, Dex.getActiveMove(move), 100); }
 describe('Approved Ultra Instinct and Inferno Ascendant rework', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
+	for (const [ability, field, remaining] of [
+		['Ultra Instinct', '', 16], ['Ultra Instinct', 'newworldterrain', 22],
+		['Inferno Ascendant', '', 16], ['Ultra Instinct', 'holyterrain', 1],
+	]) {
+		it(ability + ' settles damage before Focus Sash on ' + (field || 'neutral ground'), () => {
+			const [holder, foe] = setup(ability, field);
+			holder.hp = holder.maxhp = holder.baseMaxhp = 100;
+			holder.setItem('focussash');
+			hit(foe, holder, { damage: 120 });
+			assert.equal(holder.hp, remaining);
+			assert.equal(holder.item, remaining === 1 ? '' : 'focussash');
+		});
+	}
+	it('leaves exactly 1 HP when a single guarded hit is still lethal', () => {
+		const [holder, foe] = setup();
+		holder.hp = holder.maxhp = holder.baseMaxhp = 100;
+		holder.setItem('focussash');
+		hit(foe, holder, { damage: 200 });
+		assert.equal(holder.hp, 1);
+		assert.equal(holder.item, '');
+	});
+	it('lets a later hit knock the holder out after Focus Sash saves it once', () => {
+		const [holder, foe] = setup();
+		holder.hp = holder.maxhp = holder.baseMaxhp = 100;
+		holder.setItem('focussash');
+		hit(foe, holder, { damage: 200, multihit: 2 });
+		assert.equal(holder.hp, 0);
+		assert.equal(holder.item, '');
+	});
+	it('applies the guard before Endure and never spends Focus Sash below full HP', () => {
+		const [holder, foe] = setup();
+		holder.hp = 80;
+		holder.maxhp = holder.baseMaxhp = 100;
+		holder.setItem('focussash');
+		holder.addVolatile('endure', holder);
+		hit(foe, holder, { damage: 200 });
+		assert.equal(holder.hp, 1);
+		assert.equal(holder.item, 'focussash');
+	});
 	describe('Dusk Lycanroc contact power', () => {
 		it('uses one 1.3x boost per target, even when only one doubles foe is still queued', () => {
 			const [dusk, pending] = setup('Twilight Instinct', '', true, 'Lycanroc-Dusk');

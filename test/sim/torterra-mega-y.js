@@ -32,8 +32,15 @@ describe('Torterra and Torterra-Mega-Y', () => {
 		battle.makeChoices('team 1', 'team 1');
 		assert.equal(battle.p1.active[0].canMegaEvo, 'Torterra-Mega-X');
 		assert.equal(battle.p1.active[0].canMegaEvoY, 'Torterra-Mega-Y');
+		assert.deepEqual(battle.p1.activeRequest.active[0].megaForms, {
+			mega: 'Torterra-Mega-X', megay: 'Torterra-Mega-Y',
+		});
+		const projected = battle.p1.activeRequest.active[0].megaFormStats;
+		assert(projected.mega.atk > projected.mega.spa);
+		assert(projected.megay.spa > projected.megay.atk);
 		battle.makeChoices('move splash megay', 'move tackle');
 		const torterra = battle.p1.active[0];
+		assert.deepEqual(projected.megay, { atk: torterra.storedStats.atk, spa: torterra.storedStats.spa });
 		assert.equal(torterra.species.name, 'Torterra-Mega-Y');
 		assert(torterra.getPassives().includes('proficient'));
 		assert(torterra.hasAbilityOrPassive('proficient'));

@@ -1506,11 +1506,18 @@ export class Pokemon {
 		}
 
 		if (!lockedMove) {
-			if (this.canMegaEvo) data.canMegaEvo = true;
+			for (const [choice, flag] of [
+				['mega', 'canMegaEvo'], ['megax', 'canMegaEvoX'], ['megay', 'canMegaEvoY'],
+			] as const) {
+				const form = this[flag];
+				if (!form) continue;
+				data[flag] = true;
+				(data.megaForms ||= {})[choice] = form;
+				const { atk, spa } = this.battle.spreadModify(this.battle.dex.species.get(form).baseStats, this.set);
+				(data.megaFormStats ||= {})[choice] = { atk, spa };
+			}
 			const pulseMoves = this.getPulseEvolutionMoves();
 			if (pulseMoves) data.pulseMoves = pulseMoves;
-			if (this.canMegaEvoX) data.canMegaEvoX = true;
-			if (this.canMegaEvoY) data.canMegaEvoY = true;
 			if (this.canUltraBurst) data.canUltraBurst = true;
 			const canZMove = this.battle.actions.canZMove(this);
 			if (canZMove) data.canZMove = canZMove;

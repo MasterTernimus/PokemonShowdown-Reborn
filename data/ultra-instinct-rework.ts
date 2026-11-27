@@ -33,13 +33,15 @@ export function installUltraInstinctRework(abilities: AbilityDataTable) {
 		if (ultraInstinctBoostsPower(this, source, target)) return this.chainModify(1.3);
 	};
 	delete instinct.onSourceModifyDamage;
-	instinct.onDamagePriority = -15;
+	// Endure, Sturdy and Focus Sash must see the reduced damage before deciding whether to act.
+	instinct.onDamagePriority = -5;
 	instinct.onDamage = function (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: ActiveMove) {
 		if (disabled(this) || !opposingMove(source, target, effect) ||
 			source.hasAbilityOrPassive('misalignedstars') || predatorUltraMatch(this, source, target)) return;
 		const token = moveToken(this, source, effect);
 		if (target.m.ultraInstinctGuardTurn === this.turn && target.m.ultraInstinctGuardMove !== token) return;
-		return this.chainModify(ultraRivalry(this, source, target) ? 0.60 : this.field.isTerrain(favored) ? 0.65 : 0.70);
+		const fraction = ultraRivalry(this, source, target) ? 0.60 : this.field.isTerrain(favored) ? 0.65 : 0.70;
+		return this.modifyAbilityGuard(damage, fraction);
 	};
 	instinct.onAfterDamageApplied = function (
 		this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: ActiveMove
