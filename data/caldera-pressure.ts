@@ -1,5 +1,6 @@
 import type { AbilityData } from '../sim/dex-abilities';
 import type { ConditionDataTable } from '../sim/dex-conditions';
+import { AbilityDescriptionOverrides } from './ability-descriptions';
 
 type CalderaMove = ActiveMove & {
 	calderaStruck?: Set<Pokemon>,
@@ -8,7 +9,8 @@ type CalderaMove = ActiveMove & {
 };
 
 export const calderaSummary = 'Drought + Magma Armor. Two enemy attacks charge a Fire/Ground counterattack.';
-export const calderaDescription = 'Drought summons sun on entry. Magma Armor prevents and cures freeze outside Cold Eclipse. Incoming Water and Ice attacks use half the attacker’s offensive stat. Dragon’s Den and Infernal Eclipse block Fire moves. On entry in Dragon’s Den, Volcanic or Infernal Eclipse, Defense and Sp. Def rise one stage. Surviving an opposing attack that damages its HP builds one Pressure and heals 1/16 max HP, once per move. At two charges, its next damaging Fire or Ground move has 1.35× power and heals 1/8 max HP if it damages a foe or its Substitute. Using the move spends both charges. Switching or losing the ability clears them.';
+export const calderaDescription = AbilityDescriptionOverrides.calderacore.desc +
+	' Surviving an opposing attack that damages its HP builds one Pressure and heals 1/16 max HP, once per move. At two charges, its next damaging Fire or Ground move has 1.35× power and heals 1/8 max HP if it damages a foe or its Substitute. Using the move spends both charges. Switching or losing the ability clears them.';
 
 function landed(damage: number, target: Pokemon, source: Pokemon, move: CalderaMove) {
 	if (damage > 0 && move?.calderaRelease === source && !source.isAlly(target)) move.calderaLanded = true;
