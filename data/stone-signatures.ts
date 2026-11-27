@@ -118,7 +118,7 @@ export const StoneSignatures: Record<string, Signature> = {
 	flygonmegaz: {
 		base: 'boomburst', name: 'Dune Echo', num: 32809,
 		desc: 'A focused Ground-type sound attack. Hits one target through Substitute.',
-		changes: { basePower: 90, type: 'Ground', target: 'normal' },
+		changes: { basePower: 105, type: 'Ground', target: 'normal' },
 	},
 	glimmoraaevianmega: {
 		base: 'injection', name: 'Petal Spike', num: 32810,

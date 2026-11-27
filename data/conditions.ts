@@ -2745,6 +2745,8 @@ Conditions.dreamsicknessrescueguard = {
 
 import { PlasmaConditions } from './plasma-eruption';
 Object.assign(Conditions, PlasmaConditions);
+import { CalderaConditions } from './caldera-pressure';
+Object.assign(Conditions, CalderaConditions);
 
 import { LoreConditions } from './lore-pairs';
 Object.assign(Conditions, LoreConditions);

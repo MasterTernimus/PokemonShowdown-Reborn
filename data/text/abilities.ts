@@ -6002,3 +6002,9 @@ import { legendaryTexts } from '../legendary-abilities';
 for (const [id, [name, desc, shortDesc = desc]] of Object.entries(legendaryTexts)) {
 	AbilitiesText[id as ID] = { name, desc, shortDesc };
 }
+import { calderaDescription, calderaSummary } from '../caldera-pressure';
+AbilitiesText.calderacore.desc = calderaDescription;
+AbilitiesText.calderacore.shortDesc = calderaSummary;
+AbilitiesText.calderacore.activate = '  [POKEMON] released its stored volcanic pressure!';
+AbilitiesText.calderacharge = { name: 'Caldera Charge', start: "  Pressure built inside [POKEMON]'s caldera!" };
+AbilitiesText.calderaready = { name: 'Caldera Ready', start: "  [POKEMON]'s caldera is ready to erupt!" };

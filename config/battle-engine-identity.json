@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "9e4e41f60697efe5cd7bdab28c78e710a40e82cbd591148eff91bab3bf042049",
-  "packageManifestSHA256": "212613a6edfdbc389f1708f4f41d8f488ed210e14912376b9cf161d182cf8d7c",
-  "mechanicsSHA256": "f08e88d7c41fe3d4a9fb7c56403398de025dbea6e262f6cbde11b3bed33676be",
+  "packageEngineRevision": "fdc4df123284ab8f24547f3888e291556dcd500b2e44c595255a9ddb27d8fe88",
+  "packageManifestSHA256": "8dc9027310fb37138d51dd4a2d7d8a445fdefbeb34be65396454a1ffb3d278df",
+  "mechanicsSHA256": "e8890d30eaf46c5403ca1b019ff1b763107f830ddad8e90410bce5a727c8f6b6",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,7 +11,7 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "169eed50d023e3bc917b45d6816835543fb2e1f174e910579406f46c2ce8e9c0"
+      "sha256": "b28cfacb4cad6c10b466dbfd9899db639e2dd0b62390a57eb585487ca9fdb0c8"
     },
     {
       "file": "dist/data/ability-components.js",
@@ -150,6 +150,10 @@
       "sha256": "4d6c7b54181e462d5903a53a1f4a2fa74e28aba6362019de09d9d83cc6cbdfbd"
     },
     {
+      "file": "dist/data/caldera-pressure.js",
+      "sha256": "a65afd9aa82d8f1a976d5d383d61e961dfec57f50965591e81cdccc85bbe4746"
+    },
+    {
       "file": "dist/data/carry-on.js",
       "sha256": "2e45fdaa1fd94e0148fe30d571c9268451a0968277460fc58918a63ea67a6e4d"
     },
@@ -179,7 +183,7 @@
     },
     {
       "file": "dist/data/conditions.js",
-      "sha256": "305abeff707df8dfa735f72fc9c0be265b0d8613906d31e6cea65fc4a6c26bd9"
+      "sha256": "6a679673e9c2874c0a0c6e189695bd70a7b21aecc9257768499c498e278d6fba"
     },
     {
       "file": "dist/data/cosmetic-counterparts.js",
@@ -1011,7 +1015,7 @@
     },
     {
       "file": "dist/data/stone-signatures.js",
-      "sha256": "f64c827da24336bfd94cba20f9b222a0b56ed5327b85a5f422e48f6c0feb0a0d"
+      "sha256": "eeced30317d552360ba2bbac37fb98148c8a25fc68edeaafb03e57456316f267"
     },
     {
       "file": "dist/data/stunfisk-approved.js",
@@ -1039,7 +1043,7 @@
     },
     {
       "file": "dist/data/text/abilities.js",
-      "sha256": "007c20aa333de4003e684aa88272b6b352decfc0151fc1a757cebb67c722a7ab"
+      "sha256": "8e453099500e972274143ca803b7a769298c539fbd390a5b84713d9e19f11618"
     },
     {
       "file": "dist/data/text/default.js",
