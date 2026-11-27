@@ -12,7 +12,7 @@ export function recordUltraEgoCombat(battle: Battle, holder: Pokemon) {
 export function ultraRivalry(battle: Battle, source: Pokemon, target: Pokemon) {
 	return !source.isAlly(target) &&
 		!isUltraSuppressedTerrain(battle) &&
-		source.hasAbility('ultraego') && target.hasAbility('ultrainstinct');
+		source.hasAbilityOrPassive('ultraego') && target.hasAbilityOrPassive('ultrainstinct');
 }
 
 export function ultraGuardAvailable(battle: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) {

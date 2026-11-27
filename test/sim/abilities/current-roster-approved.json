@@ -1,6 +1,8 @@
 {
   "_comment": "Explicit local approvals through November 16. Edit this reviewed fixture rather than adding another override layer. No values are generated from runtime Dex.",
   "slots": {
+    "lycanroc": { "H": "Daybreak Rush" },
+    "lycanrocmidnight": { "0": "Moonlit Reprisal" },
     "samurott": {
       "S": "Shogun Stance"
     },
@@ -632,6 +634,8 @@
     }
   },
   "passives": {
+    "lycanroc": ["ultrainstinct"],
+    "lycanrocmidnight": ["ultraego"],
     "tatsugiri": [
       "sushisavvy"
     ],

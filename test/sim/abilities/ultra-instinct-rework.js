@@ -171,8 +171,11 @@ describe('Approved Ultra Instinct and Inferno Ascendant rework', () => {
 		const [p, q] = setup(); q.setAbility('Predator'); hit(q, p); assert.equal(p.hp, 3900);
 		q.setAbility('No Ability'); hit(q, p); assert.equal(p.hp, 3800);
 	});
-	for (const species of ['Hitmonlee', 'Infernape', 'Sawk', 'Lycanroc']) it(species + ' keeps its selected Ultra Instinct and receives the revised effects', () => {
-		const [p, q] = setup('Ultra Instinct', '', false, species); assert(Object.values(p.species.abilities).includes('Ultra Instinct'));
+	for (const species of ['Hitmonlee', 'Infernape', 'Sawk', 'Lycanroc']) it(species + ' receives Ultra Instinct through its assigned slot', () => {
+		const ability = species === 'Lycanroc' ? 'Daybreak Rush' : 'Ultra Instinct';
+		const [p, q] = setup(ability, '', false, species);
+		assert(Object.values(p.species.abilities).includes(ability));
+		assert(p.hasAbilityOrPassive('ultrainstinct'));
 		hit(q, p); assert.equal(p.hp, 3930); p.hp = 2000; hit(p, q); assert.equal(p.hp, 2250);
 	});
 	it('only true switching stamps this-turn entry, including foes who already acted', () => {

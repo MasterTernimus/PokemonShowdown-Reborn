@@ -777,8 +777,8 @@ for (const [id, passive] of Object.entries(SignaturePassiveSelections)) {
 }
 // Exact Lycanroc forms; preserve all other forms and pre-evolutions.
 for (const [id, passive] of Object.entries({
-	lycanroc: 'infiltrator',
-	lycanrocmidnight: 'defiant',
+	lycanroc: 'ultrainstinct',
+	lycanrocmidnight: 'ultraego',
 	lycanrocdusk: 'toughclaws',
 })) {
 	SpeciesPassives[id] = Object.freeze([passive]);

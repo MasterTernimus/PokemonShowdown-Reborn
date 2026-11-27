@@ -3374,7 +3374,7 @@ export class BattleActions {
 				(targetIsMega ||
 					targetIsGmax ||
 					target.terastallized === 'Stellar' ||
-					target.hasAbility('ultraego'))
+					target.hasAbilityOrPassive('ultraego'))
 			) {
 				this.battle.debug('FFA gimmick follow-up damage reduction');
 				baseDamage = this.battle.modify(baseDamage, 0.9);

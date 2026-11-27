@@ -19,6 +19,13 @@ describe('Authority Clause team-wide Ultra limits', () => {
 	it('allows exactly one ordinary Ultra Ego user and one ordinary Ultra Instinct user', () => {
 		assert.equal(validate([set('Hitmonchan', 'Ultra Ego'), set('Hitmonlee', 'Ultra Instinct')]), null);
 	});
+	it('counts Midday and Midnight passives with their new selectable abilities', () => {
+		const day = set('Lycanroc', 'Daybreak Rush');
+		const night = set('Lycanroc-Midnight', 'Moonlit Reprisal');
+		assert.equal(check([day, night]), undefined);
+		assert(check([day, set('Hitmonlee', 'Ultra Instinct')]).some(error => error.includes('Ultra Instinct')));
+		assert(check([night, set('Throh', 'Ultra Ego')]).some(error => error.includes('Ultra Ego')));
+	});
 	it('rejects two ordinary Ultra Ego users', () => {
 		assert(validate([set('Hitmonchan', 'Ultra Ego'), set('Throh', 'Ultra Ego')])
 			.some(error => /only one Ultra Ego/.test(error)));

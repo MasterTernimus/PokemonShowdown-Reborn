@@ -28034,3 +28034,5 @@ import { installCalderaPressure } from './caldera-pressure';
 installCalderaPressure(Abilities.calderacore);
 import { installBankedPressure } from './banked-pressure';
 installBankedPressure(Abilities);
+import { LycanrocAbilities } from './lycanroc-abilities';
+Object.assign(Abilities, LycanrocAbilities);

@@ -12,10 +12,13 @@ export function removeSpikesLayer(battle: Battle, side: Side) {
 }
 
 export function clearEntryHazards(battle: Battle, source: Pokemon, from: string) {
+	let cleared = false;
 	for (const id of ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend']) {
 		if (!source.side.removeSideCondition(id)) continue;
+		cleared = true;
 		battle.add('-sideend', source.side, battle.dex.conditions.get(id).name, '[from] ' + from, `[of] ${source}`);
 	}
+	return cleared;
 }
 
 function clearHazards(this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) {

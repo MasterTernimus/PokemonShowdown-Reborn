@@ -497,7 +497,7 @@ export class Battle {
 		if (target && adaptiveResistsBypass(target, this.activePokemon)) return false;
 		// Active Ultra Instinct protects the holder's composite components and passives from move bypass.
 		if (
-			target?.hasAbility('ultrainstinct') &&
+			(target?.hasAbility('ultrainstinct') || target?.getPassiveWithEffect('ultrainstinct')) &&
 			!['bewitchedwoodsterrain', 'hauntedterrain', 'holyterrain'].includes(this.field.terrain)
 		)
 			return false;

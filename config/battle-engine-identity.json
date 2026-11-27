@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "de353e8638d3e524c40becbb78dca3901e82a4e24df4ef491cde6320c244065b",
-  "packageManifestSHA256": "2f390895b00818cd34af6c38f1973acda6c36ffe00d9287eacda6cd29a4bed1d",
-  "mechanicsSHA256": "ece0bc88733f5db2eec77d47bd2e77cb1d82abc62c2def6e16839332a35b8473",
+  "packageEngineRevision": "e68348980158bc9a712a58bfda68388cba4b5bc601f0e0187376d260555e2218",
+  "packageManifestSHA256": "f92c77572883df029f9d8e14734850d3319d48239f8eba73ae1d5ae63135b8ab",
+  "mechanicsSHA256": "cc3b1b756cecc9811d83d38b5551186febc343ea1775d51f148dafc3f02ecec9",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,7 +11,7 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "8e8100de9973a5b1988639a8ca5f94cf23982f74afbf4f1b1bfbe40b5858794c"
+      "sha256": "1c1f6f2d8ba1cefaaa904e0a41ba506d951a04b2b00fcd5b70df280d35da9007"
     },
     {
       "file": "dist/data/ability-components.js",
@@ -219,7 +219,7 @@
     },
     {
       "file": "dist/data/dune-carver.js",
-      "sha256": "f64f3872e8f0a392f6faac0989fe86ba6edc42d2d38c0cff40e15e44697b394f"
+      "sha256": "45a7e81bc835d5379d464aa9ff1af7c12ce2cc5eaf0fb8db7bb6ef3aaba277fe"
     },
     {
       "file": "dist/data/dustox-approved.js",
@@ -476,6 +476,10 @@
     {
       "file": "dist/data/lost-four-approved.js",
       "sha256": "0332aedf10c39e01824a6bdf9b25cf268eb61b7572f992cbbfad5b6c325bff76"
+    },
+    {
+      "file": "dist/data/lycanroc-abilities.js",
+      "sha256": "2250dc479e318492c19b342f9079b60a5e4ac7eef6a55f6cdc802c38b0058d18"
     },
     {
       "file": "dist/data/lycanroc-qwilfish-reworks.js",
@@ -767,7 +771,7 @@
     },
     {
       "file": "dist/data/pokedex.js",
-      "sha256": "62a8c50984840c469fd76bec618330301e1aa27b492e3eb21e2f11a3ca35c564"
+      "sha256": "f56cd5f3ea0a95863922a95d722ee0f156a04ce1443e1c9e77b41cd8c60353a8"
     },
     {
       "file": "dist/data/pokemongo.js",
@@ -995,7 +999,7 @@
     },
     {
       "file": "dist/data/species-passives.js",
-      "sha256": "05efbae74d750026eb2a8f9833da8d3712955f61f0649fc73542d89193f9068a"
+      "sha256": "04df5f03ee82cf8365be3df283206ed6b36d740e4e3b62c6d8793fceee79a43f"
     },
     {
       "file": "dist/data/stance-disguise-aggron.js",
@@ -1047,7 +1051,7 @@
     },
     {
       "file": "dist/data/text/abilities.js",
-      "sha256": "46da1a95a1cad488b7ba79bc72521640d46ebf3cd1dada86fabb8e5c3e129830"
+      "sha256": "1163409a3839829bf87d17a2352e5ce9c729f644d4873b7d6478ff0cef132d3e"
     },
     {
       "file": "dist/data/text/default.js",
@@ -1215,7 +1219,7 @@
     },
     {
       "file": "dist/sim/battle-actions.js",
-      "sha256": "60872ddf7db405095fb8a36dacfc23d91f0aa4c80d64548675233976fcacec22"
+      "sha256": "3b1c386504c318141d7c8ee83fb14a6b1e28acae25ee661663ba1ef04cc916e0"
     },
     {
       "file": "dist/sim/battle-queue.js",
@@ -1227,7 +1231,7 @@
     },
     {
       "file": "dist/sim/battle.js",
-      "sha256": "101d7735ea8758e76325424d5da032267f048f440793198912692c7e0aa71af3"
+      "sha256": "030c29a829683b7abe8b13181b1531260f04af54961c887866627c4d6649ff23"
     },
     {
       "file": "dist/sim/beast-hunter.js",
@@ -1319,7 +1323,7 @@
     },
     {
       "file": "dist/sim/predator.js",
-      "sha256": "3d98e60ffbc37e13b0002ca4a813715abc9d0279b52d2a8d0f545bc0b7b7f4cb"
+      "sha256": "b75a071ff214956d15510153666d06a65ab7cca605d781ce348fe03cab5ede83"
     },
     {
       "file": "dist/sim/prng.js",
@@ -1379,7 +1383,7 @@
     },
     {
       "file": "dist/sim/ultra-rivalry.js",
-      "sha256": "a221521416bcbcde423a4220def859fcc25ed7a93ce894c932629187272b42b7"
+      "sha256": "fe51ef50b65b09fe2994ccbb8cc39de19d383864963446778caf6ea58cce5d6e"
     },
     {
       "file": "node_modules/sql-template-strings/index.js",
