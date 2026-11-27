@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "baaa1c32e5fdce8834731ae8406eacf982125b11f344e8f96018099f6145c515",
-  "packageManifestSHA256": "5b003a1070b9adfdd6b6ebd79956c6864ace81f3d64f2b09d08c405d347daddd",
-  "mechanicsSHA256": "7e637a3c7d9449289cb43e0b0fc61abe3ef0aaa28ca7fd4e66794f80112a2b8c",
+  "packageEngineRevision": "9e4e41f60697efe5cd7bdab28c78e710a40e82cbd591148eff91bab3bf042049",
+  "packageManifestSHA256": "212613a6edfdbc389f1708f4f41d8f488ed210e14912376b9cf161d182cf8d7c",
+  "mechanicsSHA256": "f08e88d7c41fe3d4a9fb7c56403398de025dbea6e262f6cbde11b3bed33676be",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -755,7 +755,7 @@
     },
     {
       "file": "dist/data/plasma-eruption.js",
-      "sha256": "cf6de4986090e804bba28c378bcbb3958593a293a4153e7e41b7b5d9623862cd"
+      "sha256": "a55d834dd48d32cf03f8885ac3a4d66dc3dc3c7a2250bfe6067f56d7b9d7ef1e"
     },
     {
       "file": "dist/data/pokedex.js",
@@ -955,7 +955,7 @@
     },
     {
       "file": "dist/data/signature-move-summaries.js",
-      "sha256": "87f6054623173b334b23aa43598ec21db80b0e04d2b31b520e4f9c5c561e4070"
+      "sha256": "66397f0270aeb2835ac4ec8db0bd6f3a761b72451b2adc081aec125ab3f60be0"
     },
     {
       "file": "dist/data/signature-passive-abilities.js",
@@ -1039,7 +1039,7 @@
     },
     {
       "file": "dist/data/text/abilities.js",
-      "sha256": "475e0257d2b016f8cf27f075bf1ede0d5989c7a818d34a8167b1612c4d80068f"
+      "sha256": "007c20aa333de4003e684aa88272b6b352decfc0151fc1a757cebb67c722a7ab"
     },
     {
       "file": "dist/data/text/default.js",
@@ -1131,7 +1131,7 @@
     },
     {
       "file": "dist/data/yang-signature-moves-a.js",
-      "sha256": "1fca3c446f3512dde7db317e3cebe25e4b4856b652afec10563bd7eb2dd1986e"
+      "sha256": "861673156a707f04073374e568b54cf53161fb239da984af0cedd3ff54ccb1a4"
     },
     {
       "file": "dist/data/yang-signature-moves-b.js",

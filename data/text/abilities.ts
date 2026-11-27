@@ -2124,6 +2124,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		shortDesc: November16BalanceDescriptions.verdanthospitality.shortDesc,
 	},
 	plasmaeruption: { name: 'Plasma Eruption', activate: '  [POKEMON] unleashed a Plasma Eruption!' },
+	plasmacharge: { name: 'Plasma Charge', start: "  [POKEMON]'s core reached its first charge!" },
+	plasmacoreready: { name: 'Plasma Core Ready', start: "  [POKEMON]'s core is ready to erupt!" },
 	plasmapressure1: { name: 'Plasma Pressure 1', start: "  [POKEMON]'s core reached Pressure 1/3!" },
 	plasmapressure2: { name: 'Plasma Pressure 2', start: "  [POKEMON]'s core reached Pressure 2/3!" },
 	plasmapressure3: { name: 'Plasma Pressure 3', start: "  [POKEMON]'s core is ready to erupt!" },

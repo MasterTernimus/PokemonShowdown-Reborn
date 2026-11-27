@@ -54,8 +54,8 @@ describe('Plasma Eruption pressure cycle', () => {
 	}
 	const pressure = p => p.volatiles.plasmacore?.pressure || 0;
 	function ready(p, q) {
-		for (let i = 0; i < 3; i++) hit(p, q);
-		assert.equal(pressure(p), 3);
+		for (let i = 0; i < 2; i++) hit(p, q);
+		assert.equal(pressure(p), 2);
 	}
 
 	for (const provider of ['ally', 'passive', 'both', 'suppressed', 'none']) {
@@ -79,9 +79,11 @@ describe('Plasma Eruption pressure cycle', () => {
 			assert.equal(move.sereneGraceProviders?.includes('plasmaeruption') || false, false);
 		});
 	}
-	it('builds once per attack, grants SpA then Speed, and detonates only on the fourth attack', () => {
+	it('builds once per attack, grants SpA then Speed, and detonates on the third attack and heals once per stage', () => {
 		const [p, q] = setup();
+		p.hp = 4000;
 		hit(p, q);
+		assert.equal(p.hp, 4625);
 		assert.equal(pressure(p), 1);
 		assert.equal(p.boosts.spa, 1);
 		assert.equal(p.boosts.spe, 0);
@@ -89,11 +91,10 @@ describe('Plasma Eruption pressure cycle', () => {
 		assert.equal(pressure(p), 2);
 		assert.equal(p.boosts.spe, 1);
 		assert.equal(p.boosts.spa, 1);
+		assert.equal(p.hp, 5250);
 		const third = hit(p, q);
-		assert.equal(pressure(p), 3);
-		assert(!third.plasmaAttack.eruption);
-		const fourth = hit(p, q);
-		assert(fourth.plasmaAttack.eruption);
+		assert(third.plasmaAttack.eruption);
+		assert.equal(p.hp, 6500);
 		assert.equal(pressure(p), 0);
 		assert.equal(p.boosts.spe, 0);
 		assert.equal(p.boosts.spa, 0);
@@ -126,7 +127,7 @@ describe('Plasma Eruption pressure cycle', () => {
 		p.getPassives = () => [];
 		ready(p, q);
 		const move = hit(p, q);
-		assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1600);
+		assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1750);
 	});
 	it('applies 50% conversion once to a whole multi-hit move', () => {
 		const [p, q] = setup();
@@ -143,12 +144,62 @@ describe('Plasma Eruption pressure cycle', () => {
 		assert.equal(rolls, 1);
 		assert.equal(pressure(p), 1);
 	});
-	it('builds only once across spread opponents and never from allied damage', () => {
+	it('charges once per spread opponent and never from allied damage alone', () => {
 		const [p, q] = setup(true);
-		hit(p, q, 'heatwave');
-		assert.equal(pressure(p), 1);
+		p.hp = 4000;
 		hit(p, battle.p1.active[1]);
-		assert.equal(pressure(p), 1);
+		assert.equal(pressure(p), 0);
+		assert.equal(p.hp, 4000);
+		hit(p, q, 'heatwave');
+		assert.equal(pressure(p), 2);
+		assert.equal(p.hp, 5250);
+	});
+	it('discharges immediately when Lava Plume hits both foes and its ally', () => {
+		const [p, q] = setup(true);
+		const partner = battle.p1.active[1], other = battle.p2.active[1];
+		p.hp = 4000;
+		const move = hit(p, q, 'lavaplume');
+		const data = move.plasmaAttack;
+		assert.equal(data.struck.size, 3);
+		assert(data.eruption);
+		assert.equal(pressure(p), 0);
+		assert(p.volatiles.plasmaairborne);
+		assert.equal(p.hp, 6500);
+		const echo = Math.floor(data.primaryDamage * 0.75);
+		assert(echo > 0);
+		for (const foe of [q, other]) {
+			assert.equal(foe.maxhp - foe.hp, data.struck.get(foe) + echo);
+			assert.equal(foe.status, 'par');
+		}
+		assert.equal(partner.maxhp - partner.hp, data.struck.get(partner));
+	});
+	it('omits protected targets and discharges on the same two-foe hit after one charge', () => {
+		const [p, q] = setup(true);
+		const ally = battle.p1.active[1], other = battle.p2.active[1];
+		hit(p, q);
+		ally.addVolatile('protect');
+		other.addVolatile('protect');
+		assert(!hit(p, q, 'lavaplume').plasmaAttack.eruption);
+		assert.equal(pressure(p), 2);
+		battle.destroy();
+		const [user, foe] = setup(true);
+		hit(user, foe);
+		const move = hit(user, foe, 'infernalrage');
+		assert(move.plasmaAttack.eruption);
+		assert.equal(move.plasmaAttack.struck.size, 2);
+	});
+	it('rolls Infernal Rage burn independently for each foe, alongside Torment', () => {
+		const [p, q] = setup(true);
+		p.setAbility('No Ability');
+		const other = battle.p2.active[1], ally = battle.p1.active[1];
+		let burnRolls = 0;
+		battle.random = (m, n) => m === 100 && n === undefined ? (burnRolls++ ? 99 : 0) : n === undefined ? m - 1 : n - 1;
+		hit(p, q, 'infernalrage');
+		assert.equal(burnRolls, 2);
+		assert.equal(q.status, 'brn');
+		assert.equal(other.status, '');
+		assert(q.volatiles.torment && other.volatiles.torment);
+		assert.equal(ally.hp, ally.maxhp);
 	});
 	for (const [ability, original, expected] of [
 		['Flash Fire', 'Fire', 'Electric'],
@@ -213,8 +264,10 @@ describe('Plasma Eruption pressure cycle', () => {
 		ready(p, q);
 		const other = battle.p2.active[1],
 			before = other.hp;
+		p.hp = 4000;
 		q.addVolatile('protect');
 		hit(p, q);
+		assert.equal(p.hp, 4000);
 		assert.equal(pressure(p), 0);
 		assert.equal(q.status, '');
 		assert.equal(other.hp, before);
@@ -393,7 +446,7 @@ describe('Plasma Eruption pressure cycle', () => {
 		const [p, q] = setup(false, '', 'Typhlosion-Mega');
 		ready(p, q);
 		const move = hit(p, q);
-		assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 2080);
+		assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 2275);
 	});
 	it('Ground attacks fail during flight, and Gravity forces landing', () => {
 		const [p, q] = setup();

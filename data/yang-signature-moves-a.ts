@@ -395,6 +395,7 @@ export const YangSignatureMovesA: MoveDataTable = {
 	infernalrage: {
 		num: 10448,
 		name: 'Infernal Rage',
+		secondary: { chance: 30, status: 'brn' },
 		type: 'Fire',
 		category: 'Special',
 		basePower: 90,
@@ -520,7 +521,7 @@ const descriptions: { [id: string]: [string, string] } = {
 	],
 	infernalrage: [
 		'Charlotte',
-		'Hits opposing Pokemon and applies Torment to damaged targets. Clears an Aura or separately placed field after a hit, respecting field locks. Natural field transitions stay in place.',
+		'Hits adjacent foes. Each damaged foe is Tormented and has a 30% chance to burn. Clears an Aura or separately placed field after a hit, respecting field locks. Natural field transitions stay in place.',
 	],
 };
 for (const [id, [credit, summary]] of Object.entries(descriptions)) {
