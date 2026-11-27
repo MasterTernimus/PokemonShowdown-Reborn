@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "fdc4df123284ab8f24547f3888e291556dcd500b2e44c595255a9ddb27d8fe88",
-  "packageManifestSHA256": "8dc9027310fb37138d51dd4a2d7d8a445fdefbeb34be65396454a1ffb3d278df",
-  "mechanicsSHA256": "e8890d30eaf46c5403ca1b019ff1b763107f830ddad8e90410bce5a727c8f6b6",
+  "packageEngineRevision": "6cb45103ded7650dea731846f7961ed8be1b8fd36f982cc2f9ac7eaa89d6a632",
+  "packageManifestSHA256": "add036cb5edf9bb408352f034f1d78248cba260a47396093e7560f21c4feea26",
+  "mechanicsSHA256": "913d0e49227d913d3a64ae90897af13ab8ea54a97f2686564c37079ec04412ac",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -759,7 +759,7 @@
     },
     {
       "file": "dist/data/plasma-eruption.js",
-      "sha256": "a55d834dd48d32cf03f8885ac3a4d66dc3dc3c7a2250bfe6067f56d7b9d7ef1e"
+      "sha256": "9025ce1099f1d9ba195d7455e05d885bdd31a8a6dcc2b23866611957c7a9b34e"
     },
     {
       "file": "dist/data/pokedex.js",

@@ -127,7 +127,7 @@ describe('Plasma Eruption pressure cycle', () => {
 		p.getPassives = () => [];
 		ready(p, q);
 		const move = hit(p, q);
-		assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1750);
+		assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1300);
 	});
 	it('applies 50% conversion once to a whole multi-hit move', () => {
 		const [p, q] = setup();
@@ -165,7 +165,7 @@ describe('Plasma Eruption pressure cycle', () => {
 		assert.equal(pressure(p), 0);
 		assert(p.volatiles.plasmaairborne);
 		assert.equal(p.hp, 6500);
-		const echo = Math.floor(data.primaryDamage * 0.75);
+		const echo = Math.floor(data.primaryDamage * 0.3);
 		assert(echo > 0);
 		for (const foe of [q, other]) {
 			assert.equal(foe.maxhp - foe.hp, data.struck.get(foe) + echo);
@@ -446,7 +446,8 @@ describe('Plasma Eruption pressure cycle', () => {
 		const [p, q] = setup(false, '', 'Typhlosion-Mega');
 		ready(p, q);
 		const move = hit(p, q);
-		assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 2275);
+		// Each 1.3× modifier uses Showdown's fixed-point rounding.
+		assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1689);
 	});
 	it('Ground attacks fail during flight, and Gravity forces landing', () => {
 		const [p, q] = setup();
@@ -461,6 +462,26 @@ describe('Plasma Eruption pressure cycle', () => {
 		assert(p.volatiles.plasmalanding);
 		hit(q, p, 'earthquake');
 		assert(p.hp < before);
+	});
+	it('counts the discharge turn toward flight and saves landing for a final Fire-type attack', () => {
+		const [p] = setup();
+		battle.randomChance = (numerator, denominator) => numerator >= denominator;
+		battle.makeChoices('move flamethrower', 'move splash');
+		battle.makeChoices('move flamethrower', 'move splash');
+		battle.makeChoices('move flamethrower', 'move splash');
+		assert(p.volatiles.plasmaairborne);
+		assert.equal(p.volatiles.plasmaairborne.duration, 1);
+		battle.makeChoices('move thunderbolt', 'move splash');
+		assert(!p.volatiles.plasmaairborne);
+		assert(p.volatiles.plasmalanding);
+		assert.equal(pressure(p), 0);
+		battle.makeChoices('move thunderbolt', 'move splash');
+		assert(p.volatiles.plasmalanding);
+		assert.equal(pressure(p), 1);
+		battle.makeChoices('move flamethrower', 'move splash');
+		assert(!p.volatiles.plasmalanding);
+		assert(p.lastMoveUsed.plasmaAttack.landing);
+		assert.equal(pressure(p), 2);
 	});
 	it('clears pre-existing burn when acquiring the ability', () => {
 		const [p, q] = setup();

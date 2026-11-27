@@ -107,7 +107,7 @@ export function installPlasmaEruption(abilities: AbilityDataTable) {
 		flags: {},
 		shortDesc:
 			'Galvanize. Fire/Electric hits heal and charge per target. The third hit discharges.',
-		desc: "Galvanize converts eligible Normal moves to Electric. These attacks can also change to Fire and keep the Galvanize power bonus either way. Fire/Electric attacks have a 50% chance to swap types, avoiding immunity on the first opponent when possible. The final type stays fixed: Electric adds 30% burn; Fire adds 30% paralysis. The holder is immune to both statuses. Outside its airborne phase, Fire and Electric attacks charge the core once per distinct target damaged, including Substitutes. An ally hit by a spread move counts if the same move also hits a foe. Each charging stage restores 1/16 max HP. The first gives +1 to the higher of Attack and Sp. Atk (Sp. Atk on ties). The second gives +1 Speed and readies the core. The next Fire or Electric attack has 1.75× power and restores 1/8 max HP if it damages a foe or its Substitute. A spread move reaching the third hit discharges immediately after damage: the primary foe also takes a 75% aftershock in place of the upfront power boost. Discharge healing occurs once. Discharge resets Pressure and its remaining stat boosts. If the primary foe takes damage, other foes take extra damage equal to 75% of the damage actually dealt to it; all affected foes receive the opposite status if possible. After discharge, flies for two end-of-turn ticks: Ground immunity, +20% Electric power, and no Pressure gain. Iron Ball, Gravity, Smack Down and Ingrain prevent flight. Landing powers up the next Fire attack by 30%. Discharge and landing bonuses are spent even on a miss or block. Switching or losing the ability clears its phases. Strongest field bonus only: Fire +15% on Volcanic, Burning, Superheated or Dragon's Den; Electric +15% on Electric Terrain/Aura, Factory or Short Circuit; both +10% on Mountain, Cave, Crystal Cavern, Desert, Ashen Beach or effective sun; both +5% on Haunted, New World, Inverse, Big Top or Fairy Tale.",
+		desc: "Galvanize converts eligible Normal moves to Electric. These attacks can also change to Fire and keep the Galvanize power bonus either way. Fire/Electric attacks have a 50% chance to swap types, avoiding immunity on the first opponent when possible. The final type stays fixed: Electric adds 30% burn; Fire adds 30% paralysis. The holder is immune to both statuses. Outside its airborne phase, Fire and Electric attacks charge the core once per distinct target damaged, including Substitutes. An ally hit by a spread move counts if the same move also hits a foe. Each charging stage restores 1/16 max HP. The first gives +1 to the higher of Attack and Sp. Atk (Sp. Atk on ties). The second gives +1 Speed and readies the core. The next Fire or Electric attack has 1.30× power and restores 1/8 max HP if it damages a foe or its Substitute. A spread move reaching the third hit discharges immediately after damage. Its aftershock deals 30% of the primary foe’s actual HP loss to it and the other foes instead of boosting the initial hit. Discharge healing occurs once. Discharge resets Pressure and its remaining stat boosts. When the core was already ready before the attack, other foes take extra damage equal to 75% of the primary foe’s actual HP loss. All affected foes receive the opposite status if possible. After discharge, flies for two end-of-turn ticks: Ground immunity, +20% Electric power, and no Pressure gain. Iron Ball, Gravity, Smack Down and Ingrain prevent flight. Landing powers up the next Fire attack by 30%. Discharge and landing bonuses are spent even on a miss or block. Switching or losing the ability clears its phases. Strongest field bonus only: Fire +15% on Volcanic, Burning, Superheated or Dragon's Den; Electric +15% on Electric Terrain/Aura, Factory or Short Circuit; both +10% on Mountain, Cave, Crystal Cavern, Desert, Ashen Beach or effective sun; both +5% on Haunted, New World, Inverse, Big Top or Fairy Tale.",
 		onStart(pokemon) {
 			pokemon.addVolatile('plasmacore');
 			if (['brn', 'par'].includes(pokemon.status)) pokemon.cureStatus();
@@ -177,7 +177,7 @@ export function installPlasmaEruption(abilities: AbilityDataTable) {
 		onBasePower(basePower, source, target, move) {
 			if (!qualifies(move)) return;
 			const data = (move as any).plasmaAttack as PlasmaAttack | undefined;
-			if (data?.eruption) this.chainModify(1.75);
+			if (data?.eruption) this.chainModify(1.3);
 			if ((data?.airborne ?? !!source.volatiles.plasmaairborne) && move.type === 'Electric')
 				this.chainModify(1.2);
 			if (data?.landing) this.chainModify(1.3);
@@ -212,7 +212,8 @@ export function installPlasmaEruption(abilities: AbilityDataTable) {
 			data.resolved = true;
 			const core = source.volatiles.plasmacore;
 			if (!core) return;
-			if (!data.eruption) {
+			const midAttackDischarge = !data.eruption;
+			if (midAttackDischarge) {
 				if (!data.hit || data.airborne || source.volatiles.plasmaairborne || !source.hp || !source.isActive) return;
 				let hits = data.struck.size;
 				while (hits > 0 && core.pressure < 2) {
@@ -235,7 +236,7 @@ export function installPlasmaEruption(abilities: AbilityDataTable) {
 					data.primaryDamage = data.primary ? data.struck.get(data.primary)! : 0;
 				}
 				if (data.primary?.hp && data.primaryDamage) {
-					this.damage(Math.max(1, Math.floor(data.primaryDamage * 0.75)), data.primary, source, this.effect);
+					this.damage(Math.max(1, Math.floor(data.primaryDamage * 0.3)), data.primary, source, this.effect);
 				}
 			}
 			removePressure(this, source);
@@ -244,7 +245,7 @@ export function installPlasmaEruption(abilities: AbilityDataTable) {
 				for (const foe of source.foes()) {
 					if (!foe.hp || foe === data.primary) continue;
 					this.damage(
-						Math.max(1, Math.floor(data.primaryDamage * 0.75)),
+						Math.max(1, Math.floor(data.primaryDamage * (midAttackDischarge ? 0.3 : 0.75))),
 						foe,
 						source,
 						this.dex.abilities.get('plasmaeruption'),
