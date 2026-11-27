@@ -5435,7 +5435,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	authorityclause: {
 		effectType: 'ValidatorRule',
 		name: 'Authority Clause',
-		desc: 'One Ultra Ego user and one Ultra Instinct user per team, counting selected abilities, passives and available Mega/Gmax forms. Ultra Instinct granted by Lucarionite or Lucarionite Z is exempt. Also limits Neutralization, Royal Decree, Burning Ego, and Perfect Ego to one user combined.',
+		desc: 'One Ultra Ego user and one Ultra Instinct user per team, counting selected abilities and the active abilities of available Mega/Gmax forms. Species passives are exempt. Ultra Instinct granted by Lucarionite or Lucarionite Z is exempt. Also limits Neutralization, Royal Decree, Burning Ego, and Perfect Ego to one user combined.',
 		onBegin() {
 			this.add(
 				'rule',
@@ -5443,7 +5443,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			);
 			this.add(
 				'rule',
-				'Authority Clause: Limit one Ultra Ego user and one Ultra Instinct user. Ultra Instinct granted by Lucarionite or Lucarionite Z is exempt.',
+				'Authority Clause: Limit one Ultra Ego user and one Ultra Instinct user. Species passives and Ultra Instinct granted by Lucarionite or Lucarionite Z are exempt.',
 			);
 		},
 		onValidateTeam(team) {
@@ -5477,8 +5477,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 							stone.megaStone?.Lucario === candidate.name &&
 							activeId === this.toID(candidate.abilities[0]) &&
 							(activeId === 'insight' || activeId === 'auraprecision');
-						return (!lucarioStoneInstinct && abilityIncludesComponent(active, component)) ||
-							candidate.passives.some(passive => abilityIncludesComponent(passive, component));
+						return !lucarioStoneInstinct && abilityIncludesComponent(active, component);
 					});
 					if (form) ultraUsers[component].push(`${set.name || set.species} (${form.name})`);
 				}
@@ -5493,7 +5492,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			for (const [component, users] of Object.entries(ultraUsers)) {
 				if (users.length > 1) {
 					problems.push(
-						`Authority Clause allows only one ${this.dex.abilities.get(component).name} user per team, including ordinary and Mega/Gmax forms.`,
+						`Authority Clause allows only one ${this.dex.abilities.get(component).name} user per team through selected or Mega/Gmax abilities. Species passives are exempt.`,
 						`(You have ${users.join(', ')})`,
 					);
 				}

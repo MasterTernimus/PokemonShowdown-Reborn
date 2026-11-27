@@ -19,12 +19,14 @@ describe('Authority Clause team-wide Ultra limits', () => {
 	it('allows exactly one ordinary Ultra Ego user and one ordinary Ultra Instinct user', () => {
 		assert.equal(validate([set('Hitmonchan', 'Ultra Ego'), set('Hitmonlee', 'Ultra Instinct')]), null);
 	});
-	it('counts Midday and Midnight passives with their new selectable abilities', () => {
+	it('allows passive Ultra on both Lycanroc forms alongside a selected user of each', () => {
 		const day = set('Lycanroc', 'Daybreak Rush');
 		const night = set('Lycanroc-Midnight', 'Moonlit Reprisal');
 		assert.equal(check([day, night]), undefined);
-		assert(check([day, set('Hitmonlee', 'Ultra Instinct')]).some(error => error.includes('Ultra Instinct')));
-		assert(check([night, set('Throh', 'Ultra Ego')]).some(error => error.includes('Ultra Ego')));
+		assert.equal(validate([day, set('Hitmonlee', 'Ultra Instinct')]), null);
+		assert.equal(validate([night, set('Throh', 'Ultra Ego')]), null);
+		assert(check([day, set('Hitmonlee', 'Ultra Instinct'), set('Sawk', 'Ultra Instinct')])
+			.some(error => error.includes('Ultra Instinct')));
 	});
 	it('rejects two ordinary Ultra Ego users', () => {
 		assert(validate([set('Hitmonchan', 'Ultra Ego'), set('Throh', 'Ultra Ego')])
@@ -127,9 +129,9 @@ describe('Authority Clause team-wide Ultra limits', () => {
 			assert(check(team, gmaxDex('Ultra Ego')).some(error => /only one Ultra Ego/.test(error)));
 		});
 	}
-	it('counts a Gmax Ultra Instinct passive and allows the opposite Ultra family', () => {
+	it('exempts Gmax passives with either Ultra family', () => {
 		const dex = gmaxDex('Blaze', ['ultrainstinct']);
-		assert(check([set('Charizard', 'Blaze'), infernape()], dex).some(error => /only one Ultra Instinct/.test(error)));
+		assert.equal(check([set('Charizard', 'Blaze'), infernape()], dex), undefined);
 		assert.equal(check([set('Charizard', 'Blaze'), emboar()], dex), undefined);
 	});
 	it('counts direct Gmax inputs too', () => {

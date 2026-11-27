@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "e68348980158bc9a712a58bfda68388cba4b5bc601f0e0187376d260555e2218",
-  "packageManifestSHA256": "f92c77572883df029f9d8e14734850d3319d48239f8eba73ae1d5ae63135b8ab",
-  "mechanicsSHA256": "cc3b1b756cecc9811d83d38b5551186febc343ea1775d51f148dafc3f02ecec9",
+  "packageEngineRevision": "1ba20a941bd415f1da2670e16b4e584c69255616011d77c59a49982946a191cb",
+  "packageManifestSHA256": "f577ba2f479167e6f84c36c86a5e115c7dc930e54d7f0f2cb2e013cb18efd73f",
+  "mechanicsSHA256": "f726dbeec970a41ba4ecb52f66dcf3ea3ae9ea4b284659a21d9319117b657bfb",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -923,7 +923,7 @@
     },
     {
       "file": "dist/data/rulesets.js",
-      "sha256": "dad0df4420468f1489e7a08b5267a464bc7ac089859864fe56b598352767598e"
+      "sha256": "4b652c991ae7e1e6f6c34f9f2847ac7bef51c4e951f06a5333436931e4c098d3"
     },
     {
       "file": "dist/data/samurott-shogun.js",
