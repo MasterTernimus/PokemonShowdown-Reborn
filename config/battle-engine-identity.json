@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "d2f73d155da2e6c94400e0819439602e9ffd4a569e7f392536384d6cf8e3249e",
-  "packageManifestSHA256": "a844c179795887122884918182ecc29e2b0e8e48127cb6a397e26d691eee4f7a",
-  "mechanicsSHA256": "d68545902961ef4ccda94adfe0f6b204baf5ad99c3acefc12eb5afb820ba9ec6",
+  "packageEngineRevision": "de353e8638d3e524c40becbb78dca3901e82a4e24df4ef491cde6320c244065b",
+  "packageManifestSHA256": "2f390895b00818cd34af6c38f1973acda6c36ffe00d9287eacda6cd29a4bed1d",
+  "mechanicsSHA256": "ece0bc88733f5db2eec77d47bd2e77cb1d82abc62c2def6e16839332a35b8473",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,7 +11,7 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "b28cfacb4cad6c10b466dbfd9899db639e2dd0b62390a57eb585487ca9fdb0c8"
+      "sha256": "8e8100de9973a5b1988639a8ca5f94cf23982f74afbf4f1b1bfbe40b5858794c"
     },
     {
       "file": "dist/data/ability-components.js",
@@ -130,6 +130,10 @@
       "sha256": "6c63963b032c434067f0ba2ea11b23395378f278238a37f496de08388115c3a7"
     },
     {
+      "file": "dist/data/banked-pressure.js",
+      "sha256": "846e91a5e3f0feb9e05a006d95eddbe1f57c087102d6586a9363938a591f1a85"
+    },
+    {
       "file": "dist/data/base-guardian-reworks.js",
       "sha256": "b9c30a8934a1d8c659b8d737f3cd1a7d7ff260fd0ba9a98c9052badfff6e03f6"
     },
@@ -151,7 +155,7 @@
     },
     {
       "file": "dist/data/caldera-pressure.js",
-      "sha256": "6880a4776197edf3d309683b165fb8891e77a66218786ec549ebdb3f56442183"
+      "sha256": "7786e1df3a8558bd940ca421cd8ce7da10f805f5688549f4d4228f92fbc33b6e"
     },
     {
       "file": "dist/data/carry-on.js",
@@ -183,7 +187,7 @@
     },
     {
       "file": "dist/data/conditions.js",
-      "sha256": "6a679673e9c2874c0a0c6e189695bd70a7b21aecc9257768499c498e278d6fba"
+      "sha256": "7ef6d08379e7e633496763cf3b224508f790b66ad319abe27387f9ef5aaf968c"
     },
     {
       "file": "dist/data/cosmetic-counterparts.js",
@@ -759,7 +763,7 @@
     },
     {
       "file": "dist/data/plasma-eruption.js",
-      "sha256": "9025ce1099f1d9ba195d7455e05d885bdd31a8a6dcc2b23866611957c7a9b34e"
+      "sha256": "0ce8daa9ae8d726dc437b249ff544243ad94131c32a60815c9a1bb7d7d1708ac"
     },
     {
       "file": "dist/data/pokedex.js",
@@ -1043,7 +1047,7 @@
     },
     {
       "file": "dist/data/text/abilities.js",
-      "sha256": "8e453099500e972274143ca803b7a769298c539fbd390a5b84713d9e19f11618"
+      "sha256": "46da1a95a1cad488b7ba79bc72521640d46ebf3cd1dada86fabb8e5c3e129830"
     },
     {
       "file": "dist/data/text/default.js",

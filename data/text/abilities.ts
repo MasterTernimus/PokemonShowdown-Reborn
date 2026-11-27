@@ -6003,6 +6003,12 @@ for (const [id, [name, desc, shortDesc = desc]] of Object.entries(legendaryTexts
 	AbilitiesText[id as ID] = { name, desc, shortDesc };
 }
 import { calderaDescription, calderaSummary } from '../caldera-pressure';
+import { bankedPressureText } from '../banked-pressure';
+AbilitiesText.undertowcharge = { name: 'Undertow Charge', start: '  [POKEMON] gathered the current!' };
+AbilitiesText.undertowready = { name: 'Undertow Ready', start: '  [POKEMON] is ready to unleash the undertow!' };
+AbilitiesText.choruscharge = { name: 'Chorus Charge', start: '  [POKEMON] found its harmony!' };
+AbilitiesText.chorusready = { name: 'Chorus Ready', start: '  [POKEMON] is ready for its final chorus!' };
+for (const [id, text] of Object.entries(bankedPressureText)) Object.assign(AbilitiesText[id as ID], text);
 AbilitiesText.calderacore.desc = calderaDescription;
 AbilitiesText.calderacore.shortDesc = calderaSummary;
 AbilitiesText.calderacore.activate = '  [POKEMON] released its stored volcanic pressure!';

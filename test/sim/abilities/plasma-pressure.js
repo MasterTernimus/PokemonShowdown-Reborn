@@ -407,7 +407,7 @@ describe('Plasma Eruption pressure cycle', () => {
 		assert(!move.secondaries.some(s => s.status === 'par'));
 		assert(p.trySetStatus('brn', q));
 	});
-	it('clears phases and charges on switching and cannot pass them with Baton Pass', () => {
+	it('banks ready Pressure across Baton Pass without passing it or regranting stat boosts', () => {
 		const [p, q] = setup();
 		ready(p, q);
 		battle.makeChoices('move batonpass', 'move splash');
@@ -415,7 +415,10 @@ describe('Plasma Eruption pressure cycle', () => {
 		for (const id of ['plasmacore', 'plasmaairborne', 'plasmalanding'])
 			assert(!battle.p1.active[0].volatiles[id]);
 		battle.makeChoices('switch 2', 'move splash');
-		assert.equal(pressure(p), 0);
+		assert.equal(pressure(p), 2);
+		assert.equal(p.boosts.spa, 0);
+		assert.equal(p.boosts.spe, 0);
+		assert(hit(p, q).plasmaAttack.eruption);
 	});
 	for (const [terrain, type, value] of [
 		['volcanicterrain', 'Fire', 1.15],

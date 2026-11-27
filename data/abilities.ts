@@ -28032,3 +28032,5 @@ import { installLegendaryAbilities } from './legendary-abilities';
 installLegendaryAbilities(Abilities);
 import { installCalderaPressure } from './caldera-pressure';
 installCalderaPressure(Abilities.calderacore);
+import { installBankedPressure } from './banked-pressure';
+installBankedPressure(Abilities);
