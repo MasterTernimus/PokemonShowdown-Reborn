@@ -3,6 +3,7 @@ import { composeSelectedAbility } from './selected-mega-simplifications';
 import { SharedPassiveAbilityDescriptions, skipPassiveComponent } from './passive-ability-cleanup';
 import { misalignedStarsEffect } from './nov16-balance-descriptions';
 import { hasCrescentSubDamage } from '../sim/crescent-rend';
+import { starsCompositeIds } from './ability-components';
 
 /** Entry identity survives Mega Evolution but changes on a genuine switch-in. */
 function sequence(pokemon: Pokemon, key: string) {
@@ -18,19 +19,22 @@ function recordOpposingMove(this: Battle, target: Pokemon, source: Pokemon, move
 	if (!target.hp || target.isAlly(source)) return;
 	const state = target.m.misalignedStars ||= { recorded: {}, spentEntry: {} };
 	state.recorded ||= {};
-	if (!(move.id in state.recorded)) {
+	if (!state.recorded[move.id]) {
 		state.recorded[move.id] = true;
 		target.getMoveHitData(this.activeMove || move).starsFirstUse = true;
 	}
 }
 
-function blockRecordedMove(this: Battle, target: Pokemon, move: ActiveMove) {
+function blockRecordedMove(this: Battle, target: Pokemon, move: ActiveMove, source: Pokemon) {
 	const state = target.m.misalignedStars;
 	if (!state?.recorded) return;
 	const hit = target.getMoveHitData(this.activeMove || move);
 	if (hit.starsBlocked) return null;
 	if (!state.recorded[move.id] || hit.starsFirstUse) return;
-	state.recorded[move.id] = null; // A full block has been spent for this move.
+	if (move.category !== 'Status' && cushionRepeat(target, move.id)) return;
+	state.recorded[move.id] = null; // The next successful use re-arms this move.
+	source.m.starsBlockedBy = target;
+	source.m.starsBlockedTurn = this.turn;
 	state.spentEntry ||= {};
 	state.spentEntry[move.id] = target.m.ultraRivalryEntryToken;
 	hit.starsBlocked = true;
@@ -38,6 +42,11 @@ function blockRecordedMove(this: Battle, target: Pokemon, move: ActiveMove) {
 	this.add('-message', 'The stars were bad for that outcome…');
 	this.heal(target.baseMaxhp / 3, target, target);
 	return null;
+}
+
+function cushionRepeat(holder: Pokemon, id: ID) {
+	const spent = holder.m.misalignedStars?.spentEntry;
+	return spent && id in spent && spent[id] !== holder.m.ultraRivalryEntryToken;
 }
 
 function gainCharge(this: Battle, damage: number, target: Pokemon, source: Pokemon, move: SequenceMove) {
@@ -79,7 +88,7 @@ export const CombatSequenceDescriptions = {
 		desc: 'Includes Keen Eye. Land a physical and a special attack in either order to charge the next attack: 1.5× damage, ignoring positive defensive stages, type resistances and screens. Weaknesses and immunities still apply. Each move grants one charge. The charged attack consumes both charges even on a miss or block and earns no charge. Charges persist through switching.',
 	},
 	misalignedstars: {
-		shortDesc: 'Anticipation. Blocks a repeat and heals 1/3 HP. After switching, halves a repeat and heals 1/4 HP.',
+		shortDesc: 'Takes 10% less attack damage. Blocks every other use of each foe move and heals 1/3 HP.',
 		desc: misalignedStarsEffect,
 	},
 	frameperfect: {
@@ -123,6 +132,22 @@ export function installCombatSequences(
 		name: 'Misaligned Stars', num: 32594, rating: 4, flags: {}, ...CombatSequenceDescriptions.misalignedstars,
 	};
 	composeSelectedAbility(abilities, 'misalignedstars', ['anticipation'], true);
+	const anticipationStart = abilities.misalignedstars.onStart!;
+	function announceStars(this: Battle, pokemon: Pokemon) {
+		const entry = pokemon.m.ultraRivalryEntryToken;
+		if (!('starsAnnouncedEntry' in pokemon.m) || pokemon.m.starsAnnouncedEntry !== entry) {
+			pokemon.m.starsAnnouncedEntry = entry;
+			this.add('-message', 'For a moment, the stars traced an unfamiliar sky.');
+		}
+	}
+	abilities.misalignedstars.onStart = function (pokemon) {
+		announceStars.call(this, pokemon);
+		anticipationStart.call(this, pokemon);
+	};
+	abilities.misalignedstars.onSourceModifyDamage = function (damage, source, target) {
+		if (target.isAlly(source) || skipPassiveComponent(this, target, 'misalignedstars')) return;
+		return this.chainModify(0.9);
+	};
 	abilities.misalignedstars.onDamagingHit = function (damage, target, source, move) {
 		if (damage <= 0 || move.category === 'Status' || !target.hp || target.isAlly(source)) return;
 		recordOpposingMove.call(this, target, source, move);
@@ -135,14 +160,15 @@ export function installCombatSequences(
 	abilities.misalignedstars.onAfterSuccessfulStatusHit = recordOpposingMove;
 	// Spectral Thief steals boosts before hit callbacks. Its blocked use must leave those boosts in place.
 	abilities.misalignedstars.onMoveTargeted = function (target, source, move) {
-		if (move.stealsBoosts && !target.isAlly(source) && target.m.misalignedStars?.recorded?.[move.id])
+		if (move.stealsBoosts && !target.isAlly(source) &&
+			target.m.misalignedStars?.recorded?.[move.id] && !cushionRepeat(target, move.id))
 			move.stealsBoosts = false;
 	};
 	// Accuracy, immunities and Protect are resolved. Block before a damaging hit would consume a Gem.
 	abilities.misalignedstars.onTryPrimaryHitPriority = 1;
 	abilities.misalignedstars.onTryPrimaryHit = function (target, source, move) {
 		if (target.isAlly(source) || (target.volatiles.substitute && !move.flags.bypasssub && !move.infiltrates)) return;
-		return blockRecordedMove.call(this, target, move);
+		return blockRecordedMove.call(this, target, move, source);
 	};
 	abilities.misalignedstars.onDamagePriority = 2;
 	abilities.misalignedstars.onDamage = function (damage, target, source, effect) {
@@ -151,11 +177,12 @@ export function installCombatSequences(
 		const state = target.m.misalignedStars;
 		// Crescent Rend can break a Substitute and send the remaining damage to the holder.
 		if (state?.recorded?.[effect.id] &&
-			hasCrescentSubDamage(target, effect)) return blockRecordedMove.call(this, target, effect);
-		if (state?.recorded?.[effect.id] !== null) return;
+			hasCrescentSubDamage(target, effect) && !cushionRepeat(target, effect.id)) {
+			return blockRecordedMove.call(this, target, effect, source);
+		}
 		const hit = target.getMoveHitData(this.activeMove || effect);
-		if (!hit.starsReduced && (state.spentEntry?.[effect.id] ?? state.entry) === target.m.ultraRivalryEntryToken) return;
-		state.spentEntry ||= {};
+		if (!hit.starsReduced && !cushionRepeat(target, effect.id)) return;
+		hit.starsFirstUse = true;
 		hit.starsReduced = true;
 		return Math.max(1, this.modify(damage, 0.5));
 	};
@@ -169,6 +196,24 @@ export function installCombatSequences(
 	};
 	// Future Sight and other delayed hits reach this boundary outside the normal move action.
 	abilities.misalignedstars.onAnyAfterTargetedMove = abilities.misalignedstars.onAnyAfterAttackResolved;
+
+	// Omen Sight already checks Anticipation alongside Forewarn in one scouting report.
+	const omenSight = abilities.omensight;
+	const scout = omenSight.onStart!;
+	omenSight.onStart = function (pokemon) {
+		announceStars.call(this, pokemon);
+		scout.call(this, pokemon);
+	};
+	const forewarnDamage = omenSight.onDamage!;
+	for (const [key, hook] of Object.entries(abilities.misalignedstars)) {
+		if (key.startsWith('on') && key !== 'onStart' && key !== 'onDamage') Object.assign(omenSight, { [key]: hook });
+	}
+	omenSight.onDamage = function (damage, target, source, effect) {
+		const warned = forewarnDamage.call(this, damage, target, source, effect);
+		const amount = typeof warned === 'number' ? warned : damage;
+		const stars = abilities.misalignedstars.onDamage!.call(this, amount, target, source, effect);
+		return stars === undefined ? warned : stars;
+	};
 
 	abilities.frameperfect = {
 		name: 'Frame Perfect', num: 32595, rating: 4, flags: {}, ...CombatSequenceDescriptions.frameperfect,
@@ -219,6 +264,8 @@ export function installCombatSequences(
 	// These abilities keep their custom hooks alongside the component's hooks.
 	for (const [id, component] of [
 		['coldlogic', 'convergence'], ['reapersgrip', 'misalignedstars'],
+		['execution', 'misalignedstars'],
+		...starsCompositeIds.map(ability => [ability, 'misalignedstars'] as const),
 		['temporalshift', 'misalignedstars'], ['tomeofavarice', 'misalignedstars'],
 	] as const) {
 		const ability = abilities[id] as any;
@@ -235,7 +282,8 @@ export function installCombatSequences(
 			};
 		}
 	}
-	for (const id of ['convergence', 'misalignedstars', 'frameperfect', 'insight', 'coldlogic'] as const) {
+	for (const id of ['convergence', 'misalignedstars', 'frameperfect', 'insight', 'coldlogic',
+		...starsCompositeIds] as const) {
 		Object.assign(abilities[id], descriptions[id]);
 	}
 }

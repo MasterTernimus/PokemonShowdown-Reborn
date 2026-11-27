@@ -88,6 +88,10 @@ export function installJirachiMoves(moves: MoveDataTable) {
 		effect: Effect,
 	) {
 		wishStart.call(this, target, source, effect);
+		if (effect?.id === 'wish' && source.m.starVerdictWishEntry === source.previouslySwitchedIn) {
+			this.effectState.hp += Math.floor(source.maxhp / 8);
+			delete source.m.starVerdictWishEntry;
+		}
 		this.effectState.wishkeeper = source.hasAbility('wishkeeper');
 	};
 	m.wish.condition.onEnd = function (this: Battle, target: Pokemon) {

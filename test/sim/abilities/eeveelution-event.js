@@ -80,6 +80,82 @@ describe('Eeveelution event abilities', () => {
 		assert.equal(battle.p2.active[0].hp, 0);
 	});
 
+	it('Sinister Blaze heals from only one opposing burn per turn in doubles', () => {
+		const mon = (species, ability = 'No Ability') => ({ species, ability, moves: ['splash'] });
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
+			[mon('Abysseon', 'Sinister Blaze'), mon('Mew')], [mon('Mew'), mon('Blissey')],
+		]);
+		battle.makeChoices();
+		const holder = battle.p1.active[0];
+		const [first, second] = battle.p2.active;
+		for (const p of [holder, first, second]) p.hp = p.maxhp = p.baseMaxhp = 320;
+		holder.hp = 80;
+		first.setStatus('brn');
+		second.setStatus('brn');
+		const tick = p => battle.singleEvent('Residual', battle.dex.conditions.get('brn'), p.statusState, p);
+		tick(holder);
+		assert.equal(holder.hp, 100);
+		assert.equal(first.hp, 300);
+		assert.equal(second.hp, 300);
+		tick(first);
+		tick(second);
+		assert.equal(first.hp, 280);
+		assert.equal(second.hp, 280);
+		assert.equal(holder.hp, 120);
+		battle.turn++;
+		tick(second);
+		tick(first);
+		assert.equal(holder.hp, 140);
+	});
+
+	it('Ascendance grants exactly one STAB bonus to matching, off-type and typeless attacks', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Divineon', ability: 'Ascendance', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+		]);
+		battle.makeChoices();
+		const p = battle.p1.active[0], q = battle.p2.active[0];
+		p.setType('Water');
+		q.setType('Normal');
+		battle.randomizer = damage => damage;
+		for (const type of ['Water', 'Electric', '???']) {
+			const m = Object.assign(Dex.getActiveMove('watergun'), { type, willCrit: false });
+			const neutral = battle.actions.getDamage(p, q, m);
+			battle.runEvent('ModifyMove', p, q, m, m);
+			assert(m.ignoreImmunity && m.forceSTAB);
+			const actual = battle.actions.getDamage(p, q, m);
+			const expected = type === 'Water' ? neutral : battle.modify(neutral, 1.5);
+			assert.equal(actual, expected, type);
+		}
+		p.setType('???');
+		const ownTypeMove = Object.assign(Dex.getActiveMove('radiantassault'), { willCrit: false });
+		const before = battle.actions.getDamage(p, q, ownTypeMove);
+		battle.runEvent('ModifyMove', p, q, ownTypeMove, ownTypeMove);
+		assert.equal(battle.actions.getDamage(p, q, ownTypeMove), battle.modify(before, 1.5));
+		q.setType('Ghost');
+		battle.actions.useMove('tackle', p, { target: q });
+		assert(q.hp < q.maxhp, 'Normal attack should hit Ghost');
+	});
+
+	for (const [ability, form] of [['Sinister Blaze', 'abysseon'], ['Ascendance', 'divineon']]) {
+		it(ability + ' grants Misaligned Stars on evolution and blocks repeat moves', () => {
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+				[{ species: 'Eevee-Starter', ability, moves: ['splash'] }],
+				[{ species: 'Mew', ability: 'No Ability', moves: ['watergun'] }],
+			]);
+			battle.makeChoices();
+			const p = battle.p1.active[0], q = battle.p2.active[0];
+			assert.equal(p.species.id, form);
+			assert.deepEqual(p.getPassives(), ['misalignedstars']);
+			p.hp = Math.floor(p.maxhp / 2);
+			for (let i = 0; i < 4; i++) {
+				const before = p.hp;
+				battle.actions.useMove('watergun', q, { target: p });
+				assert(i % 2 ? p.hp > before : p.hp < before);
+			}
+		});
+	}
+
 	it('keeps Eclipse and Mind Freeze operational as event abilities', () => {
 		const cases = [
 			['Espeon', 'Eclipse', 'soluneon'],

@@ -17,12 +17,13 @@ export const SignaturePassiveSelections: { [id: string]: string } = {
 };
 /** Only full primitive components actually retained by these seven signatures. */
 export const SignaturePassiveComponents: { [id: string]: readonly string[] } = {
+	seasonalstride: ['overcoat'],
 	kindredfury: ['friendguard', 'berserk'],
 	abyssalgrip: ['suctioncups', 'infiltrator'],
 	siegebeak: ['rockhead'],
 	tatteredmemory: ['cursedbody', 'frisk'],
 	spinyhide: ['roughskin', 'poisonpoint'],
-	omensight: ['anticipation', 'forewarn'],
+	omensight: ['misalignedstars', 'forewarn', 'anticipation'],
 	breakingnews: ['forewarn'],
 	punchfiend: ['ironfist', 'keeneye'],
 	kickfiend: ['striker', 'limber'],
@@ -84,7 +85,8 @@ export const SignaturePassiveDescriptions: { [id: string]: { shortDesc: string, 
 	},
 };
 
-SignaturePassiveComponents.bonewarrior = ['battlearmor'];
+SignaturePassiveComponents.misalignedstars = ['anticipation'];
+SignaturePassiveComponents.bonewarrior = ['battlearmor', 'cursedbody'];
 
 SignaturePassiveComponents.polarrest = ['earlybird', 'icebody'];
 SignaturePassiveComponents.glacierbreaker = ['moldbreaker'];

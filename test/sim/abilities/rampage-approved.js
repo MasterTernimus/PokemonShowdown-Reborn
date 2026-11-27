@@ -116,19 +116,38 @@ describe('Approved rampage secondaries and Raging Storm', () => {
 		hit(p, q, 'outrage');
 		assert(p.volatiles.lockedmove);
 	});
-	for (const field of ['burningterrain', 'volcanicterrain'])
-		for (const ability of ['Sheer Force', 'Raging Storm'])
+	for (const field of ['dragonsdenterrain', 'burningterrain', 'volcanicterrain'])
+		for (const ability of ['No Ability', 'Sheer Force', 'Raging Storm'])
 			it('Raging Fury preserves ' + field + ' exception with ' + ability, () => {
 				const [p, q] = setup(ability);
 				battle.field.terrain = field;
 				hit(p, q, 'ragingfury');
-				if (p.volatiles.lockedmove) {
-					p.volatiles.lockedmove.trueDuration = 1;
-					p.removeVolatile('lockedmove');
-				}
+				assert(!p.volatiles.lockedmove);
+				assert.equal(p.getMoveRequestData().moves.length, p.moveSlots.length);
 				assert(!p.volatiles.confusion);
 				if (field === 'volcanicterrain') assert.equal(p.boosts.atk, 1);
 			});
+	for (const field of ['dragonsdenterrain', 'burningterrain', 'volcanicterrain']) {
+		it('ends a Raging Fury lock immediately when ' + field + ' begins', () => {
+			const [p, q] = setup();
+			hit(p, q, 'ragingfury');
+			p.volatiles.lockedmove.trueDuration = 1;
+			battle.field.startTerrain(field);
+			assert(!p.getLockedMove());
+			assert(!p.volatiles.confusion);
+			battle.field.startTerrain('caveterrain');
+			hit(p, q, 'ragingfury');
+			assert.equal(p.getLockedMove(), 'ragingfury');
+		});
+	}
+	it('preserves unrelated confusion and other rampage locks when Dragon’s Den begins', () => {
+		const [p, q] = setup();
+		hit(p, q, 'outrage');
+		p.addVolatile('confusion', q);
+		battle.field.startTerrain('dragonsdenterrain');
+		assert.equal(p.getLockedMove(), 'outrage');
+		assert(p.volatiles.confusion);
+	});
 	it('does not retain other Sheer Force self effects', () => {
 		const [p, q] = setup('Sheer Force');
 		const m = Object.assign(Dex.getActiveMove('flamecharge'), {
@@ -158,14 +177,14 @@ describe('Rampage 140 power and conversion metadata', () => {
 		battle?.destroy();
 		battle = null;
 	});
-	it('covers the four learned rampage moves and Mega Infernape’s Blazing Fury using the shared lock', () =>
+	it('covers learned rampage moves and their Mega signatures using the shared lock', () =>
 		assert.deepEqual(
 			Dex.moves
 				.all()
 				.filter(m => !m.isZ && !m.isMax && m.self?.volatileStatus === 'lockedmove')
 				.map(m => m.id)
 				.sort(),
-			[...ids, 'blazingfury'].sort()
+			[...ids, 'blazingfury', 'riptiderampage'].sort()
 		));
 	for (const id of ids)
 		it(id + ' derives 200 Z power and retains 140 Max power', () => {

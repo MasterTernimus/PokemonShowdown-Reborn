@@ -82,10 +82,13 @@ export const MegaSignaturesWaveTwo: Record<string, Signature> = {
 	},
 	tyrantrummega: {
 		base: 'dragonclaw', name: 'Crown Rend', num: 32907,
-		desc: 'A slicing Dragon attack. Power rises from 80 to 100 against a target with boosted Defense.',
-		changes: { secondary: null, basePowerCallback(source, target, move) {
-			return target.boosts.def > 0 ? 100 : move.basePower;
-		} },
+		desc: 'A slicing Dragon bite. Power rises from 80 to 100 against a target with boosted Defense.',
+		changes: {
+			flags: { bite: 1, slicing: 1, contact: 1, protect: 1, mirror: 1, metronome: 1 },
+			secondary: null, basePowerCallback(source, target, move) {
+				return target.boosts.def > 0 ? 100 : move.basePower;
+			},
+		},
 	},
 	heracrossmega: {
 		base: 'pinmissile', name: 'Horn Salvo', num: 32908,

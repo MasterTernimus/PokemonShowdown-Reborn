@@ -45,11 +45,30 @@ describe('Eevee signature moves', () => {
 		startBattle(['spookyspell'], 'Gengar');
 		battle.makeChoices('move spookyspell', 'move splash');
 		assert(battle.p2.active[0].volatiles.curse, 'Spooky Spell should apply Curse after damage');
+	});
 
-		battle.destroy();
-		startBattle(['scalyscorn']);
+	for (const [terrain, amount] of [['', 1], ['dragonsdenterrain', 2], ['fairytaleterrain', 2]]) {
+		for (const [attack, special, stages, stat] of [[200, 150, 0, 'atk'], [150, 200, 0, 'spa'],
+			[150, 150, 0, 'spa'], [150, 200, 1, 'atk']]) {
+			it(`Scaly Scorn with ${attack}/${special} and +${stages} Attack gives +${amount} ${stat} on ${terrain || 'no field'}`, () => {
+				startBattle(['scalyscorn']);
+				const user = battle.p1.active[0];
+				user.storedStats.atk = attack;
+				user.storedStats.spa = special;
+				user.boosts.atk = stages;
+				if (terrain) battle.field.setTerrain(terrain, user);
+				battle.makeChoices('move scalyscorn', 'move splash');
+				assert.equal(user.boosts.atk, stages + (stat === 'atk' ? amount : 0));
+				assert.equal(user.boosts.spa, stat === 'spa' ? amount : 0);
+			});
+		}
+	}
+
+	it('Scaly Scorn grants no boost on a Fairy immunity', () => {
+		startBattle(['scalyscorn'], 'Clefable');
 		battle.makeChoices('move scalyscorn', 'move splash');
-		assert.equal(battle.p1.active[0].boosts.spa, 1);
+		assert.equal(battle.p1.active[0].boosts.atk, 0);
+		assert.equal(battle.p1.active[0].boosts.spa, 0);
 	});
 
 	it('clears hazards with Twirly Twister and applies Forest effects for Stabby Swarm', () => {

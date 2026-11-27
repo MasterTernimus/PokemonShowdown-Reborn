@@ -49,7 +49,7 @@ describe('Mega and G-Max component revisions', () => {
 				foe.setAbility(foeAbility);
 				if (foeAbility === 'Sturdy') foe.hp = foe.maxhp = foe.baseMaxhp = 1;
 				assert(holder.hasAbility('moldbreaker'));
-				assert.match(holder.getAbility().desc, /Moves ignore bypassable (?:opposing )?abilities/);
+				assert.match(holder.getAbility().desc, /Mold Breaker|moves ignore bypassable (?:opposing )?abilities/i);
 				battle.actions.runMove(move, holder, 1, { externalMove: true });
 				assert(foe.hp < foe.maxhp, `${ability} should bypass ${foeAbility}`);
 				if (foeAbility === 'Sturdy') assert.equal(foe.hp, 0);

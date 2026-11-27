@@ -34,15 +34,21 @@ export const FormSignatures = {
 } as const;
 
 // These four conversions are applied in their original move or ability hooks.
-export const MegaSignatureNames = new Set([
-	...Object.entries(FormSignatures).filter(([form]) => form.includes('mega')).map(([, move]) => move.name),
-	...Object.values(StoneSignatures).map(move => move.name),
-	...Object.values(SamurottSignatures).map(move => move.name),
-	'Snare Vine', 'F.M. Impression', 'Gilded Wing', 'Crown Crash',
+const megaSignatureBases = new Map<string, string>([
+	...[
+		...Object.entries(FormSignatures).filter(([form]) => form.includes('mega')).map(([, route]) => route),
+		...Object.values(StoneSignatures), ...Object.values(SamurottSignatures),
+	].map(({ name, base }) => [name, base] as const),
+	['Snare Vine', 'powerwhip'], ['F.M. Impression', 'firstimpression'],
+	['Gilded Wing', 'steelwing'], ['Crown Crash', 'wavecrash'],
 ]);
+export const MegaSignatureNames = new Set(megaSignatureBases.keys());
 
 export function applyMegaSignatureCategory(move: ActiveMove, source: Pokemon, name = move.name) {
-	if (!MegaSignatureNames.has(name) || move.category === 'Status' || move.isZ || move.isMax) return;
+	const base = megaSignatureBases.get(name);
+	if (!base || move.category === 'Status' || move.isZ || move.isMax) return;
+	const learned = source.battle.dex.moves.get(base).category;
+	if (learned !== 'Status') move.signatureLearnedCategory = learned;
 	const signature = source.battle.dex.moves.get(name);
 	// Armor Slam's physical damage has always been powered by the user's Defense.
 	const physicalStat = signature.overrideOffensiveStat === 'def' ? 'def' : 'atk';

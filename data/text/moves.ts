@@ -3723,9 +3723,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	radiantassault: {
 		name: 'Radiant Assault',
-		desc: 'Hits all opposing Pokemon and uses the higher offensive stat, including stages and field modifiers. Against active Mega, Dynamax/Gmax or Stellar-Terastallized targets, is 2x effective and deals another 1.2x damage, each once even if states overlap. Other Tera types, Primal and Ultra forms do not qualify. Recharges unless it knocks out at least one target.',
+		desc: 'Hits all adjacent foes using the higher offensive stat. Deals super-effective damage (2×) to a Z-Crystal holder or an active Tera, G-Max, or Mega target. Overlapping conditions count once. Cannot be used on consecutive turns.',
 		shortDesc:
-			'Adaptive spread; 2x effective and 1.2x damage vs Mega/Dynamax/Stellar Tera. Recharges unless KO.',
+			'Adaptive. Super effective vs Z-Crystal, Tera, G-Max or Mega targets. Cannot be used twice in a row.',
 	},
 	liquidation: {
 		name: 'Liquidation',
@@ -5779,8 +5779,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	searingvoid: {
 		name: 'Searing Void',
-		desc: 'A 40-power typeless special move that hits all active Pokemon except the user and burns each target.',
-		shortDesc: '40 BP; burns all active Pokemon except the user.',
+		desc: 'Hits every adjacent Pokémon and burns each target that can be burned.',
+		shortDesc: 'Burns all adjacent targets.',
 	},
 	shadowforce: {
 		name: 'Shadow Force',
@@ -7617,8 +7617,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	scalyscorn: {
 		name: 'Scaly Scorn',
-		desc: "Uses the higher of Attack and Sp. Atk. Raises the user's Special Attack by 1 stage after a successful hit, or by 2 in Dragon's Den or Fairy Tale Field.",
-		shortDesc: 'Uses the higher of Attack and Sp. Atk. Raises SpA by 1, or 2 in Dragon’s Den or Fairy Tale.',
+		desc: "Uses the higher of the user's Attack and Sp. Atk, including stat stages. A tie uses Sp. Atk. After dealing damage, raises the stat used by 1 stage, or by 2 in Dragon's Den or Fairy Tale Field.",
+		shortDesc: 'Uses and boosts the higher attacking stat. +1 on hit, or +2 in Dragon’s Den or Fairy Tale.',
 	},
 	glitchygraphics: {
 		name: 'Glitchy Graphics',
@@ -7861,13 +7861,13 @@ for (const [id, effect, compact] of [
 	MovesText[id as ID].desc =
 		'Has a 30% chance to ' +
 		effect +
-		'. Targets a random adjacent opponent.' +
-		'Locks the user into this move for 2-3 turns, then confuses the user if it is not already confused.' +
-		'If the user cannot act, starts a turn asleep, or fails to hit before the final locked turn, the lock ends without confusion. Sleep Talk uses it once without confusion while the user is asleep.' +
-		'Sheer Force removes the 30% effect and gives its normal power boost once; the lock and ending confusion remain.' +
-		'Raging Storm makes it a single-turn attack with no lock or ending confusion; it does not cure existing confusion.' +
+		'. Targets a random adjacent opponent. ' +
+		'Locks the user into this move for 2-3 turns, then confuses the user if it is not already confused. ' +
+		'If the user cannot act, starts a turn asleep, or fails to hit before the final locked turn, the lock ends without confusion. Sleep Talk uses it once without confusion while the user is asleep. ' +
+		'Sheer Force removes the 30% effect and gives its normal power boost once; the lock and ending confusion remain. ' +
+		'Raging Storm makes it a single-turn attack with no lock or ending confusion; it does not cure existing confusion. ' +
 		(id === 'ragingfury' ?
-			"On Burning or Volcanic Field, ending the rampage does not cause confusion. On Volcanic Field, each use also raises the user's Attack by 1." :
+			'On Dragon’s Den, Volcanic or Burning Field, each use is a single attack. Entering any of these fields ends an ongoing rampage without confusion. Volcanic also raises the user’s Attack by 1.' :
 			'On Superheated Field, the lock ends after the attack; ending it early does not cause confusion.');
 }
 
@@ -7901,8 +7901,8 @@ delete MovesText.mudslap;
 
 MovesText.drakefang = {
 	name: 'Drake Fang',
-	shortDesc: 'Dragon-type biting attack; 50% chance to badly poison.',
-	desc: '85-power physical Dragon-type biting contact attack with 100% accuracy and 15 PP. Has a 50% chance to badly poison the target. Uses ordinary Dragon effectiveness: Fairy immunity and Steel resistance apply. Mega Seviper converts its Poison Fang slot into this move while preserving PP; Sirius supplies the normal Strong Jaw bite multiplier.',
+	shortDesc: '100-power adaptive Dragon bite. 50% chance to badly poison.',
+	desc: '100-power Dragon-type biting contact attack with 100% accuracy and 15 PP. Uses the higher of Attack and Sp. Atk, choosing Attack on ties. Has a 50% chance to badly poison the target. Fairy immunity and Steel resistance apply. Mega Seviper converts its Poison Fang slot into this move while preserving PP. Sirius supplies the normal Strong Jaw bite multiplier.',
 };
 
 import { FinisherMoveDescriptions } from '../finisher-moves-approved';
@@ -7944,6 +7944,7 @@ for (const id of ['outrage', 'thrash', 'petaldance', 'ragingfury']) {
 	);
 	text.shortDesc = (text.shortDesc || '') + ' Choose initial foe; later hits random.';
 }
+MovesText.ragingfury.shortDesc = '30% burn. Locks 2-3 turns, then confuses, except on Dragon’s Den, Volcanic and Burning Field.';
 
 MovesText.scentedgeyser = {
 	name: 'Scented Geyser',

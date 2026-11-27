@@ -5,7 +5,7 @@ export const UltraBeastSlots: { [id: string]: { 0: string, 1: string, H: string 
 	pheromosa: { 0: 'Limber', 1: 'Quick Feet', H: 'Immaculate Form' },
 	xurkitree: { 0: 'Motor Drive', 1: 'Illuminate', H: 'Live Circuit' },
 	celesteela: { 0: 'Heavy Metal', 1: 'Heatproof', H: 'Launch Chamber' },
-	kartana: { 0: 'Sharpness', 1: 'Hyper Cutter', H: 'Paper Aegis' },
+	kartana: { 0: 'Steadfast', 1: 'Hyper Cutter', H: 'Paper Aegis' },
 	guzzlord: { 0: 'Gluttony', 1: 'Strong Jaw', H: 'Endless Gullet' },
 	poipole: { 0: 'Prankster', 1: 'Poison Point', H: 'Toxic Canvas' },
 	naganadel: { 0: 'Sniper', 1: 'Infiltrator', H: 'Queen Venom' },
@@ -23,7 +23,7 @@ const effects: Record<string, string> = {
 	endlessgullet: 'Knocking out a foe with a move heals 1/8 HP once per turn.',
 	toxiccanvas: 'The first damaging Poison hit each entry lowers the foe’s accuracy by 1.',
 	queenvenom: 'Dragon moves gain 20% power against poisoned foes.',
-	livingrampart: 'Rock and Steel moves gain 20% power while its Defense is boosted.',
+	livingrampart: 'Halves the first super-effective Ground or Fighting attack to damage its HP each entry.',
 	lastfirework: 'Fire and Ghost moves gain 20% power at half HP or less.',
 };
 for (const [id, text] of Object.entries(effects))
@@ -49,8 +49,6 @@ export function installUltraBeasts(a: AbilityDataTable) {
 		launchchamber: (b, s, t, m) => b.movehasType(m, 'Fire'),
 		queenvenom: (b, s, t, m) =>
 			b.movehasType(m, 'Dragon') && ['psn', 'tox'].includes(t.status) && !s.isAlly(t),
-		livingrampart: (b, s, t, m) =>
-			s.boosts.def > 0 && (b.movehasType(m, 'Rock') || b.movehasType(m, 'Steel')),
 		lastfirework: (b, s, t, m) =>
 			s.hp <= s.maxhp / 2 && (b.movehasType(m, 'Fire') || b.movehasType(m, 'Ghost')),
 	};

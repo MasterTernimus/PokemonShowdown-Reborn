@@ -1,9 +1,9 @@
-/** Current battle states only; held items and past gimmick use do not qualify. */
+/** Held Z-Crystals and active transformations qualify once, even when they overlap. */
 export function radiantTarget(pokemon: Pokemon) {
 	return !!(
 		pokemon.species.isMega ||
-		pokemon.volatiles.dynamax ||
+		pokemon.getItem().zMove ||
 		pokemon.species.forme.includes('Gmax') ||
-		pokemon.terastallized === 'Stellar'
+		pokemon.terastallized
 	);
 }

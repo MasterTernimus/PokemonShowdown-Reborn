@@ -96,4 +96,20 @@ describe('Hydreigon final ability split and Spiral Power Drill', () => {
 		assert.equal(b.runEvent('ModifySTAB', p, q, Dex.getActiveMove('megahorn'), 1.5), 2);
 		assert.equal(b.runEvent('BasePower', p, q, Dex.getActiveMove('twineedle'), 100), 200);
 	});
+	it('doubles each sting from Mega Beedrill’s Twineedle alongside its drill bonus', () => {
+		const [user, target] = setup('Beedrill-Mega', 'Spiral Evolution');
+		const converted = Dex.getActiveMove('twineedle');
+		b.singleEvent('ModifyMove', converted, {}, converted, user, target);
+		assert.equal(converted.name, 'Triple Sting');
+		assert.equal(converted.multihit, 3);
+		for (const move of [converted, Dex.getActiveMove('triplesting')]) {
+			for (const field of ['', 'rockyterrain']) {
+				b.field.terrain = field;
+				for (const hit of [1, 2, 3]) {
+					move.hit = hit;
+					assert.equal(b.runEvent('BasePower', user, target, move, move.basePower), field ? 100 : 75);
+				}
+			}
+		}
+	});
 });

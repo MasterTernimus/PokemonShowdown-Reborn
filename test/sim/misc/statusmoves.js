@@ -17,7 +17,7 @@ describe('Most status moves', () => {
 			{ species: "Klefki", ability: 'magician', happiness: 0, moves: ['return'] },
 			{ species: "Duskull", ability: 'frisk', moves: ['shadowpunch'] },
 			{ species: "Slaking", ability: 'truant', moves: ['shadowclaw'] },
-			{ species: "Tornadus", ability: 'prankster', moves: ['tailwind'] },
+			{ species: "Tropius", ability: 'chlorophyll', moves: ['tailwind'] },
 			{ species: "Unown", ability: 'levitate', moves: ['hiddenpower'] },
 		] });
 		battle.makeChoices('move gastroacid', 'move return');
@@ -26,7 +26,7 @@ describe('Most status moves', () => {
 		assert.equal(battle.p2.active[0].status, 'par');
 		battle.makeChoices('move confuseray', 'switch 3'); // Slaking
 		assert(battle.p2.active[0].volatiles['confusion']);
-		battle.makeChoices('move sandattack', 'switch 4'); // Tornadus
+		battle.makeChoices('move sandattack', 'switch 4'); // Flying type without accuracy-drop protection
 		assert.statStage(battle.p2.active[0], 'accuracy', -1);
 		battle.makeChoices('move sandattack', 'switch 5'); // Unown (Levitate)
 		assert.statStage(battle.p2.active[0], 'accuracy', -1);

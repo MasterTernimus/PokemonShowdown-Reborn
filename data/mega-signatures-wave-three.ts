@@ -48,8 +48,13 @@ export const MegaSignaturesWaveThree: Record<string, Signature> = {
 	},
 	infernapemega: {
 		base: 'ragingfury', name: 'Blazing Fury', num: 32938,
-		desc: 'A 140-power Fire rampage lasting two turns. The user then becomes confused, except on Burning and Volcanic Field.',
-		changes: {},
+		shortDesc: '30% burn. No rampage after a Fighting hit or on Dragon’s Den, Volcanic or Burning Field.',
+		desc: '140 power with a 30% burn chance. Usually locks the user in for two turns, then confuses it. Attacks freely after its last damaging hit this entry was Fighting-type, or on Dragon’s Den, Volcanic or Burning Field. Volcanic also raises Attack by 1.',
+		changes: { onModifyMove(move, source) {
+			if (source.m.blazingFuryComboEntry && source.m.blazingFuryComboEntry === source.m.ultraRivalryEntryToken) {
+				delete move.self;
+			}
+		} },
 	},
 	hydreigonmega: {
 		base: 'heavenfall', name: 'Voidfall', num: 32926,
@@ -81,9 +86,9 @@ export const MegaSignaturesWaveThree: Record<string, Signature> = {
 		changes: {},
 	},
 	gengarmega: {
-		base: 'hex', name: 'Witching Hex', num: 32930,
-		desc: '70 power. Keeps Hex’s power boosts. Ignores a foe’s positive Defense and Sp. Def stages if it has a major status condition.',
-		changes: { basePower: 70, onPrepareHit(target, source, move) {
+		base: 'shadowball', name: 'Witching Hex', num: 32930,
+		desc: '90 power. Has a 20% chance to lower Sp. Def by 1. Ignores positive Defense and Sp. Def stages on foes with a major status condition.',
+		changes: { basePower: 90, onPrepareHit(target, source, move) {
 			if (target.status && !source.isAlly(target)) move.ignorePositiveDefensive = true;
 		} },
 	},
@@ -98,17 +103,19 @@ export const MegaSignaturesWaveThree: Record<string, Signature> = {
 	},
 	absolmegaz: {
 		base: 'nightslash', name: 'Dread Crescent', num: 32971,
-		desc: 'High critical-hit rate. Clears a foe’s positive evasion stages after damaging it.',
+		shortDesc: 'High crit rate. A damaging critical hit breaks screens.',
+		desc: 'High critical-hit rate. A damaging critical hit shatters Reflect, Light Screen and Aurora Veil on the target’s side.',
 		changes: { onAfterHit(target, source, move) {
-			if (target.boosts.evasion <= 0 || !damagesFoe(target, source, move)) return;
-			target.setBoost({ evasion: 0 });
-			this.add('-setboost', target, 'evasion', 0, '[from] move: Dread Crescent');
+			if (!damagesFoe(target, source, move)) return;
+			if (target.getMoveHitData(move).crit) {
+				for (const screen of ['reflect', 'lightscreen', 'auroraveil']) target.side.removeSideCondition(screen);
+			}
 		} },
 	},
 	clawitzermega: {
 		base: 'waterpulse', name: 'Tide Mortar', num: 32972,
-		desc: 'A 65-power pulse that ignores redirection. Has a 20% chance to confuse.',
-		changes: { basePower: 65, tracksTarget: true },
+		desc: 'A 70-power pulse that ignores redirection. Has a 20% chance to confuse.',
+		changes: { basePower: 70, tracksTarget: true },
 	},
 	raichumegax: {
 		base: 'volttackle', name: 'Surge Ram', num: 32931,

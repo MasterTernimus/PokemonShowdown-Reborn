@@ -1,6 +1,7 @@
 import { AbilityComponentExclusions } from './passive-ability-cleanup';
 /** Genuine mechanical components shared by battle identity and search. */
 export const AbilityComponents: { [id: string]: string[] } = {
+	seasonalstride: ['overcoat'],
 	piercingdrill: [],
 	deepbore: ['moldbreaker', 'powerdrill'],
 	grandmaster: ['innerfocus'],
@@ -48,8 +49,9 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	pollenbloom: ['proficient', 'thickfat'],
 	ironclad: ['armorize'],
 	apexpredator: ['relicarmor', 'dragonize', 'windrider'],
-	tyrantdomain: ['relicarmor', 'supremeoverlord', 'selfsufficient', 'sandstream'],
-	auroradomain: ['relicarmor', 'refrigerate', 'selfsufficient', 'snowwarning'],
+	tyrantdomain: ['tyrantstream', 'supremeoverlord'],
+	tyrantstream: ['sandstream'],
+	auroradomain: ['auroracurrent', 'refrigerate'],
 	royalscales: ['marvelscale', 'oblivious', 'swiftswim', 'dragonize', 'selfsufficient'],
 	aeviandream: ['baddreams', 'shedskin', 'toughclaws'],
 	wingedwraith: ['infiltrator', 'galewings'],
@@ -64,13 +66,13 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	witheringshell: ['crumblingshell', 'naturalrecovery', 'sturdy'],
 	argentdevotion: ['armorize', 'swornduty', 'serenegrace', 'moldbreaker'],
 	fluffyevo: ['overcoat'],
-	bonewarrior: ['battlearmor'],
+	bonewarrior: ['battlearmor', 'cursedbody'],
 	seafiend: ['toxicdebris', 'waterbubble', 'waterveil'],
 	hisuianoath: ['swornduty', 'toughclaws', 'corrosion'],
 	abysslure: ['voltabsorb', 'waterabsorb', 'illuminate'],
 	celestialheart: ['soulheart', 'friendguard', 'serenegrace'],
 	phalanxform: ['hydrabond', 'friendguard', 'battlearmor'],
-	astralcore: ['purepower', 'naturalcure', 'illuminate'],
+	astralcore: ['starlens', 'misalignedstars', 'victorystar'],
 	doomwarning: ['magicbounce', 'magicguard'],
 	ancientbloom: ['effectspore', 'selfsufficient', 'proficient'],
 	furnaceengine: ['steamengine', 'flamebody', 'selfsufficient', 'solidrock'],
@@ -164,7 +166,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	burningspirit: ['selfsufficient', 'opportunist', 'magmaarmor', 'proficient'],
 	crueltag: ['shadowtag', 'infiltrator', 'baddreams'],
 	emperorsresolve: ['competitive', 'slushrush', 'swiftswim', 'proficient'],
-	execution: ['duskilate', 'moldbreaker'],
+	execution: ['duskilate', 'moldbreaker', 'misalignedstars', 'voidveil', 'telepathy'],
 	fallenstar: ['moldbreaker', 'dualwield', 'proficient'],
 	parasitism: ['dryskin'],
 	completeparasitism: ['parasitism', 'dryskin', 'filter', 'selfrepair'],
@@ -192,7 +194,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	alloycore: ['magicguard', 'selfsufficient', 'stalwart'],
 	hellfireeclipse: ['solarpower', 'darkaura'],
 	sacrededge: ['sharpness', 'swornduty'],
-	omenedge: ['sharpness', 'dualwield', 'pressure'],
+	omenedge: ['sharpness', 'pressure'],
 	dreadmaw: ['hugepower', 'frisk', 'invigorate'],
 	cursedkeepsake: ['frisk'],
 	cursedmarionette: ['prankster', 'frisk'],
@@ -823,7 +825,7 @@ AbilityComponents.reinflate = ['punkrock'];
 AbilityComponents.cushionchorus = ['friendguard', 'aromaveil'];
 AbilityComponents.perfectapple = ['purepower', 'selfsufficient', 'angershell'];
 AbilityComponents.boundspirits = ['prankster', 'magicguard'];
-AbilityComponents.keystoneseal = ['cursedbody'];
+AbilityComponents.keystoneseal = ['cursedbody', 'pressure'];
 
 AbilityComponents.polarrest = ['earlybird', 'icebody'];
 AbilityComponents.glacierbreaker = ['moldbreaker'];
@@ -998,7 +1000,7 @@ Object.assign(AbilityComponents, LoreComponents);
 import { TidalPoiseComponents } from './terajuma-poise';
 AbilityComponents.tidalpoise = TidalPoiseComponents;
 
-AbilityComponents.omensight = ['anticipation', 'forewarn'];
+AbilityComponents.omensight = ['misalignedstars', 'forewarn'];
 AbilityComponents.gentleembrace = ['hydration'];
 AbilityComponents.shellboundfury = [];
 AbilityComponents.soulforgedarmor = ['flashfire'];
@@ -1044,7 +1046,7 @@ AbilityComponents.twinfocus = [];
 if (!AbilityComponents.lunarorbit.includes('serenegrace'))
 	AbilityComponents.lunarorbit.push('serenegrace');
 
-AbilityComponents.cosmicanalysis = ['analytic', 'download'];
+AbilityComponents.cosmicanalysis = ['analytic', 'naturalcure'];
 
 AbilityComponents.evergreen = [];
 AbilityComponents.scavenger = [];
@@ -1059,29 +1061,13 @@ Object.assign(AbilityComponents, {
 	calculatedshot: ['frisk'],
 });
 
-// Identity lookup and callback dispatch share the current-form components.
+import { UnstableEvoForms } from './unstable-evo';
 export function unstableEvoComponents(pokemon: { species: { id: string } }): IDEntry[] {
-	switch (pokemon.species.id) {
-	case 'jolteon':
-		return ['lightningrod', 'voltabsorb'];
-	case 'flareon':
-		return ['soulfire', 'fluffy'];
-	case 'vaporeon':
-		return ['stormdrain', 'waterabsorb'];
-	case 'umbreon':
-		return ['pressure', 'innerfocus'];
-	case 'espeon':
-		return ['magicbounce', 'telepathy'];
-	case 'glaceon':
-		return ['icescales', 'slushrush'];
-	case 'leafeon':
-		return ['chlorophyll', 'regenerator'];
-	case 'sylveon':
-		return ['friendguard', 'competitive'];
-	default:
-		return [];
-	}
+	return UnstableEvoForms[pokemon.species.id]?.components || [];
 }
+
+import { SeasonalStrikers } from './seasonal-strikers';
+for (const [id, ability] of Object.entries(SeasonalStrikers)) AbilityComponents[id] = ['striker', ability.absorb];
 
 import { NovemberRosterComponents, NovemberAbilityNames } from './november-roster';
 Object.assign(AbilityComponents, NovemberRosterComponents);
@@ -1092,6 +1078,10 @@ AbilityComponents.solareruption = ['megasol', 'flamebody'];
 
 AbilityComponents.convergence = ['keeneye'];
 AbilityComponents.misalignedstars = ['anticipation'];
+export const starsCompositeIds = [
+	'wraithprocession', 'shadowdouble', 'cursedmarionette', 'cursedarmament', 'mourningsnow',
+] as const;
+for (const id of starsCompositeIds) (AbilityComponents[id] ??= []).push('misalignedstars');
 AbilityComponents.temporalshift = ['misalignedstars'];
 AbilityComponents.tomeofavarice = ['misalignedstars'];
 AbilityComponents.frameperfect = ['innerfocus'];
@@ -1102,7 +1092,6 @@ AbilityComponents.starlens = ['illuminate'];
 AbilityComponents.splintershell = ['aftermath'];
 AbilityComponents.ironmaiden = ['moxie'];
 AbilityComponents.siegegrip = ['moldbreaker'];
-AbilityComponents.astralcore = ['purepower', 'naturalcure', 'starlens'];
 
 AbilityComponents.voidpromise = AbilityComponents.moonveil;
 delete AbilityComponents.moonveil;

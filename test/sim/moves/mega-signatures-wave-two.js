@@ -202,12 +202,76 @@ describe('Mega signatures for Heatran through Breloom', () => {
 		const { user, foe } = start('tyrantrummega');
 		const m = use('dragonclaw', user, foe);
 		assert.equal(m.type, 'Dragon');
+		assert.equal(m.id, 'dragonclaw');
+		for (const flag of ['bite', 'slicing', 'contact']) {
+			assert(m.flags[flag]);
+			assert(Dex.moves.get('crownrend').flags[flag]);
+		}
+		assert(!Dex.moves.get('dragonclaw').flags.bite);
 		assert(!m.secondaries?.length);
 		assert.equal(m.basePowerCallback.call(battle, user, foe, m), 80);
 		foe.boosts.spd = 2;
 		assert.equal(m.basePowerCallback.call(battle, user, foe, m), 80);
 		foe.boosts.def = 1;
 		assert.equal(m.basePowerCallback.call(battle, user, foe, m), 100);
+	});
+
+	it('Tyrant Domain applies its bite bonus once to Crown Rend alongside Dragon Claw’s field effects', () => {
+		const { user, foe } = start('tyrantrummega');
+		const move = use('dragonclaw', user, foe);
+		user.setAbility('Tyrant Domain');
+		assert.equal(battle.field.weather, 'sandstorm');
+		assert(user.hasAbility('tyrantstream') && user.hasAbility('sandstream') && user.hasAbility('supremeoverlord'));
+		assert.equal(battle.runEvent('BasePower', user, foe, move, 100), 150);
+		assert.equal(battle.runEvent('BasePower', user, foe, Dex.getActiveMove('dragonclaw'), 100), 100);
+		user.side.totalFainted = 2;
+		assert.equal(battle.runEvent('BasePower', user, foe, move, 100), 180);
+		user.side.totalFainted = 0;
+		battle.field.setTerrain('dragonsdenterrain', user);
+		const domainPower = battle.runEvent('BasePower', user, foe, move, 100);
+		user.setAbility('No Ability');
+		const fieldPower = battle.runEvent('BasePower', user, foe, move, 100);
+		assert(fieldPower > 100);
+		assert.equal(domainPower, battle.modify(fieldPower, 1.5));
+	});
+
+	it('Aurora Domain supplies Aurora Current’s Electric and weather bonuses alongside Refrigerate', () => {
+		const { user, foe } = start('aurorusmega');
+		user.setAbility('Aurora Domain');
+		assert.equal(battle.field.weather, 'hail');
+		assert(user.hasAbility('auroracurrent') && user.hasAbility('snowwarning') && user.hasAbility('refrigerate'));
+		const electric = Dex.getActiveMove('thunder');
+		battle.runEvent('ModifyMove', user, foe, electric, electric);
+		assert.equal(electric.accuracy, true);
+		assert.equal(battle.runEvent('ModifySTAB', user, foe, electric, 1), 1.5);
+		const normal = Dex.getActiveMove('tackle');
+		battle.runEvent('ModifyType', user, foe, normal, normal);
+		assert.equal(normal.type, 'Ice');
+		const defenses = () => ['ModifyDef', 'ModifySpD'].map(event => battle.runEvent(event, user, foe, electric, 100));
+		const protectedInHail = defenses();
+		user.setAbility('No Ability');
+		assert.deepEqual(protectedInHail, defenses().map(value => battle.modify(value, 1.5)));
+		user.setAbility('Aurora Domain');
+		battle.field.clearWeather();
+		const clear = defenses();
+		user.setAbility('No Ability');
+		assert.deepEqual(clear, defenses());
+	});
+
+	it('Aurora Domain and Relic Armor grant one pair of entry boosts on Volcanic Field', () => {
+		battle = common.createBattle({ formatid: 'gen9volcanic' }, [
+			[{ species: 'Aurorus', ability: 'No Ability', item: 'Aurorite', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+		]);
+		battle.makeChoices('team 1', 'team 1');
+		const user = battle.p1.active[0];
+		user.clearBoosts();
+		battle.makeChoices('move 1 mega', 'move splash');
+		assert.equal(user.species.id, 'aurorusmega');
+		assert.equal(user.boosts.def, 0);
+		assert.equal(user.boosts.spd, 0);
+		const field = battle.field.terrain;
+		assert.equal(field, 'volcanicterrain');
 	});
 
 	it('Horn Salvo needs three HP hits on the same foe and removes both screens after the volley', () => {

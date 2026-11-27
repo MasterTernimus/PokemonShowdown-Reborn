@@ -1,9 +1,13 @@
 import { UltraEgoRivalryDescription } from './ultra-rivalry-description';
 
-export const misalignedStarsEffect = 'Includes Anticipation. Records each opposing attack that damages the user and each opposing status move that successfully hits it. Blocks the next use of that move once per battle and heals 1/3 max HP. After switching back in, the first damaging use of each previously blocked attack deals half damage; surviving it heals 1/4 max HP. Each multihit attack counts as one use.';
+export const misalignedStarsEffect = 'Includes Anticipation. Opposing attacks deal 10% less damage. Each opposing move alternates: the first successful use is recorded and the next is blocked, healing 1/3 max HP. The cycle repeats separately for each move. After switching back in, the first damaging use of each previously blocked attack deals half damage and heals 1/4 max HP if the holder survives. Its next use is blocked. Each multihit attack counts as one use. Against Ultra Ego and Ultra Instinct, the holder ignores their matchup damage bonuses, protection and positive stat stages they grant. Ultra ability bypass cannot stop the Stars.';
 
 /** Current wording for the approved November 16 balance pass. */
 export const November16BalanceDescriptions: Record<string, { name?: string, desc: string, shortDesc: string }> = {
+	execution: {
+		shortDesc: 'Misaligned Stars + Void Veil. Bypasses abilities, punishes weakened foes and heals on KOs.',
+		desc: 'Includes Duskilate, Mold Breaker, Void Veil and Misaligned Stars. Moves ignore bypassable opposing abilities. Levitate and Telepathy protect against Ground and allied attacks. Gravity cannot ground the user, and beneficial terrain effects apply while airborne. Attacks deal 1.3× damage against foes at half HP or less. Once per entry, a hit that brings a surviving foe from above half HP to half or less marks it: the next Dark or Ghost hit ignores its positive defensive stages. Either Pokémon switching clears the mark. Heals 1/8 max HP per KO. Attack and Sp. Atk cannot fall below −1. Fields protect Speed from stat drops. ' + misalignedStarsEffect,
+	},
 	racingspirit: {
 		shortDesc: "Rock Head + Flash Fire.",
 		desc: "Prevents move recoil except Struggle. Includes Flash Fire: absorbs Fire moves for a 1.5× Fire Boost, with its usual field effects.",

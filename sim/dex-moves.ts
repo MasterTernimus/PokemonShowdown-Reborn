@@ -133,6 +133,7 @@ export interface MoveEventMethods {
 
 	/* Invoked by the global BasePower event (onEffect = true) */
 	onBasePower?: CommonHandlers['ModifierSourceMove'];
+	onBasePowerPriority?: number;
 
 	onEffectiveness?: (
 		this: Battle, typeMod: number, target: Pokemon | null, type: string, move: ActiveMove
@@ -338,6 +339,9 @@ interface MoveHitData {
 	[targetSlotid: string]: {
 		auraRead?: boolean,
 		tomeRead?: boolean,
+		coldReserve?: boolean,
+		stoleBoosts?: boolean,
+		chainHit?: boolean,
 		starsFirstUse?: boolean,
 		starsBlocked?: boolean,
 		starsReduced?: boolean,
@@ -360,6 +364,8 @@ interface MoveHitData {
 		/** Highest HP before a direct hit, including healing between this move's hits. */
 		hpBeforeDamage?: number,
 		staminaTriggered?: boolean,
+		prideRoarApplied?: boolean,
+		faultArrowsAirborne?: boolean,
 		ultraEgoTriggered?: boolean,
 		attackerGuaranteedHit?: boolean,
 		poisonedBeforeHit?: boolean,
@@ -368,6 +374,9 @@ interface MoveHitData {
 
 type MutableMove = BasicEffect & MoveData;
 export interface ActiveMove extends MutableMove {
+	signatureLearnedCategory?: 'Physical' | 'Special';
+	signatureLearnedPower?: number;
+	signaturePowerTotals?: { Physical: number, Special: number, defer?: boolean };
 	keenHuntAnnounced?: boolean;
 	attackerGuaranteedHit?: boolean;
 	/** Chosen moveset slot for PP accounting when multiple slots share an ID. */
@@ -391,6 +400,7 @@ export interface ActiveMove extends MutableMove {
 	hasAuraBreak?: boolean;
 	hasBounced?: boolean;
 	hasSheerForce?: boolean;
+	ultraAbilityBypass?: boolean;
 	/** Is the move called by Dancer? Used to prevent infinite Dancer recursion. */
 	isExternal?: boolean;
 	lastHit?: boolean;

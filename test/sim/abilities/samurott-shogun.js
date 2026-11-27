@@ -7,7 +7,7 @@ const { getAbilityDisplayComponents } = require('../../../dist/data/ability-disp
 
 describe('Shogun Stance', () => {
 	let battle;
-	afterEach(() => { battle?.destroy(); });
+	afterEach(() => { battle?.destroy(); battle = null; });
 
 	const variants = [
 		['Samurott', 'Cresting Cut', 'Water'], ['Samurott-Alt', 'Cresting Cut', 'Water'],
@@ -57,39 +57,67 @@ describe('Shogun Stance', () => {
 			assert.equal(user.lastMoveUsed.type, type);
 			assert.equal(user.lastMoveUsed.critRatio, cut.critRatio);
 			for (const event of ['ModifyAtk', 'ModifySpA', 'ModifySpe']) {
-				assert.equal(battle.runEvent(event, user, foe, cut, 100), 120);
+				assert.equal(battle.runEvent(event, user, foe, cut, 100), 100);
 			}
 			user.addVolatile('gastroacid');
 			assert.equal(user.getMoves()[0].move, 'Razor Shell');
 			battle.actions.useMove('razorshell', user, { target: foe });
 			assert.equal(user.lastMoveUsed.name, 'Razor Shell');
+			assert(!user.lastMoveUsed.ignorePositiveDefensive);
 			assert.equal(user.lastMoveUsed.type, 'Water');
 			for (const event of ['ModifyAtk', 'ModifySpA', 'ModifySpe']) {
 				assert.equal(battle.runEvent(event, user, foe, cut, 100), 100);
 			}
 		});
-		it(species + ' gains Shell Armor from the stance only on the Hisuian form', () => {
+		it(species + ' can use Shell Smash in field and no-field formats', () => {
+			assert(Dex.species.getMovePool(Dex.toID(species), true).has('shellsmash'));
+			for (const format of ['gen9dragonsden', 'gen9doublesrockyfield', 'gen9nofieldsinglesgame']) {
+				const team = [{ ...set(species), moves: ['Shell Smash'] }, {
+					species: 'Magikarp', ability: 'Swift Swim', moves: ['Splash'],
+				}];
+				const problems = TeamValidator.get(format).validateTeam(team);
+				assert.equal(problems, null, format);
+			}
+		});
+		it(species + ' cuts through positive stages and still rewards lowering the relevant defense', () => {
+			const [user, foe] = start(species);
+			battle.randomizer = damage => damage;
+			for (const [offense, defense] of [['atk', 'def'], ['spa', 'spd']]) {
+				user.clearBoosts();
+				user.boosts[offense] = 2;
+				battle.actions.useMove('razorshell', user, { target: foe });
+				const cut = user.lastMoveUsed;
+				assert(cut.ignorePositiveDefensive);
+				const damage = stage => {
+					foe.boosts[defense] = stage;
+					return battle.actions.getDamage(user, foe, { ...cut, willCrit: false });
+				};
+				const neutral = damage(0);
+				assert.equal(damage(4), neutral);
+				assert(damage(-2) > neutral);
+				foe.clearBoosts();
+			}
+		});
+		it(species + ' gains Shell Armor from its active stance', () => {
 			const [holder, foe] = start(species);
-			const hisuian = species.includes('Hisui');
-			assert.equal(holder.hasAbility('shellarmor'), hisuian);
-			assert.deepEqual(getAbilityDisplayComponents('shogunstance', holder.getPassives(), species),
-				hisuian ? ['shellarmor'] : []);
-			assert.equal(holder.boosts.def, hisuian ? 1 : 0);
+			assert(holder.hasAbility('shellarmor'));
+			assert.deepEqual(getAbilityDisplayComponents('shogunstance', holder.getPassives(), species), ['shellarmor']);
+			assert.equal(holder.boosts.def, 1);
 			const attack = Dex.getActiveMove('watergun');
 			const crit = () => battle.runEvent('CriticalHit', holder, foe, attack);
 			const damage = () => battle.runEvent('ModifyDamage', foe, holder, attack, 100);
-			assert.equal(crit(), !hisuian);
-			assert.equal(damage(), hisuian ? 80 : 100);
+			assert.equal(crit(), false);
+			assert.equal(damage(), 80);
 			battle.boost({ atk: -1 }, holder, foe, Dex.moves.get('growl'));
-			assert.equal(holder.boosts.spd, hisuian ? 2 : 0);
+			assert.equal(holder.boosts.spd, 2);
 			battle.field.startTerrain('dragonsdenterrain');
 			assert.equal(damage(), 100);
-			assert.equal(crit(), !hisuian);
+			assert.equal(crit(), false);
 			attack.ignoreAbility = true;
 			battle.setActiveMove(attack, foe, holder);
 			assert.equal(crit(), true);
 			holder.setItem('Ability Shield');
-			assert.equal(crit(), !hisuian);
+			assert.equal(crit(), false);
 			battle.clearActiveMove();
 			holder.setItem('');
 			holder.addVolatile('gastroacid');
@@ -119,7 +147,7 @@ describe('Shogun Stance', () => {
 	it('can hold Choice Scarf and keeps the speed from its item under ability suppression', () => {
 		const [user, foe] = start('Samurott');
 		user.setItem('Choice Scarf');
-		assert.equal(battle.runEvent('ModifySpe', user, foe, null, 100), 180);
+		assert.equal(battle.runEvent('ModifySpe', user, foe, null, 100), 150);
 		battle.makeChoices('move razorshell', 'move splash');
 		assert.equal(user.item, 'choicescarf');
 		assert.equal(user.volatiles.choicelock.move, 'razorshell');

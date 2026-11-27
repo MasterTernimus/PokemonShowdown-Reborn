@@ -189,17 +189,28 @@ describe('Johto, Sinnoh, and heritage Mega signatures', () => {
 		assert.deepEqual(Dex.moves.get('headlongrush').self.boosts, { def: -1, spd: -1 });
 	});
 
-	for (const [field, confused] of [['', true], ['volcanicterrain', false]]) {
-		it('Blazing Fury lasts two turns and retains the ' + (field || 'neutral') + ' field finish', () => {
+	it('Blazing Fury lasts exactly two turns on neutral ground, then confuses', () => {
+		const { user } = start('infernapemega');
+		assert.equal(user.getLockedMove(), 'ragingfury');
+		assert.equal(user.getMoveRequestData().moves[0].move, 'Blazing Fury');
+		battle.makeChoices('move 1', 'move 1');
+		assert(!user.volatiles.lockedmove);
+		assert(user.volatiles.confusion);
+	});
+
+	for (const field of ['dragonsdenterrain', 'burningterrain', 'volcanicterrain']) {
+		it('Blazing Fury ends a lock and attacks freely on ' + field, () => {
 			const { user } = start('infernapemega');
-			if (field) battle.field.startTerrain(field);
 			assert.equal(user.getLockedMove(), 'ragingfury');
-			assert.equal(user.getMoveRequestData().moves[0].move, 'Blazing Fury');
+			battle.field.startTerrain(field);
+			assert.equal(user.getLockedMove(), null);
+			assert(!user.volatiles.confusion);
 			const atk = user.boosts.atk;
 			battle.makeChoices('move 1', 'move 1');
+			assert.equal(user.lastMoveUsed.name, 'Blazing Fury');
 			assert(!user.volatiles.lockedmove);
-			assert.equal(!!user.volatiles.confusion, confused);
-			if (field) assert(user.boosts.atk > atk);
+			assert(!user.volatiles.confusion);
+			if (field === 'volcanicterrain') assert(user.boosts.atk > atk);
 		});
 	}
 
@@ -212,6 +223,35 @@ describe('Johto, Sinnoh, and heritage Mega signatures', () => {
 		assert.equal(target.volatiles.substitute.hp, doll);
 	});
 
+	it('a Fighting hit frees the next Blazing Fury from its ordinary rampage', () => {
+		const { user, target } = start('infernapemega');
+		battle.makeChoices('move 1', 'move 1');
+		user.removeVolatile('confusion');
+		hit('machpunch', user, target);
+		hit('splash', user, user);
+		hit('ragingfury', user, target);
+		assert(!user.volatiles.lockedmove);
+		assert(!user.volatiles.confusion);
+		hit('ragingfury', user, target);
+		assert(user.volatiles.lockedmove);
+	});
+
+	it('Mega Infernape loses the Fighting follow-up when it switches out', () => {
+		const partner = { species: 'Mew', ability: 'No Ability', moves: ['splash'] };
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Infernape', item: 'Infernite', moves: ['machpunch', 'ragingfury'] }, partner,
+		], [partner]]);
+		battle.makeChoices('team 12', 'team 1');
+		const user = battle.p1.active[0], foe = battle.p2.active[0];
+		foe.hp = foe.maxhp = foe.baseMaxhp = 10000;
+		battle.makeChoices('move machpunch mega', 'move splash');
+		assert.equal(user.species.id, 'infernapemega');
+		battle.makeChoices('switch 2', 'move splash');
+		battle.makeChoices('switch 2', 'move splash');
+		battle.makeChoices('move ragingfury', 'move splash');
+		assert.equal(user.getLockedMove(), 'ragingfury');
+	});
+
 	it('Sky Rake gains a critical-hit stage against Flying types only', () => {
 		const { user, target } = start('salamencemega');
 		target.setType('Normal');
@@ -221,7 +261,7 @@ describe('Johto, Sinnoh, and heritage Mega signatures', () => {
 	});
 
 	for (const [species, learned, signature] of [
-		['Salamence', 'dragonclaw', 'Sky Rake'], ['Gengar', 'hex', 'Witching Hex'],
+		['Salamence', 'dragonclaw', 'Sky Rake'], ['Gengar', 'shadowball', 'Witching Hex'],
 	]) {
 		it(signature + ' checks the foe that draws the attack with Follow Me', () => {
 			const mega = Dex.species.get(species + '-Mega');
@@ -268,14 +308,14 @@ describe('Johto, Sinnoh, and heritage Mega signatures', () => {
 		target.removeVolatile('substitute');
 		const move = hit('darkpulse', user, target);
 		assert.equal(move.category, 'Special');
-		assert.equal(move.basePower, 85);
+		assert.equal(move.basePower, 95);
 		assert(move.flags.pulse);
 		assert.equal(reveals(), 1);
 		assert.equal(target.item, 'assaultvest');
 		assert.equal(hit('nightslash', user, target).name, 'Night Slash');
 	});
 
-	it('Dread Crescent keeps Omen Edge’s slicing hits and clears only positive evasion on HP damage', () => {
+	it('Dread Crescent keeps Omen Edge’s single slicing hit and preserves evasion stages', () => {
 		const { user, target } = start('absolmegaz');
 		battle.randomChance = () => true;
 		target.boosts.evasion = 3;
@@ -287,10 +327,10 @@ describe('Johto, Sinnoh, and heritage Mega signatures', () => {
 		target.removeVolatile('substitute');
 		const move = hit('nightslash', user, target);
 		assert.equal(move.category, 'Physical');
-		assert.equal(move.hit, 2);
+		assert.equal(move.hit, 1);
 		assert(move.flags.slicing);
 		assert.equal(move.critRatio, 2);
-		assert.equal(target.boosts.evasion, 0);
+		assert.equal(target.boosts.evasion, 3);
 		assert.equal(target.boosts.def, 2);
 		target.boosts.evasion = -2;
 		hit('nightslash', user, target);
@@ -298,10 +338,21 @@ describe('Johto, Sinnoh, and heritage Mega signatures', () => {
 		assert.equal(hit('darkpulse', user, target).name, 'Dark Pulse');
 	});
 
+	it('Dread Crescent shatters screens only on a damaging critical hit', () => {
+		const { user, target } = start('absolmegaz');
+		for (const id of ['reflect', 'lightscreen', 'auroraveil']) target.side.addSideCondition(id, target);
+		battle.randomChance = (n, d) => n >= d;
+		hit('nightslash', user, target);
+		assert(target.side.getSideCondition('reflect'));
+		battle.randomChance = () => true;
+		hit('nightslash', user, target);
+		for (const id of ['reflect', 'lightscreen', 'auroraveil']) assert(!target.side.getSideCondition(id));
+	});
+
 	it('Tide Mortar keeps Heavy Artillery’s spread and tracks its target when the ability is suppressed', () => {
 		const filler = { species: 'Mew', ability: 'No Ability', moves: ['splash'] };
 		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
-			[{ species: 'Clawitzer', item: 'Clawitzerite', moves: ['waterpulse'] }, filler],
+			[{ species: 'Clawitzer', item: 'Clawitzerite', evs: { atk: 252 }, moves: ['waterpulse', 'dragondance'] }, filler],
 			[filler, { ...filler, species: 'Snorlax' }],
 		]);
 		battle.makeChoices('team 12', 'team 12');
@@ -316,9 +367,16 @@ describe('Johto, Sinnoh, and heritage Mega signatures', () => {
 		const move = hit('waterpulse', user, foe);
 		assert.equal(move.category, 'Special');
 		assert(move.flags.pulse);
-		assert.equal(move.basePower, 65);
+		assert.equal(move.basePower, 70);
+		assert.equal(battle.runEvent('BasePower', user, foe, move, move.basePower), 140);
 		assert.equal(move.target, 'allAdjacentFoes');
 		assert(foe.hp < 10000 && redirector.hp < 10000);
+		battle.actions.useMove('dragondance', user);
+		assert(user.getStat('atk') > user.getStat('spa'));
+		const physical = hit('waterpulse', user, foe);
+		assert.equal(physical.category, 'Physical');
+		assert(physical.flags.pulse);
+		assert.equal(battle.runEvent('BasePower', user, foe, physical, physical.basePower), 140);
 		user.addVolatile('gastroacid', foe);
 		foe.hp = redirector.hp = 10000;
 		assert.equal(hit('waterpulse', user, foe).target, Dex.moves.get('waterpulse').target);
@@ -326,14 +384,20 @@ describe('Johto, Sinnoh, and heritage Mega signatures', () => {
 		assert.equal(redirector.hp, 10000);
 	});
 
-	it('Witching Hex keeps native Hex power and bypasses positive defenses against statused foes only', () => {
+	it('Witching Hex inherits Shadow Ball and bypasses boosted defenses only on statused foes', () => {
 		const { user, target } = start('gengarmega');
 		battle.randomizer = damage => damage;
 		battle.randomChance = (numerator, denominator) => numerator >= denominator;
-		const base = hit('hex', user, target);
+		const base = hit('shadowball', user, target);
+		assert.equal(base.basePower, 90);
 		assert.equal(base.accuracy, 100);
-		assert.equal(base.basePowerCallback.call(battle, user, target, base), 70);
-		const damage = (defenses, id = 'hex') => {
+		assert.equal(base.id, 'shadowball');
+		assert.equal(base.flags.bullet, 1);
+		assert.deepEqual(base.secondaries.map(({ chance, boosts }) => ({ chance, boosts })), [
+			{ chance: 20, boosts: { spd: -1 } },
+		]);
+		assert.equal(hit('hex', user, target).name, 'Hex');
+		const damage = (defenses, id = 'shadowball') => {
 			target.boosts.def = target.boosts.spd = defenses;
 			target.hp = target.maxhp;
 			hit(id, user, target);
@@ -349,9 +413,26 @@ describe('Johto, Sinnoh, and heritage Mega signatures', () => {
 			assert(damage(-2) > neutral);
 			const move = user.lastMoveUsed;
 			assert.equal(move.accuracy, 100);
-			assert.equal(move.basePowerCallback.call(battle, user, target, move), 140);
+			assert.equal(move.basePower, 90);
 		}
-		assert(!Dex.moves.get('hex').ignorePositiveDefensive);
+		assert(!Dex.moves.get('shadowball').ignorePositiveDefensive);
+	});
+
+	it('uses Shadow Ball’s named Rainbow Field penalty and doubled secondary chance', () => {
+		const { user, target } = start('gengarmega');
+		battle.randomizer = damage => damage;
+		battle.randomChance = (numerator, denominator) => numerator >= denominator;
+		const damage = id => {
+			target.hp = target.maxhp;
+			hit(id, user, target);
+			return target.maxhp - target.hp;
+		};
+		const ordinary = damage('shadowball');
+		battle.field.startTerrain('rainbowterrain');
+		const onRainbow = damage('witchinghex');
+		assert(onRainbow < ordinary);
+		assert(battle.log.some(line => line.includes('The terrain weakened the attack!')));
+		assert.equal(user.lastMoveUsed.secondaries[0].chance, 40);
 	});
 
 	it('Strata Cannon gains power only while the user has positive Defense', () => {

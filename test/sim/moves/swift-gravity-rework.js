@@ -4,6 +4,7 @@ const common = require('../../common');
 const { Dex } = require('../../../dist/sim');
 const impacts = [
 	'rockslide',
+	'cragslide',
 	'rocktomb',
 	'rockwrecker',
 	'avalanche',
@@ -16,6 +17,7 @@ const impacts = [
 	'heatcrash',
 	'hammerarm',
 	'icehammer',
+	'packicepunch',
 	'dragonhammer',
 	'woodhammer',
 	'timbercrash',

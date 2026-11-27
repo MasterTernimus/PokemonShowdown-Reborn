@@ -32788,6 +32788,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			magicroom: ["9M", "7T", "6T", "5T"],
 			meanlook: ["9L23"],
 			mimic: ["9M"],
+			moonblast: ["9M"],
 			mysticalfire: ["9L1", "7L1", "6L1"],
 			nastyplot: ["9M"],
 			naturalgift: ["4M"],

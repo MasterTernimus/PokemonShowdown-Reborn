@@ -46,7 +46,7 @@ describe('Crest Cleave / Sharpness Dual Wield / base weather approval', () => {
 		['Exalt composite with passive Dual Wield', 'Mew', 'Exalt', ['dualwield']],
 		['Blade Mastery composite with passive Dual Wield', 'Mew', 'Blade Mastery', ['dualwield']],
 		['Frost Stalker composite with passive Dual Wield', 'Mew', 'Frost Stalker', ['dualwield']],
-		['selected composite', 'Mew', 'Omen Edge', []],
+		['selected composite', 'Mew', 'Sacred Edge', []],
 		['actual Mega Gallade', 'Gallade-Mega', 'Sacred Edge'],
 		['Sharpness passive + selected Dual Wield', 'Mew', 'Dual Wield', ['sharpness']],
 		['Dual Wield passive + selected Sharpness', 'Mew', 'Sharpness', ['dualwield']],
@@ -74,7 +74,7 @@ describe('Crest Cleave / Sharpness Dual Wield / base weather approval', () => {
 	it('actual whole-move damage agrees across selected, passive and composite sources', () => {
 		const outcomes = [];
 		for (const [ability, passives] of [
-			['Omen Edge', []],
+			['Sacred Edge', []],
 			['Dual Wield', ['sharpness']],
 			['Sharpness', ['dualwield']],
 			['Sacred Edge', ['sharpness', 'dualwield']],

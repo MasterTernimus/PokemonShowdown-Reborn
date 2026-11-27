@@ -1521,7 +1521,7 @@ export const ReviewedReferenceDetails = {
 				"On Fairy Tale and Dragon Den, lowers Attack and Special Attack by two stages each.",
 			],
 			"scalyscorn": [
-				"After positive damage on Fairy Tale or Dragon Den, raises the user’s Special Attack by two stages rather than one.",
+				"On Fairy Tale or Dragon’s Den, dealing damage raises the attacking stat used by two stages.",
 			],
 			"bounce": [
 				"On Cave or Dragon Den, attacks immediately without spending a charge turn; the preparation/animation messages still play. Tailwind or Strong Winds independently remove charging and add a critical-rate stage.",
@@ -1694,7 +1694,7 @@ export const ReviewedReferenceDetails = {
 				"On Fairy Tale and Dragon Den, lowers Attack and Special Attack by two stages each.",
 			],
 			"scalyscorn": [
-				"After positive damage on Fairy Tale or Dragon Den, raises the user’s Special Attack by two stages rather than one.",
+				"On Fairy Tale or Dragon’s Den, dealing damage raises the attacking stat used by two stages.",
 			],
 			"craftyshield": [
 				"On Fairy Tale, a successful use also raises the user’s Defense and Special Defense by one stage. Ordinary status-move protection remains.",

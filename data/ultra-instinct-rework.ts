@@ -8,6 +8,7 @@ function disabled(battle: Battle) {
 }
 export function ultraInstinctBoostsPower(battle: Battle, source: Pokemon, target?: Pokemon) {
 	return !!target && !source.isAlly(target) && !disabled(battle) && !target.hasAbility('battlebond') &&
+		!target.hasAbilityOrPassive('misalignedstars') &&
 		(!!battle.queue.willMove(target) || target.m.enteredBattleTurn === battle.turn);
 }
 function opposingMove(source: Pokemon | undefined, target: Pokemon, effect: Effect | undefined) {
@@ -34,7 +35,8 @@ export function installUltraInstinctRework(abilities: AbilityDataTable) {
 	delete instinct.onSourceModifyDamage;
 	instinct.onDamagePriority = -15;
 	instinct.onDamage = function (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: ActiveMove) {
-		if (disabled(this) || !opposingMove(source, target, effect) || predatorUltraMatch(this, source, target)) return;
+		if (disabled(this) || !opposingMove(source, target, effect) ||
+			source.hasAbilityOrPassive('misalignedstars') || predatorUltraMatch(this, source, target)) return;
 		const token = moveToken(this, source, effect);
 		if (target.m.ultraInstinctGuardTurn === this.turn && target.m.ultraInstinctGuardMove !== token) return;
 		return this.chainModify(ultraRivalry(this, source, target) ? 0.60 : this.field.isTerrain(favored) ? 0.65 : 0.70);
@@ -43,7 +45,7 @@ export function installUltraInstinctRework(abilities: AbilityDataTable) {
 		this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: ActiveMove
 	) {
 		if (damage <= 0 || disabled(this) || !opposingMove(source, target, effect) ||
-			target.m.ultraInstinctGuardTurn === this.turn) return;
+			source.hasAbilityOrPassive('misalignedstars') || target.m.ultraInstinctGuardTurn === this.turn) return;
 		target.m.ultraInstinctGuardTurn = this.turn;
 		target.m.ultraInstinctGuardMove = moveToken(this, source, effect);
 	};

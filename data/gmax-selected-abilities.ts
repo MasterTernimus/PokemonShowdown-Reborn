@@ -1,3 +1,4 @@
+import { categoryPower } from '../sim/signature-category-power';
 import type { AbilityDataTable } from '../sim/dex-abilities';
 
 function finishCrushingDepths(this: Battle, source: Pokemon) {
@@ -34,8 +35,8 @@ export function installGmaxSelectedAbilities(abilities: AbilityDataTable) {
 			if (source === this.effectState.target) finishCrushingDepths.call(this, source);
 		},
 		onModifyDamage(damage, source, target, move) {
-			if (move.category === 'Physical' && this.movehasType(move, 'Steel') && target.boosts.def < 0) {
-				return this.chainModify(1.3);
+			if (this.movehasType(move, 'Steel') && target.boosts.def < 0) {
+				return this.chainModify(categoryPower(move, 'Physical', 1.3));
 			}
 		},
 	};

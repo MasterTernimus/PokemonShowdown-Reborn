@@ -13,7 +13,7 @@ const holders = [
 	['Ninetales-Reborn', 'Ashen Seeds', 'eruption', ['flashfire']],
 	['Camerupt', 'Ashen Seeds', 'eruption', ['soundproof']],
 	['Torkoal', 'Ashen Seeds', 'eruption', ['whitesmoke']],
-	['Hoopa', 'Rift Herald', 'riftopening', []],
+	['Hoopa', 'Rift Herald', 'riftopening', ['magician']],
 	['Mismagius', 'Rift Herald', 'riftopening', ['levitate']],
 ];
 const validator = new TeamValidator('gen9nofieldsinglesgame@@@Obtainable Abilities');

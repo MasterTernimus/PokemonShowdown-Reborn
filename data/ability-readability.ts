@@ -1,3 +1,4 @@
+import { November16BalanceDescriptions } from './nov16-balance-descriptions';
 import { UltraInstinctDescription } from './ultra-instinct-description';
 
 /** Player-facing wording only. Full rules remain available in the ability details. */
@@ -5,7 +6,7 @@ export const ReadableAbilitySummaries: Record<string, string> = {
 	slipstream: 'Airborne; first landed Flying attack each entry sets 3-turn Tailwind.',
 	silkward: 'First super-effective hit each entry: half damage; surviving clears negative Speed.',
 	bruteforce: 'Reckless + Rock Head.',
-	ascendance: '1.5x attack damage, immunity bypass and off-type STAB; Eevee-Starter/Umbreon becomes Divineon.',
+	ascendance: 'All attacks gain STAB and bypass type immunities. Starter Eevee and Umbreon become Divineon.',
 	crueltag: 'Traps foes; 20% less damage; Infiltrator + Bad Dreams. Cannot be suppressed.',
 	alchemistsurge: 'Sets Psychic Terrain on entry; Prankster.',
 	anticipation: 'Reveals dangerous moves; takes 25% less damage from the latest warning.',
@@ -14,11 +15,11 @@ export const ReadableAbilitySummaries: Record<string, string> = {
 	fallenstar: 'Arrows gain priority at 1/4 HP. Takes 25% less after an arrow or 20% less at half HP.',
 	voidcommand: 'Insomnia + Super Luck; first successful Z-Move gives +1 higher offense.',
 	bewitchingmajesty: 'Sets Bewitched Woods; reflects targeted status moves; blocks foe priority for its side.',
-	omenedge: 'Stronger slicing; eligible attacks hit twice; extra foe PP cost; physical Doom Desire on fainting.',
+	omenedge: 'Sharpness and Pressure. Calls a physical Doom Desire on fainting.',
 	adaptivecell: 'Category-based Fighting/Psychic typing; attacks use 1.3x Sp. Atk; powder/weather immunity.',
 	furnaceengine: 'Fire/Water hits: +6 Speed. Contact burns, recovery, damage reduction and Fire chip.',
 	sacredpower: 'Normal becomes Dark (1.3x power); Dark/Ghost power 1.3x; Fairy Tale entry: +1 Sp. Def.',
-	execution: 'Normal becomes Dark/Fairy; ability bypass; stronger vs weakened foes; KOs heal 1/8 HP.',
+	execution: November16BalanceDescriptions.execution.shortDesc,
 	forewarn: 'Reveals strongest moves; takes 20% less move damage, or 25% less from the latest warning.',
 	galewings: 'Flying: +1 priority at 75%+ HP. In effective Strong Winds: all moves +1 priority at any HP.',
 	gulpmissile: 'Surf/Dive loads a counterattack: 1/4 attacker HP plus -1 Defense or paralysis. Field variants.',

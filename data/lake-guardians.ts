@@ -1,3 +1,4 @@
+import { categoryPower } from '../sim/signature-category-power';
 import type { AbilityDataTable } from '../sim/dex-abilities';
 import type { SpeciesData } from '../sim/dex-species';
 import { skipPassiveComponent } from './passive-ability-cleanup';
@@ -38,7 +39,7 @@ export const lakeAbilities: AbilityDataTable = {
 		desc: 'Levitate keeps the user airborne. Its physical Psychic attacks have 1.3× power. Opposing Pokémon cannot lower its Attack or Special Attack stages.',
 		onBasePower(basePower, source, target, move) {
 			if (skipPassiveComponent(this, source, 'giftofwill')) return;
-			if (move.category === 'Physical' && this.movehasType(move, 'Psychic')) return this.chainModify(1.3);
+			if (this.movehasType(move, 'Psychic')) return this.chainModify(categoryPower(move, 'Physical', 1.3));
 		},
 		onTryBoost(boost, target, source) {
 			if (!source || target.isAlly(source)) return;

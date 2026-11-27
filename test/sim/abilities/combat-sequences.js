@@ -35,9 +35,134 @@ describe('Convergence, Misaligned Stars and Frame Perfect', () => {
 		battle.actions.runMove(move, source, source.getLocOf(target), { externalMove: true });
 		return hp - target.hp;
 	}
+	for (const [species, slot] of [
+		['Typhlosion-Hisui', 'H'], ['Gengar-Mega', '0'], ['Banette-Mega', '0'], ['Banette-Mega-Z', '0'],
+		['Froslass-Mega', '0'], ['Dragapult', '1'], ['Wishiwashi-Sevii', '0'], ['Chandelure', '0'],
+		['Spiritomb', 'H'], ['Aegislash', 'H'], ['Mimikyu', '1'],
+	]) {
+		it(species + ' announces the stars on entry and blocks repeated opposing moves', () => {
+			const ability = Dex.species.get(species).abilities[slot];
+			const [holder, foe] = start(ability, false, species);
+			assert(holder.hasAbilityOrPassive('misalignedstars'));
+			const announcements = () => battle.log.filter(line => line.includes('the stars traced an unfamiliar sky')).length;
+			assert.equal(announcements(), 1);
+			for (let i = 0; i < 4; i++) hit(foe, holder, 'growl');
+			assert.equal(battle.log.filter(line => line.includes('The stars were bad for that outcome')).length, 2);
+			assert.equal(announcements(), 1);
+			battle.makeChoices('switch 2', 'move splash');
+			battle.makeChoices('switch 2', 'move splash');
+			assert.equal(announcements(), 2);
+		});
+	}
+	it('keeps the new slots through stance, disguise and schooling changes', () => {
+		for (const species of ['mimikyubusted', 'mimikyutotem', 'mimikyubustedtotem'])
+			assert.equal(Dex.species.get(species).abilities[1], 'Misaligned Stars');
+		assert.equal(Dex.species.get('aegislashblade').abilities.H, 'Misaligned Stars');
+		assert.deepEqual(Dex.species.get('wishiwashiseviischooling').passives, ['misalignedstars']);
+		assert.deepEqual(Dex.species.get('dragapultgmax').passives, ['levitate']);
+	});
+	it('Keystone Seal applies Pressure on entry and charges extra PP alongside Imprison', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Spiritomb', ability: 'Keystone Seal', moves: ['splash'] }],
+			[{ species: 'Mew', ability: 'No Ability', moves: ['bubble', 'splash'] }],
+		]);
+		battle.makeChoices('team 1', 'team 1');
+		const [holder, foe] = battle.getAllActive();
+		assert(holder.volatiles.keystoneseal);
+		assert(holder.hasAbility('pressure'));
+		assert.equal(foe.boosts.def, -1);
+		assert.equal(foe.boosts.spd, -1);
+		const slot = foe.moveSlots[0];
+		assert.equal(slot.id, 'bubble');
+		const pp = slot.pp;
+		battle.makeChoices('move splash', 'move bubble');
+		assert.equal(slot.pp, pp - 2);
+	});
+	it('Black Fang allows sleep and keeps its bite and KO effects', () => {
+		const [holder, foe] = start('Black Fang');
+		assert(holder.trySetStatus('slp', foe));
+		battle.runEvent('Update', holder);
+		assert.equal(holder.status, 'slp');
+		assert.equal(battle.runEvent('BasePower', holder, foe, Dex.getActiveMove('bite'), 100), 150);
+		holder.cureStatus();
+		foe.hp = 1;
+		hit(holder, foe, 'bite');
+		battle.faintMessages();
+		assert.equal(holder.boosts.atk, 1);
+	});
+	it('reads Ultra Ego stages separately from ordinary setup in actual damage', () => {
+		const [stars, ego] = start('Misaligned Stars');
+		ego.setAbility('Ultra Ego');
+		const damage = (from, to) => battle.actions.getDamage(from, to, Object.assign(Dex.getActiveMove('watergun'), { willCrit: false }));
+		const base = damage(ego, stars);
+		battle.boost({ spa: 2 }, ego, ego, Dex.moves.get('nastyplot'));
+		const setup = damage(ego, stars);
+		assert(setup > base);
+		battle.makeChoices('move splash', 'move watergun');
+		assert.equal(ego.boosts.spa, 3);
+		assert.equal(damage(ego, stars), setup);
+		const beforeDefense = damage(stars, ego);
+		battle.field.terrain = 'fairytaleterrain';
+		hit(stars, ego, 'watergun');
+		assert.equal(ego.boosts.spd, 1);
+		battle.field.terrain = '';
+		assert.equal(damage(stars, ego), beforeDefense);
+		ego.clearBoosts();
+		battle.boost({ spa: 2 }, ego, ego, Dex.moves.get('nastyplot'));
+		assert.equal(damage(ego, stars), setup);
+	});
+	it('Ultra Ego cannot bypass the Stars inside Mega Gengar’s breakable Shadow Double', () => {
+		const [stars, ego] = start('Shadow Double', false, 'Gengar-Mega');
+		ego.setAbility('Ultra Ego');
+		const attack = () => hit(ego, stars, 'watergun', { damage: 10 });
+		stars.hp = 1000;
+		assert.equal(attack(), 10);
+		assert.equal(attack(), -3333);
+		assert.equal(attack(), 10);
+		assert.equal(attack(), -3333);
+	});
+	it('Ultra Instinct’s first-hit guard remains available for another foe after a Stars attack', () => {
+		const [stars, instinct, ally] = start('Misaligned Stars', true);
+		instinct.setAbility('Ultra Instinct');
+		assert.equal(hit(stars, instinct, 'watergun', { damage: 100 }), 100);
+		assert.equal(hit(ally, instinct, 'watergun', { damage: 100 }), 70);
+	});
+	for (const [species, slot] of [['Marowak', 'H'], ['Marowak-Alola', '1']]) {
+		it(species + ' uses Cursed Body through Bone Warrior alongside selectable Stars', () => {
+			assert.equal(Dex.species.get(species).abilities[slot], 'Misaligned Stars');
+			const [holder, foe] = start('Misaligned Stars', false, species);
+			assert(holder.hasAbilityOrPassive('cursedbody'));
+			battle.forceRandomChance = true;
+			battle.makeChoices('move splash', 'move watergun');
+			assert.equal(foe.volatiles.disable?.move, 'watergun');
+			holder.faint(foe);
+			battle.faintMessages();
+			assert.equal(foe.volatiles.curse.faintCurseTicks, 2);
+		});
+	}
+	it('offers Galarian Corsola three abilities', () => {
+		assert.deepEqual(Dex.species.get('corsolagalar').abilities, { 0: 'Weak Armor', 1: 'Cursed Body', H: 'Misaligned Stars' });
+	});
 	function charged(p) {
 		p.m.convergence = { entry: p.m.ultraRivalryEntryToken, Physical: true, Special: true };
 	}
+	it('Misaligned Stars reduces an unrecorded enemy attack by 10% and still blocks the repeat', () => {
+		const [holder, foe, ally] = start('Misaligned Stars', true);
+		const baseline = hit(foe, ally);
+		assert.equal(hit(foe, holder), battle.modify(baseline, 0.9));
+		holder.hp = holder.maxhp;
+		assert.equal(hit(foe, holder), 0);
+		assert.equal(hit(ally, holder), baseline);
+		battle.makeChoices('switch 3, move splash', 'move splash, move splash');
+		battle.makeChoices('switch 3, move splash', 'move splash, move splash');
+		const reduced = battle.modify(baseline, 0.9);
+		holder.hp = Math.floor(holder.maxhp / 2);
+		assert.equal(hit(foe, holder), battle.modify(reduced, 0.5) - Math.floor(holder.baseMaxhp / 4));
+		assert(holder.m.misalignedStars.spentEntry.tackle === holder.m.ultraRivalryEntryToken);
+		holder.hp = Math.floor(holder.maxhp / 2);
+		assert.equal(hit(foe, holder), -Math.floor(holder.baseMaxhp / 3));
+		assert.equal(hit(foe, holder), reduced);
+	});
 	function prepare(p, id) {
 		const move = Dex.getActiveMove(id);
 		battle.runEvent('ModifyMove', p, battle.p2.active[0], move, move);
@@ -173,7 +298,23 @@ describe('Convergence, Misaligned Stars and Frame Perfect', () => {
 		assert.equal(hit(other, p, 'tackle', { damage: 10 }), -20);
 		assert.equal(hit(foe, p, 'watergun', { damage: 10 }), 0);
 	});
-	it('records Double Slap after Knock Off and blocks only the second Double Slap', () => {
+	it('continues blocking every other Water Gun from the same foe across battle turns', () => {
+		const [holder] = start('Misaligned Stars');
+		holder.hp = 500;
+		for (let use = 1; use <= 6; use++) {
+			const before = holder.hp;
+			const logStart = battle.log.length;
+			battle.makeChoices('move splash', 'move watergun');
+			const blocks = battle.log.slice(logStart).filter(line => line.includes('The stars were bad for that outcome'));
+			assert.equal(blocks.length, use % 2 === 0 ? 1 : 0, 'Water Gun use ' + use);
+			if (use % 2 === 0) {
+				assert.equal(holder.hp, Math.min(holder.maxhp, before + Math.floor(holder.baseMaxhp / 3)));
+			} else {
+				assert(holder.hp < before, 'Water Gun should deal damage on use ' + use);
+			}
+		}
+	});
+	it('repeatedly blocks every other five-hit Double Slap after Knock Off', () => {
 		const [p, foe] = start('Misaligned Stars', false, 'Dusknoir');
 		p.hp = p.maxhp / 4;
 		assert(hit(foe, p, 'knockoff') > 0);
@@ -182,6 +323,10 @@ describe('Convergence, Misaligned Stars and Frame Perfect', () => {
 		assert.equal(slap(), -Math.floor(p.maxhp / 3));
 		assert.equal(slap(), 50);
 		assert.equal(hit(foe, p, 'knockoff'), -Math.floor(p.maxhp / 3));
+		const missingHP = p.maxhp - p.hp;
+		assert.equal(slap(), -Math.min(Math.floor(p.maxhp / 3), missingHP));
+		assert.equal(slap(), 50);
+		assert.equal(slap(), -50);
 	});
 	it('records successful targeted status moves and ignores misses', () => {
 		const [p, foe] = start('Misaligned Stars');
@@ -335,7 +480,7 @@ describe('Convergence, Misaligned Stars and Frame Perfect', () => {
 		battle.makeChoices('switch 2', 'move splash');
 		assert(!p.m.framePerfect);
 	});
-	it('keeps each Stars record, blocks once in battle, then cushions one volley each entry', () => {
+	it('alternates each Stars record and cushions one previously blocked volley on re-entry', () => {
 		const [p, foe] = start('Misaligned Stars');
 		const reenter = () => {
 			battle.makeChoices('switch 2', 'move splash');
@@ -366,6 +511,8 @@ describe('Convergence, Misaligned Stars and Frame Perfect', () => {
 		assert.equal(attack({ accuracy: 0 }), 0);
 		const before = p.hp;
 		assert.equal(attack(), 30 - Math.min(2500, p.maxhp - (before - 30)));
+		p.hp = 2000;
+		assert.equal(attack(), -3333);
 		assert.equal(attack(), 60);
 		assert.equal(status(), 0);
 		assert.equal(p.boosts.atk, -1);

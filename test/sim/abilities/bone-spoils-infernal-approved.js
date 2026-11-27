@@ -32,8 +32,8 @@ describe('Bone Warrior, Battle Spoils and Infernal Dominion approved', () => {
 	it('migrates only the two approved Marowak forms and Perrserker', () => {
 		for (const id of ['marowak', 'marowakalola'])
 			assert.deepEqual(Dex.species.get(id).passives, ['bonewarrior']);
-		assert.equal(Dex.species.get('marowak').abilities.H, 'Cursed Body');
-		assert.equal(Dex.species.get('marowakalola').abilities[1], 'Cursed Body');
+		assert.equal(Dex.species.get('marowak').abilities.H, 'Misaligned Stars');
+		assert.equal(Dex.species.get('marowakalola').abilities[1], 'Misaligned Stars');
 		assert.equal(Dex.species.get('marowakalola').abilities.H, 'Soul Fire');
 		assert.deepEqual(Dex.species.get('perrserker').passives, ['battlespoils']);
 		assert(!Dex.species.get('marowakalolatotem').passives.includes('bonewarrior'));

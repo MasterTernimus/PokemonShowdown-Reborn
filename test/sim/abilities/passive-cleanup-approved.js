@@ -226,14 +226,15 @@ describe('Approved ordinary passive cleanup', () => {
 		assert.equal(battle.runEvent('ModifySpe', p, null, null, 100), 200);
 	});
 	for (const species of ['Wishiwashi-Sevii', 'Wishiwashi-Sevii-Schooling'])
-		it(species + ' has Infiltrator through suppression', () => {
+		it(species + ' retains Misaligned Stars through suppression', () => {
 			const [p, q] = setup(species, 'No Ability');
 			p.addVolatile('gastroacid', q);
-			q.addVolatile('substitute');
-			q.volatiles.substitute.hp = 500;
-			attack(p, q);
-			assert(q.hp < 1600);
-			assert.equal(q.volatiles.substitute.hp, 500);
+			assert.deepEqual(p.getPassives(), ['misalignedstars']);
+			attack(q, p, 'watergun');
+			const hp = p.hp;
+			assert(hp < 1600);
+			attack(q, p, 'watergun');
+			assert(p.hp > hp, 'the repeated move is blocked and heals');
 		});
 	it('Includes are unique and custom descriptions survive contextual rendering', () => {
 		const { getAbilityDisplayComponents } = require('../../../dist/data/ability-display');
@@ -249,7 +250,7 @@ describe('Approved ordinary passive cleanup', () => {
 		]);
 		assert.deepEqual(
 			getAbilityDisplayComponents('cursedmarionette', ['prankster'], 'banettemega'),
-			[]
+			['misalignedstars']
 		);
 		assert.equal(SharedPassiveAbilityDescriptions.cursedmarionette, undefined);
 		assert.match(Dex.abilities.get('cursedmarionette').desc, /1\/8/);

@@ -100,6 +100,7 @@ export function installFieldSetterReductions(abilities: AbilityDataTable) {
 		'Sand Stream + Sand Spit + full local Shed Skin. During effective sand, active foes take Ground-type damage equal to 1/16 max HP each turn; Ground immunities prevent this damage.';
 	abilities.duneterror.shortDesc =
 		'Summons sand on entry and when hit; Shed Skin; sand chips foes with Ground damage.';
+	composeSelectedAbility(abilities, 'auroradomain', ['auroracurrent', 'refrigerate']);
 	abilities.auroradomain.onFaint = function (pokemon) {
 		const ability = this.dex.abilities.get('auroradomain');
 		if (
@@ -110,8 +111,9 @@ export function installFieldSetterReductions(abilities: AbilityDataTable) {
 		}
 	};
 	abilities.auroradomain.desc =
-		"Full local Snow Warning + Refrigerate. On fainting, sets or refreshes its side's Aurora Veil for 5 turns, without requiring hail or snow.";
-	abilities.auroradomain.shortDesc = 'Hail and Refrigerate; fainting sets Aurora Veil for 5 turns.';
+		"Aurora Current + Refrigerate. Summons hail and grants Electric STAB. In hail or snow, Electric moves never miss and both defenses rise by 50%. Aurora Current's field entry boosts apply once alongside Relic Armor. Fainting grants or refreshes Aurora Veil for five turns in any weather.";
+	abilities.auroradomain.shortDesc = 'Aurora Current + Refrigerate. Fainting grants five turns of Aurora Veil.';
+	composeSelectedAbility(abilities, 'tyrantdomain', ['tyrantstream', 'supremeoverlord']);
 	const startTyrantDomain = abilities.tyrantdomain.onStart!;
 	abilities.tyrantdomain.onStart = function (pokemon) {
 		startTyrantDomain.call(this, pokemon);
@@ -125,9 +127,9 @@ export function installFieldSetterReductions(abilities: AbilityDataTable) {
 		leaveGift.call(this, pokemon, 'tyrantlegacy');
 	};
 	abilities.tyrantdomain.desc =
-		'Sand Stream + Supreme Overlord. Holds an existing Dragon’s Den while active; entering it lowers each foe’s Defense and Sp. Def by 1. Once per battle, fainting grants its immediate replacement +1 Attack after entry hazards. A replacement that faints on entry consumes the gift.';
+		'Tyrant Stream + Supreme Overlord. Summons sand. Bites gain 50% power. Recoil, crash and explosion moves gain 20% power, and Chessboard gives a separate 20% boost. Prevents ordinary move recoil. Gains power for fallen allies. Holds an existing Dragon’s Den while active; entering it lowers each foe’s Defense and Sp. Def by 1. Once per battle, fainting grants its immediate replacement +1 Attack after entry hazards. A replacement that faints on entry consumes the gift.';
 	abilities.tyrantdomain.shortDesc =
-		'Sand Stream + Supreme Overlord; fainting grants its replacement +1 Attack once per battle.';
+		'Tyrant Stream + Supreme Overlord. Fainting grants its replacement +1 Attack once per battle.';
 	abilities.inversion.onStart = function (pokemon) {
 		if (pokemon.m.inversionFieldUsed) return;
 		pokemon.m.inversionFieldUsed = true;

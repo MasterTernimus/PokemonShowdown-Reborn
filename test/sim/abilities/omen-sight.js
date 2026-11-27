@@ -39,6 +39,20 @@ describe('Omen Sight', () => {
 			assert(!battle.log.some(line => line.includes('ability: Anticipation|')));
 		});
 	}
+	it('on Mega Absol-Z, protects against repeat attacks and leaves slicing moves single-hit', () => {
+		const p = start([[mon('Absol-Mega-Z', ['nightslash'], 'Omen Edge')], [mon('Mew', ['watergun'])]], 'gen9nofieldsinglesgame');
+		const foe = battle.p2.active[0];
+		assert(p.hasAbilityOrPassive('misalignedstars'));
+		assert(p.hasAbility('sharpness') && p.hasAbility('pressure'));
+		assert(!p.hasAbilityOrPassive('dualwield'));
+		assert.equal(battle.log.filter(line => line.includes('the stars traced')).length, 1);
+		p.hp = Math.floor(p.maxhp / 2);
+		for (let i = 0; i < 4; i++) {
+			const before = p.hp;
+			battle.actions.useMove('watergun', foe, { target: p });
+			assert(i % 2 ? p.hp > before : p.hp < before);
+		}
+	});
 	it('checks each opponent once, deduplicates matching reveals, and remembers each foe separately', () => {
 		const p = start([[mon('Absol'), mon()], [mon('Mew', ['moonblast', 'splash']), mon('Mew', ['closecombat', 'splash']), mon('Mew', ['surf', 'splash'])]]);
 		assert.deepEqual(p.getPassives(), ['omensight']);

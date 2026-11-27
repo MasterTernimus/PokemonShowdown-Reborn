@@ -1,34 +1,96 @@
 {
   "_comment": "Explicit local approvals through November 16. Edit this reviewed fixture rather than adding another override layer. No values are generated from runtime Dex.",
   "slots": {
-    "samurott": {"S":"Shogun Stance"},
-    "samurottalt": {"S":"Shogun Stance"},
-    "samurotthisui": {"S":"Shogun Stance"},
-    "samurotthisuialt": {"S":"Shogun Stance"},
-    "sawsbucksummer": {"1":"Chlorophyll"},
-    "vikavolt": {"H":"Swarm"},
-    "jellicent": {"0":"Unnerve"},
-    "jellicentazzy": {"0":"Unnerve"},
-    "seismitoad": {"1":"Sticky Hold"},
-    "drednaw": {"0":"Hyper Cutter"},
-    "serperior": {"1": "Leaf Guard"},
-    "serperiorazzy": {"1": "Leaf Guard"},
-    "kingambit": {"H": "Pressure"},
-    "typhlosionhisui": {"0":"Plasma Awakening"},
-    "feraligatr": {"1":"Tidal Awakening"},
-    "ninetales": {"1": "Cursed Body"},
-    "ninetalesreborn": {"1": "Cursed Body"},
-    "ninetalesalt": {"1": "Cursed Body"},
-    "arcaninehisui": {"1": "Sturdy"},
-    "houndoom": {"0": "Agony Flame", "H": "Unnerve"},
-    "chandelure": {"0": "Infiltrator"},
-    "donphan": {"0": "Sturdy", "S": "Aevian Frost"},
-    "sneasel": {"1": "Keen Eye"},
-    "sneaselhisui": {"1": "Keen Eye"},
-    "quagsire": {"1": "Water Absorb"},
-    "forretress": {"0": "Sturdy", "H": "Ballast Plating"},
-    "typhlosion": {"0":"Plasma Awakening","H":"Galvanize"},
-    "typhlosionalt": {"0":"Plasma Awakening","H":"Galvanize"},
+    "samurott": {
+      "S": "Shogun Stance"
+    },
+    "samurottalt": {
+      "S": "Shogun Stance"
+    },
+    "samurotthisui": {
+      "S": "Shogun Stance"
+    },
+    "samurotthisuialt": {
+      "S": "Shogun Stance"
+    },
+    "sawsbucksummer": {
+      "0": "Summer Striker",
+      "1": "Chlorophyll"
+    },
+    "vikavolt": {
+      "H": "Swarm"
+    },
+    "jellicent": {
+      "0": "Unnerve"
+    },
+    "jellicentazzy": {
+      "0": "Unnerve"
+    },
+    "seismitoad": {
+      "1": "Sticky Hold"
+    },
+    "drednaw": {
+      "0": "Hyper Cutter"
+    },
+    "serperior": {
+      "1": "Leaf Guard"
+    },
+    "serperiorazzy": {
+      "1": "Leaf Guard"
+    },
+    "kingambit": {
+      "H": "Pressure"
+    },
+    "typhlosionhisui": {
+      "0": "Plasma Awakening"
+    },
+    "feraligatr": {
+      "1": "Tidal Awakening"
+    },
+    "ninetales": {
+      "1": "Cursed Body"
+    },
+    "ninetalesreborn": {
+      "1": "Cursed Body"
+    },
+    "ninetalesalt": {
+      "1": "Cursed Body"
+    },
+    "arcaninehisui": {
+      "1": "Sturdy"
+    },
+    "houndoom": {
+      "0": "Agony Flame",
+      "H": "Unnerve"
+    },
+    "chandelure": {
+      "0": "Misaligned Stars"
+    },
+    "donphan": {
+      "0": "Sturdy",
+      "S": "Aevian Frost"
+    },
+    "sneasel": {
+      "1": "Keen Eye"
+    },
+    "sneaselhisui": {
+      "1": "Keen Eye"
+    },
+    "quagsire": {
+      "1": "Water Absorb"
+    },
+    "forretress": {
+      "0": "Sturdy",
+      "H": "Ballast Plating"
+    },
+    "typhlosion": {
+      "0": "Plasma Awakening",
+      "H": "Galvanize"
+    },
+    "typhlosionalt": {
+      "0": "Plasma Awakening",
+      "H": "Galvanize"
+    },
     "pangoro": {
       "0": "Hot Streak"
     },
@@ -90,7 +152,10 @@
     "hydreigon": {
       "H": "Mold Breaker"
     },
-    "meganium": {"0":"Hospitality","1":"Verdant Awakening"},
+    "meganium": {
+      "0": "Hospitality",
+      "1": "Verdant Awakening"
+    },
     "venusaur": {
       "1": "Unaware"
     },
@@ -123,51 +188,256 @@
     },
     "magmar": {
       "0": "White Smoke"
+    },
+    "marowak": {
+      "H": "Misaligned Stars"
+    },
+    "marowakalola": {
+      "1": "Misaligned Stars"
+    },
+    "corsolagalar": {
+      "1": "Cursed Body",
+      "H": "Misaligned Stars"
+    },
+    "spiritomb": {
+      "H": "Misaligned Stars"
+    },
+    "aegislash": {
+      "H": "Misaligned Stars"
+    },
+    "kartana": {
+      "0": "Steadfast"
+    },
+    "mimikyu": {
+      "1": "Misaligned Stars"
+    },
+    "mimikyutotem": {
+      "1": "Misaligned Stars"
+    },
+    "mimikyubusted": {
+      "1": "Misaligned Stars"
+    },
+    "mimikyubustedtotem": {
+      "1": "Misaligned Stars"
+    },
+    "sawsbuck": {
+      "0": "Spring Striker"
+    },
+    "sawsbuckspring": {
+      "0": "Spring Striker"
+    },
+    "sawsbuckautumn": {
+      "0": "Autumn Striker"
+    },
+    "sawsbuckwinter": {
+      "0": "Winter Striker"
+    },
+    "aegislashblade": {
+      "H": "Misaligned Stars"
+    },
+    "starmie": {
+      "1": "Misaligned Stars"
     }
   },
   "exactSlots": {
-    "heatran": {"0":"White Smoke","1":"Unnerve","H":"Furnace Hide"},
-    "heatranmega": {"0":"Steam Forge"},
-    "dodrio": {"0":"Tripwire Kick","1":"Speed Boost","H":"Guts"},
-    "drampa": {"0":"Dragonize","1":"Sap Sipper","H":"Gentle Giant"},
-    "gigalith": {"0":"Crystal Bastion","1":"Sand Stream","H":"Dune Chorus"},
-    "grapploct": {"0":"Contrary","1":"Technician","H":"Regenerator"},
-    "golisopodmega": {"0":"Armored Shell"},
-    "liepard": {"0":"Limber","1":"Unburden","H":"Alley Ambush"},
-    "druddigon": {"0":"Sheer Force","1":"Mold Breaker","H":"Basking Scales","S":"Aevian Bolt"},
-    "azelf": {"0":"Mold Breaker","1":"Vital Spirit","H":"Valor Seal"},
-    "mesprit": {"0":"Telepathy","1":"Healer","H":"Verity Seal"},
-    "uxie": {"0":"Forewarn","1":"Analytic","H":"Acuity Seal"},
-    "ambipom": {"0":"Whiplash","1":"Pickup","H":"Scrappy"},
-    "deoxysspeed": {"0":"Infiltrator","1":"Limber","H":"Alien Genome"},
-    "deoxysdefense": {"0":"Sturdy","1":"Shell Armor","H":"Alien Genome"},
-    "deoxysattack": {"0":"Inner Focus","1":"Download","H":"Alien Genome"},
-    "deoxys": {"0":"Synchronize","1":"Clear Body","H":"Alien Genome"},
-    "rayquazamega": {"0":"Stratospheric Force"},
-    "rayquaza": {"0":"Inner Focus","1":"Unnerve","H":"Jetstream"},
-    "groudonprimal": {"0":"Continental Rupture"},
-    "groudon": {"0":"Battle Armor","1":"White Smoke","H":"Mantle Fracture"},
-    "kyogreprimal": {"0":"Abyssal Deluge"},
-    "kyogre": {"0":"Rain Dish","1":"Water Veil","H":"Trench Current"},
-    "moltres": {"0":"Summer Herald","1":"Solar Power","H":"Berserk"},
-    "zapdos": {"0":"Spring Herald","1":"Lightning Rod","H":"Competitive"},
-    "articuno": {"0":"Winter Herald","1":"Soundproof","H":"Mirror Armor"},
-    "latiosmega": {"0":"Eon Onslaught"},
-    "latiasmega": {"0":"Eon Sanctuary"},
-    "latios": {"0":"Inner Focus","1":"Competitive","H":"Mistwing Lance"},
-    "latias": {"0":"Synchronize","1":"Healer","H":"Mistwing Veil"},
-    "dusclops": {"0":"Frisk","1":"Cursed Body","H":"Misaligned Stars"},
-    "pelipper": {"0":"Accumulation","1":"Hydration","H":"Rain Courier"},
-    "swellow": {"0":"Guts","1":"Aerilate","H":"Slipstream Dive"},
-    "shiftry": {"0":"Chlorophyll","1":"Early Bird","H":"Gale Revel"},
-    "celebi": {"0":"Ilex Shrine","1":"Voice of Tomorrow","H":"Time Slip"},
-    "hooh": {"0":"Rainbow Wing Canticle","1":"Clear Bell Echo","H":"Burned Tower Oath"},
-    "lugia": {"0":"Silver Wing Canticle","1":"Tidal Bell Echo","H":"Whirl Islands Oath"},
-    "houndoom": {"0":"Agony Flame","1":"Insomnia","H":"Unnerve"},
-    "xatu": {"0":"Temporal Shift","1":"Neutralization","H":"Forewarn"},
-    "togetic": {"0":"Healer","1":"Sweet Veil","H":"Super Luck"},
-    "noctowl": {"0":"Duskilate","1":"Night Watch","H":"Tinted Lens"},
-    "froslass": {"0":"Haunting Veil","1":"Ice Body","H":"Insomnia","S":"Bad Seeds"},
+    "heatran": {
+      "0": "White Smoke",
+      "1": "Unnerve",
+      "H": "Furnace Hide"
+    },
+    "heatranmega": {
+      "0": "Steam Forge"
+    },
+    "dodrio": {
+      "0": "Tripwire Kick",
+      "1": "Speed Boost",
+      "H": "Guts"
+    },
+    "drampa": {
+      "0": "Dragonize",
+      "1": "Sap Sipper",
+      "H": "Gentle Giant"
+    },
+    "gigalith": {
+      "0": "Crystal Bastion",
+      "1": "Sand Stream",
+      "H": "Dune Chorus"
+    },
+    "grapploct": {
+      "0": "Contrary",
+      "1": "Technician",
+      "H": "Regenerator"
+    },
+    "golisopodmega": {
+      "0": "Armored Shell"
+    },
+    "liepard": {
+      "0": "Limber",
+      "1": "Unburden",
+      "H": "Alley Ambush"
+    },
+    "druddigon": {
+      "0": "Sheer Force",
+      "1": "Mold Breaker",
+      "H": "Basking Scales",
+      "S": "Aevian Bolt"
+    },
+    "azelf": {
+      "0": "Mold Breaker",
+      "1": "Vital Spirit",
+      "H": "Valor Seal"
+    },
+    "mesprit": {
+      "0": "Telepathy",
+      "1": "Healer",
+      "H": "Verity Seal"
+    },
+    "uxie": {
+      "0": "Forewarn",
+      "1": "Analytic",
+      "H": "Acuity Seal"
+    },
+    "ambipom": {
+      "0": "Whiplash",
+      "1": "Pickup",
+      "H": "Scrappy"
+    },
+    "deoxysspeed": {
+      "0": "Infiltrator",
+      "1": "Limber",
+      "H": "Alien Genome"
+    },
+    "deoxysdefense": {
+      "0": "Sturdy",
+      "1": "Shell Armor",
+      "H": "Alien Genome"
+    },
+    "deoxysattack": {
+      "0": "Inner Focus",
+      "1": "Download",
+      "H": "Alien Genome"
+    },
+    "deoxys": {
+      "0": "Synchronize",
+      "1": "Clear Body",
+      "H": "Alien Genome"
+    },
+    "rayquazamega": {
+      "0": "Stratospheric Force"
+    },
+    "rayquaza": {
+      "0": "Inner Focus",
+      "1": "Unnerve",
+      "H": "Jetstream"
+    },
+    "groudonprimal": {
+      "0": "Continental Rupture"
+    },
+    "groudon": {
+      "0": "Battle Armor",
+      "1": "White Smoke",
+      "H": "Mantle Fracture"
+    },
+    "kyogreprimal": {
+      "0": "Abyssal Deluge"
+    },
+    "kyogre": {
+      "0": "Rain Dish",
+      "1": "Water Veil",
+      "H": "Trench Current"
+    },
+    "moltres": {
+      "0": "Summer Herald",
+      "1": "Solar Power",
+      "H": "Berserk"
+    },
+    "zapdos": {
+      "0": "Spring Herald",
+      "1": "Lightning Rod",
+      "H": "Competitive"
+    },
+    "articuno": {
+      "0": "Winter Herald",
+      "1": "Soundproof",
+      "H": "Mirror Armor"
+    },
+    "latiosmega": {
+      "0": "Eon Onslaught"
+    },
+    "latiasmega": {
+      "0": "Eon Sanctuary"
+    },
+    "latios": {
+      "0": "Inner Focus",
+      "1": "Competitive",
+      "H": "Mistwing Lance"
+    },
+    "latias": {
+      "0": "Synchronize",
+      "1": "Healer",
+      "H": "Mistwing Veil"
+    },
+    "dusclops": {
+      "0": "Frisk",
+      "1": "Cursed Body",
+      "H": "Misaligned Stars"
+    },
+    "pelipper": {
+      "0": "Accumulation",
+      "1": "Hydration",
+      "H": "Rain Courier"
+    },
+    "swellow": {
+      "0": "Guts",
+      "1": "Aerilate",
+      "H": "Slipstream Dive"
+    },
+    "shiftry": {
+      "0": "Chlorophyll",
+      "1": "Early Bird",
+      "H": "Gale Revel"
+    },
+    "celebi": {
+      "0": "Ilex Shrine",
+      "1": "Voice of Tomorrow",
+      "H": "Time Slip"
+    },
+    "hooh": {
+      "0": "Rainbow Wing Canticle",
+      "1": "Clear Bell Echo",
+      "H": "Burned Tower Oath"
+    },
+    "lugia": {
+      "0": "Silver Wing Canticle",
+      "1": "Tidal Bell Echo",
+      "H": "Whirl Islands Oath"
+    },
+    "houndoom": {
+      "0": "Agony Flame",
+      "1": "Insomnia",
+      "H": "Unnerve"
+    },
+    "xatu": {
+      "0": "Temporal Shift",
+      "1": "Neutralization",
+      "H": "Forewarn"
+    },
+    "togetic": {
+      "0": "Healer",
+      "1": "Sweet Veil",
+      "H": "Super Luck"
+    },
+    "noctowl": {
+      "0": "Duskilate",
+      "1": "Night Watch",
+      "H": "Tinted Lens"
+    },
+    "froslass": {
+      "0": "Haunting Veil",
+      "1": "Ice Body",
+      "H": "Insomnia",
+      "S": "Bad Seeds"
+    },
     "cherrim": {
       "0": "Chlorophyll",
       "1": "Everlasting Bloom",
@@ -177,67 +447,365 @@
       "0": "Chlorophyll",
       "1": "Everlasting Bloom",
       "H": "Flower Veil"
+    },
+    "mew": {
+      "0": "Natural Cure",
+      "1": "Own Tempo",
+      "H": "First Draft"
+    },
+    "raikou": {
+      "0": "Pressure",
+      "1": "Infiltrator",
+      "H": "Volt Absorb"
+    },
+    "entei": {
+      "0": "Pressure",
+      "1": "Flame Body",
+      "H": "Flash Fire"
+    },
+    "suicune": {
+      "0": "Pressure",
+      "1": "Healer",
+      "H": "Water Veil"
+    },
+    "cresselia": {
+      "0": "Levitate",
+      "1": "Lunar Wake"
+    },
+    "darkrai": {
+      "0": "Bad Dreams",
+      "1": "Dream Stalker"
+    },
+    "shaymin": {
+      "0": "Natural Cure",
+      "1": "Hospitality",
+      "H": "Seed Courier"
+    },
+    "cobalion": {
+      "0": "Sharpness",
+      "1": "Inner Focus",
+      "H": "Clear Body"
+    },
+    "terrakion": {
+      "0": "Sharpness",
+      "1": "Hyper Cutter",
+      "H": "Sturdy"
+    },
+    "virizion": {
+      "0": "Sharpness",
+      "1": "Leaf Guard",
+      "H": "Natural Cure"
+    },
+    "genesect": {
+      "0": "Clear Body",
+      "1": "Hyper Cutter",
+      "H": "Signature Drive"
+    },
+    "genesectdouse": {
+      "0": "Clear Body",
+      "1": "Hyper Cutter",
+      "H": "Signature Drive"
+    },
+    "genesectburn": {
+      "0": "Clear Body",
+      "1": "Hyper Cutter",
+      "H": "Signature Drive"
+    },
+    "genesectchill": {
+      "0": "Clear Body",
+      "1": "Hyper Cutter",
+      "H": "Signature Drive"
+    },
+    "genesectshock": {
+      "0": "Clear Body",
+      "1": "Hyper Cutter",
+      "H": "Signature Drive"
+    },
+    "diancie": {
+      "0": "Clear Body",
+      "1": "Sturdy"
+    },
+    "hoopa": {
+      "0": "Infiltrator",
+      "1": "Ring Trick",
+      "S": "Rift Herald"
+    },
+    "hoopaunbound": {
+      "0": "Infiltrator",
+      "1": "Ring Trick"
+    },
+    "volcanion": {
+      "0": "Water Absorb",
+      "1": "Flame Body",
+      "H": "Boiler Vent"
+    },
+    "typenull": {
+      "0": "Hyper Cutter",
+      "1": "Steadfast",
+      "H": "Rattled"
+    },
+    "marshadow": {
+      "0": "Technician",
+      "1": "Shadow Step"
+    },
+    "zeraora": {
+      "0": "Volt Absorb",
+      "1": "Hyper Cutter",
+      "H": "Scrappy"
+    },
+    "kubfu": {
+      "0": "Inner Focus",
+      "1": "Hyper Cutter",
+      "H": "Iron Fist"
+    },
+    "zarude": {
+      "0": "Invigorate",
+      "1": "Infiltrator",
+      "H": "Vine Relay"
+    },
+    "zarudedada": {
+      "0": "Invigorate",
+      "1": "Infiltrator",
+      "H": "Vine Relay"
+    },
+    "calyrex": {
+      "0": "Unnerve",
+      "1": "Harvest",
+      "H": "Crown Tending"
+    },
+    "pecharunt": {
+      "0": "Poison Puppeteer",
+      "1": "Binding Chain"
+    },
+    "articunogalar": {
+      "0": "Competitive",
+      "1": "Thick Fat",
+      "H": "Rime Mantle"
+    },
+    "zapdosgalar": {
+      "0": "Defiant",
+      "1": "Volt Absorb",
+      "H": "Storm Mantle"
+    },
+    "moltresgalar": {
+      "0": "Berserk",
+      "1": "Heatproof",
+      "H": "Cinder Mantle"
+    },
+    "cosmog": {
+      "0": "Unaware",
+      "1": "Healer"
+    },
+    "manaphy": {
+      "0": "Healer",
+      "1": "Own Tempo",
+      "H": "Heart Current"
+    },
+    "keldeo": {
+      "0": "Sharpness",
+      "1": "Inner Focus",
+      "H": "Rushing Blade"
+    },
+    "keldeoresolute": {
+      "0": "Sharpness",
+      "1": "Inner Focus",
+      "H": "Rushing Blade"
+    },
+    "victini": {
+      "0": "Flame Body",
+      "1": "Own Tempo",
+      "H": "Victory Lap"
+    },
+    "meltan": {
+      "0": "Magnet Pull",
+      "1": "Sturdy",
+      "H": "Scrap Collector"
+    },
+    "phione": {
+      "0": "Sea Blessing",
+      "1": "Hydration"
+    },
+    "vigoroth": {
+      "0": "Tough Claws",
+      "1": "Scrappy",
+      "H": "Restless Drive"
     }
   },
   "passives": {
-    "tatsugiri": ["sushisavvy"],
-    "tatsugiridroopy": ["sushisavvy"],
-    "tatsugiristretchy": ["sushisavvy"],
-    "tatsugiricurlymega": ["sushisavvy"],
-    "tatsugiridroopymega": ["sushisavvy"],
-    "tatsugiristretchymega": ["sushisavvy"],
-    "drampa": ["kindredfury"],
-    "heatran": ["flashfire"],
-    "heatranmega": ["watercompaction"],
-    "gigalith": ["mineralheart"],
-    "grapploct": ["abyssalgrip"],
-    "toucannon": ["siegebeak"],
-    "sirfetchd": ["steadfast"],
-    "liepard": ["prankster"],
-    "druddigon": ["roughskin"],
-    "azelf": ["giftofwill"],
-    "mesprit": ["giftofemotion"],
-    "uxie": ["giftofknowledge"],
-    "ambipom": ["doublestrike"],
-    "deoxysspeed": ["pressure"],
-    "deoxysdefense": ["pressure"],
-    "deoxysattack": ["pressure"],
-    "deoxys": ["pressure"],
-    "rayquazamega": ["deltastream"],
-    "rayquaza": ["airlock"],
-    "groudonprimal": ["desolateland"],
-    "groudon": ["drought"],
-    "kyogreprimal": ["primordialsea"],
-    "kyogre": ["drizzle"],
-    "latiosmega": ["levitate"],
-    "latiasmega": ["levitate"],
-    "latios": ["levitate"],
-    "latias": ["levitate"],
-    "dusclops": ["pressure"],
-    "swellow": ["scrappy"],
-    "shiftry": ["windrider"],
-    "celebi": ["naturalrecovery"],
-    "hooh": ["regenerator"],
-    "lugia": ["multiscale"],
-    "qwilfishhisui": ["ironbarbs"],
-    "xatu": ["magicbounce"],
-    "togetic": ["serenegrace"],
-    "noctowl": ["frisk"],
-    "ninetales": ["flashfire"],
-    "ninetalesreborn": ["flashfire"],
-    "ninetalesalt": ["flashfire"],
-    "arcanine": ["flashfire"],
-    "arcaninealt": ["flashfire"],
-    "arcaninehisui": ["flashfire"],
-    "houndoom": ["flashfire"],
-    "heatmor": ["flashfire"],
-    "coalossal": ["flashfire"],
-    "coalossalgmax": ["flashfire"],
-    "chandelure": ["soulsiphon"],
-    "sneasel": ["sharpness"],
-    "sneaselhisui": ["sharpness"],
-    "bellossom": ["petalrhythm"],
-    "forretress": ["splintershell"],
+    "tatsugiri": [
+      "sushisavvy"
+    ],
+    "tatsugiridroopy": [
+      "sushisavvy"
+    ],
+    "tatsugiristretchy": [
+      "sushisavvy"
+    ],
+    "tatsugiricurlymega": [
+      "sushisavvy"
+    ],
+    "tatsugiridroopymega": [
+      "sushisavvy"
+    ],
+    "tatsugiristretchymega": [
+      "sushisavvy"
+    ],
+    "drampa": [
+      "kindredfury"
+    ],
+    "heatran": [
+      "flashfire"
+    ],
+    "heatranmega": [
+      "watercompaction"
+    ],
+    "gigalith": [
+      "mineralheart"
+    ],
+    "grapploct": [
+      "abyssalgrip"
+    ],
+    "toucannon": [
+      "siegebeak"
+    ],
+    "sirfetchd": [
+      "steadfast"
+    ],
+    "liepard": [
+      "prankster"
+    ],
+    "druddigon": [
+      "roughskin"
+    ],
+    "azelf": [
+      "giftofwill"
+    ],
+    "mesprit": [
+      "giftofemotion"
+    ],
+    "uxie": [
+      "giftofknowledge"
+    ],
+    "ambipom": [
+      "doublestrike"
+    ],
+    "deoxysspeed": [
+      "pressure"
+    ],
+    "deoxysdefense": [
+      "pressure"
+    ],
+    "deoxysattack": [
+      "pressure"
+    ],
+    "deoxys": [
+      "pressure"
+    ],
+    "rayquazamega": [
+      "deltastream"
+    ],
+    "rayquaza": [
+      "airlock"
+    ],
+    "groudonprimal": [
+      "desolateland"
+    ],
+    "groudon": [
+      "drought"
+    ],
+    "kyogreprimal": [
+      "primordialsea"
+    ],
+    "kyogre": [
+      "drizzle"
+    ],
+    "latiosmega": [
+      "levitate"
+    ],
+    "latiasmega": [
+      "levitate"
+    ],
+    "latios": [
+      "levitate"
+    ],
+    "latias": [
+      "levitate"
+    ],
+    "dusclops": [
+      "pressure"
+    ],
+    "swellow": [
+      "scrappy"
+    ],
+    "shiftry": [
+      "windrider"
+    ],
+    "celebi": [
+      "naturalrecovery"
+    ],
+    "hooh": [
+      "regenerator"
+    ],
+    "lugia": [
+      "multiscale"
+    ],
+    "qwilfishhisui": [
+      "ironbarbs"
+    ],
+    "xatu": [
+      "magicbounce"
+    ],
+    "togetic": [
+      "serenegrace"
+    ],
+    "noctowl": [
+      "frisk"
+    ],
+    "ninetales": [
+      "flashfire"
+    ],
+    "ninetalesreborn": [
+      "flashfire"
+    ],
+    "ninetalesalt": [
+      "flashfire"
+    ],
+    "arcanine": [
+      "flashfire"
+    ],
+    "arcaninealt": [
+      "flashfire"
+    ],
+    "arcaninehisui": [
+      "flashfire"
+    ],
+    "houndoom": [
+      "flashfire"
+    ],
+    "heatmor": [
+      "flashfire"
+    ],
+    "coalossal": [
+      "flashfire"
+    ],
+    "coalossalgmax": [
+      "flashfire"
+    ],
+    "chandelure": [
+      "soulsiphon"
+    ],
+    "sneasel": [
+      "sharpness"
+    ],
+    "sneaselhisui": [
+      "sharpness"
+    ],
+    "bellossom": [
+      "petalrhythm"
+    ],
+    "forretress": [
+      "splintershell"
+    ],
     "audinomega": [
       "friendguard"
     ],
@@ -262,7 +830,9 @@
     "garchomp": [
       "roughskin"
     ],
-    "garchompbattlebond": ["serratedscales"],
+    "garchompbattlebond": [
+      "serratedscales"
+    ],
     "cherrim": [
       "flowergift"
     ],
@@ -280,113 +850,1260 @@
     ],
     "magmar": [
       "flamebody"
+    ],
+    "dialga": [
+      "oblivious"
+    ],
+    "dialgaorigin": [
+      "oblivious"
+    ],
+    "palkia": [
+      "suctioncups"
+    ],
+    "palkiaorigin": [
+      "suctioncups"
+    ],
+    "zygarde": [
+      "suctioncups"
+    ],
+    "zygarde10": [
+      "suctioncups"
+    ],
+    "zygardecomplete": [
+      "suctioncups"
+    ],
+    "zygardemega": [
+      "suctioncups"
+    ],
+    "tinglu": [
+      "suctioncups"
+    ],
+    "giratina": [
+      "infiltrator"
+    ],
+    "giratinaorigin": [
+      "infiltrator"
+    ],
+    "marshadow": [
+      "infiltrator"
+    ],
+    "cresselia": [
+      "healer"
+    ],
+    "xerneas": [
+      "healer"
+    ],
+    "xerneasneutral": [
+      "healer"
+    ],
+    "calyrex": [
+      "healer"
+    ],
+    "calyrexice": [
+      "healer"
+    ],
+    "calyrexshadow": [
+      "healer"
+    ],
+    "enamorus": [
+      "healer"
+    ],
+    "enamorustherian": [
+      "healer"
+    ],
+    "fezandipiti": [
+      "healer"
+    ],
+    "darkrai": [
+      "earlybird"
+    ],
+    "darkraimega": [
+      "earlybird"
+    ],
+    "spectrier": [
+      "earlybird"
+    ],
+    "shaymin": [
+      "leafguard"
+    ],
+    "shayminsky": [
+      "leafguard"
+    ],
+    "zarude": [
+      "leafguard"
+    ],
+    "zarudedada": [
+      "leafguard"
+    ],
+    "wochien": [
+      "leafguard"
+    ],
+    "arceus": [
+      "steadfast"
+    ],
+    "arceusbug": [
+      "steadfast"
+    ],
+    "arceusdark": [
+      "steadfast"
+    ],
+    "arceusdragon": [
+      "steadfast"
+    ],
+    "arceuselectric": [
+      "steadfast"
+    ],
+    "arceusfairy": [
+      "steadfast"
+    ],
+    "arceusfighting": [
+      "steadfast"
+    ],
+    "arceusfire": [
+      "steadfast"
+    ],
+    "arceusflying": [
+      "steadfast"
+    ],
+    "arceusghost": [
+      "steadfast"
+    ],
+    "arceusgrass": [
+      "steadfast"
+    ],
+    "arceusground": [
+      "steadfast"
+    ],
+    "arceusice": [
+      "steadfast"
+    ],
+    "arceuspoison": [
+      "steadfast"
+    ],
+    "arceuspsychic": [
+      "steadfast"
+    ],
+    "arceusrock": [
+      "steadfast"
+    ],
+    "arceussteel": [
+      "steadfast"
+    ],
+    "arceuswater": [
+      "steadfast"
+    ],
+    "zeraora": [
+      "steadfast"
+    ],
+    "zeraoramega": [
+      "steadfast"
+    ],
+    "zacian": [
+      "steadfast"
+    ],
+    "zaciancrowned": [
+      "steadfast"
+    ],
+    "urshifu": [
+      "steadfast"
+    ],
+    "urshifurapidstrike": [
+      "steadfast"
+    ],
+    "urshifugmax": [
+      "steadfast"
+    ],
+    "urshifurapidstrikegmax": [
+      "steadfast"
+    ],
+    "miraidon": [
+      "steadfast"
+    ],
+    "cobalion": [
+      "justified"
+    ],
+    "terrakion": [
+      "justified"
+    ],
+    "virizion": [
+      "justified"
+    ],
+    "tornadus": [
+      "keeneye"
+    ],
+    "tornadustherian": [
+      "keeneye"
+    ],
+    "thundurus": [
+      "static"
+    ],
+    "thundurustherian": [
+      "static"
+    ],
+    "reshiram": [
+      "innerfocus"
+    ],
+    "solgaleo": [
+      "innerfocus"
+    ],
+    "zekrom": [
+      "hypercutter"
+    ],
+    "koraidon": [
+      "hypercutter"
+    ],
+    "landorus": [
+      "bigpecks"
+    ],
+    "landorustherian": [
+      "bigpecks"
+    ],
+    "okidogi": [
+      "bigpecks"
+    ],
+    "kyurem": [
+      "coldreserve"
+    ],
+    "kyuremblack": [
+      "coldreserve"
+    ],
+    "kyuremwhite": [
+      "coldreserve"
+    ],
+    "genesect": [
+      "download"
+    ],
+    "genesectdouse": [
+      "download"
+    ],
+    "genesectshock": [
+      "download"
+    ],
+    "genesectburn": [
+      "download"
+    ],
+    "genesectchill": [
+      "download"
+    ],
+    "yveltal": [
+      "unnerve"
+    ],
+    "diancie": [
+      "crystalfacet"
+    ],
+    "dianciemega": [
+      "crystalfacet"
+    ],
+    "hoopa": [
+      "magician"
+    ],
+    "hoopaunbound": [
+      "magician"
+    ],
+    "volcanion": [
+      "overcoat"
+    ],
+    "typenull": [
+      "battlearmor"
+    ],
+    "tapukoko": [
+      "islandwatch"
+    ],
+    "tapulele": [
+      "islandwatch"
+    ],
+    "tapubulu": [
+      "islandwatch"
+    ],
+    "tapufini": [
+      "islandwatch"
+    ],
+    "lunala": [
+      "owntempo"
+    ],
+    "magearna": [
+      "owntempo"
+    ],
+    "magearnaoriginal": [
+      "owntempo"
+    ],
+    "magearnamega": [
+      "owntempo"
+    ],
+    "magearnaoriginalmega": [
+      "owntempo"
+    ],
+    "kubfu": [
+      "owntempo"
+    ],
+    "glastrier": [
+      "owntempo"
+    ],
+    "munkidori": [
+      "owntempo"
+    ],
+    "terapagos": [
+      "owntempo"
+    ],
+    "terapagosterastal": [
+      "owntempo"
+    ],
+    "terapagosstellar": [
+      "owntempo"
+    ],
+    "necrozma": [
+      "lightcache"
+    ],
+    "necrozmaduskmane": [
+      "lightcache"
+    ],
+    "necrozmadawnwings": [
+      "lightcache"
+    ],
+    "necrozmaultra": [
+      "lightcache"
+    ],
+    "melmetal": [
+      "stickyhold"
+    ],
+    "melmetalgmax": [
+      "stickyhold"
+    ],
+    "pecharunt": [
+      "stickyhold"
+    ],
+    "zamazenta": [
+      "bulwarkrelay"
+    ],
+    "zamazentacrowned": [
+      "bulwarkrelay"
+    ],
+    "eternatus": [
+      "poisonpoint"
+    ],
+    "chienpao": [
+      "snowpassage"
+    ],
+    "chiyu": [
+      "flamebody"
+    ],
+    "ogerpon": [
+      "maskmender"
+    ],
+    "ogerponwellspring": [
+      "maskmender"
+    ],
+    "ogerponhearthflame": [
+      "maskmender"
+    ],
+    "ogerponcornerstone": [
+      "maskmender"
+    ],
+    "ogerpontealtera": [
+      "maskmender"
+    ],
+    "ogerponwellspringtera": [
+      "maskmender"
+    ],
+    "ogerponhearthflametera": [
+      "maskmender"
+    ],
+    "ogerponcornerstonetera": [
+      "maskmender"
+    ],
+    "articunogalar": [
+      "keeneye"
+    ],
+    "zapdosgalar": [
+      "steadfast"
+    ],
+    "moltresgalar": [
+      "unnerve"
+    ],
+    "cosmog": [
+      "nebuladrift"
+    ],
+    "cosmoem": [
+      "nebuladrift"
+    ],
+    "manaphy": [
+      "hydration"
+    ],
+    "phione": [
+      "healer"
+    ],
+    "keldeo": [
+      "justified"
+    ],
+    "keldeoresolute": [
+      "justified"
+    ],
+    "meltan": [
+      "stickyhold"
+    ],
+    "victini": [
+      "victorystar"
+    ],
+    "vigoroth": [
+      "vitalspirit"
+    ],
+    "wishiwashisevii": [
+      "misalignedstars"
+    ],
+    "wishiwashiseviischooling": [
+      "misalignedstars"
+    ],
+    "dragapult": [
+      "misalignedstars"
+    ],
+    "abysseon": [
+      "misalignedstars"
+    ],
+    "divineon": [
+      "misalignedstars"
     ]
   },
   "stats": {
-    "rapidash": {"hp":80,"atk":110,"def":70,"spa":80,"spd":80,"spe":110},
-    "rapidashgalar": {"hp":80,"atk":110,"def":70,"spa":80,"spd":80,"spe":110},
-    "dodrio": {"hp":90,"atk":110,"def":85,"spa":50,"spd":75,"spe":110},
-    "houndoom": {"hp":75,"atk":110,"def":60,"spa":120,"spd":85,"spe":95},
-    "houndoommega": {"hp":75,"atk":110,"def":100,"spa":150,"spd":95,"spe":115},
-    "staraptormega": {"hp":85,"atk":145,"def":110,"spa":60,"spd":100,"spe":110},
-    "ambipom": {"hp":80,"atk":110,"def":70,"spa":100,"spd":70,"spe":115},
-    "ribombee": {"hp":65,"atk":55,"def":60,"spa":90,"spd":105,"spe":124},
-    "fearow": {"hp":80,"atk":105,"def":65,"spa":45,"spd":65,"spe":110},
-    "gardevoirmega": {"hp":75,"atk":75,"def":80,"spa":165,"spd":145,"spe":100},
-    "gardevoirmegaalt": {"hp":75,"atk":75,"def":80,"spa":165,"spd":145,"spe":100},
-    "gallademega": {"hp":75,"atk":165,"def":97,"spa":68,"spd":125,"spe":110},
-    "gallademegaazzy": {"hp":75,"atk":165,"def":97,"spa":68,"spd":125,"spe":110},
-    "deoxys": {"hp":50,"atk":120,"def":90,"spa":120,"spd":90,"spe":130},
-    "lunatone": {"hp":100,"atk":35,"def":90,"spa":125,"spd":90,"spe":70},
-    "solrock": {"hp":100,"atk":125,"def":90,"spa":35,"spd":90,"spe":70},
-    "dusclops": {"hp":55,"atk":70,"def":130,"spa":60,"spd":130,"spe":25},
-    "togetic": {"hp":65,"atk":40,"def":85,"spa":80,"spd":105,"spe":50},
-    "forretress": {"hp": 85, "atk": 105, "def": 145, "spa": 60, "spd": 85, "spe": 20},
-    "cacturne": {"hp": 75, "atk": 145, "def": 70, "spa": 90, "spd": 70, "spe": 85},
-    "cacturnealt": {"hp": 75, "atk": 145, "def": 70, "spa": 90, "spd": 70, "spe": 85},
-    "venusaur": {"hp": 80, "atk": 92, "def": 83, "spa": 100, "spd": 100, "spe": 80},
-    "venusaurmega": {"hp": 80, "atk": 110, "def": 123, "spa": 122, "spd": 120, "spe": 80},
-    "venusaurgmax": {"hp": 136, "atk": 92, "def": 83, "spa": 100, "spd": 100, "spe": 80},
-    "charizard": {"hp": 78, "atk": 84, "def": 78, "spa": 110, "spd": 85, "spe": 100},
-    "charizardalt": {"hp": 78, "atk": 84, "def": 78, "spa": 110, "spd": 85, "spe": 100},
-    "charizardmegax": {"hp": 78, "atk": 130, "def": 111, "spa": 131, "spd": 85, "spe": 100},
-    "charizardmegaxalt": {"hp": 78, "atk": 130, "def": 111, "spa": 131, "spd": 85, "spe": 100},
-    "charizardmegay": {"hp": 78, "atk": 104, "def": 78, "spa": 160, "spd": 115, "spe": 100},
-    "charizardgmax": {"hp": 133, "atk": 84, "def": 78, "spa": 109, "spd": 85, "spe": 100},
-    "blastoise": {"hp": 79, "atk": 83, "def": 105, "spa": 85, "spd": 105, "spe": 78},
-    "blastoisemega": {"hp": 79, "atk": 103, "def": 125, "spa": 135, "spd": 115, "spe": 78},
-    "blastoisegmax": {"hp": 145, "atk": 83, "def": 100, "spa": 85, "spd": 105, "spe": 78},
-    "meganium": {"hp": 80, "atk": 62, "def": 115, "spa": 83, "spd": 125, "spe": 70},
-    "meganiummega": {"hp": 80, "atk": 92, "def": 115, "spa": 153, "spd": 115, "spe": 80},
-    "meganiummegay": {"hp": 80, "atk": 82, "def": 130, "spa": 123, "spd": 130, "spe": 90},
-    "typhlosion": {"hp": 78, "atk": 84, "def": 78, "spa": 110, "spd": 85, "spe": 100},
-    "typhlosionalt": {"hp": 78, "atk": 84, "def": 78, "spa": 110, "spd": 85, "spe": 100},
-    "typhlosionhisui": {"hp": 73, "atk": 84, "def": 78, "spa": 120, "spd": 85, "spe": 95},
-    "typhlosionmega": {"hp": 78, "atk": 127, "def": 78, "spa": 137, "spd": 85, "spe": 130},
-    "feraligatr": {"hp": 100, "atk": 109, "def": 100, "spa": 59, "spd": 89, "spe": 78},
-    "feraligatrmega": {"hp": 100, "atk": 164, "def": 125, "spa": 59, "spd": 104, "spe": 83},
-    "sceptile": {"hp": 70, "atk": 105, "def": 60, "spa": 115, "spd": 65, "spe": 120},
-    "sceptilemega": {"hp": 70, "atk": 130, "def": 70, "spa": 145, "spd": 75, "spe": 145},
-    "blaziken": {"hp": 80, "atk": 120, "def": 70, "spa": 110, "spd": 75, "spe": 80},
-    "blazikenmega": {"hp": 80, "atk": 160, "def": 80, "spa": 130, "spd": 85, "spe": 100},
-    "serperior": {"hp": 75, "atk": 75, "def": 95, "spa": 82, "spd": 95, "spe": 113},
-    "serperiorazzy": {"hp": 75, "atk": 75, "def": 95, "spa": 82, "spd": 95, "spe": 113},
-    "serperiormega": {"hp": 75, "atk": 95, "def": 115, "spa": 102, "spd": 115, "spe": 133},
-    "emboar": {"hp": 110, "atk": 123, "def": 75, "spa": 87, "spd": 75, "spe": 65},
-    "emboarmega": {"hp": 110, "atk": 150, "def": 93, "spa": 92, "spd": 115, "spe": 75},
-    "emboaralt": {"hp": 110, "atk": 123, "def": 75, "spa": 87, "spd": 75, "spe": 65},
-    "emboarreborn": {"hp": 110, "atk": 123, "def": 75, "spa": 87, "spd": 75, "spe": 65},
-    "emboarmegaalt": {"hp": 110, "atk": 150, "def": 93, "spa": 92, "spd": 115, "spe": 75},
-    "emboarmegareborn": {"hp": 110, "atk": 150, "def": 93, "spa": 92, "spd": 115, "spe": 75},
-    "samurott": {"hp": 90, "atk": 100, "def": 85, "spa": 105, "spd": 80, "spe": 75},
-    "samurottalt": {"hp": 90, "atk": 100, "def": 85, "spa": 105, "spd": 80, "spe": 75},
-    "samurotthisui": {"hp": 90, "atk": 115, "def": 80, "spa": 100, "spd": 65, "spe": 85},
-    "samurotthisuialt": {"hp": 90, "atk": 115, "def": 80, "spa": 100, "spd": 65, "spe": 85},
-    "chesnaught": {"hp": 88, "atk": 107, "def": 122, "spa": 74, "spd": 80, "spe": 64},
-    "chesnaughtmega": {"hp": 88, "atk": 137, "def": 172, "spa": 74, "spd": 120, "spe": 44},
-    "delphox": {"hp": 75, "atk": 69, "def": 72, "spa": 115, "spd": 100, "spe": 104},
-    "delphoxmega": {"hp": 75, "atk": 69, "def": 72, "spa": 160, "spd": 125, "spe": 134},
-    "decidueye": {"hp": 83, "atk": 112, "def": 80, "spa": 85, "spd": 90, "spe": 85},
-    "decidueyealt": {"hp": 83, "atk": 112, "def": 80, "spa": 85, "spd": 90, "spe": 85},
-    "decidueyehisui": {"hp": 93, "atk": 117, "def": 80, "spa": 80, "spd": 85, "spe": 80},
-    "decidueyehisuialt": {"hp": 93, "atk": 117, "def": 80, "spa": 80, "spd": 85, "spe": 80},
-    "rillaboom": {"hp": 100, "atk": 125, "def": 90, "spa": 60, "spd": 75, "spe": 85},
-    "cinderace": {"hp": 80, "atk": 121, "def": 75, "spa": 65, "spd": 75, "spe": 119},
-    "inteleon": {"hp": 70, "atk": 85, "def": 65, "spa": 130, "spd": 65, "spe": 120},
-    "skeledirge": {"hp": 104, "atk": 75, "def": 105, "spa": 110, "spd": 75, "spe": 66},
-    "skeledirgealt": {"hp": 104, "atk": 75, "def": 105, "spa": 110, "spd": 75, "spe": 66},
-    "skeledirgeaevian": {"hp": 90, "atk": 50, "def": 110, "spa": 103, "spd": 105, "spe": 77},
-    "quaquaval": {"hp": 85, "atk": 120, "def": 80, "spa": 85, "spd": 80, "spe": 85},
-    "cinderacemega": {"hp": 80, "atk": 151, "def": 95, "spa": 75, "spd": 85, "spe": 149},
-    "emboarego": {"hp": 110, "atk": 123, "def": 75, "spa": 87, "spd": 75, "spe": 65},
-    "emboarmegaego": {"hp": 110, "atk": 150, "def": 93, "spa": 92, "spd": 115, "spe": 75},
-    "azumarill": {"hp": 100, "atk": 60, "def": 105, "spa": 90, "spd": 105, "spe": 60},
-    "sandslash": {"hp": 95, "atk": 115, "def": 125, "spa": 45, "spd": 75, "spe": 75},
-    "sandslashalola": {"hp": 95, "atk": 115, "def": 125, "spa": 45, "spd": 75, "spe": 75},
-    "nidoqueen": {"hp": 90, "atk": 95, "def": 100, "spa": 88, "spd": 97, "spe": 80},
-    "nidoking": {"hp": 84, "atk": 110, "def": 82, "spa": 102, "spd": 82, "spe": 90},
-    "ninetales": {"hp": 73, "atk": 76, "def": 75, "spa": 81, "spd": 100, "spe": 100},
-    "ninetalesalola": {"hp": 73, "atk": 67, "def": 75, "spa": 81, "spd": 100, "spe": 109},
-    "venomoth": {"hp": 70, "atk": 60, "def": 65, "spa": 110, "spd": 90, "spe": 105},
-    "persian": {"hp": 75, "atk": 95, "def": 65, "spa": 115, "spd": 65, "spe": 125},
-    "persianalola": {"hp": 95, "atk": 70, "def": 80, "spa": 95, "spd": 90, "spe": 110},
-    "poliwrath": {"hp": 95, "atk": 100, "def": 95, "spa": 80, "spd": 85, "spe": 75},
-    "poliwrathrejuv": {"hp": 95, "atk": 70, "def": 90, "spa": 135, "spd": 85, "spe": 55},
-    "politoed": {"hp": 105, "atk": 75, "def": 80, "spa": 100, "spd": 100, "spe": 70},
-    "politoedrejuv": {"hp": 105, "atk": 70, "def": 105, "spa": 95, "spd": 85, "spe": 70},
-    "tentacruel": {"hp": 80, "atk": 70, "def": 70, "spa": 90, "spd": 120, "spe": 100},
-    "rhydon": {"hp": 105, "atk": 130, "def": 120, "spa": 45, "spd": 55, "spe": 45},
-    "lapras": {"hp": 130, "atk": 85, "def": 80, "spa": 85, "spd": 95, "spe": 60},
-    "laprasaevian": {"hp": 130, "atk": 85, "def": 80, "spa": 85, "spd": 95, "spe": 60},
-    "laprasgmax": {"hp": 195, "atk": 85, "def": 80, "spa": 85, "spd": 95, "spe": 60},
-    "laprasaeviangmax": {"hp": 195, "atk": 85, "def": 80, "spa": 85, "spd": 95, "spe": 60},
-    "sandslashalt": {"hp": 95, "atk": 115, "def": 125, "spa": 45, "spd": 75, "spe": 75},
-    "sandslashreborn": {"hp": 95, "atk": 115, "def": 125, "spa": 45, "spd": 75, "spe": 75},
-    "ninetalesalt": {"hp": 73, "atk": 76, "def": 75, "spa": 81, "spd": 100, "spe": 100},
-    "ninetalesreborn": {"hp": 73, "atk": 76, "def": 75, "spa": 81, "spd": 100, "spe": 100},
-    "tentacruelalt": {"hp": 80, "atk": 70, "def": 70, "spa": 90, "spd": 120, "spe": 100},
-    "tentacruelreborn": {"hp": 80, "atk": 70, "def": 70, "spa": 90, "spd": 120, "spe": 100},
-    "laprasazzy": {"hp": 130, "atk": 85, "def": 80, "spa": 85, "spd": 95, "spe": 60}
+    "rapidash": {
+      "hp": 80,
+      "atk": 110,
+      "def": 70,
+      "spa": 80,
+      "spd": 80,
+      "spe": 110
+    },
+    "rapidashgalar": {
+      "hp": 80,
+      "atk": 110,
+      "def": 70,
+      "spa": 80,
+      "spd": 80,
+      "spe": 110
+    },
+    "dodrio": {
+      "hp": 90,
+      "atk": 110,
+      "def": 85,
+      "spa": 50,
+      "spd": 75,
+      "spe": 110
+    },
+    "houndoom": {
+      "hp": 75,
+      "atk": 110,
+      "def": 60,
+      "spa": 120,
+      "spd": 85,
+      "spe": 95
+    },
+    "houndoommega": {
+      "hp": 75,
+      "atk": 110,
+      "def": 100,
+      "spa": 150,
+      "spd": 95,
+      "spe": 115
+    },
+    "staraptormega": {
+      "hp": 85,
+      "atk": 145,
+      "def": 110,
+      "spa": 60,
+      "spd": 100,
+      "spe": 110
+    },
+    "ambipom": {
+      "hp": 80,
+      "atk": 110,
+      "def": 70,
+      "spa": 100,
+      "spd": 70,
+      "spe": 115
+    },
+    "ribombee": {
+      "hp": 65,
+      "atk": 55,
+      "def": 60,
+      "spa": 90,
+      "spd": 105,
+      "spe": 124
+    },
+    "fearow": {
+      "hp": 80,
+      "atk": 105,
+      "def": 65,
+      "spa": 45,
+      "spd": 65,
+      "spe": 110
+    },
+    "gardevoirmega": {
+      "hp": 75,
+      "atk": 75,
+      "def": 80,
+      "spa": 165,
+      "spd": 145,
+      "spe": 100
+    },
+    "gardevoirmegaalt": {
+      "hp": 75,
+      "atk": 75,
+      "def": 80,
+      "spa": 165,
+      "spd": 145,
+      "spe": 100
+    },
+    "gallademega": {
+      "hp": 75,
+      "atk": 165,
+      "def": 97,
+      "spa": 68,
+      "spd": 125,
+      "spe": 110
+    },
+    "gallademegaazzy": {
+      "hp": 75,
+      "atk": 165,
+      "def": 97,
+      "spa": 68,
+      "spd": 125,
+      "spe": 110
+    },
+    "deoxys": {
+      "hp": 50,
+      "atk": 120,
+      "def": 90,
+      "spa": 120,
+      "spd": 90,
+      "spe": 130
+    },
+    "lunatone": {
+      "hp": 100,
+      "atk": 35,
+      "def": 90,
+      "spa": 125,
+      "spd": 90,
+      "spe": 70
+    },
+    "solrock": {
+      "hp": 100,
+      "atk": 125,
+      "def": 90,
+      "spa": 35,
+      "spd": 90,
+      "spe": 70
+    },
+    "dusclops": {
+      "hp": 55,
+      "atk": 70,
+      "def": 130,
+      "spa": 60,
+      "spd": 130,
+      "spe": 25
+    },
+    "togetic": {
+      "hp": 65,
+      "atk": 40,
+      "def": 85,
+      "spa": 80,
+      "spd": 105,
+      "spe": 50
+    },
+    "forretress": {
+      "hp": 85,
+      "atk": 105,
+      "def": 145,
+      "spa": 60,
+      "spd": 85,
+      "spe": 20
+    },
+    "cacturne": {
+      "hp": 75,
+      "atk": 145,
+      "def": 70,
+      "spa": 90,
+      "spd": 70,
+      "spe": 85
+    },
+    "cacturnealt": {
+      "hp": 75,
+      "atk": 145,
+      "def": 70,
+      "spa": 90,
+      "spd": 70,
+      "spe": 85
+    },
+    "venusaur": {
+      "hp": 80,
+      "atk": 92,
+      "def": 83,
+      "spa": 100,
+      "spd": 100,
+      "spe": 80
+    },
+    "venusaurmega": {
+      "hp": 80,
+      "atk": 110,
+      "def": 123,
+      "spa": 122,
+      "spd": 120,
+      "spe": 80
+    },
+    "venusaurgmax": {
+      "hp": 136,
+      "atk": 92,
+      "def": 83,
+      "spa": 100,
+      "spd": 100,
+      "spe": 80
+    },
+    "charizard": {
+      "hp": 78,
+      "atk": 84,
+      "def": 78,
+      "spa": 110,
+      "spd": 85,
+      "spe": 100
+    },
+    "charizardalt": {
+      "hp": 78,
+      "atk": 84,
+      "def": 78,
+      "spa": 110,
+      "spd": 85,
+      "spe": 100
+    },
+    "charizardmegax": {
+      "hp": 78,
+      "atk": 130,
+      "def": 111,
+      "spa": 131,
+      "spd": 85,
+      "spe": 100
+    },
+    "charizardmegaxalt": {
+      "hp": 78,
+      "atk": 130,
+      "def": 111,
+      "spa": 131,
+      "spd": 85,
+      "spe": 100
+    },
+    "charizardmegay": {
+      "hp": 78,
+      "atk": 104,
+      "def": 78,
+      "spa": 160,
+      "spd": 115,
+      "spe": 100
+    },
+    "charizardgmax": {
+      "hp": 133,
+      "atk": 84,
+      "def": 78,
+      "spa": 109,
+      "spd": 85,
+      "spe": 100
+    },
+    "blastoise": {
+      "hp": 79,
+      "atk": 83,
+      "def": 105,
+      "spa": 85,
+      "spd": 105,
+      "spe": 78
+    },
+    "blastoisemega": {
+      "hp": 79,
+      "atk": 103,
+      "def": 125,
+      "spa": 135,
+      "spd": 115,
+      "spe": 78
+    },
+    "blastoisegmax": {
+      "hp": 145,
+      "atk": 83,
+      "def": 100,
+      "spa": 85,
+      "spd": 105,
+      "spe": 78
+    },
+    "meganium": {
+      "hp": 80,
+      "atk": 62,
+      "def": 115,
+      "spa": 83,
+      "spd": 125,
+      "spe": 70
+    },
+    "meganiummega": {
+      "hp": 80,
+      "atk": 92,
+      "def": 115,
+      "spa": 153,
+      "spd": 115,
+      "spe": 80
+    },
+    "meganiummegay": {
+      "hp": 80,
+      "atk": 82,
+      "def": 130,
+      "spa": 123,
+      "spd": 130,
+      "spe": 90
+    },
+    "typhlosion": {
+      "hp": 78,
+      "atk": 84,
+      "def": 78,
+      "spa": 110,
+      "spd": 85,
+      "spe": 100
+    },
+    "typhlosionalt": {
+      "hp": 78,
+      "atk": 84,
+      "def": 78,
+      "spa": 110,
+      "spd": 85,
+      "spe": 100
+    },
+    "typhlosionhisui": {
+      "hp": 73,
+      "atk": 84,
+      "def": 78,
+      "spa": 120,
+      "spd": 85,
+      "spe": 95
+    },
+    "typhlosionmega": {
+      "hp": 78,
+      "atk": 127,
+      "def": 78,
+      "spa": 137,
+      "spd": 85,
+      "spe": 130
+    },
+    "feraligatr": {
+      "hp": 100,
+      "atk": 109,
+      "def": 100,
+      "spa": 59,
+      "spd": 89,
+      "spe": 78
+    },
+    "feraligatrmega": {
+      "hp": 100,
+      "atk": 164,
+      "def": 125,
+      "spa": 59,
+      "spd": 104,
+      "spe": 83
+    },
+    "sceptile": {
+      "hp": 70,
+      "atk": 105,
+      "def": 60,
+      "spa": 115,
+      "spd": 65,
+      "spe": 120
+    },
+    "sceptilemega": {
+      "hp": 70,
+      "atk": 130,
+      "def": 70,
+      "spa": 145,
+      "spd": 75,
+      "spe": 145
+    },
+    "blaziken": {
+      "hp": 80,
+      "atk": 120,
+      "def": 70,
+      "spa": 110,
+      "spd": 75,
+      "spe": 80
+    },
+    "blazikenmega": {
+      "hp": 80,
+      "atk": 160,
+      "def": 80,
+      "spa": 130,
+      "spd": 85,
+      "spe": 100
+    },
+    "serperior": {
+      "hp": 75,
+      "atk": 75,
+      "def": 95,
+      "spa": 82,
+      "spd": 95,
+      "spe": 113
+    },
+    "serperiorazzy": {
+      "hp": 75,
+      "atk": 75,
+      "def": 95,
+      "spa": 82,
+      "spd": 95,
+      "spe": 113
+    },
+    "serperiormega": {
+      "hp": 75,
+      "atk": 95,
+      "def": 115,
+      "spa": 102,
+      "spd": 115,
+      "spe": 133
+    },
+    "emboar": {
+      "hp": 110,
+      "atk": 123,
+      "def": 75,
+      "spa": 87,
+      "spd": 75,
+      "spe": 65
+    },
+    "emboarmega": {
+      "hp": 110,
+      "atk": 150,
+      "def": 93,
+      "spa": 92,
+      "spd": 115,
+      "spe": 75
+    },
+    "emboaralt": {
+      "hp": 110,
+      "atk": 123,
+      "def": 75,
+      "spa": 87,
+      "spd": 75,
+      "spe": 65
+    },
+    "emboarreborn": {
+      "hp": 110,
+      "atk": 123,
+      "def": 75,
+      "spa": 87,
+      "spd": 75,
+      "spe": 65
+    },
+    "emboarmegaalt": {
+      "hp": 110,
+      "atk": 150,
+      "def": 93,
+      "spa": 92,
+      "spd": 115,
+      "spe": 75
+    },
+    "emboarmegareborn": {
+      "hp": 110,
+      "atk": 150,
+      "def": 93,
+      "spa": 92,
+      "spd": 115,
+      "spe": 75
+    },
+    "samurott": {
+      "hp": 90,
+      "atk": 100,
+      "def": 85,
+      "spa": 105,
+      "spd": 80,
+      "spe": 75
+    },
+    "samurottalt": {
+      "hp": 90,
+      "atk": 100,
+      "def": 85,
+      "spa": 105,
+      "spd": 80,
+      "spe": 75
+    },
+    "samurotthisui": {
+      "hp": 90,
+      "atk": 115,
+      "def": 80,
+      "spa": 100,
+      "spd": 65,
+      "spe": 85
+    },
+    "samurotthisuialt": {
+      "hp": 90,
+      "atk": 115,
+      "def": 80,
+      "spa": 100,
+      "spd": 65,
+      "spe": 85
+    },
+    "chesnaught": {
+      "hp": 88,
+      "atk": 107,
+      "def": 122,
+      "spa": 74,
+      "spd": 80,
+      "spe": 64
+    },
+    "chesnaughtmega": {
+      "hp": 88,
+      "atk": 137,
+      "def": 172,
+      "spa": 74,
+      "spd": 120,
+      "spe": 44
+    },
+    "delphox": {
+      "hp": 75,
+      "atk": 69,
+      "def": 72,
+      "spa": 115,
+      "spd": 100,
+      "spe": 104
+    },
+    "delphoxmega": {
+      "hp": 75,
+      "atk": 69,
+      "def": 72,
+      "spa": 160,
+      "spd": 125,
+      "spe": 134
+    },
+    "decidueye": {
+      "hp": 83,
+      "atk": 112,
+      "def": 80,
+      "spa": 85,
+      "spd": 90,
+      "spe": 85
+    },
+    "decidueyealt": {
+      "hp": 83,
+      "atk": 112,
+      "def": 80,
+      "spa": 85,
+      "spd": 90,
+      "spe": 85
+    },
+    "decidueyehisui": {
+      "hp": 93,
+      "atk": 117,
+      "def": 80,
+      "spa": 80,
+      "spd": 85,
+      "spe": 80
+    },
+    "decidueyehisuialt": {
+      "hp": 93,
+      "atk": 117,
+      "def": 80,
+      "spa": 80,
+      "spd": 85,
+      "spe": 80
+    },
+    "rillaboom": {
+      "hp": 100,
+      "atk": 125,
+      "def": 90,
+      "spa": 60,
+      "spd": 75,
+      "spe": 85
+    },
+    "cinderace": {
+      "hp": 80,
+      "atk": 121,
+      "def": 75,
+      "spa": 65,
+      "spd": 75,
+      "spe": 119
+    },
+    "inteleon": {
+      "hp": 70,
+      "atk": 85,
+      "def": 65,
+      "spa": 130,
+      "spd": 65,
+      "spe": 120
+    },
+    "skeledirge": {
+      "hp": 104,
+      "atk": 75,
+      "def": 105,
+      "spa": 110,
+      "spd": 75,
+      "spe": 66
+    },
+    "skeledirgealt": {
+      "hp": 104,
+      "atk": 75,
+      "def": 105,
+      "spa": 110,
+      "spd": 75,
+      "spe": 66
+    },
+    "skeledirgeaevian": {
+      "hp": 90,
+      "atk": 50,
+      "def": 110,
+      "spa": 103,
+      "spd": 105,
+      "spe": 77
+    },
+    "quaquaval": {
+      "hp": 85,
+      "atk": 120,
+      "def": 80,
+      "spa": 85,
+      "spd": 80,
+      "spe": 85
+    },
+    "cinderacemega": {
+      "hp": 80,
+      "atk": 151,
+      "def": 95,
+      "spa": 75,
+      "spd": 85,
+      "spe": 149
+    },
+    "emboarego": {
+      "hp": 110,
+      "atk": 123,
+      "def": 75,
+      "spa": 87,
+      "spd": 75,
+      "spe": 65
+    },
+    "emboarmegaego": {
+      "hp": 110,
+      "atk": 150,
+      "def": 93,
+      "spa": 92,
+      "spd": 115,
+      "spe": 75
+    },
+    "azumarill": {
+      "hp": 100,
+      "atk": 60,
+      "def": 105,
+      "spa": 90,
+      "spd": 105,
+      "spe": 60
+    },
+    "sandslash": {
+      "hp": 95,
+      "atk": 115,
+      "def": 125,
+      "spa": 45,
+      "spd": 75,
+      "spe": 75
+    },
+    "sandslashalola": {
+      "hp": 95,
+      "atk": 115,
+      "def": 125,
+      "spa": 45,
+      "spd": 75,
+      "spe": 75
+    },
+    "nidoqueen": {
+      "hp": 90,
+      "atk": 95,
+      "def": 100,
+      "spa": 88,
+      "spd": 97,
+      "spe": 80
+    },
+    "nidoking": {
+      "hp": 84,
+      "atk": 110,
+      "def": 82,
+      "spa": 102,
+      "spd": 82,
+      "spe": 90
+    },
+    "ninetales": {
+      "hp": 73,
+      "atk": 76,
+      "def": 75,
+      "spa": 81,
+      "spd": 100,
+      "spe": 100
+    },
+    "ninetalesalola": {
+      "hp": 73,
+      "atk": 67,
+      "def": 75,
+      "spa": 81,
+      "spd": 100,
+      "spe": 109
+    },
+    "venomoth": {
+      "hp": 70,
+      "atk": 60,
+      "def": 65,
+      "spa": 110,
+      "spd": 90,
+      "spe": 105
+    },
+    "persian": {
+      "hp": 75,
+      "atk": 95,
+      "def": 65,
+      "spa": 115,
+      "spd": 65,
+      "spe": 125
+    },
+    "persianalola": {
+      "hp": 95,
+      "atk": 70,
+      "def": 80,
+      "spa": 95,
+      "spd": 90,
+      "spe": 110
+    },
+    "poliwrath": {
+      "hp": 95,
+      "atk": 100,
+      "def": 95,
+      "spa": 80,
+      "spd": 85,
+      "spe": 75
+    },
+    "poliwrathrejuv": {
+      "hp": 95,
+      "atk": 70,
+      "def": 90,
+      "spa": 135,
+      "spd": 85,
+      "spe": 55
+    },
+    "politoed": {
+      "hp": 105,
+      "atk": 75,
+      "def": 80,
+      "spa": 100,
+      "spd": 100,
+      "spe": 70
+    },
+    "politoedrejuv": {
+      "hp": 105,
+      "atk": 70,
+      "def": 105,
+      "spa": 95,
+      "spd": 85,
+      "spe": 70
+    },
+    "tentacruel": {
+      "hp": 80,
+      "atk": 70,
+      "def": 70,
+      "spa": 90,
+      "spd": 120,
+      "spe": 100
+    },
+    "rhydon": {
+      "hp": 105,
+      "atk": 130,
+      "def": 120,
+      "spa": 45,
+      "spd": 55,
+      "spe": 45
+    },
+    "lapras": {
+      "hp": 130,
+      "atk": 85,
+      "def": 80,
+      "spa": 85,
+      "spd": 95,
+      "spe": 60
+    },
+    "laprasaevian": {
+      "hp": 130,
+      "atk": 85,
+      "def": 80,
+      "spa": 85,
+      "spd": 95,
+      "spe": 60
+    },
+    "laprasgmax": {
+      "hp": 195,
+      "atk": 85,
+      "def": 80,
+      "spa": 85,
+      "spd": 95,
+      "spe": 60
+    },
+    "laprasaeviangmax": {
+      "hp": 195,
+      "atk": 85,
+      "def": 80,
+      "spa": 85,
+      "spd": 95,
+      "spe": 60
+    },
+    "sandslashalt": {
+      "hp": 95,
+      "atk": 115,
+      "def": 125,
+      "spa": 45,
+      "spd": 75,
+      "spe": 75
+    },
+    "sandslashreborn": {
+      "hp": 95,
+      "atk": 115,
+      "def": 125,
+      "spa": 45,
+      "spd": 75,
+      "spe": 75
+    },
+    "ninetalesalt": {
+      "hp": 73,
+      "atk": 76,
+      "def": 75,
+      "spa": 81,
+      "spd": 100,
+      "spe": 100
+    },
+    "ninetalesreborn": {
+      "hp": 73,
+      "atk": 76,
+      "def": 75,
+      "spa": 81,
+      "spd": 100,
+      "spe": 100
+    },
+    "tentacruelalt": {
+      "hp": 80,
+      "atk": 70,
+      "def": 70,
+      "spa": 90,
+      "spd": 120,
+      "spe": 100
+    },
+    "tentacruelreborn": {
+      "hp": 80,
+      "atk": 70,
+      "def": 70,
+      "spa": 90,
+      "spd": 120,
+      "spe": 100
+    },
+    "laprasazzy": {
+      "hp": 130,
+      "atk": 85,
+      "def": 80,
+      "spa": 85,
+      "spd": 95,
+      "spe": 60
+    },
+    "stakataka": {
+      "hp": 76,
+      "atk": 131,
+      "def": 211,
+      "spa": 38,
+      "spd": 101,
+      "spe": 13
+    }
   },
   "slotRenamesByPrefix": {
     "tauros": {

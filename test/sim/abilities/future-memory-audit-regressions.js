@@ -110,7 +110,7 @@ describe('Future attack queue and RKS Memory audit regressions', () => {
 		const holder = memory(type + ' Memory');
 		for (const component of components) {
 			assert(holder.hasAbility(component), component);
-			for (const [event, handler] of Object.entries(battle.dex.abilities.get(component))) if (event.startsWith('on') && typeof handler === 'function')assert.equal(typeof holder.getAbility()[event], 'function', component + '.' + event);
+			assert.deepEqual(holder.getPassives(), [component]);
 		}
 		for (const component of new Set(Object.values(memories).flat()))assert.equal(holder.hasAbility(component), components.includes(component), component);
 		assert(!holder.hasAbility('scrappy'));

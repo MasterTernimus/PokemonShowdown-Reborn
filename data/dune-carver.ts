@@ -1,5 +1,16 @@
 import type { AbilityData } from '../sim/dex-abilities';
 
+export function removeSpikesLayer(battle: Battle, side: Side) {
+	const spikes = side.getSideConditionData('spikes');
+	if (!spikes) return;
+	const remaining = spikes.layers - 1;
+	if (remaining) spikes.layers = remaining;
+	else side.removeSideCondition('spikes');
+	// The battle protocol represents layers as consecutive side starts.
+	battle.add('-sideend', side, 'Spikes');
+	for (let i = 0; i < remaining; i++) battle.add('-sidestart', side, 'Spikes');
+}
+
 export function clearEntryHazards(battle: Battle, source: Pokemon, from: string) {
 	for (const id of ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend']) {
 		if (!source.side.removeSideCondition(id)) continue;

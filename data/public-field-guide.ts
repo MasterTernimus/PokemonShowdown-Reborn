@@ -486,6 +486,7 @@ Object.assign(ReviewedFieldGuide, {
 		Moves: [
 			'Rock Slide, Smack Down and Thousand Arrows gain additional Fire typing and 2x power. Smog and Clear Smog gain Fire typing and 1.5x. Infernal Parade gains 1.5x. Field-clearing moves gain a named 1.3x modifier where applicable. Named bonuses can stack, with adaptive field modifiers.',
 			'After Burn Up, a typeless Pokémon regains Fire typing at turn end.',
+			'Raging Fury and Blazing Fury can be chosen freely. Entering this field ends their rampage without confusion.',
 		],
 		Abilities: [
 			'Blazing Mane raises Speed by one when entering Burning, and for existing active holders when Burning starts.',

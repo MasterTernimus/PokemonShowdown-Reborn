@@ -232,7 +232,7 @@ describe('Approved Seviper sustain, fang-tail move and Radiant Assault', () => {
 			if (state === 'ultra') q.species = Dex.species.get('Necrozma-Ultra');
 			if (state === 'megastone') q.setItem('Charizardite X');
 			if (state === 'zcrystal') q.setItem('Normalium Z');
-			const qualifies = ['mega', 'dynamax', 'gmax', 'stellar', 'overlap'].includes(state);
+			const qualifies = ['mega', 'gmax', 'stellar', 'othertera', 'overlap', 'zcrystal'].includes(state);
 			const m = Dex.getActiveMove('radiantassault');
 			m.willCrit = false;
 			m.spreadHit = false;
@@ -245,9 +245,9 @@ describe('Approved Seviper sustain, fang-tail move and Radiant Assault', () => {
 				spreadHit: false,
 			});
 			const base = battle.actions.getDamage(p, q, control);
-			assert(Math.abs(actual - base * (qualifies ? 2.4 : 1)) <= 3, `${state}: ${base} -> ${actual}`);
+			assert(Math.abs(actual - base * (qualifies ? 2 : 1)) <= 3, `${state}: ${base} -> ${actual}`);
 		});
-	it('Radiant Assault preserves adaptive spread and KO recharge waiver', () => {
+	it('Radiant Assault uses the higher attacking stat and targets opposing slots', () => {
 		const [p, q] = setup('No Ability', 'Mew', true);
 		p.storedStats.atk = 100;
 		p.storedStats.spa = 300;
@@ -261,10 +261,10 @@ describe('Approved Seviper sustain, fang-tail move and Radiant Assault', () => {
 		assert(q.fainted || !q.hp);
 		assert(!p.volatiles.mustrecharge);
 	});
-	it('Radiant Assault recharges without a KO', () => {
+	it('Radiant Assault allows another move after a surviving hit', () => {
 		const [p, q] = setup('No Ability', 'Mew');
 		hit(p, q, 'radiantassault');
-		assert(p.volatiles.mustrecharge, battle.log.join(' | '));
+		assert(!p.volatiles.mustrecharge, battle.log.join(' | '));
 	});
 	it('Sirius bite retains Protect bypass and its separate 30% toxic secondary', () => {
 		const [p, q] = setup('Sirius', 'Seviper-Mega');

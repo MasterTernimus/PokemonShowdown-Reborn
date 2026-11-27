@@ -54,6 +54,14 @@ describe('Warned move protection and Cold Logic contingency', () => {
 		assert(!p.volatiles.warnedmoves);
 		assert.equal(damage(p, q, 'fissure'), 1000);
 	});
+	it('Misaligned Stars stacks its constant protection with Anticipation on the warned move', () => {
+		const [holder, foe] = setup('Mew', 'Misaligned Stars');
+		const move = battle.dex.getActiveMove('shadowball');
+		assert.equal(holder.volatiles.warnedmoves.anticipation, move.id);
+		const reduced = battle.runEvent('ModifyDamage', foe, holder, move, 1000);
+		assert.equal(reduced, 900);
+		assert.equal(battle.runEvent('Damage', holder, foe, move, reduced), 675);
+	});
 	it('Cold Logic uses Forewarn protection without Prism Armor', () => {
 		const [p, q] = setup('Metagross-Mega', 'Cold Logic', 'No Ability', 'surf');
 		for (const [typeMod, expected] of [

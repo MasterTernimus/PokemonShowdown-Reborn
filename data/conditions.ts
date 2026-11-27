@@ -1,3 +1,4 @@
+import { categoryPower } from '../sim/signature-category-power';
 import { adaptiveZHit } from '../sim/adaptive-cycle';
 import { isUltraSuppressedTerrain } from '../sim/ultra-rivalry';
 import { updatePreparedIndicator } from './grand-strategy';
@@ -8,6 +9,11 @@ import { JackpotConditions } from './jackpot-salvation';
 import { resolveForesight } from './foresight-memory';
 
 import { toID } from '../sim/dex-data';
+function isFreeRagingFury(battle: Battle, move: string) {
+	return (move === 'ragingfury' || move === 'blazingfury') &&
+		battle.field.isTerrain(['dragonsdenterrain', 'volcanicterrain', 'burningterrain']);
+}
+
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	...JackpotConditions,
 	ultraegocombat: {
@@ -26,7 +32,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			delete state.combatTurn;
 			state.combatTurns = (state.combatTurns || 0) + 1;
 			if (state.combatTurns % 2 === 1)
-				this.boost({ atk: 1, spa: 1 }, holder, holder, state.sourceEffect);
+				this.boost({ atk: 1, spa: 1 }, holder, holder, this.dex.abilities.get('ultraego'));
 		},
 	},
 	aimassistlock: {
@@ -670,11 +676,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 					this.add('-message', `${pokemon.name} is healed by the flames!`);
 				}
 				for (const foe of pokemon.foes()) {
-					if (!foe.fainted && foe.hp) {
-						// Sinister Blaze's reflected burn is 1/16 max HP, doubled for already-burned foes.
-						// This generated damage does not heal the Sinister Blaze user.
-						const foeDamage = foe.baseMaxhp * (foe.status === 'brn' ? 1 / 8 : 1 / 16);
-						this.damage(foeDamage, foe, pokemon, this.dex.abilities.get('sinisterblaze'));
+					if (foe.hp && !foe.fainted && foe.status === 'brn') {
+						this.damage(foe.baseMaxhp / 16, foe, pokemon, this.dex.abilities.get('sinisterblaze'));
 					}
 				}
 				return;
@@ -682,13 +685,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const damage = this.damage(burnDamage, pokemon, pokemon, this.effect);
 			if (typeof damage === 'number' && damage > 0) {
 				for (const foe of pokemon.foes()) {
-					if (!foe.fainted && foe.hp && foe.hasAbility('sinisterblaze')) {
+					if (!foe.fainted && foe.hp && foe.hasAbility('sinisterblaze') && foe.m.sinisterBlazeHealTurn !== this.turn) {
 						const healed = this.heal(
 							damage,
 							foe,
 							pokemon,
 							this.dex.abilities.get('sinisterblaze'),
 						);
+						if (healed) foe.m.sinisterBlazeHealTurn = this.turn;
 						if (healed && this.field.isTerrain('icyterrain')) {
 							this.add('-message', `${foe.name} is healed by the flames!`);
 						}
@@ -1366,6 +1370,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.effectState.trueDuration--;
 		},
 		onStart(target, source, effect) {
+			if (isFreeRagingFury(this, effect.id)) return false;
 			this.effectState.trueDuration = effect.name === 'Blazing Fury' ? 2 : this.random(2, 4);
 			this.effectState.move = effect.id;
 			this.effectState.ragingHeartThrash = !!(effect as ActiveMove & { ragingHeartThrash?: boolean })
@@ -1381,13 +1386,12 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				pokemon.removeVolatile('lockedmove');
 			}
 		},
+		onTerrainChange(pokemon) {
+			if (isFreeRagingFury(this, this.effectState.move)) pokemon.removeVolatile('lockedmove');
+		},
 		onEnd(target) {
 			if (this.effectState.trueDuration > 1) return;
-			if (
-				this.field.isTerrain(['burningterrain', 'volcanicterrain']) &&
-				this.effectState.move === 'ragingfury'
-			)
-				return;
+			if (isFreeRagingFury(this, this.effectState.move)) return;
 			if (this.effectState.ragingHeartThrash && target.hasAbility('ragingheart')) return;
 			target.addVolatile('confusion');
 		},
@@ -1605,6 +1609,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 
 			const hitResult = this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
+			if (data.starVerdictEntry !== undefined && data.source.isActive &&
+				data.source.previouslySwitchedIn === data.starVerdictEntry &&
+				!data.source.isAlly(target) && (target.getMoveHitData(hitMove).damage || 0) > 0) {
+				data.source.m.starVerdictWishEntry = data.starVerdictEntry;
+			}
 			if (!hitResult && data.moveData?.roarOfTimeFuture) {
 				data.endingTurn = this.turn + 2;
 				this.add(
@@ -2141,7 +2150,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				].includes(move.id)
 			)
 				modifier *= 1.5;
-			if (move.category === 'Special' && move.type === 'Flying') modifier *= 1.5;
+			if (move.type === 'Flying') modifier *= categoryPower(move, 'Special', 1.5);
 			if (modifier !== 1) {
 				this.add('-message', 'The wind strengthened the attack!');
 				return this.chainModify(modifier);

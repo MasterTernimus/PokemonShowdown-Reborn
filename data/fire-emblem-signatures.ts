@@ -1,3 +1,4 @@
+import { categoryPower } from '../sim/signature-category-power';
 import type { AbilityDataTable } from '../sim/dex-abilities';
 
 function isBeastFangAttack(move: ActiveMove) {
@@ -93,8 +94,7 @@ export function installFireEmblemSignatures(abilities: AbilityDataTable) {
 		num: 11456,
 		rating: 3.5,
 		onModifyDamage(damage, source, target, move) {
-			if (move.category === 'Physical' && target.hasType('Dragon'))
-				return this.chainModify([5325, 4096]);
+			if (target.hasType('Dragon')) return this.chainModify(categoryPower(move, 'Physical', 5325 / 4096));
 		},
 	};
 }

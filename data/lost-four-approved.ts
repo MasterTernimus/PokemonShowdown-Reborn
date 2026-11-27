@@ -275,7 +275,9 @@ export function installLostFour(abilities: AbilityDataTable) {
 		rating: 4,
 		onStart(pokemon) {
 			pokemon.addVolatile('keystoneseal');
+			this.dex.abilities.get('pressure').onStart!.call(this, pokemon);
 		},
+		onDeductPP: abilities.pressure.onDeductPP,
 		onUpdate(pokemon) {
 			pokemon.addVolatile('keystoneseal');
 		},

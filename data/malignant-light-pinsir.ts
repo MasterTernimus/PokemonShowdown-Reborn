@@ -1,6 +1,6 @@
 import type { AbilityDataTable } from '../sim/dex-abilities';
 import { composeSelectedAbility } from './selected-mega-simplifications';
-import { SharedPassiveAbilityDescriptions } from './passive-ability-cleanup';
+import { AbilityComponents } from './ability-components';
 
 export const LightPinsirDescriptions = {
 	starlens: {
@@ -24,7 +24,7 @@ export function installLightPinsir(
 	composeSelectedAbility(abilities, 'starlens', ['illuminate'], true);
 	composeSelectedAbility(abilities, 'woolyconductor', ['fluffy', 'starlens'], true);
 	// Illuminate is supplied through Star Lens, not separately a second time.
-	composeSelectedAbility(abilities, 'astralcore', ['purepower', 'naturalcure', 'starlens'], true);
+	composeSelectedAbility(abilities, 'astralcore', AbilityComponents.astralcore, true);
 
 	abilities.ironmaiden = { name: 'Iron Maiden', num: 32597, rating: 3.5, flags: {} };
 	composeSelectedAbility(abilities, 'ironmaiden', ['moxie'], true);
@@ -49,8 +49,4 @@ export function installLightPinsir(
 	for (const id of ['relicbeam', 'starlens', 'ironmaiden', 'siegegrip', 'astralcore', 'woolyconductor'] as const) {
 		Object.assign(abilities[id], descriptions[id]);
 	}
-	Object.assign(SharedPassiveAbilityDescriptions.astralcore, {
-		shortDesc: 'Natural Cure + Star Lens.',
-		desc: descriptions.naturalcure.desc + ' ' + descriptions.starlens.desc,
-	});
 }

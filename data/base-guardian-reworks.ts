@@ -61,6 +61,7 @@ export function installBaseGuardianReworks(a: AbilityDataTable) {
 	baseOnly(a, 'voidveil', 'gardevoir', veil);
 	composeSelectedAbility(a, 'voidvoice', ['queenlymajesty'], true);
 	Object.assign(a.voidvoice, veil);
+	Object.assign(a.execution, veil);
 }
 
 export const GuardianLegacyDescriptions: Record<string, { desc: string, shortDesc: string }> = {

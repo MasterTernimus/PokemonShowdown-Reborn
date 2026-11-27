@@ -7,6 +7,7 @@ const historical = require('./selected-simplifications-approved.json');
 const approved = { ...historical, exact: { ...historical.exact }, removed: { ...historical.removed } };
 // Later approvals replace Ange's selected/passive split and restore Stamina.
 approved.exact.siegelauncher = ['megalauncher', 'dualwield', 'stalwart'];
+approved.exact.cursedarmament = ['misalignedstars'];
 approved.exact.railguncircuit = ['lightningrod'];
 approved.exact.ange = ['fairyaura'];
 approved.removed.ange = ['eternalflower', 'moldbreaker', 'magicguard'];

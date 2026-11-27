@@ -61,7 +61,7 @@ describe('October follow-up rules', () => {
 	it('Chandelure has Soul Siphon as its passive and Soul Fire only in its event slot', () => {
 		const species = Dex.species.get('chandelure');
 		assert.deepEqual(species.passives, ['soulsiphon']);
-		assert.deepEqual(species.abilities, { 0: 'Infiltrator', 1: 'Soul Pyre', H: 'Malice Well', S: 'Soul Fire' });
+		assert.deepEqual(species.abilities, { 0: 'Misaligned Stars', 1: 'Soul Pyre', H: 'Malice Well', S: 'Soul Fire' });
 		for (const ability of Object.values(species.abilities)) {
 			const result = new TeamValidator('gen9nofieldsinglesgame').validateTeam([
 				{ species: 'Chandelure', ability, moves: ['shadowball'], evs: { spa: 252 }, nature: 'Modest' },

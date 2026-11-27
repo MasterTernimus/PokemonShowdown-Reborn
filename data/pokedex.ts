@@ -3077,7 +3077,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ['Water', 'Psychic'],
 		gender: 'N',
 		baseStats: { hp: 60, atk: 75, def: 85, spa: 105, spd: 85, spe: 115 },
-		abilities: { 0: 'Cosmic Analysis', 1: 'Natural Cure', H: 'Victory Star' },
+		abilities: { 0: 'Cosmic Analysis', 1: 'Misaligned Stars', H: 'Victory Star' },
 		heightm: 1.1,
 		weightkg: 80,
 		color: 'Purple',
@@ -5370,7 +5370,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ['Ghost'],
 		genderRatio: { M: 0.25, F: 0.75 },
 		baseStats: { hp: 60, atk: 55, def: 100, spa: 65, spd: 100, spe: 30 },
-		abilities: { 0: 'Weak Armor', H: 'Cursed Body' },
+		abilities: { 0: 'Weak Armor', 1: 'Cursed Body', H: 'Misaligned Stars' },
 		heightm: 0.6,
 		weightkg: 0.5,
 		color: 'White',
@@ -6541,7 +6541,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: 'Vigoroth',
 		types: ['Normal'],
 		baseStats: { hp: 80, atk: 80, def: 80, spa: 55, spd: 55, spe: 90 },
-		abilities: { 0: 'Vital Spirit', 1: 'Tough Claws' },
+		abilities: { 0: 'Tough Claws', 1: 'Scrappy', H: 'Restless Drive' },
 		heightm: 1.4,
 		weightkg: 46.5,
 		color: 'White',
@@ -12971,7 +12971,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: 'Sawsbuck',
 		types: ['Water', 'Grass'],
 		baseStats: { hp: 80, atk: 110, def: 80, spa: 60, spd: 80, spe: 100 },
-		abilities: { 0: 'Seasonal Stride', 1: 'Swift Swim', H: 'Sap Sipper' },
+		abilities: { 0: 'Spring Striker', 1: 'Swift Swim', H: 'Sap Sipper' },
 		heightm: 1.9,
 		weightkg: 92.5,
 		color: 'Brown',
@@ -12994,7 +12994,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: 'Spring',
 		types: ['Water', 'Grass'],
 		baseStats: { hp: 80, atk: 110, def: 80, spa: 60, spd: 80, spe: 100 },
-		abilities: { 0: 'Seasonal Stride', 1: 'Swift Swim', H: 'Sap Sipper' },
+		abilities: { 0: 'Spring Striker', 1: 'Swift Swim', H: 'Sap Sipper' },
 		heightm: 1.9,
 		weightkg: 92.5,
 		color: 'Brown',
@@ -13010,7 +13010,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: 'Summer',
 		types: ['Fire', 'Grass'],
 		baseStats: { hp: 80, atk: 110, def: 80, spa: 60, spd: 80, spe: 100 },
-		abilities: { 0: 'Seasonal Stride', 1: 'Chlorophyll', H: 'Rock Head' },
+		abilities: { 0: 'Summer Striker', 1: 'Chlorophyll', H: 'Rock Head' },
 		heightm: 1.9,
 		weightkg: 92.5,
 		color: 'Brown',
@@ -13026,7 +13026,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: 'Autumn',
 		types: ['Ground', 'Grass'],
 		baseStats: { hp: 80, atk: 110, def: 80, spa: 60, spd: 80, spe: 100 },
-		abilities: { 0: 'Seasonal Stride', 1: 'Sand Rush', H: 'Stamina' },
+		abilities: { 0: 'Autumn Striker', 1: 'Sand Rush', H: 'Stamina' },
 		heightm: 1.9,
 		weightkg: 92.5,
 		color: 'Brown',
@@ -13042,7 +13042,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: 'Winter',
 		types: ['Ice', 'Grass'],
 		baseStats: { hp: 80, atk: 110, def: 80, spa: 60, spd: 80, spe: 100 },
-		abilities: { 0: 'Seasonal Stride', 1: 'Ice Body', H: 'Slush Rush' },
+		abilities: { 0: 'Winter Striker', 1: 'Slush Rush', H: 'Ice Body' },
 		heightm: 1.9,
 		weightkg: 92.5,
 		color: 'Brown',
@@ -25234,10 +25234,6 @@ Pokedex.cinccinodeso.abilities = { 0: 'Pixilate', 1: 'Skill Link', H: 'Silken Sa
 Pokedex.probopass.abilities = { 0: 'Magnet Pull', 1: 'Magnetic Command', H: 'Magnetic Bulwark' };
 Pokedex.probopass.baseStats = { hp: 75, atk: 35, def: 150, spa: 110, spd: 155, spe: 25 };
 
-for (const id of ['sawsbuck', 'sawsbuckspring', 'sawsbucksummer', 'sawsbuckautumn', 'sawsbuckwinter'])
-	Pokedex[id as keyof typeof Pokedex].abilities!['0'] = 'Overcoat';
-Pokedex.sawsbuckwinter.abilities = { 0: 'Overcoat', 1: 'Slush Rush', H: 'Ice Body' };
-
 Pokedex.swalot.abilities = { 0: 'Adhesive Armor', 1: 'Neutralization', H: 'Caustic Ooze' };
 Pokedex.vespiquen.abilities = { 0: 'Royal Presence', 1: 'Queenly Majesty', H: 'Hive Sanctuary' };
 
@@ -25260,8 +25256,8 @@ Pokedex.huntail.types = ['Water', 'Dark'];
 Pokedex.gorebyss.abilities = { 0: 'Swift Swim', 1: 'Pearl Siphon', H: 'Pearl Tide' };
 Pokedex.huntail.abilities = { 0: 'Swift Swim', 1: 'Abyssal Fang', H: 'Abyssal Current' };
 
-Pokedex.marowak.abilities!.H = 'Cursed Body';
-Pokedex.marowakalola.abilities![1] = 'Cursed Body';
+Pokedex.marowak.abilities!.H = 'Misaligned Stars';
+Pokedex.marowakalola.abilities![1] = 'Misaligned Stars';
 
 Pokedex.venusaur.abilities![1] = 'Soothing Bouquet';
 
@@ -25287,7 +25283,7 @@ Pokedex.kommoo.abilities!.H = 'Scale Rhythm';
 
 Pokedex.wigglytuff.abilities = { 0: 'Cushion Chorus', 1: 'Reinflate', H: 'Perfect Apple' };
 Pokedex.decidueye.abilities!.H = 'Canopy Archer';
-Pokedex.spiritomb.abilities = { 0: 'Keystone Seal', 1: 'Bound Spirits', H: 'Pressure' };
+Pokedex.spiritomb.abilities = { 0: 'Keystone Seal', 1: 'Bound Spirits', H: 'Misaligned Stars' };
 
 Pokedex.rapidash.abilities!.H = 'Flame Body';
 
@@ -25359,9 +25355,9 @@ Pokedex.sylveon.abilities!.H = 'Healer';
 
 Pokedex.aggron.abilities = { 0: 'Lightning Rod', 1: 'Brute Force', H: 'Soundproof' };
 for (const id of ['mimikyu', 'mimikyubusted', 'mimikyutotem', 'mimikyubustedtotem'] as const)
-	Pokedex[id].abilities = { 0: 'Cursed Body', 1: 'Frisk', H: 'Infiltrator' };
+	Pokedex[id].abilities = { 0: 'Cursed Body', 1: 'Misaligned Stars', H: 'Infiltrator' };
 for (const id of ['aegislash', 'aegislashblade'] as const)
-	Pokedex[id].abilities = { 0: 'Stalwart', 1: 'Cursed Body', H: 'Infiltrator' };
+	Pokedex[id].abilities = { 0: 'Stalwart', 1: 'Cursed Body', H: 'Misaligned Stars' };
 
 Pokedex.hydreigon.abilities = { 0: 'Dark Aura', 1: 'Strings of Ruin', H: 'False Liberation' };
 
@@ -25735,7 +25731,7 @@ Pokedex.ninetalesalt.abilities![1] = 'Cursed Body';
 Pokedex.arcaninehisui.abilities![1] = 'Sturdy';
 Pokedex.houndoom.abilities![0] = 'Agony Flame';
 Pokedex.houndoom.abilities!.H = 'Unnerve';
-Pokedex.chandelure.abilities[0] = 'Infiltrator';
+Pokedex.chandelure.abilities[0] = 'Misaligned Stars';
 
 Pokedex.meganium.abilities![0] = 'Hospitality';
 Pokedex.meganium.abilities![1] = 'Bloom Shelter';
@@ -25773,3 +25769,8 @@ Pokedex.golisopodmega.abilities![0] = 'Armored Shell';
 
 Pokedex.dodrio.abilities[0] = 'Tripwire Kick';
 Pokedex.dodrio.abilities.H = 'Guts';
+import { reserveSlots } from './legendary-reserves';
+for (const [id, slots] of Object.entries(reserveSlots)) Pokedex[id as ID].abilities = slots;
+Pokedex.stakataka.baseStats = { ...Pokedex.stakataka.baseStats!, hp: 76, spa: 38 };
+import { legendarySlots } from './legendary-roster';
+for (const [id, slots] of Object.entries(legendarySlots)) Pokedex[id as ID].abilities = { ...slots };

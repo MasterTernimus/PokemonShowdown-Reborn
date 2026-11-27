@@ -225,7 +225,7 @@ CheckedFieldReferences.coldeclipseterrain = {
 			'Ashen Beach, New World, Starlight Arena and Cold Eclipse increase its first opposing HP-damaging move reduction each turn from 30% to 35%, covering that move’s multiple hits, and increase its once-per-turn healing after its own completed damaging attack from 1/16 to 1/8 base max HP. Ultra Ego rivalry instead uses 40% reduction. Bewitched Woods, Haunted and Holy disable these effects. Substitute-only damage does not spend its guard.',
 		],
 		duskilate: [
-			'Cold Eclipse strengthens its conversion bonus to 1.5x and grants hail immunity. It does not grant extra defenses; Cold Eclipse no longer has a grounded Speed penalty.',
+			'New World: avoids the grounded Speed penalty. Cold Eclipse: conversion bonus rises to 1.5× and grants hail immunity.',
 		],
 		execution: [
 			'Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. While any base field exists, it blocks Speed drops, including self-caused drops; its Attack/Special Attack floor and KO healing remain separate.',
@@ -252,7 +252,7 @@ CheckedFieldReferences.coldeclipseterrain = {
 			'Cold Eclipse retains its 1.5x move power and Magma Armor frostbite exception; its components no longer grant entry defensive stages here.',
 		],
 		omenedge: [
-			'Its Sharpness component does not grant the slicing multiplier on Cold Eclipse. Pressure lowers opposing Defense and Special Defense by two on entry there, with Substitute blocking the drops; Cold Eclipse permits repeated entry activation. Pressure changes Underwater into Midnight Zone and applies the Midnight Zone extra PP cost. Dual Wield remains independent of those field rules.',
+			'Its Sharpness component does not grant the slicing multiplier on Cold Eclipse. Pressure lowers opposing Defense and Special Defense by two on entry there, with Substitute blocking the drops; Cold Eclipse permits repeated entry activation. Pressure changes Underwater into Midnight Zone and applies the Midnight Zone extra PP cost.',
 		],
 		fortressshell: [
 			'Cold Eclipse grants 1.5x move power without the former field-entry Defense and Special Defense boosts. Its ordinary components still apply.',

@@ -247,6 +247,9 @@ describe('Approved Ultra Instinct and Inferno Ascendant rework', () => {
 				.map(([key, fn]) => [key, fn.toString()
 					.replaceAll('(0, import_ultra_rivalry.isUltraSuppressedTerrain)', 'isUltraSuppressedTerrain')]));
 			const expected = { ...before.abilities[id].callbacks };
+			if (id === 'ultraego') {
+				expected.onModifyMove = expected.onModifyMove.replace('move.ignoreAbility = true;', 'move.ultraAbilityBypass = true;\n      move.ignoreAbility = true;');
+			}
 			if (id !== 'opportunist') {
 				for (const hook of ['onDamagingHit', 'onSourceDamagingHit', 'boostedField']) {
 					delete current[hook];

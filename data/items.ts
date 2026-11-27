@@ -1,3 +1,4 @@
+import { categoryPower } from '../sim/signature-category-power';
 /* eslint-disable @stylistic/max-len */
 
 function isEeviumHolder(pokemon: Pokemon) {
@@ -4703,9 +4704,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onBasePowerPriority: 16,
 		onBasePower(basePower, user, target, move) {
-			if (move.category === 'Physical') {
-				return this.chainModify([4505, 4096]);
-			}
+			return this.chainModify(categoryPower(move, 'Physical', 4505 / 4096));
 		},
 		num: 266,
 		gen: 4,
@@ -8397,9 +8396,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onBasePowerPriority: 16,
 		onBasePower(basePower, user, target, move) {
-			if (move.category === 'Special') {
-				return this.chainModify([4505, 4096]);
-			}
+			return this.chainModify(categoryPower(move, 'Special', 4505 / 4096));
 		},
 		num: 267,
 		gen: 4,

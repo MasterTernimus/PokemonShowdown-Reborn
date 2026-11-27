@@ -58,7 +58,7 @@ export function passiveState(pokemon: Pokemon, id: string) {
 }
 
 export function thematicPassives(pokemon: Pokemon) {
-	return pokemon.getPassives().filter(id => ThematicPassiveIds.has(id));
+	return pokemon.getPassives().filter(id => ThematicPassiveIds.has(id) || id === pokemon.getRKSMemoryPassive());
 }
 
 const migratedEntryPassives = new Set([

@@ -73,7 +73,7 @@ export const DualWieldFinalDamageHooks = new Set([
 	'pastelveil', 'queenlymajesty', 'rkssystem', 'sniper', 'tintedlens', 'empress', 'prismwings', 'spentforce', 'venomignition',
 	'patientmarksman', 'guidinggallop', 'crushingdepths', 'ruinedsky', 'rivalmalice', 'pastelsanctuary',
 	'beastfang', 'apocalypticflame', 'burningquake',
-	'convergence', 'insight', 'coldlogic', 'frameperfect',
+	'convergence', 'insight', 'coldlogic', 'frameperfect', 'signaturedrive',
 ]);
 export function dualWieldFinalDamageBoost(
 	battle: Battle, id: string, source: Pokemon, target: Pokemon, move: ActiveMove

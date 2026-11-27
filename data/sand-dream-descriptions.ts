@@ -1,4 +1,9 @@
 export const SandDreamDescriptions = {
+	restlessdrive: {
+		name: 'Restless Drive',
+		shortDesc: 'Once per entry, +1 Speed after striking back on the turn a foe hits it.',
+		desc: 'Once per switch-in, if an opposing attack damages its HP, landing a damaging move on a foe later that turn raises its Speed by one stage.',
+	},
 	"tripwirekick": {
 		"name": "Tripwire Kick",
 		"shortDesc": "Hydra Bond. Kicks gain 10% power. Once per entry, a damaging kick clears Sticky Web from its side.",

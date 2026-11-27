@@ -138,13 +138,14 @@ describe('November 16 approved balance changes', () => {
 		assert(!p.hasAbility('intimidate'));
 	});
 	for (const id of ['Shadow Shield', 'Moonlit Hide', 'Voidcraft', 'Cursed Doll', 'Afterlife Gate']) {
-		it(id + ' halves attacks only at full HP', () => {
+		it(id + ' applies its Shadow Shield multiplier only at full HP', () => {
 			const [p, q] = setup(id);
 			const move = Dex.getActiveMove('tackle');
 			p.getMoveHitData(move).typeMod = 1;
-			assert.equal(battle.runEvent('ModifyDamage', q, p, move, 100), 50);
+			const ordinaryDamage = id === 'Voidcraft' ? 90 : 100;
+			assert.equal(battle.runEvent('ModifyDamage', q, p, move, 100), ordinaryDamage / 2);
 			p.hp--;
-			assert.equal(battle.runEvent('ModifyDamage', q, p, move, 100), 100);
+			assert.equal(battle.runEvent('ModifyDamage', q, p, move, 100), ordinaryDamage);
 		});
 	}
 	it('Shadow Shield keeps only its Cold Eclipse hail immunity', () => {

@@ -3,7 +3,10 @@ import { KalosRipostes } from './kalos-ripostes';
 import { MegaSignatureExpansion } from './mega-signature-expansion';
 import { MegaSignaturesWaveTwo } from './mega-signatures-wave-two';
 import { MegaSignaturesWaveThree } from './mega-signatures-wave-three';
-import { clearEntryHazards } from './dune-carver';
+import { MegaSignaturesNov26A } from './mega-signatures-nov26-a';
+import { MegaSignaturesNov26B } from './mega-signatures-nov26-b';
+import { MegaSignaturesNov26C } from './mega-signatures-nov26-c';
+import { clearEntryHazards, removeSpikesLayer } from './dune-carver';
 
 export interface Signature {
 	base: string; name: string; num: number; desc: string;
@@ -44,13 +47,23 @@ export const StoneSignatures: Record<string, Signature> = {
 	},
 	blastoisemega: {
 		base: 'waterpulse', name: 'Broadside', num: 32983,
-		desc: 'A 75-power Water pulse. Ignores the target’s positive evasion stages and has a 20% chance to confuse.',
-		changes: { basePower: 75, ignorePositiveEvasion: true },
+		shortDesc: 'Clears one layer of Spikes on hit. 20% confusion.',
+		desc: 'Has a 20% chance to confuse. Damaging a foe clears one layer of Spikes from the user’s side per use.',
+		changes: { basePower: 75,
+			onAfterHit(target, source, move: ActiveMove & { broadsideCleared?: boolean }) {
+				if (move.broadsideCleared || !damagedFoe(target, source, move)) return;
+				move.broadsideCleared = true;
+				removeSpikesLayer(this, source.side);
+			},
+		},
 	},
 	...KalosRipostes,
 	...MegaSignatureExpansion,
 	...MegaSignaturesWaveTwo,
 	...MegaSignaturesWaveThree,
+	...MegaSignaturesNov26A,
+	...MegaSignaturesNov26B,
+	...MegaSignaturesNov26C,
 	miloticmega: {
 		base: 'waterpulse', name: 'Soothing Tide', num: 32800,
 		desc: 'Restores HP equal to 25% of damage dealt.',
@@ -150,7 +163,12 @@ export const StoneSignatures: Record<string, Signature> = {
 	},
 };
 
-// Historical standalone move data for saved replays. These forms now use their ordinary moves.
+// Drake Fang changes the actual slot and retains its own PP handling in the simulator.
+export const MegaSignatureDisplayRoutes = {
+	...StoneSignatures, sevipermega: { base: 'poisonfang', name: 'Drake Fang' },
+};
+
+// Historical standalone move data for saved replays.
 export const RetiredStoneSignatures: Record<string, Signature> = {
 	garlandburst: {
 		base: 'magicalleaf', name: 'Garland Burst', num: 32920,
@@ -169,7 +187,7 @@ export const RetiredStoneSignatures: Record<string, Signature> = {
 		desc: 'A 90-power punch that ignores evasion stages. Has a 20% chance to lower Defense.',
 		changes: { basePower: 90, ignoreEvasion: true },
 	},
-	kangaskhanmega: {
+	pouchpunch: {
 		base: 'dizzypunch', name: 'Pouch Punch', num: 32801,
 		desc: 'After damaging a foe, heals the adjacent ally with the lowest HP percentage by 1/8 max HP. Heals the user if alone.',
 		changes: { secondary: null, onAfterMoveSecondarySelf(source, target, move) {
@@ -179,7 +197,7 @@ export const RetiredStoneSignatures: Record<string, Signature> = {
 			this.heal(recipient.baseMaxhp / 8, recipient, source, move);
 		} },
 	},
-	metagrossmega: {
+	quadpress: {
 		base: 'meteormash', name: 'Quad Press', num: 32814,
 		desc: 'Uses the user’s Defense to attack. Has a 20% chance to raise its Defense by 1.',
 		changes: {
@@ -193,6 +211,9 @@ export const RetiredStoneSignatures: Record<string, Signature> = {
 export const signatureOnlyMoveModifiers = new WeakSet<NonNullable<MoveData['onModifyMove']>>();
 
 export function installStoneSignatures(moves: MoveDataTable) {
+	const adaptiveBonuses = new Set(Object.values({
+		...MegaSignaturesNov26A, ...MegaSignaturesNov26B, ...MegaSignaturesNov26C,
+	}));
 	const originalModifiers = new Map<string, MoveData['onModifyMove']>();
 	for (const [form, signature] of Object.entries({ ...StoneSignatures, ...RetiredStoneSignatures })) {
 		const { base, name, num, changes, baseAccuracy, baseType } = signature;
@@ -207,6 +228,9 @@ export function installStoneSignatures(moves: MoveDataTable) {
 		if (!originalModifiers.has(base)) originalModifiers.set(base, prior);
 		const baseModifier = originalModifiers.get(base);
 		const applySignature: NonNullable<MoveData['onModifyMove']> = function (move, user, target) {
+			if (adaptiveBonuses.has(signature) && original.category !== 'Status') {
+				move.signatureLearnedPower = original.basePower;
+			}
 			// Later abilities can edit flags and secondaries on this use of the move.
 			Object.assign(move, this.dex.deepClone(properties), { name });
 			if ('secondary' in properties) move.secondaries = move.secondary ? [move.secondary] : null;

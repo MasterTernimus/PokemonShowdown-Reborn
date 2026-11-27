@@ -1743,12 +1743,17 @@ export class Battle {
 				),
 			);
 		}
-		callback = this.getCallback(pokemon, ability, callbackName);
+		// Keep only the Stars component when Ultra Ego bypasses a breakable composite.
+		const selectedEffect = this.activeMove?.ultraAbilityBypass && ability.flags.breakable &&
+			this.activePokemon && !pokemon.isAlly(this.activePokemon) &&
+			pokemon.hasAbility('misalignedstars') && this.suppressingAbility(pokemon, ability) ?
+			this.dex.abilities.get('misalignedstars') : ability;
+		callback = this.getCallback(pokemon, selectedEffect, callbackName);
 		if (callback !== undefined || (getKey && pokemon.abilityState[getKey])) {
 			handlers.push(
 				this.resolvePriority(
 					{
-						effect: ability,
+						effect: selectedEffect,
 						callback,
 						state: pokemon.abilityState,
 						end: pokemon.clearAbility,
@@ -2943,7 +2948,8 @@ export class Battle {
 			const currentBoost: SparseBoostsTable = {
 				[boostName]: boost[boostName],
 			};
-			let boostBy = target.boostBy(currentBoost);
+			const ultraStage = effect?.effectType === 'Ability' && (effect.id === 'ultraego' || effect.id === 'ultrainstinct');
+			let boostBy = target.boostBy(currentBoost, ultraStage);
 			let msg = '-boost';
 			if (boost[boostName]! < 0 || target.boosts[boostName] === -6) {
 				msg = '-unboost';

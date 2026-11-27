@@ -789,8 +789,9 @@ for (const [id, passive] of Object.entries({
 	gyarados: 'tempestfury',
 	milotic: 'waterabsorb',
 	raichualola: 'static',
-	wishiwashisevii: 'infiltrator',
-	wishiwashiseviischooling: 'infiltrator',
+	wishiwashisevii: 'misalignedstars',
+	wishiwashiseviischooling: 'misalignedstars',
+	dragapult: 'misalignedstars',
 	gliscor: 'poisonheal',
 	gliscoralt: 'poisonheal',
 })) {
@@ -1335,11 +1336,23 @@ for (const [id, passive] of Object.entries(revisedPassives)) {
 	ThematicPassiveIds.add(passive);
 }
 for (const [id, passive] of Object.entries({
+	abysseon: 'misalignedstars', divineon: 'misalignedstars',
+	vigoroth: 'vitalspirit',
 	drampa: 'kindredfury', gigalith: 'mineralheart', grapploct: 'abyssalgrip', toucannon: 'siegebeak',
 	heatran: 'flashfire', heatranmega: 'watercompaction',
 	tatsugiri: 'sushisavvy', tatsugiridroopy: 'sushisavvy', tatsugiristretchy: 'sushisavvy',
 })) {
 	SpeciesPassives[id] = Object.freeze([passive]);
 	ThematicPassiveIds.add(passive);
+}
+import { reservePassives } from './legendary-reserves';
+for (const [id, passive] of Object.entries(reservePassives)) {
+	SpeciesPassives[id] = Object.freeze([passive]);
+	ThematicPassiveIds.add(passive);
+}
+import { legendaryPassiveGroups } from './legendary-roster';
+for (const [passive, species] of Object.entries(legendaryPassiveGroups)) {
+	ThematicPassiveIds.add(passive);
+	for (const id of species) SpeciesPassives[id] = Object.freeze([passive]);
 }
 Object.freeze(SpeciesPassives);

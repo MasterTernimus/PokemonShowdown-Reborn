@@ -1,3 +1,4 @@
+import { rewardFirstDraft, rewardTeamCure, rewardWideGuard } from './legendary-abilities';
 import { adaptiveZHit, adaptiveFieldMultiplier, adaptiveEnvironment } from '../sim/adaptive-cycle';
 import { clearWonderRoomDrops, wonderRoomPowerTrick } from './room-move-effects';
 import { resolveNaturePowerMove } from './nature-power';
@@ -4327,6 +4328,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			duration: 5,
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon, source, effect) {
+				if (effect.id === 'bindingchain') {
+					const slot = pokemon.getMoveData(pokemon.m.lastSuccessfulMove);
+					if (!slot?.pp) return false;
+					this.effectState.move = slot.id;
+					this.effectState.duration = this.queue.willMove(pokemon) ? 2 : 3;
+					this.add('-start', pokemon, 'Disable', slot.move, '[from] ability: Binding Chain', `[of] ${source}`);
+					return;
+				}
 				// The target hasn't taken its turn, or Cursed Body activated and the move was not used through Dancer or Instruct
 				if (
 					this.queue.willMove(pokemon) ||
@@ -4526,11 +4535,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.types = [move.type, 'Fire'];
 			}
 		},
-		onTry(source, target) {
+		onTry(source, target, move) {
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				move: 'doomdesire',
 				source,
+				starVerdictEntry: move.name === 'Star Verdict' ? source.previouslySwitchedIn : undefined,
 				moveData: {
 					id: 'doomdesire',
 					name: "Doom Desire",
@@ -4543,6 +4553,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					type: 'Steel',
 				},
 			});
+			if (move.name === 'Star Verdict') {
+				const queued = target.side.slotConditions[target.position].futuremove.moveData;
+				Object.assign(queued, { name: move.name, basePower: move.basePower, category: move.category,
+					overrideOffensiveStat: move.overrideOffensiveStat, types: move.types });
+			}
 			this.add('-start', source, 'Doom Desire');
 			return this.NOT_FAIL;
 		},
@@ -9827,6 +9842,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				sourceBoosts[i] = source.boosts[i];
 			}
 
+			const changed = (Object.keys(sourceBoosts) as BoostID[]).some(stat => sourceBoosts[stat] !== targetBoosts[stat]);
 			target.setBoost(sourceBoosts);
 			source.setBoost(targetBoosts);
 
@@ -9840,6 +9856,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-sethp', target, target.getHealth, '[from] move: Heart Swap', '[silent]');
 				source.sethp(averagehp);
 				this.add('-sethp', source, source.getHealth, '[from] move: Heart Swap');
+			}
+			if (changed && source.hasAbilityOrPassive('heartcurrent') && source.m.heartCurrent !== source.m.ultraRivalryEntryToken) {
+				source.m.heartCurrent = source.m.ultraRivalryEntryToken;
+				this.heal(source.baseMaxhp / 4, source, source, this.dex.abilities.get('heartcurrent'));
 			}
 		},
 		target: "normal",
@@ -11332,9 +11352,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { heal: 1, bypasssub: 1, allyanim: 1 },
-		onHit(pokemon) {
+		onHit(pokemon, source, move) {
 			const cured = pokemon.cureStatus();
 			const healed = !!this.heal(this.modify(pokemon.maxhp, cured ? 0.25 : 0.125));
+			if (cured) rewardTeamCure(this, move, source, pokemon);
 			return cured || healed;
 		},
 		target: "allies",
@@ -11878,6 +11899,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Special') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens && !grandStrategyPrepared(source, target, move)) {
+						if (move.name === 'Cell Division' && (source.boosts.def > 0 || source.boosts.spd > 0)) return;
 						this.debug('Light Screen weaken');
 						if (crescentRendApplies(source, move)) return;
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
@@ -12126,9 +12148,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
-		onHit(pokemon) {
+		onHit(pokemon, source, move) {
 			const cured = pokemon.cureStatus();
 			const healed = !!this.heal(this.modify(pokemon.maxhp, cured ? 0.25 : 0.125));
+			if (cured) rewardTeamCure(this, move, source, pokemon);
 			return cured || healed;
 		},
 		target: "allies",
@@ -15612,6 +15635,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (!this.heal(Math.floor(target.baseMaxhp * 0.5))) {
 					return this.NOT_FAIL;
 				}
+				if (source !== target && source.hasAbilityOrPassive('crowntending') && source.m.crownTendingTurn !== this.turn) {
+					source.m.crownTendingTurn = this.turn;
+					this.heal(source.baseMaxhp / 16, source, source, this.dex.abilities.get('crowntending'));
+				}
 			}
 		},
 		target: "normal",
@@ -16165,6 +16192,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { bypasssub: 1, allyanim: 1, metronome: 1 },
 		onHit(target, source) {
 			let i: BoostID;
+			delete source.m.ultraStages;
 			for (i in target.boosts) {
 				source.boosts[i] = target.boosts[i];
 			}
@@ -17018,15 +17046,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Radiant Assault",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, recharge: 1, protect: 1, mirror: 1, metronome: 1 },
-		onAfterMove(source, target, move) {
-			if (target.fainted || move.hitTargets?.some(pokemon => pokemon.fainted)) {
-				source.removeVolatile('mustrecharge');
-			}
-		},
-		self: {
-			volatileStatus: 'mustrecharge',
-		},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, cantusetwice: 1 },
 		target: "allAdjacentFoes",
 		type: "???",
 		contestType: "Cool",
@@ -17160,6 +17180,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens && !grandStrategyPrepared(source, target, move)) {
+						if (move.name === 'Pike Charge' && source.m.staminaDefenseRiseTurn === this.turn) return;
 						this.debug('Reflect weaken');
 						if (crescentRendApplies(source, move)) return;
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
@@ -17221,6 +17242,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			source.addedType = target.addedType;
 			source.knownType = target.isAlly(source) && target.knownType;
 			if (!source.knownType) source.apparentType = oldApparentType;
+			if (source.hasAbilityOrPassive('firstdraft')) rewardFirstDraft(this, source);
 		},
 		target: "normal",
 		type: "Normal",
@@ -23031,6 +23053,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			let i: BoostID;
 			for (i in target.boosts) {
 				if (target.boosts[i] === 0) continue;
+				if (target.m.ultraStages) delete target.m.ultraStages[i];
 				target.boosts[i] = -target.boosts[i];
 			}
 			this.add('-invertboost', target, '[from] move: Topsy-Turvy');
@@ -23222,9 +23245,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { allyanim: 1, failencore: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
 		onHit(target, pokemon) {
+			const firstDraft = pokemon.hasAbilityOrPassive('firstdraft');
 			if (!pokemon.transformInto(target)) {
 				return false;
 			}
+			if (firstDraft) rewardFirstDraft(this, pokemon);
 		},
 		target: "normal",
 		type: "Normal",
@@ -24328,6 +24353,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 				if (this.checkMoveBypassesProtect(move, source, target)) return;
 				this.add('-activate', target, 'move: Wide Guard');
+				rewardWideGuard(this, this.effectState.source, source, move);
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -24957,7 +24983,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onAfterHit(target, source, move) {
 			if (!((target.getMoveHitData(move) as { damage?: number }).damage! > 0)) return;
 			const amount = this.field.isTerrain(['dragonsdenterrain', 'fairytaleterrain']) ? 2 : 1;
-			this.boost({ spa: amount }, source, source, move);
+			const stat = move.overrideOffensiveStat === 'atk' ? 'atk' : 'spa';
+			this.boost({ [stat]: amount }, source, source, move);
 		},
 		target: "normal",
 		type: "Dragon",
@@ -25198,7 +25225,15 @@ Object.assign(Moves, RejuvenationAdvancedMoves);
 Moves.mudbarrage = { ...Moves.mudslap, name: 'Mud Barrage' };
 delete Moves.mudslap;
 
-Moves.drakefang = { ...Moves.poisonfang, num: 11485, name: 'Drake Fang', type: 'Dragon', isNonstandard: 'Custom' };
+Moves.drakefang = {
+	...Moves.poisonfang, num: 11485, name: 'Drake Fang', type: 'Dragon', basePower: 100, isNonstandard: 'Custom',
+	flags: { ...Moves.poisonfang.flags, adaptivecategory: 1, megasignature: 1 },
+	onModifyMove(move, user) {
+		move.signatureLearnedCategory = 'Physical';
+		move.signatureLearnedPower = Moves.poisonfang.basePower;
+		useHigherOffensiveStat(user, move, true);
+	},
+};
 
 import { installStarterFinishMoves } from './starter-finish-approved';
 installStarterFinishMoves(Moves);

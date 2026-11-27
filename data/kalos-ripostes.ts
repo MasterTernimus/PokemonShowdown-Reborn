@@ -26,7 +26,7 @@ export const KalosRipostes: Record<string, Signature> = {
 	greninjamega: {
 		base: 'watershuriken', name: 'Mist Shuriken', num: 32831,
 		shortDesc: 'Priority volley. A charged volley lowers the first surviving foe’s Speed by 1.',
-		desc: 'Uses the higher attacking stat. Aegis Tide grants guaranteed critical hits, 90 power on hit one and 20 thereafter, 2–5 hits (3–6 in free-for-all), and one extra hit on a KO. Fully blocking a foe’s damaging move with Protect or Spiky Shield stores a charge. Your next Water attack spends it for 1.2× power, even on a miss. A charged Mist Shuriken lowers the Speed of the first foe that takes damage and survives by 1 stage, once per volley. Switching clears the charge.',
+		desc: 'With Aegis Tide, each hit is critical. The first hit has 90 power and later hits have 20. Hits 2–5 times (3–6 in Free-for-All), with one extra hit on a KO. Fully blocking a foe’s damaging move with Protect or Spiky Shield charges the next Water attack for 1.2× power. A charged Mist Shuriken lowers the first surviving foe’s Speed by 1. Attacking with Water or switching spends the charge.',
 		changes: {
 			onAfterHit(target, source, move: RiposteMove) {
 				if (!target.hp || move.mistShurikenSpent || !chargedHit(target, source, move)) return;

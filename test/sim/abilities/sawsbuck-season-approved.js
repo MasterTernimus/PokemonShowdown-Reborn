@@ -25,16 +25,16 @@ describe('Approved Sawsbuck seasonal slots', () => {
 	it('exact passive and winter corrected slots', () => {
 		for (const id of names) {
 			assert.deepEqual(Dex.species.get(id).passives, ['seasonalstride']);
-			assert.equal(Dex.species.get(id).abilities[0], 'Overcoat');
+			assert.equal(Dex.species.get(id).abilities[0], (Dex.species.get(id).forme || 'Spring') + ' Striker');
 		}
 		assert.deepEqual(Dex.species.get('sawsbuckwinter').abilities, {
-			0: 'Overcoat',
+			0: 'Winter Striker',
 			1: 'Slush Rush',
 			H: 'Ice Body',
 		});
 	});
 	for (const [ability, expected] of [
-		['Overcoat', ['overcoat', 'overcoat', 'overcoat', 'overcoat']],
+		['Spring Striker', ['summerstriker', 'autumnstriker', 'winterstriker', 'springstriker']],
 		['Swift Swim', ['chlorophyll', 'sandrush', 'slushrush', 'swiftswim']],
 		['Sap Sipper', ['rockhead', 'stamina', 'icebody', 'sapsipper']],
 	])
@@ -50,6 +50,41 @@ describe('Approved Sawsbuck seasonal slots', () => {
 			}
 			assert(battle.log.some(l => l.startsWith('|-formechange|')));
 		});
+	it('keeps passive Overcoat when its selectable ability is suppressed', () => {
+		const p = setup('Sap Sipper'), foe = battle.p2.active[0];
+		p.addVolatile('gastroacid');
+		p.setType('Normal');
+		assert(p.hasAbilityOrPassive('overcoat'));
+		for (const type of ['powder', 'hail', 'sandstorm']) assert.equal(p.runStatusImmunity(type), false, type);
+		battle.actions.useMove('spore', foe, { target: p });
+		assert.equal(p.status, '');
+		foe.setAbility('Mold Breaker');
+		battle.actions.useMove('spore', foe, { target: p });
+		assert.equal(p.status, 'slp');
+	});
+	it('changes its kick and absorption package with the season', () => {
+		const p = setup('Spring Striker'), foe = battle.p2.active[0];
+		for (const [weather, component, move] of [
+			['raindance', 'waterabsorb', 'watergun'], ['sunnyday', 'flashfire', 'ember'],
+			['sandstorm', 'eartheater', 'mudshot'], ['snow', 'iceabsorb', 'icebeam'],
+		]) {
+			season(p, weather);
+			assert(p.hasAbility(component), component);
+			assert(p.hasAbility('striker'));
+			const kick = Dex.getActiveMove('doublekick');
+			assert.equal(battle.runEvent('BasePower', p, foe, kick, 100), 140);
+			const hp = p.hp = Math.floor(p.maxhp / 2);
+			battle.actions.useMove(move, foe, { target: p });
+			if (component === 'flashfire') {
+				assert(p.volatiles.flashfire);
+				assert.equal(p.hp, hp);
+				assert.equal(battle.runEvent('ModifyAtk', p, foe, Dex.getActiveMove('flamewheel'), 100), 150);
+			} else {
+				assert(!p.volatiles.flashfire);
+				assert.equal(p.hp, hp + Math.floor(p.baseMaxhp / 4));
+			}
+		}
+	});
 	it('no weather retains season; external ability survives cycling and restores mapped slot on entry', () => {
 		const p = setup();
 		season(p, 'sunnyday');
@@ -95,7 +130,7 @@ describe('Approved Sawsbuck seasonal slots', () => {
 		assert.equal(q.species.id, 'sawsbuck');
 	});
 	it('conversion remains without a kicking bonus; sun does not grant passive Speed', () => {
-		const p = setup('Overcoat'),
+		const p = setup('Spring Striker'),
 			q = battle.p2.active[0];
 		p.addVolatile('gastroacid');
 		const m = Dex.getActiveMove('megakick');
@@ -151,7 +186,7 @@ describe('Seasonal Stride no longer includes the kicking boost', () => {
 	for (const species of names)
 		it(species + ' retains conversion without Striker', () => {
 			battle = common.createBattle({ gameType: 'singles' }, [
-				[{ species, ability: 'Overcoat', moves: ['splash'] }],
+				[{ species, ability: Dex.species.get(species).abilities[1], moves: ['splash'] }],
 				[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 			]);
 			battle.field.terrain = '';

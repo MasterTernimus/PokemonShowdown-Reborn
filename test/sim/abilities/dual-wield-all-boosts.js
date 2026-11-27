@@ -95,6 +95,20 @@ describe('Dual Wield actual offensive ability boost family', () => {
 	it('lists every current final-damage ability hook for explicit pure eligibility coverage', () => {
 		for (const ability of Dex.abilities.all()) if (ability.onModifyDamage) assert(DualWieldFinalDamageHooks.has(ability.id), ability.id);
 	});
+	it('counts Signature Drive only for Techno Blast matching an active Drive', () => {
+		const [p, q] = setup('Signature Drive', ['dualwield']);
+		const { dualWieldFinalDamageBoost } = require('../../../dist/sim/dual-wield-power');
+		const move = Dex.getActiveMove('technoblast');
+		const qualifies = () => dualWieldFinalDamageBoost(battle, 'signaturedrive', p, q, move);
+		p.setItem('shockdrive');
+		move.type = 'Fire';
+		assert(!qualifies());
+		move.type = 'Electric';
+		assert(qualifies());
+		assert.equal(battle.runEvent('ModifyDamage', p, q, move, 100), 115);
+		p.addVolatile('embargo');
+		assert(!qualifies());
+	});
 	for (const ability of ['Convergence', 'Insight', 'Cold Logic', 'Frame Perfect']) {
 		for (const boosted of [false, true]) it(`${ability} uses the correct Dual Wield split with bonus ${boosted}`, () => {
 			const [p, q] = setup(ability, ['dualwield']);

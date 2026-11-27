@@ -4,8 +4,8 @@ import { skipPassiveComponent } from './passive-ability-cleanup';
 
 export const QueuedAbilityDescriptions = {
 	seasonalstride: {
-		shortDesc: "Normal attacks become the current primary type with 1.2x power. Weather changes season.",
-		desc: "Eligible damaging Normal moves become the current primary type and gain 20% power. At turn end, rain selects Spring, sun Summer, sand Autumn, and hail or snow Winter. Clear weather keeps the current season. Changing season carries the selected ability slot across forms.",
+		shortDesc: "Overcoat. Converts Normal attacks to the primary type at 1.2× power. Weather changes season.",
+		desc: "Overcoat protects against powders, Effect Spore, hail and sandstorm damage. Eligible damaging Normal moves become the current primary type and gain 20% power. At turn end, rain selects Spring, sun Summer, sand Autumn, and hail or snow Winter. Clear weather keeps the current season. Changing season carries the selected ability slot across forms.",
 	},
 	sheddecoy: {
 		shortDesc: 'After entry effects, pays 1/4 max HP to create a Substitute.',
@@ -134,6 +134,17 @@ export function shedDecoyEntry(battle: Battle, pokemon: Pokemon) {
 
 export function installQueuedAbilities(abilities: AbilityDataTable) {
 	abilities.magneticbulwark = { ...abilities.filter, name: 'Magnetic Bulwark', num: 11690, rating: 4 };
+	abilities.seasonalstride.onImmunity = function (type, pokemon) {
+		const coat = this.dex.abilities.get('overcoat');
+		if (!this.suppressingAbility(pokemon, coat)) return coat.onImmunity?.call(this, type, pokemon);
+	};
+	abilities.seasonalstride.onTryHitPriority = abilities.overcoat.onTryHitPriority;
+	abilities.seasonalstride.onTryHit = function (target, source, move) {
+		const coat = this.dex.abilities.get('overcoat');
+		if (!this.suppressingAbility(target, coat) && typeof coat.onTryHit === 'function') {
+			return coat.onTryHit.call(this, target, source, move);
+		}
+	};
 	abilities.seasonalstride.onResidual = function (pokemon) {
 		if (pokemon.baseSpecies.num !== 586 || pokemon.transformed || !pokemon.isActive) return;
 		const seasons: { [weather: string]: string } = {

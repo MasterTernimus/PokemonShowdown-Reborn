@@ -46,9 +46,9 @@ describe('Approved Shadow Double and Crossfire', () => {
 		assert(!p.volatiles.shadowdoublespent); q.removeVolatile('substitute'); move(p, q, 'shadowball');
 		assert(p.volatiles.shadowdoublespent.armed);
 		const m = Dex.getActiveMove('doublehit');
-		assert.equal(battle.runEvent('ModifyDamage', q, p, m, 100), 60);
-		assert.equal(battle.runEvent('ModifyDamage', q, p, m, 100), 60);
-		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('doublehit'), 100), 80);
+		assert.equal(battle.runEvent('ModifyDamage', q, p, m, 100), 54);
+		assert.equal(battle.runEvent('ModifyDamage', q, p, m, 100), 54);
+		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('doublehit'), 100), 72);
 		p.setAbility('No Ability'); p.setAbility('Shadow Double'); move(p, q, 'shadowball');
 		assert.equal(p.volatiles.shadowdoublespent.armed, false);
 	});
@@ -92,9 +92,12 @@ describe('Approved Shadow Double and Crossfire', () => {
 		const [p, q] = setup('Gengar-Mega'); p.setType(['Normal']); battle.randomizer = n => n;
 		const attack = () => move(q, p, Object.assign(Dex.getActiveMove('doublehit'), { accuracy: true, willCrit: false }));
 		let hp = p.hp; attack(); const ordinary = hp - p.hp;
-		move(p, q, 'shadowball'); hp = p.hp; attack();
+		move(p, q, 'shadowball'); attack();
+		assert(p.volatiles.shadowdoublespent.armed, 'The Stars block preserves the double');
+		hp = p.hp; attack();
 		const guarded = hp - p.hp;
 		assert(guarded >= ordinary * 0.70 && guarded <= ordinary * 0.80, `${guarded}/${ordinary}`);
+		attack(); // Misaligned Stars blocks the fourth use.
 		hp = p.hp; attack(); assert.equal(hp - p.hp, ordinary);
 	});
 	it('clears once-entry shield and Crossfire charges on actual switching', () => {

@@ -1,4 +1,5 @@
 import { beastHunterMoveView } from './beast-hunter';
+import { mantleMoveView } from '../data/legendary-reserves';
 import { encoreAriaView } from './encore-aria';
 import { auraConvergenceView } from './aura-convergence';
 /** Adaptive Cycle's battle-long, individual memory. No state lives in abilityState or volatiles. */
@@ -476,7 +477,7 @@ export function adaptiveMoveView(move: ActiveMove, source: Pokemon, target: Poke
 		(view as any).adaptiveViewFor = target;
 	}
 	return encoreAriaView(
-		beastHunterMoveView(auraConvergenceView(view, source, target, move), source, target),
+		mantleMoveView(beastHunterMoveView(auraConvergenceView(view, source, target, move), source, target), source, target),
 		source,
 		target,
 	);

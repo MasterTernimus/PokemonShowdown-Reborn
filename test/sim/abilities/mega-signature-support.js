@@ -118,9 +118,10 @@ describe('Mega signature support moves', () => {
 		assert.equal(a.hp, 4000);
 		assert.equal(t.hp, 4000);
 	});
-	it('Dizzy Punch stays ordinary and Soothing Tide heals its user', () => {
+	it('Tandem Punch heals its ally once across both hits and Soothing Tide heals its user', () => {
 		const [p, a, t] = start('Kangaskhan', 'dizzypunch'); a.hp = 500;
-		assert.equal(hit(p, t, 'dizzypunch').name, 'Dizzy Punch'); assert.equal(a.hp, 500);
+		assert.equal(hit(p, t, 'dizzypunch').name, 'Tandem Punch');
+		assert.equal(a.hp, 500 + Math.floor(a.baseMaxhp / 12));
 		b.destroy();
 		const [milotic,,foe] = start('Milotic', 'waterpulse'); milotic.maxhp = milotic.baseMaxhp = 4000; milotic.hp = 200;
 		const before = foe.hp;
@@ -153,11 +154,21 @@ describe('Mega signature support moves', () => {
 		const m = hit(p, t, 'waterpulse'); assert.equal(m.name, 'Soothing Tide'); assert.equal(m.id, 'waterpulse');
 		assert.equal(b.runEvent('BasePower', p, t, m, 100), 225);
 	});
-	for (const [species, id] of [['Absol', 'nightslash'], ['Kangaskhan', 'dizzypunch'], ['Metagross', 'meteormash']]) {
+	for (const [species, id] of [['Absol', 'nightslash']]) {
 		it(species + ' keeps its ordinary move after Mega Evolution', () => {
 			const [p,,t] = start(species, id); const m = hit(p, t, id), base = Dex.moves.get(id);
 			assert.equal(m.name, base.name); assert.equal(p.getMoves()[0].move, base.name);
 			assert.equal(m.category, base.category); assert.equal(m.overrideOffensiveStat, base.overrideOffensiveStat);
+		});
+	}
+	for (const [species, id, name] of [
+		['Kangaskhan', 'dizzypunch', 'Tandem Punch'], ['Metagross', 'meteormash', 'Meteor Ram'],
+	]) {
+		it(species + ' shows the new signature in its original move slot', () => {
+			const [user,, foe] = start(species, id);
+			assert.equal(hit(user, foe, id).name, name);
+			assert.equal(user.getMoves()[0].move, name);
+			assert.equal(user.moveSlots[0].id, id);
 		});
 	}
 	it('Frost Hammer is physical Grass and recoils for one eighth of damage dealt', () => {

@@ -38,7 +38,14 @@ describe('Approved ability followups', () => {
 		return move;
 	}
 
-	for (const ability of ['Shadow Shield', 'Voidcraft', 'Cursed Doll', 'Phantom Fist', 'Surge Conduit']) {
+	const damageAtFullAndHalf = {
+		'Shadow Shield': [50, 100],
+		'Voidcraft': [45, 90],
+		'Cursed Doll': [50, 100],
+		'Phantom Fist': [100, 100],
+		'Surge Conduit': [100, 100],
+	};
+	for (const [ability, [atFull, atHalf]] of Object.entries(damageAtFullAndHalf)) {
 		for (const hp of [1, 0.5])
 			it(`${ability}: reviewed incoming-damage effects at ${hp} HP`, () => {
 				const [p, t] = start(ability);
@@ -48,7 +55,7 @@ describe('Approved ability followups', () => {
 					const move = b.dex.getActiveMove('tackle');
 					p.getMoveHitData(move).typeMod = mod;
 
-					assert.equal(b.runEvent('ModifyDamage', t, p, move, 100), ['Phantom Fist', 'Surge Conduit'].includes(ability) ? 100 : hp === 1 ? 50 : 100);
+					assert.equal(b.runEvent('ModifyDamage', t, p, move, 100), hp === 1 ? atFull : atHalf);
 				}
 			});
 	}
@@ -72,7 +79,7 @@ describe('Approved ability followups', () => {
 				p.getMoveHitData(m).typeMod = 1;
 
 				b.setActiveMove(m, t, p);
-				assert.equal(b.runEvent('ModifyDamage', t, p, m, 100), 50);
+				assert.equal(b.runEvent('ModifyDamage', t, p, m, 100), damageAtFullAndHalf[ability][0]);
 			});
 
 		for (const suppression of ['gastroacid', 'gas'])

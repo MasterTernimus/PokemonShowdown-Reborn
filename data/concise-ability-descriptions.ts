@@ -26,8 +26,8 @@ export const ConciseAbilityDescriptions: Record<string, { desc: string, shortDes
 		"shortDesc": "Friend Guard; doubled secondary chances; one charge skip per recipient per stay; Safeguard and stat-drop ward.",
 	},
 	"bonewarrior": {
-		"desc": "Battle Armor, including critical-hit immunity, 0.8x incoming attack damage and field effects. Once per turn after a bone-flag attack damages opposing HP, the living active holder restores 1/8 max HP after the whole attack. Normal healing restrictions apply.",
-		"shortDesc": "Battle Armor; bone attacks heal 1/8 max HP once per turn after opposing HP damage.",
+		"desc": "Includes Battle Armor and Cursed Body. A damaging hit can disable the attacking move. Fainting curses active foes for two turns. Once per turn, damaging a foe with a bone move restores 1/8 max HP after the attack.",
+		"shortDesc": "Battle Armor + Cursed Body. Bone attacks heal 1/8 HP once per turn.",
 	},
 	"apexvenom": {
 		"desc": "Strong Jaw gives biting attacks 1.5x power. Poison Fang has no separate signature multiplier. Local Poison/Steel matchup overrides, bite protection bypass and toxic chance, and Shed Skin.",

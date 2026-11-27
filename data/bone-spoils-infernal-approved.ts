@@ -28,6 +28,8 @@ function rewardResolve(this: Battle, source: Pokemon, target: Pokemon, move: Act
 export function installBoneSpoilsInfernal(a: AbilityDataTable) {
 	a.bonewarrior = {
 		...a.battlearmor,
+		onDamagingHit: a.cursedbody.onDamagingHit,
+		onFaint: a.cursedbody.onFaint,
 		name: 'Bone Warrior',
 		num: 10282,
 		rating: 4.5,
@@ -91,8 +93,8 @@ export function installBoneSpoilsInfernal(a: AbilityDataTable) {
 export const BoneSpoilsInfernalDescriptions = {
 	bonewarrior: {
 		name: 'Bone Warrior',
-		shortDesc: 'Battle Armor; bone attacks heal 1/8 max HP once per turn after opposing HP damage.',
-		desc: 'Full local Battle Armor, including critical-hit immunity, 0.8x incoming attack damage and field effects. Once per turn after a bone-flag attack damages opposing HP, the living active holder restores 1/8 max HP after the whole attack. Normal healing restrictions apply.',
+		shortDesc: 'Battle Armor + Cursed Body. Bone attacks heal 1/8 max HP once per turn after opposing HP damage.',
+		desc: 'Cursed Body can disable a move that hits the holder and curses foes on fainting. Includes Battle Armor, including critical-hit immunity, 0.8x incoming attack damage and field effects. Once per turn after a bone-flag attack damages opposing HP, the living active holder restores 1/8 max HP after the whole attack. Normal healing restrictions apply.',
 	},
 	battlespoils: {
 		name: 'Battle Spoils',

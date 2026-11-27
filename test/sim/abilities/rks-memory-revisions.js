@@ -8,12 +8,12 @@ describe('Revised single Memory effects', () => {
 		battle?.destroy();
 		battle = null;
 	});
-	function setup(item) {
+	function setup(item, ability = 'RKS System') {
 		battle = common.createBattle({}, [
 			[
 				{
 					species: 'Silvally',
-					ability: 'RKS System',
+					ability,
 					item,
 					moves: ['tackle', 'tailwind', 'flamethrower'],
 				},
@@ -21,9 +21,26 @@ describe('Revised single Memory effects', () => {
 			[{ species: 'Mew', ability: 'No Ability', moves: ['splash', 'ember', 'gust', 'earthquake'] }],
 		]);
 		if (battle.requestState === 'teampreview') battle.makeChoices();
-		battle.field.terrain = '';
+		if (item !== 'Fairy Memory') battle.field.terrain = '';
 		return [battle.p1.active[0], battle.p2.active[0]];
 	}
+	it('only grants a held Memory passive with RKS System and updates it when the item changes', () => {
+		const [p, q] = setup('Fire Memory');
+		assert.deepEqual(p.getPassives(), ['flashfire']);
+		battle.actions.useMove('ember', q, { target: p });
+		p.setItem('Fairy Memory');
+		assert.deepEqual(p.getPassives(), ['mistysurge']);
+		assert(!p.volatiles.flashfire);
+		assert.equal(battle.field.terrain, 'mistyterrain');
+		p.clearItem();
+		assert.deepEqual(p.getPassives(), []);
+		assert(p.hasAbility('scrappy'));
+	});
+	for (const ability of ['Adaptive Arsenal', 'Memory Leak']) it(ability + ' gets no Memory passive', () => {
+		const [p] = setup('Fire Memory', ability);
+		assert.equal(p.ability, Dex.toID(ability));
+		assert.deepEqual(p.getPassives(), []);
+	});
 	it('Fire absorbs Fire and retains its charged damage boost', () => {
 		const [p, q] = setup('Fire Memory');
 		const hp = p.hp;
@@ -77,8 +94,7 @@ describe('Revised single Memory effects', () => {
 	});
 	it('Fairy starts Misty Terrain through RKS System', () => {
 		const [p] = setup('Fairy Memory');
-		const ability = Dex.abilities.get('rkssystem');
-		battle.singleEvent('Start', ability, p.abilityState, p);
+		assert.deepEqual(p.getPassives(), ['mistysurge']);
 		assert.equal(battle.field.terrain, 'mistyterrain');
 		assert(p.hasAbility('mistysurge'));
 		assert(!p.hasAbility('invigorate'));

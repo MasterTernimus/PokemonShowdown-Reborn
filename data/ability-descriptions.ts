@@ -367,9 +367,9 @@ export const AbilityDescriptionOverrides: Record<string, { desc: string, shortDe
 			'Transforms Druddigon; stronger Sp. Atk with HP cost in rain; contact paralysis; absorbs Electric.',
 	},
 	ascendance: {
-		desc: "All damaging moves deal 1.5x damage, can hit type immunities, and gain a 1.5x STAB-style boost when they do not match its type. On Holy Field, its Attack and Special Attack are raised by 1 on entry. Eevee-Starter and Umbreon transform into Divineon on entry; Umbreon uses Umbreon-Perfect's appearance while retaining Umbreon's full movepool.",
+		desc: "All damaging moves get the same-type attack bonus once, including ??? moves, and bypass type immunities. On Holy Field, its Attack and Special Attack are raised by 1 on entry. Eevee-Starter and Umbreon transform into Divineon on entry; Umbreon uses Umbreon-Perfect's appearance while retaining Umbreon's full movepool.",
 		shortDesc:
-			'Damaging moves deal 1.5x, bypass immunities, and gain off-type STAB; transforms Eevee-Starter/Umbreon into Divineon.',
+			'All attacks gain STAB and bypass type immunities. Transforms Starter Eevee or Umbreon into Divineon.',
 	},
 	hisuianresolve: {
 		desc: "Recoil and crash moves, Explosion, Self-Destruct and Misty Explosion have 1.2x power; Struggle is excluded. On Chessboard, all moves gain a further 1.2x power. Prevents move recoil except Struggle. Crash and Life Orb damage still apply. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def.",
@@ -862,9 +862,9 @@ export const AbilityDescriptionOverrides: Record<string, { desc: string, shortDe
 			'Stronger slicing moves; eligible moves hit twice; entry heals allies by 1/4 HP, or 1/3 on Fairy Tale.',
 	},
 	omenedge: {
-		desc: "Slicing moves have 1.5x power, except on Cold Eclipse. Eligible slicing, pulse, bullet, horn, drill, and Arrow moves normally hit twice at 60% power, each with its own accuracy check. If an offensive ability power or damage multiplier applies, the first hit retains its full ability boosts and the second uses 15% of original move power without those offensive ability multipliers. Stat multipliers, items, STAB and ordinary weather or field modifiers remain separate. In Free-for-All, the second hit targets another random living foe when possible; Siege Launcher retains its full-power pair. Existing multi-hit moves do not gain an extra pair. On entry, lowers foes' Defense and Sp. Def by 1 (2 on Cold Eclipse) and changes Underwater to Midnight Zone. Foes targeting it spend 1 extra PP, or 2 on Midnight Zone. On fainting, schedules a physical, 140-power Steel Doom Desire against each foe. An existing delayed attack is delayed by another 2 turns instead.",
+		desc: "Slicing moves have 1.5x power, except on Cold Eclipse. On entry, lowers foes' Defense and Sp. Def by 1 (2 on Cold Eclipse) and changes Underwater to Midnight Zone. Foes targeting it spend 1 extra PP, or 2 on Midnight Zone. On fainting, schedules a physical, 140-power Steel Doom Desire against each foe. An existing delayed attack is delayed by another 2 turns instead.",
 		shortDesc:
-			'Stronger slicing moves; eligible moves hit twice; foes spend extra PP; physical Doom Desire on fainting.',
+			'Boosts slicing moves. Pressure drains extra PP. Calls a physical Doom Desire on fainting.',
 	},
 	invigorate: {
 		desc: "Healing received by it and its allies is multiplied by 1.3. At turn end, it has a 50% chance to cure each adjacent ally's status condition.",
@@ -1388,11 +1388,6 @@ export const AbilityDescriptionOverrides: Record<string, { desc: string, shortDe
 		desc: "Other Pokemon cannot lower its stat stages. Moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist. Airborne: immune to Ground attacks, Spikes, Toxic Spikes, Sticky Web and Arena Trap unless grounded. Thousand Arrows can still hit. Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. Dragon Darts and G-Max Spirit Volley use its higher offensive stat and gain 20% power from Hydra Bond instead of extra hits. Dragon Darts keeps its two-hit pattern; Spirit Volley keeps its full-power hit and weaker follow-up against another foe. In Free-for-All battles, Dragon Darts hits all opposing Pokemon twice.",
 		shortDesc:
 			'Airborne; blocks foe stat drops; bypasses screens/Substitute; extra hits, or 1.2x power for signature moves.',
-	},
-	astralcore: {
-		desc: "Doubles Attack, or Sp. Atk instead on Psychic Terrain. Switching out cures major status and heals 1/8 max HP only if a status was cured. Bewitched Woods cures status at turn end without this heal. Prevents other Pokemon's accuracy drops and ignores evasion boosts. Reveals opposing Illusions on activation. Mirror Arena entry lowers foes' accuracy by 1. Starlight Arena entry gives +2 Sp. Atk and puts Spotlight on its first adjacent ally.",
-		shortDesc:
-			'Doubles Attack; Psychic Terrain doubles Sp. Atk instead; Switching cures status and heals 1/3 HP if cured; Woods cures status each turn; No opposing accuracy drops; ignores evasion; reveals Illusions.',
 	},
 	divinemockery: {
 		desc: "Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. Moves ignore bypassable opposing abilities. It gains 1 Accuracy on entry. Its critical hits deal 2.25x damage instead of 1.5x. Eligible attacks gain Hydra Bond's extra hits and ignore opposing Abilities. It gains +1 accuracy on entry and its critical hits deal more damage. Water attacks receive STAB even without Water typing.",
@@ -1918,9 +1913,9 @@ export const AbilityDescriptionOverrides: Record<string, { desc: string, shortDe
 		shortDesc: November16BalanceDescriptions.solidrock.shortDesc,
 	},
 	sinisterblaze: {
-		desc: 'This Ability cannot be suppressed, copied, or transferred. It is burned on entry, even through Misty Terrain, and its burn can overwrite other status conditions. In Fairy Tale, Starlight Arena, New World, Burning Field, Volcanic Field, Superheated Field, or Cold Eclipse, its Defense and Special Defense rise by 1 stage on entry. Its burn damage becomes healing; foes take 1/16 max HP each turn, or 1/8 if already burned. It does not heal from this generated damage, but heals from real burn damage dealt to foes. Its physical attacks are not weakened by burn. It is immune to hail and sandstorm damage and counts as Ice type in hail, snow, and ice fields, except for Abysseon and Divineon.',
+		desc: 'This Ability cannot be suppressed, copied, or transferred. It is burned on entry, even through Misty Terrain, and its burn can overwrite other status conditions. In Fairy Tale, Starlight Arena, New World, Burning Field, Volcanic Field, or Superheated Field, its Defense and Special Defense rise by 1 stage on entry. Its burn heals it. Burned foes lose an extra 1/16 max HP each turn. Once per turn, the user also recovers HP equal to the burn damage one foe actually takes. Its physical attacks are not weakened by burn. It is immune to hail and sandstorm damage and counts as Ice type in hail, snow, and ice fields, except for Abysseon and Divineon.',
 		shortDesc:
-			'Burn heals user; foes take 1/16, or 1/8 if burned; no burn penalty; hail/sand immune.',
+			'Burned foes lose an extra 1/16 each turn. Heals from its own burn and one opposing burn per turn.',
 	},
 	soulfire: {
 		desc: 'It draws in Fire- and Ghost-type moves to itself and is immune to Fire-type moves, Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by them. Its Fire- and Ghost-type moves bypass type immunities, cannot hit Normal-type Pokemon with Ghost-type attacks, and are resisted by Steel- and Dark-type Pokemon. Burns caused by its Fire- and Ghost-type moves or Will-O-Wisp bypass burn immunities, Misty Terrain, and Mist. Fire- and Ghost-type moves from this Ability deal 4x damage to opposing Soul Fire users.',
@@ -2162,8 +2157,8 @@ export const AbilityDescriptionOverrides: Record<string, { desc: string, shortDe
 		shortDesc: 'Bites have 1.5x power.',
 	},
 	blackfang: {
-		desc: 'Biting moves have 1.5x power. Prevents and cures sleep. Gains +1 Attack for each Pokemon knocked out by its move.',
-		shortDesc: 'Bites have 1.5x power; Prevents and cures sleep; Move KOs give +1 Attack.',
+		desc: 'Biting moves have 1.5× power. Each Pokémon knocked out by its move raises its Attack by 1 stage.',
+		shortDesc: 'Bites have 1.5× power. Move KOs give +1 Attack.',
 	},
 	fluffycraft: {
 		desc: 'Contact attacks deal half damage; Fire attacks deal double damage (contact Fire attacks are neutral). Moves of 60 power or less gain 1.5x power, with the Factory Field threshold of 80. Switching out cures major status and, only when a status was cured, heals 1/3 max HP. Bewitched Woods also cures status at turn end without this switch-out heal. Normal ability suppression applies.',
@@ -5054,8 +5049,8 @@ AbilityDescriptionOverrides.lunarorbit = {
 };
 
 AbilityDescriptionOverrides.cosmicanalysis = {
-	shortDesc: 'Analytic + Download.',
-	desc: 'Attacks gain 30% power after all other active Pokemon have acted. On entry, raises Attack if foes have lower combined Defense, otherwise Sp. Atk. Once per battle on entry, Download grants Laser Focus for the next attack that hits, through the following turn. Retains Download’s field bonuses.',
+	shortDesc: 'Analytic + Natural Cure.',
+	desc: 'Attacks gain 30% power after all other active Pokémon have acted. ' + AbilityDescriptionOverrides.naturalcure.desc,
 };
 
 AbilityDescriptionOverrides.evergreen = {
@@ -5156,14 +5151,32 @@ AbilityDescriptionOverrides.ironmaiden.desc =
 AbilityDescriptionOverrides.siegegrip.desc =
 	AbilityDescriptionOverrides.moldbreaker.desc + ' ' + LightPinsirDescriptions.siegegrip.desc;
 AbilityDescriptionOverrides.astralcore = {
-	shortDesc: 'Pure Power + Natural Cure + Star Lens.',
-	desc:
-		AbilityDescriptionOverrides.purepower.desc +
-		' ' +
-		AbilityDescriptionOverrides.naturalcure.desc +
-		' ' +
+	shortDesc: 'Star Lens + Misaligned Stars + Victory Star.',
+	desc: [
 		AbilityDescriptionOverrides.starlens.desc,
+		AbilityDescriptionOverrides.misalignedstars.desc,
+		'Victory Star gives the user and its allies 1.1× accuracy. Foes take 1.5× damage on New World and Starlight Arena.',
+	].join(' '),
 };
 
 import { November16BalanceDescriptions } from './nov16-balance-descriptions';
 Object.assign(AbilityDescriptionOverrides, November16BalanceDescriptions);
+import { starsCompositeIds } from './ability-components';
+const compactStarEffects: Record<string, string> = {
+	cursedmarionette: 'First status hit per foe each entry curses it; 1.3× damage to cursed foes.',
+	mourningsnow: 'Hail and Veil; frostbite, Disable, snow healing, FFA KO healing and faint Curse.',
+};
+for (const [id, part, name] of [
+	...starsCompositeIds.map(ability => [ability, 'misalignedstars', 'Misaligned Stars']),
+	['keystoneseal', 'pressure', 'Pressure'],
+]) {
+	const text = AbilityDescriptionOverrides[id];
+	AbilityDescriptionOverrides[id] = {
+		shortDesc: name + '. ' + (compactStarEffects[id] || text.shortDesc),
+		desc: text.desc + ' ' + AbilityDescriptionOverrides[part].desc,
+	};
+}
+import { reserveDescriptions, reserveSummaries } from './legendary-reserves';
+for (const [id, desc] of Object.entries(reserveDescriptions)) {
+	AbilityDescriptionOverrides[id] = { shortDesc: reserveSummaries[id], desc };
+}

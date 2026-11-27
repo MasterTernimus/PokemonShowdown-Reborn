@@ -1,5 +1,6 @@
 import { adaptiveIgnoresAbility } from '../sim/adaptive-cycle';
 import { AbilityComponents } from './ability-components';
+import { removeSpikesLayer } from './dune-carver';
 import type { AbilityData, AbilityDataTable } from '../sim/dex-abilities';
 
 function includesNaturalCure(id: string, seen = new Set<string>()): boolean {
@@ -303,15 +304,7 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 			source.m.rimebreakerTurn = this.turn;
 			if (source.side.removeSideCondition('stealthrock'))
 				this.add('-sideend', source.side, 'Stealth Rock');
-			const spikes = source.side.sideConditions['spikes'];
-			if (!spikes) return;
-			if (spikes.layers <= 1) {
-				if (source.side.removeSideCondition('spikes')) this.add('-sideend', source.side, 'Spikes');
-			} else {
-				spikes.layers--;
-				this.add('-sideend', source.side, 'Spikes');
-				for (let i = 0; i < spikes.layers; i++) this.add('-sidestart', source.side, 'Spikes');
-			}
+			removeSpikesLayer(this, source.side);
 		},
 	});
 	base.twilightinstinct = {

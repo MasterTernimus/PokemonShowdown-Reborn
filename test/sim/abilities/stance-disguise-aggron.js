@@ -47,7 +47,7 @@ describe('Approved Aggron Mimikyu and Aegislash', () => {
 			assert.deepEqual(Dex.species.get(id).abilities, {
 				0: 'Stalwart',
 				1: 'Cursed Body',
-				H: 'Infiltrator',
+				H: 'Misaligned Stars',
 			});
 	});
 	for (const species of ['Mimikyu', 'Mimikyu-Totem'])

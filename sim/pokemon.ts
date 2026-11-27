@@ -1,4 +1,5 @@
 import { formSignature, signatureTarget } from '../data/form-signatures';
+import { rewardIslandWatch } from '../data/legendary-abilities';
 import { tryRotomEject } from '../data/rotom-eject';
 import { refillMewtwoShield } from '../data/mewtwo-approved';
 import { DisabledSpecies } from '../data/disabled-species';
@@ -16,7 +17,8 @@ import {
 	adaptiveStatus,
 } from './adaptive-cycle';
 import { AbilityComponents, unstableEvoComponents } from '../data/ability-components';
-import { startGainedPassives } from './species-passives';
+import { passiveEffect, passiveState, startGainedPassives } from './species-passives';
+import { RKSSystemMemoryAbilities } from '../data/rks-system-memory';
 import { SignaturePassiveComponents } from '../data/signature-passive-data';
 import { getGigantamaxForm } from './gigantamax';
 /**
@@ -52,6 +54,7 @@ interface MoveSlot {
 interface Attacker {
 	source: Pokemon;
 	damage: number;
+	soundTurn?: number;
 	thisTurn: boolean;
 	move?: ID;
 	slot: PokemonSlot;
@@ -1126,6 +1129,10 @@ export class Pokemon {
 	gotAttacked(move: string | Move, damage: number | false | undefined, source: Pokemon) {
 		const damageNumber = typeof damage === 'number' ? damage : 0;
 		if (damageNumber > 0 && !this.isAlly(source)) {
+			if (source.species.id === 'infernapemega' || source.species.id === 'infernape') {
+				const type = typeof move === 'string' ? this.battle.dex.moves.get(move).type : move.type;
+				source.m.blazingFuryComboEntry = type === 'Fighting' ? source.m.ultraRivalryEntryToken : undefined;
+			}
 			const turns = source.m.lastDamagedSideTurn ||= {};
 			turns[this.side.id] = this.battle.turn;
 			if (this.side.allySide) turns[this.side.allySide.id] = this.battle.turn;
@@ -1142,6 +1149,7 @@ export class Pokemon {
 		this.attackedBy.push({
 			source,
 			damage: damageNumber,
+			soundTurn: damageNumber > 0 && move.flags.sound ? this.battle.turn : undefined,
 			move: move.id,
 			thisTurn: true,
 			slot: source.getSlot(),
@@ -1601,7 +1609,7 @@ export class Pokemon {
 		return cappedBoost;
 	}
 
-	boostBy(boosts: SparseBoostsTable) {
+	boostBy(boosts: SparseBoostsTable, ultraStage = false) {
 		boosts = this.getCappedBoost(boosts);
 		let delta = 0;
 		let boostName: BoostID;
@@ -1614,12 +1622,28 @@ export class Pokemon {
 				if (credit > 0 && delta < 0) core[key] = Math.max(0, credit + delta);
 				if (credit < 0 && delta > 0) core[key] = Math.min(0, credit + delta);
 			}
+			if (ultraStage && delta > 0) {
+				const credit = this.m.ultraStages ||= {};
+				credit[boostName] = (credit[boostName] || 0) + Math.min(delta, Math.max(0, this.boosts[boostName] + delta));
+			} else if (delta < 0 && this.m.ultraStages?.[boostName]) {
+				this.m.ultraStages[boostName] = Math.max(0, this.m.ultraStages[boostName] + delta);
+			}
 			this.boosts[boostName] += delta;
 		}
 		return delta;
 	}
 
+	damageStage(stat: StatIDExceptHP, opponent: Pokemon) {
+		const stage = this.boosts[stat];
+		const credit = this.m.ultraStages?.[stat];
+		if (stage > 0 && credit && !this.isAlly(opponent) && opponent.hasAbilityOrPassive('misalignedstars')) {
+			return Math.max(0, stage - credit);
+		}
+		return stage;
+	}
+
 	clearBoosts() {
+		delete this.m.ultraStages;
 		if (this.volatiles.plasmacore) {
 			for (const stat of ['atk', 'spa', 'spe']) this.volatiles.plasmacore[`${stat}Credit`] = 0;
 		}
@@ -1641,6 +1665,7 @@ export class Pokemon {
 			if (this.volatiles.plasmacore && (boostName === 'atk' || boostName === 'spa' || boostName === 'spe')) {
 				this.volatiles.plasmacore[`${boostName}Credit`] = 0;
 			}
+			if (this.m.ultraStages) delete this.m.ultraStages[boostName];
 			this.boosts[boostName] = boosts[boostName]!;
 		}
 	}
@@ -1729,7 +1754,10 @@ export class Pokemon {
 
 	copyVolatileFrom(pokemon: Pokemon, switchCause?: string | boolean) {
 		this.clearVolatile();
-		if (switchCause !== 'shedtail') this.boosts = pokemon.boosts;
+		if (switchCause !== 'shedtail') {
+			this.boosts = pokemon.boosts;
+			if (pokemon.m.ultraStages) this.m.ultraStages = { ...pokemon.m.ultraStages };
+		}
 		for (const i in pokemon.volatiles) {
 			if (switchCause === 'shedtail' && i !== 'substitute') continue;
 			if (this.battle.dex.conditions.getByID(i as ID).noCopy) continue;
@@ -1822,6 +1850,7 @@ export class Pokemon {
 			});
 		}
 		let boostName: BoostID;
+		delete this.m.ultraStages;
 		for (boostName in pokemon.boosts) {
 			this.boosts[boostName] = pokemon.boosts[boostName];
 		}
@@ -2082,6 +2111,7 @@ export class Pokemon {
 	}
 
 	clearVolatile(includeSwitchFlags = true) {
+		delete this.m.ultraStages;
 		this.illusion = null;
 		delete this.m.perfectIllusion;
 		this.passiveStates = {};
@@ -2430,6 +2460,7 @@ export class Pokemon {
 			this.statusState = prevStatusState;
 			return false;
 		}
+		if (!status.id && prevStatus) rewardIslandWatch(this);
 		adaptiveStatus(this, status.id, sourceEffect);
 		if (status.id && !this.battle.runEvent('AfterSetStatus', this, source, sourceEffect, status)) {
 			return false;
@@ -2547,11 +2578,13 @@ export class Pokemon {
 		if (!this.item) return;
 		const item = this.getItem();
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {
+			const memory = this.getRKSMemoryPassive();
 			this.item = '';
 			const oldItemState = this.itemState;
 			this.battle.clearEffectState(this.itemState);
 			this.pendingStaleness = undefined;
 			this.battle.singleEvent('End', item, oldItemState, this);
+			this.updateRKSMemoryPassive(memory);
 			this.battle.runEvent('AfterTakeItem', this, null, null, item);
 			return item;
 		}
@@ -2570,6 +2603,7 @@ export class Pokemon {
 		} else {
 			this.pendingStaleness = undefined;
 		}
+		const memory = this.getRKSMemoryPassive();
 		const oldItem = this.getItem();
 		const oldItemState = this.itemState;
 		this.item = item.id;
@@ -2578,6 +2612,7 @@ export class Pokemon {
 		if (item.id) {
 			this.battle.singleEvent('Start', item, this.itemState, this, source, effect);
 		}
+		this.updateRKSMemoryPassive(memory);
 		return true;
 	}
 
@@ -2720,7 +2755,24 @@ export class Pokemon {
 
 	/** Current mechanical form, including Transform; independent of ability suppression. */
 	getPassives(): readonly string[] {
-		return (this.m.perfectIllusion && this.illusion ? this.illusion.species : this.species).passives;
+		const passives = (this.m.perfectIllusion && this.illusion ? this.illusion.species : this.species).passives;
+		const memory = this.getRKSMemoryPassive();
+		return memory && !passives.includes(memory) ? [...passives, memory] : passives;
+	}
+
+	getRKSMemoryPassive() {
+		if (this.ability === 'rkssystem' && this.species.baseSpecies === 'Silvally' &&
+			this.baseSpecies.baseSpecies === 'Silvally') return RKSSystemMemoryAbilities[this.item]?.[0];
+	}
+
+	private updateRKSMemoryPassive(previous: string | undefined) {
+		const next = this.getRKSMemoryPassive();
+		if (previous === next || !this.isActive) return;
+		if (previous) {
+			this.battle.singleEvent('End', passiveEffect(this.battle, previous), passiveState(this, previous), this);
+			delete this.passiveStates[previous];
+		}
+		if (next) this.battle.singleEvent('SwitchIn', passiveEffect(this.battle, next), passiveState(this, next), this);
 	}
 
 	getPassiveWithEffect(id: string) {
@@ -2737,6 +2789,7 @@ export class Pokemon {
 			if (!passive) return this.hasAbility(id);
 			const useComponent =
 				id === 'levitate' ||
+				(passive === 'seasonalstride' && id === 'overcoat') ||
 				(passive === 'serratedscales' && id === 'limber') ||
 				(passive === 'absolutepressure' && ['innerfocus', 'insomnia'].includes(id));
 			const component = this.battle.dex.abilities.get(useComponent ? id : passive);
@@ -3065,7 +3118,7 @@ export class Pokemon {
 
 	hasGravityExemption() {
 		return (
-			(this.hasAbility('voidvoice') ||
+			(this.hasAbility(['voidvoice', 'execution']) ||
 				(this.species.id === 'gardevoir' && this.hasAbility('voidveil'))) &&
 				!this.battle.suppressingAbility(this)
 		);

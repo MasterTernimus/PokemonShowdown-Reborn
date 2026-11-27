@@ -1,6 +1,8 @@
+import { AbilityComponents, unstableEvoComponents } from './ability-components';
+import { categoryPower } from '../sim/signature-category-power';
 import { qualifiesForRelicBeam } from './relic-beam';
 import { isUltraSuppressedTerrain, recordUltraEgoCombat } from '../sim/ultra-rivalry';
-import { unstableEvoComponents } from './ability-components';
+import { UnstableEvoMoveForms } from './unstable-evo';
 import { whiteSmokeFieldEntry } from './field-messages';
 import { fieldDisablesArmorReduction } from './armor-reductions';
 import { markDualWieldScale } from '../sim/dual-wield-power';
@@ -84,18 +86,8 @@ function revealOpposingIllusions(battle: Battle, pokemon: Pokemon) {
 }
 
 type MemoryAbilityData = import('../sim/dex-abilities').AbilityData;
-type MemoryEventHandler<K extends keyof MemoryAbilityData> = Extract<
-	MemoryAbilityData[K],
-	(...args: never[]) => unknown
->;
 interface RKSSystemMethods {
 	memoryAbilities(this: Battle, pokemon: Pokemon): string[];
-	callMemoryAbility<K extends keyof MemoryAbilityData>(
-		this: Battle,
-		pokemon: Pokemon,
-		eventName: K,
-		...args: Parameters<MemoryEventHandler<K>>
-	): ReturnType<MemoryEventHandler<K>> | undefined;
 }
 export type RKSSystemAbility = Ability & RKSSystemMethods;
 
@@ -1138,7 +1130,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyPriority(priority, pokemon, target, move) {
 			if (!isStarterEeveePokemon(pokemon)) return;
-			const forme = UNSTABLE_EVO_FORMES[move?.id];
+			const forme = UnstableEvoMoveForms[move?.id];
 			if (!forme || pokemon.species.id === this.dex.species.get(forme).id) return;
 			pokemon.formeChange(forme, this.effect, false, '[msg]');
 			for (const id of unstableEvoComponents(pokemon)) {
@@ -2672,17 +2664,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onModifyMove(move) {
-			if (move.category !== 'Status') move.ignoreImmunity = true;
-		},
-		onBasePowerPriority: 21,
-		onBasePower(basePower, source, target, move) {
-			if (move.category !== 'Status') {
-				const modifier = move.type === '???' && source.hasType('???') ? 2.25 : 1.5;
-				return this.chainModify(modifier);
-			}
-		},
-		onModifySTAB(stab, source, target, move) {
-			if (move.category !== 'Status' && !source.hasType(move.type)) return 1.5;
+			if (move.category === 'Status') return;
+			move.ignoreImmunity = true;
+			move.forceSTAB = true;
 		},
 		flags: { breakable: 1 },
 		name: 'Ascendance',
@@ -3961,20 +3945,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 22,
 		onBasePower(basePower, attacker, defender, move) {
 			if (skipPassiveComponent(this, this.effectState.target, 'battery')) return;
-			if (move.category !== 'Special') return;
 			let modifier = 1.3;
 			if (this.field.isTerrain('electricterrain')) {
 				modifier *= 1.5;
 			}
-			this.debug('Battery boost');
-			return this.chainModify(modifier);
+			return this.chainModify(categoryPower(move, 'Special', modifier));
 		},
 		onAllyBasePowerPriority: 22,
 		onAllyBasePower(basePower, attacker, defender, move) {
 			if (skipPassiveComponent(this, this.effectState.target, 'battery')) return;
-			if (attacker !== this.effectState.target && move.category === 'Special') {
+			if (attacker !== this.effectState.target) {
 				this.debug('Battery boost');
-				return this.chainModify(1.3);
+				return this.chainModify(categoryPower(move, 'Special', 1.3));
 			}
 		},
 		flags: {},
@@ -7320,19 +7302,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10101,
 	},
 	omenedge: {
-		onModifyMove(move, source, target) {
-			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source, target);
-		},
 		onBasePowerPriority: 19,
-		onBasePower(basePower, attacker, defender, move) {
-			if (move.multihitType !== 'dualwield')
-				return this.dex.abilities
-					.get('sharpness')
-					.onBasePower?.call(this, basePower, attacker, defender, move);
-			const componentBoost =
-				move.flags['slicing'] && !this.field.isTerrain('coldeclipseterrain') ? 1.5 : 1;
-			const modifier = getDualWieldModifier(move, componentBoost, this, 'sharpness');
-			if (modifier !== 1) return this.chainModify(modifier);
+		onBasePower(power, source, target, move) {
+			return this.dex.abilities.get('sharpness').onBasePower?.call(this, power, source, target, move);
 		},
 		onFaint(pokemon) {
 			for (const target of pokemon.foes()) {
@@ -8621,14 +8593,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
-			return this.dex.abilities
+			const result = this.dex.abilities
 				.getHandler('magicbounce', 'onTryHit')
 				?.call(this, target, source, move);
+			if (result === null) target.m.omenPulseCharge = target.m.ultraRivalryEntryToken;
+			return result;
 		},
 		onAllyTryHitSide(target, source, move) {
-			return this.dex.abilities
+			const result = this.dex.abilities
 				.getHandler('magicbounce', 'onAllyTryHitSide')
 				?.call(this, target, source, move);
+			const holder: Pokemon = this.effectState.target;
+			if (result === null) holder.m.omenPulseCharge = holder.m.ultraRivalryEntryToken;
+			return result;
 		},
 		onFaint(pokemon) {
 			this.add('-message', `${pokemon.name} has warned you of doom.`);
@@ -8711,6 +8688,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyMove(move) {
 			if (isUltraSuppressedTerrain(this)) return;
+			move.ultraAbilityBypass = true;
 			move.ignoreAbility = true;
 		},
 		onAfterMove(source, target, move) {
@@ -8721,7 +8699,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, source, target, move) {
 			if (isUltraSuppressedTerrain(this)) return;
 			if (move.category === 'Status') return;
-			if (target?.hasAbility('battlebond')) return;
+			if (target?.hasAbility('battlebond') || target?.hasAbilityOrPassive('misalignedstars')) return;
 			if (
 				!this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization')) &&
 				this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'empress']))
@@ -8731,6 +8709,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(1.2);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
+			if (source?.hasAbilityOrPassive('misalignedstars')) return;
 			if (isUltraSuppressedTerrain(this)) return;
 			if (!move || move.category === 'Status') return;
 			if (
@@ -8764,11 +8743,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if ((this.dex.abilities.get('ultraego') as any).boostedField.call(this)) {
 				if (move.category === 'Physical' && !target.abilityState.ultraEgoDefBoosted) {
 					target.abilityState.ultraEgoDefBoosted = true;
-					this.boost({ def: 1 }, target, target);
+					this.boost({ def: 1 }, target, target, this.dex.abilities.get('ultraego'));
 				}
 				if (move.category === 'Special' && !target.abilityState.ultraEgoSpDBoosted) {
 					target.abilityState.ultraEgoSpDBoosted = true;
-					this.boost({ spd: 1 }, target, target);
+					this.boost({ spd: 1 }, target, target, this.dex.abilities.get('ultraego'));
 				}
 			}
 			(this.dex.abilities.get('ultraego') as any).healUltraEgo.call(this, target, 'hit');
@@ -10869,10 +10848,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (
 				(attacker.status === 'brn' ||
 					this.field.isTerrain(['burningterrain', 'volcanicterrain', 'infernaleclipseterrain'])) &&
-					move.category === 'Special' &&
 					!this.field.isTerrain('coldeclipseterrain')
 			) {
-				return this.chainModify(1.5);
+				return this.chainModify(categoryPower(move, 'Special', 1.5));
 			}
 		},
 		flags: {},
@@ -12985,33 +12963,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10259,
 	},
 	astralcore: {
-		onStart(pokemon) {
-			this.dex.abilities.get('illuminate').onStart?.call(this, pokemon);
-		},
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, pokemon, target, move) {
-			return this.dex.abilities.get('purepower').onModifyAtk?.call(this, atk, pokemon, target, move);
-		},
-		onModifySpA(spa, pokemon, target, move) {
-			return this.dex.abilities.get('purepower').onModifySpA?.call(this, spa, pokemon, target, move);
-		},
-		onTryBoost(boost, target, source, effect) {
-			return this.dex.abilities
-				.get('illuminate')
-				.onTryBoost?.call(this, boost, target, source, effect);
-		},
-		onModifyMove(move, pokemon, target) {
-			return this.dex.abilities.get('illuminate').onModifyMove?.call(this, move, pokemon, target);
-		},
-		onCheckShow(pokemon) {
-			return this.dex.abilities.get('naturalcure').onCheckShow?.call(this, pokemon);
-		},
-		onSwitchOut(pokemon) {
-			return this.dex.abilities.get('naturalcure').onSwitchOut?.call(this, pokemon);
-		},
-		onResidual(pokemon) {
-			return this.dex.abilities.get('naturalcure').onResidual?.call(this, pokemon);
-		},
 		flags: {},
 		name: 'Astral Core',
 		rating: 5,
@@ -17585,408 +17536,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Silvally') return [];
 			return getRKSSystemMemoryAbilities(pokemon.item);
 		},
-		callMemoryAbility(this: Battle, pokemon: Pokemon, eventName: string, ...args: unknown[]) {
-			for (const abilityid of (this.effect as RKSSystemAbility).memoryAbilities.call(
-				this,
-				pokemon,
-			)) {
-				const ability = this.dex.abilities.get(abilityid);
-				// Match the engine's SwitchIn fallback without running both entry hooks.
-				const handler =
-					(ability as unknown as Record<string, unknown>)[eventName] ??
-					(eventName === 'onSwitchIn' ? (ability as MemoryAbilityData).onStart : undefined);
-				if (typeof handler !== 'function') continue;
-				if (ability.flags.breakable && this.suppressingAbility(pokemon)) continue;
-				const parentEffect = this.effect;
-				try {
-					// Components may call their own helpers or identify the source of a boost.
-					this.effect = ability;
-					const result = handler.call(this, ...args);
-					if (result !== undefined) return result;
-				} finally {
-					this.effect = parentEffect;
-				}
-			}
-		},
-		onSwitchIn(pokemon) {
-			pokemon.abilityState.ending = false;
-			(this.effect as RKSSystemAbility).callMemoryAbility.call(this, pokemon, 'onSwitchIn', pokemon);
-		},
-		onStart(pokemon) {
-			pokemon.abilityState.ending = false;
-			(this.effect as RKSSystemAbility).callMemoryAbility.call(this, pokemon, 'onStart', pokemon);
-		},
-		onTerrainChange(pokemon, source, effect) {
-			(this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				pokemon,
-				'onTerrainChange',
-				pokemon,
-				source,
-				effect,
-			);
-		},
-		onSideConditionStart(side, source, sideCondition) {
-			(this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				this.effectState.target,
-				'onSideConditionStart',
-				side,
-				source,
-				sideCondition,
-			);
-		},
-		onEnd(pokemon) {
-			(this.effect as RKSSystemAbility).callMemoryAbility.call(this, pokemon, 'onEnd', pokemon);
-		},
-		onFaint(pokemon) {
-			(this.effect as RKSSystemAbility).callMemoryAbility.call(this, pokemon, 'onFaint', pokemon);
-		},
-		onSwitchOut(pokemon) {
-			(this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				pokemon,
-				'onSwitchOut',
-				pokemon,
-			);
-		},
 		onModifyMovePriority: -5,
 		onModifyMove(move, pokemon, target) {
-			(this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				pokemon,
-				'onModifyMove',
-				move,
-				pokemon,
-				target,
-			);
+			if (pokemon.hasAbility('scrappy')) return this.dex.abilities.get('scrappy').onModifyMove?.call(this, move, pokemon, target);
 		},
-		onBasePowerPriority: 21,
-		onBasePower(basePower, pokemon, target, move) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				pokemon,
-				'onBasePower',
-				basePower,
-				pokemon,
-				target,
-				move,
-			);
-		},
-		onModifySecondaries(secondaries, target, source, move) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				target,
-				'onModifySecondaries',
-				secondaries,
-				target,
-				source,
-				move,
-			);
-		},
-		onModifySpe(spe, pokemon) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				pokemon,
-				'onModifySpe',
-				spe,
-				pokemon,
-			);
-		},
-		onModifyPriority(priority, pokemon, target, move) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				pokemon,
-				'onModifyPriority',
-				priority,
-				pokemon,
-				target,
-				move,
-			);
-		},
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				attacker,
-				'onModifyAtk',
-				atk,
-				attacker,
-				defender,
-				move,
-			);
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(spa, attacker, defender, move) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				attacker,
-				'onModifySpA',
-				spa,
-				attacker,
-				defender,
-				move,
-			);
-		},
-		onModifyDefPriority: 6,
-		onModifyDef(def, pokemon) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				pokemon,
-				'onModifyDef',
-				def,
-				pokemon,
-			);
-		},
-		onSourceModifyAtkPriority: 5,
-		onSourceModifyAtk(atk, attacker, defender, move) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				defender,
-				'onSourceModifyAtk',
-				atk,
-				attacker,
-				defender,
-				move,
-			);
-		},
-		onSourceModifySpAPriority: 5,
-		onSourceModifySpA(spa, attacker, defender, move) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				defender,
-				'onSourceModifySpA',
-				spa,
-				attacker,
-				defender,
-				move,
-			);
-		},
-		onTryBoostPriority: 2,
 		onTryBoost(boost, target, source, effect) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				target,
-				'onTryBoost',
-				boost,
-				target,
-				source,
-				effect,
-			);
-		},
-		onAfterEachBoost(boost, target, source, effect) {
-			(this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				target,
-				'onAfterEachBoost',
-				boost,
-				target,
-				source,
-				effect,
-			);
-		},
-		onSetStatus(status, target, source, effect) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				target,
-				'onSetStatus',
-				status,
-				target,
-				source,
-				effect,
-			);
-		},
-		onTryAddVolatile(status, target, source, effect) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				target,
-				'onTryAddVolatile',
-				status,
-				target,
-				source,
-				effect,
-			);
-		},
-		onUpdate(pokemon) {
-			(this.effect as RKSSystemAbility).callMemoryAbility.call(this, pokemon, 'onUpdate', pokemon);
-		},
-		onTryHitPriority: 1,
-		onTryHit(target, source, move) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				target,
-				'onTryHit',
-				target,
-				source,
-				move,
-			);
-		},
-		onAnyRedirectTarget(target, source, source2, move) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				this.effectState.target,
-				'onAnyRedirectTarget',
-				target,
-				source,
-				source2,
-				move,
-			);
-		},
-		onFoeTryMove(target, source, move) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				this.effectState.target,
-				'onFoeTryMove',
-				target,
-				source,
-				move,
-			);
-		},
-		onAllyTryHitSide(target, source, move) {
-			const pokemon = this.effectState.target;
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				pokemon,
-				'onAllyTryHitSide',
-				target,
-				source,
-				move,
-			);
-		},
-		onAnyTryHeal(damage, target, source, effect) {
-			const pokemon = this.effectState.target;
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				pokemon,
-				'onAnyTryHeal',
-				damage,
-				target,
-				source,
-				effect,
-			);
-		},
-		onAnyModifyDamage(damage, source, target, move) {
-			const pokemon = this.effectState.target;
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				pokemon,
-				'onAnyModifyDamage',
-				damage,
-				source,
-				target,
-				move,
-			);
-		},
-		onModifyDamage(damage, source, target, move) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				source,
-				'onModifyDamage',
-				damage,
-				source,
-				target,
-				move,
-			);
-		},
-		onSourceModifyDamage(damage, source, target, move) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				target,
-				'onSourceModifyDamage',
-				damage,
-				source,
-				target,
-				move,
-			);
-		},
-		onDeductPP(target, source) {
-			const pokemon = this.effectState.target;
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				pokemon,
-				'onDeductPP',
-				target,
-				source,
-			);
-		},
-		onDamage(damage, target, source, effect) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				target,
-				'onDamage',
-				damage,
-				target,
-				source,
-				effect,
-			);
-		},
-		onDamagingHit(damage, target, source, effect) {
-			(this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				target,
-				'onDamagingHit',
-				damage,
-				target,
-				source,
-				effect,
-			);
-		},
-		onImmunity(type, pokemon) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				pokemon,
-				'onImmunity',
-				type,
-				pokemon,
-			);
-		},
-		onNegateImmunity(pokemon, type) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				pokemon,
-				'onNegateImmunity',
-				pokemon,
-				type,
-			);
-		},
-		onFoeAfterSetStatus(status, target, source, effect) {
-			const pokemon = this.effectState.target;
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				pokemon,
-				'onFoeAfterSetStatus',
-				status,
-				target,
-				source,
-				effect,
-			);
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			(this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				source,
-				'onSourceAfterFaint',
-				length,
-				target,
-				source,
-				effect,
-			);
-		},
-		onWeather(target, source, effect) {
-			return (this.effect as RKSSystemAbility).callMemoryAbility.call(
-				this,
-				target,
-				'onWeather',
-				target,
-				source,
-				effect,
-			);
+			if (target.hasAbility('scrappy')) return this.dex.abilities.get('scrappy').onTryBoost?.call(this, boost, target, source, effect);
 		},
 		onResidualOrder: 5,
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
-			(this.effect as RKSSystemAbility).callMemoryAbility.call(this, pokemon, 'onResidual', pokemon);
 		},
 		flags: {
 			failroleplay: 1,
@@ -21124,7 +20684,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			hit.staminaTriggered = true;
 			if (this.effectState.staminaHitTurn !== this.turn) {
 				this.effectState.staminaHitTurn = this.turn;
+				const before = target.boosts.def;
 				this.boost({ def: 1 }, target, target);
+				if (target.boosts.def > before) target.m.staminaDefenseRiseTurn = this.turn;
 			}
 			this.heal(target.baseMaxhp / 16, target, target);
 		},
@@ -21571,14 +21133,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities
 				.get('strongjaw')
 				.onBasePower?.call(this, basePower, attacker, defender, move);
-		},
-		onUpdate(pokemon) {
-			return this.dex.abilities.get('insomnia').onUpdate?.call(this, pokemon);
-		},
-		onSetStatus(status, target, source, effect) {
-			return this.dex.abilities
-				.get('insomnia')
-				.onSetStatus?.call(this, status, target, source, effect);
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			return this.dex.abilities
@@ -22028,7 +21582,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('factoryterrain')) {
 				minimum = 80;
 			}
-			const basePowerAfterMultiplier = this.modify(basePower, this.event.modifier);
+			const eligiblePower = move.signatureLearnedPower ? Math.min(basePower, move.signatureLearnedPower) : basePower;
+			const basePowerAfterMultiplier = this.modify(eligiblePower, this.event.modifier);
 			this.debug(`basePower: ${basePowerAfterMultiplier}`);
 			if (basePowerAfterMultiplier <= minimum) {
 				this.debug('Technician boost');
@@ -22289,10 +21844,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					attacker.status === 'tox' ||
 					this.field.isTerrain('corrosiveterrain') ||
 					this.field.isTerrain('murkwatersurfaceterrain') ||
-					this.field.isTerrain('wastelandterrain')) &&
-					move.category === 'Physical'
+					this.field.isTerrain('wastelandterrain'))
 			) {
-				return this.chainModify(1.5);
+				return this.chainModify(categoryPower(move, 'Physical', 1.5));
 			}
 		},
 		flags: {},
@@ -23133,12 +22687,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyMove(move) {
 			if (isUltraSuppressedTerrain(this)) return;
+			move.ultraAbilityBypass = true;
 			move.ignoreAbility = true;
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target, move) {
 			if (isUltraSuppressedTerrain(this)) return;
-			if (target?.hasAbility('battlebond')) return;
+			if (target?.hasAbility('battlebond') || target?.hasAbilityOrPassive('misalignedstars')) return;
 			if (
 				move.category !== 'Status' &&
 				!this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization')) &&
@@ -23149,6 +22704,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
+			if (source?.hasAbilityOrPassive('misalignedstars')) return;
 			if (isUltraSuppressedTerrain(this)) return;
 			if (
 				move &&
@@ -23188,11 +22744,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if ((this.dex.abilities.get('burningego') as any).boostedField.call(this)) {
 				if (move.category === 'Physical' && !target.abilityState.ultraEgoDefBoosted) {
 					target.abilityState.ultraEgoDefBoosted = true;
-					this.boost({ def: 1 }, target, target);
+					this.boost({ def: 1 }, target, target, this.dex.abilities.get('ultraego'));
 				}
 				if (move.category === 'Special' && !target.abilityState.ultraEgoSpDBoosted) {
 					target.abilityState.ultraEgoSpDBoosted = true;
-					this.boost({ spd: 1 }, target, target);
+					this.boost({ spd: 1 }, target, target, this.dex.abilities.get('ultraego'));
 				}
 			}
 			(this.dex.abilities.get('burningego') as any).healUltraEgo.call(this, target, 'hit');
@@ -23493,6 +23049,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.dex.abilities.get('ultraego').onModifyMove?.call(this, move, pokemon, target);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
+			if (source?.hasAbilityOrPassive('misalignedstars')) return;
 			return this.dex.abilities
 				.get('ultraego')
 				.onSourceModifyDamage?.call(this, damage, source, target, move);
@@ -23526,11 +23083,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if ((this.dex.abilities.get('perfectego') as any).boostedField.call(this)) {
 				if (move.category === 'Physical' && !target.abilityState.ultraEgoDefBoosted) {
 					target.abilityState.ultraEgoDefBoosted = true;
-					this.boost({ def: 1 }, target, target);
+					this.boost({ def: 1 }, target, target, this.dex.abilities.get('ultraego'));
 				}
 				if (move.category === 'Special' && !target.abilityState.ultraEgoSpDBoosted) {
 					target.abilityState.ultraEgoSpDBoosted = true;
-					this.boost({ spd: 1 }, target, target);
+					this.boost({ spd: 1 }, target, target, this.dex.abilities.get('ultraego'));
 				}
 			}
 			(this.dex.abilities.get('perfectego') as any).healUltraEgo.call(this, target, 'hit');
@@ -23586,12 +23143,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	victorystar: {
 		onAnyModifyAccuracyPriority: -1,
 		onAnyModifyAccuracy(accuracy, target, source) {
+			if (skipPassiveComponent(this, this.effectState.target, 'victorystar')) return;
 			if (source.isAlly(this.effectState.target) && typeof accuracy === 'number') {
 				return this.chainModify([4506, 4096]);
 			}
 		},
 		onFoeDamage(damage) {
-			this.add('-message', 'Happened');
+			if (skipPassiveComponent(this, this.effectState.target, 'victorystar')) return;
 			if (this.field.isTerrain('newworldterrain') || this.field.isTerrain('starlightarenaterrain')) {
 				return this.chainModify(1.5);
 			}
@@ -25196,17 +24754,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 5,
 		num: 10402,
 	},
-};
-
-const UNSTABLE_EVO_FORMES: Partial<Record<IDEntry, string>> = {
-	baddybad: 'Umbreon',
-	bouncybubble: 'Vaporeon',
-	buzzybuzz: 'Jolteon',
-	freezyfrost: 'Glaceon',
-	glitzyglow: 'Espeon',
-	sappyseed: 'Leafeon',
-	sizzlyslide: 'Flareon',
-	sparklyswirl: 'Sylveon',
 };
 
 function setStarterEeveeBattleEVs(pokemon: Pokemon, effect: Effect) {
@@ -28250,7 +27797,7 @@ Abilities.twinfocus = {
 };
 
 Abilities.cosmicanalysis = { name: 'Cosmic Analysis', num: 32502, rating: 4, flags: {} };
-composeSelectedAbility(Abilities, 'cosmicanalysis', ['analytic', 'download'], true);
+composeSelectedAbility(Abilities, 'cosmicanalysis', AbilityComponents.cosmicanalysis, true);
 
 import { installGalarRising } from './galar-rising';
 installGalarRising(Abilities);
@@ -28441,6 +27988,45 @@ Abilities.tripwirekick = {
 };
 
 import { SandDreamDescriptions } from './sand-dream-descriptions';
+Abilities.restlessdrive = {
+	name: 'Restless Drive', num: 33307, rating: 2.5, flags: {},
+	onAfterDamageApplied(damage, target, source, effect) {
+		if (damage > 0 && source && !target.isAlly(source) && effect?.effectType === 'Move' && effect.category !== 'Status') {
+			target.abilityState.restlessHitTurn = this.turn;
+		}
+	},
+	onSourceAfterDamageApplied(damage, target, source, effect) {
+		if (damage <= 0 || !source.hp || source.isAlly(target) || effect?.effectType !== 'Move' ||
+			effect.category === 'Status' || source.abilityState.restlessHitTurn !== this.turn) return;
+		const entry = source.m.ultraRivalryEntryToken;
+		if (source.m.restlessDriveEntry === entry) return;
+		source.m.restlessDriveEntry = entry;
+		this.boost({ spe: 1 }, source, source, this.dex.abilities.get('restlessdrive'));
+	},
+};
+Abilities.restlessdrive.onSourceAfterSubDamage = Abilities.restlessdrive.onSourceAfterDamageApplied;
 import { ShogunStance } from './samurott-shogun';
 Abilities.shogunstance = ShogunStance;
+Abilities.duskpoise = {
+	name: 'Dusk Poise', num: 33305, flags: { breakable: 1 }, rating: 1,
+	shortDesc: 'Prevents flinching.', desc: 'Abysseon keeps its composure and cannot flinch.',
+	onTryAddVolatile(status) { if (status.id === 'flinch') return null; },
+};
+Abilities.dawnpoise = {
+	name: 'Dawn Poise', num: 33306, flags: { breakable: 1 }, rating: 1,
+	shortDesc: 'Foes cannot lower its accuracy.', desc: 'Prevents opposing Pokémon from lowering Divineon’s accuracy.',
+	onTryBoost(boost, target, source) {
+		if (boost.accuracy && boost.accuracy < 0 && source && !target.isAlly(source)) delete boost.accuracy;
+	},
+};
+
+import { SeasonalStrikers } from './seasonal-strikers';
+for (const [id, { name, num, shortDesc, desc, absorb }] of Object.entries(SeasonalStrikers)) {
+	Abilities[id as ID] = { name, num, shortDesc, desc, flags: {}, rating: 4 };
+	composeSelectedAbility(Abilities, id, ['striker', absorb], true);
+}
 for (const [id, text] of Object.entries(SandDreamDescriptions)) Object.assign(Abilities[id as ID], text);
+import { installReserveAbilities } from './legendary-reserves';
+installReserveAbilities(Abilities);
+import { installLegendaryAbilities } from './legendary-abilities';
+installLegendaryAbilities(Abilities);

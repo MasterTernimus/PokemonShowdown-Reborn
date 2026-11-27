@@ -23,7 +23,7 @@ describe('Mega composite ability components', () => {
 		battle.runEvent('TrapPokemon', foe);
 		assert(foe.trapped);
 		const incoming = move => battle.runEvent('ModifyDamage', foe, gengar, move, 100);
-		assert.equal(incoming(battle.dex.getActiveMove('doublehit')), 80);
+		assert.equal(incoming(battle.dex.getActiveMove('doublehit')), 72);
 		// Blissey's natural Normal typing is immune to Ghost attacks.
 		foe.setType('Psychic');
 		foe.hp = foe.maxhp = foe.baseMaxhp = 10000;
@@ -32,9 +32,9 @@ describe('Mega composite ability components', () => {
 		assert(foe.hp < 10000);
 		assert(gengar.volatiles.shadowdoublespent.armed);
 		const guardedMove = battle.dex.getActiveMove('doublehit');
-		assert.equal(incoming(guardedMove), 60);
-		assert.equal(incoming(guardedMove), 60, 'all hits of the same execution retain the guard');
-		assert.equal(incoming(battle.dex.getActiveMove('doublehit')), 80);
+		assert.equal(incoming(guardedMove), 54);
+		assert.equal(incoming(guardedMove), 54, 'all hits of the same execution retain the guard');
+		assert.equal(incoming(battle.dex.getActiveMove('doublehit')), 72);
 		assert.equal(gengar.volatiles.shadowdoublespent.armed, false);
 	});
 
@@ -49,7 +49,7 @@ describe('Mega composite ability components', () => {
 		assert.equal(battle.runEvent('ModifyDamage', foe, gengar, battle.dex.getActiveMove('doublehit'), 100), 80);
 		assert(gengar.volatiles.shadowdoublespent.armed, 'suppression does not spend the guard');
 		gengar.removeVolatile('gastroacid');
-		assert.equal(battle.runEvent('ModifyDamage', foe, gengar, battle.dex.getActiveMove('doublehit'), 100), 60);
+		assert.equal(battle.runEvent('ModifyDamage', foe, gengar, battle.dex.getActiveMove('doublehit'), 100), 54);
 	});
 
 	it('only Heavy Artillery ignores enemy boosts through Unaware', () => {

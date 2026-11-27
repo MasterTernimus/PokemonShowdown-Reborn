@@ -1,3 +1,4 @@
+import { UnstableEvoForms } from './unstable-evo';
 import { getRKSSystemMemoryAbilities } from './rks-system-memory';
 import { PerfectForecastForms } from './castform-split';
 import {
@@ -43,7 +44,7 @@ const AdditionalDisplayComponents: { [id: string]: string[] } = {
 	blademastery: ['sharpness', 'superluck'],
 	goldentalons: ['stalwart', 'goodasgold', 'sharpness'],
 	venomheal: ['hypercutter', 'poisonheal', 'poisonpoint'],
-	blackfang: ['strongjaw', 'insomnia', 'moxie'],
+	blackfang: ['strongjaw', 'moxie'],
 	fluffycraft: ['fluffy', 'technician'],
 	surgeconduit: ['bruteforce', 'shadowshield'],
 	duskdrive: ['precision', 'opportunist', 'battlefervor'],
@@ -65,6 +66,8 @@ const AdditionalDisplayComponents: { [id: string]: string[] } = {
 // The legacy identity registry is not always an exact implementation summary.
 // Burning Crown uses flat damage reduction, not Filter; its other delegates remain active.
 const DisplayComponentOverrides: { [id: string]: string[] } = {
+	// Execution uses Gardevoir's Void Veil, which already displays Telepathy.
+	execution: ['duskilate', 'moldbreaker', 'misalignedstars', 'voidveil'],
 	mourningvessel: [],
 	burningrage: ['bruteforce', 'ironfist'],
 	// These packages retain custom effects; Includes names only their full components.
@@ -133,6 +136,9 @@ export function getAbilityDisplayComponents(
 		)
 	) {
 		return item === undefined ? [] : getRKSSystemMemoryAbilities(canonicalAbilityDisplayID(item));
+	}
+	if (id === 'unstableevo') {
+		return ['filter', 'selfsufficient', ...(UnstableEvoForms[canonicalAbilityDisplayID(species)]?.components || [])];
 	}
 	if (id === 'voidvoice') return ['queenlymajesty', 'voidveil'];
 	if (id === 'perfectforecast')

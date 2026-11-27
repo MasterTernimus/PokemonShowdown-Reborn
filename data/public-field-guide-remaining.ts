@@ -95,6 +95,7 @@ export const RemainingFieldGuide: { [id: string]: { [section: string]: string[] 
 		],
 		Moves: [
 			'Dragon Rend sets Stealth Rock on the opposing side after hitting a foe, including Substitute. Protect, a miss or an immunity prevents it.',
+			'Raging Fury and Blazing Fury can be chosen freely. Entering this field ends their rampage without confusion.',
 			'Smack Down, Thousand Arrows, Continental Crush, Tectonic Rage, Rock Climb and Earthquake add Fire typing. Strength becomes Rock/Fire.',
 			'Smack Down, Thousand Arrows, Continental Crush, Tectonic Rage, Dragon Ascent, Pay Day, Luster Purge and Mist Ball gain 2× power.',
 			'Magma Drift, Matrix Shot, Lava Plume, Magma Storm, Mega Kick, Make It Rain, Rock Climb, Strength, Diamond Storm, Power Gem, Shell Trap, Earth Power and Stomping Tantrum gain 1.5×.',
@@ -179,7 +180,7 @@ export const RemainingFieldGuide: { [id: string]: { [section: string]: string[] 
 	},
 	newworldterrain: {
 		Transitions: ['Gravity, Geomancy or Light of Ruin changes the field to Starlight Arena. Existing weather is cleared when New World starts. Ordinary field-setting effects cannot replace it; specific field-changing effects remain subject to shared restrictions.'],
-		'Boosts and general effects': ['Grounded Pokémon have 0.75× Speed unless covered by Limber, Web Assassin or Spiral Evolution. Airborne Pokémon normally have 0.9× Defense and Special Defense. Dark attacks gain 1.5× power.'],
+		'Boosts and general effects': ['Grounded Pokémon have 0.75× Speed unless protected by Duskilate, Limber, Web Assassin or Spiral Evolution. Airborne Pokémon normally have 0.9× Defense and Sp. Def. Dark attacks gain 1.5× power.'],
 		Moves: [
 			'Doom Desire and Nostra’s Wish gain 4× power. Vacuum Wave, Draco Meteor, Meteor Mash, Moonblast, Comet Punch, Swift, Meteor Beam, Hyperspace Hole, Spacial Rend, Hyperspace Fury, Ancient Power and Black Hole Eclipse gain 2×. Bulldoze, Earthquake and Magnitude have 0.25× power.',
 			'Radiant Assault and the field’s named signature/light attacks gain 1.5× power. The full named list is included separately below; it is not a blanket bonus to every signature move.',
@@ -214,6 +215,7 @@ export const RemainingFieldGuide: { [id: string]: { [section: string]: string[] 
 		],
 		Moves: [
 			'Clear Smog and Smog gain 2× power and add Fire typing. Smack Down, Thousand Arrows and Rock Slide gain 1.5× and add Fire. Infernal Parade and Ethereal Tempest gain 1.5×.',
+			'Raging Fury and Blazing Fury can be chosen freely and raise Attack by 1. Entering this field ends their rampage without confusion.',
 			'The Cave-changing Z-Moves gain 1.3×, as do the ordinary Cave-changing moves once that counter is already primed. Dragon Pulse and Dragon Energy gain 1.3×; the immediate Dragon-changing moves gain that modifier when the Dragon counter is primed.',
 			'Burn Up users regain Fire typing at turn end if they became typeless.',
 		],

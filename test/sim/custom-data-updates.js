@@ -554,7 +554,7 @@ describe('Custom battle data updates', () => {
 	});
 
 	for (const burned of [false, true]) {
-		it(`should deal ${burned ? '1/8' : '1/16'} Sinister Blaze damage to a ${burned ? 'burned' : 'healthy'} foe`, () => {
+		it(`should deal ${burned ? '1/16' : 'zero'} Sinister Blaze damage to a ${burned ? 'burned' : 'healthy'} foe`, () => {
 			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 				{ species: 'Eevee-Starter', ability: 'sinisterblaze', moves: ['splash'] },
 			], [
@@ -568,7 +568,7 @@ describe('Custom battle data updates', () => {
 			const before = holder.hp;
 			const foeBefore = foe.hp;
 			battle.singleEvent('Residual', battle.dex.conditions.get('brn'), holder.statusState, holder);
-			assert.equal(foeBefore - foe.hp, Math.floor(foe.baseMaxhp / (burned ? 8 : 16)));
+			assert.equal(foeBefore - foe.hp, burned ? Math.floor(foe.baseMaxhp / 16) : 0);
 			assert.equal(holder.hp - before, Math.floor(holder.baseMaxhp / 16), 'Only its own burn heals it; generated damage does not');
 		});
 	}
@@ -767,7 +767,7 @@ describe('Custom battle data updates', () => {
 		assert.equal(megaZ.requiredItem, 'Banettite');
 		const cursedArmament = dex.abilities.get('Cursed Armament');
 		assert.equal(cursedArmament.name, 'Cursed Armament');
-		assert(!cursedArmament.onSourceModifyDamage, 'Cursed Armament no longer includes Filter');
+		assert(!require('../../dist/data/ability-components').AbilityComponents.cursedarmament.includes('filter'));
 		const banetteMoves = dex.species.getLearnsetData('banette').learnset;
 		for (const move of ['flashcannon', 'magnetbomb', 'mirrorshot', 'bittermalice', 'ancientpower', 'eeriespell']) {
 			assert(banetteMoves[move]?.length, `Banette should learn ${move}`);

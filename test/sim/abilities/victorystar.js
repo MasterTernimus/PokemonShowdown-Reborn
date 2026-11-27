@@ -10,6 +10,31 @@ describe("Victory Star", () => {
 		battle.destroy();
 	});
 
+	it('counts each Reborn holder once for accuracy and field damage, including active/passive overlap', () => {
+		const spare = { species: 'Mew', ability: 'No Ability', moves: ['splash'] };
+		battle = common.createBattle({ formatid: 'gen9doublesrockyfield' }, [
+			[{ species: 'Victini', ability: 'Victory Star', moves: ['hypnosis'] }, spare], [spare, spare],
+		]);
+		battle.makeChoices('team 12', 'team 12');
+		const [user, ally] = battle.p1.active;
+		const target = battle.p2.active[0];
+		const move = battle.dex.moves.get('hypnosis');
+		const accuracy = () => battle.runEvent('ModifyAccuracy', target, user, move, 60);
+		const damage = () => battle.runEvent('Damage', target, user, move, 100);
+		assert(user.getPassives().includes('victorystar'));
+		assert.equal(accuracy(), 66);
+		assert.equal(damage(), 100);
+		for (const field of ['newworldterrain', 'starlightarenaterrain']) {
+			battle.field.startTerrain(field);
+			assert.equal(damage(), 150);
+			ally.setAbility('Victory Star', null, null, true);
+			assert.equal(accuracy(), 73);
+			assert.equal(damage(), 225);
+			ally.setAbility('No Ability', null, null, true);
+		}
+		assert(!battle.log.some(line => line.includes('Happened')));
+	});
+
 	it(`can boost accuracy twice if both the user and ally have the ability`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Victini', ability: 'victorystar', moves: ['hypnosis'] },

@@ -78,6 +78,7 @@ describe('Banette Frisk follows its species passive', () => {
 		const p = setup('cursedmarionette');
 		assert.deepEqual(p.getPassives(), ['prankster']);
 		assert(!p.hasAbilityOrPassive('frisk'));
-		assert(p.foes().every(foe => foe.illusion));
+		assert(p.foes().every(foe => !foe.illusion), 'Misaligned Stars reveals disguises');
+		assert(!battle.log.some(line => line.startsWith('|-item|') && line.includes('Frisk')));
 	});
 });

@@ -1,3 +1,4 @@
+import { categoryPower } from '../sim/signature-category-power';
 import type { AbilityDataTable } from '../sim/dex-abilities';
 export const StunfiskDescriptions = {
 	livewiretrap: {
@@ -115,11 +116,10 @@ export function installStunfisk(abilities: AbilityDataTable) {
 		},
 		onBasePower(power, source, target, move) {
 			if (
-				move.category === 'Physical' &&
 				source.m.baitedCounterTurn === this.turn &&
 				source.m.baitedCounterEntry === source.previouslySwitchedIn
 			)
-				return this.chainModify(1.3);
+				return this.chainModify(categoryPower(move, 'Physical', 1.3));
 		},
 	};
 }

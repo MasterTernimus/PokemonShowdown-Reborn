@@ -53,13 +53,19 @@ describe('Recharge KO state and protocol', () => {
 		assertDisplay(p, false);
 		assert(battle.log.includes(`|cant|${p}|recharge`));
 	});
-	it('Radiant Assault clears recharge when only the second spread target is KOed', () => {
-		const [p, q] = setup('radiantassault', true);
-		battle.p2.active[1].hp = 1;
-		hit(p, q, 'radiantassault');
-		assert(q.hp > 0);
-		assert.equal(battle.p2.active[1].hp, 0);
-		assertDisplay(p, false);
+	for (const ko of [false, true]) it('Radiant Assault locks only itself for the next turn, KO: ' + ko, () => {
+		const [user, foe] = setup('radiantassault', true);
+		const other = battle.p2.active[1];
+		const before = other.hp;
+		if (ko) foe.hp = 1;
+		battle.makeChoices('move radiantassault, move splash', 'move splash, move splash');
+		if (ko) battle.makeChoices('', 'switch 3');
+		const moves = () => battle.p1.activeRequest.active[0].moves;
+		assert(other.hp < before);
+		assert(moves().find(m => m.id === 'radiantassault').disabled);
+		assert(!moves().find(m => m.id === 'splash').disabled);
+		battle.makeChoices('move splash, move splash', 'move splash, move splash');
+		assert(!moves().find(m => m.id === 'radiantassault').disabled);
 	});
 	for (const defense of ['protect', 'immune', 'miss', 'substitute']) it(`Giga Impact respects ${defense}`, () => {
 		const [p, q] = setup('gigaimpact');

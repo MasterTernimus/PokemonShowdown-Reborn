@@ -17,6 +17,7 @@ describe('Divineon Stellar and Z-Move bonus exemption', () => {
 					battle.makeChoices();
 					battle.randomizer = damage => damage;
 					const p = battle.p1.active[0], q = battle.p2.active[0];
+					q.getPassives = () => []; // Isolate the form’s Stellar/Z rule from its Misaligned Stars passive.
 					if (stellar) p.terastallized = 'Stellar';
 					const move = () => Object.assign(Dex.getActiveMove('tackle'), {
 						basePower: 100, category, willCrit: false, isZ: z ? 'normaliumz' : false,

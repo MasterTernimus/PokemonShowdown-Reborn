@@ -1,3 +1,4 @@
+import { categoryPower } from '../sim/signature-category-power';
 import { SnowyField } from './snowy-field';
 import { installFieldArrivalMessages } from './field-messages';
 import { EclipseTerrains } from './eclipse-fields';
@@ -1314,8 +1315,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (move.type === 'Grass') {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
-				if (move.type === 'Bug' && move.category === 'Special') {
-					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
+				if (move.type === 'Bug') {
+					modifier *= categoryPower(move, 'Special', adaptiveFieldMultiplier(this, source, target, 1.5));
 				}
 				if (boosted.includes(move.id)) {
 					this.add('-message', 'The forest stirred with the rhythm of the attack!');
@@ -1586,9 +1587,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'Legendary power accelerated the attack!');
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
-				if ((move.type === 'Fairy' || move.type === 'Normal') && move.category === 'Special') {
+				if ((move.type === 'Fairy' || move.type === 'Normal') &&
+					(move.category === 'Special' || move.signatureLearnedCategory === 'Special')) {
 					this.add('-message', 'The holy energy resonated with the attack!');
-					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
+					modifier *= categoryPower(move, 'Special', adaptiveFieldMultiplier(this, source, target, 1.5));
 				}
 				if (move.type === 'Dragon' || move.type === 'Psychic') {
 					this.add('-message', 'The legendary energy resonated with the attack!');
@@ -2118,8 +2120,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 		condition: {
 			effectType: "Terrain",
 			onModifySpe(spe, pokemon) {
-				if (pokemon.hasAbilityOrPassive('limber')) return;
-				if (pokemon.isGrounded() && !pokemon.hasAbilityOrPassive(['limber', 'webassassin', 'spiralevolution'])) {
+				if (pokemon.isGrounded() && !pokemon.hasAbilityOrPassive(['limber', 'duskilate', 'webassassin', 'spiralevolution'])) {
 					return this.chainModify(0.75);
 				}
 			},
@@ -2234,8 +2235,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				const strengthenedMoves = ['aurorabeam', 'dazzlinggleam', 'dragonpulse', 'firepledge', 'fleurcannon', 'grasspledge', 'heartstamp', 'hiddenpower', 'judgment', 'deiludicium', 'mirrorbeam', 'mistball', 'moonblast', 'mysticalfire', 'oceanicoperetta', 'prismaticlaser', 'relicsong', 'sacredfire', 'secretpower', 'silverwind', 'solarbeam', 'solarblade', 'sparklingaria', 'triattack', 'twinkletackle', 'waterpledge', 'weatherball', 'zenheadbutt'];
 				const weakenedMoves = ['darkpulse', 'nightdaze', 'neverendingnightmare', 'shadowball'];
-				if (move.type === 'Normal' && move.category === 'Special') {
-					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
+				if (move.type === 'Normal') {
+					modifier *= categoryPower(move, 'Special', adaptiveFieldMultiplier(this, source, target, 1.5));
 				}
 				if (strengthenedMoves.includes(move.id)) {
 					this.add('-message', 'The terrain strengthened the attack!');

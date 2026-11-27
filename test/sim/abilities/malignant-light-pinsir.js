@@ -138,14 +138,26 @@ describe('Star Lens and Pinsir', () => {
 		assert.equal(p.boosts.spa, 2);
 		assert.equal(battle.log.filter(line => line.includes('dazzling shine put a spotlight')).length, 1);
 	});
-	it('keeps Astral Core Natural Cure and Pure Power with the nested beam effect', () => {
+	it('keeps Pure Power as Mega Starmie’s passive and cures no status with Astral Core', () => {
 		const [p] = start('Astral Core', 'Starmie-Mega');
 		assert.equal(p.getStat('atk'), p.getStat('atk', false, true) * 2);
 		battle.field.terrain = 'psychicterrain';
 		assert.equal(p.getStat('spa'), p.getStat('spa', false, true) * 2);
 		p.setStatus('par');
 		battle.singleEvent('SwitchOut', p.getAbility(), p.abilityState, p);
-		assert.equal(p.status, '');
+		assert.equal(p.status, 'par');
+	});
+	it('applies Victory Star to both partners and blocks repeats through Astral Core', () => {
+		const [p, foe, ally] = start('Astral Core', 'Starmie-Mega', true);
+		for (const source of [p, ally]) {
+			assert.equal(battle.runEvent('ModifyAccuracy', foe, source, Dex.getActiveMove('hydropump'), 80), 88);
+		}
+		assert.equal(battle.runEvent('ModifyAccuracy', p, foe, Dex.getActiveMove('hydropump'), 80), 80);
+		p.hp = 5000;
+		for (let i = 0; i < 4; i++) {
+			const damage = hit(foe, p, 'watergun');
+			assert(i % 2 ? damage < 0 : damage > 0);
+		}
 	});
 	for (const hits of [1, 3, 5]) it(`retaliates once for a ${hits}-hit move, then again for the next move`, () => {
 		const [p, foe] = start('Iron Maiden');

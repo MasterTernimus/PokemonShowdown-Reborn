@@ -8,6 +8,7 @@ import {
 export { SignaturePassiveComponents, SignaturePassiveRemovedComponents, SignaturePassiveDescriptions };
 /** Components moved out of exclusive selected packages into existing species passives. */
 export const AbilityComponentExclusions: { [id: string]: readonly string[] } = {
+	execution: ['insomnia', 'magicguard'],
 	uncheckedassault: ['limber'],
 	cinderscales: ['shielddust'],
 	cursedkeepsake: ['frisk'],
@@ -473,7 +474,6 @@ SharedPassiveComponents.ironvise = [...(SharedPassiveComponents.ironvise || []),
 SharedPassiveComponents.sacrededge = [...(SharedPassiveComponents.sacrededge || []), 'sharpness'];
 SharedPassiveComponents.vitalsigns = [...(SharedPassiveComponents.vitalsigns || []), 'invigorate'];
 SharedPassiveComponents.lunarorbit = [...(SharedPassiveComponents.lunarorbit || []), 'magicbounce'];
-SharedPassiveComponents.astralcore = [...(SharedPassiveComponents.astralcore || []), 'purepower'];
 
 // Explicitly approved selected/passive swaps.
 AbilityComponentExclusions.uncheckedassault = [];
@@ -513,11 +513,6 @@ Object.assign(SharedPassiveAbilityDescriptions, {
 		passive: 'magicbounce',
 		desc: 'Magic Guard, Serene Grace and Triage. Creates Gravity on entry.',
 		shortDesc: 'Magic Guard, Serene Grace and Triage.',
-	},
-	astralcore: {
-		passive: 'purepower',
-		desc: 'Natural Cure and Illuminate.',
-		shortDesc: 'Natural Cure and Illuminate.',
 	},
 	relentlesslink: {
 		passive: 'skilllink',
@@ -675,8 +670,8 @@ Object.assign(SharedPassiveAbilityDescriptions, {
 	execution: {
 		passive: 'duskilate',
 		shortDesc:
-			'Double power against foes at half HP or less; has offense-drop limits, field Speed protection and KO healing.',
-		desc: 'Has Mold Breaker, double attack power against targets at half HP or less, limits to Attack and Special Attack drops, prevention of Speed drops while a field exists, and 1/8 max HP healing per move KO.',
+			'Misaligned Stars + Void Veil. Bypasses abilities, punishes weakened foes and heals on KOs.',
+		desc: 'Includes Misaligned Stars and Void Veil. Ignores bypassable abilities, deals 1.3× damage at half enemy HP or less, marks weakened foes and heals 1/8 max HP per KO. Attack and Sp. Atk cannot fall below −1. Fields protect its Speed.',
 	},
 	corrosivetouch: {
 		passive: 'technician',

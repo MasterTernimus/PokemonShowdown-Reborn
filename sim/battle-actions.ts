@@ -12,7 +12,6 @@ import {
 	grandStrategyRecordHit,
 	grandStrategyAfterMove,
 } from '../data/grand-strategy';
-import { radiantTarget } from './radiant-target';
 import { endArsenal } from './adaptive-arsenal';
 import { settleFinisherCost } from './finisher-cost';
 import { settleRecharge } from './recharge';
@@ -175,6 +174,9 @@ export class BattleActions {
 				return 'pursuitfaint';
 			}
 
+			if (sourceEffect?.id === 'teleport' && oldActive.hasAbilityOrPassive('nebuladrift')) {
+				pokemon.m.nebulaGuide = oldActive;
+			}
 			// will definitely switch out at this point
 			// Rage Fist progress persists through voluntary and forced switches.
 			ringmasterSwitch(this.battle, oldActive, pokemon);
@@ -425,6 +427,16 @@ export class BattleActions {
 							side.removeSlotCondition(slot, id);
 					}
 				}
+		}
+		for (const poke of switchersIn) {
+			const guide = poke.m.nebulaGuide as Pokemon | undefined;
+			delete poke.m.nebulaGuide;
+			if (!guide || !poke.hp) continue;
+			this.battle.heal(poke.baseMaxhp / 3, poke, guide, this.dex.abilities.get('nebuladrift'));
+			if (poke.status && !guide.m.nebulaCureUsed && guide.m.nebulaPrepared === guide.m.ultraRivalryEntryToken) {
+				guide.m.nebulaCureUsed = true;
+				poke.cureStatus();
+			}
 		}
 		for (const poke of switchersIn) resolveFarewellGift(poke);
 		for (const poke of switchersIn) poke.revertSuppressedRegionalForm();
@@ -1032,6 +1044,7 @@ export class BattleActions {
 			}
 		}
 
+		pokemon.m.lastSuccessfulMove = move.id;
 		return true;
 	}
 	/** NOTE: includes single-target moves */
@@ -1485,6 +1498,7 @@ export class BattleActions {
 				}
 				target.setBoost(boosts);
 				if (move.id === 'spectralthief') {
+					target.getMoveHitData(move).stoleBoosts = true;
 					this.battle.addMove('-anim', pokemon, 'Spectral Thief', target);
 				}
 			}
@@ -2500,7 +2514,9 @@ export class BattleActions {
 						typeof moveData.self.chance === 'undefined' ||
 						secondaryRoll < moveData.self.chance
 					) {
-						this.moveHit(source, source, move, moveData.self, isSecondary, true);
+						const self = move.name === 'Fleur Salvo' && target && !target.hp && !source.isAlly(target) &&
+							(target.getMoveHitData(move).damage || 0) > 0 ? { ...moveData.self, boosts: { spa: -1 } } : moveData.self;
+						this.moveHit(source, source, move, self, isSecondary, true);
 					}
 					if (!move.multihit) move.selfDropped = true;
 				} else {
@@ -3078,6 +3094,10 @@ export class BattleActions {
 			this.battle.runEvent('DualWieldDamageBoost', source, target, move, 4096);
 		}
 		// happens after crit calculation
+		if (move.signatureLearnedCategory && move.signatureLearnedCategory !== move.category) {
+			// Each hit and spread target gets its own comparison across power and final damage hooks.
+			move.signaturePowerTotals = { Physical: 1, Special: 1, defer: true };
+		}
 		basePower = this.battle.runEvent('BasePower', source, target, move, basePower, true);
 
 		if (!basePower) return 0;
@@ -3122,8 +3142,8 @@ export class BattleActions {
 
 		const statTable = { atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
 
-		let atkBoosts = attacker.boosts[attackStat];
-		let defBoosts = defender.boosts[defenseStat];
+		let atkBoosts = attacker.damageStage(attackStat, attacker === source ? target : source);
+		let defBoosts = defender.damageStage(defenseStat, defender === target ? source : target);
 		// Ego ignores its own offensive penalties against Instinct. Instinct reads
 		// Ego's offensive boosts only while its first HP-damaging move guard is available.
 		if (
@@ -3149,6 +3169,7 @@ export class BattleActions {
 		)
 			atkBoosts = 0;
 		if (defBoosts > 0 && adaptiveSetup(source, defender)) defBoosts = 0;
+		if (move.name === 'Psi Knuckle' && defender === target && defenseStat === 'def' && defBoosts > 0) defBoosts--;
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 		let ignorePositiveDefensive =
@@ -3263,7 +3284,7 @@ export class BattleActions {
 					['mewtwo', 'mewtwomegax', 'mewtwomegay'].includes(source.species.id)))
 		) {
 			const alternateStat = defenseStat === 'def' ? 'spd' : 'def';
-			let alternateBoosts = defender.boosts[alternateStat];
+			let alternateBoosts = defender.damageStage(alternateStat, source);
 			if (
 				(alternateBoosts > 0 && adaptiveSetup(source, defender)) ||
 				move.ignoreDefensive ||
@@ -3391,11 +3412,8 @@ export class BattleActions {
 		}
 
 		// STAB
-		// The "???" type never gets STAB
-		// Not even if you Roost in Gen 4 and somehow manage to use
-		// Struggle in the same turn.
-		// (On second thought, it might be easier to get a MissingNo.)
-		if (type !== '???') {
+		// Typeless moves normally skip STAB. Ascendance grants it through the ordinary STAB calculation.
+		if (type !== '???' || (move.forceSTAB && pokemon.hasAbility('ascendance'))) {
 			let stab: number | [number, number] = 1;
 
 			const isSTAB =
@@ -3498,9 +3516,6 @@ export class BattleActions {
 		const sourceIsMega = !!(pokemon.species.isMega || pokemon.species.forme === 'Mega');
 		// Divineon's form is exempt from extra Stellar/Z target bonuses, regardless of ability.
 		const targetIsDivineon = target.species.id === 'divineon';
-		if (move.id === 'radiantassault' && radiantTarget(target)) {
-			baseDamage = this.battle.modify(baseDamage, 1.2);
-		}
 		// One shared bonus, including when a Stellar user also uses a Z-Move.
 		if (
 			!targetIsDivineon &&
@@ -3528,6 +3543,11 @@ export class BattleActions {
 
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
+		if (move.signaturePowerTotals?.defer) {
+			const { Physical, Special } = move.signaturePowerTotals;
+			baseDamage = this.battle.modify(baseDamage, Math.max(Physical, Special));
+			delete move.signaturePowerTotals;
+		}
 		if (move.id === 'fissure' && !move.isZ && !move.isMax && target.hp * 2 <= target.maxhp) {
 			baseDamage = this.battle.modify(baseDamage, 1.5);
 		}

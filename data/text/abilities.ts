@@ -817,9 +817,9 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ascendance: {
 		name: 'Ascendance',
-		desc: "All damaging moves deal 1.5x damage, can hit type immunities, and gain a 1.5x STAB-style boost when they do not match this Pokemon's type. On Holy Field, this Pokemon's Attack and Special Attack are raised by 1 on entry. Eevee-Starter and Umbreon transform into Divineon on entry; Umbreon uses Umbreon-Perfect's appearance while retaining Umbreon's full movepool.",
+		desc: "All damaging moves get the same-type attack bonus once, including ??? moves, and bypass type immunities. On Holy Field, this Pokemon's Attack and Special Attack are raised by 1 on entry. Eevee-Starter and Umbreon transform into Divineon on entry; Umbreon uses Umbreon-Perfect's appearance while retaining Umbreon's full movepool.",
 		shortDesc:
-			'Damaging moves deal 1.5x, bypass immunities, and gain off-type STAB; transforms Eevee-Starter/Umbreon into Divineon.',
+			'All attacks gain STAB and bypass type immunities. Transforms Starter Eevee or Umbreon into Divineon.',
 	},
 	hisuianresolve: {
 		name: 'Hisuian Resolve',
@@ -949,11 +949,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: November16BalanceDescriptions.unleashedego.desc,
 		shortDesc: November16BalanceDescriptions.unleashedego.shortDesc,
 	},
-	astralcore: {
-		name: 'Astral Core',
-		desc: "This Pokemon has Pure Power, Natural Cure, and Illuminate's effects.",
-		shortDesc: 'Pure Power + Natural Cure + Illuminate.',
-	},
+	astralcore: { name: 'Astral Core', ...AbilityDescriptionOverrides.astralcore },
 	joyride: {
 		name: 'Joyride',
 		desc: 'Aerilate + Violent Rush + Vital Spirit. On its first active turn, Speed rises 50% and Attack 20%; eligible Normal moves become Flying.',
@@ -1641,8 +1637,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	omenedge: {
 		name: 'Omen Edge',
-		desc: 'Sharpness + Dual Wield + Pressure; physical Doom Desire on faint. Slicing moves are strengthened. Contact moves no longer gain a separate bonus.',
-		shortDesc: 'Sharpness + Dual Wield + Pressure; physical Doom Desire on faint.',
+		...AbilityDescriptionOverrides.omenedge,
 	},
 	dreadmaw: {
 		name: 'Dread Maw',
@@ -4783,9 +4778,9 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sinisterblaze: {
 		name: 'Sinister Blaze',
-		desc: 'This Ability cannot be suppressed, copied, or transferred. This Pokemon is burned on switch-in, even through Misty Terrain, and its burn can overwrite other status conditions. In Fairy Tale, Starlight Arena, New World, Burning Field, Volcanic Field, Superheated Field, or Cold Eclipse, its Defense and Special Defense rise by 1 stage on entry. Its burn damage becomes healing; foes take 1/16 max HP each turn, or 1/8 if already burned. It does not heal from this generated damage, but heals from real burn damage dealt to foes. Its physical attacks are not weakened by burn. It is immune to hail and sandstorm damage and counts as Ice type in hail, snow, and ice fields, except for Abysseon and Divineon.',
+		desc: 'This Ability cannot be suppressed, copied, or transferred. This Pokemon is burned on switch-in, even through Misty Terrain, and its burn can overwrite other status conditions. In Fairy Tale, Starlight Arena, New World, Burning Field, Volcanic Field, or Superheated Field, its Defense and Special Defense rise by 1 stage on entry. Its burn heals it. Burned foes lose an extra 1/16 max HP each turn. Once per turn, the user also recovers HP equal to the burn damage one foe actually takes. Its physical attacks are not weakened by burn. It is immune to hail and sandstorm damage and counts as Ice type in hail, snow, and ice fields, except for Abysseon and Divineon.',
 		shortDesc:
-			'Burn heals user; foes take 1/16, or 1/8 if burned; no burn penalty; hail/sand immune.',
+			'Burned foes lose an extra 1/16 each turn. Heals from its own burn and one opposing burn per turn.',
 	},
 	stormsovereign: {
 		name: 'Storm Sovereign',
@@ -5517,6 +5512,11 @@ import { PrimarinaApprovedDescriptions } from '../primarina-approved';
 for (const [id, text] of Object.entries(PrimarinaApprovedDescriptions))
 	Object.assign(AbilitiesText[id as ID], text);
 
+import { SeasonalStrikers } from '../seasonal-strikers';
+for (const [id, { name, shortDesc, desc }] of Object.entries(SeasonalStrikers)) {
+	AbilitiesText[id as ID] = { name, shortDesc, desc };
+}
+
 import { QueuedAbilityDescriptions } from '../queued-abilities-approved';
 for (const [id, text] of Object.entries(QueuedAbilityDescriptions))
 	AbilitiesText[id as ID] = {
@@ -5991,4 +5991,12 @@ import { ShogunStanceText } from '../samurott-shogun';
 AbilitiesText.shogunstance = ShogunStanceText;
 for (const [id, text] of Object.entries(SandDreamDescriptions)) {
 	AbilitiesText[id as ID] = { ...AbilitiesText[id as ID], ...text };
+}
+import { starsCompositeIds } from '../ability-components';
+for (const id of [...starsCompositeIds, 'keystoneseal', 'blackfang']) {
+	AbilitiesText[id as ID] = { ...AbilitiesText[id as ID], ...AbilityDescriptionOverrides[id] };
+}
+import { legendaryTexts } from '../legendary-abilities';
+for (const [id, [name, desc, shortDesc = desc]] of Object.entries(legendaryTexts)) {
+	AbilitiesText[id as ID] = { name, desc, shortDesc };
 }

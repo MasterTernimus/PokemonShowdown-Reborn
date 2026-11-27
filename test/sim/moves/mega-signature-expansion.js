@@ -147,7 +147,8 @@ describe('Mega signature move effects', () => {
 		assert(!foe.trapped);
 		battle.fieldEvent('Residual');
 		assert(!foe.volatiles.puppetsnare);
-		use('uturn', foe, user);
+		// A different pivot isolates the expired snare from Misaligned Stars’ repeat block.
+		use('flipturn', foe, user);
 		assert(foe.switchFlag);
 	});
 

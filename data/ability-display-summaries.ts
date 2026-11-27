@@ -149,7 +149,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	hellfireeclipse: November16BalanceDescriptions.hellfireeclipse.shortDesc,
 	sacrededge: 'Combines the listed abilities.',
 	omenedge:
-		'Stronger slicing moves; eligible moves hit twice; foes spend extra PP; physical Doom Desire on fainting.',
+		'Boosts slicing moves. Pressure drains extra PP. Calls a physical Doom Desire on fainting.',
 	dreadmaw: 'Doubles Attack; 30% chance of 5-turn Embargo; 50% to cure ally status each turn.',
 	cursedkeepsake: 'Curses attackers; cursed foes deal 0.5x; heals 1/2 Curse damage.',
 	curseddoll: November16BalanceDescriptions.curseddoll.shortDesc,
@@ -243,8 +243,6 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 		'Lowers foe evasion; protects item; attackers receive Embargo; heals; three-hit moves; ally Dragon Cheer.',
 	phantombarrage:
 		'Blocks foe stat drops; bypasses screens/Substitute; extra hits, or 1.2x power for signature moves.',
-	astralcore:
-		'Psychic Terrain doubles Sp. Atk instead; Woods cures status each turn; reveals Illusions.',
 	divinemockery: 'Water STAB.',
 	truehydra: 'Combines the listed abilities.',
 	desertspirit: 'Ground moves get STAB.',
@@ -335,7 +333,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	strikersmomentum:
 		'Stronger kicking and same-type moves; foe stat drops boost Attack; never misses; changes type; first KO boosts Speed.',
 	nighthunt: 'Combines the listed abilities.',
-	blackfang: 'Bites have 1.5x power; Prevents and cures sleep; Move KOs give +1 Attack.',
+	blackfang: AbilityDescriptionOverrides.blackfang.shortDesc,
 	fluffycraft: 'Combines the listed abilities.',
 	mightyjaw: 'Biting moves gain +2 priority on first action.',
 	supersweetsyrup:
@@ -667,8 +665,8 @@ Object.assign(AbilityDisplaySummaries, {
 
 Object.assign(AbilityDisplaySummaries, {
 	apexpredator: 'Dragon conversion and wind boosts.',
-	tyrantdomain: "Sandstorm and fallen-ally power; Dragon's Den on fainting.",
-	auroradomain: 'Hail and stronger Ice moves; field and Veil on fainting.',
+	tyrantdomain: 'Tyrant Stream + Supreme Overlord. Fainting grants its replacement +1 Attack once per battle.',
+	auroradomain: 'Aurora Current + Refrigerate. Fainting grants five turns of Aurora Veil.',
 });
 
 AbilityDisplaySummaries.grapplingclaws =
@@ -1149,3 +1147,7 @@ for (const [id, text] of Object.entries(November16BalanceDescriptions))
 
 import { SandDreamDescriptions } from './sand-dream-descriptions';
 for (const [id, text] of Object.entries(SandDreamDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+import { starsCompositeIds } from './ability-components';
+for (const id of [...starsCompositeIds, 'keystoneseal']) {
+	AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+}

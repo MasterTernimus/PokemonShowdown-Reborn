@@ -61,7 +61,9 @@ describe('Sableye’s Echidna abilities', () => {
 		assert.equal(battle.p1.active[0], p);
 		p.hp = 2500;
 		assert.equal(hit(q, 'watergun'), battle.modify(repeat, 0.5) - 2250);
+		assert.equal(hit(r, 'watergun'), -3000);
 		assert.equal(hit(r, 'watergun'), repeat);
+		p.hp = 2500;
 		assert.equal(hit(r, 'bubble'), -3000);
 		for (const name of ['Water Gun', 'Bubble']) {
 			assert.equal(battle.log.filter(line => line.includes(p.name + "'s Tome of Avarice recorded " + name + '!')).length, 1);

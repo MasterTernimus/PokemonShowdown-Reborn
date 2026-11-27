@@ -48,7 +48,8 @@ describe('Kanto starter Mega signatures', () => {
 				assert.equal(move.basePower, 75);
 				assert.equal(move.type, 'Water');
 				assert.equal(move.hit, 2);
-				assert(move.flags.pulse && move.ignorePositiveEvasion);
+				assert(move.flags.pulse);
+				assert(!move.ignorePositiveEvasion);
 				assert.deepEqual(move.secondary, Dex.moves.get('waterpulse').secondary);
 			} else {
 				assert(!move.drain);
@@ -84,14 +85,21 @@ describe('Kanto starter Mega signatures', () => {
 		assert.equal(user.getMoves()[1].move, 'Flash Cannon');
 		user.storedStats.atk = 300;
 		user.storedStats.spa = 100;
+		for (let layer = 0; layer < 3; layer++) user.side.addSideCondition('spikes', foe);
+		use('waterpulse');
+		assert.equal(foe.hp, 10000);
+		assert.equal(user.side.sideConditions.spikes.layers, 3);
+		foe.boosts.evasion = 0;
 		const move = use('waterpulse');
 		assert.equal(move.category, 'Physical');
 		assert.equal(move.hit, 2);
+		assert.equal(user.side.sideConditions.spikes.layers, 2);
 		assert(foe.hp < 10000);
 		foe.hp = 10000;
 		user.boosts.accuracy = -2;
 		use('waterpulse');
 		assert.equal(foe.hp, 10000);
+		assert.equal(user.side.sideConditions.spikes.layers, 2);
 		foe.boosts.evasion = -2;
 		assert.equal(use('waterpulse').hit, 2);
 		assert(foe.hp < 10000);
