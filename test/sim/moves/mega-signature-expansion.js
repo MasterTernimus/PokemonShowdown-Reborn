@@ -33,7 +33,7 @@ describe('Mega signature move effects', () => {
 		foe.addVolatile('substitute', foe);
 		const move = use('boomburst', user, foe);
 		assert.equal(move.name, 'Dune Echo');
-		assert.equal(move.basePower, 115);
+		assert.equal(move.basePower, 100);
 		assert(foe.hp < 4000 && foe.volatiles.substitute);
 		assert.equal(other.hp, 4000);
 		const power = () => battle.runEvent('BasePower', user, foe, move, 1000);

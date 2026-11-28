@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "2c70f545372076e1f16e3253b931b71be5e710ba8a42d689a39ec3fbc87add96",
-  "packageManifestSHA256": "a0356354a236ae1165946fcf633adb03a7b0adba16a30c93b18ba6eb9bdfe37f",
-  "mechanicsSHA256": "c5f42b9254adbef83ec5e342933146ee1ae0122a6c7470bd8e8ea1e9c55ea9c3",
+  "packageEngineRevision": "c4d4da30ba490a55dfbf8b1416e4fe712a701e3bcd2cace7c99cb86f6492f48a",
+  "packageManifestSHA256": "905101e9e60f719c7545fd72e50a7ac6b5d8bfb12b504445441934e1fee8d094",
+  "mechanicsSHA256": "2d17507ff0e9b08887075fd43e2875a9c2106d06afb245c1fc337dced7b6832d",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -1023,7 +1023,7 @@
     },
     {
       "file": "dist/data/stone-signatures.js",
-      "sha256": "579b9b1afec7c99262b0d2467f6e1a9d1ebb2ab953f4b3f447db027b47729dab"
+      "sha256": "02bd60c85bd8144f079b6ec7145fbb6f74ac1c2bc5a1199ad437709749d2bf77"
     },
     {
       "file": "dist/data/stunfisk-approved.js",
