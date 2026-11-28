@@ -1475,7 +1475,8 @@ export class Field {
 	getPublicFieldReturn() {
 		const current = this.terrainState;
 		if (!this.terrain || current.permanent || !current.duration || current.duration >= 9999) return '';
-		if (this.isFlowerGardenBase() || this.isTerrain(['newworldterrain', 'underwaterterrain', 'midnightzoneterrain'])) return '';
+		if (this.isFlowerGardenBase()) return '';
+		if (this.isTerrain(['newworldterrain', 'underwaterterrain', 'midnightzoneterrain'])) return '';
 		const covered = this.terrainStack.filter(state => state !== current);
 		if (current.zMoveTerrain) {
 			while (covered[0]?.zMoveTerrain) covered.shift();

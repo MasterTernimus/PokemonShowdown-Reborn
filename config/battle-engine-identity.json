@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "2937a3414564033f6f7840471a5ae0ba87fb2d2c6a990b2214bf95cac6c8d72d",
-  "packageManifestSHA256": "be11e7414538e375d24f0b6285754dff1b2a6ca739e5a495ea48a73ded0d3d9f",
-  "mechanicsSHA256": "0eaefb4b547c677345fe88ab90154c3ae33ae2b29a64bb05a838abf07f939504",
+  "packageEngineRevision": "38a248249b73f8360e6c231b33ffc9ce62b5c18f0d4d536a805424d9fdce6158",
+  "packageManifestSHA256": "1606ae98f9f689285d43797dc8a09c93c0605e510fdc9f0b21f06c3028610712",
+  "mechanicsSHA256": "769a60b2b76ff9677c3cf9526b8b69550601ff4c479ecb517a386d762fdafdf2",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -1303,7 +1303,7 @@
     },
     {
       "file": "dist/sim/field.js",
-      "sha256": "539c72bbd007b13bf028e5672297ba17dbb11d1da341426d151f54b8b7b45a06"
+      "sha256": "a4091b767f49184f69954e7e87cfcfed7fe91a8ae266a4c1277b42532b1c2e6c"
     },
     {
       "file": "dist/sim/finisher-cost.js",
