@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "38a248249b73f8360e6c231b33ffc9ce62b5c18f0d4d536a805424d9fdce6158",
-  "packageManifestSHA256": "1606ae98f9f689285d43797dc8a09c93c0605e510fdc9f0b21f06c3028610712",
-  "mechanicsSHA256": "769a60b2b76ff9677c3cf9526b8b69550601ff4c479ecb517a386d762fdafdf2",
+  "packageEngineRevision": "079d44c216a468b965e5b868be8311e64f6085c02c351d3de05d242feb347dab",
+  "packageManifestSHA256": "c8bfcf566de4b6fd140df8f1737d5a771f2c7fd8de4053cd3259d01e0ed44dab",
+  "mechanicsSHA256": "900a0218e88709ca58333c56f7f1542f3f967c32d5896589448375ebc0e64a8c",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -1231,7 +1231,7 @@
     },
     {
       "file": "dist/sim/battle.js",
-      "sha256": "8fadae48ab9968a8644af5125da81a035284dcd105c1cd82187a37aba340a4bf"
+      "sha256": "c0f6062cca1d3da36355bf5f9efeb355310efb4560b473f9e628f030fe6f0fc1"
     },
     {
       "file": "dist/sim/beast-hunter.js",
@@ -1303,7 +1303,7 @@
     },
     {
       "file": "dist/sim/field.js",
-      "sha256": "a4091b767f49184f69954e7e87cfcfed7fe91a8ae266a4c1277b42532b1c2e6c"
+      "sha256": "fa835b59805284ceca87201823bc29912e7026f9ad614ec3095c92d8e8c5edf5"
     },
     {
       "file": "dist/sim/finisher-cost.js",
@@ -1319,7 +1319,7 @@
     },
     {
       "file": "dist/sim/pokemon.js",
-      "sha256": "ac6a71ce0cd482809db705ce32b048a62e8e1a3b0f74b34263b973e9f182e444"
+      "sha256": "bbf050ea2685283eb47b11bdf064f2df0b9cff5f1eff279c9a66623ae3680544"
     },
     {
       "file": "dist/sim/predator.js",

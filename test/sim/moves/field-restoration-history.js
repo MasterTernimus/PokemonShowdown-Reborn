@@ -73,7 +73,35 @@ describe('Field restoration history', () => {
 		assert.equal(battle.field.getPublicFieldReturn(), battle.dex.conditions.get(expected).name);
 		for (let i = 0; i < turns; i++) battle.makeChoices('move splash', 'move splash');
 		assert.equal(battle.field.terrain, expected);
+		const restored = battle.log.filter(line => line.startsWith('|-fieldstart|')).pop();
+		if (turns === 2) {
+			assert.equal(battle.field.terrainState.duration, 3);
+			assert.equal(restored, '|-fieldstart|Starlight Arena Terrain|[turns] 3|[ticked]');
+		} else {
+			assert.match(restored, /Rocky Terrain\|\[turns\] 0/);
+		}
 	});
+	for (const ability of ['Tyrant Domain', 'Neutralization']) {
+		it(ability + ' holds the countdown and releases the forecast when it leaves', () => {
+			const p = setup();
+			battle.field.startTerrain('rockyterrain');
+			battle.field.setTerrain('dragonsdenterrain', p);
+			battle.field.setTerrainDuration(1);
+			p.setAbility(ability);
+			battle.sendUpdates();
+			assert(battle.log.includes('|fieldreturn|dragonsdenterrain|held'));
+			battle.makeChoices('move splash', 'move splash');
+			assert.equal(battle.field.terrain, 'dragonsdenterrain');
+			p.setAbility('No Ability');
+			battle.add('message', 'Lock released');
+			battle.sendUpdates();
+			if (battle.field.terrain === 'dragonsdenterrain') {
+				assert(battle.log.includes('|fieldreturn|dragonsdenterrain|Rocky Terrain|[turns] 1'));
+				battle.makeChoices('move splash', 'move splash');
+			}
+			assert.equal(battle.field.terrain, 'rockyterrain');
+		});
+	}
 	it('Mist Ball expires back to the exact Dragon Den', () => {
 		const p = setup();
 		battle.field.changeTerrain('caveterrain', p);

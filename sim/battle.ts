@@ -4836,7 +4836,10 @@ export class Battle {
 		const destination = this.field.getPublicFieldReturn();
 		const preview = destination ? this.field.terrain + '|' + destination : '';
 		if (preview !== this.lastFieldPreview) {
-			this.add('fieldreturn', this.field.terrain, destination);
+			const released = this.lastFieldPreview === this.field.terrain + '|held' && destination;
+			const turns = this.field.terrainState.duration;
+			this.add('fieldreturn', this.field.terrain, destination,
+				...(released && turns !== undefined ? [`[turns] ${turns}`] : []));
 			this.lastFieldPreview = preview;
 		}
 		this.send('update', this.log.slice(this.sentLogPos));

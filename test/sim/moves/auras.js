@@ -598,6 +598,23 @@ describe('Misty and Psychic Aura protections and direct boosts', () => {
 		battle.makeChoices('move splash', 'move quickattack');
 		assert(p.hp < hp);
 	});
+	it('offers the same Expanding Force targets that are hit in doubles', () => {
+		const ally = { species: 'Mew', ability: 'No Ability', moves: ['splash'] };
+		battle = common.createBattle({ gameType: 'doubles' }, [
+			[{ ...ally, moves: ['expandingforce'] }, ally], [ally, ally],
+		]);
+		battle.field.startTerrain('psychicterrain');
+		const target = () => battle.getRequests('move')[0].active[0].moves[0].target;
+		assert.equal(target(), 'allAdjacentFoes');
+		const foes = battle.p2.active.map(p => p.hp);
+		battle.makeChoices('move expandingforce, move splash', 'move splash, move splash');
+		assert(battle.p2.active.every((p, i) => p.hp < foes[i]));
+		battle.p1.active[0].setItem('Air Balloon');
+		assert.equal(target(), 'normal');
+		battle.field.startTerrain('rockyterrain');
+		battle.field.setAura('psychicterrain', 5, battle.p1.active[0]);
+		assert.equal(target(), 'allAdjacentFoes');
+	});
 	it('Expanding Force gains both its own boost and Psychic Aura boost', () => {
 		const [p] = setup('rockyterrain');
 		battle.field.setAura('psychicterrain', 5, p);

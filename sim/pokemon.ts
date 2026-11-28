@@ -1268,6 +1268,12 @@ export class Pokemon {
 				signatureTarget(this.species.id, move.id) || moveSlot.target;
 			if (moveSlot.id === 'decorate' && this.hasAbility('masterpatissier')) target = 'normalOrSelf';
 			switch (moveSlot.id) {
+			case 'expandingforce':
+				if (this.battle.field.isAura('psychicterrain') ||
+					(this.battle.field.isTerrain('psychicterrain') && this.canBenefitFromTerrain())) {
+					target = 'allAdjacentFoes';
+				}
+				break;
 			case 'petaldance':
 			case 'petalblizzard':
 				if (this.battle.field.isTerrain('flowergarden5')) target = 'allAdjacentFoes';

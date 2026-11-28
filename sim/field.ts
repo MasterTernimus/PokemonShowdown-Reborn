@@ -1477,6 +1477,7 @@ export class Field {
 		if (!this.terrain || current.permanent || !current.duration || current.duration >= 9999) return '';
 		if (this.isFlowerGardenBase()) return '';
 		if (this.isTerrain(['newworldterrain', 'underwaterterrain', 'midnightzoneterrain'])) return '';
+		if (this.tyrantMaintainsDen() || this.neutralizingTerrainEffects()) return 'held';
 		const covered = this.terrainStack.filter(state => state !== current);
 		if (current.zMoveTerrain) {
 			while (covered[0]?.zMoveTerrain) covered.shift();
@@ -1623,6 +1624,8 @@ export class Field {
 			this.battle.add(
 				'-fieldstart',
 				current_terrain.id === 'icyterrain' ? 'Icy Field' : current_terrain.name,
+				`[turns] ${this.terrainState.permanent ? 0 : this.terrainState.duration ?? 0}`,
+				...(this.terrainState.durationUpdatedTurn === this.battle.turn ? ['[ticked]'] : []),
 				...(this.terrain === 'crystalcavernterrain' ?
 					[
 						'[crystal] ' +
