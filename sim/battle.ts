@@ -196,6 +196,7 @@ export class Battle {
 	readonly inputLog: string[];
 	readonly messageLog: string[];
 	sentLogPos: number;
+	private lastFieldPreview = '';
 	sentEnd: boolean;
 	sentRequests = true;
 
@@ -4832,6 +4833,12 @@ export class Battle {
 
 	sendUpdates() {
 		if (this.sentLogPos >= this.log.length) return;
+		const destination = this.field.getPublicFieldReturn();
+		const preview = destination ? this.field.terrain + '|' + destination : '';
+		if (preview !== this.lastFieldPreview) {
+			this.add('fieldreturn', this.field.terrain, destination);
+			this.lastFieldPreview = preview;
+		}
 		this.send('update', this.log.slice(this.sentLogPos));
 		if (!this.sentRequests) {
 			for (const side of this.sides) side.emitRequest();

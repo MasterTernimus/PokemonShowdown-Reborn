@@ -99,6 +99,7 @@ export interface PokemonSwitchRequestData {
 	/** Private owner-side species traits; never announced through ability messages. */
 	passives?: readonly string[];
 	rageFistBonus?: number;
+	bankedPressure?: 1 | 2;
 	/** Owner-only active foe slots that can trigger Greed Gospel's Ghost typing. */
 	greedGospelTargets?: PokemonSlot[];
 	/** Owner-only current disguise; omitted from ally requests and public logs. */

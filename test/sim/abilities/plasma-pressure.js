@@ -412,6 +412,8 @@ describe('Plasma Eruption pressure cycle', () => {
 		ready(p, q);
 		battle.makeChoices('move batonpass', 'move splash');
 		battle.makeChoices('switch 2');
+		assert.equal(p.getSwitchRequestData().bankedPressure, 2);
+		assert(!('bankedPressure' in p.getSwitchRequestData(true)));
 		for (const id of ['plasmacore', 'plasmaairborne', 'plasmalanding'])
 			assert(!battle.p1.active[0].volatiles[id]);
 		battle.makeChoices('switch 2', 'move splash');

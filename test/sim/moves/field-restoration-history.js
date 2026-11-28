@@ -61,6 +61,19 @@ describe('Field restoration history', () => {
 		after('glaciate', p);
 		assert.equal(battle.field.terrain, 'caveterrain');
 	});
+	for (const turns of [2, 7]) it('predicts the surviving field under a timed overlay of ' + turns + ' turns', () => {
+		const p = setup();
+		battle.field.startTerrain('rockyterrain');
+		battle.field.setTerrain('starlightarenaterrain', p);
+		battle.field.setTerrainDuration(5, false);
+		assert(battle.field.setTerrain('caveterrain', p));
+		assert.equal(battle.field.terrain, 'caveterrain');
+		battle.field.setTerrainDuration(turns, false);
+		const expected = turns < 5 ? 'starlightarenaterrain' : 'rockyterrain';
+		assert.equal(battle.field.getPublicFieldReturn(), battle.dex.conditions.get(expected).name);
+		for (let i = 0; i < turns; i++) battle.makeChoices('move splash', 'move splash');
+		assert.equal(battle.field.terrain, expected);
+	});
 	it('Mist Ball expires back to the exact Dragon Den', () => {
 		const p = setup();
 		battle.field.changeTerrain('caveterrain', p);
@@ -69,6 +82,9 @@ describe('Field restoration history', () => {
 		const den = battle.field.terrainState;
 		after('mistball', p);
 		assert.equal(battle.field.terrainState.duration, 5);
+		assert.equal(battle.field.getPublicFieldReturn(), battle.dex.conditions.get(den.id).name);
+		battle.sendUpdates();
+		assert(battle.log.includes('|fieldreturn|fairytaleterrain|' + battle.dex.conditions.get(den.id).name));
 		for (let i = 0; i < 5; i++) battle.makeChoices('move splash', 'move splash');
 		assert.equal(battle.field.terrain, 'dragonsdenterrain');
 		assert.equal(battle.field.terrainState, den);

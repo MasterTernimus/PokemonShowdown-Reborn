@@ -1471,6 +1471,27 @@ export class Field {
 		return fallback ? this.changeTerrain(fallback, source, move) : this.clearTerrain();
 	}
 
+	/** The field underneath the current timed layer, accounting for elapsed covered turns. */
+	getPublicFieldReturn() {
+		const current = this.terrainState;
+		if (!this.terrain || current.permanent || !current.duration || current.duration >= 9999) return '';
+		if (this.isFlowerGardenBase() || this.isTerrain(['newworldterrain', 'underwaterterrain', 'midnightzoneterrain'])) return '';
+		const covered = this.terrainStack.filter(state => state !== current);
+		if (current.zMoveTerrain) {
+			while (covered[0]?.zMoveTerrain) covered.shift();
+		} else if (current.previousTerrainState?.id && covered[0] !== current.previousTerrainState) {
+			covered.unshift(current.previousTerrainState);
+		}
+		const tick = current.durationUpdatedTurn === this.battle.turn ? this.battle.turn : this.battle.turn - 1;
+		for (const state of covered) {
+			const age = Math.max(0, tick + current.duration - (state.durationUpdatedTurn ?? current.turn - 1));
+			if (state.permanent || state.duration === undefined || state.duration > age) {
+				return this.battle.dex.conditions.get(state.id).name;
+			}
+		}
+		return 'No Field';
+	}
+
 	clearTerrain(power: string | null = null) {
 		if (power === 'mid' && this.auraField && !this.terrainState.purifiedEclipse)
 			return this.clearAura();

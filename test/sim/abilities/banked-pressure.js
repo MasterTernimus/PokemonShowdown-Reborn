@@ -30,9 +30,12 @@ describe('Pressure across switches', () => {
 	function swapAndReturn(holder, phase) {
 		battle.makeChoices('switch 3, move splash', 'move splash, move splash');
 		assert.notEqual(battle.p1.active[0], holder);
+		assert.equal(holder.getSwitchRequestData().bankedPressure, phase.endsWith('ready') ? 2 : 1);
+		assert(!('bankedPressure' in holder.getSwitchRequestData(true)));
 		assert(!battle.p1.active[0].volatiles[phase]);
 		battle.makeChoices('switch 3, move splash', 'move splash, move splash');
 		assert.equal(battle.p1.active[0], holder);
+		assert(!('bankedPressure' in holder.getSwitchRequestData()));
 		assert(holder.volatiles[phase], phase);
 	}
 	it('Camerupt banks both stages and cannot farm charge healing by re-entering', () => {

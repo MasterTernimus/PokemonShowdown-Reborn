@@ -1561,6 +1561,11 @@ export class Pokemon {
 			item: this.item,
 			pokeball: this.pokeball,
 		};
+		if (!forAlly && !this.isActive && this.hp > 0) {
+			const bank = this.m.bankedCaldera || this.m.razorcurrentBanked || this.m.heavenlychorusBanked;
+			const pressure = this.m.bankedPlasma || (bank ? (bank.endsWith('ready') ? 2 : 1) : 0);
+			if (pressure === 1 || pressure === 2) entry.bankedPressure = pressure;
+		}
 		if (!forAlly && ['sableye', 'sableyemega'].includes(this.species.id)) {
 			const attackers: Pokemon[] = this.volatiles.greedgospelmemory?.foes || [];
 			entry.greedGospelTargets = attackers.filter(foe => foe.isActive && foe.hp && !this.isAlly(foe))
