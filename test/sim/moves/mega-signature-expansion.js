@@ -28,13 +28,27 @@ describe('Mega signature move effects', () => {
 		return user.lastMoveUsed;
 	}
 
+	it('uses Dune Echo from Boomburst and applies Tremor, including its Desert bonus', () => {
+		const { user, foe, other } = start('Flygon-Mega-Z', 'boomburst');
+		foe.addVolatile('substitute', foe);
+		const move = use('boomburst', user, foe);
+		assert.equal(move.name, 'Dune Echo');
+		assert.equal(move.basePower, 115);
+		assert(foe.hp < 4000 && foe.volatiles.substitute);
+		assert.equal(other.hp, 4000);
+		const power = () => battle.runEvent('BasePower', user, foe, move, 1000);
+		assert.equal(power(), 1500);
+		battle.field.setTerrain('desertterrain', user);
+		assert(power() > 1500);
+	});
 	it('targets one foe with Fault Cleave and keeps Earthquake’s Rocky typing and Dune Carver interaction', () => {
 		const { user, ally, foe, other } = start('Garchomp-Mega', 'earthquake');
+		assert.equal(battle.runEvent('BasePower', user, foe, Dex.getActiveMove('faultcleave'), 100), 150);
 		battle.field.setTerrain('rockyterrain', user);
 		user.side.addSideCondition('stealthrock', foe);
 		const move = use('earthquake', user, other);
 		assert.equal(move.name, 'Fault Cleave');
-		assert.equal(move.basePower, 75);
+		assert.equal(move.basePower, 100);
 		assert.equal(user.getMoves()[0].target, 'normal');
 		assert(move.flags.slicing);
 		assert.deepEqual(move.types, ['Ground', 'Rock']);

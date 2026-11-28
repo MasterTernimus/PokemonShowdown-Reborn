@@ -16,7 +16,7 @@ export const MegaSignatureExpansion: Record<string, Signature> = {
 		base: 'earthquake', name: 'Fault Cleave', num: 32820,
 		desc: 'A slicing Ground attack that hits one adjacent target.',
 		changes: {
-			basePower: 75, target: 'normal',
+			basePower: 100, target: 'normal',
 			flags: { slicing: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
 		},
 	},

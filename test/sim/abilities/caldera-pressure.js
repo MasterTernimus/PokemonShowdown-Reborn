@@ -64,9 +64,9 @@ describe('Caldera Core pressure and Dune Echo', () => {
 		p.setAbility('No Ability');
 		assert(!p.volatiles.calderacharge);
 	});
-	it('gives Mega Flygon-Z 105-power Dune Echo and preserves the base and other Mega moves', () => {
+	it('gives Mega Flygon-Z 115-power Dune Echo and preserves the base and other Mega moves', () => {
 		const move = Dex.moves.get('duneecho');
-		assert.equal(move.basePower, 105);
+		assert.equal(move.basePower, 115);
 		assert.equal(move.type, 'Ground');
 		assert.equal(move.target, 'normal');
 		assert(move.flags.sound);

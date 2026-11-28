@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "1ba20a941bd415f1da2670e16b4e584c69255616011d77c59a49982946a191cb",
-  "packageManifestSHA256": "f577ba2f479167e6f84c36c86a5e115c7dc930e54d7f0f2cb2e013cb18efd73f",
-  "mechanicsSHA256": "f726dbeec970a41ba4ecb52f66dcf3ea3ae9ea4b284659a21d9319117b657bfb",
+  "packageEngineRevision": "2c70f545372076e1f16e3253b931b71be5e710ba8a42d689a39ec3fbc87add96",
+  "packageManifestSHA256": "a0356354a236ae1165946fcf633adb03a7b0adba16a30c93b18ba6eb9bdfe37f",
+  "mechanicsSHA256": "c5f42b9254adbef83ec5e342933146ee1ae0122a6c7470bd8e8ea1e9c55ea9c3",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -507,7 +507,7 @@
     },
     {
       "file": "dist/data/mega-signature-expansion.js",
-      "sha256": "54cd85a145587248f607b9315b7d963c29166a6a32159ee63f90cbc1266a5fa8"
+      "sha256": "a6ba54d10582dbafe0506359a7243d649889cef00c56292c0be035ad8574d83a"
     },
     {
       "file": "dist/data/mega-signature-traps.js",
@@ -1023,7 +1023,7 @@
     },
     {
       "file": "dist/data/stone-signatures.js",
-      "sha256": "eeced30317d552360ba2bbac37fb98148c8a25fc68edeaafb03e57456316f267"
+      "sha256": "579b9b1afec7c99262b0d2467f6e1a9d1ebb2ab953f4b3f447db027b47729dab"
     },
     {
       "file": "dist/data/stunfisk-approved.js",
